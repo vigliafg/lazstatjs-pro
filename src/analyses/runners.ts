@@ -17,6 +17,7 @@ import { buildContingencyOutput } from './contingency/run';
 import { buildAncovaOutput } from './ancova/run';
 import { buildFactorialOutput } from './factorial/run';
 import { buildRepeatedAnovaOutput } from './repeatedanova/run';
+import { buildMultivariateOutput } from './multivariate/run';
 
 export interface AnalysisRunContext {
   grid: GridData;
@@ -30,10 +31,10 @@ export interface AnalysisRunContext {
  * Le sei analisi legacy sono già funzioni `(dati, parametri) -> risultato`:
  * qui ricevono un contesto unico invece di sei chiamate con firme diverse.
  * `samplesize`, `distfit`, `logistic`, `cox`, `survival`, `timeseries`,
- * `contingency`, `ancova`, `factorial` e `repeatedanova` sono i pannelli
- * convertiti: parametri nell'App e builder puro, come le analisi legacy. Gli
- * altri 3 restano componenti controllati dal segnale `runSignal`, in attesa di
- * separare i loro parametri dal form.
+ * `contingency`, `ancova`, `factorial`, `repeatedanova` e `multivariate` sono i
+ * pannelli convertiti: parametri nell'App e builder puro, come le analisi
+ * legacy. Gli altri 2 restano componenti controllati dal segnale `runSignal`,
+ * in attesa di separare i loro parametri dal form.
  */
 export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => AnalysisRunResult> = {
   descriptive: ({ grid, params, ciLevel }) =>
@@ -72,4 +73,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildFactorialOutput({ grid, params: params.factorial, ciLevel }),
   repeatedanova: ({ grid, params, ciLevel }) =>
     buildRepeatedAnovaOutput({ grid, params: params.repeatedanova, ciLevel }),
+  multivariate: ({ grid, params, ciLevel }) =>
+    buildMultivariateOutput({ grid, params: params.multivariate, ciLevel }),
 };

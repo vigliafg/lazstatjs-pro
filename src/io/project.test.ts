@@ -385,6 +385,22 @@ describe('project sanitisation', () => {
     assert.deepEqual(restored.params.repeatedanova.selected, [0, 1, 2]);
   });
 
+  it('restores and sanitises multivariate parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          multivariate: { mode: 'bogus', standardize: false, selected: [0, 9, 1, 1] },
+        },
+      })
+    );
+    assert.equal(restored.params.multivariate.mode, 'pca');
+    assert.equal(restored.params.multivariate.standardize, false);
+    assert.deepEqual(restored.params.multivariate.selected, [0, 1]);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

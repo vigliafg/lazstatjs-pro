@@ -17,6 +17,7 @@ import { defaultSurvivalParams } from './analyses/survival/defaults';
 import { defaultAncovaParams } from './analyses/ancova/defaults';
 import { defaultFactorialParams } from './analyses/factorial/defaults';
 import { defaultRepeatedAnovaParams } from './analyses/repeatedanova/defaults';
+import { defaultMultivariateParams } from './analyses/multivariate/defaults';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -52,6 +53,7 @@ import {
   type DistributionFitParams,
   type FactorialParams,
   type LogisticParams,
+  type MultivariateParams,
   type ProjectParams,
   type ProjectSettings,
   type ProjectSnapshot,
@@ -293,6 +295,10 @@ export default function App() {
     () => boot?.params.repeatedanova ?? defaultRepeatedAnovaParams(grid)
   );
 
+  const [multivariateParams, setMultivariateParams] = useState<MultivariateParams>(
+    () => boot?.params.multivariate ?? defaultMultivariateParams(grid)
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -316,8 +322,9 @@ export default function App() {
       ancova: ancovaParams,
       factorial: factorialParams,
       repeatedanova: repeatedAnovaParams,
+      multivariate: multivariateParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -347,6 +354,7 @@ export default function App() {
     setAncovaParams(project.params.ancova);
     setFactorialParams(project.params.factorial);
     setRepeatedAnovaParams(project.params.repeatedanova);
+    setMultivariateParams(project.params.multivariate);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -490,6 +498,8 @@ export default function App() {
             setFactorialParams={setFactorialParams}
             repeatedAnovaParams={repeatedAnovaParams}
             setRepeatedAnovaParams={setRepeatedAnovaParams}
+            multivariateParams={multivariateParams}
+            setMultivariateParams={setMultivariateParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

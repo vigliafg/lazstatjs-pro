@@ -158,6 +158,15 @@ export interface RepeatedAnovaParams {
   selected: number[];
 }
 
+export type MultivariateMode = 'pca' | 'alpha';
+
+/** Parametri di PCA / Cronbach alpha. */
+export interface MultivariateParams {
+  mode: MultivariateMode;
+  standardize: boolean;
+  selected: number[];
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -175,6 +184,7 @@ export interface ProjectParams {
   ancova: AncovaParams;
   factorial: FactorialParams;
   repeatedanova: RepeatedAnovaParams;
+  multivariate: MultivariateParams;
 }
 
 export interface ProjectSettings {
@@ -281,6 +291,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     interaction: false,
   },
   repeatedanova: {
+    selected: [0, 1, 2],
+  },
+  multivariate: {
+    mode: 'pca',
+    standardize: true,
     selected: [0, 1, 2],
   },
 };
@@ -504,6 +519,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const ancova = isRecord(raw.ancova) ? raw.ancova : {};
   const factorial = isRecord(raw.factorial) ? raw.factorial : {};
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
+  const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -632,6 +648,11 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
     },
     repeatedanova: {
       selected: indexList(repeatedanova.selected, d.repeatedanova.selected, width),
+    },
+    multivariate: {
+      mode: multivariate.mode === 'alpha' ? 'alpha' : d.multivariate.mode,
+      standardize: bool(multivariate.standardize, d.multivariate.standardize),
+      selected: indexList(multivariate.selected, d.multivariate.selected, width),
     },
   };
 };
