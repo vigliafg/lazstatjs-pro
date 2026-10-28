@@ -69,3 +69,16 @@ test('runs an analysis on the mobile layout', async ({ page, isMobile }) => {
   await expect(page.locator('article.output-card')).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Collapse result' })).toBeVisible();
 });
+
+test('live-run replaces one card when parameters change', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'live-run toggle is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Live run' }).click();
+
+  await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 5000 });
+  await page.getByLabel('ANOVA dependent variable').selectOption('3');
+  await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 5000 });
+  await expect(page.getByRole('button', { name: 'Live run' })).toHaveAttribute('aria-pressed', 'true');
+});

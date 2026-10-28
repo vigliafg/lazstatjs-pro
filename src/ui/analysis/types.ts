@@ -43,6 +43,7 @@ export interface AnalysisTabProps {
   exportResultsXlsx: () => void;
   setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
   runAnalysis: () => boolean;
+  runAnalysisLive: () => boolean;
   updateColumnLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
   updateColumnRecode: (column: number, mapping: Record<string, string>) => void;
 }

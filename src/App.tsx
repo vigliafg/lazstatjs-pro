@@ -361,7 +361,8 @@ export default function App() {
   const emit = (
     result: AnalysisRunResult,
     analysisId: string = activeAnalysis,
-    paramsUsed = params
+    paramsUsed = params,
+    options?: { live?: boolean }
   ): boolean => {
     if ('reason' in result) {
       showToast('Error', result.reason, 'error');
@@ -373,11 +374,12 @@ export default function App() {
       filterSignature,
       params: analysisParamsOf(analysisId, paramsUsed),
       paramsSignature: analysisParamsSignature(analysisId, paramsUsed),
+      live: options?.live,
     });
     return true;
   };
 
-  const { runAnalysis, runAnalysisWith } = useAnalysisRun({
+  const { runAnalysis, runAnalysisWith, runAnalysisLive } = useAnalysisRun({
     activeAnalysis,
     grid: analysisGrid,
     params,
@@ -512,6 +514,7 @@ export default function App() {
             exportResultsXlsx={exportResultsXlsx}
             setActiveTab={setActiveTab}
             runAnalysis={runAnalysis}
+            runAnalysisLive={runAnalysisLive}
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
           />

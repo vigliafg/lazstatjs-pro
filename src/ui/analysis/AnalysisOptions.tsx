@@ -1,4 +1,4 @@
-import { useState, type ReactNode, type SetStateAction } from 'react';
+import { useEffect, useState, type ReactNode, type SetStateAction } from 'react';
 import { Play } from 'lucide-react';
 import { analysisMeta, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
@@ -71,10 +71,42 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
   const meta = analysisMeta(p.activeAnalysis);
   const family = familyOf(p.activeAnalysis);
   const [peek, setPeek] = useState(false);
+  const [live, setLive] = useState(false);
+  const [livePending, setLivePending] = useState(false);
   const [roleKey, setRoleKey] = useState('');
   const activeRoleKey = p.roles.some(role => role.key === roleKey)
     ? roleKey
     : p.roles[0]?.key ?? '';
+  // Live mode recomputes instant procedures after a short pause; heavy ones
+  // stay explicit. The previous live card is replaced, not stacked.
+  useEffect(() => {
+    setLive(false);
+  }, [p.activeAnalysis]);
+
+  useEffect(() => {
+    if (!live) {
+      setLivePending(false);
+      return;
+    }
+    if (p.roleErrors.length > 0) return;
+    setLivePending(true);
+    const timer = setTimeout(() => {
+      p.runAnalysisLive();
+      setLivePending(false);
+    }, 500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    live,
+    params,
+    p.grid.rows,
+    p.grid.cols,
+    p.ciLevel,
+    p.roleErrors.length,
+    p.activeRowFilter,
+    p.filterAffectsAnalysis,
+  ]);
+
   const rowsForAnalysis =
     p.filterAffectsAnalysis && p.activeRowFilter
       ? p.grid.rows.filter(row => rowMatches(p.grid, row, p.activeRowFilter))
@@ -461,6 +493,18 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
           >
             {peek ? 'Hide data peek' : 'Data peek'}
           </button>
+          {meta?.cost === 'instant' && (
+            <button
+              type="button"
+              onClick={() => setLive(value => !value)}
+              aria-pressed={live}
+              aria-label="Live run"
+              title="Re-run this analysis automatically when the data or its parameters change"
+              className={`tb-btn px-2 py-0.5 text-[10px] ${live ? 'border-accent bg-accent/10 text-text' : ''}`}
+            >
+              {live ? (livePending ? 'Live · syncing…' : 'Live · on') : 'Live'}
+            </button>
+          )}
           <button
             type="button"
             onClick={() => p.setActiveTab('data')}

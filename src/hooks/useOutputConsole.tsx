@@ -62,6 +62,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       filterSignature?: string;
       params?: unknown;
       paramsSignature?: string;
+      live?: boolean;
     }
   ) => {
     const block = (
@@ -87,10 +88,18 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       ...(meta?.filterSignature ? { filterSignature: meta.filterSignature } : {}),
       ...(meta?.params !== undefined ? { params: meta.params } : {}),
       ...(meta?.paramsSignature ? { paramsSignature: meta.paramsSignature } : {}),
+      ...(meta?.live ? { live: true } : {}),
       html,
       node: block,
     };
-    setOutputs(prev => capStoredOutputs([...prev, entry]));
+    setOutputs(prev => {
+      // A live run owns one card per analysis: replace it instead of stacking
+      // a new result on every keystroke.
+      const base = meta?.live
+        ? prev.filter(item => !(item.live && item.analysisId === analysisId))
+        : prev;
+      return capStoredOutputs([...base, entry]);
+    });
   };
 
   const clearOutput = () => {

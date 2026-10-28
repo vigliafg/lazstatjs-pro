@@ -25,6 +25,8 @@ export interface OutputEntry extends StoredOutput {
   datasetId?: string;
   /** Signature of the analysis row filter used for the run. */
   filterSignature?: string;
+  /** Session-only live-run card: replaced on the next live run. */
+  live?: boolean;
 }
 
 /** I blocchi ripristinati sono statici: sanificati una volta e iniettati. */
