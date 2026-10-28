@@ -12,11 +12,7 @@ const LIMIT = 700;
 const EXCEPTIONS = new Map([
   ['src/help/helpContent.ts', 1474], // contenuto statico, non logica
   ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
-  ['src/stats/report.ts', 898], // prosa dei report
   ['src/io/project.ts', 855], // schema .lzs (da spezzare in Fase 3/4)
-  ['src/stats/cox.ts', 818], // kernel numerico compatto
-  ['src/stats/wizard.ts', 795], // albero delle raccomandazioni
-  ['src/stats/timeseries.ts', 724], // kernel numerico compatto
 ]);
 
 const walk = directory =>

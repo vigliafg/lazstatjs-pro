@@ -113,9 +113,11 @@ passano dalla stessa strada.
 
 ### Fase 3 — Stratificare `stats/`
 
-- [ ] Separare `kernels` / `tables` / `reports` (avviata: `samplesize`, `distfit`,
-      `logistic`, `survival` e `contingency` sono i moduli stratificati; i kernel
-      legacy sono in `src/stats/kernels/`).
+- [x] Separare `kernels` / `tables` / `reports`: ogni analisi ha la sua cartella
+      con `types`, `tables`, `reports` e un barrel `stats/<id>.ts`.
+      I sei moduli legacy (`ttest`, `anova`, `regression`, `correlation`,
+      `chisquare`, `descriptive`) espongono solo tabelle e vivono in `tables/`;
+      l'estrazione dei loro kernel è annotata come debito.
 - [x] Assorbire `statsHelpers.ts` nei kernel: `kernels/exact.ts`,
       `kernels/ranks.ts`, `kernels/normality.ts`, con test di equivalenza numerica.
 - [x] `jstat` isolato dietro `src/stats/jstat.ts`: nessun altro modulo importa il
@@ -124,7 +126,8 @@ passano dalla stessa strada.
       (`fmtPctValue` rimosso da `multivariate`).
 
 **Fatto quando:** nessun kernel importa React, nessun report ricalcola, una sola
-implementazione per ogni test statistico.
+implementazione per ogni test statistico. ✔ (resta il debito dei kernel legacy
+dentro i table builder, senza impatto sui report)
 
 ### Fase 4 — Confine dei dati
 
