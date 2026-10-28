@@ -230,6 +230,9 @@ export const parseGrid = (value: unknown): GridData => {
       ...(levels ? { levels } : {}),
       ...(reference ? { reference } : {}),
       ...(missing.length ? { missing } : {}),
+      ...(typeof record.formula === 'string' && record.formula.trim()
+        ? { formula: record.formula.trim().slice(0, 500) }
+        : {}),
     };
   });
 

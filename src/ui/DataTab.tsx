@@ -71,7 +71,7 @@ export interface DataTabProps {
   setFilterAffectsAnalysis: Dispatch<SetStateAction<boolean>>;
   inspectorCol: number;
   setInspectorCol: Dispatch<SetStateAction<number>>;
-  onColumnMeta: (column: number, patch: { label?: string; description?: string; missing?: string[] }) => void;
+  onColumnMeta: (column: number, patch: { label?: string; description?: string; missing?: string[]; formula?: string }) => void;
   filterCol: number;
   setFilterCol: Dispatch<SetStateAction<number>>;
   filterOp: RowFilterOp;

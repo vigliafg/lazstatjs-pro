@@ -25,6 +25,7 @@ export function TransformPanel({ grid, onApply }: Props) {
   const [mergeSep, setMergeSep] = useState('_');
   const [expr, setExpr] = useState('Score_Post - Score_Pre');
   const [exprName, setExprName] = useState('Diff');
+  const [persistent, setPersistent] = useState(true);
 
   // Column indexes go stale after delete/merge: clamp into range.
   useEffect(() => {
@@ -116,6 +117,15 @@ export function TransformPanel({ grid, onApply }: Props) {
         <div className="flex gap-1.5 items-center">
           <input className="bg-surface3 border border-border2 rounded px-2 py-1 w-40 text-text font-mono" value={expr} onChange={(e) => setExpr(e.target.value)} />
           <input className="bg-surface3 border border-border2 rounded px-2 py-1 w-20 text-text" value={exprName} onChange={(e) => setExprName(e.target.value)} placeholder="Name" />
+          <label className="flex items-center gap-1 text-text2" title="Recalculate the column whenever the data changes">
+            <input
+              type="checkbox"
+              className="accent-accent"
+              checked={persistent}
+              onChange={(e) => setPersistent(e.target.checked)}
+            />
+            formula
+          </label>
           <button
             className="tb-btn"
             onClick={() => {
@@ -123,9 +133,15 @@ export function TransformPanel({ grid, onApply }: Props) {
               grid.cols.forEach((c, i) => {
                 colIndex[c.name] = i;
               });
-              const { grid: next, error } = computeColumn(grid, expr, exprName, colIndex);
+              const { grid: next, error } = computeColumn(
+                grid,
+                expr,
+                exprName,
+                colIndex,
+                persistent ? expr : undefined
+              );
               if (error) onApply(grid, error, 'error');
-              else onApply(next, `Computed ${exprName}`, 'ok');
+              else onApply(next, `Computed ${exprName}${persistent ? ' (formula)' : ''}`, 'ok');
             }}
           >
             Compute

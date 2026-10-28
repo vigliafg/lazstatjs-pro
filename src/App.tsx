@@ -188,13 +188,17 @@ export default function App() {
   // reference and (when needed) the column type move together in one undo step.
   const updateColumnMeta = (
     c: number,
-    patch: { label?: string; description?: string; missing?: string[] }
+    patch: { label?: string; description?: string; missing?: string[]; formula?: string }
   ) => {
     setGrid(prev => ({
       ...prev,
-      cols: prev.cols.map((col, index) =>
-        index === c ? { ...col, ...patch } : col
-      ),
+      cols: prev.cols.map((col, index) => {
+        if (index !== c) return col;
+        const next = { ...col, ...patch };
+        // An empty formula removes the computed-column behaviour.
+        if (patch.formula !== undefined && !patch.formula.trim()) delete next.formula;
+        return next;
+      }),
     }));
   };
 

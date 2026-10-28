@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import type { CategoryLevel, GridData } from './types';
+import { recalculateFormulas } from './formulas';
 
 const CAP = 50;
 
@@ -68,7 +69,10 @@ export function useGridHistory(initial: GridData) {
   const commit = useCallback(
     (next: GridData | ((prev: GridData) => GridData), opts?: { coalesce?: boolean; kind?: string }) => {
       const prev = gridRef.current;
-      const value = typeof next === 'function' ? (next as (p: GridData) => GridData)(prev) : next;
+      const raw = typeof next === 'function' ? (next as (p: GridData) => GridData)(prev) : next;
+      // Persistent formulas are the source of truth for their column: any
+      // edit re-derives them before the commit is recorded.
+      const value = recalculateFormulas(raw);
       if (sameGrid(prev, value)) return;
       const now = Date.now();
       const canCoalesce =

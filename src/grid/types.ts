@@ -36,6 +36,8 @@ export interface Column {
   reference?: string;
   /** Cell values treated as missing by every analysis. */
   missing?: string[];
+  /** Persistent arithmetic formula; recalculated on every grid edit. */
+  formula?: string;
 }
 
 export interface GridData {

@@ -4,18 +4,27 @@ import {
   createColumnId,
   distinctColumnValues,
   uniqueColName,
-  validateValue,
 } from '../types';
-import { numVal } from './shared';
+import { evalFormula, renameFormulaReferences } from '../formulas';
 
 /* ---------- Column metadata ---------- */
 
 export const renameColumn = (grid: GridData, c: number, name: string): GridData => {
   if (c < 0 || c >= grid.cols.length) return grid;
-  const clean = name.trim() || grid.cols[c].name;
+  const oldName = grid.cols[c].name;
+  const clean = name.trim() || oldName;
   const dupe = grid.cols.some((col, i) => i !== c && col.name.toLowerCase() === clean.toLowerCase());
   const finalName = dupe ? uniqueColName(grid.cols, clean) : clean;
-  return { cols: grid.cols.map((col, i) => (i === c ? { ...col, name: finalName } : col)), rows: grid.rows };
+  return {
+    cols: grid.cols.map((col, i) => {
+      const next = i === c ? { ...col, name: finalName } : col;
+      // Persistent formulas follow the rename instead of breaking.
+      return next.formula
+        ? { ...next, formula: renameFormulaReferences(next.formula, oldName, finalName) }
+        : next;
+    }),
+    rows: grid.rows,
+  };
 };
 
 export const setColType = (grid: GridData, c: number, type: ColType): GridData => ({
@@ -161,54 +170,36 @@ export const mergeColumns = (grid: GridData, a: number, b: number, sep: string, 
 
 /* ---------- Computed columns ---------- */
 
-const SAFE_EXPR = /^[A-Za-z0-9_+\-*/().\s^%]+$/;
-
+/**
+ * Append a computed column. When `formula` is passed the expression is stored
+ * on the column and recalculated on every later edit; otherwise the values are
+ * a one-shot snapshot.
+ */
 export const computeColumn = (
   grid: GridData,
   expr: string,
   newName: string,
-  colIndex: Record<string, number>
+  colIndex: Record<string, number>,
+  formula?: string
 ): { grid: GridData; error?: string } => {
-  if (!SAFE_EXPR.test(expr)) return { grid, error: 'Unsafe characters in expression' };
-  if (expr.length > 500) return { grid, error: 'Expression too long' };
-  if (/__(?:proto|prototype|constructor)__/i.test(expr)) return { grid, error: 'Unsafe expression' };
-  // Column names arrive from user data: only map sane identifiers, and skip
-  // dangerous keys so a column literally named "__proto__" cannot pollute.
-  const BLOCKED = new Set(['__proto__', 'prototype', 'constructor', 'V']);
-  const names = Object.keys(colIndex)
-    .filter((n) => /^[A-Za-z_][A-Za-z0-9_]*$/.test(n) && !BLOCKED.has(n))
-    .sort((a, b) => b.length - a.length);
-  let js = expr.replace(/\^/g, '**');
-  names.forEach((name) => {
-    js = js.replace(new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g'), `__v_${colIndex[name]}`);
-  });
-  if (/[A-Za-z_]/.test(js.replace(/__v_\d+/g, ''))) return { grid, error: 'Unknown column in expression' };
-  // Belt and braces: no property access or call expressions may survive.
-  if (/[.\[\];,{}'"`\\]/.test(js)) return { grid, error: 'Unsafe expression' };
-  let fn: (vals: number[]) => number;
-  try {
-    fn = new Function('V', `return (${js.replace(/__v_(\d+)/g, 'V[$1]')});`) as (vals: number[]) => number;
-  } catch {
-    return { grid, error: 'Invalid expression' };
-  }
   const name = uniqueColName(grid.cols, newName.trim() || 'Computed');
-  const cols: Column[] = [...grid.cols, { id: createColumnId(), name, type: 'num' as ColType }];
-  const rows = grid.rows.map((r) => {
-    const nums = r.map((v) => {
-      const n = numVal(v);
-      return n === null ? NaN : n;
-    });
-    let out = '';
-    try {
-      const val = fn(nums);
-      out = typeof val === 'number' && isFinite(val) ? String(val) : '';
-    } catch {
-      out = '';
-    }
-    return [...r, out];
-  });
-  return { grid: { cols, rows } };
+  const cols: Column[] = [
+    ...grid.cols,
+    {
+      id: createColumnId(),
+      name,
+      type: 'num' as ColType,
+      ...(formula ? { formula } : {}),
+    },
+  ];
+  // The new column is not part of the evaluation scope: a formula cannot
+  // reference itself. Later formulas can reference it.
+  const { values, error } = evalFormula(expr, grid.rows, colIndex);
+  if (error) return { grid, error };
+  return {
+    grid: {
+      cols,
+      rows: grid.rows.map((row, r) => [...row, values[r] ?? '']),
+    },
+  };
 };
-
-/** Validate a cell against a declared type (re-exported for callers of ops). */
-export { validateValue };

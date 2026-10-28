@@ -20,7 +20,7 @@ interface Props {
   onSelectColumn: (column: number) => void;
   onRename: (column: number, name: string) => void;
   onType: (column: number, type: ColType) => void;
-  onMeta: (column: number, patch: { label?: string; description?: string; missing?: string[] }) => void;
+  onMeta: (column: number, patch: { label?: string; description?: string; missing?: string[]; formula?: string }) => void;
   onLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
   onRecode: (column: number, mapping: Record<string, string>) => void;
   onDuplicate: (column: number) => void;
@@ -57,13 +57,15 @@ export const VariableInspector = ({
   const [label, setLabel] = useState(col?.label ?? '');
   const [description, setDescription] = useState(col?.description ?? '');
   const [missingInput, setMissingInput] = useState('');
+  const [formula, setFormula] = useState(col?.formula ?? '');
 
   useEffect(() => {
     setName(col?.name ?? '');
     setLabel(col?.label ?? '');
     setDescription(col?.description ?? '');
     setMissingInput('');
-  }, [column, col?.name, col?.label, col?.description]);
+    setFormula(col?.formula ?? '');
+  }, [column, col?.name, col?.label, col?.description, col?.formula]);
 
   if (!col) return null;
 
@@ -100,6 +102,11 @@ export const VariableInspector = ({
     if (nextLabel !== (col.label ?? '') || nextDescription !== (col.description ?? '')) {
       onMeta(column, { label: nextLabel, description: nextDescription });
     }
+  };
+
+  const commitFormula = () => {
+    const next = formula.trim();
+    if (next !== (col.formula ?? '')) onMeta(column, { formula: next });
   };
 
   const addMissingCode = () => {
@@ -215,6 +222,30 @@ export const VariableInspector = ({
             className={`${inputClass} mt-1 resize-y`}
           />
         </label>
+
+        <div className="mt-3">
+          <span className="font-mono text-[8px] uppercase tracking-widest text-text3">
+            Formula
+          </span>
+          <div className="mt-1 flex gap-1">
+            <input
+              value={formula}
+              onChange={event => setFormula(event.target.value)}
+              onBlur={commitFormula}
+              onKeyDown={event => {
+                if (event.key === 'Enter') event.currentTarget.blur();
+              }}
+              placeholder="e.g. Score_Post - Score_Pre"
+              aria-label="Column formula"
+              className={inputClass}
+            />
+          </div>
+          <p className="mt-1 text-[9px] leading-relaxed text-text3">
+            {col.formula
+              ? 'Computed column: recalculated on every edit, references follow renames.'
+              : 'Leave empty for a plain data column.'}
+          </p>
+        </div>
 
         <div className="mt-3">
           <span className="font-mono text-[8px] uppercase tracking-widest text-text3">

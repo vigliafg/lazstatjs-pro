@@ -190,6 +190,17 @@ describe('project sanitisation', () => {
     assert.deepEqual(parsed.cols[0].missing, ['-9', 'NA']);
   });
 
+  it('round-trips a persistent formula and trims it', () => {
+    const parsed = parseGrid({
+      cols: [{ name: 'Diff', type: 'num', formula: '  Post - Pre  ' }],
+      rows: [['1']],
+    });
+    assert.equal(parsed.cols[0].formula, 'Post - Pre');
+
+    const blank = parseGrid({ cols: [{ name: 'Plain', type: 'num', formula: '   ' }], rows: [['1']] });
+    assert.equal(blank.cols[0].formula, undefined);
+  });
+
   it('falls back on invalid settings and params without losing valid ones', () => {
     const base = makeSnapshot();
     const parsed = parseProject(
