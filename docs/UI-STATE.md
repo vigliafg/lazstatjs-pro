@@ -234,6 +234,8 @@ Priorità:
 
 ## 9. Prossima fase: inserimento ed editing dei dati
 
+Analisi completata: [`docs/DATA-EDITING-ANALYSIS.md`](DATA-EDITING-ANALYSIS.md).
+
 La fase successiva non parte dal codice: parte da un'analisi comparata dei
 programmi più popolari, rapportata al nostro modello attuale.
 
@@ -311,6 +313,23 @@ La scheda Data ha già:
    - **C.** Modello Prism-like: più tabelle per forma del dato.
 4. Scelta condivisa e piano a blocchi.
 5. Solo dopo: implementazione.
+
+### 9.6 Esito dell'analisi
+
+La relazione attuale griglia↔analisi è di tipo **snapshot, non linked**:
+
+- l'analisi legge la griglia al Run;
+- i parametri sono indici di colonna, non identità stabili;
+- il filtro è view-only;
+- le modifiche ai dati non invalidano l'output;
+- la selezione della griglia non arriva all'analisi.
+
+Il difetto più grave è il **remap mancante**: inserire, eliminare o spostare una
+colonna può far puntare i parametri a un'altra variabile senza avviso. Va
+corretto prima di ogni altra evoluzione (blocco DE-0).
+
+Raccomandazione: una sola griglia + Variable Inspector a drawer + ponte
+dati↔analisi esplicito. Multi-tabella solo se diventa un requisito di prodotto.
 
 ## 10. Decisioni aperte
 
