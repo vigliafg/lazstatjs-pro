@@ -325,8 +325,10 @@ La relazione attuale griglia↔analisi è di tipo **snapshot, non linked**:
 - la selezione della griglia non arriva all'analisi.
 
 Il difetto più grave è il **remap mancante**: inserire, eliminare o spostare una
-colonna può far puntare i parametri a un'altra variabile senza avviso. Va
-corretto prima di ogni altra evoluzione (blocco DE-0).
+colonna può far puntare i parametri a un'altra variabile senza avviso. Lo stesso
+vale per split, merge, duplicate e per il cambio di dataset con New/Import. Va
+corretto prima di ogni altra evoluzione (DE-0, matrice completa in
+`docs/DATA-EDITING-ANALYSIS.md` §3.6).
 
 Raccomandazione: una sola griglia + Variable Inspector a drawer + ponte
 dati↔analisi esplicito. Multi-tabella solo se diventa un requisito di prodotto.

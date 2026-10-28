@@ -150,6 +150,59 @@ La card dice cosa è stato calcolato, non **su quali dati**. Mancano:
 Senza questi dati, "Setup" riapre la procedura ma non può ripristinare la
 configurazione che ha prodotto quella card.
 
+### 3.6 Matrice completa delle operazioni
+
+Il remap non riguarda solo insert/delete/move. Ogni operazione della scheda Data
+deve avere un effetto dichiarato su **indici, ruoli, semantica e output**.
+
+Legenda:
+
+- **Remap**: gli indici delle colonne vengono aggiornati.
+- **Invalidare**: il ruolo che puntava alla colonna non è piu valido e va
+  riselezionato; non si sceglie una colonna al posto suo.
+- **Stale**: gli output esistenti vengono marcati come non più allineati.
+- **Reset**: i parametri tornano ai default perché il dataset è cambiato.
+- **Nessuna**: l'operazione non tocca i dati usati dalle analisi.
+
+| Operazione | Indici colonna | Ruoli / parametri | Semantica | Azione |
+|---|---|---|---|---|
+| Edit cella | invariati | invariati | valori cambiati | Stale |
+| Paste che resta nella griglia | invariati | invariati | valori cambiati | Stale |
+| Paste che aggiunge colonne | nuove in coda | invariati | nuove variabili | Stale |
+| Fill down / clear range / clear all | invariati | invariati | valori cambiati | Stale |
+| Find/replace, trim, coerce, fill missing | invariati | invariati | valori cambiati | Stale |
+| Add column end | nuova in coda | invariati | nuova variabile | Stale |
+| Compute | nuova in coda | invariati | nuova variabile | Stale |
+| Insert column at i | `>= i` -> `+1` | remap | ruoli invariati | Remap + Stale |
+| Duplicate column i | `>= i+1` -> `+1` | remap | nuova variabile | Remap + Stale |
+| Move column i->j | permutazione | remap | ruoli invariati | Remap + Stale |
+| Delete column i | `> i` -> `-1`; `i` sparisce | ruoli su `i` **invalidati**; gli altri remap | variabile rimossa | Invalidare + Remap + Stale |
+| Split column i | nuova a `i+1`; `>= i+1` -> `+1`; `i` resta (parte sinistra) | ruoli su `i` **invalidati**; gli altri remap | la colonna originale cambia significato | Invalidare + Remap + Stale |
+| Merge columns a,b | `hi` sparisce; `lo` resta fusa; `> hi` -> `-1` | ruoli su `a` o `b` **invalidati**; gli altri remap | variabile fusa | Invalidare + Remap + Stale |
+| Recode values / levels | invariati | invariati | valori, label, reference cambiano | Stale + rivalidare tipo/gruppo |
+| Rename column | invariati | invariati | solo etichetta | Stale (etichette) |
+| Cambio tipo | invariati | invariati se compatibili; altrimenti invalidare | cambia group eligibility/validazione | Stale + validare ruoli |
+| Set levels / reference | invariati | invariati | cambia la codifica del modello | Stale |
+| Sort rows | invariati | invariati | ordine righe cambiato | Stale; warning per Time Series |
+| Add / insert row | invariati | invariati | N e ordine cambiano | Stale |
+| Delete row | invariati | invariati | N e ordine cambiano | Stale |
+| Remove empty / duplicate rows | invariati | invariati | N cambia | Stale |
+| New grid | tutte nuove | **reset** | dataset diverso | Reset + datasetId + output non correnti |
+| Import overwrite | tutte nuove | **reset** | dataset diverso | Reset + datasetId + output non correnti |
+| Import append rows | invariati | invariati | N cambia | Stale |
+| Import merge columns | nuove in coda | invariati | nuove variabili | Stale |
+| Restore progetto | ripristinati | ripristinati | sessione coerente | Nessuna |
+| Filter / freeze / scroll | invariati | invariati | solo vista (oggi) | Nessuna; con analysis-filter: Stale |
+
+La regola chiave:
+
+> **Remap solo per operazioni che spostano gli indici. Invalidazione per
+> operazioni che cambiano l'identita o il significato della variabile.**
+
+Non si deve mai rimappare un ruolo su una colonna diversa solo perche l'indice
+è ancora valido. Se una variabile sparisce o viene trasformata, l'utente deve
+riselezionarla.
+
 ## 4. Cosa fanno i programmi popolari
 
 | Programma | Superficie dati | Metadati | Relazione con l'analisi | Aggiornamento output | Lezione |
@@ -297,7 +350,7 @@ visibile** il passaggio dati→analisi.
 
 | ID | Blocco | Contenuto | Dipendenze | Rischio |
 |---|---|---|---|---|
-| **DE-0** | Integrità colonne | `Column.id` stabile; remap dei parametri su insert/delete/move; test | — | Medio |
+| **DE-0** | Integrità dati e operazioni | `Column.id` stabile; remap, invalidazione, reset e revisione per **tutte** le operazioni della matrice 3.6; test | — | Medio/alto |
 | **DE-1** | Variable Inspector | Drawer con tipo, label, descrizione, livelli, reference, missing, ruolo | DE-0 | Basso/medio |
 | **DE-2** | Ponte dati↔analisi | Context bar, Data peek, selezione→ruolo, jump ruolo→colonna | DE-0, DE-1 | Medio |
 | **DE-3** | Filtro e missing | Scelta view-only/analysis-filter, conteggio esclusi, missing code, N per analisi | DE-2 | Medio |
@@ -306,9 +359,26 @@ visibile** il passaggio dati→analisi.
 | **DE-6** | Grandi dati e mobile | Virtualizzazione, paste a blocchi, touch editing | DE-4 | Medio |
 | **DE-7** | Test | Unit su remap/filtro/missing; smoke UI; regressioni | DE-0..DE-6 | Basso |
 
+### DE-0 in dettaglio
+
+DE-0 non è una singola patch. È un contratto formato da cinque parti:
+
+| Parte | Contenuto |
+|---|---|
+| **DE-0a — Remap** | Insert, delete, move, duplicate, split, merge: aggiornare gli indici di tutti i parametri, incluse liste e `-1` |
+| **DE-0b — Invalidazione** | Delete, split, merge e cambi tipo incompatibili: il ruolo non viene rimappato, viene marcato invalido e l'utente lo riseleziona |
+| **DE-0c — Dataset identity** | New e import overwrite: reset dei parametri ai default, nuovo `datasetId`, output precedenti non correnti |
+| **DE-0d — Revisione dati** | Edit, paste, fill, clear, recode, rename, tipo, livelli, sort, righe: `dataRevision++` e output stale |
+| **DE-0e — Test matrix** | Un test per ogni riga della matrice 3.6, più test di compatibilità `.lzs` |
+
+Senza DE-0b, un remap “fortunato” può far sembrare valido un ruolo che in realtà
+puntava a una variabile trasformata. Senza DE-0c, un import può riusare i
+parametri del dataset precedente. Senza DE-0d, una card vecchia sembra ancora
+corrente.
+
 ### Ordine consigliato
 
-1. **DE-0** — senza questo, ogni insert/delete può falsare un'analisi.
+1. **DE-0** — senza questo, qualsiasi operazione può falsare un'analisi.
 2. **DE-1** — il dizionario variabili sblocca il resto.
 3. **DE-2** — il ponte visivo/operativo.
 4. **DE-3** — semantica filtro e missing.
@@ -317,8 +387,11 @@ visibile** il passaggio dati→analisi.
 
 ## 9. Criteri di accettazione
 
+- Ogni operazione della matrice 3.6 ha un effetto dichiarato e testato su
+  indici, ruoli, semantica e output.
 - Inserire, eliminare o spostare una colonna **non cambia** il significato di
-  alcun parametro di analisi.
+  alcun parametro di analisi; le variabili rimosse o trasformate invalidano il
+  ruolo invece di essere rimappate.
 - Il Setup mostra righe, colonne, filtro attivo e missing senza cambiare tab.
 - Una colonna selezionata può essere assegnata a un ruolo in **≤ 2 azioni**.
 - Dopo una modifica ai dati, le card che dipendono da quei dati sono **stale**
@@ -326,7 +399,8 @@ visibile** il passaggio dati→analisi.
 - Il filtro dichiara se influisce sull'analisi; l'N dell'output è coerente.
 - Il Variable Inspector mostra tutti i metadati usati dai runner.
 - I progetti `.lzs` vecchi continuano a caricarsi; i nuovi campi sono opzionali.
-- Test unitari su remap, filtro, missing; smoke UI su desktop e mobile.
+- Test unitari su remap, invalidazione, dataset replacement, revisione, filtro
+  e missing; smoke UI su desktop e mobile.
 
 ## 10. Decisioni aperte
 
@@ -349,9 +423,12 @@ visibile** il passaggio dati→analisi.
 Se la direzione A è confermata, il primo blocco è **DE-0**:
 
 - aggiungere un identificatore stabile alla colonna;
-- rimappare tutti i parametri che contengono indici (inclusi `-1`, liste e
-  riferimenti) su insert/delete/move;
-- coprire il remap con test;
+- classificare ogni operazione secondo la matrice 3.6;
+- rimappare gli indici su insert/delete/move/duplicate/split/merge;
+- invalidare i ruoli su delete/split/merge e cambi tipo incompatibili;
+- resettare i parametri su new/import overwrite;
+- incrementare la revisione dati su edit/recode/sort/righe/metadati;
+- coprire ogni riga della matrice con test;
 - mantenere la compatibilità `.lzs`.
 
 Solo dopo: Variable Inspector e ponte dati↔analisi.
