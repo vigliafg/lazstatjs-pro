@@ -239,6 +239,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
   const nonparamrm = isRecord(raw.nonparamrm) ? raw.nonparamrm : {};
+  const tdcox = isRecord(raw.tdcox) ? raw.tdcox : {};
   const stratcox = isRecord(raw.stratcox) ? raw.stratcox : {};
   const gee = isRecord(raw.gee) ? raw.gee : {};
   const resampling = isRecord(raw.resampling) ? raw.resampling : {};
@@ -404,6 +405,12 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       right: index(nonparamrm.right, d.nonparamrm.right, width),
       outcome: index(nonparamrm.outcome, d.nonparamrm.outcome, width),
       group: index(nonparamrm.group, d.nonparamrm.group, width),
+    },
+    tdcox: {
+      start: index(tdcox.start, d.tdcox.start, width),
+      stop: index(tdcox.stop, d.tdcox.stop, width),
+      event: index(tdcox.event, d.tdcox.event, width),
+      covariates: indexList(tdcox.covariates, d.tdcox.covariates, width),
     },
     stratcox: {
       time: index(stratcox.time, d.stratcox.time, width),

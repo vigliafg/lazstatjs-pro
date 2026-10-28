@@ -31,9 +31,10 @@ import { ParametricForm } from '../analyses/parametric/Form';
 import { ResamplingForm } from '../analyses/resampling/Form';
 import { GeeForm } from '../analyses/gee/Form';
 import { StratifiedCoxForm } from '../analyses/stratcox/Form';
+import { TdCoxForm } from '../analyses/tdcox/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, GeeParams, MixedAnovaParams, StratifiedCoxParams, ParametricSurvivalParams, ResamplingParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, GeeParams, MixedAnovaParams, StratifiedCoxParams, TdCoxParams, ParametricSurvivalParams, ResamplingParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -100,6 +101,8 @@ export interface AnalysisTabProps {
   setGeeParams: Dispatch<SetStateAction<GeeParams>>;
   stratCoxParams: StratifiedCoxParams;
   setStratCoxParams: Dispatch<SetStateAction<StratifiedCoxParams>>;
+  tdCoxParams: TdCoxParams;
+  setTdCoxParams: Dispatch<SetStateAction<TdCoxParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -179,6 +182,8 @@ export const AnalysisTab = ({
   setGeeParams,
   stratCoxParams,
   setStratCoxParams,
+  tdCoxParams,
+  setTdCoxParams,
   grid,
   outputs,
   removeOutput,
@@ -349,6 +354,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'tdcox' && (
+        <TdCoxForm grid={grid} tdCoxParams={tdCoxParams} setTdCoxParams={setTdCoxParams} />
       )}
 
       {activeAnalysis === 'stratcox' && (

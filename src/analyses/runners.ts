@@ -31,6 +31,7 @@ import { buildParametricOutput } from './parametric/run';
 import { buildResamplingOutput } from './resampling/run';
 import { buildGeeOutput } from './gee/run';
 import { buildStratifiedCoxOutput } from './stratcox/run';
+import { buildTdCoxOutput } from './tdcox/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -111,4 +112,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildGeeOutput({ grid, params: params.gee, ciLevel }),
   stratcox: ({ grid, params, ciLevel }) =>
     buildStratifiedCoxOutput({ grid, params: params.stratcox, ciLevel }),
+  tdcox: ({ grid, params, ciLevel }) =>
+    buildTdCoxOutput({ grid, params: params.tdcox, ciLevel }),
 };

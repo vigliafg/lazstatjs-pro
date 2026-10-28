@@ -76,6 +76,7 @@ import {
   type ResamplingParams,
   type GeeParams,
   type StratifiedCoxParams,
+  type TdCoxParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -366,6 +367,10 @@ export default function App() {
     boot?.params.stratcox ?? DEFAULT_PARAMS.stratcox
   );
 
+  const [tdCoxParams, setTdCoxParams] = useState<TdCoxParams>(
+    boot?.params.tdcox ?? DEFAULT_PARAMS.tdcox
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -403,8 +408,9 @@ export default function App() {
       resampling: resamplingParams,
       gee: geeParams,
       stratcox: stratCoxParams,
+      tdcox: tdCoxParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams, resamplingParams, geeParams, stratCoxParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams, resamplingParams, geeParams, stratCoxParams, tdCoxParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -448,6 +454,7 @@ export default function App() {
     setResamplingParams(project.params.resampling);
     setGeeParams(project.params.gee);
     setStratCoxParams(project.params.stratcox);
+    setTdCoxParams(project.params.tdcox);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -619,6 +626,8 @@ export default function App() {
             setGeeParams={setGeeParams}
             stratCoxParams={stratCoxParams}
             setStratCoxParams={setStratCoxParams}
+            tdCoxParams={tdCoxParams}
+            setTdCoxParams={setTdCoxParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

@@ -170,6 +170,14 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri del Cox con covariate tempo-dipendenti (start-stop). */
+export interface TdCoxParams {
+  start: number;
+  stop: number;
+  event: number;
+  covariates: number[];
+}
+
 /** Parametri del Cox stratificato. */
 export interface StratifiedCoxParams {
   time: number;
@@ -286,6 +294,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  tdcox: TdCoxParams;
   stratcox: StratifiedCoxParams;
   gee: GeeParams;
   resampling: ResamplingParams;
@@ -423,6 +432,12 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  tdcox: {
+    start: 0,
+    stop: 1,
+    event: 2,
+    covariates: [],
   },
   stratcox: {
     time: 0,
