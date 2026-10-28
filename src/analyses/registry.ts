@@ -324,25 +324,51 @@ const normalize = (value: string): string =>
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
 
+const normalizeWords = (value: string): string =>
+  normalize(value).replace(/[^a-z0-9]+/g, ' ');
+
+/** Relevance of one analysis for one query term (higher is better). */
+const termScore = (meta: AnalysisMeta, term: string): number => {
+  const family = ANALYSIS_FAMILIES.find(item => item.id === meta.family);
+  const label = normalizeWords(meta.label);
+  if (label === term) return 100;
+  if (label.split(' ').some(word => word === term)) return 80;
+  if (label.startsWith(term)) return 60;
+  if (label.includes(term)) return 40;
+  const keywords = meta.keywords.flatMap(normalizeWords);
+  if (keywords.some(word => word === term)) return 25;
+  if (normalizeWords(meta.description).includes(term)) return 12;
+  if (normalizeWords(family?.label ?? '').includes(term)) return 8;
+  return 0;
+};
+
 /**
  * Search the library by label, description, keywords and family label.
- * Every whitespace-separated term must match, so "cox survival" narrows down.
+ * Every whitespace-separated term must match; results are ranked by label
+ * exactness, then keyword, then description, preserving registry order for
+ * ties (so "cox" still lists Cox, Stratified Cox, Time-Dependent Cox).
  */
 export const filterAnalyses = (query: string): AnalysisMeta[] => {
-  const terms = normalize(query.trim())
-    .replace(/[^a-z0-9]+/g, ' ')
-    .split(' ')
-    .filter(Boolean);
+  const terms = normalizeWords(query.trim()).split(' ').filter(Boolean);
   if (terms.length === 0) return [...ANALYSIS_TABS];
-  return ANALYSIS_TABS.filter(meta => {
+  return ANALYSIS_TABS.map((meta, index) => {
     const family = ANALYSIS_FAMILIES.find(item => item.id === meta.family);
-    const words = normalize(
+    const words = normalizeWords(
       [meta.label, meta.description, family?.label ?? '', ...meta.keywords].join(' ')
-    ).replace(/[^a-z0-9]+/g, ' ');
+    );
     const haystack = ` ${words} `;
-    return terms.every(term => haystack.includes(` ${term}`));
-  });
+    if (!terms.every(term => haystack.includes(` ${term}`))) return null;
+    const score = terms.reduce((sum, term) => sum + termScore(meta, term), 0);
+    return { meta, index, score };
+  })
+    .filter((entry): entry is { meta: AnalysisMeta; index: number; score: number } => entry !== null)
+    .sort((a, b) => b.score - a.score || a.index - b.index)
+    .map(entry => entry.meta);
 };
+
+/** Flat alphabetical index used by the library's A–Z mode. */
+export const alphabeticalAnalyses = (analyses: readonly AnalysisMeta[] = ANALYSIS_TABS): AnalysisMeta[] =>
+  [...analyses].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
 
 /** Group a list of analyses by family, preserving the family order. */
 export const groupByFamily = (

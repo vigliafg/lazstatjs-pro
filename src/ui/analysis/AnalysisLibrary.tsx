@@ -12,6 +12,7 @@ import {
   Layers,
   LineChart,
   Search,
+  Star,
   Table2,
   TrendingUp,
   X,
@@ -20,12 +21,14 @@ import {
 import {
   ANALYSIS_FAMILIES,
   ANALYSIS_TABS,
+  alphabeticalAnalyses,
   analysisMeta,
   filterAnalyses,
   groupByFamily,
   type AnalysisFamilyId,
   type AnalysisMeta,
 } from '../../analyses/registry';
+import { loadFavorites, saveFavorites } from './favorites';
 
 const FAMILY_ICONS: Record<AnalysisFamilyId, LucideIcon> = {
   guided: Compass,
@@ -51,19 +54,25 @@ export interface AnalysisLibraryProps {
 const AnalysisItem = ({
   meta,
   active,
+  favorite,
   onSelect,
+  onToggleFavorite,
 }: {
   key?: string;
   meta: AnalysisMeta;
   active: boolean;
+  favorite: boolean;
   onSelect: (id: string) => void;
+  onToggleFavorite: (id: string) => void;
 }) => (
+  <div className="group relative">
   <button
     type="button"
+    data-analysis-item={meta.id}
     onClick={() => onSelect(meta.id)}
     title={meta.description}
     aria-current={active ? 'true' : undefined}
-    className={`group w-full rounded border-l-2 px-2 py-1.5 text-left transition-colors ${
+    className={`w-full rounded border-l-2 px-2 py-1.5 pr-7 text-left transition-colors ${
       active
         ? 'border-accent bg-accent/10 text-text'
         : 'border-transparent text-text2 hover:bg-surface3 hover:text-text'
@@ -84,6 +93,18 @@ const AnalysisItem = ({
       {meta.description}
     </span>
   </button>
+  <button
+    type="button"
+    onClick={() => onToggleFavorite(meta.id)}
+    aria-label={favorite ? `Remove ${meta.label} from favorites` : `Add ${meta.label} to favorites`}
+    aria-pressed={favorite}
+    className={`absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded ${
+      favorite ? 'text-yellow' : 'text-text3/60 opacity-0 group-hover:opacity-100 focus:opacity-100'
+    }`}
+  >
+    <Star className="h-3 w-3" fill={favorite ? 'currentColor' : 'none'} />
+  </button>
+  </div>
 );
 
 /** Searchable, family-grouped analysis chooser. */
@@ -95,6 +116,21 @@ export const AnalysisLibrary = ({
   onClose,
 }: AnalysisLibraryProps) => {
   const [query, setQuery] = useState('');
+  const [favorites, setFavorites] = useState<string[]>(() =>
+    loadFavorites(ANALYSIS_TABS.map(meta => meta.id))
+  );
+  const [alphabetical, setAlphabetical] = useState(false);
+
+  const toggleFavorite = (id: string) => {
+    setFavorites(previous => {
+      const next = previous.includes(id)
+        ? previous.filter(item => item !== id)
+        : [...previous, id];
+      saveFavorites(next);
+      return next;
+    });
+  };
+
   const activeFamily = analysisMeta(activeAnalysis)?.family;
   const [collapsed, setCollapsed] = useState<Set<AnalysisFamilyId>>(
     () =>
@@ -113,7 +149,15 @@ export const AnalysisLibrary = ({
     });
   }, [activeFamily]);
 
-  const groups = useMemo(() => groupByFamily(filterAnalyses(query)), [query]);
+  const results = useMemo(() => filterAnalyses(query), [query]);
+  const groups = useMemo(() => groupByFamily(results), [results]);
+  const flat = useMemo(
+    () => (alphabetical ? alphabeticalAnalyses(results) : null),
+    [alphabetical, results]
+  );
+  const favoriteItems = favorites
+    .map(id => analysisMeta(id))
+    .filter((meta): meta is AnalysisMeta => Boolean(meta));
   const normalizedQuery = query.trim();
   const recentItems = normalizedQuery
     ? []
@@ -147,10 +191,24 @@ export const AnalysisLibrary = ({
             <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-text3">
               Analysis library
             </p>
-            <p className="mt-0.5 text-[10px] text-text3">
-              {normalizedQuery
-                ? `${count} match${count === 1 ? '' : 'es'}`
-                : `${ANALYSIS_TABS.length} procedures · ${ANALYSIS_FAMILIES.length} families`}
+            <p className="mt-0.5 flex items-center gap-2 text-[10px] text-text3">
+              <span>
+                {normalizedQuery
+                  ? `${count} match${count === 1 ? '' : 'es'}`
+                  : `${ANALYSIS_TABS.length} procedures · ${ANALYSIS_FAMILIES.length} families`}
+              </span>
+              <button
+                type="button"
+                onClick={() => setAlphabetical(value => !value)}
+                aria-pressed={alphabetical}
+                aria-label="Sort alphabetically"
+                title="Flat A–Z index"
+                className={`rounded border px-1 font-mono text-[8px] ${
+                  alphabetical ? 'border-accent text-accent' : 'border-border2 text-text3'
+                }`}
+              >
+                A–Z
+              </button>
             </p>
           </div>
           {onClose && (
@@ -198,7 +256,47 @@ export const AnalysisLibrary = ({
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto scrollbar p-2">
+      <div
+        className="min-h-0 flex-1 overflow-auto scrollbar p-2"
+        onKeyDown={event => {
+          if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+          const items = Array.from(
+            document.querySelectorAll<HTMLButtonElement>('[data-analysis-item]')
+          );
+          if (items.length === 0) return;
+          const current = items.indexOf(document.activeElement as HTMLButtonElement);
+          let next = current;
+          if (event.key === 'ArrowDown') next = current < 0 ? 0 : Math.min(items.length - 1, current + 1);
+          if (event.key === 'ArrowUp') next = current < 0 ? 0 : Math.max(0, current - 1);
+          if (event.key === 'Home') next = 0;
+          if (event.key === 'End') next = items.length - 1;
+          event.preventDefault();
+          items[next]?.focus();
+        }}
+      >
+        {normalizedQuery.length === 0 && favoriteItems.length > 0 && (
+          <section className="mb-3">
+            <div className="flex items-center gap-1.5 px-2 py-1">
+              <Star className="h-3 w-3 text-yellow" fill="currentColor" />
+              <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
+                Favorites
+              </span>
+            </div>
+            <div className="space-y-0.5">
+              {favoriteItems.map(meta => (
+                <AnalysisItem
+                  key={`favorite-${meta.id}`}
+                  meta={meta}
+                  active={meta.id === activeAnalysis}
+                  favorite={favorites.includes(meta.id)}
+                  onSelect={onSelect}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {recentItems.length > 0 && (
           <section className="mb-3">
             <div className="flex items-center gap-1.5 px-2 py-1">
@@ -213,14 +311,36 @@ export const AnalysisLibrary = ({
                   key={`recent-${meta.id}`}
                   meta={meta}
                   active={meta.id === activeAnalysis}
+                  favorite={favorites.includes(meta.id)}
                   onSelect={onSelect}
+                  onToggleFavorite={toggleFavorite}
                 />
               ))}
             </div>
           </section>
         )}
 
-        {groups.map(group => {
+        {flat && (
+          <section>
+            <div className="mb-1 px-2 font-mono text-[9px] uppercase tracking-widest text-text3">
+              A–Z
+            </div>
+            <div className="space-y-0.5">
+              {flat.map(meta => (
+                <AnalysisItem
+                  key={`az-${meta.id}`}
+                  meta={meta}
+                  active={meta.id === activeAnalysis}
+                  favorite={favorites.includes(meta.id)}
+                  onSelect={onSelect}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {!flat && groups.map(group => {
           const Icon = FAMILY_ICONS[group.family.id];
           const open = normalizedQuery.length > 0 || !collapsed.has(group.family.id);
           return (
@@ -251,7 +371,9 @@ export const AnalysisLibrary = ({
                       key={meta.id}
                       meta={meta}
                       active={meta.id === activeAnalysis}
+                      favorite={favorites.includes(meta.id)}
                       onSelect={onSelect}
+                      onToggleFavorite={toggleFavorite}
                     />
                   ))}
                 </div>

@@ -109,3 +109,29 @@ test('filters, pins and clears result cards', async ({ page, isMobile }) => {
   await page.getByRole('button', { name: 'Clear every result block' }).click();
   await expect(page.locator('article.output-card')).toHaveCount(0);
 });
+
+test('favorites, A–Z index and keyboard navigation in the library', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'library interactions are exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('ANOVA');
+  await page.getByRole('button', { name: 'Add ANOVA to favorites' }).click();
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await expect(page.getByText('Favorites')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Remove ANOVA from favorites' }).first()).toBeVisible();
+
+  await page.getByRole('button', { name: 'Sort alphabetically' }).click();
+  await expect(page.getByRole('button', { name: 'Sort alphabetically' })).toHaveAttribute(
+    'aria-pressed',
+    'true'
+  );
+
+  const first = page.locator('[data-analysis-item]').first();
+  await first.focus();
+  await page.keyboard.press('ArrowDown');
+  const second = await page.evaluate(() =>
+    (document.activeElement as HTMLElement | null)?.dataset.analysisItem ?? null
+  );
+  expect(second).not.toBeNull();
+});
