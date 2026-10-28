@@ -23,5 +23,5 @@ export const defaultLogisticParams = (grid: GridData): LogisticParams => {
     .map((_, index) => index)
     .filter(index => index !== outcome)
     .slice(0, 1);
-  return { outcome, predictors, cutoff: 0.5 };
+  return { outcome, predictors, cutoff: 0.5, penalized: false };
 };

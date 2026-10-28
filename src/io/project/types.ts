@@ -85,6 +85,7 @@ export interface LogisticParams {
   outcome: number;
   predictors: number[];
   cutoff: number;
+  penalized: boolean;
 }
 
 /** Parametri del modello di Cox. */
@@ -307,6 +308,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     outcome: 0,
     predictors: [1],
     cutoff: 0.5,
+    penalized: false,
   },
   cox: {
     timeVariable: 0,

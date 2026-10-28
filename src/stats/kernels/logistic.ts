@@ -44,11 +44,34 @@ const devianceOf = (beta: number[], X: number[][], y: number[]): number => {
   return deviance;
 };
 
+const logDet = (matrix: number[][]): number => {
+  const n = matrix.length;
+  const a = matrix.map(row => [...row]);
+  let value = 0;
+  for (let column = 0; column < n; column++) {
+    let pivot = column;
+    for (let row = column + 1; row < n; row++) {
+      if (Math.abs(a[row][column]) > Math.abs(a[pivot][column])) pivot = row;
+    }
+    if (Math.abs(a[pivot][column]) < 1e-12) return -Infinity;
+    if (pivot !== column) [a[column], a[pivot]] = [a[pivot], a[column]];
+    value += Math.log(Math.abs(a[column][column]));
+    const divisor = a[column][column];
+    for (let j = column; j < n; j++) a[column][j] /= divisor;
+    for (let row = column + 1; row < n; row++) {
+      const factor = a[row][column];
+      for (let j = column; j < n; j++) a[row][j] -= factor * a[column][j];
+    }
+  }
+  return value;
+};
+
 export const fitLogistic = (
   y: number[],
   predictors: LogisticPredictor[],
   level = 95,
-  cutoff = 0.5
+  cutoff = 0.5,
+  penalized = false
 ): LogisticModel | null => {
   const n = y.length;
   if (n < 3 || predictors.length === 0) return null;
@@ -68,15 +91,11 @@ export const fitLogistic = (
 
   for (let iteration = 0; iteration < 100; iteration++) {
     const xtwx = Array.from({ length: k }, () => new Array<number>(k).fill(0));
-    const xtwz = new Array<number>(k).fill(0);
-
     for (let i = 0; i < n; i++) {
       const eta = X[i].reduce((sum, value, j) => sum + value * beta[j], 0);
       const p = sigmoid(eta);
       const weight = Math.max(EPS, p * (1 - p));
-      const z = eta + (y[i] - p) / weight;
       for (let j = 0; j < k; j++) {
-        xtwz[j] += X[i][j] * weight * z;
         for (let l = 0; l <= j; l++) xtwx[j][l] += X[i][j] * weight * X[i][l];
       }
     }
@@ -86,6 +105,23 @@ export const fitLogistic = (
 
     const inverse = invert(xtwx);
     if (!inverse) return null;
+
+    const xtwz = new Array<number>(k).fill(0);
+    for (let i = 0; i < n; i++) {
+      const eta = X[i].reduce((sum, value, j) => sum + value * beta[j], 0);
+      const p = sigmoid(eta);
+      const weight = Math.max(EPS, p * (1 - p));
+      const leverage = penalized
+        ? weight * X[i].reduce(
+            (sum, value, j) =>
+              sum + value * inverse[j].reduce((inner, entry, l) => inner + entry * X[i][l], 0),
+            0
+          )
+        : 0;
+      const adjustment = penalized ? leverage * (0.5 - p) : 0;
+      const z = eta + (y[i] - p + adjustment) / weight;
+      for (let j = 0; j < k; j++) xtwz[j] += X[i][j] * weight * z;
+    }
 
     const candidate = Array.from({ length: k }, (_, j) =>
       xtwz.reduce((sum, value, l) => sum + inverse[j][l] * value, 0)
@@ -184,6 +220,8 @@ export const fitLogistic = (
     sensitivity: events > 0 ? truePositive / events : NaN,
     specificity: nonEvents > 0 ? trueNegative / nonEvents : NaN,
     separation: beta.some(value => Math.abs(value) > 20),
+    penalized,
+    penalizedLogLik: penalized ? logLik + 0.5 * logDet(xtwx) : undefined,
   };
 };
 

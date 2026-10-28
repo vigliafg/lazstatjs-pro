@@ -24,7 +24,7 @@ export const buildLogisticOutput = ({
   params,
   ciLevel,
 }: LogisticInput): AnalysisRunResult => {
-  const { outcome, predictors, cutoff } = params;
+  const { outcome, predictors, cutoff, penalized } = params;
 
   if (predictors.length === 0) {
     return { ok: false, reason: 'Select at least one predictor' };
@@ -69,7 +69,7 @@ export const buildLogisticOutput = ({
     values: rows.map(row => row.values[position]),
   }));
 
-  const model = fitLogistic(y, predictorData, ciLevel, cutoff);
+  const model = fitLogistic(y, predictorData, ciLevel, cutoff, penalized);
   if (!model) {
     return {
       ok: false,

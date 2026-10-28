@@ -21,7 +21,7 @@ const grid = {
   ],
 };
 
-const base = { grid, params: { outcome: 1, predictors: [0], cutoff: 0.5 }, ciLevel: 95 };
+const base = { grid, params: { outcome: 1, predictors: [0], cutoff: 0.5, penalized: false }, ciLevel: 95 };
 
 test('logistic builder returns tables, report and the probability curve', () => {
   const result = buildLogisticOutput(base);

@@ -12,7 +12,7 @@ const inputClass =
   'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[110px]';
 
 export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: LogisticFormProps) => {
-  const { outcome, predictors, cutoff } = logisticParams;
+  const { outcome, predictors, cutoff, penalized } = logisticParams;
 
   const toggle = (index: number) => {
     setLogisticParams(prev => ({
@@ -59,6 +59,19 @@ export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: Logist
             </label>
           ))}
         </div>
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Penalization</label>
+        <label className="flex items-center gap-1.5 text-[11px] text-text2 cursor-pointer pt-1.5">
+          <input
+            type="checkbox"
+            className="accent-accent"
+            checked={penalized}
+            onChange={e => setLogisticParams(prev => ({ ...prev, penalized: e.target.checked }))}
+          />
+          Firth (penalized)
+        </label>
       </div>
 
       <div className="flex flex-col gap-1">

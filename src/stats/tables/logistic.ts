@@ -15,7 +15,7 @@ export const logisticTables = (
   tables.push({
     id: 'logit-fit',
     title: 'Modello logistico',
-    subtitle: `stima di massima verosimiglianza · N = ${model.n}`,
+    subtitle: `${model.penalized ? 'Firth penalized likelihood' : 'stima di massima verosimiglianza'} · N = ${model.n}`,
     columns: [
       { key: 'metric', label: 'Metrica', format: 'text' },
       { key: 'value', label: 'Valore', format: 'text' },
@@ -98,10 +98,10 @@ export const logisticTables = (
   if (model.separation) {
     tables.push({
       id: 'logit-warning',
-      title: 'Attenzione: separazione',
+      title: model.penalized ? 'Separazione gestita da Firth' : 'Attenzione: separazione',
       columns: [{ key: 'note', label: 'Diagnostica', format: 'text' }],
       rows: [{ note: 'Almeno un coefficiente è molto grande: i dati separano quasi perfettamente gli esiti e le stime/SE non sono affidabili.' }],
-      notes: ['Raccogli più casi, riduci i predittori o usa una regressione penalizzata (Firth).'],
+      notes: [model.penalized ? 'La verosimiglianza penalizzata di Firth mantiene finite le stime; gli errori standard restano approssimati.' : 'Raccogli più casi, riduci i predittori o usa una regressione penalizzata (Firth).'],
     });
   }
 

@@ -325,6 +325,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
         (value) => value !== logisticOutcome
       ),
       cutoff: finite(logistic.cutoff, d.logistic.cutoff),
+      penalized: bool(logistic.penalized, d.logistic.penalized),
     },
     cox: {
       timeVariable: coxTime,

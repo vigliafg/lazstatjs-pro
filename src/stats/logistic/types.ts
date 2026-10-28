@@ -32,4 +32,6 @@ export interface LogisticModel {
   sensitivity: number;
   specificity: number;
   separation: boolean;
+  penalized?: boolean;
+  penalizedLogLik?: number;
 }
