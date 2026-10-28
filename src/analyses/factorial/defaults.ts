@@ -1,5 +1,6 @@
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { FactorialParams } from '../../io/project';
+import { distinctValues } from '../shared/columns';
 
 /**
  * Picks a response and two categorical-looking factors, preferring a pair
@@ -7,12 +8,7 @@ import type { FactorialParams } from '../../io/project';
  * interaction is switched off, because the full model would not be estimable.
  */
 export const defaultFactorialParams = (grid: GridData): FactorialParams => {
-  const distinct = grid.cols.map(
-    (_, index) =>
-      new Set(
-        grid.rows.map(row => String(row[index] ?? '').trim()).filter(value => value !== '')
-      ).size
-  );
+  const distinct = grid.cols.map((_, index) => distinctValues(grid, index).size);
   const candidates = groupColumnIndexes(grid).filter(
     index => distinct[index] >= 2 && distinct[index] <= 8
   );

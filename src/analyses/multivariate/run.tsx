@@ -18,7 +18,7 @@ import { parseNum } from '../../stats/core';
 import type { GridData } from '../../grid/types';
 import type { MultivariateParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
-import { isNumericColumn } from './defaults';
+import { isNumericColumn } from '../shared/columns';
 
 export interface MultivariateInput {
   grid: GridData;

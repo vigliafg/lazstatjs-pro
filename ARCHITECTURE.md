@@ -11,6 +11,7 @@ src/
   grid/         modello dati: celle, colonne, livelli, operazioni, history
   stats/        motore numerico e prosa dei report (nessun React)
   analyses/     una cartella per analisi: Form.tsx + run.tsx (+ defaults.ts)
+                e helper condivisi in analyses/shared/
   components/   componenti riusabili (tabelle, report) senza schermate
   io/           import/export, progetto .lzs, formattazione dei file
   hooks/        stato e orchestrazione (console, sessione, import/export)

@@ -24,7 +24,8 @@ import { parseNum } from '../../stats/core';
 import { analysisRows, type GridData } from '../../grid/types';
 import type { NonParamParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
-import { isBinaryColumn, isNumericColumn, levelsOf } from './defaults';
+import { isNumericColumn } from '../shared/columns';
+import { isBinaryColumn, levelsOf } from './defaults';
 
 export interface NonParamInput {
   grid: GridData;

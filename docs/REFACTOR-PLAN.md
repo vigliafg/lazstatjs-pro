@@ -123,8 +123,11 @@ implementazione per ogni test statistico.
 
 ### Fase 4 — Confine dei dati
 
+- [x] Classificazione condivisa delle colonne: `isNumericColumn`, `columnStrings`,
+      `distinctValues`, `numericColumnIndexes` in `src/analyses/shared/columns.ts`.
 - [ ] `Dataset` in sola lettura + `selectValues` / `groupBy` / `completeCases` condivisi.
-- [ ] Eliminare `toValues` / `numericValues` / `parseNum` duplicati nei moduli.
+- [ ] Eliminare `toValues` / `numericValues` / `parseNum` duplicati nei moduli
+      (restano locali in `stats/wizard.ts`).
 
 **Fatto quando:** le analisi ricevono una vista tipizzata, non `string[][]` grezzo.
 
@@ -164,5 +167,5 @@ implementazione per ogni test statistico.
 | 1 — Sfoltire `App.tsx` | **completa**: estrazioni fatte (451 righe); la fase 2 ha aggiunto gli stati dei parametri |
 | 2 — Contratto unico | **completa**: 19/19 con builder puro e parametri persistiti |
 | 3 — Stratificare `stats/` | non iniziata |
-| 4 — Confine dati | non iniziata |
+| 4 — Confine dati | avviata: classificazione colonne condivisa in `analyses/shared/` |
 | 5 — Guardrail | **completa**: dependency-cruiser, madge, limite righe, ARCHITECTURE.md |

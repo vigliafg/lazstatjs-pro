@@ -1,7 +1,8 @@
 import { useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { MultivariateMode, MultivariateParams } from '../../io/project';
-import { defaultMultivariateParams, isNumericColumn } from './defaults';
+import { defaultMultivariateParams } from './defaults';
+import { numericColumnIndexes } from '../shared/columns';
 
 export interface MultivariateFormProps {
   grid: GridData;
@@ -19,9 +20,7 @@ export const MultivariateForm = ({
   setMultivariateParams,
 }: MultivariateFormProps) => {
   const { mode, standardize, selected } = multivariateParams;
-  const numericColumns = grid.cols
-    .map((_, index) => index)
-    .filter(index => isNumericColumn(grid, index));
+  const numericColumns = numericColumnIndexes(grid);
 
   // Keep the old behaviour: a change in the number of columns re-picks the
   // default variables. The first mount must not overwrite restored params.

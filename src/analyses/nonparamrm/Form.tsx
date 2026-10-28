@@ -5,8 +5,8 @@ import type { NonParamMode, NonParamParams } from '../../io/project';
 import {
   defaultSelection,
   isBinaryColumn,
-  isNumericColumn,
 } from './defaults';
+import { numericColumnIndexes } from '../shared/columns';
 
 export interface NonParamFormProps {
   grid: GridData;
@@ -64,9 +64,7 @@ export const NonParamForm = ({
     }));
   };
 
-  const numericColumns = grid.cols
-    .map((_, index) => index)
-    .filter(index => isNumericColumn(grid, index));
+  const numericColumns = numericColumnIndexes(grid);
   const binaryColumns = grid.cols
     .map((_, index) => index)
     .filter(index => isBinaryColumn(grid, index));

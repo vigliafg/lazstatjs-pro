@@ -1,9 +1,7 @@
 import type { GridData } from '../../grid/types';
 import type { CoxParams } from '../../io/project';
 import { parseNum } from '../../stats/core';
-
-const columnStrings = (grid: GridData, index: number): string[] =>
-  grid.rows.map(row => String(row[index] ?? '').trim());
+import { columnStrings } from '../shared/columns';
 
 const defaultTime = (grid: GridData): number => {
   for (let index = 0; index < grid.cols.length; index++) {

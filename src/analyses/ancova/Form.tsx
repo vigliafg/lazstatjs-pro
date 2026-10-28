@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
 import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
 import type { AncovaParams } from '../../io/project';
-import { isNumericColumn } from './columns';
+import { numericColumnIndexes } from '../shared/columns';
 
 export interface AncovaFormProps {
   grid: GridData;
@@ -24,7 +24,7 @@ export const AncovaForm = ({
   setAncovaParams,
 }: AncovaFormProps) => {
   const { response, factor, covariates } = ancovaParams;
-  const numericColumns = grid.cols.map((_, index) => index).filter(index => isNumericColumn(grid, index));
+  const numericColumns = numericColumnIndexes(grid);
   const factorColumns = groupColumnIndexes(grid);
   const availableCovariates = numericColumns.filter(index => index !== response && index !== factor);
 

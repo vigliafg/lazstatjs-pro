@@ -5,19 +5,11 @@ import {
   type GridData,
 } from '../../grid/types';
 import type { NonParamMode, NonParamParams } from '../../io/project';
-import { parseNum } from '../../stats/core';
+import { isNumericColumn, numericColumnIndexes } from '../shared/columns';
 
 export const levelsOf = (grid: GridData, index: number): string[] => {
   const col = grid.cols[index];
   return orderedColumnLevels(col, grid.rows, index).map(level => levelLabel(col, level.value));
-};
-
-export const isNumericColumn = (grid: GridData, index: number): boolean => {
-  const values = grid.rows
-    .map(row => String(row[index] ?? '').trim())
-    .filter(value => value !== '');
-  if (values.length < 2) return false;
-  return values.every(value => Number.isFinite(parseNum(value)));
 };
 
 export const isBinaryColumn = (grid: GridData, index: number): boolean =>
@@ -42,7 +34,7 @@ export const defaultSelection = (grid: GridData, mode: NonParamMode): number[] =
 /** Default coerenti con quelli che il pannello calcolava al primo mount. */
 export const defaultNonParamParams = (grid: GridData): NonParamParams => {
   const binary = grid.cols.map((_, index) => index).filter(index => isBinaryColumn(grid, index));
-  const numeric = grid.cols.map((_, index) => index).filter(index => isNumericColumn(grid, index));
+  const numeric = numericColumnIndexes(grid);
   return {
     mode: 'friedman',
     selected: defaultSelection(grid, 'friedman'),

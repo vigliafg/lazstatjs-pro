@@ -1,7 +1,8 @@
 import { useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { RepeatedAnovaParams } from '../../io/project';
-import { defaultRepeatedAnovaParams, isNumericColumn } from './defaults';
+import { defaultRepeatedAnovaParams } from './defaults';
+import { numericColumnIndexes } from '../shared/columns';
 
 export interface RepeatedAnovaFormProps {
   grid: GridData;
@@ -15,9 +16,7 @@ export const RepeatedAnovaForm = ({
   setRepeatedAnovaParams,
 }: RepeatedAnovaFormProps) => {
   const { selected } = repeatedAnovaParams;
-  const numericColumns = grid.cols
-    .map((_, index) => index)
-    .filter(index => isNumericColumn(grid, index));
+  const numericColumns = numericColumnIndexes(grid);
 
   // Keep the old behaviour: a change in the number of columns re-picks the
   // default conditions. The first mount must not overwrite restored params.

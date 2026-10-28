@@ -1,15 +1,10 @@
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { AncovaParams } from '../../io/project';
-import { isNumericColumn } from './columns';
+import { distinctValues, isNumericColumn } from '../shared/columns';
 
 /** Response numerica, fattore categorico e fino a due covariate numeriche. */
 export const defaultAncovaParams = (grid: GridData): AncovaParams => {
-  const distinct = grid.cols.map(
-    (_, index) =>
-      new Set(
-        grid.rows.map(row => String(row[index] ?? '').trim()).filter(value => value !== '')
-      ).size
-  );
+  const distinct = grid.cols.map((_, index) => distinctValues(grid, index).size);
   const factorCandidates = groupColumnIndexes(grid);
   // Prefer a genuine categorical column, then fall back to a numeric code.
   const factor =
