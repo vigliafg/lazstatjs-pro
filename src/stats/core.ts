@@ -109,3 +109,11 @@ export const buildHistogram = (values: number[], binCount?: number): HistogramRe
 
   return { bins, binWidth, edges, data };
 };
+
+/** Celle testuali di una colonna, ripulite dagli spazi. */
+export const columnStrings = (rows: string[][], index: number): string[] =>
+  rows.map(row => String(row[index] ?? '').trim());
+
+/** Valori numerici di una colonna testuale, ignorando vuoti e non numerici. */
+export const numericValues = (values: string[]): number[] =>
+  values.filter(value => value !== '' && Number.isFinite(parseNum(value))).map(value => parseNum(value));

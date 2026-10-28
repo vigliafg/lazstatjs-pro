@@ -12,7 +12,6 @@ const LIMIT = 700;
 const EXCEPTIONS = new Map([
   ['src/help/helpContent.ts', 1474], // contenuto statico, non logica
   ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
-  ['src/io/project.ts', 855], // schema .lzs (da spezzare in Fase 3/4)
 ]);
 
 const walk = directory =>

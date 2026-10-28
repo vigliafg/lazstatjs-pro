@@ -1,6 +1,6 @@
 import { leveneTest, lillieforsTest } from '../distributions';
-import { parseNum } from '../core';
-import { groupChecks, profileColumns, recommendWizard, sdOf, toValues } from '../kernels/wizard';
+import { columnStrings as toValues, parseNum } from '../core';
+import { groupChecks, profileColumns, recommendWizard, sdOf } from '../kernels/wizard';
 import { auditTable, checkTable, groupTable, selectionTable } from '../tables/wizard';
 import { wizardReport } from '../reports/wizard';
 import type { TableSpec } from '../types';

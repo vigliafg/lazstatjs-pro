@@ -19,6 +19,7 @@ import type { GridData } from '../../grid/types';
 import type { MultivariateParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { isNumericColumn } from '../shared/columns';
+import { completeNumericRows } from '../shared/data';
 
 export interface MultivariateInput {
   grid: GridData;
@@ -53,12 +54,8 @@ export const buildMultivariateOutput = ({
   }
 
   const names = columns.map(index => grid.cols[index]?.name ?? `Var${index + 1}`);
-  const data: number[][] = [];
   // Complete-case analysis: PCA and alpha both need every selected value.
-  grid.rows.forEach(row => {
-    const values = columns.map(index => parseNum(row[index]));
-    if (values.every(value => Number.isFinite(value))) data.push(values);
-  });
+  const data = completeNumericRows(grid, columns);
 
   if (data.length < 3) {
     return {

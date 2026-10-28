@@ -10,6 +10,7 @@ import { timeSeriesReport, timeSeriesTables } from '../../stats/timeseries';
 import { arimaAnalysis } from '../../stats/arima';
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
+import { numericColumnValues } from '../shared/data';
 import type { GridData } from '../../grid/types';
 import type { TimeSeriesParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -35,9 +36,7 @@ export const buildTimeSeriesOutput = ({
 }: TimeSeriesInput): AnalysisRunResult => {
   const { variable, period, horizon, differenceMode, seasonalDifferenceMode } = params;
 
-  const values = grid.rows
-    .map(row => parseNum(row[variable]))
-    .filter(value => Number.isFinite(value));
+  const values = numericColumnValues(grid, variable);
 
   if (values.length < 5) {
     return {

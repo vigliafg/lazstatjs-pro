@@ -25,6 +25,7 @@ import { analysisRows, type GridData } from '../../grid/types';
 import type { NonParamParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { isNumericColumn } from '../shared/columns';
+import { completeNumericRows } from '../shared/data';
 import { isBinaryColumn, levelsOf } from './defaults';
 
 export interface NonParamInput {
@@ -55,11 +56,7 @@ const buildFriedman = (
       reason: 'Select at least three numeric columns measured on the same rows',
     };
   }
-  const blocks: number[][] = [];
-  grid.rows.forEach(row => {
-    const values = columns.map(index => parseNum(row[index]));
-    if (values.every(value => Number.isFinite(value))) blocks.push(values);
-  });
+  const blocks = completeNumericRows(grid, columns);
   if (blocks.length < 2) {
     return {
       ok: false,

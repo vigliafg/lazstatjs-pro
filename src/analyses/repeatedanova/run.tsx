@@ -15,6 +15,7 @@ import type { GridData } from '../../grid/types';
 import type { RepeatedAnovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { isNumericColumn } from '../shared/columns';
+import { completeNumericRows } from '../shared/data';
 
 export interface RepeatedAnovaInput {
   grid: GridData;
@@ -36,11 +37,7 @@ export const buildRepeatedAnovaOutput = ({
     };
   }
 
-  const blocks: number[][] = [];
-  grid.rows.forEach(row => {
-    const values = columns.map(index => parseNum(row[index]));
-    if (values.every(value => Number.isFinite(value))) blocks.push(values);
-  });
+  const blocks = completeNumericRows(grid, columns);
   if (blocks.length < 3) {
     return {
       ok: false,

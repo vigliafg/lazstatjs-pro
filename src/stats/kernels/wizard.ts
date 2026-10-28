@@ -1,16 +1,10 @@
 import { leveneTest, lillieforsTest } from '../distributions';
 import { fmtP } from '../format';
 import { describeP, isDecided } from '../reportKit';
-import { parseNum } from '../core';
+import { columnStrings as toValues, numericValues, parseNum } from '../core';
 import type {
   ColumnKind, ColumnProfile, GroupCheck, WizardContext, WizardGoal, WizardRecommendation, WizardSelection,
 } from '../wizard/types';
-
-export const toValues = (rows: string[][], index: number): string[] =>
-  rows.map(row => String(row[index] ?? '').trim());
-
-const numericValues = (values: string[]): number[] =>
-  values.filter(value => value !== '' && Number.isFinite(parseNum(value))).map(value => parseNum(value));
 
 export const sdOf = (values: number[]): number => {
   if (values.length < 2) return NaN;

@@ -90,8 +90,7 @@ incompatibili.
 
 ## Debito noto
 
-- `src/io/project.ts` contiene lo schema completo (855 righe): da spezzare in
-  `io/project/` quando si affronterà la Fase 4.
+- Lo schema `.lzs` è diviso in `io/project/types.ts`, `parse.ts` e `index.ts`.
 - I sei moduli legacy (`ttest`, `anova`, `regression`, `correlation`,
   `chisquare`, `descriptive`) vivono in `stats/tables/` e calcolano ancora dentro
   il table builder: estrarre i kernel è un refactor numerico da fare con i golden

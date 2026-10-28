@@ -1,0 +1,333 @@
+import type { GridData } from '../../grid/types';
+import type { IoPreferences } from '../prefs';
+import type { StoredOutput } from '../outputs';
+import type { SampleSizeDesign } from '../../stats/samplesize';
+import type { DistributionName } from '../../stats/distfit';
+import type { WizardGoal } from '../../stats/wizard';
+
+export const PROJECT_APP = 'lazstats';
+export const PROJECT_VERSION = 1;
+export const PROJECT_STORAGE_KEY = 'lazstats.project.v1';
+/** Keep autosave comfortably below the ~5 MB localStorage budget. */
+export const MAX_AUTOSAVE_CHARS = 4_000_000;
+
+export type ProjectTab = 'data' | 'analysis' | 'settings' | 'help';
+
+export interface TTestParams {
+  type: 'ind' | 'dep' | 'one';
+  var1: number;
+  var2: number;
+  mu: number;
+  useNonParam: boolean;
+  equalVar: boolean;
+}
+
+export interface AnovaParams {
+  dep: number;
+  grp: number;
+  posthoc: string;
+  useNonParam: boolean;
+  kwPosthoc: 'none' | 'bonferroni' | 'holm';
+}
+
+export interface RegParams {
+  dep: number;
+  indeps: number[];
+  useNonParam: boolean;
+  robustEstimator: string;
+}
+
+export interface CorrParams {
+  vars: number[];
+  method: string;
+  showSpearman: boolean;
+  showKendall: boolean;
+}
+
+export interface ChiSqParams {
+  row1col1: number;
+  row1col2: number;
+  row2col1: number;
+  row2col2: number;
+  row1Label: string;
+  row2Label: string;
+  col1Label: string;
+  col2Label: string;
+  runFisherExact: boolean;
+}
+
+/** Parametri del calcolatore di numerosità campionaria. */
+export interface SampleSizeParams {
+  design: SampleSizeDesign;
+  alpha: number;
+  power: number;
+  /** Differenza da rilevare (medie o differenze appaiate). */
+  delta: number;
+  sd: number;
+  p1: number;
+  p2: number;
+  r: number;
+  groups: number;
+  f: number;
+  /** Semi-ampiezza dell'intervallo di confidenza (0 = non richiesta). */
+  margin: number;
+}
+
+/** Parametri del fit delle distribuzioni. */
+export interface DistributionFitParams {
+  variable: number;
+  selected: DistributionName[];
+}
+
+/** Parametri della regressione logistica. */
+export interface LogisticParams {
+  outcome: number;
+  predictors: number[];
+  cutoff: number;
+}
+
+/** Parametri del modello di Cox. */
+export interface CoxParams {
+  timeVariable: number;
+  eventVariable: number;
+  covariates: number[];
+}
+
+/** Parametri della sopravvivenza (Kaplan–Meier). */
+export interface SurvivalParams {
+  timeVariable: number;
+  eventVariable: number;
+  /** -1 = nessun raggruppamento. */
+  groupVariable: number;
+}
+
+export type TimeSeriesDifferenceMode = 'auto' | '0' | '1' | '2';
+export type TimeSeriesSeasonalDifferenceMode = 'auto' | '0' | '1';
+
+/** Parametri della serie temporale (ARIMA/SARIMA + modelli semplici). */
+export interface TimeSeriesParams {
+  variable: number;
+  period: number;
+  horizon: number;
+  differenceMode: TimeSeriesDifferenceMode;
+  seasonalDifferenceMode: TimeSeriesSeasonalDifferenceMode;
+}
+
+/** Parametri della tabella di contingenza R×C. */
+export interface ContingencyParams {
+  rows: string[];
+  cols: string[];
+  /** Frequenze come stringhe: il calcolo usa parseInt, come il form. */
+  values: string[][];
+  exact: boolean;
+  monteCarlo: boolean;
+}
+
+/** Parametri dell'ANCOVA. */
+export interface AncovaParams {
+  response: number;
+  factor: number;
+  covariates: number[];
+}
+
+/** Parametri dell'ANOVA fattoriale a due fattori. */
+export interface FactorialParams {
+  response: number;
+  factorA: number;
+  factorB: number;
+  interaction: boolean;
+}
+
+/** Parametri dell'ANOVA per misure ripetute. */
+export interface RepeatedAnovaParams {
+  selected: number[];
+}
+
+export type MultivariateMode = 'pca' | 'alpha';
+
+/** Parametri di PCA / Cronbach alpha. */
+export interface MultivariateParams {
+  mode: MultivariateMode;
+  standardize: boolean;
+  selected: number[];
+}
+
+export type NonParamMode = 'friedman' | 'mcnemar' | 'cochran' | 'jonckheere';
+
+/** Parametri dei test non parametrici per misure ripetute. */
+export interface NonParamParams {
+  mode: NonParamMode;
+  selected: number[];
+  left: number;
+  right: number;
+  outcome: number;
+  group: number;
+}
+
+/** Parametri del wizard (selezione corrente e raccomandazione). */
+export interface WizardParams {
+  goal: WizardGoal;
+  /** -1 = non selezionata. */
+  outcome: number;
+  /** -1 = nessun gruppo. */
+  group: number;
+  /** -1 = nessuna seconda variabile. */
+  second: number;
+  paired: boolean;
+}
+
+export interface ProjectParams {
+  descVars: number[];
+  ttest: TTestParams;
+  anova: AnovaParams;
+  reg: RegParams;
+  corr: CorrParams;
+  chisq: ChiSqParams;
+  samplesize: SampleSizeParams;
+  distfit: DistributionFitParams;
+  logistic: LogisticParams;
+  cox: CoxParams;
+  survival: SurvivalParams;
+  timeseries: TimeSeriesParams;
+  contingency: ContingencyParams;
+  ancova: AncovaParams;
+  factorial: FactorialParams;
+  repeatedanova: RepeatedAnovaParams;
+  multivariate: MultivariateParams;
+  nonparamrm: NonParamParams;
+  wizard: WizardParams;
+}
+
+export interface ProjectSettings {
+  ciLevel: number;
+  activeAnalysis: string;
+  activeTab: ProjectTab;
+}
+
+export interface ProjectSnapshot {
+  app: typeof PROJECT_APP;
+  version: number;
+  savedAt: string;
+  grid: GridData;
+  prefs: IoPreferences;
+  settings: ProjectSettings;
+  params: ProjectParams;
+  /** Static snapshots of the output console, oldest first. */
+  outputs: StoredOutput[];
+}
+
+export interface ProjectInput {
+  grid: GridData;
+  prefs: IoPreferences;
+  settings: ProjectSettings;
+  params: ProjectParams;
+  outputs?: StoredOutput[];
+}
+
+export const DEFAULT_PARAMS: ProjectParams = {
+  descVars: [0, 1],
+  ttest: { type: 'ind', var1: 0, var2: 1, mu: 0, useNonParam: true, equalVar: true },
+  anova: { dep: 0, grp: 2, posthoc: 'holm', useNonParam: true, kwPosthoc: 'bonferroni' },
+  reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen' },
+  corr: { vars: [0, 1], method: 'pearson', showSpearman: true, showKendall: true },
+  chisq: {
+    row1col1: 30,
+    row1col2: 20,
+    row2col1: 15,
+    row2col2: 35,
+    row1Label: 'Group A',
+    row2Label: 'Group B',
+    col1Label: 'Success',
+    col2Label: 'Failure',
+    runFisherExact: true,
+  },
+  samplesize: {
+    design: 'twoMeans',
+    alpha: 0.05,
+    power: 0.8,
+    delta: 5,
+    sd: 10,
+    p1: 0.5,
+    p2: 0.3,
+    r: 0.3,
+    groups: 3,
+    f: 0.25,
+    margin: 0,
+  },
+  distfit: {
+    variable: 0,
+    selected: ['normal', 'lognormal', 'exponential', 'gamma', 'weibull'],
+  },
+  logistic: {
+    outcome: 0,
+    predictors: [1],
+    cutoff: 0.5,
+  },
+  cox: {
+    timeVariable: 0,
+    eventVariable: 1,
+    covariates: [],
+  },
+  survival: {
+    timeVariable: 0,
+    eventVariable: 1,
+    groupVariable: -1,
+  },
+  timeseries: {
+    variable: 0,
+    period: 0,
+    horizon: 12,
+    differenceMode: 'auto',
+    seasonalDifferenceMode: 'auto',
+  },
+  contingency: {
+    rows: ['Treatment', 'Control'],
+    cols: ['Improved', 'Unchanged', 'Worse'],
+    values: [
+      ['42', '18', '6'],
+      ['21', '34', '11'],
+    ],
+    exact: true,
+    monteCarlo: true,
+  },
+  ancova: {
+    response: 0,
+    factor: 1,
+    covariates: [],
+  },
+  factorial: {
+    response: 0,
+    factorA: 1,
+    factorB: 2,
+    interaction: false,
+  },
+  repeatedanova: {
+    selected: [0, 1, 2],
+  },
+  multivariate: {
+    mode: 'pca',
+    standardize: true,
+    selected: [0, 1, 2],
+  },
+  nonparamrm: {
+    mode: 'friedman',
+    selected: [0, 1, 2],
+    left: 0,
+    right: 1,
+    outcome: 0,
+    group: 1,
+  },
+  wizard: {
+    goal: 'compare',
+    outcome: -1,
+    group: -1,
+    second: -1,
+    paired: false,
+  },
+};
+
+export const DEFAULT_SETTINGS: ProjectSettings = {
+  ciLevel: 95,
+  activeAnalysis: 'wizard',
+  activeTab: 'data',
+};

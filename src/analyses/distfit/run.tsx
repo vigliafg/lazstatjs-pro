@@ -14,6 +14,7 @@ import {
 } from '../../stats/distfit';
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
+import { numericColumnValues } from '../shared/data';
 import type { GridData } from '../../grid/types';
 import type { DistributionFitParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -30,9 +31,7 @@ export const buildDistributionFitOutput = ({
   params,
   ciLevel,
 }: DistributionFitInput): AnalysisRunResult => {
-  const values = grid.rows
-    .map(row => parseNum(row[params.variable]))
-    .filter(value => Number.isFinite(value));
+  const values = numericColumnValues(grid, params.variable);
 
   if (values.length < 3) {
     return { ok: false, reason: 'Select a numeric variable with at least three valid values' };
