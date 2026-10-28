@@ -269,7 +269,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       posthoc: text(anova.posthoc, d.anova.posthoc),
       useNonParam: bool(anova.useNonParam, d.anova.useNonParam),
       kwPosthoc:
-        anova.kwPosthoc === 'none' || anova.kwPosthoc === 'bonferroni' || anova.kwPosthoc === 'holm'
+        anova.kwPosthoc === 'none' || anova.kwPosthoc === 'bonferroni' || anova.kwPosthoc === 'holm' || anova.kwPosthoc === 'fdr'
           ? anova.kwPosthoc
           : d.anova.kwPosthoc,
     },

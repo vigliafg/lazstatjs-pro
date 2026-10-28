@@ -12,7 +12,7 @@ export interface AnovaTablesOptions {
   depName: string;
   grpName: string;
   posthoc: PostHocMethod;
-  kwPosthoc: 'none' | 'bonferroni' | 'holm';
+  kwPosthoc: 'none' | 'bonferroni' | 'holm' | 'fdr';
   level: number;
   useNonParam: boolean;
 }
@@ -160,6 +160,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
       tukey: 'Tukey–Kramer (approssimazione Bonferroni)',
       bonferroni: 'Bonferroni',
       holm: 'Holm',
+      fdr: 'FDR (Benjamini–Hochberg)',
       gameshowell: 'Games–Howell (Welch pairwise)',
     };
 
@@ -237,7 +238,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
       tables.push({
         id: 'anova-dunn',
         title: 'Post-hoc Dunn',
-        subtitle: kwPosthoc === 'holm' ? 'correzione Holm' : 'correzione Bonferroni',
+        subtitle: kwPosthoc === 'holm' ? 'correzione Holm' : kwPosthoc === 'fdr' ? 'correzione FDR' : 'correzione Bonferroni',
         columns: [
           { key: 'comparison', label: 'Confronto', format: 'text' },
           { key: 'z', label: 'z', format: 'dec3' },

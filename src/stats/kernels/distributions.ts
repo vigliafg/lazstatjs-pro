@@ -1,3 +1,4 @@
+import { benjaminiHochberg } from './multiple';
 import { jStat } from '../jstat';
 
 // ---------------------------------------------------------------------------
@@ -296,7 +297,7 @@ export interface DunnResult {
 /** Dunn's post-hoc test for Kruskal-Wallis with Holm adjustment by default. */
 export const dunnTest = (
   groups: { [key: string]: number[] },
-  adjustment: 'holm' | 'bonferroni' = 'holm'
+  adjustment: 'holm' | 'bonferroni' | 'fdr' = 'holm'
 ): DunnResult[] => {
   const keys = Object.keys(groups);
   const all: { value: number; group: string }[] = [];
@@ -339,7 +340,10 @@ export const dunnTest = (
   }
 
   const raw = results.map(r => r.p);
-  const adjusted = adjustment === 'holm' ? holmAdjust(raw) : bonferroniAdjust(raw);
+  const adjusted =
+    adjustment === 'holm' ? holmAdjust(raw) :
+    adjustment === 'fdr' ? benjaminiHochberg(raw) :
+    bonferroniAdjust(raw);
   results.forEach((r, i) => {
     r.pAdj = adjusted[i];
   });

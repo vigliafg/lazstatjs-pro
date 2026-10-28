@@ -27,7 +27,7 @@ export interface AnovaParams {
   grp: number;
   posthoc: string;
   useNonParam: boolean;
-  kwPosthoc: 'none' | 'bonferroni' | 'holm';
+  kwPosthoc: 'none' | 'bonferroni' | 'holm' | 'fdr';
 }
 
 export interface RegParams {

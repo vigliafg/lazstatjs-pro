@@ -1,6 +1,7 @@
 import { jStat } from '../jstat';
 import { parseNum } from '../core';
 import { calcKruskalWallis } from './index';
+import { benjaminiHochberg } from './multiple';
 import {
   bonferroniAdjust,
   chi2SF,
@@ -15,14 +16,14 @@ import {
 } from '../distributions';
 import type { DunnResult } from '../distributions';
 
-export type PostHocMethod = 'none' | 'tukey' | 'bonferroni' | 'holm' | 'gameshowell';
+export type PostHocMethod = 'none' | 'tukey' | 'bonferroni' | 'holm' | 'fdr' | 'gameshowell';
 
 export interface AnovaStatsOptions {
   rows: readonly (readonly string[])[];
   depIdx: number;
   grpIdx: number;
   posthoc: PostHocMethod;
-  kwPosthoc: 'none' | 'bonferroni' | 'holm';
+  kwPosthoc: 'none' | 'bonferroni' | 'holm' | 'fdr';
   level: number;
   useNonParam: boolean;
 }
@@ -244,6 +245,7 @@ export const anovaStats = (options: AnovaStatsOptions): AnovaStats | null => {
     let adjusted: number[] = raw;
     if (posthoc === 'holm') adjusted = holmAdjust(raw);
     else if (posthoc === 'bonferroni') adjusted = bonferroniAdjust(raw);
+    else if (posthoc === 'fdr') adjusted = benjaminiHochberg(raw);
     else adjusted = raw.map(value => Math.min(1, value * raw.length));
 
     pairs.forEach((pair, index) => {
