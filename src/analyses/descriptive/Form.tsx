@@ -1,6 +1,6 @@
-import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
+import { VariableList } from '../../components/FormFields';
 
 export interface DescriptiveFormProps {
   grid: GridData;
@@ -9,27 +9,15 @@ export interface DescriptiveFormProps {
 }
 
 export const DescriptiveForm = ({ grid, descVars, setDescVars }: DescriptiveFormProps) => (
-  <>
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Select Variables</label>
-        <div className="bg-surface3 border border-border2 rounded p-2 min-w-[200px] max-h-[100px] overflow-auto scrollbar">
-          {grid.cols.map((col, i) => (
-            <label key={i} className="flex items-center gap-2 text-[11px] text-text2 hover:text-text cursor-pointer py-0.5">
-              <input 
-                type="checkbox" 
-                className="accent-accent" 
-                checked={descVars.includes(i)} 
-                onChange={(e) => {
-                  const newVars = e.target.checked 
-                    ? [...descVars, i]
-                    : descVars.filter(idx => idx !== i);
-                  setDescVars(newVars);
-                }}
-              />
-              {columnLabel(col)}
-            </label>
-          ))}
-        </div>
-      </div>
-  </>
+  <VariableList
+    label="Select Variables"
+    cols={grid.cols}
+    selected={descVars}
+    hint="One row per variable, with N, missing, spread, quantiles and normality checks."
+    onToggle={(column, checked) =>
+      setDescVars(previous =>
+        checked ? [...previous, column] : previous.filter(index => index !== column)
+      )
+    }
+  />
 );

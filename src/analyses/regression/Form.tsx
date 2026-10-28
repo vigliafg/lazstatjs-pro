@@ -1,7 +1,14 @@
-import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { RegParams } from '../../io/project';
+import {
+  Advanced,
+  CheckboxField,
+  Field,
+  VariableList,
+  VariableSelect,
+  variableOptions,
+} from '../../components/FormFields';
 
 export interface RegressionFormProps {
   grid: GridData;
@@ -11,62 +18,49 @@ export interface RegressionFormProps {
 
 export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionFormProps) => (
   <>
-      <>
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Dependent (Y)</label>
-          <select 
-            className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[120px]"
-            value={regParams.dep}
-            onChange={(e) => setRegParams(p => ({ ...p, dep: parseInt(e.target.value) }))}
-          >
-            {grid.cols.map((c, i) => <option key={i} value={i}>{columnLabel(c)}</option>)}
-          </select>
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Independents (X)</label>
-          <div className="bg-surface3 border border-border2 rounded p-2 min-w-[200px] max-h-[100px] overflow-auto scrollbar">
-            {grid.cols.map((col, i) => (
-              <label key={i} className="flex items-center gap-2 text-[11px] text-text2 hover:text-text cursor-pointer py-0.5">
-                <input 
-                  type="checkbox" 
-                  className="accent-accent" 
-                  checked={regParams.indeps.includes(i)}
-                  onChange={(e) => {
-                    const newIndeps = e.target.checked 
-                      ? [...regParams.indeps, i]
-                      : regParams.indeps.filter(idx => idx !== i);
-                    setRegParams(p => ({ ...p, indeps: newIndeps }));
-                  }}
-                />
-                {columnLabel(col)}
-              </label>
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Robust SE</label>
-          <select
-            className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[110px]"
-            value={regParams.robustSE}
-            onChange={(e) => setRegParams(p => ({ ...p, robustSE: e.target.value as RegParams['robustSE'] }))}
-          >
-            <option value="none">None (OLS)</option>
-            <option value="HC1">HC1</option>
-            <option value="HC3">HC3</option>
-          </select>
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Non-Parametric</label>
-          <label className="flex items-center gap-1.5 text-[11px] text-text2 hover:text-text cursor-pointer h-full pt-1">
-            <input 
-              type="checkbox" 
-              className="accent-accent" 
-              checked={regParams.useNonParam}
-              onChange={(e) => setRegParams(p => ({ ...p, useNonParam: e.target.checked }))}
-            />
-            Theil-Sen Robust Line
-          </label>
-        </div>
-      </>
+    <VariableSelect
+      label="Dependent (Y)"
+      value={regParams.dep}
+      options={variableOptions(grid.cols)}
+      onChange={value => setRegParams(previous => ({ ...previous, dep: value }))}
+    />
+    <VariableList
+      label="Independents (X)"
+      cols={grid.cols}
+      selected={regParams.indeps}
+      onToggle={(column, checked) =>
+        setRegParams(previous => ({
+          ...previous,
+          indeps: checked
+            ? [...previous.indeps, column]
+            : previous.indeps.filter(index => index !== column),
+        }))
+      }
+    />
+    <Advanced>
+      <Field label="Robust SE" hint="Heteroskedasticity-consistent standard errors.">
+        <select
+          aria-label="Regression robust standard errors"
+          className="min-w-[110px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={regParams.robustSE}
+          onChange={event =>
+            setRegParams(previous => ({
+              ...previous,
+              robustSE: event.target.value as RegParams['robustSE'],
+            }))
+          }
+        >
+          <option value="none">None (OLS)</option>
+          <option value="HC1">HC1</option>
+          <option value="HC3">HC3</option>
+        </select>
+      </Field>
+      <CheckboxField
+        label="Theil-Sen robust line"
+        checked={regParams.useNonParam}
+        onChange={checked => setRegParams(previous => ({ ...previous, useNonParam: checked }))}
+        hint="Median-slope estimate with bootstrap CI."
+      />
+    </Advanced>
   </>
 );

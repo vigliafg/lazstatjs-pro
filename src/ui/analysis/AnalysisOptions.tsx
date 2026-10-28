@@ -37,24 +37,7 @@ import { TdCoxForm } from '../../analyses/tdcox/Form';
 import type { ProjectParams } from '../../io/project';
 import type { AnalysisTabProps } from './types';
 import { useAnalysisStore } from './store';
-
-const Section = ({
-  title,
-  hint,
-  children,
-}: {
-  title: string;
-  hint?: string;
-  children: ReactNode;
-}) => (
-  <section className="border-b border-border/70 pb-4 last:border-0 last:pb-0">
-    <div className="mb-2 flex items-baseline justify-between gap-2">
-      <h3 className="font-mono text-[9px] uppercase tracking-[0.18em] text-text3">{title}</h3>
-      {hint && <span className="text-[9px] text-text3/70">{hint}</span>}
-    </div>
-    {children}
-  </section>
-);
+import { Section } from '../../components/FormFields';
 
 const inputClass =
   'w-full bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded focus:border-accent focus:outline-none';
