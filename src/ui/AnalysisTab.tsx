@@ -28,9 +28,10 @@ import { OrdinalForm } from '../analyses/ordinal/Form';
 import { MiForm } from '../analyses/mi/Form';
 import { MixedAnovaForm } from '../analyses/mixedanova/Form';
 import { ParametricForm } from '../analyses/parametric/Form';
+import { ResamplingForm } from '../analyses/resampling/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, MixedAnovaParams, ParametricSurvivalParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, MixedAnovaParams, ParametricSurvivalParams, ResamplingParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -91,6 +92,8 @@ export interface AnalysisTabProps {
   setMixedAnovaParams: Dispatch<SetStateAction<MixedAnovaParams>>;
   parametricParams: ParametricSurvivalParams;
   setParametricParams: Dispatch<SetStateAction<ParametricSurvivalParams>>;
+  resamplingParams: ResamplingParams;
+  setResamplingParams: Dispatch<SetStateAction<ResamplingParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -164,6 +167,8 @@ export const AnalysisTab = ({
   setMixedAnovaParams,
   parametricParams,
   setParametricParams,
+  resamplingParams,
+  setResamplingParams,
   grid,
   outputs,
   removeOutput,
@@ -334,6 +339,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'resampling' && (
+        <ResamplingForm grid={grid} resamplingParams={resamplingParams} setResamplingParams={setResamplingParams} />
       )}
 
       {activeAnalysis === 'parametric' && (

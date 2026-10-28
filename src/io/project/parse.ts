@@ -239,6 +239,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
   const nonparamrm = isRecord(raw.nonparamrm) ? raw.nonparamrm : {};
+  const resampling = isRecord(raw.resampling) ? raw.resampling : {};
   const parametric = isRecord(raw.parametric) ? raw.parametric : {};
   const mixedanova = isRecord(raw.mixedanova) ? raw.mixedanova : {};
   const mi = isRecord(raw.mi) ? raw.mi : {};
@@ -399,6 +400,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       right: index(nonparamrm.right, d.nonparamrm.right, width),
       outcome: index(nonparamrm.outcome, d.nonparamrm.outcome, width),
       group: index(nonparamrm.group, d.nonparamrm.group, width),
+    },
+    resampling: {
+      outcome: index(resampling.outcome, d.resampling.outcome, width),
+      group: index(resampling.group, d.resampling.group, width),
+      statistic: resampling.statistic === 'median' ? 'median' : d.resampling.statistic,
+      permutations: Math.max(99, Math.min(50000, integer(resampling.permutations, d.resampling.permutations))),
+      bootstrap: Math.max(99, Math.min(50000, integer(resampling.bootstrap, d.resampling.bootstrap))),
     },
     parametric: {
       time: index(parametric.time, d.parametric.time, width),

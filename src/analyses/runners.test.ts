@@ -26,6 +26,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'parametric',
     'regression',
     'repeatedanova',
+    'resampling',
     'samplesize',
     'survival',
     'timeseries',

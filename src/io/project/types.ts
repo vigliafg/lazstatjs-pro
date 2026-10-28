@@ -168,6 +168,15 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri di permutazione/bootstrap a due gruppi. */
+export interface ResamplingParams {
+  outcome: number;
+  group: number;
+  statistic: 'mean' | 'median';
+  permutations: number;
+  bootstrap: number;
+}
+
 /** Parametri della sopravvivenza parametrica. */
 export interface ParametricSurvivalParams {
   time: number;
@@ -257,6 +266,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  resampling: ResamplingParams;
   parametric: ParametricSurvivalParams;
   mixedanova: MixedAnovaParams;
   mi: MiParams;
@@ -389,6 +399,13 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  resampling: {
+    outcome: 0,
+    group: 2,
+    statistic: 'mean',
+    permutations: 2000,
+    bootstrap: 2000,
   },
   parametric: {
     time: 0,

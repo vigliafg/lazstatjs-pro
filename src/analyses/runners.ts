@@ -28,6 +28,7 @@ import { buildOrdinalOutput } from './ordinal/run';
 import { buildMiOutput } from './mi/run';
 import { buildMixedAnovaOutput } from './mixedanova/run';
 import { buildParametricOutput } from './parametric/run';
+import { buildResamplingOutput } from './resampling/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -102,4 +103,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildMixedAnovaOutput({ grid, params: params.mixedanova, ciLevel }),
   parametric: ({ grid, params, ciLevel }) =>
     buildParametricOutput({ grid, params: params.parametric, ciLevel }),
+  resampling: ({ grid, params, ciLevel }) =>
+    buildResamplingOutput({ grid, params: params.resampling, ciLevel }),
 };

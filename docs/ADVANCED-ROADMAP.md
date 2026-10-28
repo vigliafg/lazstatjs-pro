@@ -34,7 +34,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [x] **Sopravvivenza parametrica**: Weibull ed esponenziale AFT, time ratio e
       CI; validata contro survival::survreg. Restano Cox stratificato e
       covariate tempo-dipendenti.
-- [ ] **Bootstrap e permutazione** come inferenza trasversale.
+- [x] **Bootstrap e permutazione**: scheda Resampling per la differenza tra
+      due gruppi (media/mediana, p di permutazione, CI bootstrap). Resta
+      l'integrazione nelle altre procedure.
 - [ ] **Potenza estesa**: mixed, survival, equivalenza.
 
 ## Priorità 3 — fuori perimetro
