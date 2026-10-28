@@ -146,6 +146,15 @@ export interface TheilSenEstimates {
   hi: number;
 }
 
+export interface RobustCoefficient {
+  b: number;
+  se: number;
+  t: number;
+  p: number;
+  ciLo: number;
+  ciHi: number;
+}
+
 export interface RegressionStats {
   n: number;
   k: number;
@@ -167,6 +176,7 @@ export interface RegressionStats {
   crit: number;
   intercept: RegressionCoefficient;
   coefficients: RegressionCoefficient[];
+  robust: { intercept: RobustCoefficient; coefficients: RobustCoefficient[] } | null;
   diagnostics: RegressionDiagnostics;
   residualsOls: RegressionResidualStats;
   residualsTs: RegressionResidualStats | null;
@@ -179,7 +189,8 @@ export const regressionStats = (
   rows: readonly (readonly string[])[],
   depIdx: number,
   indepIdxs: number[],
-  level: number
+  level: number,
+  robustSE: 'none' | 'HC1' | 'HC3' = 'none'
 ): RegressionStats | null => {
   const validRows = rows.filter(row => {
     if (isNaN(parseNum(row[depIdx]))) return false;
@@ -439,6 +450,40 @@ export const regressionStats = (
     };
   });
 
+  let robust: RegressionStats['robust'] = null;
+  if (robustSE !== 'none') {
+    const width = k + 1;
+    const meat = Array.from({ length: width }, () => new Array<number>(width).fill(0));
+    X.forEach((row, index) => {
+      const h = Math.min(1 - 1e-12, Math.max(0, leverage[index]));
+      const factor = robustSE === 'HC3' ? 1 / Math.pow(1 - h, 2) : n / fit.df;
+      const weight = fit.residuals[index] * fit.residuals[index] * factor;
+      for (let i = 0; i < width; i++) {
+        for (let j = 0; j < width; j++) {
+          meat[i][j] += weight * row[i] * row[j];
+        }
+      }
+    });
+    const cov = multiply(multiply(fit.xtxInv, meat), fit.xtxInv);
+    const se = cov.map((row, index) => Math.sqrt(Math.max(0, row[index])));
+    const coefficient = (index: number): RobustCoefficient => {
+      const valueSe = se[index];
+      const t = valueSe > 0 ? fit.coef[index] / valueSe : NaN;
+      return {
+        b: fit.coef[index],
+        se: valueSe,
+        t,
+        p: twoSidedTP(t, fit.df),
+        ciLo: fit.coef[index] - crit * valueSe,
+        ciHi: fit.coef[index] + crit * valueSe,
+      };
+    };
+    robust = {
+      intercept: coefficient(0),
+      coefficients: predictors.map((_, index) => coefficient(index + 1)),
+    };
+  }
+
   const univariateSlopes =
     k > 1 ? predictors.map(values => calcTheilSen(values, Y).slope) : [];
 
@@ -463,6 +508,7 @@ export const regressionStats = (
     crit,
     intercept,
     coefficients,
+    robust,
     diagnostics: {
       maxLeverage,
       maxCook,

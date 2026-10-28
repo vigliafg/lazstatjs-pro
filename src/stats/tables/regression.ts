@@ -9,16 +9,18 @@ export interface RegressionTablesOptions {
   depName: string;
   predNames: string[];
   level: number;
+  robustSE?: 'none' | 'HC1' | 'HC3';
 }
 
 export const regressionTables = (options: RegressionTablesOptions): TableSpec[] => {
   const { rows, depIdx, indepIdxs, depName, predNames, level } = options;
-  const stats = regressionStats(rows, depIdx, indepIdxs, level);
+  const robustSE = options.robustSE ?? 'none';
+  const stats = regressionStats(rows, depIdx, indepIdxs, level, robustSE);
   if (!stats) return [];
   const {
     n, k, df, sse, ssr, sst, mse, msRegression, r, r2, adjR2, seEstimate, f, pF,
     aic, bic, dw, intercept, coefficients, diagnostics,
-    residualsOls, residualsTs, theilSen, univariateSlopes,
+    residualsOls, residualsTs, theilSen, univariateSlopes, robust,
   } = stats;
   const {
     maxLeverage, maxCook, cookOutliers, bpStat, bpP,
@@ -190,6 +192,31 @@ export const regressionTables = (options: RegressionTablesOptions): TableSpec[] 
         ts: univariateSlopes[index],
       })),
       notes: ['Con più predittori il Theil–Sen è calcolato separatamente per ciascun predittore e non controlla gli altri: usarlo solo come diagnostica descrittiva.'],
+    });
+  }
+
+  if (robust) {
+    tables.push({
+      id: 'reg-robust-se',
+      title: 'Errori standard robusti',
+      subtitle: `${robustSE} · CI ${level}%`,
+      columns: [
+        { key: 'predictor', label: 'Predictor', format: 'text' },
+        { key: 'b', label: 'B', format: 'dec4' },
+        { key: 'se', label: 'SE robusto', format: 'dec4' },
+        { key: 't', label: 't', format: 'dec3' },
+        { key: 'p', label: 'p', format: 'p' },
+        { key: 'ciLo', label: 'CI low', format: 'dec4' },
+        { key: 'ciHi', label: 'CI high', format: 'dec4' },
+      ],
+      rows: [
+        { predictor: '(Intercept)', ...robust.intercept },
+        ...predNames.map((name, index) => ({ predictor: name, ...robust.coefficients[index] })),
+      ],
+      notes: [
+        'HC1 = n/(n−k−1); HC3 = 1/(1−h)². La matrice di covarianza robusta non assume varianza costante.',
+        'I gradi di libertà restano n−k−1; con pochi casi i test robusti sono instabili.',
+      ],
     });
   }
 

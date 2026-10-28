@@ -35,6 +35,7 @@ export interface RegParams {
   indeps: number[];
   useNonParam: boolean;
   robustEstimator: string;
+  robustSE: 'none' | 'HC1' | 'HC3';
 }
 
 export interface CorrParams {
@@ -239,7 +240,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
   descVars: [0, 1],
   ttest: { type: 'ind', var1: 0, var2: 1, mu: 0, useNonParam: true, equalVar: true },
   anova: { dep: 0, grp: 2, posthoc: 'holm', useNonParam: true, kwPosthoc: 'bonferroni' },
-  reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen' },
+  reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen', robustSE: 'none' },
   corr: { vars: [0, 1], method: 'pearson', showSpearman: true, showKendall: true },
   chisq: {
     row1col1: 30,

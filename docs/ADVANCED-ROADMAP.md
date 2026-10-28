@@ -11,7 +11,8 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [ ] **Modelli misti**: LMM/GLMM, GEE.
 - [ ] **EFA + omega**: rotazioni, parallel analysis, affidabilità omega.
 - [ ] **Dati mancanti**: imputazione multipla, FIML.
-- [ ] **Errori standard robusti**: HC1/HC3 e cluster-robust nella regressione.
+- [x] **Errori standard robusti**: HC1/HC3 nella regressione, con tabella
+      dedicata e test contro un riferimento sandwich.
 - [ ] **Accordo**: ICC, Bland–Altman, kappa di Cohen/Fleiss/pesata.
 - [x] **TOST / non-inferiorità**: nuova scheda Equivalence (TOST) con disegno
       one-sample, paired e due gruppi indipendenti.

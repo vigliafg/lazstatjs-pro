@@ -279,6 +279,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       indeps: indexList(reg.indeps, d.reg.indeps, width),
       useNonParam: bool(reg.useNonParam, d.reg.useNonParam),
       robustEstimator: text(reg.robustEstimator, d.reg.robustEstimator),
+      robustSE: reg.robustSE === 'HC1' || reg.robustSE === 'HC3' ? reg.robustSE : d.reg.robustSE,
     },
     corr: {
       vars: indexList(corr.vars, d.corr.vars, width),

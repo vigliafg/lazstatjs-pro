@@ -278,6 +278,7 @@ export interface RegressionRunInput {
       depName: grid.cols[dep].name,
       predNames: indeps.map(index => grid.cols[index].name),
       level: ciLevel,
+      robustSE: regParams.robustSE,
     });
     const report = regressionReport({
       tables,

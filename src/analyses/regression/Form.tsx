@@ -43,6 +43,18 @@ export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionForm
           </div>
         </div>
         <div className="flex flex-col gap-1">
+          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Robust SE</label>
+          <select
+            className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[110px]"
+            value={regParams.robustSE}
+            onChange={(e) => setRegParams(p => ({ ...p, robustSE: e.target.value as RegParams['robustSE'] }))}
+          >
+            <option value="none">None (OLS)</option>
+            <option value="HC1">HC1</option>
+            <option value="HC3">HC3</option>
+          </select>
+        </div>
+        <div className="flex flex-col gap-1">
           <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Non-Parametric</label>
           <label className="flex items-center gap-1.5 text-[11px] text-text2 hover:text-text cursor-pointer h-full pt-1">
             <input 
