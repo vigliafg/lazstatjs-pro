@@ -14,12 +14,12 @@ import { regressionTables } from '../../stats/regression';
 import { regressionReport } from '../../stats/report';
 import { calcNormalityTests, calcTheilSen } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { RegParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface RegressionRunInput {
-  grid: GridData;
+  grid: Dataset;
   regParams: RegParams;
   ciLevel: number;
 }

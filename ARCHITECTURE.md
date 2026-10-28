@@ -8,7 +8,8 @@ duplicare calcolo, form, report e persistenza. Le regole sono verificate da
 
 ```
 src/
-  grid/         modello dati: celle, colonne, livelli, operazioni, history
+  grid/         modello dati: celle, colonne, livelli, operazioni, history;
+                `Dataset` è la vista readonly usata dalle analisi
   stats/        motore numerico e prosa dei report (nessun React):
                 kernels/ numeri puri, tables/ TableSpec, reports/ ReportSpec
   analyses/     una cartella per analisi: Form.tsx + run.tsx (+ defaults.ts)
@@ -44,6 +45,7 @@ Tutte le 19 analisi passano dallo stesso punto:
 ```ts
 // src/analyses/<id>/run.tsx
 buildOutput({ grid, params, ciLevel }): AnalysisRunResult
+// grid è un Dataset in sola lettura
 // ok: { ok: true, node, tables, report }
 // no: { ok: false, reason }
 ```

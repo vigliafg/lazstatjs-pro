@@ -14,13 +14,13 @@ import {
   levelLabel,
   orderedColumnLevels,
   referenceFirst,
-  type GridData,
+  type Dataset,
 } from '../../grid/types';
 import type { AncovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface AncovaInput {
-  grid: GridData;
+  grid: Dataset;
   params: AncovaParams;
   ciLevel: number;
 }

@@ -1,11 +1,11 @@
 import { ANALYSIS_RUNNERS } from '../analyses/runners';
 import type { AnalysisRunResult } from '../analyses/types';
-import type { GridData } from '../grid/types';
+import type { Dataset } from '../grid/types';
 import type { ProjectParams } from '../io/project';
 
 interface UseAnalysisRunOptions {
   activeAnalysis: string;
-  grid: GridData;
+  grid: Dataset;
   params: ProjectParams;
   ciLevel: number;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */

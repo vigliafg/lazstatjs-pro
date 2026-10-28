@@ -1,4 +1,4 @@
-import { analysisRows, groupColumnIndexes, type GridData } from '../../grid/types';
+import { analysisRows, groupColumnIndexes, type Dataset, type GridData } from '../../grid/types';
 import type { WizardParams } from '../../io/project';
 import { profileColumns } from '../../stats/wizard';
 
@@ -12,8 +12,8 @@ const firstOfKind = (
 };
 
 /** Griglia con i gruppi risolti nelle loro etichette (per profili e tabelle). */
-export const wizardGrid = (grid: GridData): GridData => ({
-  ...grid,
+export const wizardGrid = (grid: Dataset): GridData => ({
+  cols: [...grid.cols],
   rows: analysisRows(grid, groupColumnIndexes(grid)),
 });
 

@@ -15,12 +15,12 @@ import {
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import { numericColumnValues } from '../shared/data';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { DistributionFitParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface DistributionFitInput {
-  grid: GridData;
+  grid: Dataset;
   params: DistributionFitParams;
   ciLevel: number;
 }

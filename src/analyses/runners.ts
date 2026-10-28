@@ -1,5 +1,5 @@
 import type { AnalysisRunResult } from './types';
-import type { GridData } from '../grid/types';
+import type { Dataset } from '../grid/types';
 import type { ProjectParams } from '../io/project';
 import { buildDescriptiveOutput } from './descriptive/run';
 import { buildTTestOutput } from './ttest/run';
@@ -22,7 +22,7 @@ import { buildNonParamOutput } from './nonparamrm/run';
 import { buildWizardOutput } from './wizard/run';
 
 export interface AnalysisRunContext {
-  grid: GridData;
+  grid: Dataset;
   params: ProjectParams;
   ciLevel: number;
 }

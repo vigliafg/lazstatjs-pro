@@ -15,7 +15,7 @@ import { interpretR } from '../format';
 import { eigenSymmetric } from '../linalg';
 
 export interface RegressionTablesOptions {
-  rows: string[][];
+  rows: readonly (readonly string[])[];
   depIdx: number;
   indepIdxs: number[];
   depName: string;

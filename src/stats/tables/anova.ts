@@ -19,7 +19,7 @@ import { interpretD, interpretEta } from '../format';
 export type PostHocMethod = 'none' | 'tukey' | 'bonferroni' | 'holm' | 'gameshowell';
 
 export interface AnovaTablesOptions {
-  rows: string[][];
+  rows: readonly (readonly string[])[];
   depIdx: number;
   grpIdx: number;
   depName: string;

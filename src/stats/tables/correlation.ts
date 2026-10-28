@@ -13,7 +13,7 @@ import {
 import { stars, interpretR } from '../format';
 
 export interface CorrelationTablesOptions {
-  rows: string[][];
+  rows: readonly (readonly string[])[];
   varIdxs: number[];
   varNames: string[];
   level: number;
@@ -37,7 +37,7 @@ interface PairResult {
   kendallP: number;
 }
 
-const pairedColumns = (rows: string[][], i: number, j: number) => {
+const pairedColumns = (rows: readonly (readonly string[])[], i: number, j: number) => {
   const xs: number[] = [];
   const ys: number[] = [];
   rows.forEach(row => {

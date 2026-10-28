@@ -15,12 +15,12 @@ import { fmtEst } from '../../stats/format';
 import { ResultTables } from '../../components/ResultTable';
 import { calcFisherExact } from '../../stats/kernels';
 import { AlertCircle } from 'lucide-react';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { ChiSqParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface ChiSquareRunInput {
-  grid: GridData;
+  grid: Dataset;
   chisqParams: ChiSqParams;
   ciLevel: number;
 }

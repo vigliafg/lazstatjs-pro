@@ -13,12 +13,12 @@ import { correlationTables } from '../../stats/correlation';
 import { correlationReport } from '../../stats/report';
 import { calcKendallTau } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { CorrParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface CorrelationRunInput {
-  grid: GridData;
+  grid: Dataset;
   corrParams: CorrParams;
   ciLevel: number;
 }

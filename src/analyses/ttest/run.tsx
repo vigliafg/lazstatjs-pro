@@ -15,12 +15,12 @@ import { calcMannWhitneyU, calcWilcoxonSignedRank } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
 import type { TableSpec } from '../../stats/types';
 import type { ReportSpec } from '../../stats/report';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { TTestParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface TTestRunInput {
-  grid: GridData;
+  grid: Dataset;
   ttestParams: TTestParams;
   ciLevel: number;
 }

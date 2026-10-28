@@ -13,12 +13,12 @@ import { anovaReport } from '../../stats/report';
 import { calcKruskalWallis, calcMannWhitneyU } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
 import { analysisRows } from '../../grid/types';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { AnovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface AnovaRunInput {
-  grid: GridData;
+  grid: Dataset;
   anovaParams: AnovaParams;
   ciLevel: number;
 }

@@ -136,7 +136,8 @@ dentro i table builder, senza impatto sui report)
 - [x] Classificazione condivisa delle colonne: `isNumericColumn`, `columnStrings`,
       `distinctValues`, `numericColumnIndexes` in `src/analyses/shared/columns.ts`.
 - [x] Schema `.lzs` diviso in `io/project/types.ts`, `parse.ts` e `index.ts`.
-- [ ] `Dataset` in sola lettura + `selectValues` / `groupBy` / `completeCases` tipizzati.
+- [x] `Dataset` in sola lettura (`src/grid/types.ts`) usato da tutti i builder;
+      `selectValues`/`completeCases`/`groupBy` condivisi in `analyses/shared/`.
 - [x] Eliminare `toValues` / `numericValues` / `parseNum` duplicati nei moduli:
       restano solo le implementazioni condivise in `stats/core.ts`.
 
@@ -178,5 +179,5 @@ dentro i table builder, senza impatto sui report)
 | 1 — Sfoltire `App.tsx` | **completa**: estrazioni fatte (451 righe); la fase 2 ha aggiunto gli stati dei parametri |
 | 2 — Contratto unico | **completa**: 19/19 con builder puro e parametri persistiti |
 | 3 — Stratificare `stats/` | **completa** (struttura): tutti i moduli in types/tables/reports + kernel condivisi |
-| 4 — Confine dati | parziale: helper e schema `.lzs` completi; resta il `Dataset` in sola lettura |
+| 4 — Confine dati | **completa**: `Dataset` readonly, helper condivisi e schema `.lzs` diviso |
 | 5 — Guardrail | **completa**: dependency-cruiser, madge, limite righe, ARCHITECTURE.md |

@@ -22,7 +22,7 @@ interface VariableSummary {
 }
 
 export const descriptiveTables = (
-  rows: string[][],
+  rows: readonly (readonly string[])[],
   variableIndices: number[],
   columnNames: string[],
   level = 95

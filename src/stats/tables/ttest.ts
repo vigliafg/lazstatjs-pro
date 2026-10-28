@@ -22,7 +22,7 @@ import { fmtEst, interpretD, interpretR } from '../format';
 
 export interface TTestTablesOptions {
   type: 'one' | 'ind' | 'dep';
-  rows: string[][];
+  rows: readonly (readonly string[])[];
   i1: number;
   i2: number;
   name1: string;

@@ -15,14 +15,14 @@ import {
 } from '../../stats/multivariate';
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { MultivariateParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { isNumericColumn } from '../shared/columns';
 import { completeNumericRows } from '../shared/data';
 
 export interface MultivariateInput {
-  grid: GridData;
+  grid: Dataset;
   params: MultivariateParams;
   ciLevel: number;
 }

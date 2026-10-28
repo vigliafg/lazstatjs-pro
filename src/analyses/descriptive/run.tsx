@@ -24,7 +24,7 @@ import type { AnalysisRunResult } from '../types';
 import { ResultTables } from '../../components/ResultTable';
 
 export interface DescriptiveInput {
-  rows: string[][];
+  rows: readonly (readonly string[])[];
   columnNames: string[];
   /** Indici di colonna selezionati dall'utente. */
   indices: number[];

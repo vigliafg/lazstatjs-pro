@@ -8,12 +8,12 @@ import {
 import { fitLogistic, logisticCurve, logisticReport, logisticTables } from '../../stats/logistic';
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { LogisticParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface LogisticInput {
-  grid: GridData;
+  grid: Dataset;
   params: LogisticParams;
   ciLevel: number;
 }

@@ -13,7 +13,7 @@ export const parseNum = (x: string | number | undefined | null): number => {
  * are empty or invalid. Only complete pairs are returned, so `a[i]` and `b[i]`
  * always belong to the same row.
  */
-export const pairedValues = (rows: string[][], var1: number, var2: number) => {
+export const pairedValues = (rows: readonly (readonly string[])[], var1: number, var2: number) => {
   const a: number[] = [];
   const b: number[] = [];
   rows.forEach(row => {

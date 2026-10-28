@@ -11,12 +11,12 @@ import { arimaAnalysis } from '../../stats/arima';
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import { numericColumnValues } from '../shared/data';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { TimeSeriesParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface TimeSeriesInput {
-  grid: GridData;
+  grid: Dataset;
   params: TimeSeriesParams;
   ciLevel: number;
 }

@@ -8,12 +8,12 @@ import {
 import { coxReport, coxTables, fitCox } from '../../stats/cox';
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { CoxParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface CoxInput {
-  grid: GridData;
+  grid: Dataset;
   params: CoxParams;
   ciLevel: number;
 }
@@ -32,7 +32,7 @@ const numericShare = (values: string[]): number => {
 
 /** Numeric columns stay numeric; small categorical columns become dummies. */
 const encodeColumn = (
-  rows: string[][],
+  rows: readonly (readonly string[])[],
   index: number,
   name: string
 ): EncodedCovariate[] => {

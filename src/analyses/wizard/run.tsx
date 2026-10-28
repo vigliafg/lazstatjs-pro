@@ -1,13 +1,13 @@
 import { Compass } from 'lucide-react';
 import { ResultTables } from '../../components/ResultTable';
 import { goalLabel, runWizard } from '../../stats/wizard';
-import type { GridData } from '../../grid/types';
+import type { Dataset } from '../../grid/types';
 import type { WizardParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { wizardGrid } from './defaults';
 
 export interface WizardInput {
-  grid: GridData;
+  grid: Dataset;
   params: WizardParams;
   ciLevel: number;
 }

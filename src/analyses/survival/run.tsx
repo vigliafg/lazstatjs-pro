@@ -7,12 +7,12 @@ import {
 import { survivalReport, survivalTables } from '../../stats/survival';
 import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
-import { analysisRows, type GridData } from '../../grid/types';
+import { analysisRows, type Dataset } from '../../grid/types';
 import type { SurvivalParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
 export interface SurvivalInput {
-  grid: GridData;
+  grid: Dataset;
   params: SurvivalParams;
   ciLevel: number;
 }

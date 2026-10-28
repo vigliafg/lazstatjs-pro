@@ -35,6 +35,12 @@ export interface GridData {
   rows: string[][];
 }
 
+/** Vista in sola lettura usata dai builder delle analisi. */
+export interface Dataset {
+  readonly cols: readonly Column[];
+  readonly rows: readonly (readonly string[])[];
+}
+
 export interface ColTypeDef {
   id: ColType;
   label: string;
@@ -83,10 +89,10 @@ export const uniqueColName = (cols: Column[], base: string): string => {
   return `${base}_${i}`;
 };
 
-export const nonEmptyRowCount = (rows: string[][]): number =>
+export const nonEmptyRowCount = (rows: readonly (readonly string[])[]): number =>
   rows.filter((r) => r.some((v) => String(v ?? '').trim() !== '')).length;
 
-export const countInvalidCells = (grid: GridData): number => {
+export const countInvalidCells = (grid: Dataset): number => {
   let n = 0;
   grid.rows.forEach((row) => {
     row.forEach((cell, c) => {
@@ -110,7 +116,7 @@ export const naturalCompare = (a: string, b: string): number =>
   a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
 
 /** Distinct non-empty cell values of a column, natural-sorted and capped. */
-export const distinctColumnValues = (rows: string[][], c: number): string[] => {
+export const distinctColumnValues = (rows: readonly (readonly string[])[], c: number): string[] => {
   const seen = new Set<string>();
   rows.forEach((row) => {
     const value = String(row[c] ?? '').trim();
@@ -124,7 +130,7 @@ export const distinctColumnValues = (rows: string[][], c: number): string[] => {
  * keeps old projects and freshly imported data usable without opening the
  * editor first.
  */
-export const columnLevels = (col: Column | undefined, rows: string[][], c: number): CategoryLevel[] => {
+export const columnLevels = (col: Column | undefined, rows: readonly (readonly string[])[], c: number): CategoryLevel[] => {
   if (col?.levels && col.levels.length > 0) return col.levels;
   return distinctColumnValues(rows, c).map((value) => ({ value, label: value }));
 };
@@ -133,7 +139,7 @@ export const levelLabel = (col: Column | undefined, value: string): string =>
   col?.levels?.find((level) => level.value === value)?.label ?? value;
 
 /** Declared levels present in the data, followed by undeclared values. */
-export const orderedColumnLevels = (col: Column | undefined, rows: string[][], c: number): CategoryLevel[] => {
+export const orderedColumnLevels = (col: Column | undefined, rows: readonly (readonly string[])[], c: number): CategoryLevel[] => {
   const observed = distinctColumnValues(rows, c);
   const declared = (col?.levels ?? []).filter((level) => observed.includes(level.value));
   const known = new Set(declared.map((level) => level.value));
@@ -151,7 +157,7 @@ export const referenceFirst = (values: string[], reference?: string): string[] =
  * of levels. `num`, `dec` and `id` are excluded so continuous variables and
  * identifiers never show up in group pickers.
  */
-export const isGroupColumn = (grid: GridData, c: number): boolean => {
+export const isGroupColumn = (grid: Dataset, c: number): boolean => {
   const col = grid.cols[c];
   if (!col || col.type === 'id') return false;
   // `cat` is an explicit declaration and is always offered, however many
@@ -175,7 +181,7 @@ export const isGroupColumn = (grid: GridData, c: number): boolean => {
   return values.length >= 2 && values.length <= 12;
 };
 
-export const groupColumnIndexes = (grid: GridData): number[] =>
+export const groupColumnIndexes = (grid: Dataset): number[] =>
   grid.cols.map((_, i) => i).filter((i) => isGroupColumn(grid, i));
 
 /**
@@ -183,7 +189,7 @@ export const groupColumnIndexes = (grid: GridData): number[] =>
  * output. Labels are applied only when the mapping is injective on the values
  * actually present, so two levels can never be merged by a duplicate label.
  */
-export const analysisRows = (grid: GridData, groupColumns: number[]): string[][] => {
+export const analysisRows = (grid: Dataset, groupColumns: number[]): string[][] => {
   const maps = new Map<number, Map<string, string>>();
   groupColumns.forEach((c) => {
     const col = grid.cols[c];
@@ -193,7 +199,7 @@ export const analysisRows = (grid: GridData, groupColumns: number[]): string[][]
     if (new Set(labels.map((label) => label.toLowerCase())).size !== labels.length) return;
     maps.set(c, new Map(observed.map((value, i) => [value, labels[i]])));
   });
-  if (maps.size === 0) return grid.rows;
+  if (maps.size === 0) return grid.rows.map((row) => [...row]);
   return grid.rows.map((row) =>
     row.map((cell, c) => {
       const map = maps.get(c);
