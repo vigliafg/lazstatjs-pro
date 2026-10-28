@@ -15,6 +15,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { jStat } from './stats/jstat';
 import { ResultTables } from './components/ResultTable';
+import type { AnalysisRunResult } from './analyses/types';
 import { buildDescriptiveOutput } from './analyses/descriptive/run';
 import { buildChiSquareOutput } from './analyses/chisquare/run';
 import { buildCorrelationOutput } from './analyses/correlation/run';
@@ -458,127 +459,66 @@ export default function App() {
   const coxRef = useRef<CoxHandle>(null);
   const wizardRef = useRef<WizardHandle>(null);
 
+  // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
+  // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
+  const emit = (result: AnalysisRunResult) => {
+    if ('reason' in result) {
+      showToast('Error', result.reason, 'error');
+      return;
+    }
+    pushOutput(result.node, result.report);
+  };
+
   const runAnalysis = () => {
     switch (activeAnalysis) {
       case 'descriptive':
-        runDescriptive();
-        break;
+        return emit(
+          buildDescriptiveOutput({
+            rows: grid.rows,
+            columnNames: grid.cols.map(col => col.name),
+            indices: descVars,
+            level: ciLevel,
+          })
+        );
       case 'ttest':
-        runTTest();
-        break;
+        return emit(buildTTestOutput({ grid, ttestParams, ciLevel }));
       case 'anova':
-        runANOVA();
-        break;
+        return emit(buildAnovaOutput({ grid, anovaParams, ciLevel }));
       case 'regression':
-        runRegression();
-        break;
+        return emit(buildRegressionOutput({ grid, regParams, ciLevel }));
       case 'correlation':
-        runCorrelation();
-        break;
+        return emit(buildCorrelationOutput({ grid, corrParams, ciLevel }));
       case 'chisquare':
-        runChiSquare();
-        break;
+        return emit(buildChiSquareOutput({ grid, chisqParams, ciLevel }));
       case 'contingency':
-        contingencyRef.current?.run();
-        break;
+        return contingencyRef.current?.run();
       case 'nonparamrm':
-        nonParamRepeatedRef.current?.run();
-        break;
+        return nonParamRepeatedRef.current?.run();
       case 'repeatedanova':
-        repeatedAnovaRef.current?.run();
-        break;
+        return repeatedAnovaRef.current?.run();
       case 'multivariate':
-        multivariateRef.current?.run();
-        break;
+        return multivariateRef.current?.run();
       case 'ancova':
-        ancovaRef.current?.run();
-        break;
+        return ancovaRef.current?.run();
       case 'samplesize':
-        sampleSizeRef.current?.run();
-        break;
+        return sampleSizeRef.current?.run();
       case 'distfit':
-        distFitRef.current?.run();
-        break;
+        return distFitRef.current?.run();
       case 'factorial':
-        factorialRef.current?.run();
-        break;
+        return factorialRef.current?.run();
       case 'logistic':
-        logisticRef.current?.run();
-        break;
+        return logisticRef.current?.run();
       case 'timeseries':
-        timeSeriesRef.current?.run();
-        break;
+        return timeSeriesRef.current?.run();
       case 'survival':
-        survivalRef.current?.run();
-        break;
+        return survivalRef.current?.run();
       case 'cox':
-        coxRef.current?.run();
-        break;
+        return coxRef.current?.run();
       case 'wizard':
-        wizardRef.current?.run();
-        break;
+        return wizardRef.current?.run();
       default:
         showToast('Analysis', 'Analysis type not implemented yet', 'warn');
     }
-  };
-
-  const runDescriptive = () => {
-    const result = buildDescriptiveOutput({
-      rows: grid.rows,
-      columnNames: grid.cols.map(col => col.name),
-      indices: descVars,
-      level: ciLevel,
-    });
-    if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
-      return;
-    }
-    pushOutput(result.node, result.report);
-  };
-
-  const runTTest = () => {
-    const result = buildTTestOutput({ grid, ttestParams, ciLevel });
-    if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
-      return;
-    }
-    pushOutput(result.node, result.report);
-  };
-
-  const runANOVA = () => {
-    const result = buildAnovaOutput({ grid, anovaParams, ciLevel });
-    if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
-      return;
-    }
-    pushOutput(result.node, result.report);
-  };
-
-  const runRegression = () => {
-    const result = buildRegressionOutput({ grid, regParams, ciLevel });
-    if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
-      return;
-    }
-    pushOutput(result.node, result.report);
-  };
-
-  const runCorrelation = () => {
-    const result = buildCorrelationOutput({ grid, corrParams, ciLevel });
-    if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
-      return;
-    }
-    pushOutput(result.node, result.report);
-  };
-
-  const runChiSquare = () => {
-    const result = buildChiSquareOutput({ grid, chisqParams, ciLevel });
-    if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
-      return;
-    }
-    pushOutput(result.node, result.report);
   };
 
   return (
