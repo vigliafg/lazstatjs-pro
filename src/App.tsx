@@ -19,6 +19,7 @@ import { defaultFactorialParams } from './analyses/factorial/defaults';
 import { defaultRepeatedAnovaParams } from './analyses/repeatedanova/defaults';
 import { defaultMultivariateParams } from './analyses/multivariate/defaults';
 import { defaultNonParamParams } from './analyses/nonparamrm/defaults';
+import { defaultWizardParams } from './analyses/wizard/defaults';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -65,6 +66,7 @@ import {
   type SurvivalParams,
   type TimeSeriesParams,
   type TTestParams,
+  type WizardParams,
 } from './io/project';
 
 const createDefaultGrid = (): GridData => ({
@@ -305,6 +307,10 @@ export default function App() {
     () => boot?.params.nonparamrm ?? defaultNonParamParams(grid)
   );
 
+  const [wizardParams, setWizardParams] = useState<WizardParams>(
+    () => boot?.params.wizard ?? defaultWizardParams(grid)
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -330,8 +336,9 @@ export default function App() {
       repeatedanova: repeatedAnovaParams,
       multivariate: multivariateParams,
       nonparamrm: nonParamParams,
+      wizard: wizardParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -363,6 +370,7 @@ export default function App() {
     setRepeatedAnovaParams(project.params.repeatedanova);
     setMultivariateParams(project.params.multivariate);
     setNonParamParams(project.params.nonparamrm);
+    setWizardParams(project.params.wizard);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -402,7 +410,7 @@ export default function App() {
     pushOutput(result.node, result.report);
   };
 
-  const { runAnalysis, runSignal } = useAnalysisRun({
+  const { runAnalysis } = useAnalysisRun({
     activeAnalysis,
     grid,
     params,
@@ -510,6 +518,8 @@ export default function App() {
             setMultivariateParams={setMultivariateParams}
             nonParamParams={nonParamParams}
             setNonParamParams={setNonParamParams}
+            wizardParams={wizardParams}
+            setWizardParams={setWizardParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}
@@ -520,9 +530,6 @@ export default function App() {
             exportResultsXlsx={exportResultsXlsx}
             setActiveTab={setActiveTab}
             runAnalysis={runAnalysis}
-            runSignal={runSignal}
-            pushOutput={pushOutput}
-            showToast={showToast}
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
           />

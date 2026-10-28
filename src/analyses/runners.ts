@@ -19,6 +19,7 @@ import { buildFactorialOutput } from './factorial/run';
 import { buildRepeatedAnovaOutput } from './repeatedanova/run';
 import { buildMultivariateOutput } from './multivariate/run';
 import { buildNonParamOutput } from './nonparamrm/run';
+import { buildWizardOutput } from './wizard/run';
 
 export interface AnalysisRunContext {
   grid: GridData;
@@ -31,10 +32,8 @@ export interface AnalysisRunContext {
  *
  * Le sei analisi legacy sono già funzioni `(dati, parametri) -> risultato`:
  * qui ricevono un contesto unico invece di sei chiamate con firme diverse.
- * `samplesize`, `distfit`, `logistic`, `cox`, `survival`, `timeseries`,
- * `contingency`, `ancova`, `factorial`, `repeatedanova`, `multivariate` e
- * `nonparamrm` sono i pannelli convertiti: parametri nell'App e builder puro,
- * come le analisi legacy. Resta solo `wizard` sul segnale `runSignal`.
+ * Tutte le 19 analisi (6 legacy + 13 pannelli) hanno un builder puro nel
+ * registro: parametri nell'App, nessun `forwardRef` e nessun segnale.
  */
 export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => AnalysisRunResult> = {
   descriptive: ({ grid, params, ciLevel }) =>
@@ -77,4 +76,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildMultivariateOutput({ grid, params: params.multivariate, ciLevel }),
   nonparamrm: ({ grid, params, ciLevel }) =>
     buildNonParamOutput({ grid, params: params.nonparamrm, ciLevel }),
+  wizard: ({ grid, params, ciLevel }) =>
+    buildWizardOutput({ grid, params: params.wizard, ciLevel }),
 };

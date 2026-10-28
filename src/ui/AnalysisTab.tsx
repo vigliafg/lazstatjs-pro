@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { Play } from 'lucide-react';
 import { ANALYSIS_TABS } from '../analyses/registry';
 import { DescriptiveForm } from '../analyses/descriptive/Form';
@@ -19,11 +19,10 @@ import { FactorialForm } from '../analyses/factorial/Form';
 import { RepeatedAnovaForm } from '../analyses/repeatedanova/Form';
 import { MultivariateForm } from '../analyses/multivariate/Form';
 import { NonParamForm } from '../analyses/nonparamrm/Form';
-import { WizardAnalysis } from '../analyses/WizardAnalysis';
+import { WizardForm } from '../analyses/wizard/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
-import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -66,6 +65,8 @@ export interface AnalysisTabProps {
   setMultivariateParams: Dispatch<SetStateAction<MultivariateParams>>;
   nonParamParams: NonParamParams;
   setNonParamParams: Dispatch<SetStateAction<NonParamParams>>;
+  wizardParams: WizardParams;
+  setWizardParams: Dispatch<SetStateAction<WizardParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -76,9 +77,6 @@ export interface AnalysisTabProps {
   exportResultsXlsx: () => void;
   setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
   runAnalysis: () => void;
-  runSignal: number;
-  pushOutput: (node: ReactNode, report: ReportSpec | null) => void;
-  showToast: (title: string, msg: string, type?: 'ok' | 'warn' | 'error') => void;
   updateColumnLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
   updateColumnRecode: (column: number, mapping: Record<string, string>) => void;
 }
@@ -124,6 +122,8 @@ export const AnalysisTab = ({
   setMultivariateParams,
   nonParamParams,
   setNonParamParams,
+  wizardParams,
+  setWizardParams,
   grid,
   outputs,
   removeOutput,
@@ -134,9 +134,6 @@ export const AnalysisTab = ({
   exportResultsXlsx,
   setActiveTab,
   runAnalysis,
-  runSignal,
-  pushOutput,
-  showToast,
   updateColumnLevels,
   updateColumnRecode,
 }: AnalysisTabProps) => (
@@ -219,14 +216,14 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'wizard' && (
-        <WizardAnalysis
-          runSignal={runSignal}
+        <WizardForm
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
+          onOpenAnalysis={analysisId => setActiveAnalysis(analysisId)}
           ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onOpenAnalysis={(analysisId) => setActiveAnalysis(analysisId)}
+          wizardParams={wizardParams}
+          setWizardParams={setWizardParams}
         />
       )}
 

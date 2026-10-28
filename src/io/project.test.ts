@@ -427,6 +427,24 @@ describe('project sanitisation', () => {
     assert.equal(restored.params.nonparamrm.group, 0);
   });
 
+  it('restores and sanitises wizard parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          wizard: { goal: 'predict', outcome: 99, group: -1, second: 0, paired: true },
+        },
+      })
+    );
+    assert.equal(restored.params.wizard.goal, 'predict');
+    assert.equal(restored.params.wizard.outcome, 2);
+    assert.equal(restored.params.wizard.group, -1);
+    assert.equal(restored.params.wizard.second, 0);
+    assert.equal(restored.params.wizard.paired, true);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

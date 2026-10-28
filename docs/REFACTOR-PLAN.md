@@ -92,29 +92,24 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 - [x] Estrarre `useProjectSession` (`src/hooks/useProjectSession.ts`).
 - [x] Estrarre `useAnalysisRun` (`src/hooks/useAnalysisRun.ts`).
 
-**Stato:** `App.tsx` 3.767 → **451 righe** (-88%). Resta la fase 2: portare i
-parametri dei 13 pannelli fuori dai form e unificarne la persistenza.
+**Stato:** Fase 1 ha portato `App.tsx` da 3.767 a **451 righe**. La fase 2 ha poi
+aggiunto gli stati dei parametri (`App.tsx` è a 576 righe), ma il file non
+contiene più logica di analisi: solo stato, persistenza e composizione.
 
 ### Fase 2 — Unificare il contratto
 
-- [ ] `AnalysisSpec` + `useAnalysisRunner` + `useAnalysisParams`.
-- [x] Un solo punto che appende alla console (niente `pushOutput` sparsa).
-- [x] Registro unico dei builder puri per le 6 analisi legacy (`src/analyses/runners.ts`).
-- [x] Eliminare `forwardRef`/`useImperativeHandle` dai 13 pannelli: il pulsante
-      "Run" incrementa `runSignal`, osservato da `useRunSignal`.
-- [ ] Persistenza parametri unica per id di analisi (`.lzs` compatibile o migrato con versione):
-      `samplesize` già persistito in `ProjectParams`, restano 12 pannelli.
+- [x] Registro unico dei builder: tutte le 19 analisi espongono
+      `(grid, params, ciLevel) -> AnalysisRunResult` (`src/analyses/runners.ts`).
+- [x] `useAnalysisRun`: unico punto di avvio; `emit` unico punto di emissione.
+- [x] Eliminare `forwardRef`/`useImperativeHandle` dai 13 pannelli.
+- [x] Persistenza parametri per id in `ProjectParams`, con parser difensivo e
+      `.lzs` retrocompatibile (i campi mancanti usano i default).
 
-**Stato:** le 19 analisi partono da `useAnalysisRun`. Diciotto hanno builder puro
-e parametri centralizzati/persistiti (`descriptive`, `ttest`, `anova`,
-`regression`, `correlation`, `chisquare`, `samplesize`, `distfit`, `logistic`,
-`cox`, `survival`, `timeseries`, `contingency`, `ancova`, `factorial`,
-`repeatedanova`, `multivariate`, `nonparamrm`); resta `wizard`, che osserva
-`runSignal` ma tiene ancora i parametri nello stato locale (non persistiti). I
-dodici pannelli convertiti sono il modello da replicare: `Form.tsx` + `run.tsx` +
-parametri in `ProjectParams`.
+**Stato:** completa. Ogni analisi ha `Form.tsx` (controllato) + `run.tsx` (builder
+puro); `App.tsx` possiede i parametri e li salva nel progetto. I 19/19 casi
+passano dalla stessa strada.
 
-**Fatto quando:** 19/19 analisi passano dalla stessa strada.
+**Fatto quando:** 19/19 analisi passano dalla stessa strada. ✔
 
 ### Fase 3 — Stratificare `stats/`
 
@@ -165,8 +160,8 @@ implementazione per ogni test statistico.
 | Fase | Stato |
 |---|---|
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
-| 1 — Sfoltire `App.tsx` | **completa**: `App.tsx` 3.767 → 451 righe |
-| 2 — Contratto unico | avviata: 18/19 con builder puro; resta `wizard` |
+| 1 — Sfoltire `App.tsx` | **completa**: estrazioni fatte (451 righe); la fase 2 ha aggiunto gli stati dei parametri |
+| 2 — Contratto unico | **completa**: 19/19 con builder puro e parametri persistiti |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
 | 5 — Guardrail | non iniziata |

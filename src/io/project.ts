@@ -11,6 +11,7 @@ import type { CategoryLevel, ColType, GridData } from '../grid/types';
 import { COL_TYPES, MAX_LEVELS } from '../grid/types';
 import type { SampleSizeDesign } from '../stats/samplesize';
 import type { DistributionName } from '../stats/distfit';
+import type { WizardGoal } from '../stats/wizard';
 import { MAX_COLS, MAX_ROWS } from './readers';
 import { normalizePrefs, type IoPreferences } from './prefs';
 import {
@@ -179,6 +180,18 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri del wizard (selezione corrente e raccomandazione). */
+export interface WizardParams {
+  goal: WizardGoal;
+  /** -1 = non selezionata. */
+  outcome: number;
+  /** -1 = nessun gruppo. */
+  group: number;
+  /** -1 = nessuna seconda variabile. */
+  second: number;
+  paired: boolean;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -198,6 +211,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  wizard: WizardParams;
 }
 
 export interface ProjectSettings {
@@ -319,6 +333,13 @@ export const DEFAULT_PARAMS: ProjectParams = {
     outcome: 0,
     group: 1,
   },
+  wizard: {
+    goal: 'compare',
+    outcome: -1,
+    group: -1,
+    second: -1,
+    paired: false,
+  },
 };
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
@@ -405,6 +426,20 @@ const parseDistributionList = (
 
 const DIFFERENCE_MODES: readonly TimeSeriesDifferenceMode[] = ['auto', '0', '1', '2'];
 const SEASONAL_DIFFERENCE_MODES: readonly TimeSeriesSeasonalDifferenceMode[] = ['auto', '0', '1'];
+const WIZARD_GOALS: readonly WizardGoal[] = [
+  'describe',
+  'compare',
+  'associate',
+  'predict',
+  'survive',
+  'forecast',
+  'plan',
+];
+
+const parseWizardGoal = (value: unknown, fallback: WizardGoal): WizardGoal =>
+  typeof value === 'string' && (WIZARD_GOALS as readonly string[]).includes(value)
+    ? (value as WizardGoal)
+    : fallback;
 
 const parseDifferenceMode = (
   value: unknown,
@@ -542,6 +577,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
   const nonparamrm = isRecord(raw.nonparamrm) ? raw.nonparamrm : {};
+  const wizard = isRecord(raw.wizard) ? raw.wizard : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -686,6 +722,13 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       right: index(nonparamrm.right, d.nonparamrm.right, width),
       outcome: index(nonparamrm.outcome, d.nonparamrm.outcome, width),
       group: index(nonparamrm.group, d.nonparamrm.group, width),
+    },
+    wizard: {
+      goal: parseWizardGoal(wizard.goal, d.wizard.goal),
+      outcome: optionalIndex(wizard.outcome, d.wizard.outcome, width),
+      group: optionalIndex(wizard.group, d.wizard.group, width),
+      second: optionalIndex(wizard.second, d.wizard.second, width),
+      paired: bool(wizard.paired, d.wizard.paired),
     },
   };
 };
