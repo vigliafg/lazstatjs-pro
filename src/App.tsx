@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { 
-  BarChart3, 
-  Settings, 
-  Database, 
-  FileText, 
-  Download, 
-  Upload, 
-  Plus, 
-  Trash2, 
-  Play, 
-  CheckCircle2, 
+import {
+  AlertCircle,
+  BarChart3,
+  CheckCircle2,
   ChevronDown,
+  Database,
+  Download,
+  FileText,
   HelpCircle,
-  Info
+  Info,
+  Settings,
+  Upload,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { jStat } from './stats/jstat';
@@ -28,29 +26,21 @@ import { buildTTestOutput } from './analyses/ttest/run';
 import { OutputConsole, restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
 import { DataTab } from './ui/DataTab';
+import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
-import { DescriptiveForm } from './analyses/descriptive/Form';
-import { TTestForm } from './analyses/ttest/Form';
-import { AnovaForm } from './analyses/anova/Form';
-import { RegressionForm } from './analyses/regression/Form';
-import { CorrelationForm } from './analyses/correlation/Form';
-import { ChiSquareForm } from './analyses/chisquare/Form';
-import { ContingencyAnalysis, type ContingencyHandle } from './analyses/ContingencyAnalysis';
-import { SampleSizeAnalysis, type SampleSizeHandle } from './analyses/SampleSizeAnalysis';
-import { DistributionFitAnalysis, type DistributionFitHandle } from './analyses/DistributionFitAnalysis';
-import { FactorialAnovaAnalysis, type FactorialAnovaHandle } from './analyses/FactorialAnovaAnalysis';
-import { LogisticAnalysis, type LogisticHandle } from './analyses/LogisticAnalysis';
-import { TimeSeriesAnalysis, type TimeSeriesHandle } from './analyses/TimeSeriesAnalysis';
-import { SurvivalAnalysis, type SurvivalHandle } from './analyses/SurvivalAnalysis';
-import { CoxAnalysis, type CoxHandle } from './analyses/CoxAnalysis';
-import { WizardAnalysis, type WizardHandle } from './analyses/WizardAnalysis';
-import {
-  NonParamRepeatedAnalysis,
-  type NonParamRepeatedHandle,
-} from './analyses/NonParamRepeatedAnalysis';
-import { RepeatedAnovaAnalysis, type RepeatedAnovaHandle } from './analyses/RepeatedAnovaAnalysis';
-import { MultivariateAnalysis, type MultivariateHandle } from './analyses/MultivariateAnalysis';
-import { AncovaAnalysis, type AncovaHandle } from './analyses/AncovaAnalysis';
+import type { AncovaHandle } from './analyses/AncovaAnalysis';
+import type { ContingencyHandle } from './analyses/ContingencyAnalysis';
+import type { CoxHandle } from './analyses/CoxAnalysis';
+import type { DistributionFitHandle } from './analyses/DistributionFitAnalysis';
+import type { FactorialAnovaHandle } from './analyses/FactorialAnovaAnalysis';
+import type { LogisticHandle } from './analyses/LogisticAnalysis';
+import type { MultivariateHandle } from './analyses/MultivariateAnalysis';
+import type { NonParamRepeatedHandle } from './analyses/NonParamRepeatedAnalysis';
+import type { RepeatedAnovaHandle } from './analyses/RepeatedAnovaAnalysis';
+import type { SampleSizeHandle } from './analyses/SampleSizeAnalysis';
+import type { SurvivalHandle } from './analyses/SurvivalAnalysis';
+import type { TimeSeriesHandle } from './analyses/TimeSeriesAnalysis';
+import type { WizardHandle } from './analyses/WizardAnalysis';
 import {
   type ReportSpec,
 } from './stats/report';
@@ -886,213 +876,51 @@ export default function App() {
         )}
 
         {activeTab === 'analysis' && (
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="bg-surface border-b border-border shrink-0">
-              <div className="flex overflow-x-auto scrollbar">
-                {ANALYSIS_TABS.map(a => (
-                  <button 
-                    key={a.id}
-                    onClick={() => setActiveAnalysis(a.id)}
-                    className={`atab ${activeAnalysis === a.id ? 'active' : ''}`}
-                  >
-                    {a.label}
-                  </button>
-                ))}
-              </div>
-              
-              <div className="p-4 flex flex-wrap gap-6 items-start">
-                <div className="flex flex-col gap-1">
-                  <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">CI Level</label>
-                  <select
-                    className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[90px]"
-                    value={ciLevel}
-                    onChange={(e) => setCiLevel(parseInt(e.target.value))}
-                  >
-                    <option value={90}>90%</option>
-                    <option value={95}>95%</option>
-                    <option value={99}>99%</option>
-                  </select>
-                </div>
-                {activeAnalysis === 'descriptive' && (
-                  <DescriptiveForm grid={grid} descVars={descVars} setDescVars={setDescVars} />
-                )}
-
-                {activeAnalysis === 'ttest' && (
-                  <TTestForm grid={grid} ttestParams={ttestParams} setTTestParams={setTTestParams} />
-                )}
-
-                {activeAnalysis === 'anova' && (
-                  <AnovaForm grid={grid} anovaParams={anovaParams} setAnovaParams={setAnovaParams} onLevels={updateColumnLevels} onRecode={updateColumnRecode} />
-                )}
-
-                {activeAnalysis === 'regression' && (
-                  <RegressionForm grid={grid} regParams={regParams} setRegParams={setRegParams} />
-                )}
-
-                {activeAnalysis === 'correlation' && (
-                  <CorrelationForm grid={grid} corrParams={corrParams} setCorrParams={setCorrParams} />
-                )}
-
-                {activeAnalysis === 'chisquare' && (
-                  <ChiSquareForm grid={grid} chisqParams={chisqParams} setChisqParams={setChisqParams} />
-                )}
-
-                {activeAnalysis === 'timeseries' && (
-                  <TimeSeriesAnalysis
-                    ref={timeSeriesRef}
-                    grid={grid}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'survival' && (
-                  <SurvivalAnalysis
-                    ref={survivalRef}
-                    grid={grid}
-                    onLevels={updateColumnLevels}
-                    onRecode={updateColumnRecode}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'cox' && (
-                  <CoxAnalysis
-                    ref={coxRef}
-                    grid={grid}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'wizard' && (
-                  <WizardAnalysis
-                    ref={wizardRef}
-                    grid={grid}
-                    onLevels={updateColumnLevels}
-                    onRecode={updateColumnRecode}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onOpenAnalysis={(analysisId) => setActiveAnalysis(analysisId)}
-                  />
-                )}
-
-                {activeAnalysis === 'logistic' && (
-                  <LogisticAnalysis
-                    ref={logisticRef}
-                    grid={grid}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'factorial' && (
-                  <FactorialAnovaAnalysis
-                    ref={factorialRef}
-                    grid={grid}
-                    onLevels={updateColumnLevels}
-                    onRecode={updateColumnRecode}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'distfit' && (
-                  <DistributionFitAnalysis
-                    ref={distFitRef}
-                    grid={grid}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'samplesize' && (
-                  <SampleSizeAnalysis
-                    ref={sampleSizeRef}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'ancova' && (
-                  <AncovaAnalysis
-                    ref={ancovaRef}
-                    grid={grid}
-                    onLevels={updateColumnLevels}
-                    onRecode={updateColumnRecode}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'multivariate' && (
-                  <MultivariateAnalysis
-                    ref={multivariateRef}
-                    grid={grid}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'repeatedanova' && (
-                  <RepeatedAnovaAnalysis
-                    ref={repeatedAnovaRef}
-                    grid={grid}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'nonparamrm' && (
-                  <NonParamRepeatedAnalysis
-                    ref={nonParamRepeatedRef}
-                    grid={grid}
-                    onLevels={updateColumnLevels}
-                    onRecode={updateColumnRecode}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                {activeAnalysis === 'contingency' && (
-                  <ContingencyAnalysis
-                    ref={contingencyRef}
-                    ciLevel={ciLevel}
-                    onOutput={pushOutput}
-                    onError={(message) => showToast('Error', message, 'error')}
-                  />
-                )}
-
-                <button className="run-btn h-9 self-end" onClick={runAnalysis}>
-                  <Play className="w-3 h-3 inline mr-2" />
-                  Run Analysis
-                </button>
-              </div>
-            </div>
-
-            <OutputConsole
-              outputs={outputs}
-              onRemove={removeOutput}
-              onClear={clearOutput}
-              onCopy={copyOutput}
-              onExportCharts={exportChartPngs}
-              onExportReport={exportReportHtml}
-              onExportXlsx={exportResultsXlsx}
-              onBackToData={() => setActiveTab('data')}
-            />
-          </div>
+          <AnalysisTab
+            activeAnalysis={activeAnalysis}
+            setActiveAnalysis={setActiveAnalysis}
+            ciLevel={ciLevel}
+            setCiLevel={setCiLevel}
+            descVars={descVars}
+            setDescVars={setDescVars}
+            ttestParams={ttestParams}
+            setTTestParams={setTTestParams}
+            anovaParams={anovaParams}
+            setAnovaParams={setAnovaParams}
+            regParams={regParams}
+            setRegParams={setRegParams}
+            corrParams={corrParams}
+            setCorrParams={setCorrParams}
+            chisqParams={chisqParams}
+            setChisqParams={setChisqParams}
+            grid={grid}
+            outputs={outputs}
+            removeOutput={removeOutput}
+            clearOutput={clearOutput}
+            copyOutput={copyOutput}
+            exportChartPngs={exportChartPngs}
+            exportReportHtml={exportReportHtml}
+            exportResultsXlsx={exportResultsXlsx}
+            setActiveTab={setActiveTab}
+            runAnalysis={runAnalysis}
+            pushOutput={pushOutput}
+            showToast={showToast}
+            updateColumnLevels={updateColumnLevels}
+            updateColumnRecode={updateColumnRecode}
+            ancovaRef={ancovaRef}
+            contingencyRef={contingencyRef}
+            coxRef={coxRef}
+            distFitRef={distFitRef}
+            factorialRef={factorialRef}
+            logisticRef={logisticRef}
+            multivariateRef={multivariateRef}
+            nonParamRepeatedRef={nonParamRepeatedRef}
+            repeatedAnovaRef={repeatedAnovaRef}
+            sampleSizeRef={sampleSizeRef}
+            survivalRef={survivalRef}
+            timeSeriesRef={timeSeriesRef}
+            wizardRef={wizardRef}
+          />
         )}
 
         {activeTab === 'help' && <HelpPanel />}
