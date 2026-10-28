@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
 import {
   AlertCircle,
   BarChart3,
@@ -16,16 +15,17 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { jStat } from './stats/jstat';
 import { ResultTables } from './components/ResultTable';
-import { AnalysisReport } from './components/AnalysisReport';
 import { buildDescriptiveOutput } from './analyses/descriptive/run';
 import { buildChiSquareOutput } from './analyses/chisquare/run';
 import { buildCorrelationOutput } from './analyses/correlation/run';
 import { buildAnovaOutput } from './analyses/anova/run';
 import { buildRegressionOutput } from './analyses/regression/run';
 import { buildTTestOutput } from './analyses/ttest/run';
-import { OutputConsole, restoredOutputs, type OutputEntry } from './ui/OutputConsole';
+import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
 import { DataTab } from './ui/DataTab';
+import { useToasts } from './hooks/useToasts';
+import { useOutputConsole } from './hooks/useOutputConsole';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { AncovaHandle } from './analyses/AncovaAnalysis';
@@ -95,13 +95,8 @@ import { ExportDialog } from './io/ExportDialog';
 import type { ImportTable } from './io/readers';
 import { looksLikeJson } from './io/detect';
 import { readDelimitedTable, readJsonTable } from './io/readers';
-import { downloadBytes, downloadExportFile, downloadText } from './io/writers';
-import {
-  buildResultsWorkbookFromElement,
-  readXlsxSheets,
-  XLSX_MIME,
-  type XlsxSheet,
-} from './io/xlsx';
+import { downloadExportFile, downloadText } from './io/writers';
+import { readXlsxSheets, type XlsxSheet } from './io/xlsx';
 import { loadPrefs, savePrefs } from './io/prefs';
 import {
   DEFAULT_PARAMS,
@@ -118,15 +113,6 @@ import {
   type RegParams,
   type TTestParams,
 } from './io/project';
-import { copyText } from './io/clipboard';
-import {
-  capStoredOutputs,
-  extractOutputTitle,
-  sanitizeOutputHtml,
-  type StoredOutput,
-} from './io/outputs';
-import { exportChartsAsPng } from './io/chartExport';
-import { buildReportFromElement } from './io/reportExport';
 
 // --- Types ---
 interface AnalysisConfig {
@@ -227,16 +213,7 @@ export default function App() {
     ran: false,
     issues: [],
   });
-  const [outputs, setOutputs] = useState<OutputEntry[]>(() => restoredOutputs(boot?.outputs));
-  const runSeq = useRef(0);
-  const [toasts, setToasts] = useState<{ id: number; title: string; msg: string; type: 'ok' | 'warn' | 'error' }[]>([]);
-  useEffect(() => {
-    // Scroll only the output container: scrollIntoView() also scrolls the
-    // document/ancestors in some browsers, hiding the main tabs and controls.
-    const el = document.getElementById('output-content');
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [outputs]);
-
+  const { toasts, showToast } = useToasts();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
@@ -252,42 +229,6 @@ export default function App() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [undoGrid, redoGrid]);
-
-  // Each run pushes a single block: the written report is part of that block,
-  // so it always closes the run after every table and chart. The block is also
-  // rendered once to static markup so the console survives reloads and .lzs
-  // files; live runs keep their interactive React nodes in this session.
-  const pushOutput = (node: React.ReactNode, report: ReportSpec | null) => {
-    const block = (
-      <>
-        {node}
-        {report && <AnalysisReport spec={report} />}
-      </>
-    );
-    let html = '';
-    try {
-      html = renderToStaticMarkup(block);
-    } catch (error) {
-      // A failed snapshot must never lose the run that is on screen.
-      console.error('Could not snapshot the output block', error);
-    }
-    const entry: OutputEntry = {
-      id: `run-${Date.now()}-${runSeq.current++}`,
-      title: html ? extractOutputTitle(html) : 'Analysis output',
-      createdAt: new Date().toISOString(),
-      html,
-      node: block,
-    };
-    setOutputs(prev => capStoredOutputs([...prev, entry]));
-  };
-
-  const showToast = (title: string, msg: string, type: 'ok' | 'warn' | 'error' = 'ok') => {
-    const id = Date.now();
-    setToasts(prev => [...prev, { id, title, msg, type }]);
-    setTimeout(() => {
-      setToasts(prev => prev.filter(t => t.id !== id));
-    }, 4000);
-  };
 
   const addColumn = () => {
     setGrid((prev) => gridAddColumn(prev));
@@ -458,6 +399,17 @@ export default function App() {
     boot?.params.descVars ?? DEFAULT_PARAMS.descVars
   );
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
+  const {
+    outputs,
+    setOutputs,
+    pushOutput,
+    clearOutput,
+    removeOutput,
+    copyOutput,
+    exportChartPngs,
+    exportResultsXlsx,
+    exportReportHtml,
+  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
   const [ttestParams, setTTestParams] = useState<TTestParams>(
     boot?.params.ttest ?? DEFAULT_PARAMS.ttest
   );
@@ -733,60 +685,6 @@ export default function App() {
       return;
     }
     pushOutput(result.node, result.report);
-  };
-
-  const clearOutput = () => {
-    setOutputs([]);
-    showToast('Output', 'Output console cleared', 'ok');
-  };
-
-  const removeOutput = (index: number) => {
-    setOutputs((prev) => prev.filter((_, i) => i !== index));
-    showToast('Output', 'Result block removed', 'ok');
-  };
-
-  const copyOutput = async () => {
-    const el = document.getElementById('output-content');
-    if (!el) return;
-    const ok = await copyText(el.innerText);
-    showToast('Output', ok ? 'Output copied to clipboard' : 'Could not copy the output', ok ? 'ok' : 'error');
-  };
-
-  const exportChartPngs = async () => {
-    const el = document.getElementById('output-content');
-    if (!el) return;
-    const result = await exportChartsAsPng(el, 'lazstats-chart');
-    if (result.exported === 0 && result.failed === 0) {
-      showToast('Charts', 'No charts in the output console yet', 'warn');
-    } else if (result.failed > 0) {
-      showToast('Charts', `${result.exported} chart(s) exported, ${result.failed} failed`, 'warn');
-    } else {
-      showToast('Charts', `${result.exported} chart(s) exported as PNG`, 'ok');
-    }
-  };
-
-  const exportResultsXlsx = () => {
-    const el = document.getElementById('output-content');
-    if (!el) return;
-    try {
-      const bytes = buildResultsWorkbookFromElement(el, grid);
-      downloadBytes(bytes, 'lazstats-risultati.xlsx', XLSX_MIME);
-      showToast('Export', 'Workbook .xlsx con il dataset e le tabelle dei risultati', 'ok');
-    } catch (error) {
-      showToast('Export', error instanceof Error ? error.message : 'Could not build the workbook', 'error');
-    }
-  };
-
-  const exportReportHtml = () => {
-    const el = document.getElementById('output-content');
-    if (!el) return;
-    const html = buildReportFromElement(el, {
-      title: 'LazStats JS — Analysis Report',
-      generatedAt: new Date().toLocaleString(),
-      details: [`${nonEmptyRowCount(grid.rows)} rows`, `${grid.cols.length} columns`, `CI ${ciLevel}%`],
-    });
-    downloadText(html, 'lazstats-report.html', 'text/html;charset=utf-8');
-    showToast('Report', 'Printable report downloaded — open it and print to PDF', 'ok');
   };
 
   return (
