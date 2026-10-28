@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { GeeParams } from '../../io/project';
@@ -28,7 +29,7 @@ export const GeeForm = ({ grid, geeParams, setGeeParams }: GeeFormProps) => {
         <label className={labelClass}>Outcome</label>
         <select className={inputClass} value={geeParams.dep} onChange={e => setGeeParams(prev => ({ ...prev, dep: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -45,7 +46,7 @@ export const GeeForm = ({ grid, geeParams, setGeeParams }: GeeFormProps) => {
                 disabled={index === geeParams.dep || index === geeParams.cluster}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}
@@ -56,7 +57,7 @@ export const GeeForm = ({ grid, geeParams, setGeeParams }: GeeFormProps) => {
         <label className={labelClass}>Cluster</label>
         <select className={inputClass} value={geeParams.cluster} onChange={e => setGeeParams(prev => ({ ...prev, cluster: parseInt(e.target.value, 10) }))}>
           {groupColumnIndexes(grid).map(index => (
-            <option key={index} value={index}>{grid.cols[index]?.name}</option>
+            <option key={index} value={index}>{columnLabel(grid.cols[index])}</option>
           ))}
         </select>
       </div>

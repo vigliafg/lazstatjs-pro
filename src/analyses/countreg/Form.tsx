@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { CountParams } from '../../io/project';
@@ -29,7 +30,7 @@ export const CountForm = ({ grid, countParams, setCountParams }: CountFormProps)
         <label className={labelClass}>Count outcome</label>
         <select className={inputClass} value={dep} onChange={e => setCountParams(prev => ({ ...prev, dep: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -46,7 +47,7 @@ export const CountForm = ({ grid, countParams, setCountParams }: CountFormProps)
                 disabled={index === dep}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}

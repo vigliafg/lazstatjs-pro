@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 
@@ -25,7 +26,7 @@ export const DescriptiveForm = ({ grid, descVars, setDescVars }: DescriptiveForm
                   setDescVars(newVars);
                 }}
               />
-              {col.name}
+              {columnLabel(col)}
             </label>
           ))}
         </div>

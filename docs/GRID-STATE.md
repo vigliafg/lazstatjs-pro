@@ -1,27 +1,31 @@
 # Griglia dati — stato dei lavori
 
-> Checkpoint al commit `ff508b7` (`main`, allineato a `origin/main`).
+> Ultimo blocco completato: P0/P1/P2/P3 del backlog (validazione tipo/ruolo,
+> assegnazione a tutti i ruoli, missing code, Playwright, formule persistenti,
+> virtualizzazione, label nei picker).
 > Documento di handoff: cosa è stato costruito, quali invarianti non rompere,
 > cosa resta. L'analisi e il backlog completo sono in
 > [`DATA-EDITING-ANALYSIS.md`](DATA-EDITING-ANALYSIS.md).
 
 ## 1. Sintesi
 
-La griglia non è più solo un editor di celle. Ora è **identity-safe**:
+La griglia non è più solo un editor di celle. Ora è **identity-safe** e
+**analysis-aware**:
 
 - ogni colonna ha un `id` stabile;
 - insert/delete/move/duplicate/split/merge rimappano i parametri;
-- le variabili rimosse o trasformate invalidano il ruolo, non vengono
-  sostituite in silenzio;
+- le variabili rimosse, trasformate o con un tipo incompatibile invalidano il
+  ruolo, non vengono sostituite in silenzio;
+- ogni ruolo di ogni analisi è assegnabile dalla colonna focalizzata;
 - New/Import resettano parametri e output;
 - ogni modifica della griglia ha una revisione, usata per il badge `stale`;
-- un Variable Inspector espone metadati e statistiche;
-- il Setup mostra il contesto dati e può assegnare la colonna focalizzata al
-  ruolo primario;
-- il filtro può essere view-only o influire sulle analisi.
-
-Restano fuori i blocchi più costosi: formule persistenti, virtualizzazione,
-codici missing e suite UI automatica.
+- un Variable Inspector espone metadati, formula, missing code e statistiche;
+- i codici missing dichiarati sono esclusi da tutte le analisi;
+- le colonne calcolate possono avere una formula persistente e si aggiornano a
+  ogni edit;
+- le tabelle grandi renderizzano solo le righe visibili;
+- i picker delle analisi mostrano la label della variabile quando presente;
+- smoke test Playwright coprono i flussi principali su desktop e mobile.
 
 ## 2. Cosa è stato completato
 
@@ -30,6 +34,7 @@ codici missing e suite UI automatica.
 | Identità stabile delle colonne | Fatto |
 | Remap su insert/delete/move/duplicate/split/merge | Fatto |
 | Invalidazione ruoli su delete/split/merge | Fatto |
+| Validazione tipo/ruolo (continuo vs gruppo) | Fatto |
 | Undo/redo con riconciliazione per id | Fatto |
 | Reset su New/Import overwrite | Fatto |
 | Revisione dati + stale output | Fatto |
@@ -37,12 +42,15 @@ codici missing e suite UI automatica.
 | Variable Inspector | Fatto |
 | Contesto dati nel Setup + Data peek | Fatto |
 | Colonna focalizzata → ruolo primario | Fatto |
-| Fill right | Fatto |
-| Test unitari column ops/remap | Fatto |
-| Formule persistenti | Rinviato |
-| Virtualizzazione | Rinviato |
-| Missing code per colonna | Rinviato |
-| Playwright in CI | Rinviato |
+| Colonna focalizzata → qualsiasi ruolo | Fatto |
+| Fill right + fill handle + Ctrl+D / Ctrl+R | Fatto |
+| Editing multi-cella | Fatto |
+| Test unitari column ops/remap/formule/missing | Fatto |
+| Missing code per colonna | Fatto |
+| Formule persistenti con ricalcolo | Fatto |
+| Virtualizzazione righe | Fatto |
+| Label nei picker delle analisi | Fatto |
+| Playwright desktop/mobile in CI | Fatto |
 
 ## 3. Regole operative
 
@@ -71,12 +79,13 @@ codici missing e suite UI automatica.
 | Split column i | nuova a `i+1`; `>= i+1` → `+1`; `i` resta | ruolo su `i` → `-1` | invalidazione |
 | Merge columns a,b | `hi` sparisce; `lo` fusa; `> hi` → `-1` | ruoli su `a`/`b` → `-1` | invalidazione |
 | Recode values/levels | invariati | invariati | stale, **validazione tipo non automatica** |
-| Rename | invariati | invariati | stale (etichette) |
-| Cambio tipo | invariati | invariati | stale, **validazione ruolo non automatica** |
+| Rename | invariati | invariati | stale; le formule seguono il nome |
+| Cambio tipo | invariati | ruolo incompatibile → errore | stale + Run bloccato |
 | New / Import overwrite | tutte nuove | reset | reset + `datasetId` + output svuotati |
 | Import append/merge | invariati / nuovi in coda | invariati | stale |
 | Undo/redo | per id | riconciliati per id | invalidati restano `-1` |
 | Filter | invariati | invariati | firma filtro, stale |
+| Formula edit | invariati | invariati | ricalcolo + stale |
 
 ### 3.3 Dataset replacement
 
@@ -102,12 +111,19 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 ### 3.5 Ruoli invalidi
 
 - `remapParams` restituisce `{ params, invalidated }`.
-- Il Setup calcola `roleErrors` per l'analisi attiva con
-  `validateAnalysisColumnRefs`.
+- `validateAnalysisColumnRefs` controlla che gli indici esistano;
+  `validateRoleTypes` controlla che il tipo della colonna sia compatibile:
+  - ruoli **continui**: rifiutano `cat`, `str`, `alp`, `chr`, `dat`, `dtm`,
+    `tim`, `id`;
+  - ruoli **gruppo**: richiedono `isGroupColumn` (categorie dichiarate,
+    `bol`, oppure codici con 2–12 livelli).
 - Se ci sono errori: banner “Reselect variables”, Run disabilitato, e
   `useAnalysisRun` blocca comunque il run.
 - I select con valore `-1` possono mostrare la prima opzione per come funziona
   il DOM: il banner è la fonte di verità finché l'utente non riseleziona.
+- `roles.ts` descrive ogni ruolo con getter/setter; il primo è il primario.
+  Il Setup permette di assegnare la colonna focalizzata a un ruolo qualsiasi
+  (select + Assign); il Data peek mostra la mappa ruolo → colonna.
 
 ### 3.6 Filtro
 
@@ -116,74 +132,111 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 - Il Setup mostra `Rows 10/20` e “analysis filter”.
 - La firma del filtro entra nello stale; la modalità non è persistita.
 
+### 3.7 Missing code
+
+- `Column.missing?: string[]` contiene i codici dichiarati (es. `-9`, `NA`),
+  modificabili dal Variable Inspector.
+- `maskMissingCodes` azzera le celle con un codice dichiarato **prima** di
+  passarli alle analisi: tutti i runner continuano a trattare `''` come
+  missing, senza modifiche ai kernel.
+- Il conteggio "Missing" nel Setup e nell'inspector include vuoti e codici;
+  il badge `Codes N` mostra quante celle sono state escluse dai codici.
+- La validazione di cella ignora i codici dichiarati.
+- I codici sono opzionali nel progetto: i file vecchi si caricano invariati.
+
+### 3.8 Formule persistenti
+
+- `Column.formula?: string` conserva l'espressione (nomi di colonna, numeri,
+  `+ - * / % ^`, parentesi).
+- `recalculateFormulas` gira dentro `useGridHistory.commit`: ogni edit,
+  paste, fill, recode o rename aggiorna le colonne calcolate prima di salvare
+  la revisione; i valori delle celle restano la fonte per export e reload.
+- Le colonne sono valutate da sinistra a destra: una formula può usare una
+  colonna calcolata precedente.
+- Una formula che non compila (colonna referenziata cancellata) conserva i
+  valori precedenti invece di svuotare la colonna; l'undo ripristina il
+  riferimento.
+- `renameColumn` riscrive i riferimenti nelle formule.
+- `Compute` nel pannello Transform crea una formula persistente quando la
+  casella `formula` è selezionata (default) e una colonna one-shot altrimenti.
+
+### 3.9 Virtualizzazione
+
+- `visibleWindow` calcola la finestra di righe da montare (altezza fissa
+  23 px, overscan 10, soglia 80 righe).
+- Sopra la soglia la tabella usa due righe-spacer: le larghezze delle colonne
+  restano naturali (niente posizionamento assoluto).
+- Il focus programmatico (validate → jump) porta prima la riga nella finestra.
+- Selezione, copy/paste e fill continuano a lavorare sugli indici originali.
+
 ## 4. File chiave
 
 | File | Ruolo |
 |---|---|
-| `src/grid/types.ts` | `Column.id`, `label`, `description`, livelli |
+| `src/grid/types.ts` | `Column.id/formula/missing`, livelli, `columnLabel`, masking |
 | `src/grid/columnOps.ts` | Mappa indici per insert/delete/move/split/merge/map/reset |
-| `src/analyses/params.ts` | Remap, invalidazione, validazione, ruolo primario |
+| `src/grid/formulas.ts` | Valutazione formule, ricalcolo, rewrite su rename |
+| `src/grid/virtual.ts` | Finestra di righe e costanti di virtualizzazione |
+| `src/grid/ops/` | Operazioni pure divise in columns/rows/ranges/clean/recode |
+| `src/grid/ops.ts` | Re-export della superficie storica + edit cella/filtro/validazione |
+| `src/analyses/params.ts` | Remap, invalidazione, validazione indici, ruolo primario |
+| `src/analyses/roles.ts` | Ruoli per analisi, assegnazione, validazione tipo/ruolo |
 | `src/hooks/useColumnOperations.ts` | Handler strutturali della griglia |
-| `src/grid/useGridHistory.ts` | Revisione e undo/redo che restituiscono la griglia |
-| `src/grid/VariableInspector.tsx` | Drawer metadati e statistiche |
+| `src/hooks/useProjectParams.ts` | Stato parametri e `bindParam` estratti da App |
+| `src/grid/useGridHistory.ts` | Revisione, undo/redo e ricalcolo formule |
+| `src/grid/VariableInspector.tsx` | Drawer metadati, formula, missing, statistiche |
+| `src/ui/DataWorkspace.tsx` | Stato di vista della scheda Data e wiring di DataTab |
 | `src/ui/DataTab.tsx` | Layout griglia + inspector, filtro, fill right |
-| `src/ui/analysis/AnalysisOptions.tsx` | Context bar, Data peek, focused column, banner ruoli |
+| `src/ui/analysis/AnalysisOptions.tsx` | Context bar, Data peek, mappa ruoli, banner |
 | `src/hooks/useOutputConsole.tsx` | Meta `dataRevision`/`datasetId`/`filterSignature` |
 | `src/ui/OutputConsole.tsx` | Badge stale |
 | `src/hooks/useImportExport.ts` | Import overwrite → `replaceDataset` |
-| `src/grid/ops.ts` | Operazioni pure; 700 righe, al limite del guard |
+| `e2e/smoke.spec.ts` | Smoke Playwright desktop/mobile |
+| `playwright.config.ts` | webServer + progetti desktop/mobile |
 
 ## 5. Verifica
 
-- `npm run check`: **399 test verdi**, dependency-cruiser, madge e file-size
+- `npm run check`: **419 test verdi**, dependency-cruiser, madge e file-size
   guard ok.
 - `npm run build`: ok (resta il warning Vite >500 kB).
-- Smoke manuale Playwright:
-  - delete/split/merge con banner e Run bloccato;
-  - undo di un move con parametri ripristinati per id;
-  - inspector desktop e mobile;
-  - Data peek;
-  - analysis filter con N ridotto nell'output;
-  - New/Import overwrite con output svuotato;
-  - stale badge dopo edit;
-  - assegnazione della colonna focalizzata al ruolo primario.
+- `npm run test:e2e`: 9 test, 2 progetti (desktop esegue tutti i flussi, mobile
+  esegue caricamento e undo). Coprono:
+  - caricamento della griglia seed, edit + undo;
+  - missing code dall'inspector;
+  - assegnazione a un ruolo non primario;
+  - banner “Reselect variables” dopo cambio tipo incompatibile;
+  - paste di 500 righe, virtualizzazione e scroll all'ultima riga;
+  - formula persistente ricalcolata dopo un edit;
+  - fill down da tastiera + undo;
+  - overwrite multi-cella.
 
 ## 6. Limiti noti
 
-1. **Cambio tipo non validato contro il ruolo.** Un gruppo può diventare
-   continuo e restare selezionato: i dati sono stale, ma il ruolo non viene
-   invalidato automaticamente.
-2. **Label non usata nei picker delle analisi.** Label e description sono nel
-   progetto, nell'inspector e nel Data peek, ma i form mostrano ancora `name`.
-3. **Missing code assente.** La cella vuota è l'unico missing; mancano codici
-   per colonna e report delle esclusioni.
-4. **Stale solo in sessione.** Dopo reload le card ripristinate non hanno
+1. **Stale solo in sessione.** Dopo reload le card ripristinate non hanno
    revision/dataset/filter e non vengono marcate.
-5. **Parametri non contano per lo stale.** Cambiare un parametro non invalida
+2. **Parametri non contano per lo stale.** Cambiare un parametro non invalida
    la card; cambia solo dati, dataset o filtro.
-6. **Invalidati non recuperati dall'undo.** Undo riporta la colonna, ma il
+3. **Invalidati non recuperati dall'undo.** Undo riporta la colonna, ma il
    ruolo resta `-1` e va riselezionato.
-7. **Formule one-shot.** `Compute` crea una colonna statica; non c'è refresh.
-8. **Nessuna virtualizzazione.** Dataset grandi renderizzano tutte le righe
-   visibili.
-9. **Nessuna suite Playwright committata.** Gli smoke sono manuali.
-10. **App e ops a 699/700 righe.** Il prossimo blocco deve splittare prima di
-    aggiungere codice.
+4. **Formule ricalcolate solo sugli edit.** Un progetto caricato mostra i
+   valori salvati finché non si modifica la griglia; nessun ricalcolo
+   automatico al load.
+5. **Missing code per colonna, non per dataset.** Non esiste un elenco
+   globale di codici né un report esportabile delle esclusioni per variabile.
+6. **Virtualizzazione a altezza fissa.** Cambiare il padding delle righe
+   richiede di aggiornare `ROW_HEIGHT` in `src/grid/virtual.ts`.
+7. **Smoke automatici, non suite completa.** I flussi con modali (import,
+   export, livelli, ricodifica) restano a verifica manuale.
 
 ## 7. Prossimi passi
 
 | Priorità | Intervento | Perché |
 |---|---|---|
-| **P0** | Validazione tipo/ruolo (gruppo vs continuo) | Chiude il buco lasciato dal cambio tipo |
-| **P0** | Assegnazione a tutti i ruoli, non solo al primario | Completa DE-2 |
-| **P1** | Missing code per colonna + report esclusioni | Completa DE-3 |
-| **P1** | Playwright in CI | Protegge i flussi appena costruiti |
-| **P2** | Formule persistenti | DE-5 |
-| **P2** | Virtualizzazione righe | DE-6 |
-| **P3** | Label nei picker delle analisi | Rende utile il metadato |
-
-Prima di DE-5/DE-6 conviene splittare `App.tsx` e `grid/ops.ts`, entrambi al
-limite di 700 righe.
+| **P1** | Persistere revision/dataset/firma nelle card `.lzs` | Chiude lo stale in-session |
+| **P1** | Recuperare il ruolo invalidato dall'undo per id | Evita di riselezionare dopo un undo |
+| **P2** | Report esclusioni per variabile (missing codes) | Rende verificabile l'N delle analisi |
+| **P2** | Suite Playwright per import/export/livelli | Copre i modali rimasti manuali |
+| **P3** | Altezza riga configurabile | Toglie il vincolo di `ROW_HEIGHT` |
 
 ## 8. Come riprendere
 
@@ -191,6 +244,7 @@ limite di 700 righe.
 npm install
 npm run dev
 npm run check
+npm run test:e2e
 ```
 
 Invarianti da non rompere:
@@ -203,3 +257,6 @@ Invarianti da non rompere:
 - Ogni run deve salvare revision, dataset e firma del filtro.
 - I campi nuovi del progetto devono restare opzionali: non cambiare
   `PROJECT_VERSION` per un campo opzionale.
+- Le formule si ricalcolano solo dentro `commit`, mai su `setWithoutHistory`.
+- I codici missing vengono azzerati solo nella vista passata alle analisi,
+  non nella griglia originale.

@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import { useMemo, type Dispatch, type SetStateAction } from 'react';
 import { ArrowRight, Compass } from 'lucide-react';
 import { analysisRows, groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
@@ -94,7 +95,7 @@ export const WizardForm = ({
               <option value={-1}>— seleziona —</option>
               {grid.cols.map((column, index) => (
                 <option key={index} value={index}>
-                  {column.name} ({profiles[index]?.kind ?? 'vuota'})
+                  {columnLabel(column)} ({profiles[index]?.kind ?? 'vuota'})
                 </option>
               ))}
             </select>
@@ -115,7 +116,7 @@ export const WizardForm = ({
                 <option value={-1}>— nessun gruppo —</option>
                 {groupColumnIndexes(grid).map(index => (
                   <option key={index} value={index}>
-                    {grid.cols[index]?.name} ({profiles[index]?.unique ?? 0} livelli)
+                    {columnLabel(grid.cols[index])} ({profiles[index]?.unique ?? 0} livelli)
                   </option>
                 ))}
               </select>
@@ -144,7 +145,7 @@ export const WizardForm = ({
               <option value={-1}>— nessuna —</option>
               {grid.cols.map((column, index) => (
                 <option key={index} value={index}>
-                  {column.name} ({profiles[index]?.kind ?? 'vuota'})
+                  {columnLabel(column)} ({profiles[index]?.kind ?? 'vuota'})
                 </option>
               ))}
             </select>

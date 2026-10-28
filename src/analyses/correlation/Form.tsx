@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { CorrParams } from '../../io/project';
@@ -27,7 +28,7 @@ export const CorrelationForm = ({ grid, corrParams, setCorrParams }: Correlation
                     setCorrParams(p => ({ ...p, vars: newVars }));
                   }}
                 />
-                {col.name}
+                {columnLabel(col)}
               </label>
             ))}
           </div>

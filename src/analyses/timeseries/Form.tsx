@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type {
   GridData,
@@ -34,7 +35,7 @@ export const TimeSeriesForm = ({
         <select className={inputClass} value={variable} onChange={e => update({ variable: parseInt(e.target.value, 10) })}>
           {grid.cols.map((column, index) => (
             <option key={index} value={index}>
-              {column.name}
+              {columnLabel(column)}
             </option>
           ))}
         </select>

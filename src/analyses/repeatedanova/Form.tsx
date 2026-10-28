@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import { useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { RepeatedAnovaParams } from '../../io/project';
@@ -55,7 +56,7 @@ export const RepeatedAnovaForm = ({
                 checked={selected.includes(index)}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{grid.cols[index]?.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(grid.cols[index])}</span>
               <span className="text-[9px] text-text3 font-mono">{grid.cols[index]?.type}</span>
             </label>
           ))}

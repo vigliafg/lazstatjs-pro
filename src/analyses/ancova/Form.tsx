@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
 import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
@@ -48,7 +49,7 @@ export const AncovaForm = ({
         >
           {numericColumns.map(index => (
             <option key={index} value={index}>
-              {grid.cols[index]?.name}
+              {columnLabel(grid.cols[index])}
             </option>
           ))}
         </select>
@@ -64,7 +65,7 @@ export const AncovaForm = ({
           >
             {factorColumns.map(index => (
               <option key={index} value={index}>
-                {grid.cols[index]?.name}
+                {columnLabel(grid.cols[index])}
               </option>
             ))}
           </select>
@@ -93,7 +94,7 @@ export const AncovaForm = ({
                 checked={covariates.includes(index)}
                 onChange={() => toggleCovariate(index)}
               />
-              <span className="text-[11px] text-text2">{grid.cols[index]?.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(grid.cols[index])}</span>
               <span className="text-[9px] text-text3 font-mono">{grid.cols[index]?.type}</span>
             </label>
           ))}

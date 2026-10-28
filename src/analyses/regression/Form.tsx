@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { RegParams } from '../../io/project';
@@ -18,7 +19,7 @@ export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionForm
             value={regParams.dep}
             onChange={(e) => setRegParams(p => ({ ...p, dep: parseInt(e.target.value) }))}
           >
-            {grid.cols.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
+            {grid.cols.map((c, i) => <option key={i} value={i}>{columnLabel(c)}</option>)}
           </select>
         </div>
         <div className="flex flex-col gap-1">
@@ -37,7 +38,7 @@ export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionForm
                     setRegParams(p => ({ ...p, indeps: newIndeps }));
                   }}
                 />
-                {col.name}
+                {columnLabel(col)}
               </label>
             ))}
           </div>

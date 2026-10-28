@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TostParams } from '../../io/project';
@@ -32,7 +33,7 @@ export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => 
         <label className={labelClass}>Variable 1</label>
         <select className={inputClass} value={var1} onChange={e => update({ var1: parseInt(e.target.value, 10) })}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -42,7 +43,7 @@ export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => 
           <label className={labelClass}>Variable 2</label>
           <select className={inputClass} value={var2} onChange={e => update({ var2: parseInt(e.target.value, 10) })}>
             {grid.cols.map((column, index) => (
-              <option key={index} value={index}>{column.name}</option>
+              <option key={index} value={index}>{columnLabel(column)}</option>
             ))}
           </select>
         </div>

@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { StratifiedCoxParams } from '../../io/project';
@@ -28,7 +29,7 @@ export const StratifiedCoxForm = ({ grid, stratCoxParams, setStratCoxParams }: S
         <label className={labelClass}>Time</label>
         <select className={inputClass} value={stratCoxParams.time} onChange={e => setStratCoxParams(prev => ({ ...prev, time: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -37,7 +38,7 @@ export const StratifiedCoxForm = ({ grid, stratCoxParams, setStratCoxParams }: S
         <label className={labelClass}>Event (0/1)</label>
         <select className={inputClass} value={stratCoxParams.event} onChange={e => setStratCoxParams(prev => ({ ...prev, event: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -47,7 +48,7 @@ export const StratifiedCoxForm = ({ grid, stratCoxParams, setStratCoxParams }: S
         <select className={inputClass} value={stratCoxParams.stratum} onChange={e => setStratCoxParams(prev => ({ ...prev, stratum: parseInt(e.target.value, 10) }))}>
           <option value={-1}>None</option>
           {groupColumnIndexes(grid).map(index => (
-            <option key={index} value={index}>{grid.cols[index]?.name}</option>
+            <option key={index} value={index}>{columnLabel(grid.cols[index])}</option>
           ))}
         </select>
       </div>
@@ -64,7 +65,7 @@ export const StratifiedCoxForm = ({ grid, stratCoxParams, setStratCoxParams }: S
                 disabled={index === stratCoxParams.time || index === stratCoxParams.event || index === stratCoxParams.stratum}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}

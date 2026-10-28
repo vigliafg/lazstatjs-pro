@@ -3,6 +3,7 @@ import { ChevronDown, Pencil } from 'lucide-react';
 import type { CategoryLevel, ColType, GridData } from './types';
 import { COL_TYPES, columnLevels, isGroupColumn, levelLabel, validateValue } from './types';
 import { rowMatches, type RowFilter } from './ops';
+import { ROW_HEIGHT, visibleWindow } from './virtual';
 import { LevelsEditor } from './LevelsEditor';
 
 interface Props {
@@ -22,6 +23,8 @@ interface Props {
   onCopyRange: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
   onClearRange: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
   onFillDown: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
+  onFillRight: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
+  onSetRange: (range: { r0: number; c0: number; r1: number; c1: number }, value: string) => void;
   onSortCol?: (col: number, dir: 'asc' | 'desc') => void;
   onInspectCol?: (col: number) => void;
   onFocusCol?: (col: number) => void;
@@ -40,7 +43,40 @@ export function DataGrid(props: Props) {
   const [menu, setMenu] = useState<{ kind: 'col' | 'row'; index: number; x: number; y: number } | null>(null);
   const [anchor, setAnchor] = useState<{ r: number; c: number } | null>(null);
   const [sel, setSel] = useState<{ r0: number; c0: number; r1: number; c1: number } | null>(null);
+  const [fillDrag, setFillDrag] = useState<{
+    start: { r0: number; c0: number; r1: number; c1: number };
+    target: { r: number; c: number };
+  } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [viewportH, setViewportH] = useState(600);
+  // Only visible rows are mounted: with 5000 rows the previous table created
+  // 5000 inputs per column and every keystroke re-rendered all of them.
+  const win = visibleWindow(visibleRows.length, scrollTop, viewportH);
+  const windowRows = visibleRows.slice(win.start, win.end);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Drag the small handle at the bottom-right corner of a selection to copy
+  // the top/left edge across the rows/columns it covers.
+  useEffect(() => {
+    if (!fillDrag) return;
+    const finish = () => {
+      const { start, target } = fillDrag;
+      const down = target.r - start.r1;
+      const right = target.c - start.c1;
+      if (down > 0 || (down >= 0 && right > 0)) {
+        if (down >= right) {
+          props.onFillDown({ r0: start.r0, c0: start.c0, r1: target.r, c1: start.c1 });
+        } else {
+          props.onFillRight({ r0: start.r0, c0: start.c0, r1: start.r1, c1: target.c });
+        }
+      }
+      setFillDrag(null);
+    };
+    window.addEventListener('mouseup', finish);
+    return () => window.removeEventListener('mouseup', finish);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fillDrag]);
 
   const inSel = (r: number, c: number): boolean => {
     if (!sel) return false;
@@ -68,11 +104,52 @@ export function DataGrid(props: Props) {
   }, [menu]);
 
   useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const update = () => setViewportH(el.clientHeight);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Keep the focused cell mounted before focusing it (validation jumps and
+  // "Jump to first" can target a row outside the current window).
+  useEffect(() => {
     if (!props.focusCell) return;
-    const el = document.querySelector<HTMLElement>(`[data-cell="${props.focusCell.r}-${props.focusCell.c}"]`);
-    el?.focus();
-    el?.scrollIntoView({ block: 'nearest' });
+    const position = visibleRows.findIndex(item => item.index === props.focusCell?.r);
+    const el = scrollRef.current;
+    if (position >= 0 && el) {
+      const top = position * ROW_HEIGHT;
+      if (top < el.scrollTop || top + ROW_HEIGHT > el.scrollTop + el.clientHeight) {
+        el.scrollTop = top;
+        setScrollTop(top);
+      }
+    }
+    const frame = requestAnimationFrame(() => {
+      const cell = document.querySelector<HTMLElement>(
+        `[data-cell="${props.focusCell?.r}-${props.focusCell?.c}"]`
+      );
+      cell?.focus();
+      cell?.scrollIntoView({ block: 'nearest' });
+    });
+    return () => cancelAnimationFrame(frame);
+    // `visibleRows` is derived from the grid and the filter.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.focusCell]);
+
+  // Deleting rows or applying a filter can leave the scroll position past the
+  // new end; pull it back so the table never shows a blank viewport.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const max = Math.max(0, visibleRows.length * ROW_HEIGHT - el.clientHeight);
+    if (el.scrollTop > max) {
+      el.scrollTop = max;
+      setScrollTop(max);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleRows.length]);
 
   const commitRename = (c: number) => {
     if (draftName.trim() && draftName.trim() !== grid.cols[c].name) props.onRenameCol(c, draftName);
@@ -106,7 +183,11 @@ export function DataGrid(props: Props) {
 
   return (
     <>
-      <div className="flex-1 overflow-auto scrollbar">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-auto scrollbar"
+        onScroll={event => setScrollTop(event.currentTarget.scrollTop)}
+      >
         <table className="w-full border-collapse font-mono text-[11px]">
           <thead className="sticky top-0 z-20">
             <tr className="bg-surface2">
@@ -217,8 +298,13 @@ export function DataGrid(props: Props) {
                 </td>
               </tr>
             )}
-            {visibleRows.map(({ row, index: rIdx }) => (
-              <tr key={rIdx} className="hover:bg-white/5 transition-colors">
+            {win.padTop > 0 && (
+              <tr aria-hidden="true" style={{ height: win.padTop }}>
+                <td colSpan={grid.cols.length + 1} className="p-0 border-0" />
+              </tr>
+            )}
+            {windowRows.map(({ row, index: rIdx }) => (
+              <tr key={rIdx} style={{ height: ROW_HEIGHT }} className="hover:bg-white/5 transition-colors">
                 <td
                   className={`border border-border text-center text-text3 bg-surface2/30 cursor-context-menu select-none ${
                     freezeFirstCol ? 'sticky left-0 z-10 bg-surface2' : ''
@@ -239,6 +325,9 @@ export function DataGrid(props: Props) {
                   return (
                     <td
                       key={cIdx}
+                      onMouseEnter={() => {
+                        if (fillDrag) setFillDrag({ ...fillDrag, target: { r: rIdx, c: cIdx } });
+                      }}
                       className={`border border-border p-0 relative ${
                         selected ? 'outline outline-1 outline-accent' : ''
                       } ${
@@ -267,7 +356,11 @@ export function DataGrid(props: Props) {
                               setSel({ r0: rIdx, c0: cIdx, r1: rIdx, c1: cIdx });
                             }
                           }}
-                          onChange={(e) => props.onCell(rIdx, cIdx, e.target.value)}
+                          onChange={(e) => {
+                            const multi = sel && (sel.r0 !== sel.r1 || sel.c0 !== sel.c1);
+                            if (multi && inSel(rIdx, cIdx)) props.onSetRange(sel, e.target.value);
+                            else props.onCell(rIdx, cIdx, e.target.value);
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') { e.preventDefault(); moveTo(rIdx, cIdx, e.shiftKey ? -1 : 1, 0, e.shiftKey); }
                             else if (e.key === 'Tab') { e.preventDefault(); moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey); }
@@ -315,7 +408,11 @@ export function DataGrid(props: Props) {
                               setSel({ r0: rIdx, c0: cIdx, r1: rIdx, c1: cIdx });
                             }
                           }}
-                          onChange={(e) => props.onCell(rIdx, cIdx, e.target.value)}
+                          onChange={(e) => {
+                            const multi = sel && (sel.r0 !== sel.r1 || sel.c0 !== sel.c1);
+                            if (multi && inSel(rIdx, cIdx)) props.onSetRange(sel, e.target.value);
+                            else props.onCell(rIdx, cIdx, e.target.value);
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'ArrowDown') { e.preventDefault(); moveTo(rIdx, cIdx, 1, 0, e.shiftKey); }
                             else if (e.key === 'ArrowUp') { e.preventDefault(); moveTo(rIdx, cIdx, -1, 0, e.shiftKey); }
@@ -329,6 +426,12 @@ export function DataGrid(props: Props) {
                             } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c' && sel) {
                               e.preventDefault();
                               props.onCopyRange(sel);
+                            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd' && sel) {
+                              e.preventDefault();
+                              props.onFillDown(sel);
+                            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r' && sel) {
+                              e.preventDefault();
+                              props.onFillRight(sel);
                             }
                           }}
                           onPaste={(e) => {
@@ -340,12 +443,40 @@ export function DataGrid(props: Props) {
                           }}
                         />
                       )}
+                      {sel &&
+                        Math.max(sel.r0, sel.r1) === rIdx &&
+                        Math.max(sel.c0, sel.c1) === cIdx && (
+                          <span
+                            role="button"
+                            aria-label="Fill handle"
+                            title="Drag to fill down or right (Ctrl+D / Ctrl+R)"
+                            className="absolute bottom-0 right-0 z-10 h-2 w-2 cursor-crosshair border border-white/70 bg-accent"
+                            onMouseDown={event => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              setFillDrag({
+                                start: {
+                                  r0: Math.min(sel.r0, sel.r1),
+                                  c0: Math.min(sel.c0, sel.c1),
+                                  r1: Math.max(sel.r0, sel.r1),
+                                  c1: Math.max(sel.c0, sel.c1),
+                                },
+                                target: { r: rIdx, c: cIdx },
+                              });
+                            }}
+                          />
+                        )}
                       {!isCat && cell === '' && <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] text-text3 pointer-events-none italic opacity-50">null</span>}
                     </td>
                   );
                 })}
               </tr>
             ))}
+            {win.padBottom > 0 && (
+              <tr aria-hidden="true" style={{ height: win.padBottom }}>
+                <td colSpan={grid.cols.length + 1} className="p-0 border-0" />
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -3,6 +3,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { CleanPanel } from '../grid/CleanPanel';
 import { VariableInspector } from '../grid/VariableInspector';
 import { fillRightRange as gridFillRight } from '../grid/fillRight';
+import { setRangeValue as gridSetRangeValue } from '../grid/ops';
 import { DataGrid } from '../grid/DataGrid';
 import { TransformPanel } from '../grid/TransformPanel';
 import {
@@ -453,6 +454,8 @@ export const DataTab = ({
     }}
     onClearRange={(range) => setGrid((prev) => gridClearRange(prev, range))}
     onFillDown={(range) => setGrid((prev) => gridFillDown(prev, range))}
+    onFillRight={(range) => setGrid((prev) => gridFillRight(prev, range))}
+    onSetRange={(range, value) => setGrid((prev) => gridSetRangeValue(prev, range, value))}
     freezeFirstCol={freezeFirstCol}
     rowFilter={activeRowFilter}
     onSortCol={(col, dir) => {

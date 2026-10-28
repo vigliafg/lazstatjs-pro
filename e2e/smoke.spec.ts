@@ -48,6 +48,30 @@ test('assigns the focused column to a non-primary role', async ({ page, isMobile
   await expect(page.getByText('group variable: Age')).toBeVisible();
 });
 
+test('virtualises large grids and scrolls to the last row', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'large paste is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.locator('input[data-cell="0-0"]').focus();
+  await page.evaluate(() => {
+    const block = Array.from({ length: 500 }, (_, i) => `r${i}\t${i}`).join('\n');
+    const data = new DataTransfer();
+    data.setData('text/plain', block);
+    document
+      .querySelector('input[data-cell="0-0"]')
+      ?.dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }));
+  });
+
+  await expect(page.locator('input[data-cell="10-1"]')).toHaveValue('10');
+  expect(await page.locator('input[data-cell]').count()).toBeLessThan(300);
+
+  await page.locator('table').evaluate(table => {
+    const scroller = table.parentElement;
+    if (scroller) scroller.scrollTop = scroller.scrollHeight;
+  });
+  await expect(page.locator('input[data-cell="499-0"]')).toHaveValue('r499');
+});
+
 test('blocks the run after a type change makes a role incompatible', async ({ page, isMobile }) => {
   test.skip(isMobile, 'the desktop layout keeps the setup panel visible');
 
@@ -60,4 +84,43 @@ test('blocks the run after a type change makes a role incompatible', async ({ pa
 
   await expect(page.getByText('Reselect variables')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Run analysis' })).toBeDisabled();
+});
+
+test('keeps a computed column in sync when its source changes', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'transform panel is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Transform' }).click();
+  await page.getByLabel('Formula expression').fill('Score_Post - Score_Pre');
+  await page.getByLabel('New column name').fill('Diff');
+  await page.getByRole('button', { name: 'Compute' }).click();
+
+  await expect(page.locator('input[data-cell="0-4"]')).toHaveValue('10');
+  await page.locator('input[data-cell="0-0"]').fill('51');
+  await expect(page.locator('input[data-cell="0-4"]')).toHaveValue('9');
+});
+
+test('fills a selection down with the keyboard and restores it with undo', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'keyboard fill is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.locator('input[data-cell="0-0"]').click();
+  await page.locator('input[data-cell="0-0"]').press('Shift+ArrowDown');
+  await page.locator('input[data-cell="1-0"]').press('Control+d');
+  await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('50');
+  await expect(page.locator('input[data-cell="1-0"]')).toHaveValue('50');
+
+  await page.getByRole('button', { name: 'Undo' }).click();
+  await expect(page.locator('input[data-cell="1-0"]')).toHaveValue('52');
+});
+
+test('typing into a multi-cell selection overwrites every selected cell', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'multi-cell editing is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.locator('input[data-cell="0-0"]').click();
+  await page.locator('input[data-cell="0-0"]').press('Shift+ArrowDown');
+  await page.locator('input[data-cell="1-0"]').fill('7');
+  await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('7');
+  await expect(page.locator('input[data-cell="1-0"]')).toHaveValue('7');
 });

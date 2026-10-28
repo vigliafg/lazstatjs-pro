@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { LogisticParams } from '../../io/project';
@@ -34,7 +35,7 @@ export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: Logist
         >
           {grid.cols.map((column, index) => (
             <option key={index} value={index}>
-              {column.name}
+              {columnLabel(column)}
             </option>
           ))}
         </select>
@@ -55,7 +56,7 @@ export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: Logist
                 disabled={index === outcome}
                 onChange={() => toggle(index)}
               />
-              {column.name}
+              {columnLabel(column)}
             </label>
           ))}
         </div>

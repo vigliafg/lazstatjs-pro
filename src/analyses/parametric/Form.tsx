@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { ParametricSurvivalParams } from '../../io/project';
@@ -29,7 +30,7 @@ export const ParametricForm = ({ grid, parametricParams, setParametricParams }: 
         <label className={labelClass}>Time</label>
         <select className={inputClass} value={time} onChange={e => setParametricParams(prev => ({ ...prev, time: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -38,7 +39,7 @@ export const ParametricForm = ({ grid, parametricParams, setParametricParams }: 
         <label className={labelClass}>Event (0/1)</label>
         <select className={inputClass} value={event} onChange={e => setParametricParams(prev => ({ ...prev, event: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -55,7 +56,7 @@ export const ParametricForm = ({ grid, parametricParams, setParametricParams }: 
                 disabled={index === time || index === event}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}

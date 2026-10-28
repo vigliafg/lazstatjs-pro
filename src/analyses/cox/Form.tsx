@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { CoxParams } from '../../io/project';
@@ -34,7 +35,7 @@ export const CoxForm = ({ grid, coxParams, setCoxParams }: CoxFormProps) => {
         >
           {grid.cols.map((column, index) => (
             <option key={index} value={index}>
-              {column.name}
+              {columnLabel(column)}
             </option>
           ))}
         </select>
@@ -49,7 +50,7 @@ export const CoxForm = ({ grid, coxParams, setCoxParams }: CoxFormProps) => {
         >
           {grid.cols.map((column, index) => (
             <option key={index} value={index}>
-              {column.name}
+              {columnLabel(column)}
             </option>
           ))}
         </select>
@@ -70,7 +71,7 @@ export const CoxForm = ({ grid, coxParams, setCoxParams }: CoxFormProps) => {
                 disabled={index === timeVariable || index === eventVariable}
                 onChange={() => toggle(index)}
               />
-              {column.name}
+              {columnLabel(column)}
             </label>
           ))}
         </div>

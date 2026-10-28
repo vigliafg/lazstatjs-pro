@@ -217,6 +217,10 @@ export const columnLevels = (col: Column | undefined, rows: readonly (readonly s
 export const levelLabel = (col: Column | undefined, value: string): string =>
   col?.levels?.find((level) => level.value === value)?.label ?? value;
 
+/** Human-facing column name: the declared label when present, else the name. */
+export const columnLabel = (col: Column | undefined): string =>
+  col?.label?.trim() || col?.name || '';
+
 /** Declared levels present in the data, followed by undeclared values. */
 export const orderedColumnLevels = (col: Column | undefined, rows: readonly (readonly string[])[], c: number): CategoryLevel[] => {
   const observed = distinctColumnValues(rows, c);

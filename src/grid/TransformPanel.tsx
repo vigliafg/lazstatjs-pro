@@ -115,8 +115,19 @@ export function TransformPanel({ grid, onApply }: Props) {
       <div className="flex flex-col gap-1">
         <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">Compute (e.g. A - B)</span>
         <div className="flex gap-1.5 items-center">
-          <input className="bg-surface3 border border-border2 rounded px-2 py-1 w-40 text-text font-mono" value={expr} onChange={(e) => setExpr(e.target.value)} />
-          <input className="bg-surface3 border border-border2 rounded px-2 py-1 w-20 text-text" value={exprName} onChange={(e) => setExprName(e.target.value)} placeholder="Name" />
+          <input
+            aria-label="Formula expression"
+            className="bg-surface3 border border-border2 rounded px-2 py-1 w-40 text-text font-mono"
+            value={expr}
+            onChange={(e) => setExpr(e.target.value)}
+          />
+          <input
+            aria-label="New column name"
+            className="bg-surface3 border border-border2 rounded px-2 py-1 w-20 text-text"
+            value={exprName}
+            onChange={(e) => setExprName(e.target.value)}
+            placeholder="Name"
+          />
           <label className="flex items-center gap-1 text-text2" title="Recalculate the column whenever the data changes">
             <input
               type="checkbox"

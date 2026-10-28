@@ -20,8 +20,11 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - Row/column count displayed in status bar
 - **Freeze first column** (plus row numbers) while scrolling wide sheets; the header row is always sticky
 - **Row filter** with type-aware operators (contains, =, ≠, >, ≥, <, ≤, empty/non-empty) and a live `visible / total` count; choose **View only** or **Also filter analyses**
-- **Variable inspector** drawer: name, type, label, description, role, rows, missing, unique/invalid counts, levels/reference, duplicate and delete
-- **Stable column ids** and parameter remapping: insert, delete, move, duplicate, split and merge never silently point an analysis at another variable
+- **Variable inspector** drawer: name, type, label, description, formula, missing codes, role, rows, missing, unique/invalid counts, levels/reference, duplicate and delete
+- **Declared missing codes** per column (e.g. `-9`, `NA`): cells carrying a code are excluded from every analysis, counted in the context bar and marked in the inspector
+- **Computed columns with persistent formulas** (`Column.formula`): the column is recalculated on every edit, references follow renames and a broken formula keeps its last values
+- **Virtualised rows** above 80 visible rows, with fill handle, `Ctrl+D` / `Ctrl+R`, multi-cell typing and 500-row paste smoke-tested
+- **Stable column ids** and parameter remapping: insert, delete, move, duplicate, split and merge never silently point an analysis at another variable; a type incompatible with the role blocks the run until the variable is reselected
 - **Sort ascending/descending per column** from the column context menu (undoable)
 - **Find & replace** with regex, case sensitivity and single-column scope; whitespace trim, duplicates/empty-row cleanup and mean/median/mode imputation live in the Clean panel
 
@@ -32,7 +35,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Output document**: one collapsible card per run with an outline, timestamp, analysis label and a *Setup* shortcut back to the parameters that produced it; Copy, Charts PNG, Report HTML and Results XLSX keep working
 - **Responsive panes**: below `lg` a segmented control switches between Library, Setup and Output; *Focus output* hides the library and setup on wide screens
 - **Data context** in Setup: rows, variables, missing cells, active filter, **Data peek** and a shortcut to the data editor
-- **Focused column bridge**: focus a cell in the grid, then assign that column to the primary role of the active analysis with one click
+- **Focused column bridge**: focus a cell in the grid, pick any role of the active analysis and assign the column in two actions; the Data peek shows the role → column map
 - **Stale badges**: a result whose grid revision, dataset or filter changed is marked stale
 
 ### Help
@@ -189,6 +192,9 @@ lazstatjs/
 | `npm run clean` | Remove `dist/` directory |
 | `npm run lint` | TypeScript type-check |
 | `npm test` | Run the statistics reference tests with `node:test` + `tsx` |
+| `npm run test:e2e` | Run the Playwright smoke suite (desktop + mobile) |
+| `npm run check` | Type-check, unit tests, dependency-cruiser, madge and file-size guard |
+| `npm run guard` | Architecture and size guards only |
 
 ## Notes
 
@@ -196,7 +202,7 @@ lazstatjs/
 - `recharts` and `express` appear in dependencies but are not currently used
 - `@google/genai` SDK is installed for potential future AI integration
 - CI level (90/95/99%) is selectable in the analysis toolbar and applies to every table.
-- Projects (`.lzs`) and the silent autosave cover data, settings and analysis parameters. The output console is intentionally excluded: results are recomputed by running the analysis again on the restored grid.
+- Projects (`.lzs`) and the silent autosave cover data, settings, analysis parameters and static output snapshots. Results are restored as read-only cards and are recomputed by running the analysis again on the current grid.
 - The newer analyses follow the same contract as the original ones: a pure builder returning typed `TableSpec` objects, a written report generated from those tables, and reference tests (`node:test`) for the numerical results.
 - Known limitations are stated inside each report: sequential SS for unbalanced factorial designs, asymptotic KS p-values for fitted distributions, Wald tests and separation warnings for logistic regression, additive-only seasonal decomposition, conditional (CSS) ARIMA estimation with a bounded order search, Breslow ties and asymptotic proportional-hazards checks for Cox, screening-only assumptions in the Wizard.
 - The Cox model uses a time-interaction likelihood-ratio test for proportional hazards; the baseline cumulative hazard is the Breslow estimator and the concordance index is Harrell's C.

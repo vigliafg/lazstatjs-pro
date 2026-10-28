@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { LmmParams } from '../../io/project';
@@ -29,7 +30,7 @@ export const LmmForm = ({ grid, lmmParams, setLmmParams }: LmmFormProps) => {
         <label className={labelClass}>Outcome (Y)</label>
         <select className={inputClass} value={dep} onChange={e => setLmmParams(prev => ({ ...prev, dep: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -46,7 +47,7 @@ export const LmmForm = ({ grid, lmmParams, setLmmParams }: LmmFormProps) => {
                 disabled={index === dep || index === group}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}
@@ -57,7 +58,7 @@ export const LmmForm = ({ grid, lmmParams, setLmmParams }: LmmFormProps) => {
         <label className={labelClass}>Group (random intercept)</label>
         <select className={inputClass} value={group} onChange={e => setLmmParams(prev => ({ ...prev, group: parseInt(e.target.value, 10) }))}>
           {groupColumnIndexes(grid).map(index => (
-            <option key={index} value={index}>{grid.cols[index]?.name}</option>
+            <option key={index} value={index}>{columnLabel(grid.cols[index])}</option>
           ))}
         </select>
       </div>

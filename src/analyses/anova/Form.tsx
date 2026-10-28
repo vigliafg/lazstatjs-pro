@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, isGroupColumn } from '../../grid/types';
 import type { CategoryLevel, GridData } from '../../grid/types';
@@ -22,7 +23,7 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
             value={anovaParams.dep}
             onChange={(e) => setAnovaParams(p => ({ ...p, dep: parseInt(e.target.value) }))}
           >
-            {grid.cols.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
+            {grid.cols.map((c, i) => <option key={i} value={i}>{columnLabel(c)}</option>)}
           </select>
         </div>
         <div className="flex flex-col gap-1">
@@ -34,10 +35,10 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
               onChange={(e) => setAnovaParams(p => ({ ...p, grp: parseInt(e.target.value) }))}
             >
               {groupColumnIndexes(grid).map((i) => (
-                <option key={i} value={i}>{grid.cols[i].name}</option>
+                <option key={i} value={i}>{columnLabel(grid.cols[i])}</option>
               ))}
               {!isGroupColumn(grid, anovaParams.grp) && grid.cols[anovaParams.grp] && (
-                <option value={anovaParams.grp}>{grid.cols[anovaParams.grp].name} (numeric)</option>
+                <option value={anovaParams.grp}>{columnLabel(grid.cols[anovaParams.grp])} (numeric)</option>
               )}
             </select>
             <LevelsEditor

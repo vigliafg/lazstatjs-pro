@@ -126,6 +126,7 @@ export {
   parseTsv,
   pasteTsvAt,
   rangeToTsv,
+  setRangeValue,
   type Range,
 } from './ops/ranges';
 export { coerceGrid, coerceValue, findReplace, trimGrid } from './ops/clean';

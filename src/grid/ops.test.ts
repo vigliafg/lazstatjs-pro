@@ -6,7 +6,7 @@ import {
   coerceGrid, coerceValue, findReplace, trimGrid, removeEmptyRows, removeDuplicateRows,
   fillMissing, findInvalid, sortByColumn, recodeColumn, splitColumn,
   mergeColumns, computeColumn, rowMatchesFilter, filterRowIndexes, rowMatches,
-  renameColumn, setColType,
+  renameColumn, setColType, setRangeValue,
 } from './ops';
 import { COL_TYPES, validateValue, type ColType, type GridData } from './types';
 import { fillRightRange } from './fillRight';
@@ -24,6 +24,14 @@ const demo = (): GridData => ({
 });
 
 describe('grid ops foundation', () => {
+  it('setRangeValue overwrites exactly the selected rectangle', () => {
+    const out = setRangeValue(demo(), { r0: 0, c0: 0, r1: 1, c1: 0 }, '9');
+    assert.deepEqual(out.rows.map(row => row[0]), ['9', '9', '']);
+    assert.deepEqual(out.rows.map(row => row[1]), ['2', 'x', '']);
+    const untouched = demo();
+    assert.equal(setRangeValue(untouched, { r0: 0, c0: 0, r1: 0, c1: 0 }, '1'), untouched);
+  });
+
   it('clearGrid keeps column width', () => {
     const out = clearGrid(demo());
     assert.equal(out.rows.length, 3);

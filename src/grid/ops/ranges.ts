@@ -63,6 +63,21 @@ export const clearRange = (grid: GridData, range: Range): GridData => {
   };
 };
 
+/** Overwrite every selected cell with one value (multi-cell typing). */
+export const setRangeValue = (grid: GridData, range: Range, value: string): GridData => {
+  const { r0, c0, r1, c1 } = normRange(range);
+  let changed = false;
+  const rows = grid.rows.map((row, r) => {
+    if (r < r0 || r > r1) return row;
+    return row.map((cell, c) => {
+      if (c < c0 || c > c1 || cell === value) return cell;
+      changed = true;
+      return value;
+    });
+  });
+  return changed ? { cols: grid.cols, rows } : grid;
+};
+
 export const fillDownRange = (grid: GridData, range: Range): GridData => {
   const { r0, c0, r1, c1 } = normRange(range);
   if (grid.rows.length === 0 || grid.cols.length === 0) return grid;

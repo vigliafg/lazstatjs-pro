@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TTestParams } from '../../io/project';
@@ -30,7 +31,7 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
             value={ttestParams.var1}
             onChange={(e) => setTTestParams(p => ({ ...p, var1: parseInt(e.target.value) }))}
           >
-            {grid.cols.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
+            {grid.cols.map((c, i) => <option key={i} value={i}>{columnLabel(c)}</option>)}
           </select>
         </div>
         {ttestParams.type !== 'one' ? (
@@ -41,7 +42,7 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
               value={ttestParams.var2}
               onChange={(e) => setTTestParams(p => ({ ...p, var2: parseInt(e.target.value) }))}
             >
-              {grid.cols.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
+              {grid.cols.map((c, i) => <option key={i} value={i}>{columnLabel(c)}</option>)}
             </select>
           </div>
         ) : (

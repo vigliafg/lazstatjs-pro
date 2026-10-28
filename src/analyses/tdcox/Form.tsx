@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TdCoxParams } from '../../io/project';
@@ -28,7 +29,7 @@ export const TdCoxForm = ({ grid, tdCoxParams, setTdCoxParams }: TdCoxFormProps)
         <label className={labelClass}>Start</label>
         <select className={inputClass} value={tdCoxParams.start} onChange={e => setTdCoxParams(prev => ({ ...prev, start: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -37,7 +38,7 @@ export const TdCoxForm = ({ grid, tdCoxParams, setTdCoxParams }: TdCoxFormProps)
         <label className={labelClass}>Stop</label>
         <select className={inputClass} value={tdCoxParams.stop} onChange={e => setTdCoxParams(prev => ({ ...prev, stop: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -46,7 +47,7 @@ export const TdCoxForm = ({ grid, tdCoxParams, setTdCoxParams }: TdCoxFormProps)
         <label className={labelClass}>Event (0/1)</label>
         <select className={inputClass} value={tdCoxParams.event} onChange={e => setTdCoxParams(prev => ({ ...prev, event: parseInt(e.target.value, 10) }))}>
           {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{column.name}</option>
+            <option key={index} value={index}>{columnLabel(column)}</option>
           ))}
         </select>
       </div>
@@ -63,7 +64,7 @@ export const TdCoxForm = ({ grid, tdCoxParams, setTdCoxParams }: TdCoxFormProps)
                 disabled={index === tdCoxParams.start || index === tdCoxParams.stop || index === tdCoxParams.event}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}

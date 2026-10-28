@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { ResamplingParams } from '../../io/project';
@@ -18,7 +19,7 @@ export const ResamplingForm = ({ grid, resamplingParams, setResamplingParams }: 
       <label className={labelClass}>Outcome</label>
       <select className={inputClass} value={resamplingParams.outcome} onChange={e => setResamplingParams(prev => ({ ...prev, outcome: parseInt(e.target.value, 10) }))}>
         {grid.cols.map((column, index) => (
-          <option key={index} value={index}>{column.name}</option>
+          <option key={index} value={index}>{columnLabel(column)}</option>
         ))}
       </select>
     </div>
@@ -27,7 +28,7 @@ export const ResamplingForm = ({ grid, resamplingParams, setResamplingParams }: 
       <label className={labelClass}>Group (2 levels)</label>
       <select className={inputClass} value={resamplingParams.group} onChange={e => setResamplingParams(prev => ({ ...prev, group: parseInt(e.target.value, 10) }))}>
         {groupColumnIndexes(grid).map(index => (
-          <option key={index} value={index}>{grid.cols[index]?.name}</option>
+          <option key={index} value={index}>{columnLabel(grid.cols[index])}</option>
         ))}
       </select>
     </div>

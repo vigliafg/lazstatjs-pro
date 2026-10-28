@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { MiParams } from '../../io/project';
@@ -35,7 +36,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => {
                 checked={miParams.variables.includes(index)}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}
@@ -64,7 +65,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => {
               onChange={e => setMiParams(prev => ({ ...prev, outcome: parseInt(e.target.value, 10) }))}
             >
               {grid.cols.map((column, index) => (
-                <option key={index} value={index}>{column.name}</option>
+                <option key={index} value={index}>{columnLabel(column)}</option>
               ))}
             </select>
           </div>
@@ -85,7 +86,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => {
                         : [...prev.predictors, index],
                     }))}
                   />
-                  <span className="text-[11px] text-text2">{column.name}</span>
+                  <span className="text-[11px] text-text2">{columnLabel(column)}</span>
                 </label>
               ))}
             </div>

@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
 import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
@@ -36,7 +37,7 @@ export const FactorialForm = ({
         >
           {grid.cols.map((column, index) => (
             <option key={index} value={index}>
-              {column.name}
+              {columnLabel(column)}
             </option>
           ))}
         </select>
@@ -52,7 +53,7 @@ export const FactorialForm = ({
           >
             {factors.map(index => (
               <option key={index} value={index}>
-                {grid.cols[index]?.name}
+                {columnLabel(grid.cols[index])}
               </option>
             ))}
           </select>
@@ -77,7 +78,7 @@ export const FactorialForm = ({
           >
             {factors.map(index => (
               <option key={index} value={index}>
-                {grid.cols[index]?.name}
+                {columnLabel(grid.cols[index])}
               </option>
             ))}
           </select>

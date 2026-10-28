@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { DISTRIBUTION_LABEL, type DistributionName } from '../../stats/distfit';
 import type { GridData } from '../../grid/types';
@@ -36,7 +37,7 @@ export const DistributionFitForm = ({
         >
           {grid.cols.map((column, index) => (
             <option key={index} value={index}>
-              {column.name}
+              {columnLabel(column)}
             </option>
           ))}
         </select>

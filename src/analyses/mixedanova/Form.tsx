@@ -1,3 +1,4 @@
+import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { MixedAnovaParams } from '../../io/project';
@@ -28,7 +29,7 @@ export const MixedAnovaForm = ({ grid, mixedAnovaParams, setMixedAnovaParams }: 
         <label className={labelClass}>Between-subject group</label>
         <select className={inputClass} value={mixedAnovaParams.group} onChange={e => setMixedAnovaParams(prev => ({ ...prev, group: parseInt(e.target.value, 10) }))}>
           {groupColumnIndexes(grid).map(index => (
-            <option key={index} value={index}>{grid.cols[index]?.name}</option>
+            <option key={index} value={index}>{columnLabel(grid.cols[index])}</option>
           ))}
         </select>
       </div>
@@ -45,7 +46,7 @@ export const MixedAnovaForm = ({ grid, mixedAnovaParams, setMixedAnovaParams }: 
                 disabled={index === mixedAnovaParams.group}
                 onChange={() => toggle(index)}
               />
-              <span className="text-[11px] text-text2">{column.name}</span>
+              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
               <span className="text-[9px] text-text3 font-mono">{column.type}</span>
             </label>
           ))}
