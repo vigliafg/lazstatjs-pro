@@ -344,7 +344,14 @@ export default function App() {
   };
 
   // --- Project persistence (.lzs + silent autosave) ---
-  const { projectInputRef, lastAutosave, saveProjectFile, openProjectFile } = useProjectSession({
+  const {
+    projectInputRef,
+    lastAutosave,
+    saveProjectFile,
+    openProjectFile,
+    recentProjects,
+    clearRecentProjects,
+  } = useProjectSession({
     boot,
     grid,
     prefs: ioPrefs,
@@ -523,7 +530,16 @@ export default function App() {
         {activeTab === 'help' && <HelpPanel />}
 
         {activeTab === 'settings' && (
-          <SettingsTab ioPrefs={ioPrefs} setIoPrefs={setIoPrefs} />
+          <SettingsTab
+            ioPrefs={ioPrefs}
+            setIoPrefs={setIoPrefs}
+            onNewDataset={() => replaceDataset(gridNewGrid())}
+            onSaveProject={saveProjectFile}
+            onOpenProject={() => projectInputRef.current?.click()}
+            onExport={() => setShowExport(true)}
+            recentProjects={recentProjects}
+            onClearRecent={clearRecentProjects}
+          />
         )}
       </main>
 

@@ -10,6 +10,11 @@ import {
 } from '../io/project';
 import { savePrefs, type IoPreferences } from '../io/prefs';
 import { downloadText } from '../io/writers';
+import {
+  addRecentProject,
+  loadRecentProjects,
+  saveRecentProjects,
+} from '../io/recent';
 import { nonEmptyRowCount, type GridData } from '../grid/types';
 import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
 import type { Toast } from './useToasts';
@@ -49,6 +54,20 @@ export const useProjectSession = ({
   const [lastAutosave, setLastAutosave] = useState<string | null>(() =>
     boot ? new Date(boot.savedAt).toLocaleTimeString() : null
   );
+  const [recentProjects, setRecentProjects] = useState<string[]>(() => loadRecentProjects());
+
+  const rememberProject = (name: string) => {
+    setRecentProjects(previous => {
+      const next = addRecentProject(previous, name);
+      saveRecentProjects(next);
+      return next;
+    });
+  };
+
+  const clearRecentProjects = () => {
+    setRecentProjects([]);
+    saveRecentProjects([]);
+  };
   const autosaveWarned = useRef(false);
   // Canonical serialization of what is already stored: avoids redundant
   // writes on mount/StrictMode re-runs and keeps mounts from clobbering a
@@ -116,10 +135,18 @@ export const useProjectSession = ({
         return;
       }
       applyProject(project);
+      rememberProject(file.name);
     } catch (error) {
       showToast('Project', error instanceof Error ? error.message : 'Could not read the project', 'error');
     }
   };
 
-  return { projectInputRef, lastAutosave, saveProjectFile, openProjectFile };
+  return {
+    projectInputRef,
+    lastAutosave,
+    saveProjectFile,
+    openProjectFile,
+    recentProjects,
+    clearRecentProjects,
+  };
 };
