@@ -113,8 +113,8 @@ passano dalla stessa strada.
 
 ### Fase 3 — Stratificare `stats/`
 
-- [ ] Separare `kernels` / `tables` / `reports` (avviata: i kernel legacy sono in
-      `src/stats/kernels/`).
+- [ ] Separare `kernels` / `tables` / `reports` (avviata: `samplesize` è il primo
+      modulo stratificato; i kernel legacy sono in `src/stats/kernels/`).
 - [x] Assorbire `statsHelpers.ts` nei kernel: `kernels/exact.ts`,
       `kernels/ranks.ts`, `kernels/normality.ts`, con test di equivalenza numerica.
 - [x] `jstat` isolato dietro `src/stats/jstat.ts`: nessun altro modulo importa il
@@ -170,6 +170,6 @@ implementazione per ogni test statistico.
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
 | 1 — Sfoltire `App.tsx` | **completa**: estrazioni fatte (451 righe); la fase 2 ha aggiunto gli stati dei parametri |
 | 2 — Contratto unico | **completa**: 19/19 con builder puro e parametri persistiti |
-| 3 — Stratificare `stats/` | avviata: kernel legacy assorbiti e formattazione unica |
+| 3 — Stratificare `stats/` | avviata: kernel legacy, formattazione, jstat e primo modulo stratificato (`samplesize`) |
 | 4 — Confine dati | avviata: classificazione colonne condivisa in `analyses/shared/` |
 | 5 — Guardrail | **completa**: dependency-cruiser, madge, limite righe, ARCHITECTURE.md |

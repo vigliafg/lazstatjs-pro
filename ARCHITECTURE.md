@@ -9,8 +9,8 @@ duplicare calcolo, form, report e persistenza. Le regole sono verificate da
 ```
 src/
   grid/         modello dati: celle, colonne, livelli, operazioni, history
-  stats/        motore numerico e prosa dei report (nessun React);
-                i kernel condivisi stanno in stats/kernels/
+  stats/        motore numerico e prosa dei report (nessun React):
+                kernels/ numeri puri, tables/ TableSpec, reports/ ReportSpec
   analyses/     una cartella per analisi: Form.tsx + run.tsx (+ defaults.ts)
                 e helper condivisi in analyses/shared/
   components/   componenti riusabili (tabelle, report) senza schermate
@@ -25,6 +25,9 @@ Le regole attuali (`.dependency-cruiser.cjs`) vietano:
 
 - cicli tra moduli;
 - `stats/` verso `ui/`, `analyses/`, `hooks/`, `io/`, `components/`;
+- `stats/kernels/` verso `stats/tables/` e `stats/reports/`;
+- `stats/tables/` verso `stats/reports/`;
+- `stats/reports/` verso `stats/kernels/` (la prosa legge solo le tabelle);
 - `grid/` verso `ui/`, `analyses/`, `hooks/`, `io/`;
 - `components/` verso `ui/`, `analyses/`, `hooks/`;
 - `io/` verso `ui/`, `analyses/`, `hooks/`;
@@ -89,6 +92,6 @@ incompatibili.
 
 - `src/io/project.ts` contiene lo schema completo (855 righe): da spezzare in
   `io/project/` quando si affronterà la Fase 4.
-- `stats/` non è ancora diviso in `kernels`/`tables`/`reports` (Fase 3): i kernel
-  legacy sono già in `stats/kernels/`, ma tabelle e prosa convivono ancora nei
-  moduli delle singole analisi.
+- `stats/` non è ancora diviso in `kernels`/`tables`/`reports` per tutte le
+  analisi: `samplesize` è il modello, gli altri moduli tengono ancora calcolo,
+  tabelle e prosa nello stesso file.

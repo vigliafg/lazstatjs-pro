@@ -1,9 +1,10 @@
 import type { TableRow, TableSpec } from './types';
 import { fmtCI, fmtEst, fmtP } from './format';
+import { alphaOf } from './kernels/alpha';
 
 /** Small formatting helpers shared by the report builders of the newer analyses. */
 
-export const alphaOf = (level: number): number => 1 - level / 100;
+export { alphaOf };
 
 export const isDecided = (p: number, level: number): boolean =>
   Number.isFinite(p) && p < alphaOf(level);

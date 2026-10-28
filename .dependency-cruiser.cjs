@@ -37,6 +37,27 @@ module.exports = {
       to: { path: '^src/(ui|analyses|hooks)/' },
     },
     {
+      name: 'kernels-solo-numeri',
+      severity: 'error',
+      comment: 'stats/kernels non conosce tabelle né prosa.',
+      from: { path: '^src/stats/kernels/' },
+      to: { path: '^src/stats/(tables|reports)/' },
+    },
+    {
+      name: 'tables-senza-prosa',
+      severity: 'error',
+      comment: 'stats/tables costruisce tabelle, non report.',
+      from: { path: '^src/stats/tables/' },
+      to: { path: '^src/stats/reports/' },
+    },
+    {
+      name: 'reports-senza-ricalcolo',
+      severity: 'error',
+      comment: 'stats/reports legge solo TableSpec: non richiama i kernel.',
+      from: { path: '^src/stats/reports/' },
+      to: { path: '^src/stats/kernels/' },
+    },
+    {
       name: 'analyses-non-dipendono-dalla-ui',
       severity: 'error',
       comment: 'analysis/ descrive form e calcolo: la UI li compone, non viceversa.',
