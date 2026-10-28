@@ -1,0 +1,430 @@
+[
+  {
+    "id": "corr-pairs",
+    "title": "Correlazioni a coppie",
+    "subtitle": "Metodo primario: pearson · CI 95% · eliminazione pairwise",
+    "columns": [
+      {
+        "key": "a",
+        "label": "Variabile A",
+        "format": "text"
+      },
+      {
+        "key": "b",
+        "label": "Variabile B",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "pearson",
+        "label": "Pearson r",
+        "format": "dec3"
+      },
+      {
+        "key": "pearsonP",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "lo",
+        "label": "CI low",
+        "format": "dec3"
+      },
+      {
+        "key": "hi",
+        "label": "CI high",
+        "format": "dec3"
+      },
+      {
+        "key": "r2",
+        "label": "r²",
+        "format": "dec3"
+      },
+      {
+        "key": "spearman",
+        "label": "Spearman ρ",
+        "format": "dec3"
+      },
+      {
+        "key": "spearmanP",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "kendall",
+        "label": "Kendall τ",
+        "format": "dec3"
+      },
+      {
+        "key": "kendallP",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "a": "score",
+        "b": "age",
+        "n": 28,
+        "pearson": 0.94317101258,
+        "pearsonP": 5.94065244128e-14,
+        "lo": 0.8796056116,
+        "hi": 0.973645940447,
+        "r2": 0.88957155897,
+        "spearman": 0.944718117132,
+        "spearmanP": 4.18638708503e-14,
+        "kendall": 0.835978835979,
+        "kendallP": 4.29091762122e-10
+      },
+      {
+        "a": "score",
+        "b": "income",
+        "n": 28,
+        "pearson": 0.980853000635,
+        "pearsonP": 5.30217066664e-20,
+        "lo": 0.958536985855,
+        "hi": 0.991212094474,
+        "r2": 0.962072608854,
+        "spearman": 0.994526546251,
+        "spearmanP": 4.87312601532e-27,
+        "kendall": 0.957671957672,
+        "kendallP": 8.56092974288e-13
+      },
+      {
+        "a": "age",
+        "b": "income",
+        "n": 30,
+        "pearson": 0.900519607726,
+        "pearsonP": 1.2280399587e-11,
+        "lo": 0.79969504935,
+        "hi": 0.951948617323,
+        "r2": 0.810935563899,
+        "spearman": 0.920355951057,
+        "spearmanP": 6.1864417605e-13,
+        "kendall": 0.797701149425,
+        "kendallP": 5.98452842837e-10
+      }
+    ],
+    "notes": [
+      "Ogni coppia usa tutte le righe con entrambi i valori validi (pairwise deletion): N può variare tra le coppie.",
+      "p di Pearson e Spearman: t con df = N − 2. p di Kendall: approssimazione normale con correzione dei ranghi pari.",
+      "CI di Pearson: trasformazione z di Fisher, tanh(z ± z_crit/√(N−3))."
+    ]
+  },
+  {
+    "id": "corr-matrix-pearson",
+    "title": "Matrice di correlazione di Pearson (r)",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "v0",
+        "label": "score",
+        "format": "text",
+        "align": "right"
+      },
+      {
+        "key": "v1",
+        "label": "age",
+        "format": "text",
+        "align": "right"
+      },
+      {
+        "key": "v2",
+        "label": "income",
+        "format": "text",
+        "align": "right"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "v0": "1",
+        "v1": "n=28",
+        "v2": "n=28"
+      },
+      {
+        "variable": "age",
+        "v0": "0.943***",
+        "v1": "1",
+        "v2": "n=30"
+      },
+      {
+        "variable": "income",
+        "v0": "0.981***",
+        "v1": "0.901***",
+        "v2": "1"
+      }
+    ],
+    "notes": [
+      "Coefficiente lineare di Pearson.",
+      "Triangolo inferiore: coefficiente con stelle di significatività (* p<.05, ** p<.01, *** p<.001). Triangolo superiore: N della coppia."
+    ]
+  },
+  {
+    "id": "corr-matrix-spearman",
+    "title": "Matrice di correlazione di Spearman (ρ)",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "v0",
+        "label": "score",
+        "format": "text",
+        "align": "right"
+      },
+      {
+        "key": "v1",
+        "label": "age",
+        "format": "text",
+        "align": "right"
+      },
+      {
+        "key": "v2",
+        "label": "income",
+        "format": "text",
+        "align": "right"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "v0": "1",
+        "v1": "n=28",
+        "v2": "n=28"
+      },
+      {
+        "variable": "age",
+        "v0": "0.945***",
+        "v1": "1",
+        "v2": "n=30"
+      },
+      {
+        "variable": "income",
+        "v0": "0.995***",
+        "v1": "0.920***",
+        "v2": "1"
+      }
+    ],
+    "notes": [
+      "Rho di Spearman sui ranghi.",
+      "Triangolo inferiore: coefficiente con stelle di significatività (* p<.05, ** p<.01, *** p<.001). Triangolo superiore: N della coppia."
+    ]
+  },
+  {
+    "id": "corr-matrix-kendall",
+    "title": "Matrice di correlazione di Kendall (τ-b)",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "v0",
+        "label": "score",
+        "format": "text",
+        "align": "right"
+      },
+      {
+        "key": "v1",
+        "label": "age",
+        "format": "text",
+        "align": "right"
+      },
+      {
+        "key": "v2",
+        "label": "income",
+        "format": "text",
+        "align": "right"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "v0": "1",
+        "v1": "n=28",
+        "v2": "n=28"
+      },
+      {
+        "variable": "age",
+        "v0": "0.836***",
+        "v1": "1",
+        "v2": "n=30"
+      },
+      {
+        "variable": "income",
+        "v0": "0.958***",
+        "v1": "0.798***",
+        "v2": "1"
+      }
+    ],
+    "notes": [
+      "Tau-b di Kendall con correzione dei ranghi pari.",
+      "Triangolo inferiore: coefficiente con stelle di significatività (* p<.05, ** p<.01, *** p<.001). Triangolo superiore: N della coppia."
+    ]
+  },
+  {
+    "id": "corr-descriptives",
+    "title": "Descrittive delle variabili",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "mean",
+        "label": "Mean",
+        "format": "dec4"
+      },
+      {
+        "key": "sd",
+        "label": "SD",
+        "format": "dec4"
+      },
+      {
+        "key": "median",
+        "label": "Median",
+        "format": "dec4"
+      },
+      {
+        "key": "min",
+        "label": "Min",
+        "format": "dec4"
+      },
+      {
+        "key": "max",
+        "label": "Max",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "n": 28,
+        "mean": 15.0428571429,
+        "sd": 5.44191065108,
+        "median": 14.55,
+        "min": 6.8,
+        "max": 25.2
+      },
+      {
+        "variable": "age",
+        "n": 30,
+        "mean": 39.0333333333,
+        "sd": 9.83478461918,
+        "median": 38.5,
+        "min": 22,
+        "max": 58
+      },
+      {
+        "variable": "income",
+        "n": 30,
+        "mean": 2247.66666667,
+        "sd": 749.241839017,
+        "median": 2075,
+        "min": 1280,
+        "max": 4100
+      }
+    ]
+  },
+  {
+    "id": "corr-partial",
+    "title": "Correlazioni parziali",
+    "subtitle": "controllando per le altre 1 variabili · CI 95%",
+    "columns": [
+      {
+        "key": "a",
+        "label": "Variabile A",
+        "format": "text"
+      },
+      {
+        "key": "b",
+        "label": "Variabile B",
+        "format": "text"
+      },
+      {
+        "key": "controls",
+        "label": "Controllate",
+        "format": "text"
+      },
+      {
+        "key": "r",
+        "label": "r parziale",
+        "format": "dec3"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "lo",
+        "label": "CI low",
+        "format": "dec3"
+      },
+      {
+        "key": "hi",
+        "label": "CI high",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "a": "score",
+        "b": "age",
+        "r": 0.588426801485,
+        "df": 25,
+        "p": 0.00124471436384,
+        "lo": 0.268438469927,
+        "hi": 0.791461698429,
+        "controls": "income"
+      },
+      {
+        "a": "score",
+        "b": "income",
+        "r": 0.880604238106,
+        "df": 25,
+        "p": 1.38158857917e-9,
+        "lo": 0.752362192521,
+        "hi": 0.944536654799,
+        "controls": "age"
+      },
+      {
+        "a": "age",
+        "b": "income",
+        "r": -0.167892468696,
+        "df": 25,
+        "p": 0.402547560341,
+        "lo": -0.515045751835,
+        "hi": 0.226577476113,
+        "controls": "score"
+      }
+    ],
+    "notes": [
+      "Calcolate su casi completi per tutte le variabili selezionate (listwise deletion), per garantire una matrice invertibile.",
+      "r parziale da inversa della matrice di correlazione: r_ij·rest = −P_ij/√(P_ii·P_jj); p con t e df = N − q (q = numero di variabili selezionate)."
+    ]
+  }
+]

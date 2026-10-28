@@ -1,0 +1,440 @@
+[
+  {
+    "id": "reg-model",
+    "title": "Sintesi del modello",
+    "subtitle": "score ~ age + income",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec4"
+      },
+      {
+        "key": "detail",
+        "label": "Dettaglio",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "N",
+        "value": 28,
+        "detail": "osservazioni complete (k = 2 predittori)"
+      },
+      {
+        "metric": "R",
+        "value": 0.987524592174,
+        "detail": "molto forte"
+      },
+      {
+        "metric": "R²",
+        "value": 0.975204820148,
+        "detail": "quota di varianza spiegata"
+      },
+      {
+        "metric": "Adjusted R²",
+        "value": 0.97322120576,
+        "detail": "corretto per numero di predittori"
+      },
+      {
+        "metric": "SE of estimate",
+        "value": 0.890526640496,
+        "detail": "√(SSE / 25)"
+      },
+      {
+        "metric": "F",
+        "value": 491.630241234,
+        "detail": "F(2, 25)"
+      },
+      {
+        "metric": "p (F)",
+        "value": 0,
+        "detail": "test globale del modello"
+      },
+      {
+        "metric": "AIC",
+        "value": -3.66596976908,
+        "detail": "n·ln(SSE/n) + 2(k+1)"
+      },
+      {
+        "metric": "BIC",
+        "value": 0.33064376145,
+        "detail": "n·ln(SSE/n) + ln(n)(k+1)"
+      },
+      {
+        "metric": "Durbin–Watson",
+        "value": 1.71729951304,
+        "detail": "≈2 assenza di autocorrelazione; ordine righe"
+      }
+    ],
+    "notes": [
+      "R² e F assumono un modello con intercetta. AIC/BIC sono definiti a meno di una costante additiva."
+    ]
+  },
+  {
+    "id": "reg-anova",
+    "title": "ANOVA del modello",
+    "columns": [
+      {
+        "key": "source",
+        "label": "Source",
+        "format": "text"
+      },
+      {
+        "key": "ss",
+        "label": "SS",
+        "format": "dec4"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "ms",
+        "label": "MS",
+        "format": "dec4"
+      },
+      {
+        "key": "f",
+        "label": "F",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "source": "Regression",
+        "ss": 779.762628993,
+        "df": 2,
+        "ms": 389.881314496,
+        "f": 491.630241234,
+        "p": 0
+      },
+      {
+        "source": "Residual",
+        "ss": 19.8259424358,
+        "df": 25,
+        "ms": 0.793037697432,
+        "f": "NaN",
+        "p": "NaN"
+      },
+      {
+        "source": "Total",
+        "ss": 799.588571429,
+        "df": 27,
+        "ms": "NaN",
+        "f": "NaN",
+        "p": "NaN"
+      }
+    ]
+  },
+  {
+    "id": "reg-coefficients",
+    "title": "Coefficienti",
+    "subtitle": "CI 95% · stima OLS",
+    "columns": [
+      {
+        "key": "predictor",
+        "label": "Predictor",
+        "format": "text"
+      },
+      {
+        "key": "b",
+        "label": "B",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "beta",
+        "label": "β std.",
+        "format": "dec3"
+      },
+      {
+        "key": "t",
+        "label": "t",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec4"
+      },
+      {
+        "key": "tol",
+        "label": "Tolerance",
+        "format": "dec3"
+      },
+      {
+        "key": "vif",
+        "label": "VIF",
+        "format": "dec2"
+      }
+    ],
+    "rows": [
+      {
+        "predictor": "(Intercept)",
+        "b": -2.22756728227,
+        "se": 0.729007138405,
+        "beta": "NaN",
+        "t": -3.05561792872,
+        "p": 0.00528079246128,
+        "ciLo": -3.72898557661,
+        "ciHi": -0.726148987937,
+        "tol": "NaN",
+        "vif": "NaN"
+      },
+      {
+        "predictor": "age",
+        "b": 0.151499792681,
+        "se": 0.0416348241486,
+        "beta": 0.282842359274,
+        "t": 3.6387758512,
+        "p": 0.00124471436384,
+        "ciLo": 0.0657512679202,
+        "ciHi": 0.237248317442,
+        "tol": 0.164153051149,
+        "vif": 6.09187580127
+      },
+      {
+        "predictor": "income",
+        "b": 0.00509342640563,
+        "se": 0.000548153789371,
+        "beta": 0.722265319363,
+        "t": 9.29196605841,
+        "p": 1.38158857917e-9,
+        "ciLo": 0.00396448255293,
+        "ciHi": 0.00622237025832,
+        "tol": 0.164153051149,
+        "vif": 6.09187580127
+      }
+    ],
+    "notes": [
+      "CI: B ± t(95%, df = 25)·SE. β std. = B·SD(x)/SD(y).",
+      "VIF = 1/(1−R²_aux) da regressione del predittore sugli altri; valori > 5 indicano collinearità problematica."
+    ]
+  },
+  {
+    "id": "reg-diagnostics",
+    "title": "Diagnostica del modello",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec4"
+      },
+      {
+        "key": "note",
+        "label": "Nota",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "Leverage massimo",
+        "value": 0.280816686961,
+        "note": "h_ii = x_iᵀ(XᵀX)⁻¹x_i"
+      },
+      {
+        "metric": "Cook's D massimo",
+        "value": 1.14757611213,
+        "note": "valori > 1 indicano osservazioni influenti"
+      },
+      {
+        "metric": "Cook's D > 1",
+        "value": 1,
+        "note": "numero di osservazioni"
+      },
+      {
+        "metric": "Breusch–Pagan LM",
+        "value": 14.2698917463,
+        "note": "eteroschedasticità dei residui"
+      },
+      {
+        "metric": "Breusch–Pagan p",
+        "value": 0.000796768908301,
+        "note": "χ² con 2 df"
+      },
+      {
+        "metric": "White LM",
+        "value": 18.6567802878,
+        "note": "quadrati e prodotti incrociati dei predittori"
+      },
+      {
+        "metric": "White p",
+        "value": 0.00222651630267,
+        "note": "χ² con 5 df"
+      },
+      {
+        "metric": "RESET F (ŷ²)",
+        "value": 40.5452761939,
+        "note": "non linearità da potenze dei valori adattati"
+      },
+      {
+        "metric": "RESET p",
+        "value": 0.00000139001243449,
+        "note": "F con 1 e df del modello aumentato"
+      },
+      {
+        "metric": "|DFBETAS| massimo",
+        "value": 1.34792537805,
+        "note": "influenza su singolo coefficiente"
+      },
+      {
+        "metric": "DFBETAS oltre 2/√n",
+        "value": 8,
+        "note": "soglia 0.378"
+      },
+      {
+        "metric": "Condition index massimo",
+        "value": 21.6020899394,
+        "note": "X scalato a norma unitaria; > 30 collinearità"
+      },
+      {
+        "metric": "Condition index > 30",
+        "value": 0,
+        "note": "numero di dimensioni coinvolte"
+      },
+      {
+        "metric": "Residui studentizzati |z| > 3",
+        "value": 0,
+        "note": "outlier sui residui studentizzati"
+      }
+    ],
+    "notes": [
+      "Breusch–Pagan richiede l’ipotesi di normalità dei residui; con N piccolo ha potenza limitata.",
+      "White usa n·R² della regressione ausiliaria (quadrati e prodotti incrociati); RESET2 aggiunge ŷ². DFBETAS misura il cambio standardizzato di un coefficiente eliminando un’osservazione.",
+      "Condition index di Belsley calcolato sugli autovalori di XᵀX dopo scala a norma unitaria: valori > 30 suggeriscono collinearità, > 100 sono gravi."
+    ]
+  },
+  {
+    "id": "reg-residuals",
+    "title": "Diagnostica dei residui",
+    "subtitle": "OLS vs Theil–Sen",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "ols",
+        "label": "Residui OLS",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "N",
+        "ols": 28
+      },
+      {
+        "metric": "Mean",
+        "ols": 2.24106447685e-13
+      },
+      {
+        "metric": "Median",
+        "ols": -0.0588035384086
+      },
+      {
+        "metric": "SD",
+        "ols": 0.856909659351
+      },
+      {
+        "metric": "Min",
+        "ols": -2.2424689563
+      },
+      {
+        "metric": "Max",
+        "ols": 1.81745516882
+      },
+      {
+        "metric": "Skewness",
+        "ols": -0.0537272863261
+      },
+      {
+        "metric": "Excess kurtosis",
+        "ols": 0.602605813791
+      },
+      {
+        "metric": "Jarque–Bera p",
+        "ols": 0.80367246043
+      },
+      {
+        "metric": "Lilliefors p",
+        "ols": 0.813186813187
+      },
+      {
+        "metric": "Residui oltre 3 SD",
+        "ols": 0
+      }
+    ],
+    "notes": [
+      "I residui Theil–Sen sono disponibili per la regressione semplice; con più predittori il TS è univariato e non definisce un modello congiunto."
+    ]
+  },
+  {
+    "id": "reg-robust",
+    "title": "Stimatori robusti univariati",
+    "columns": [
+      {
+        "key": "predictor",
+        "label": "Predictor",
+        "format": "text"
+      },
+      {
+        "key": "ols",
+        "label": "OLS B",
+        "format": "dec4"
+      },
+      {
+        "key": "ts",
+        "label": "Theil–Sen slope",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "predictor": "age",
+        "ols": 0.151499792681,
+        "ts": 0.495238095238
+      },
+      {
+        "predictor": "income",
+        "ols": 0.00509342640563,
+        "ts": 0.00754374057315
+      }
+    ],
+    "notes": [
+      "Con più predittori il Theil–Sen è calcolato separatamente per ciascun predittore e non controlla gli altri: usarlo solo come diagnostica descrittiva."
+    ]
+  }
+]

@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "test": "node --import tsx --test src/stats/*.test.ts src/io/*.test.ts src/grid/*.test.ts src/help/*.test.ts"
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "test:update": "UPDATE_GOLDEN=1 node --import tsx --test \"src/**/*.test.ts\"",
+    "check": "npm run lint && npm test"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

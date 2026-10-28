@@ -1,0 +1,492 @@
+[
+  {
+    "id": "desc-location",
+    "title": "Campione e misure di posizione",
+    "subtitle": "CI 95%",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "missing",
+        "label": "Missing",
+        "format": "int"
+      },
+      {
+        "key": "sum",
+        "label": "Sum",
+        "format": "dec3"
+      },
+      {
+        "key": "mean",
+        "label": "Mean",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec4"
+      },
+      {
+        "key": "median",
+        "label": "Median",
+        "format": "dec4"
+      },
+      {
+        "key": "medianLo",
+        "label": "Median CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "medianHi",
+        "label": "Median CI high",
+        "format": "dec4"
+      },
+      {
+        "key": "trimmed",
+        "label": "Trimmed mean 5%",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "n": 28,
+        "missing": 2,
+        "sum": 421.2,
+        "mean": 15.0428571429,
+        "se": 1.0284244457,
+        "ciLo": 12.9327045054,
+        "ciHi": 17.1530097803,
+        "median": 14.55,
+        "medianLo": 11.1,
+        "medianHi": 18.3,
+        "trimmed": 14.9692307692
+      },
+      {
+        "variable": "age",
+        "n": 30,
+        "missing": 0,
+        "sum": 1171,
+        "mean": 39.0333333333,
+        "se": 1.79557779471,
+        "ciLo": 35.3609644585,
+        "ciHi": 42.7057022082,
+        "median": 38.5,
+        "medianLo": 33,
+        "medianHi": 45,
+        "trimmed": 38.9642857143
+      },
+      {
+        "variable": "income",
+        "n": 30,
+        "missing": 0,
+        "sum": 67430,
+        "mean": 2247.66666667,
+        "se": 136.792218752,
+        "ciLo": 1967.8951703,
+        "ciHi": 2527.43816303,
+        "median": 2075,
+        "medianLo": 1710,
+        "medianHi": 2600,
+        "trimmed": 2216.07142857
+      }
+    ],
+    "notes": [
+      "CI della media: t di Student con df = N − 1. CI della mediana: metodo distribution-free basato sulle statistiche d'ordine (Binomiale(n, 0.5)).",
+      "Trimmed mean al 5%: media dopo aver rimosso il 5% delle osservazioni a ciascuna coda (0 se N < 20)."
+    ]
+  },
+  {
+    "id": "desc-dispersion",
+    "title": "Dispersione e valori anomali",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "sd",
+        "label": "SD",
+        "format": "dec4"
+      },
+      {
+        "key": "variance",
+        "label": "Variance",
+        "format": "dec4"
+      },
+      {
+        "key": "cv",
+        "label": "CV %",
+        "format": "dec2"
+      },
+      {
+        "key": "min",
+        "label": "Min",
+        "format": "dec4"
+      },
+      {
+        "key": "q1",
+        "label": "Q1",
+        "format": "dec4"
+      },
+      {
+        "key": "q3",
+        "label": "Q3",
+        "format": "dec4"
+      },
+      {
+        "key": "max",
+        "label": "Max",
+        "format": "dec4"
+      },
+      {
+        "key": "range",
+        "label": "Range",
+        "format": "dec4"
+      },
+      {
+        "key": "iqr",
+        "label": "IQR",
+        "format": "dec4"
+      },
+      {
+        "key": "mad",
+        "label": "MAD",
+        "format": "dec4"
+      },
+      {
+        "key": "madScaled",
+        "label": "MAD scalata",
+        "format": "dec4"
+      },
+      {
+        "key": "outliers",
+        "label": "Outlier 1.5 IQR",
+        "format": "int"
+      },
+      {
+        "key": "outliersPct",
+        "label": "Outlier %",
+        "format": "dec1"
+      },
+      {
+        "key": "extreme",
+        "label": "Estremi 3 IQR",
+        "format": "int"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "sd": 5.44191065108,
+        "variance": 29.6143915344,
+        "cv": 36.1760442142,
+        "min": 6.8,
+        "q1": 10.2,
+        "q3": 19.2,
+        "max": 25.2,
+        "range": 18.4,
+        "iqr": 9,
+        "mad": 4.5,
+        "madScaled": 6.6717,
+        "outliers": 0,
+        "outliersPct": 0,
+        "extreme": 0
+      },
+      {
+        "variable": "age",
+        "sd": 9.83478461918,
+        "variance": 96.7229885057,
+        "cv": 25.1958615351,
+        "min": 22,
+        "q1": 31,
+        "q3": 47,
+        "max": 58,
+        "range": 36,
+        "iqr": 16,
+        "mad": 8,
+        "madScaled": 11.8608,
+        "outliers": 0,
+        "outliersPct": 0,
+        "extreme": 0
+      },
+      {
+        "variable": "income",
+        "sd": 749.241839017,
+        "variance": 561363.333333,
+        "cv": 33.334206096,
+        "min": 1280,
+        "q1": 1620,
+        "q3": 2780,
+        "max": 4100,
+        "range": 2820,
+        "iqr": 1160,
+        "mad": 530,
+        "madScaled": 785.778,
+        "outliers": 0,
+        "outliersPct": 0,
+        "extreme": 0
+      }
+    ],
+    "notes": [
+      "Definizione di Tukey: outlier se < Q1 − 1.5·IQR o > Q3 + 1.5·IQR; estremi oltre 3·IQR.",
+      "Q1/Q3 con il metodo Tukey hinges di jStat (lievemente diverso dal tipo 7 di R per N piccoli); lo stesso metodo è usato nei boxplot.",
+      "MAD scalata = 1.4826 · MAD, stimatore consistente della SD sotto normalità."
+    ]
+  },
+  {
+    "id": "desc-shape",
+    "title": "Forma e test di normalità",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "skew",
+        "label": "Skewness",
+        "format": "dec3"
+      },
+      {
+        "key": "skewSe",
+        "label": "SE",
+        "format": "dec3"
+      },
+      {
+        "key": "zSkew",
+        "label": "z",
+        "format": "dec2"
+      },
+      {
+        "key": "pSkew",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "kurt",
+        "label": "Excess kurtosis",
+        "format": "dec3"
+      },
+      {
+        "key": "kurtSe",
+        "label": "SE",
+        "format": "dec3"
+      },
+      {
+        "key": "zKurt",
+        "label": "z",
+        "format": "dec2"
+      },
+      {
+        "key": "pKurt",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "jb",
+        "label": "Jarque–Bera",
+        "format": "dec3"
+      },
+      {
+        "key": "jbP",
+        "label": "JB p",
+        "format": "p"
+      },
+      {
+        "key": "ksD",
+        "label": "KS D",
+        "format": "dec3"
+      },
+      {
+        "key": "ksP",
+        "label": "KS p (Lilliefors)",
+        "format": "p"
+      },
+      {
+        "key": "k2",
+        "label": "D'Agostino K²",
+        "format": "dec3"
+      },
+      {
+        "key": "k2P",
+        "label": "K² p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "skew": 0.266621375694,
+        "skewSe": 0.440524435241,
+        "zSkew": 0.605236291939,
+        "pSkew": 0.545022005031,
+        "kurt": -1.10257628521,
+        "kurtSe": 0.858329236001,
+        "zKurt": -1.28456102736,
+        "pKurt": 0.198945724896,
+        "jb": 1.75002601272,
+        "jbP": 0.416856597856,
+        "ksD": 0.114963318001,
+        "ksP": 0.431568431568,
+        "k2": 3.78374229841,
+        "k2P": 0.150789395243
+      },
+      {
+        "variable": "age",
+        "skew": 0.123089424199,
+        "skewSe": 0.426892395951,
+        "zSkew": 0.288338291726,
+        "pSkew": 0.773087798626,
+        "kurt": -0.996253228086,
+        "kurtSe": 0.832745618358,
+        "zKurt": -1.19634760739,
+        "pKurt": 0.231560937774,
+        "jb": 1.31640564984,
+        "jbP": 0.517781042004,
+        "ksD": 0.0635501238273,
+        "ksP": 0.992007992008,
+        "k2": 2.51743317686,
+        "k2P": 0.284018305069
+      },
+      {
+        "variable": "income",
+        "skew": 0.67898410646,
+        "skewSe": 0.426892395951,
+        "zSkew": 1.59052752614,
+        "pSkew": 0.111715946069,
+        "kurt": -0.409701123293,
+        "kurtSe": 0.832745618358,
+        "zKurt": -0.491988326641,
+        "pKurt": 0.622727595815,
+        "jb": 2.51491584716,
+        "jbP": 0.284376013996,
+        "ksD": 0.113394152389,
+        "ksP": 0.404595404595,
+        "k2": 2.85242006914,
+        "k2P": 0.240217615656
+      }
+    ],
+    "notes": [
+      "SE di skewness e kurtosi secondo le formule di Fisher; z = statistica / SE, p a due code normale.",
+      "KS con parametri stimati: p corretta con metodo Lilliefors (Monte Carlo, 1000 repliche, seed fisso). Il p grezzo di KS sarebbe anti-conservativo.",
+      "D'Agostino–Pearson K² combina le trasformazioni normalizzanti di skewness e kurtosi; p da χ² con 2 df."
+    ]
+  },
+  {
+    "id": "desc-quantiles",
+    "title": "Quantili",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variable",
+        "format": "text"
+      },
+      {
+        "key": "p1",
+        "label": "P1",
+        "format": "dec3"
+      },
+      {
+        "key": "p5",
+        "label": "P5",
+        "format": "dec3"
+      },
+      {
+        "key": "p10",
+        "label": "P10",
+        "format": "dec3"
+      },
+      {
+        "key": "p25",
+        "label": "P25",
+        "format": "dec3"
+      },
+      {
+        "key": "p50",
+        "label": "P50",
+        "format": "dec3"
+      },
+      {
+        "key": "p75",
+        "label": "P75",
+        "format": "dec3"
+      },
+      {
+        "key": "p90",
+        "label": "P90",
+        "format": "dec3"
+      },
+      {
+        "key": "p95",
+        "label": "P95",
+        "format": "dec3"
+      },
+      {
+        "key": "p99",
+        "label": "P99",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "p1": 6.962,
+        "p5": 7.68,
+        "p10": 8.69,
+        "p25": 10.5,
+        "p50": 14.55,
+        "p75": 19.325,
+        "p90": 22.65,
+        "p95": 23.715,
+        "p99": 24.1
+      },
+      {
+        "variable": "age",
+        "p1": 22.58,
+        "p5": 24.9,
+        "p10": 26.9,
+        "p25": 31.25,
+        "p50": 38.5,
+        "p75": 46.75,
+        "p90": 52.1,
+        "p95": 54.1,
+        "p99": 55
+      },
+      {
+        "variable": "income",
+        "p1": 1291.6,
+        "p5": 1351.5,
+        "p10": 1444,
+        "p25": 1627.5,
+        "p50": 2075,
+        "p75": 2755,
+        "p90": 3267,
+        "p95": 3519,
+        "p99": 3600
+      }
+    ],
+    "notes": [
+      "Quantili interpolati (metodo jStat.percentile)."
+    ]
+  }
+]

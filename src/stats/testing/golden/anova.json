@@ -1,0 +1,416 @@
+[
+  {
+    "id": "anova-groups",
+    "title": "Descrittive per gruppo",
+    "subtitle": "score per group · CI 95%",
+    "columns": [
+      {
+        "key": "group",
+        "label": "Gruppo",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "mean",
+        "label": "Mean",
+        "format": "dec4"
+      },
+      {
+        "key": "sd",
+        "label": "SD",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "median",
+        "label": "Median",
+        "format": "dec4"
+      },
+      {
+        "key": "min",
+        "label": "Min",
+        "format": "dec4"
+      },
+      {
+        "key": "max",
+        "label": "Max",
+        "format": "dec4"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "group": "A",
+        "n": 11,
+        "mean": 14.5727272727,
+        "sd": 2.68703960116,
+        "se": 0.810172923078,
+        "median": 14.9,
+        "min": 9.8,
+        "max": 18.3,
+        "ciLo": 12.7675495137,
+        "ciHi": 16.3779050318
+      },
+      {
+        "group": "B",
+        "n": 8,
+        "mean": 21.975,
+        "sd": 2.13658606192,
+        "se": 0.755397246487,
+        "median": 22.15,
+        "min": 19.2,
+        "max": 25.2,
+        "ciLo": 20.1887693632,
+        "ciHi": 23.7612306368
+      },
+      {
+        "group": "C",
+        "n": 9,
+        "mean": 9.45555555556,
+        "sd": 1.85749233586,
+        "se": 0.619164111953,
+        "median": 9.1,
+        "min": 6.8,
+        "max": 12,
+        "ciLo": 8.02776055417,
+        "ciHi": 10.8833505569
+      }
+    ],
+    "notes": [
+      "CI della media entro gruppo: t di Student con df = n_gruppo − 1."
+    ]
+  },
+  {
+    "id": "anova-table",
+    "title": "ANOVA a una via",
+    "subtitle": "H₀: tutte le medie uguali · α = 0.05",
+    "columns": [
+      {
+        "key": "source",
+        "label": "Source",
+        "format": "text"
+      },
+      {
+        "key": "ss",
+        "label": "SS",
+        "format": "dec4"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "ms",
+        "label": "MS",
+        "format": "dec4"
+      },
+      {
+        "key": "f",
+        "label": "F",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "source": "Between (gruppi)",
+        "ss": 667.829531025,
+        "df": 2,
+        "ms": 333.914765512,
+        "f": 63.3570881528,
+        "p": 1.62713287288e-10
+      },
+      {
+        "source": "Within (errore)",
+        "ss": 131.759040404,
+        "df": 25,
+        "ms": 5.27036161616,
+        "f": "NaN",
+        "p": "NaN"
+      },
+      {
+        "source": "Total",
+        "ss": 799.588571429,
+        "df": 27,
+        "ms": "NaN",
+        "f": "NaN",
+        "p": "NaN"
+      }
+    ],
+    "notes": [
+      "F = MS_between / MS_within; p da F(2, 25)."
+    ]
+  },
+  {
+    "id": "anova-effects",
+    "title": "Effect size",
+    "columns": [
+      {
+        "key": "measure",
+        "label": "Misura",
+        "format": "text"
+      },
+      {
+        "key": "estimate",
+        "label": "Stima",
+        "format": "dec4"
+      },
+      {
+        "key": "note",
+        "label": "Interpretazione",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "measure": "η²",
+        "estimate": 0.835216453671,
+        "note": "grande"
+      },
+      {
+        "measure": "partial η²",
+        "estimate": 0.835216453671,
+        "note": "grande"
+      },
+      {
+        "measure": "ω²",
+        "estimate": 0.816650944415,
+        "note": "grande"
+      },
+      {
+        "measure": "ε²",
+        "estimate": 0.822033769965,
+        "note": "grande"
+      },
+      {
+        "measure": "Cohen's f",
+        "estimate": 2.25134783013,
+        "note": "grande"
+      }
+    ],
+    "notes": [
+      "η² = SS_between / SS_total; ω² = (SS_between − (k−1)·MS_within)/(SS_total + MS_within); ε² = (SS_between − (k−1)·MS_within)/SS_total.",
+      "In un ANOVA a una via partial η² coincide con η²."
+    ]
+  },
+  {
+    "id": "anova-assumptions",
+    "title": "Assunzioni",
+    "columns": [
+      {
+        "key": "check",
+        "label": "Controllo",
+        "format": "text"
+      },
+      {
+        "key": "statistic",
+        "label": "Statistica",
+        "format": "dec4"
+      },
+      {
+        "key": "df1",
+        "label": "df1",
+        "format": "dec2"
+      },
+      {
+        "key": "df2",
+        "label": "df2",
+        "format": "dec2"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "note",
+        "label": "Nota",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "check": "Levene (media)",
+        "statistic": 0.611189894184,
+        "df1": 2,
+        "df2": 25,
+        "p": 0.550615990108,
+        "note": "omoschedasticità"
+      },
+      {
+        "check": "Brown–Forsythe (mediana)",
+        "statistic": 0.543166396427,
+        "df1": 2,
+        "df2": 25,
+        "p": 0.587607361674,
+        "note": "robusto agli outlier"
+      },
+      {
+        "check": "Rapporto SD max/min",
+        "statistic": 1.44659525602,
+        "df1": "NaN",
+        "df2": "NaN",
+        "p": "NaN",
+        "note": "omogeneità descrittiva delle SD"
+      },
+      {
+        "check": "Welch ANOVA",
+        "statistic": 78.9146153208,
+        "df1": 2,
+        "df2": 16.2500381726,
+        "p": 4.28649593598e-9,
+        "note": "alternativa con varianze diseguali"
+      },
+      {
+        "check": "Jarque–Bera A",
+        "statistic": 0.587313462523,
+        "df1": 2,
+        "df2": "NaN",
+        "p": 0.745532365479,
+        "note": "normalità residui del gruppo (N = 11)"
+      },
+      {
+        "check": "Jarque–Bera B",
+        "statistic": 0.532522609519,
+        "df1": 2,
+        "df2": "NaN",
+        "p": 0.766238879473,
+        "note": "normalità residui del gruppo (N = 8)"
+      },
+      {
+        "check": "Jarque–Bera C",
+        "statistic": 0.574846751034,
+        "df1": 2,
+        "df2": "NaN",
+        "p": 0.7501940478,
+        "note": "normalità residui del gruppo (N = 9)"
+      }
+    ],
+    "notes": [
+      "Nessuna evidenza di eteroschedasticità.",
+      "Il rapporto max(SD)/min(SD) è un ulteriore controllo descrittivo della omogeneità."
+    ]
+  },
+  {
+    "id": "anova-posthoc",
+    "title": "Post-hoc",
+    "subtitle": "Tukey–Kramer (approssimazione Bonferroni)",
+    "columns": [
+      {
+        "key": "comparison",
+        "label": "Confronto",
+        "format": "text"
+      },
+      {
+        "key": "diff",
+        "label": "Mean diff",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "t",
+        "label": "t",
+        "format": "dec3"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "dec2"
+      },
+      {
+        "key": "pRaw",
+        "label": "p non corretto",
+        "format": "p"
+      },
+      {
+        "key": "pAdj",
+        "label": "p corretto",
+        "format": "p"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec4"
+      },
+      {
+        "key": "d",
+        "label": "Cohen's d",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "comparison": "A vs B",
+        "diff": -7.40227272727,
+        "se": 1.06673285564,
+        "t": -6.93920008943,
+        "df": 25,
+        "pRaw": 2.83667245927e-7,
+        "pAdj": 8.51001737782e-7,
+        "ciLo": -9.59925015076,
+        "ciHi": -5.20529530379,
+        "d": -3.22437002258
+      },
+      {
+        "comparison": "A vs C",
+        "diff": 5.11717171717,
+        "se": 1.03185246931,
+        "t": 4.95920867506,
+        "df": 25,
+        "pRaw": 0.0000414207070862,
+        "pAdj": 0.000124262121258,
+        "ciLo": 2.99203179348,
+        "ciHi": 7.24231164086,
+        "d": 2.22899853777
+      },
+      {
+        "comparison": "B vs C",
+        "diff": 12.5194444444,
+        "se": 1.11552271924,
+        "t": 11.2229399083,
+        "df": 25,
+        "pRaw": 2.97497074529e-11,
+        "pAdj": 8.92491223586e-11,
+        "ciLo": 10.2219824167,
+        "ciHi": 14.8169064722,
+        "d": 5.45336856035
+      }
+    ],
+    "notes": [
+      "Tukey–Kramer qui usa l’approssimazione t con aggiustamento Bonferroni: riportato esplicitamente per non spacciarla per il range studentizzato esatto.",
+      "I CI sono individuali (non simultanei) al livello scelto; per Holm/Bonferroni il p è corretto, il CI no.",
+      "Cohen’s d per confronto usa la SD within pooled (√MS_within)."
+    ]
+  }
+]

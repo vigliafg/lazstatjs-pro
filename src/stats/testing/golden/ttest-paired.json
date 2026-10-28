@@ -1,0 +1,287 @@
+[
+  {
+    "id": "ttest-sample",
+    "title": "Campione e statistiche descrittive",
+    "subtitle": "CI 95%",
+    "columns": [
+      {
+        "key": "group",
+        "label": "Gruppo",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "missing",
+        "label": "Missing",
+        "format": "int"
+      },
+      {
+        "key": "mean",
+        "label": "Mean",
+        "format": "dec4"
+      },
+      {
+        "key": "sd",
+        "label": "SD",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "median",
+        "label": "Median",
+        "format": "dec4"
+      },
+      {
+        "key": "min",
+        "label": "Min",
+        "format": "dec4"
+      },
+      {
+        "key": "max",
+        "label": "Max",
+        "format": "dec4"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "group": "pre",
+        "n": 30,
+        "missing": 0,
+        "mean": 14.6933333333,
+        "sd": 5.1518950871,
+        "se": 0.940603051035,
+        "median": 14.55,
+        "min": 6.5,
+        "max": 24.6,
+        "ciLo": 12.769584121,
+        "ciHi": 16.6170825456
+      },
+      {
+        "group": "post",
+        "n": 30,
+        "missing": 0,
+        "mean": 16.08,
+        "sd": 5.49328116257,
+        "se": 1.00293133582,
+        "median": 15.9,
+        "min": 7.3,
+        "max": 26.4,
+        "ciLo": 14.028775134,
+        "ciHi": 18.131224866
+      }
+    ],
+    "notes": [
+      "Solo righe con entrambe le colonne numeriche: 30 coppie complete, 0 coppie escluse.",
+      "Le statistiche descrittive dei gruppi sono calcolate sulle sole coppie complete, per coerenza con il test."
+    ]
+  },
+  {
+    "id": "ttest-main",
+    "title": "Test t per campioni appaiati",
+    "subtitle": "H₀: μ_diff = 0 · due code · α = 0.05",
+    "columns": [
+      {
+        "key": "comparison",
+        "label": "Confronto",
+        "format": "text"
+      },
+      {
+        "key": "diff",
+        "label": "Mean diff (A − B)",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE diff",
+        "format": "dec4"
+      },
+      {
+        "key": "t",
+        "label": "t",
+        "format": "dec3"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "dec2"
+      },
+      {
+        "key": "p",
+        "label": "p (2 code)",
+        "format": "p"
+      },
+      {
+        "key": "pOne",
+        "label": "p (1 coda)",
+        "format": "p"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "comparison": "pre − post",
+        "diff": -1.38666666667,
+        "se": 0.0867991913376,
+        "t": -15.9755712616,
+        "df": 29,
+        "p": 6.54023018354e-16,
+        "pOne": 3.27011509177e-16,
+        "ciLo": -1.56419094301,
+        "ciHi": -1.20914239032
+      }
+    ],
+    "notes": [
+      "Differenze calcolate riga per riga su 30 coppie complete; le righe con una cella mancante sono escluse dall’intero test.",
+      "CI: diff ± t(95%, df = 29) · SE."
+    ]
+  },
+  {
+    "id": "ttest-effects",
+    "title": "Effect size",
+    "columns": [
+      {
+        "key": "measure",
+        "label": "Misura",
+        "format": "text"
+      },
+      {
+        "key": "estimate",
+        "label": "Stima",
+        "format": "dec3"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec3"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec3"
+      },
+      {
+        "key": "note",
+        "label": "Interpretazione",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "measure": "Cohen's d_z",
+        "estimate": -2.91672691634,
+        "ciLo": -3.73692348358,
+        "ciHi": -2.09653034911,
+        "note": "grande"
+      },
+      {
+        "measure": "Hedges g_z",
+        "estimate": -2.84063838809,
+        "ciLo": -3.66083495533,
+        "ciHi": -2.02044182086,
+        "note": "grande"
+      },
+      {
+        "measure": "r tra le coppie",
+        "estimate": 0.998065805487,
+        "ciLo": "NaN",
+        "ciHi": "NaN",
+        "note": "molto forte"
+      },
+      {
+        "measure": "r²",
+        "estimate": 0.996135352083,
+        "ciLo": "NaN",
+        "ciHi": "NaN",
+        "note": "quota di varianza condivisa"
+      }
+    ],
+    "notes": [
+      "d_z = media delle differenze / SD delle differenze; SE(d_z) ≈ √(1/n + d_z²/(2n)).",
+      "La correlazione tra le coppie descrive l’accoppiamento, non l’effetto del trattamento."
+    ]
+  },
+  {
+    "id": "ttest-assumptions",
+    "title": "Assunzioni",
+    "columns": [
+      {
+        "key": "check",
+        "label": "Controllo",
+        "format": "text"
+      },
+      {
+        "key": "statistic",
+        "label": "Statistica",
+        "format": "dec4"
+      },
+      {
+        "key": "df1",
+        "label": "df1",
+        "format": "dec2"
+      },
+      {
+        "key": "df2",
+        "label": "df2",
+        "format": "dec2"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "note",
+        "label": "Nota",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "check": "Jarque–Bera differenze",
+        "statistic": 3.66050883579,
+        "df1": 2,
+        "df2": "NaN",
+        "p": 0.160372760884,
+        "note": "JB su N = 30"
+      },
+      {
+        "check": "Lilliefors differenze",
+        "statistic": 0.152705943379,
+        "df1": "NaN",
+        "df2": "NaN",
+        "p": 0.0649350649351,
+        "note": "normalità delle differenze"
+      }
+    ],
+    "notes": [
+      "Il test t appaiato assume normalità delle differenze, non delle due variabili separatamente."
+    ]
+  }
+]

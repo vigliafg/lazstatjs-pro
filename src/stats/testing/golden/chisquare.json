@@ -1,0 +1,275 @@
+[
+  {
+    "id": "chisq-contingency",
+    "title": "Tabella di contingenza e residui",
+    "subtitle": "Trattato/Controllo × Evento/Nessun evento",
+    "columns": [
+      {
+        "key": "cell",
+        "label": "Cella",
+        "format": "text"
+      },
+      {
+        "key": "observed",
+        "label": "Osservato",
+        "format": "int"
+      },
+      {
+        "key": "expected",
+        "label": "Atteso",
+        "format": "dec3"
+      },
+      {
+        "key": "rowPct",
+        "label": "Row %",
+        "format": "dec1"
+      },
+      {
+        "key": "colPct",
+        "label": "Column %",
+        "format": "dec1"
+      },
+      {
+        "key": "totalPct",
+        "label": "Total %",
+        "format": "dec1"
+      },
+      {
+        "key": "standardized",
+        "label": "Residuo std.",
+        "format": "dec3"
+      },
+      {
+        "key": "adjusted",
+        "label": "Residuo aggiustato",
+        "format": "dec3"
+      },
+      {
+        "key": "contribution",
+        "label": "Contributo χ²",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "cell": "Trattato · Evento",
+        "observed": 18,
+        "expected": 13.5,
+        "rowPct": 72,
+        "colPct": 66.6666666667,
+        "totalPct": 36,
+        "standardized": 1.22474487139,
+        "adjusted": 2.55376959228,
+        "contribution": 1.5
+      },
+      {
+        "cell": "Trattato · Nessun evento",
+        "observed": 7,
+        "expected": 11.5,
+        "rowPct": 28,
+        "colPct": 30.4347826087,
+        "totalPct": 14,
+        "standardized": -1.32697760539,
+        "adjusted": -2.55376959228,
+        "contribution": 1.76086956522
+      },
+      {
+        "cell": "Controllo · Evento",
+        "observed": 9,
+        "expected": 13.5,
+        "rowPct": 36,
+        "colPct": 33.3333333333,
+        "totalPct": 18,
+        "standardized": -1.22474487139,
+        "adjusted": -2.55376959228,
+        "contribution": 1.5
+      },
+      {
+        "cell": "Controllo · Nessun evento",
+        "observed": 16,
+        "expected": 11.5,
+        "rowPct": 64,
+        "colPct": 69.5652173913,
+        "totalPct": 32,
+        "standardized": 1.32697760539,
+        "adjusted": 2.55376959228,
+        "contribution": 1.76086956522
+      }
+    ],
+    "notes": [
+      "Totali: righe 25 / 25, colonne 27 / 23, N = 50.",
+      "Residuo standardizzato = (O − E)/√E; aggiustato = (O − E)/√(E·(1−row%)(1−col%)). Il contributo è (O − E)²/E."
+    ]
+  },
+  {
+    "id": "chisq-tests",
+    "title": "Test di indipendenza",
+    "subtitle": "α = 0.05",
+    "columns": [
+      {
+        "key": "test",
+        "label": "Test",
+        "format": "text"
+      },
+      {
+        "key": "statistic",
+        "label": "Statistica",
+        "format": "dec4"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "test": "Pearson χ²",
+        "statistic": 6.52173913043,
+        "df": 1,
+        "p": 0.0106563747213
+      },
+      {
+        "test": "Likelihood ratio G²",
+        "statistic": 6.67580023378,
+        "df": 1,
+        "p": 0.0097730624521
+      },
+      {
+        "test": "Yates continuity correction",
+        "statistic": 5.15297906602,
+        "df": 1,
+        "p": 0.0232065264067
+      },
+      {
+        "test": "Fisher's exact (two-sided)",
+        "statistic": "NaN",
+        "df": "NaN",
+        "p": 0.0222412956917
+      }
+    ],
+    "notes": [
+      "Per tabelle 2×2 χ² e G² hanno df = 1; con frequenze attese piccole (< 5) preferire il test esatto di Fisher."
+    ]
+  },
+  {
+    "id": "chisq-effects",
+    "title": "Effect size e misure di associazione",
+    "subtitle": "CI 95%",
+    "columns": [
+      {
+        "key": "measure",
+        "label": "Misura",
+        "format": "text"
+      },
+      {
+        "key": "estimate",
+        "label": "Stima",
+        "format": "dec4"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec4"
+      },
+      {
+        "key": "note",
+        "label": "Interpretazione",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "measure": "φ (phi)",
+        "estimate": 0.361157559257,
+        "ciLo": 0.108948274481,
+        "ciHi": 0.6217315427,
+        "note": "moderata"
+      },
+      {
+        "measure": "Cramér's V",
+        "estimate": 0.361157559257,
+        "ciLo": 0.108948274481,
+        "ciHi": 0.6217315427,
+        "note": "moderata"
+      },
+      {
+        "measure": "Odds Ratio",
+        "estimate": 4.57142857143,
+        "ciLo": 1.38315916325,
+        "ciHi": 15.1088607435,
+        "note": "associazione positiva"
+      },
+      {
+        "measure": "Relative Risk",
+        "estimate": 2,
+        "ciLo": 1.12316366769,
+        "ciHi": 3.56136876135,
+        "note": "rischio riga 1 / rischio riga 2"
+      },
+      {
+        "measure": "Risk Difference",
+        "estimate": 0.36,
+        "ciLo": 0.102356043305,
+        "ciHi": 0.617643956695,
+        "note": "differenza assoluta dei rischi"
+      }
+    ],
+    "notes": [
+      "Per una tabella 2×2 φ e Cramér’s V coincidono numericamente; sono riportati separatamente perché la formula generale di V usa min(r−1, c−1).",
+      "OR: CI di Woolf su log(OR). RR: CI di Katz su log(RR). RD: CI di Wald. Con celle vuote le stime OR/RR non sono definite.",
+      "CI di φ/V: bootstrap percentile (500 repliche, seed fisso) ricampionando le osservazioni dalla tabella."
+    ]
+  },
+  {
+    "id": "chisq-assumptions",
+    "title": "Assunzioni",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Controllo",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec3"
+      },
+      {
+        "key": "note",
+        "label": "Nota",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "Frequenza attesa minima",
+        "value": 11.5,
+        "note": "Cochran: tutte ≥ 5 desiderabile"
+      },
+      {
+        "metric": "Celle con E < 5",
+        "value": 0,
+        "note": "0% delle celle"
+      },
+      {
+        "metric": "N",
+        "value": 50,
+        "note": "numerosità totale"
+      }
+    ],
+    "notes": [
+      "Le frequenze attese soddisfano la regola di Cochran."
+    ]
+  }
+]
