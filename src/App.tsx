@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, type SetStateAction } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
@@ -12,6 +12,7 @@ import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { useColumnOperations } from './hooks/useColumnOperations';
+import { useProjectParams } from './hooks/useProjectParams';
 import {
   defaultParamsForGrid,
   remapParams,
@@ -19,15 +20,7 @@ import {
   setPrimaryColumn,
   validateAnalysisColumnRefs,
 } from './analyses/params';
-import { defaultLogisticParams } from './analyses/logistic/defaults';
-import { defaultCoxParams } from './analyses/cox/defaults';
-import { defaultSurvivalParams } from './analyses/survival/defaults';
-import { defaultAncovaParams } from './analyses/ancova/defaults';
-import { defaultFactorialParams } from './analyses/factorial/defaults';
-import { defaultRepeatedAnovaParams } from './analyses/repeatedanova/defaults';
-import { defaultMultivariateParams } from './analyses/multivariate/defaults';
-import { defaultNonParamParams } from './analyses/nonparamrm/defaults';
-import { defaultWizardParams } from './analyses/wizard/defaults';
+import { assignRole, roleStates, validateRoleTypes } from './analyses/roles';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -53,7 +46,6 @@ import { ImportWizard } from './io/ImportWizard';
 import { ExportDialog } from './io/ExportDialog';
 import { downloadExportFile } from './io/writers';
 import {
-  DEFAULT_PARAMS,
   DEFAULT_SETTINGS,
   loadAutosaveProject,
   type AnovaParams,
@@ -67,7 +59,6 @@ import {
   type LogisticParams,
   type MultivariateParams,
   type NonParamParams,
-  type ProjectParams,
   type ProjectSettings,
   type ProjectSnapshot,
   type RegParams,
@@ -285,21 +276,7 @@ export default function App() {
     () => `dataset-${Date.now().toString(36)}`
   );
 
-  const [params, setParams] = useState<ProjectParams>(() => {
-    if (boot) return boot.params;
-    return {
-      ...DEFAULT_PARAMS,
-      logistic: defaultLogisticParams(grid),
-      cox: defaultCoxParams(grid),
-      survival: defaultSurvivalParams(grid),
-      ancova: defaultAncovaParams(grid),
-      factorial: defaultFactorialParams(grid),
-      repeatedanova: defaultRepeatedAnovaParams(grid),
-      multivariate: defaultMultivariateParams(grid),
-      nonparamrm: defaultNonParamParams(grid),
-      wizard: defaultWizardParams(grid),
-    };
-  });
+  const { params, setParams, bindParam } = useProjectParams(boot, grid);
 
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const {
@@ -313,24 +290,6 @@ export default function App() {
     exportResultsXlsx,
     exportReportHtml,
   } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
-
-  function updateParams<K extends keyof ProjectParams>(
-    key: K,
-    updater: SetStateAction<ProjectParams[K]>
-  ) {
-    setParams(previous => {
-      const current = previous[key];
-      const next =
-        typeof updater === 'function'
-          ? (updater as (value: ProjectParams[K]) => ProjectParams[K])(current)
-          : updater;
-      return next === current ? previous : { ...previous, [key]: next };
-    });
-  }
-
-  function bindParam<K extends keyof ProjectParams>(key: K) {
-    return (updater: SetStateAction<ProjectParams[K]>) => updateParams(key, updater);
-  }
 
   const {
     descVars,
@@ -411,13 +370,28 @@ export default function App() {
     showToast('Analysis', `Assigned to ${result.role}`, 'ok');
   };
 
+  const assignRoleTo = (column: number, roleKey: string) => {
+    const next = assignRole(activeAnalysis, params, roleKey, column);
+    if (!next) {
+      showToast('Analysis', 'This role does not accept columns', 'warn');
+      return;
+    }
+    setParams(next);
+    const role = roleStates(activeAnalysis, params).find(item => item.key === roleKey);
+    showToast('Analysis', `Assigned to ${role?.label ?? roleKey}`, 'ok');
+  };
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
     [ciLevel, activeAnalysis, activeTab]
   );
 
-  const roleErrors = validateAnalysisColumnRefs(activeAnalysis, params, grid.cols.length);
+  const roleErrors = [
+    ...validateAnalysisColumnRefs(activeAnalysis, params, grid.cols.length),
+    ...validateRoleTypes(activeAnalysis, params, grid),
+  ];
+  const roles = roleStates(activeAnalysis, params);
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
   const activeRowFilter: RowFilter | null =
@@ -647,6 +621,8 @@ export default function App() {
             filterSignature={filterSignature}
             focusedColumn={focusedColumn}
             onAssignPrimary={assignPrimary}
+            roles={roles}
+            onAssignRole={assignRoleTo}
             removeOutput={removeOutput}
             clearOutput={clearOutput}
             copyOutput={copyOutput}

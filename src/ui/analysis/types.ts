@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { CategoryLevel, GridData } from '../../grid/types';
 import type { RowFilter } from '../../grid/ops';
+import type { RoleState } from '../../analyses/roles';
 import type { OutputEntry } from '../OutputConsole';
 import type {
   AgreementParams,
@@ -120,6 +121,8 @@ export interface AnalysisTabProps {
   filterSignature: string;
   focusedColumn: number | null;
   onAssignPrimary: (column: number) => void;
+  roles: RoleState[];
+  onAssignRole: (column: number, roleKey: string) => void;
   removeOutput: (index: number) => void;
   clearOutput: () => void;
   copyOutput: () => void;

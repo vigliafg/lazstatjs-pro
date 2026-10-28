@@ -64,6 +64,10 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
   const meta = analysisMeta(p.activeAnalysis);
   const family = familyOf(p.activeAnalysis);
   const [peek, setPeek] = useState(false);
+  const [roleKey, setRoleKey] = useState('');
+  const activeRoleKey = p.roles.some(role => role.key === roleKey)
+    ? roleKey
+    : p.roles[0]?.key ?? '';
   const rowsForAnalysis =
     p.filterAffectsAnalysis && p.activeRowFilter
       ? p.grid.rows.filter(row => rowMatches(p.grid, row, p.activeRowFilter))
@@ -393,18 +397,43 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
           )}
         </div>
         {p.focusedColumn !== null && p.grid.cols[p.focusedColumn] && (
-          <div className="mt-2 flex items-center gap-2 rounded border border-border bg-surface3/50 px-2 py-1">
+          <div className="mt-2 flex flex-col gap-1 rounded border border-border bg-surface3/50 px-2 py-1">
             <span className="min-w-0 truncate font-mono text-[9px] uppercase tracking-wider text-text3">
               Focused: <span className="text-text2">{p.grid.cols[p.focusedColumn]?.label?.trim() || p.grid.cols[p.focusedColumn]?.name}</span>
             </span>
-            <button
-              type="button"
-              onClick={() => p.onAssignPrimary(p.focusedColumn as number)}
-              className="tb-btn ml-auto shrink-0 px-2 py-0.5 text-[10px]"
-              title="Assign the focused grid column to the primary role of this analysis"
-            >
-              Use in analysis
-            </button>
+            {p.roles.length > 1 ? (
+              <div className="flex items-center gap-1">
+                <select
+                  aria-label="Role to assign the focused column to"
+                  className="min-w-0 flex-1 rounded border border-border2 bg-surface3 p-1 text-[10px] text-text"
+                  value={activeRoleKey}
+                  onChange={event => setRoleKey(event.target.value)}
+                >
+                  {p.roles.map(role => (
+                    <option key={role.key} value={role.key}>
+                      {role.label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => p.onAssignRole(p.focusedColumn as number, activeRoleKey)}
+                  className="tb-btn shrink-0 px-2 py-0.5 text-[10px]"
+                  title="Assign the focused column to the selected role"
+                >
+                  Assign
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => p.onAssignPrimary(p.focusedColumn as number)}
+                className="tb-btn px-2 py-0.5 text-[10px]"
+                title="Assign the focused grid column to the primary role of this analysis"
+              >
+                Use in analysis
+              </button>
+            )}
           </div>
         )}
         <div className="mt-2 flex gap-1.5">
@@ -472,6 +501,26 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
                 First {Math.min(5, rowsForAnalysis.length)} of {rowsForAnalysis.length} rows ·{' '}
                 {p.filterAffectsAnalysis ? 'analysis filter active' : 'view filter only'}
               </p>
+              {p.roles.length > 0 && (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {p.roles.map(role => {
+                    const names = role.columns
+                      .filter(column => column >= 0)
+                      .map(column => p.grid.cols[column]?.label?.trim() || p.grid.cols[column]?.name)
+                      .filter(Boolean)
+                      .join(', ');
+                    return (
+                      <span
+                        key={role.key}
+                        className="rounded border border-border2 bg-surface2 px-1.5 py-0.5 font-mono text-[9px] text-text3"
+                        title={role.label}
+                      >
+                        {role.label.split(': ')[1] ?? role.label}: {names || '—'}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
