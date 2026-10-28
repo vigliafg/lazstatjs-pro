@@ -12,7 +12,7 @@ import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { regressionTables } from '../../stats/regression';
 import { regressionReport } from '../../stats/report';
-import { calcNormalityTests, calcTheilSen } from '../../statsHelpers';
+import { calcNormalityTests, calcTheilSen } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
 import type { GridData } from '../../grid/types';
 import type { RegParams } from '../../io/project';

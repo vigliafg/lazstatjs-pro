@@ -1,7 +1,7 @@
 import { jStat } from './jstat';
 import { parseNum } from './core';
 import type { TableSpec } from './types';
-import { calcTheilSen } from '../statsHelpers';
+import { calcTheilSen } from './kernels';
 import {
   bootstrapCI,
   chi2SF,

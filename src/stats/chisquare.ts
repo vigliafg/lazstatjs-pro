@@ -1,5 +1,5 @@
 import type { TableSpec } from './types';
-import { calcFisherExact } from '../statsHelpers';
+import { calcFisherExact } from './kernels';
 import { bootstrapCI, chi2SF, zCrit } from './distributions';
 import { interpretPhi } from './format';
 

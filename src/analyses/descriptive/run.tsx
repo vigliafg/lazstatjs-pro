@@ -13,7 +13,7 @@ import {
 } from 'victory';
 import { jStat } from '../../stats/jstat';
 import { buildHistogram, parseNum } from '../../stats/core';
-import { calcNormalityTests } from '../../statsHelpers';
+import { calcNormalityTests } from '../../stats/kernels';
 import { lillieforsTest } from '../../stats/distributions';
 import { descriptiveTables } from '../../stats/descriptive';
 import { descriptiveReport } from '../../stats/report';

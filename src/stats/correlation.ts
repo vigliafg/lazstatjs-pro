@@ -1,7 +1,7 @@
 import { jStat } from './jstat';
 import { parseNum } from './core';
 import type { TableSpec } from './types';
-import { calcKendallTau } from '../statsHelpers';
+import { calcKendallTau } from './kernels';
 import {
   correlationP,
   fisherZCI,

@@ -9,6 +9,7 @@
  */
 
 import { jStat } from './jstat';
+import { fmtPct } from './format';
 import type { TableSpec } from './types';
 import type { ReportSpec } from './report';
 import { chi2SF } from './distributions';
@@ -30,8 +31,6 @@ const correlation = (a: number[], b: number[]): number => {
   const cov = a.reduce((sum, value, index) => sum + (value - ma) * (b[index] - mb), 0) / (a.length - 1);
   return cov / Math.sqrt(va * vb);
 };
-
-const fmtPctValue = (value: number, decimals = 1): string => `${value.toFixed(decimals)}%`;
 
 export interface PcaResult {
   n: number;
@@ -291,7 +290,7 @@ export const pcaReport = (tables: TableSpec[], result: PcaResult, level: number)
   return {
     id: 'pca',
     title: 'Report di lettura',
-    headline: `I ${result.retained} componenti ritenuti spiegano il ${fmtPctValue(explained)} della varianza totale.`,
+    headline: `I ${result.retained} componenti ritenuti spiegano il ${fmtPct(explained)} della varianza totale.`,
     badge: kmoOk ? 'Struttura leggibile' : 'Campione debole',
     tone: kmoOk ? 'positive' : 'caution',
     intro: [
@@ -302,7 +301,7 @@ export const pcaReport = (tables: TableSpec[], result: PcaResult, level: number)
       {
         heading: 'La lettura dei risultati',
         body: [
-          `Il primo componente spiega il ${fmtPctValue(result.variancePct[0])}; i primi ${result.retained} arrivano al ${fmtPctValue(explained)}.`,
+          `Il primo componente spiega il ${fmtPct(result.variancePct[0])}; i primi ${result.retained} arrivano al ${fmtPct(explained)}.`,
           leading.length > 0
             ? `Le saturazioni più alte sono: ${leading.join(', ')}.`
             : 'Nessuna variabile raggiunge |saturazione| ≥ 0.40 sui componenti ritenuti: la struttura è debole o il numero di componenti è insufficiente.',

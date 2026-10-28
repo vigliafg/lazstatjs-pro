@@ -1,7 +1,7 @@
 import { jStat } from './jstat';
 import { parseNum, pairedValues, pooledTTest, welchTTest } from './core';
 import type { TableSpec } from './types';
-import { calcMannWhitneyU, calcWilcoxonSignedRank } from '../statsHelpers';
+import { calcMannWhitneyU, calcWilcoxonSignedRank } from './kernels';
 import {
   bootstrapCI,
   chi2SF,

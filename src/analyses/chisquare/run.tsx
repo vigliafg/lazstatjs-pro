@@ -13,7 +13,7 @@ import { chiSquareTables } from '../../stats/chisquare';
 import { chiSquareReport } from '../../stats/report';
 import { fmtEst } from '../../stats/format';
 import { ResultTables } from '../../components/ResultTable';
-import { calcFisherExact } from '../../statsHelpers';
+import { calcFisherExact } from '../../stats/kernels';
 import { AlertCircle } from 'lucide-react';
 import type { GridData } from '../../grid/types';
 import type { ChiSqParams } from '../../io/project';

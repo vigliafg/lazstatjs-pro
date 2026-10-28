@@ -11,7 +11,7 @@ import { jStat } from '../../stats/jstat';
 import { pairedValues, parseNum, pooledTTest, welchTTest } from '../../stats/core';
 import { ttestTables } from '../../stats/ttest';
 import { ttestReport } from '../../stats/report';
-import { calcMannWhitneyU, calcWilcoxonSignedRank } from '../../statsHelpers';
+import { calcMannWhitneyU, calcWilcoxonSignedRank } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
 import type { TableSpec } from '../../stats/types';
 import type { ReportSpec } from '../../stats/report';

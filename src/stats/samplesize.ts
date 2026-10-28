@@ -1,6 +1,6 @@
 import { jStat } from './jstat';
 import { fSF } from './distributions';
-import { logFactorial } from '../statsHelpers';
+import { logFactorial } from './kernels';
 import type { TableSpec } from './types';
 import type { ReportSpec } from './report';
 import { alphaOf, showInt, tableById } from './reportKit';

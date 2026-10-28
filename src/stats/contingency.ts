@@ -1,6 +1,6 @@
 import type { TableSpec } from './types';
 import { chi2SF, mulberry32 } from './distributions';
-import { calcFisherExact } from '../statsHelpers';
+import { calcFisherExact } from './kernels';
 import { fmtEst, fmtP } from './format';
 import type { ReportSpec } from './report';
 import {

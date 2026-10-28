@@ -10,7 +10,7 @@ import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { anovaTables } from '../../stats/anova';
 import { anovaReport } from '../../stats/report';
-import { calcKruskalWallis, calcMannWhitneyU } from '../../statsHelpers';
+import { calcKruskalWallis, calcMannWhitneyU } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
 import { analysisRows } from '../../grid/types';
 import type { GridData } from '../../grid/types';

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { contingencyReport, contingencyTables } from './contingency';
-import { calcFisherExact } from '../statsHelpers';
+import { calcFisherExact } from './kernels';
 import type { TableSpec } from './types';
 
 const close = (actual: number, expected: number, tolerance = 1e-6) =>

@@ -9,7 +9,8 @@ duplicare calcolo, form, report e persistenza. Le regole sono verificate da
 ```
 src/
   grid/         modello dati: celle, colonne, livelli, operazioni, history
-  stats/        motore numerico e prosa dei report (nessun React)
+  stats/        motore numerico e prosa dei report (nessun React);
+                i kernel condivisi stanno in stats/kernels/
   analyses/     una cartella per analisi: Form.tsx + run.tsx (+ defaults.ts)
                 e helper condivisi in analyses/shared/
   components/   componenti riusabili (tabelle, report) senza schermate
@@ -88,5 +89,6 @@ incompatibili.
 
 - `src/io/project.ts` contiene lo schema completo (855 righe): da spezzare in
   `io/project/` quando si affronterà la Fase 4.
-- `stats/` non è ancora diviso in `kernels`/`tables`/`reports` (Fase 3); per ora
-  la regola automatica impone solo che non importi React o la UI.
+- `stats/` non è ancora diviso in `kernels`/`tables`/`reports` (Fase 3): i kernel
+  legacy sono già in `stats/kernels/`, ma tabelle e prosa convivono ancora nei
+  moduli delle singole analisi.

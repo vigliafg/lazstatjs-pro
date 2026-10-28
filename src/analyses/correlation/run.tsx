@@ -11,7 +11,7 @@ import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { correlationTables } from '../../stats/correlation';
 import { correlationReport } from '../../stats/report';
-import { calcKendallTau } from '../../statsHelpers';
+import { calcKendallTau } from '../../stats/kernels';
 import { ResultTables } from '../../components/ResultTable';
 import type { GridData } from '../../grid/types';
 import type { CorrParams } from '../../io/project';

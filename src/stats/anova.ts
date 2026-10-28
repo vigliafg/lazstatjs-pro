@@ -1,7 +1,7 @@
 import { jStat } from './jstat';
 import { parseNum } from './core';
 import type { TableSpec } from './types';
-import { calcKruskalWallis } from '../statsHelpers';
+import { calcKruskalWallis } from './kernels';
 import {
   bonferroniAdjust,
   chi2SF,
