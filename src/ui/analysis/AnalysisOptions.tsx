@@ -74,7 +74,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
     if (p.roleErrors.length > 0) return;
     setLivePending(true);
     const timer = setTimeout(() => {
-      p.runAnalysisLive();
+      void p.runAnalysisLive();
       setLivePending(false);
     }, 500);
     return () => clearTimeout(timer);
@@ -614,7 +614,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
       <div className="shrink-0 border-t border-border bg-surface2/60 p-3">
         <button
           type="button"
-          onClick={p.runAnalysis}
+          onClick={() => void p.runAnalysis()}
           disabled={p.roleErrors.length > 0}
           title="Run analysis (Ctrl/Cmd + Enter)"
           className="run-btn flex h-10 w-full items-center justify-center gap-2"

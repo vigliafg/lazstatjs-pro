@@ -1,4 +1,4 @@
-import { ANALYSIS_RUNNERS } from '../analyses/runners';
+
 import { validateAnalysisColumnRefs } from '../analyses/params';
 import type { AnalysisRunResult } from '../analyses/types';
 import type { Dataset } from '../grid/types';
@@ -33,30 +33,33 @@ export const useAnalysisRun = ({
   emit,
   warn,
 }: UseAnalysisRunOptions) => {
-  const run = (
+  const run = async (
     analysisId: string,
     paramsUsed: ProjectParams,
     options?: { live?: boolean }
-  ): boolean => {
+  ): Promise<boolean> => {
     const invalid = validateAnalysisColumnRefs(analysisId, paramsUsed, grid.cols.length);
     if (invalid.length > 0) {
       warn(`Reselect the highlighted variable: ${invalid.slice(0, 2).join(' · ')}`);
       return false;
     }
+    // The runners (and the statistics/victory code they need) load on first
+    // run: the workspace itself stays small.
+    const { ANALYSIS_RUNNERS } = await import('../analyses/runners');
     const runner = ANALYSIS_RUNNERS[analysisId];
     if (runner) return emit(runner({ grid, params: paramsUsed, ciLevel }), analysisId, paramsUsed, options);
     warn('Analysis type not implemented yet');
     return false;
   };
 
-  const runAnalysis = (): boolean => run(activeAnalysis, params);
+  const runAnalysis = (): Promise<boolean> => run(activeAnalysis, params);
 
   /** Re-run a stored card with its own parameters, without touching state. */
-  const runAnalysisWith = (analysisId: string, paramsUsed: ProjectParams): boolean =>
+  const runAnalysisWith = (analysisId: string, paramsUsed: ProjectParams): Promise<boolean> =>
     run(analysisId, paramsUsed);
 
   /** Live run: replaces the previous live card instead of appending. */
-  const runAnalysisLive = (): boolean => run(activeAnalysis, params, { live: true });
+  const runAnalysisLive = (): Promise<boolean> => run(activeAnalysis, params, { live: true });
 
   return { runAnalysis, runAnalysisWith, runAnalysisLive };
 };

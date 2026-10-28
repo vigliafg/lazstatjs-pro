@@ -4,7 +4,7 @@ import { AnalysisReport } from '../components/AnalysisReport';
 import { copyText } from '../io/clipboard';
 import { exportChartsAsPng } from '../io/chartExport';
 import { buildReportFromElement } from '../io/reportExport';
-import { buildResultsWorkbookFromElement, XLSX_MIME } from '../io/xlsx';
+
 import { downloadBytes, downloadText } from '../io/writers';
 import { capStoredOutputs, extractOutputTitle, type StoredOutput } from '../io/outputs';
 import { nonEmptyRowCount } from '../grid/types';
@@ -142,10 +142,11 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     }
   };
 
-  const exportResultsXlsx = () => {
+  const exportResultsXlsx = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
     try {
+      const { buildResultsWorkbookFromElement, XLSX_MIME } = await import('../io/xlsx');
       const bytes = buildResultsWorkbookFromElement(el, grid);
       downloadBytes(bytes, 'lazstats-risultati.xlsx', XLSX_MIME);
       showToast('Export', 'Workbook .xlsx con il dataset e le tabelle dei risultati', 'ok');

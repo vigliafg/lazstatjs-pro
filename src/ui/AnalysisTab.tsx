@@ -82,8 +82,8 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
     }
   };
 
-  const run = (): boolean => {
-    const ok = props.runAnalysis();
+  const run = async (): Promise<boolean> => {
+    const ok = await props.runAnalysis();
     if (ok && isNarrow()) {
       setFocusOutput(false);
       setPane('output');
@@ -96,7 +96,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
       if (event.repeat) return;
       if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
         event.preventDefault();
-        run();
+        void run();
       }
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();

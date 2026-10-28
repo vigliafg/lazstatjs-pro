@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
@@ -27,7 +27,9 @@ import {
   analysisParamsSignature,
   withAnalysisParams,
 } from './analyses/paramsSnapshot';
-import { AnalysisTab } from './ui/AnalysisTab';
+const AnalysisTab = lazy(() =>
+  import('./ui/AnalysisTab').then(module => ({ default: module.AnalysisTab }))
+);
 import { ANALYSIS_TABS } from './analyses/registry';
 import { maskMissingCodes } from './grid/types';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -36,7 +38,9 @@ import {
   findInvalid as gridFindInvalid,
 } from './grid/ops';
 import { useGridHistory } from './grid/useGridHistory';
-import { HelpPanel } from './help/HelpPanel';
+const HelpPanel = lazy(() =>
+  import('./help/HelpPanel').then(module => ({ default: module.HelpPanel }))
+);
 import {
   setCell as gridSetCell,
   addColumnEnd as gridAddColumn,
@@ -49,8 +53,12 @@ import {
   type RowFilter,
   type RowFilterOp,
 } from './grid/ops';
-import { ImportWizard } from './io/ImportWizard';
-import { ExportDialog } from './io/ExportDialog';
+const ImportWizard = lazy(() =>
+  import('./io/ImportWizard').then(module => ({ default: module.ImportWizard }))
+);
+const ExportDialog = lazy(() =>
+  import('./io/ExportDialog').then(module => ({ default: module.ExportDialog }))
+);
 import { downloadExportFile } from './io/writers';
 import {
   DEFAULT_SETTINGS,
@@ -427,9 +435,9 @@ export default function App() {
       showToast('Output', 'This card has no saved parameters', 'warn');
       return;
     }
-    if (runAnalysisWith(entry.analysisId, next)) {
-      showToast('Output', 'Re-ran with the saved parameters', 'ok');
-    }
+    void runAnalysisWith(entry.analysisId, next).then(ok => {
+      if (ok) showToast('Output', 'Re-ran with the saved parameters', 'ok');
+    });
   };
 
   return (
@@ -490,6 +498,7 @@ export default function App() {
         )}
 
         {activeTab === 'analysis' && (
+          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">Loading analysis workspace…</div>}>
           <AnalysisTab
             activeAnalysis={activeAnalysis}
             setActiveAnalysis={setActiveAnalysis}
@@ -525,9 +534,14 @@ export default function App() {
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
           />
+          </Suspense>
         )}
 
-        {activeTab === 'help' && <HelpPanel />}
+        {activeTab === 'help' && (
+          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">Loading help…</div>}>
+            <HelpPanel />
+          </Suspense>
+        )}
 
         {activeTab === 'settings' && (
           <SettingsTab
@@ -544,6 +558,7 @@ export default function App() {
       </main>
 
       {pendingImport && (
+        <Suspense fallback={null}>
         <ImportWizard
           fileName={pendingImport.fileName}
           text={pendingImport.text}
@@ -552,8 +567,10 @@ export default function App() {
           onClose={() => setPendingImport(null)}
           onApply={applyImportTable}
         />
+        </Suspense>
       )}
       {showExport && (
+        <Suspense fallback={null}>
         <ExportDialog
           grid={grid}
           onClose={() => setShowExport(false)}
@@ -563,6 +580,7 @@ export default function App() {
             showToast('Export', files.map((f) => f.fileName).join(' + '), 'ok');
           }}
         />
+        </Suspense>
       )}
 
       <div role="status" aria-live="polite" className="sr-only">

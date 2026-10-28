@@ -2,7 +2,7 @@ import { useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import { loadPrefs, savePrefs, type IoPreferences } from '../io/prefs';
 import { looksLikeJson } from '../io/detect';
 import { readDelimitedTable } from '../io/readers';
-import { readXlsxSheets, type XlsxSheet } from '../io/xlsx';
+import type { XlsxSheet } from '../io/xlsx';
 import type { ImportMode } from '../io/ImportWizard';
 import type { ImportTable } from '../io/readers';
 import type { GridData } from '../grid/types';
@@ -120,6 +120,7 @@ export const useImportExport = ({
       // Excel workbooks are binary: parse every sheet, then reuse the wizard
       // and the CSV type-inference pipeline on the chosen sheet.
       if (lower.endsWith('.xlsx') || lower.endsWith('.xls') || lower.endsWith('.xlsm')) {
+        const { readXlsxSheets } = await import('../io/xlsx');
         if (file.size > 25_000_000) throw new Error('The workbook is too large (max 25 MB)');
         const sheets = readXlsxSheets(await file.arrayBuffer());
         setPendingImport({ fileName: file.name, sheets });
