@@ -1,0 +1,277 @@
+[
+  {
+    "id": "wiz-audit",
+    "title": "Audit delle colonne",
+    "subtitle": "7 colonne · classificazione automatica",
+    "columns": [
+      {
+        "key": "column",
+        "label": "Colonna",
+        "format": "text"
+      },
+      {
+        "key": "kind",
+        "label": "Tipo",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "missing",
+        "label": "Mancanti",
+        "format": "int"
+      },
+      {
+        "key": "unique",
+        "label": "Livelli",
+        "format": "int"
+      },
+      {
+        "key": "min",
+        "label": "Min",
+        "format": "dec3"
+      },
+      {
+        "key": "max",
+        "label": "Max",
+        "format": "dec3"
+      },
+      {
+        "key": "mean",
+        "label": "Media",
+        "format": "dec3"
+      },
+      {
+        "key": "sd",
+        "label": "SD",
+        "format": "dec3"
+      },
+      {
+        "key": "normalityP",
+        "label": "Normalità p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "column": "score",
+        "kind": "numerica",
+        "n": 28,
+        "missing": 2,
+        "unique": 28,
+        "min": 6.8,
+        "max": 25.2,
+        "mean": 15.0428571429,
+        "sd": 5.44191065108,
+        "normalityP": 0.416458852868
+      },
+      {
+        "column": "age",
+        "kind": "numerica",
+        "n": 30,
+        "missing": 0,
+        "unique": 30,
+        "min": 22,
+        "max": 58,
+        "mean": 39.0333333333,
+        "sd": 9.83478461918,
+        "normalityP": 0.992518703242
+      },
+      {
+        "column": "income",
+        "kind": "numerica",
+        "n": 30,
+        "missing": 0,
+        "unique": 30,
+        "min": 1280,
+        "max": 4100,
+        "mean": 2247.66666667,
+        "sd": 749.241839017,
+        "normalityP": 0.364089775561
+      },
+      {
+        "column": "pre",
+        "kind": "numerica",
+        "n": 30,
+        "missing": 0,
+        "unique": 30,
+        "min": 6.5,
+        "max": 24.6,
+        "mean": 14.6933333333,
+        "sd": 5.1518950871,
+        "normalityP": 0.234413965087
+      },
+      {
+        "column": "group",
+        "kind": "categorica",
+        "n": 30,
+        "missing": 0,
+        "unique": 3,
+        "min": "NaN",
+        "max": "NaN",
+        "mean": "NaN",
+        "sd": "NaN",
+        "normalityP": "NaN"
+      },
+      {
+        "column": "sex",
+        "kind": "binaria",
+        "n": 30,
+        "missing": 0,
+        "unique": 2,
+        "min": "NaN",
+        "max": "NaN",
+        "mean": "NaN",
+        "sd": "NaN",
+        "normalityP": "NaN"
+      },
+      {
+        "column": "post",
+        "kind": "numerica",
+        "n": 30,
+        "missing": 0,
+        "unique": 30,
+        "min": 7.3,
+        "max": 26.4,
+        "mean": 16.08,
+        "sd": 5.49328116257,
+        "normalityP": 0.468827930175
+      }
+    ],
+    "notes": [
+      "Tipo numerico: almeno il 95% dei valori non vuoti è numerico. Binaria: due soli livelli.",
+      "Il p di normalità è il test di Lilliefors (α = 0.05): con pochi dati ha poca potenza, con molti è iper-sensibile."
+    ]
+  },
+  {
+    "id": "wiz-groups",
+    "title": "Esito per gruppo",
+    "columns": [
+      {
+        "key": "level",
+        "label": "Gruppo",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "mean",
+        "label": "Media",
+        "format": "dec3"
+      },
+      {
+        "key": "sd",
+        "label": "SD",
+        "format": "dec3"
+      },
+      {
+        "key": "normalityP",
+        "label": "Normalità p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "level": "A",
+        "n": 11,
+        "mean": 14.5727272727,
+        "sd": 2.68703960116,
+        "normalityP": 0.956810631229
+      },
+      {
+        "level": "B",
+        "n": 8,
+        "mean": 21.975,
+        "sd": 2.13658606192,
+        "normalityP": 0.803986710963
+      },
+      {
+        "level": "C",
+        "n": 9,
+        "mean": 9.45555555556,
+        "sd": 1.85749233586,
+        "normalityP": 0.926910299003
+      }
+    ],
+    "notes": [
+      "Le medie descrivono i gruppi; il test scelto dal wizard confronta medie o ranghi a seconda delle assunzioni."
+    ]
+  },
+  {
+    "id": "wiz-checks",
+    "title": "Controlli sulle assunzioni",
+    "subtitle": "3 gruppi",
+    "columns": [
+      {
+        "key": "check",
+        "label": "Controllo",
+        "format": "text"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "reading",
+        "label": "Lettura",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "check": "Levene (uguaglianza delle varianze)",
+        "p": 0.550615990108,
+        "reading": "varianze compatibili"
+      },
+      {
+        "check": "Normalità di score",
+        "p": 0.416458852868,
+        "reading": "compatibile con la gaussiana"
+      }
+    ],
+    "notes": [
+      "I controlli sono di screening: con pochi dati i test di normalità hanno poca potenza, con molti sono iper-sensibili."
+    ]
+  },
+  {
+    "id": "wiz-path",
+    "title": "Percorso consigliato",
+    "subtitle": "ANOVA · ANOVA a una via con post-hoc",
+    "columns": [
+      {
+        "key": "step",
+        "label": "Passo",
+        "format": "int"
+      },
+      {
+        "key": "action",
+        "label": "Cosa fare",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "step": 1,
+        "action": "Nel pannello ANOVA scegli Y = score e il fattore con 3 livelli."
+      },
+      {
+        "step": 2,
+        "action": "Attiva i confronti post-hoc e controlla Levene nella tabella delle assunzioni."
+      },
+      {
+        "step": 3,
+        "action": "Apri ANOVA e premi Run Analysis."
+      }
+    ],
+    "notes": [
+      "Alternativa: Per varianze molto diverse usa Welch ANOVA (presente nella scheda)."
+    ]
+  }
+]

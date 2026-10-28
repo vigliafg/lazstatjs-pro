@@ -1,0 +1,417 @@
+[
+  {
+    "id": "cox-summary",
+    "title": "Sintesi del modello di Cox",
+    "subtitle": "30 osservazioni · 15 eventi · 2 covariariate",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Voce",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "Osservazioni",
+        "value": "30",
+        "raw": 30
+      },
+      {
+        "metric": "Eventi",
+        "value": "15",
+        "raw": 15
+      },
+      {
+        "metric": "Censurati",
+        "value": "15",
+        "raw": 15
+      },
+      {
+        "metric": "Covariati",
+        "value": "2",
+        "raw": 2
+      },
+      {
+        "metric": "Eventi per covariata",
+        "value": "7.5",
+        "raw": 7.5
+      },
+      {
+        "metric": "Log-verosimiglianza",
+        "value": "-23.219",
+        "raw": -23.2191998098
+      },
+      {
+        "metric": "Log-verosimiglianza nulla",
+        "value": "-38.648",
+        "raw": -38.6478524557
+      },
+      {
+        "metric": "AIC",
+        "value": "50.438",
+        "raw": 50.4383996195
+      },
+      {
+        "metric": "Concordanza (C di Harrell)",
+        "value": "0.915",
+        "raw": 0.915178571429
+      },
+      {
+        "metric": "Iterazioni",
+        "value": "7",
+        "raw": 7
+      },
+      {
+        "metric": "Convergenza",
+        "value": "sì",
+        "raw": "NaN"
+      }
+    ],
+    "notes": [
+      "La verosimiglianza parziale di Cox non richiede di specificare la forma della funzione di rischio di base.",
+      "Come regola pratica servono almeno 10 eventi per covariata: sotto questa soglia le stime sono instabili.",
+      "La C di Harrell misura la capacità del modello di ordinare i tempi: 0,5 = caso, 1 = ordine perfetto."
+    ]
+  },
+  {
+    "id": "cox-tests",
+    "title": "Test globali sul modello",
+    "subtitle": "ipotesi nulla: tutti i coefficienti uguali a zero",
+    "columns": [
+      {
+        "key": "test",
+        "label": "Test",
+        "format": "text"
+      },
+      {
+        "key": "statistic",
+        "label": "Statistica",
+        "format": "dec3"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "reading",
+        "label": "Lettura",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "test": "Rapporto di verosimiglianza",
+        "statistic": 30.8573052919,
+        "df": 2,
+        "p": 1.99260535294e-7,
+        "reading": "il modello spiega i tempi meglio del nulla"
+      },
+      {
+        "test": "Wald",
+        "statistic": 16.5693176148,
+        "df": 2,
+        "p": 0.000252358766226,
+        "reading": "almeno un coefficiente è diverso da zero"
+      },
+      {
+        "test": "Score (log-rank generalizzato)",
+        "statistic": 23.2033479465,
+        "df": 2,
+        "p": 0.0000091507567862,
+        "reading": "le covariariate sono associate al rischio già senza stima completa"
+      }
+    ],
+    "notes": [
+      "Con campioni grandi i tre test convergono; con pochi eventi il rapporto di verosimiglianza è il più affidabile.",
+      "Il test score valutato in β = 0 coincide, per una sola covariata dicotomica, con il log-rank."
+    ]
+  },
+  {
+    "id": "cox-coefficients",
+    "title": "Coefficienti e hazard ratio",
+    "subtitle": "IC 95% · HR per un’unità di incremento della covariata",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Covariata",
+        "format": "text"
+      },
+      {
+        "key": "beta",
+        "label": "B",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "Errore std.",
+        "format": "dec4"
+      },
+      {
+        "key": "z",
+        "label": "z",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "hr",
+        "label": "HR",
+        "format": "dec3"
+      },
+      {
+        "key": "lo",
+        "label": "HR low",
+        "format": "dec3"
+      },
+      {
+        "key": "hi",
+        "label": "HR high",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "term": "age",
+        "beta": -0.299541593992,
+        "se": 0.0740115235127,
+        "z": -4.04722913102,
+        "p": 0.0000518275025455,
+        "hr": 0.741157894053,
+        "lo": 0.641079686088,
+        "hi": 0.856859195257
+      },
+      {
+        "term": "group",
+        "beta": -1.67403651705,
+        "se": 0.827579409426,
+        "z": -2.02281073935,
+        "p": 0.043092664028,
+        "hr": 0.187488734687,
+        "lo": 0.0370286865761,
+        "hi": 0.94931872785
+      }
+    ],
+    "notes": [
+      "B è il logaritmo dell’hazard ratio: B > 0 indica rischio maggiore quando la covariata aumenta.",
+      "HR = 1 significa nessun effetto; l’intervallo che contiene 1 è coerente con l’assenza di associazione.",
+      "I p-value sono test di Wald e non tengono conto dell’incertezza sugli altri coefficienti."
+    ]
+  },
+  {
+    "id": "cox-ph",
+    "title": "Verifica dei rischi proporzionali",
+    "subtitle": "test di interazione con log(tempo)",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Termine",
+        "format": "text"
+      },
+      {
+        "key": "chi2",
+        "label": "χ²",
+        "format": "dec3"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "reading",
+        "label": "Lettura",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "term": "age",
+        "chi2": 1.12586926625,
+        "df": 1,
+        "p": 0.288658150028,
+        "reading": "nessuna evidenza contro i rischi proporzionali"
+      },
+      {
+        "term": "group",
+        "chi2": 8.38339628608,
+        "df": 1,
+        "p": 0.00378664175442,
+        "reading": "effetto che cambia nel tempo: l’ipotesi di rischi proporzionali è messa in discussione"
+      },
+      {
+        "term": "Globale",
+        "chi2": 18.5307925574,
+        "df": 2,
+        "p": 0.0000946432234549,
+        "reading": "effetto che cambia nel tempo: l’ipotesi di rischi proporzionali è messa in discussione"
+      }
+    ],
+    "notes": [
+      "Il test aggiunge un coefficiente per covariata × log(t): se quel coefficiente è diverso da zero l’effetto cambia con il tempo.",
+      "p grande è ciò che si vuole vedere: indica che l’ipotesi di rischio proporzionale regge.",
+      "È un test asintotico e con pochi eventi ha poca potenza: l’assenza di significatività non prova i rischi proporzionali."
+    ]
+  },
+  {
+    "id": "cox-baseline",
+    "title": "Rischio cumulato di base",
+    "subtitle": "stimatore di Breslow · profilo medio delle covariariate",
+    "columns": [
+      {
+        "key": "time",
+        "label": "Tempo",
+        "format": "dec2"
+      },
+      {
+        "key": "risk",
+        "label": "A rischio",
+        "format": "int"
+      },
+      {
+        "key": "events",
+        "label": "Eventi",
+        "format": "int"
+      },
+      {
+        "key": "hazard",
+        "label": "H₀(t)",
+        "format": "dec4"
+      },
+      {
+        "key": "survival",
+        "label": "S₀(t)",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "time": 7.3,
+        "risk": 30,
+        "events": 1,
+        "hazard": 0.00297040627555,
+        "survival": 0.997034001016
+      },
+      {
+        "time": 9.5,
+        "risk": 27,
+        "events": 1,
+        "hazard": 0.00878597412572,
+        "survival": 0.991252509756
+      },
+      {
+        "time": 9.7,
+        "risk": 26,
+        "events": 1,
+        "hazard": 0.0153626181761,
+        "survival": 0.984754784868
+      },
+      {
+        "time": 10.4,
+        "risk": 25,
+        "events": 1,
+        "hazard": 0.022645678436,
+        "survival": 0.977608810297
+      },
+      {
+        "time": 11.2,
+        "risk": 23,
+        "events": 1,
+        "hazard": 0.0360588839184,
+        "survival": 0.964583493355
+      },
+      {
+        "time": 13.1,
+        "risk": 19,
+        "events": 1,
+        "hazard": 0.070169964849,
+        "survival": 0.932235359198
+      },
+      {
+        "time": 15.3,
+        "risk": 17,
+        "events": 1,
+        "hazard": 0.141010760417,
+        "survival": 0.86847996644
+      },
+      {
+        "time": 17,
+        "risk": 14,
+        "events": 1,
+        "hazard": 0.446671832326,
+        "survival": 0.639753820353
+      },
+      {
+        "time": 17.1,
+        "risk": 13,
+        "events": 1,
+        "hazard": 0.774646700009,
+        "survival": 0.460866576397
+      },
+      {
+        "time": 17.9,
+        "risk": 12,
+        "events": 1,
+        "hazard": 1.16440731632,
+        "survival": 0.312107588299
+      },
+      {
+        "time": 18.5,
+        "risk": 11,
+        "events": 1,
+        "hazard": 1.58654472366,
+        "survival": 0.204631449807
+      },
+      {
+        "time": 19.9,
+        "risk": 9,
+        "events": 1,
+        "hazard": 2.04872164602,
+        "survival": 0.128899577597
+      },
+      {
+        "time": 21.6,
+        "risk": 6,
+        "events": 1,
+        "hazard": 3.63253186815,
+        "survival": 0.0264491338434
+      },
+      {
+        "time": 23.8,
+        "risk": 4,
+        "events": 1,
+        "hazard": 19.1585904244,
+        "survival": 4.78112279163e-9
+      },
+      {
+        "time": 24.1,
+        "risk": 3,
+        "events": 1,
+        "hazard": 87.51682985,
+        "survival": 9.81575528391e-39
+      }
+    ],
+    "notes": [
+      "H₀(t) è il rischio cumulato valutato al profilo medio delle covariariate: un profilo ipotetico ma stabile numericamente anche con età o punteggi lontani da zero.",
+      "Per un profilo x la sopravvivenza è S₀(t) elevato a exp((x − x̄)′B): la curva di base non va letta come la sopravvivenza media della coorte."
+    ]
+  }
+]

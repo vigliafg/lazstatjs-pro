@@ -1,0 +1,233 @@
+[
+  {
+    "id": "ss-input",
+    "title": "Parametri del piano",
+    "columns": [
+      {
+        "key": "parameter",
+        "label": "Parametro",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "parameter": "Disegno",
+        "value": "Due medie indipendenti"
+      },
+      {
+        "parameter": "α",
+        "value": "0.050"
+      },
+      {
+        "parameter": "Potenza target",
+        "value": "80%"
+      },
+      {
+        "parameter": "Code",
+        "value": "due"
+      },
+      {
+        "parameter": "Differenza da rilevare",
+        "value": "0.5"
+      },
+      {
+        "parameter": "SD (dei differenziali se appaiato)",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "id": "ss-result",
+    "title": "Numerosità richiesta",
+    "subtitle": "t a due campioni, correzione iterativa dei df",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Voce",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "n per gruppo",
+        "value": "64"
+      },
+      {
+        "metric": "N totale",
+        "value": "128"
+      },
+      {
+        "metric": "Effect size",
+        "value": "0.5"
+      },
+      {
+        "metric": "Potenza raggiunta",
+        "value": "80.2%"
+      }
+    ],
+    "notes": [
+      "Il calcolo è iterativo: la numerosità viene aumentata finché la potenza raggiunge quella richiesta.",
+      "La potenza riportata è quella approssimata del disegno, non il target: arrotondando a n intero può superarlo di poco."
+    ]
+  },
+  {
+    "id": "ss-curve",
+    "title": "Potenza al variare di n",
+    "subtitle": "per gruppo",
+    "columns": [
+      {
+        "key": "n",
+        "label": "n",
+        "format": "int"
+      },
+      {
+        "key": "power",
+        "label": "Potenza",
+        "format": "pct"
+      }
+    ],
+    "rows": [
+      {
+        "n": 4,
+        "power": 4.1
+      },
+      {
+        "n": 8,
+        "power": 12.6
+      },
+      {
+        "n": 12,
+        "power": 19.8
+      },
+      {
+        "n": 16,
+        "power": 26.5
+      },
+      {
+        "n": 20,
+        "power": 32.9
+      },
+      {
+        "n": 24,
+        "power": 38.9
+      },
+      {
+        "n": 28,
+        "power": 44.7
+      },
+      {
+        "n": 32,
+        "power": 50
+      },
+      {
+        "n": 36,
+        "power": 55
+      },
+      {
+        "n": 40,
+        "power": 59.7
+      },
+      {
+        "n": 44,
+        "power": 64
+      },
+      {
+        "n": 48,
+        "power": 67.9
+      },
+      {
+        "n": 52,
+        "power": 71.4
+      },
+      {
+        "n": 56,
+        "power": 74.7
+      },
+      {
+        "n": 60,
+        "power": 77.6
+      },
+      {
+        "n": 64,
+        "power": 80.2
+      },
+      {
+        "n": 68,
+        "power": 82.6
+      },
+      {
+        "n": 72,
+        "power": 84.7
+      },
+      {
+        "n": 76,
+        "power": 86.6
+      },
+      {
+        "n": 80,
+        "power": 88.2
+      },
+      {
+        "n": 84,
+        "power": 89.7
+      },
+      {
+        "n": 88,
+        "power": 91
+      },
+      {
+        "n": 92,
+        "power": 92.2
+      },
+      {
+        "n": 96,
+        "power": 93.2
+      },
+      {
+        "n": 100,
+        "power": 94.1
+      },
+      {
+        "n": 104,
+        "power": 94.9
+      },
+      {
+        "n": 108,
+        "power": 95.6
+      },
+      {
+        "n": 112,
+        "power": 96.2
+      },
+      {
+        "n": 116,
+        "power": 96.7
+      },
+      {
+        "n": 120,
+        "power": 97.1
+      },
+      {
+        "n": 124,
+        "power": 97.5
+      },
+      {
+        "n": 128,
+        "power": 97.9
+      }
+    ],
+    "notes": [
+      "La curva si appiattisce: oltre il punto calcolato ogni osservazione in più compra sempre meno potenza."
+    ]
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "id": "fit-parameters",
+    "title": "Distribuzioni stimate",
+    "subtitle": "ordinamento per AIC · N = 30",
+    "columns": [
+      {
+        "key": "distribution",
+        "label": "Distribuzione",
+        "format": "text"
+      },
+      {
+        "key": "parameters",
+        "label": "Parametri (MLE)",
+        "format": "text"
+      },
+      {
+        "key": "logLik",
+        "label": "Log-verosimiglianza",
+        "format": "dec3"
+      },
+      {
+        "key": "k",
+        "label": "Parametri",
+        "format": "int"
+      },
+      {
+        "key": "aic",
+        "label": "AIC",
+        "format": "dec2"
+      },
+      {
+        "key": "bic",
+        "label": "BIC",
+        "format": "dec2"
+      }
+    ],
+    "rows": [
+      {
+        "distribution": "Normale",
+        "parameters": "mu = 14.04 · sigma = 6.3822",
+        "logLik": -98.1737591672,
+        "k": 2,
+        "aic": 200.347518334,
+        "bic": 203.149913098
+      }
+    ],
+    "notes": [
+      "Le stime sono di massima verosimiglianza (MLE): scelgono i parametri che rendono i dati osservati più probabili.",
+      "AIC = 2k − 2·logL: più basso è, meglio la distribuzione spiega i dati tenendo conto del numero di parametri.",
+      "Confronta solo le righe con la stessa AIC (stesso dataset): le differenze sotto 2 sono trascurabili, sopra 10 sono nette."
+    ]
+  },
+  {
+    "id": "fit-gof",
+    "title": "Bontà di adattamento",
+    "subtitle": "KS = Kolmogorov–Smirnov · AD = Anderson–Darling",
+    "columns": [
+      {
+        "key": "distribution",
+        "label": "Distribuzione",
+        "format": "text"
+      },
+      {
+        "key": "ks",
+        "label": "KS D",
+        "format": "dec4"
+      },
+      {
+        "key": "ksP",
+        "label": "p KS (indicativo)",
+        "format": "p"
+      },
+      {
+        "key": "ad",
+        "label": "AD A²",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "distribution": "Normale",
+        "ks": 0.0680629302162,
+        "ksP": 0.998583245171,
+        "ad": 0.226706283951
+      }
+    ],
+    "notes": [
+      "Il p del KS è asintotico e non corretto per i parametri stimati: tende a essere ottimistico, usalo come indicazione.",
+      "KS misura la distanza massima tra la cumulata empirica e quella teorica; AD dà più peso alle code."
+    ]
+  },
+  {
+    "id": "fit-percentiles",
+    "title": "Percentili della distribuzione migliore (Normale)",
+    "subtitle": "CI 95% non applicabile ai percentili stimati",
+    "columns": [
+      {
+        "key": "p",
+        "label": "Percentile",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore stimato",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "p": "P1",
+        "value": -0.807324898887
+      },
+      {
+        "p": "P5",
+        "value": 3.54213917575
+      },
+      {
+        "p": "P10",
+        "value": 5.86082237973
+      },
+      {
+        "p": "P25",
+        "value": 9.7352403491
+      },
+      {
+        "p": "P50",
+        "value": 14.04
+      },
+      {
+        "p": "P75",
+        "value": 18.3447596509
+      },
+      {
+        "p": "P90",
+        "value": 22.2191776203
+      },
+      {
+        "p": "P95",
+        "value": 24.5378608242
+      },
+      {
+        "p": "P99",
+        "value": 28.8873248989
+      }
+    ],
+    "notes": [
+      "I percentili sono quelli della distribuzione stimata, non i percentili osservati.",
+      "Con N piccolo le code sono le più incerte: evita di leggere P1 o P99 come limiti affidabili."
+    ]
+  }
+]

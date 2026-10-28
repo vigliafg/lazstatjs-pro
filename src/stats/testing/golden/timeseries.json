@@ -1,0 +1,300 @@
+[
+  {
+    "id": "ts-summary",
+    "title": "Sintesi della serie",
+    "subtitle": "N = 30",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "Osservazioni",
+        "value": "30"
+      },
+      {
+        "metric": "Media",
+        "value": "16.08"
+      },
+      {
+        "metric": "Deviazione standard",
+        "value": "5.4933"
+      },
+      {
+        "metric": "Minimo",
+        "value": "7.3"
+      },
+      {
+        "metric": "Massimo",
+        "value": "26.4"
+      },
+      {
+        "metric": "Primo valore",
+        "value": "13.1"
+      },
+      {
+        "metric": "Ultimo valore",
+        "value": "17.9"
+      },
+      {
+        "metric": "Variazione totale",
+        "value": "4.8"
+      },
+      {
+        "metric": "Pendenza di Sen",
+        "value": "-0.0222"
+      }
+    ],
+    "notes": [
+      "La pendenza di Sen è la mediana delle pendenze tra tutte le coppie di punti: è robusta agli outlier."
+    ]
+  },
+  {
+    "id": "ts-acf",
+    "title": "Autocorrelazione e autocorrelazione parziale",
+    "subtitle": "banda di confidenza ±1,96/√N = ±0.358",
+    "columns": [
+      {
+        "key": "lag",
+        "label": "Lag",
+        "format": "int"
+      },
+      {
+        "key": "acf",
+        "label": "ACF",
+        "format": "dec3"
+      },
+      {
+        "key": "pacf",
+        "label": "PACF",
+        "format": "dec3"
+      },
+      {
+        "key": "lo",
+        "label": "Limite basso",
+        "format": "dec3"
+      },
+      {
+        "key": "hi",
+        "label": "Limite alto",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "lag": 0,
+        "acf": 1,
+        "pacf": 1,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      },
+      {
+        "lag": 1,
+        "acf": 0.25215356276,
+        "pacf": 0.25215356276,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      },
+      {
+        "lag": 2,
+        "acf": 0.340434780621,
+        "pacf": 0.29565129002,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      },
+      {
+        "lag": 3,
+        "acf": -0.0101669736764,
+        "pacf": -0.169886236353,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      },
+      {
+        "lag": 4,
+        "acf": -0.217565831874,
+        "pacf": -0.341406092618,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      },
+      {
+        "lag": 5,
+        "acf": -0.105488693967,
+        "pacf": 0.072761009168,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      },
+      {
+        "lag": 6,
+        "acf": -0.54601306353,
+        "pacf": -0.449894217128,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      },
+      {
+        "lag": 7,
+        "acf": -0.292252841935,
+        "pacf": -0.206057417483,
+        "lo": -0.357845404237,
+        "hi": 0.357845404237
+      }
+    ],
+    "notes": [
+      "Barre oltre la banda indicano autocorrelazione non spiegata dal caso.",
+      "La PACF isola la correlazione al lag k al netto dei lag intermedi: un taglio netto dopo il lag 1 suggerisce un processo AR(1)."
+    ]
+  },
+  {
+    "id": "ts-tests",
+    "title": "Test di casualità e trend",
+    "columns": [
+      {
+        "key": "test",
+        "label": "Test",
+        "format": "text"
+      },
+      {
+        "key": "statistic",
+        "label": "Statistica",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "decision",
+        "label": "Lettura",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "test": "Mann–Kendall (trend)",
+        "statistic": -0.142728248028,
+        "p": 0.886504806414,
+        "decision": "nessun trend monotono"
+      },
+      {
+        "test": "Wald–Wolfowitz (runs)",
+        "statistic": 0.557417514718,
+        "p": 0.577242201539,
+        "decision": "compatibile con il caso"
+      },
+      {
+        "test": "Ljung–Box (lag 1–7)",
+        "statistic": 23.7472926806,
+        "p": 0.00126190096518,
+        "decision": "autocorrelazione presente"
+      }
+    ],
+    "notes": [
+      "Mann–Kendall è non parametrico e resistente agli outlier: p piccolo indica una tendenza monotona.",
+      "Il test dei runs verifica che l’ordine dei valori sia casuale, non la loro distribuzione.",
+      "Ljung–Box verifica se le prime autocorrelazioni sono congiuntamente nulle."
+    ]
+  },
+  {
+    "id": "ts-models",
+    "title": "Confronto dei modelli di previsione",
+    "subtitle": "errore su un campione di validazione (ultimo 20% della serie)",
+    "columns": [
+      {
+        "key": "model",
+        "label": "Modello",
+        "format": "text"
+      },
+      {
+        "key": "rmse",
+        "label": "RMSE",
+        "format": "dec3"
+      },
+      {
+        "key": "mae",
+        "label": "MAE",
+        "format": "dec3"
+      },
+      {
+        "key": "mape",
+        "label": "MAPE %",
+        "format": "dec2"
+      },
+      {
+        "key": "note",
+        "label": "Dettaglio",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "model": "Linear trend",
+        "rmse": 3.32442174711,
+        "mae": 2.89215384615,
+        "mape": 18.7013526941,
+        "note": "pendenza = -0.0537 per passo"
+      },
+      {
+        "model": "Exponential smoothing (SES)",
+        "rmse": 4.40915724197,
+        "mae": 4.05870931842,
+        "mape": 24.0157978541,
+        "note": "alpha ottimale = 0.55"
+      }
+    ],
+    "notes": [
+      "RMSE e MAE sono nella stessa unità della serie; il MAPE è percentuale e non è definito se la serie contiene zeri.",
+      "Questi modelli servono da riferimento: il migliore viene confrontato con l’ARIMA, che è il modello usato per le previsioni con intervalli."
+    ]
+  },
+  {
+    "id": "ts-forecast",
+    "title": "Previsioni (Linear trend)",
+    "subtitle": "orizzonte 5 passi",
+    "columns": [
+      {
+        "key": "step",
+        "label": "Passo",
+        "format": "int"
+      },
+      {
+        "key": "forecast",
+        "label": "Previsione",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "step": 31,
+        "forecast": 15.695862069
+      },
+      {
+        "step": 32,
+        "forecast": 15.6710789766
+      },
+      {
+        "step": 33,
+        "forecast": 15.6462958843
+      },
+      {
+        "step": 34,
+        "forecast": 15.621512792
+      },
+      {
+        "step": 35,
+        "forecast": 15.5967296997
+      }
+    ],
+    "notes": [
+      "Le previsioni sono puntuali: non incorporano l’incertezza del modello né quella dei dati.",
+      "Con orizzonti lunghi l’errore cresce: oltre un ciclo stagionale le previsioni vanno lette come indicazione di direzione."
+    ]
+  }
+]

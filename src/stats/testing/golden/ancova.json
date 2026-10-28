@@ -1,0 +1,359 @@
+[
+  {
+    "id": "ancova-model",
+    "title": "ANCOVA — effetti (SS tipo III)",
+    "subtitle": "score ~ group + age · N = 30",
+    "columns": [
+      {
+        "key": "source",
+        "label": "Sorgente",
+        "format": "text"
+      },
+      {
+        "key": "ss",
+        "label": "SS",
+        "format": "dec3"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "dec1"
+      },
+      {
+        "key": "ms",
+        "label": "MS",
+        "format": "dec3"
+      },
+      {
+        "key": "f",
+        "label": "F",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "etaP",
+        "label": "η²p",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "source": "group",
+        "ss": 15.5607410438,
+        "df": 2,
+        "ms": 7.78037052192,
+        "f": 0.405635565677,
+        "p": 0.670698391647,
+        "etaP": 0.0302585851816
+      },
+      {
+        "source": "age",
+        "ss": 405.702069401,
+        "df": 1,
+        "ms": 405.702069401,
+        "f": 21.1515875696,
+        "p": 0.0000968560879526,
+        "etaP": 0.448586965144
+      },
+      {
+        "source": "Residuo",
+        "ss": 498.697971003,
+        "df": 26,
+        "ms": 19.1806911924,
+        "f": "NaN",
+        "p": "NaN",
+        "etaP": "NaN"
+      },
+      {
+        "source": "Totale",
+        "ss": 1221.992,
+        "df": 29,
+        "ms": "NaN",
+        "f": "NaN",
+        "p": "NaN",
+        "etaP": "NaN"
+      }
+    ],
+    "notes": [
+      "SS tipo III: ogni termine è testato togliendolo dal modello completo (fattore e covariate insieme).",
+      "Modello: F(3, 26) = 12.57, p = < 0.001 · R² = 0.592, R²adj = 0.545, RMSE = 4.38."
+    ]
+  },
+  {
+    "id": "ancova-means",
+    "title": "Medie aggiustate per gruppo",
+    "subtitle": "valutate alla media delle covariate · CI 95%",
+    "columns": [
+      {
+        "key": "group",
+        "label": "Gruppo",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "rawMean",
+        "label": "Media grezza",
+        "format": "dec3"
+      },
+      {
+        "key": "adjusted",
+        "label": "Media aggiustata",
+        "format": "dec3"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec3"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec3"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "group": "A",
+        "n": 11,
+        "rawMean": 14.5727272727,
+        "adjusted": 13.7869350673,
+        "se": 1.33149982286,
+        "ciLo": 11.0499980106,
+        "ciHi": 16.5238721239
+      },
+      {
+        "group": "B",
+        "n": 10,
+        "rawMean": 17.58,
+        "adjusted": 12.8741965646,
+        "se": 1.72192214529,
+        "ciLo": 9.33473493854,
+        "ciHi": 16.4136581906
+      },
+      {
+        "group": "C",
+        "n": 9,
+        "rawMean": 9.45555555556,
+        "adjusted": 15.6446387349,
+        "se": 1.98548515337,
+        "ciLo": 11.5634155922,
+        "ciHi": 19.7258618777
+      }
+    ],
+    "notes": [
+      "Media aggiustata = valore atteso del gruppo con tutte le covariate al loro valore medio.",
+      "La differenza tra media grezza e aggiustata mostra quanto pesa lo sbilanciamento delle covariate tra i gruppi."
+    ]
+  },
+  {
+    "id": "ancova-coefficients",
+    "title": "Coefficienti del modello",
+    "subtitle": "codifica treatment · riferimento: A",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Termine",
+        "format": "text"
+      },
+      {
+        "key": "b",
+        "label": "B",
+        "format": "dec3"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec3"
+      },
+      {
+        "key": "t",
+        "label": "t",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "ciLo",
+        "label": "CI low",
+        "format": "dec3"
+      },
+      {
+        "key": "ciHi",
+        "label": "CI high",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "term": "Intercetta",
+        "b": 13.7869350673,
+        "se": 1.33149982286,
+        "t": 10.3544400312,
+        "p": 1.02146977163e-10,
+        "ciLo": 11.0499980106,
+        "ciHi": 16.5238721239
+      },
+      {
+        "term": "B",
+        "b": -0.912738502702,
+        "se": 2.09481781648,
+        "t": -0.43571259301,
+        "p": 0.666641396179,
+        "ciLo": -5.2186981509,
+        "ciHi": 3.3932211455
+      },
+      {
+        "term": "C",
+        "b": 1.85770366767,
+        "se": 2.48493425073,
+        "t": 0.747586648268,
+        "p": 0.46141798358,
+        "ciLo": -3.25015178777,
+        "ciHi": 6.96555912311
+      },
+      {
+        "term": "age",
+        "b": 0.590686623695,
+        "se": 0.128435668751,
+        "t": 4.59908551449,
+        "p": 0.0000968560886346,
+        "ciLo": 0.326683328192,
+        "ciHi": 0.854689919198
+      }
+    ],
+    "notes": [
+      "L’intercetta è la media aggiustata del gruppo di riferimento (A).",
+      "I coefficienti dei gruppi sono differenze aggiustate rispetto al riferimento; quelli delle covariate sono pendenze comuni."
+    ]
+  },
+  {
+    "id": "ancova-slopes",
+    "title": "Omogeneità delle pendenze",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec4"
+      },
+      {
+        "key": "detail",
+        "label": "Dettaglio",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "F interazione",
+        "value": 3.05542817228,
+        "detail": "group × covariate"
+      },
+      {
+        "metric": "df numeratore",
+        "value": 2,
+        "detail": "(k−1) × numero di covariate"
+      },
+      {
+        "metric": "df denominatore",
+        "value": 24,
+        "detail": "residui del modello con interazioni"
+      },
+      {
+        "metric": "p interazione",
+        "value": 0.0657442261273,
+        "detail": "p > α: pendenze compatibili"
+      }
+    ],
+    "notes": [
+      "Se l’interazione è significativa le pendenze differiscono tra i gruppi: l’ANCOVA classica non è appropriata.",
+      "Il test confronta il modello completo con e senza tutti i prodotti gruppo × covariata."
+    ]
+  },
+  {
+    "id": "ancova-posthoc",
+    "title": "Confronti a coppie (medie aggiustate)",
+    "subtitle": "correzione Holm",
+    "columns": [
+      {
+        "key": "contrast",
+        "label": "Confronto",
+        "format": "text"
+      },
+      {
+        "key": "difference",
+        "label": "Differenza",
+        "format": "dec3"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec3"
+      },
+      {
+        "key": "t",
+        "label": "t",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "pHolm",
+        "label": "p Holm",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "contrast": "A − B",
+        "difference": 0.912738502702,
+        "se": 2.09481781648,
+        "t": 0.43571259301,
+        "p": 0.666641396179,
+        "pHolm": 1
+      },
+      {
+        "contrast": "A − C",
+        "difference": -1.85770366767,
+        "se": 2.48493425073,
+        "t": -0.747586648268,
+        "p": 0.46141798358,
+        "pHolm": 1
+      },
+      {
+        "contrast": "B − C",
+        "difference": -2.77044217037,
+        "se": 3.10822466789,
+        "t": -0.89132622844,
+        "p": 0.380928879059,
+        "pHolm": 1
+      }
+    ],
+    "notes": [
+      "Differenza = media aggiustata del primo gruppo − media aggiustata del secondo.",
+      "p non corretti da t con df = 26; la colonna Holm controlla il numero di confronti."
+    ]
+  }
+]

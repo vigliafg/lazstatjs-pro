@@ -1,0 +1,415 @@
+[
+  {
+    "id": "surv-summary",
+    "title": "Sintesi di sopravvivenza",
+    "subtitle": "N = 30 · eventi = 15 · censurati = 15",
+    "columns": [
+      {
+        "key": "group",
+        "label": "Gruppo",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "events",
+        "label": "Eventi",
+        "format": "int"
+      },
+      {
+        "key": "censored",
+        "label": "Censurati",
+        "format": "int"
+      },
+      {
+        "key": "median",
+        "label": "Mediana",
+        "format": "dec2"
+      },
+      {
+        "key": "medianLo",
+        "label": "CI low",
+        "format": "dec2"
+      },
+      {
+        "key": "medianHi",
+        "label": "CI high",
+        "format": "dec2"
+      },
+      {
+        "key": "rmst",
+        "label": "RMST",
+        "format": "dec2"
+      }
+    ],
+    "rows": [
+      {
+        "group": "A",
+        "n": 11,
+        "events": 6,
+        "censored": 5,
+        "median": 17.9,
+        "medianLo": 13.1,
+        "medianHi": "NaN",
+        "rmst": 16.6236652237
+      },
+      {
+        "group": "B",
+        "n": 10,
+        "events": 5,
+        "censored": 5,
+        "median": 23.8,
+        "medianLo": 17,
+        "medianHi": "NaN",
+        "rmst": 23.3533333333
+      },
+      {
+        "group": "C",
+        "n": 9,
+        "events": 4,
+        "censored": 5,
+        "median": 11.2,
+        "medianLo": 7.3,
+        "medianHi": "NaN",
+        "rmst": 10.9641975309
+      }
+    ],
+    "notes": [
+      "La mediana è il tempo in cui la curva scende a 0,50: se non viene raggiunta resta non calcolabile.",
+      "Il CI della mediana deriva dagli intervalli log-log della curva; RMST è l’area sotto la curva fino all’ultimo tempo osservato."
+    ]
+  },
+  {
+    "id": "surv-km",
+    "title": "Curva di Kaplan–Meier",
+    "subtitle": "CI 95% log-log · stima prodotto-limite",
+    "columns": [
+      {
+        "key": "group",
+        "label": "Gruppo",
+        "format": "text"
+      },
+      {
+        "key": "time",
+        "label": "Tempo",
+        "format": "dec2"
+      },
+      {
+        "key": "nRisk",
+        "label": "A rischio",
+        "format": "int"
+      },
+      {
+        "key": "events",
+        "label": "Eventi",
+        "format": "int"
+      },
+      {
+        "key": "censored",
+        "label": "Censurati",
+        "format": "int"
+      },
+      {
+        "key": "survival",
+        "label": "S(t)",
+        "format": "dec3"
+      },
+      {
+        "key": "lo",
+        "label": "CI low",
+        "format": "dec3"
+      },
+      {
+        "key": "hi",
+        "label": "CI high",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "group": "A",
+        "time": 10.4,
+        "nRisk": 11,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.909090909091,
+        "lo": 0.50808020577,
+        "hi": 0.986673822668
+      },
+      {
+        "group": "A",
+        "time": 13.1,
+        "nRisk": 9,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.808080808081,
+        "lo": 0.42349600619,
+        "hi": 0.948522935017
+      },
+      {
+        "group": "A",
+        "time": 15.3,
+        "nRisk": 7,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.692640692641,
+        "lo": 0.311930691706,
+        "hi": 0.890680813976
+      },
+      {
+        "group": "A",
+        "time": 17.1,
+        "nRisk": 4,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.519480519481,
+        "lo": 0.145492678897,
+        "hi": 0.800502358469
+      },
+      {
+        "group": "A",
+        "time": 17.9,
+        "nRisk": 3,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.34632034632,
+        "lo": 0.0548840333177,
+        "hi": 0.678822313394
+      },
+      {
+        "group": "A",
+        "time": 18.5,
+        "nRisk": 2,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.17316017316,
+        "lo": 0.00860242522218,
+        "hi": 0.523839877688
+      },
+      {
+        "group": "B",
+        "time": 17,
+        "nRisk": 10,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.9,
+        "lo": 0.473009271362,
+        "hi": 0.985281393367
+      },
+      {
+        "group": "B",
+        "time": 19.9,
+        "nRisk": 9,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.8,
+        "lo": 0.408690781633,
+        "hi": 0.945872645839
+      },
+      {
+        "group": "B",
+        "time": 21.6,
+        "nRisk": 6,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.666666666667,
+        "lo": 0.271680092285,
+        "hi": 0.881474429765
+      },
+      {
+        "group": "B",
+        "time": 23.8,
+        "nRisk": 4,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.5,
+        "lo": 0.134087331402,
+        "hi": 0.787321254539
+      },
+      {
+        "group": "B",
+        "time": 24.1,
+        "nRisk": 3,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.333333333333,
+        "lo": 0.0518965622448,
+        "hi": 0.665005885927
+      },
+      {
+        "group": "C",
+        "time": 7.3,
+        "nRisk": 9,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.888888888889,
+        "lo": 0.432965090226,
+        "hi": 0.983564028526
+      },
+      {
+        "group": "C",
+        "time": 9.5,
+        "nRisk": 6,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.740740740741,
+        "lo": 0.289211654964,
+        "hi": 0.929976147014
+      },
+      {
+        "group": "C",
+        "time": 9.7,
+        "nRisk": 5,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.592592592593,
+        "lo": 0.185918996671,
+        "hi": 0.849818348649
+      },
+      {
+        "group": "C",
+        "time": 11.2,
+        "nRisk": 3,
+        "events": 1,
+        "censored": 0,
+        "survival": 0.395061728395,
+        "lo": 0.0641808147345,
+        "hi": 0.730452975398
+      }
+    ],
+    "notes": [
+      "S(t) è la probabilità stimata di essere ancora “in vita” (senza evento) al tempo t.",
+      "I censurati escono dal rischio senza far scendere la curva: è il motivo per cui serve un’analisi di sopravvivenza invece di una media."
+    ]
+  },
+  {
+    "id": "surv-logrank",
+    "title": "Log-rank test",
+    "subtitle": "A vs B vs C",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Voce",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "χ²",
+        "value": "17.116",
+        "chiValue": 17.1164181534
+      },
+      {
+        "metric": "df",
+        "value": "2"
+      },
+      {
+        "metric": "p",
+        "value": "< 0.001",
+        "pValue": 0.000191962776586
+      }
+    ],
+    "notes": [
+      "Il log-rank confronta il numero di eventi osservati in ogni gruppo con quelli attesi se le curve fossero uguali.",
+      "L’hazard ratio è stimato con l’approccio Mantel–Haenszel: HR > 1 indica rischio maggiore nel primo gruppo."
+    ]
+  },
+  {
+    "id": "surv-life",
+    "title": "Life table (tutta la coorte)",
+    "subtitle": "6 intervalli di uguale ampiezza",
+    "columns": [
+      {
+        "key": "start",
+        "label": "Da",
+        "format": "dec2"
+      },
+      {
+        "key": "end",
+        "label": "A",
+        "format": "dec2"
+      },
+      {
+        "key": "atRisk",
+        "label": "A rischio",
+        "format": "int"
+      },
+      {
+        "key": "events",
+        "label": "Eventi",
+        "format": "int"
+      },
+      {
+        "key": "censored",
+        "label": "Censurati",
+        "format": "int"
+      },
+      {
+        "key": "survival",
+        "label": "S(t)",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "start": 0,
+        "end": 4.4,
+        "atRisk": 30,
+        "events": 0,
+        "censored": 0,
+        "survival": 1
+      },
+      {
+        "start": 4.4,
+        "end": 8.8,
+        "atRisk": 30,
+        "events": 1,
+        "censored": 1,
+        "survival": 0.966101694915
+      },
+      {
+        "start": 8.8,
+        "end": 13.2,
+        "atRisk": 28,
+        "events": 5,
+        "censored": 5,
+        "survival": 0.77666999003
+      },
+      {
+        "start": 13.2,
+        "end": 17.6,
+        "atRisk": 18,
+        "events": 3,
+        "censored": 3,
+        "survival": 0.63545726457
+      },
+      {
+        "start": 17.6,
+        "end": 22,
+        "atRisk": 12,
+        "events": 4,
+        "censored": 3,
+        "survival": 0.393378306639
+      },
+      {
+        "start": 22,
+        "end": 26.4,
+        "atRisk": 5,
+        "events": 2,
+        "censored": 3,
+        "survival": 0.168590702845
+      }
+    ],
+    "notes": [
+      "Nella life table i censurati nell’intervallo contribuiscono per metà al tempo a rischio."
+    ]
+  }
+]

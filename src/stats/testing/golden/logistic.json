@@ -1,0 +1,200 @@
+[
+  {
+    "id": "logit-fit",
+    "title": "Modello logistico",
+    "subtitle": "stima di massima verosimiglianza · N = 30",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "Osservazioni",
+        "value": "30"
+      },
+      {
+        "metric": "Eventi (Y = 1)",
+        "value": "15"
+      },
+      {
+        "metric": "Eventi per parametro",
+        "value": "7.5"
+      },
+      {
+        "metric": "Log-verosimiglianza",
+        "value": "-20.575"
+      },
+      {
+        "metric": "Log-verosimiglianza nulla",
+        "value": "-20.794"
+      },
+      {
+        "metric": "LR χ² (vs modello nullo)",
+        "value": "0.438"
+      },
+      {
+        "metric": "df",
+        "value": "2"
+      },
+      {
+        "metric": "p del modello",
+        "value": "0.803"
+      },
+      {
+        "metric": "McFadden R²",
+        "value": "0.011"
+      },
+      {
+        "metric": "Cox–Snell R²",
+        "value": "0.015"
+      },
+      {
+        "metric": "Nagelkerke R²",
+        "value": "0.019"
+      },
+      {
+        "metric": "AIC",
+        "value": "47.15"
+      },
+      {
+        "metric": "BIC",
+        "value": "51.35"
+      }
+    ],
+    "notes": [
+      "Il test LR confronta il modello con quello che contiene solo l’intercetta: p piccolo = almeno un predittore aggiunge informazione.",
+      "Le pseudo-R² non hanno il significato dell’R² lineare: valori intorno a 0,2–0,4 indicano già un buon adattamento."
+    ]
+  },
+  {
+    "id": "logit-coefficients",
+    "title": "Coefficienti e odds ratio",
+    "subtitle": "CI 95%",
+    "columns": [
+      {
+        "key": "predictor",
+        "label": "Predittore",
+        "format": "text"
+      },
+      {
+        "key": "b",
+        "label": "B",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "z",
+        "label": "Wald z",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "or",
+        "label": "OR",
+        "format": "dec3"
+      },
+      {
+        "key": "orLo",
+        "label": "OR CI low",
+        "format": "dec3"
+      },
+      {
+        "key": "orHi",
+        "label": "OR CI high",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "predictor": "(Intercept)",
+        "b": 1.02273785331,
+        "se": 1.61786000898,
+        "z": 0.632154727625,
+        "p": 0.527285776826,
+        "or": "NaN",
+        "orLo": "NaN",
+        "orHi": "NaN"
+      },
+      {
+        "predictor": "age",
+        "b": -0.0465419378831,
+        "se": 0.0880786182597,
+        "z": -0.528413578717,
+        "p": 0.597212314969,
+        "or": 0.954524528992,
+        "orLo": 0.803182869987,
+        "orHi": 1.13438310315
+      },
+      {
+        "predictor": "income",
+        "b": 0.00035320006867,
+        "se": 0.00115171397797,
+        "z": 0.306673423634,
+        "p": 0.75909196051,
+        "or": 1.00035326245,
+        "orLo": 0.998097693834,
+        "orHi": 1.00261392836
+      }
+    ],
+    "notes": [
+      "OR > 1 aumenta le probabilità dell’esito per un’unità in più del predittore; OR < 1 le riduce. OR = 1 non ha effetto.",
+      "L’intervallo dell’OR è calcolato su scala logaritmica: exp(B ± z·SE). Se contiene 1, l’effetto non è significativo.",
+      "Il p è di Wald (z = B/SE): con campioni piccoli o effetti forti può essere meno affidabile del test LR."
+    ]
+  },
+  {
+    "id": "logit-classification",
+    "title": "Classificazione",
+    "subtitle": "soglia p ≥ 0.5 → Y = 1",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "Accuratezza",
+        "value": "56.7%"
+      },
+      {
+        "metric": "Sensibilità",
+        "value": "53.3%"
+      },
+      {
+        "metric": "Specificità",
+        "value": "60%"
+      },
+      {
+        "metric": "AUC",
+        "value": "0.573"
+      }
+    ],
+    "notes": [
+      "L’AUC non dipende dalla soglia: 0,5 è il caso, 0,7 accettabile, 0,8 buono, 0,9 eccellente.",
+      "La soglia 0,5 è arbitraria: se il costo di un falso negativo è alto, abbassala e guarda come cambiano sensibilità e specificità."
+    ]
+  }
+]

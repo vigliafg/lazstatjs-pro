@@ -1,0 +1,163 @@
+[
+  {
+    "id": "pca-eigen",
+    "title": "Autovalori e varianza spiegata",
+    "subtitle": "30 casi completi · 3 variabili · 1 componenti ritenuti",
+    "columns": [
+      {
+        "key": "component",
+        "label": "Componente",
+        "format": "text"
+      },
+      {
+        "key": "eigenvalue",
+        "label": "Autovalore",
+        "format": "dec3"
+      },
+      {
+        "key": "variance",
+        "label": "% varianza",
+        "format": "dec1"
+      },
+      {
+        "key": "cumulative",
+        "label": "% cumulata",
+        "format": "dec1"
+      },
+      {
+        "key": "retained",
+        "label": "Ritenuto",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "component": "PC1",
+        "eigenvalue": 2.59977987997,
+        "variance": 86.6593293322,
+        "cumulative": 86.6593293322,
+        "retained": "sì"
+      },
+      {
+        "component": "PC2",
+        "eigenvalue": 0.301974851572,
+        "variance": 10.0658283857,
+        "cumulative": 96.7251577179,
+        "retained": "no"
+      },
+      {
+        "component": "PC3",
+        "eigenvalue": 0.0982452684626,
+        "variance": 3.27484228209,
+        "cumulative": 100,
+        "retained": "no"
+      }
+    ],
+    "notes": [
+      "Criterio di Kaiser: si ritengono i componenti con autovalore > 1 (matrice di correlazione)."
+    ]
+  },
+  {
+    "id": "pca-loadings",
+    "title": "Saturazioni e comunalità",
+    "subtitle": "PCA su matrice di correlazione",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variabile",
+        "format": "text"
+      },
+      {
+        "key": "pc1",
+        "label": "PC1",
+        "format": "dec3"
+      },
+      {
+        "key": "communality",
+        "label": "Comunalità",
+        "format": "dec3"
+      },
+      {
+        "key": "kmo",
+        "label": "KMO item",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "pc1": 0.88925002641,
+        "communality": 0.79076560947,
+        "kmo": 0.885804451966
+      },
+      {
+        "variable": "age",
+        "pc1": 0.955730372096,
+        "communality": 0.913420544146,
+        "kmo": 0.66021608416
+      },
+      {
+        "variable": "income",
+        "pc1": 0.946358138523,
+        "communality": 0.895593726349,
+        "kmo": 0.681100437504
+      }
+    ],
+    "notes": [
+      "Saturazione = autovettore × √autovalore. La comunalità è la quota di varianza spiegata dai componenti ritenuti.",
+      "Con |saturazione| ≥ 0.40 la variabile è di solito considerata associata al componente."
+    ]
+  },
+  {
+    "id": "pca-adequacy",
+    "title": "Adeguatezza del campione",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec4"
+      },
+      {
+        "key": "detail",
+        "label": "Dettaglio",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "KMO",
+        "value": 0.72119956679,
+        "detail": "discreto"
+      },
+      {
+        "metric": "Bartlett χ²",
+        "value": 69.6084150237,
+        "detail": "df = 3"
+      },
+      {
+        "metric": "Bartlett p",
+        "value": 5.21804821574e-15,
+        "detail": "struttura non sferica"
+      },
+      {
+        "metric": "Determinante R",
+        "value": 0.0771292305071,
+        "detail": "valori prossimi a 0 indicano collinearità"
+      },
+      {
+        "metric": "N casi",
+        "value": 30,
+        "detail": "casi completi sulle variabili selezionate"
+      }
+    ],
+    "notes": [
+      "KMO ≥ 0.70 è in genere considerato adeguato per la PCA.",
+      "Bartlett significativo indica che la matrice di correlazione non è un’identità: è una condizione necessaria, non sufficiente."
+    ]
+  }
+]

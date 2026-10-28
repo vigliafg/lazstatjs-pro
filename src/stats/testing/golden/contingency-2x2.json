@@ -1,0 +1,265 @@
+[
+  {
+    "id": "cont-observed",
+    "title": "Tabella di contingenza (frequenze osservate)",
+    "subtitle": "2 × 2 · N = 50",
+    "columns": [
+      {
+        "key": "label",
+        "label": "Riga",
+        "format": "text"
+      },
+      {
+        "key": "c0",
+        "label": "Evento",
+        "format": "int"
+      },
+      {
+        "key": "c1",
+        "label": "Nessun evento",
+        "format": "int"
+      },
+      {
+        "key": "total",
+        "label": "Totale",
+        "format": "int"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Trattato",
+        "total": 25,
+        "c0": 18,
+        "c1": 7
+      },
+      {
+        "label": "Controllo",
+        "total": 25,
+        "c0": 9,
+        "c1": 16
+      }
+    ],
+    "notes": [
+      "Ogni cella contiene il numero di osservazioni con quella combinazione di categorie."
+    ]
+  },
+  {
+    "id": "cont-expected",
+    "title": "Frequenze attese sotto indipendenza",
+    "subtitle": "E = (totale riga × totale colonna) / N",
+    "columns": [
+      {
+        "key": "label",
+        "label": "Riga",
+        "format": "text"
+      },
+      {
+        "key": "c0",
+        "label": "Evento",
+        "format": "dec2"
+      },
+      {
+        "key": "c1",
+        "label": "Nessun evento",
+        "format": "dec2"
+      },
+      {
+        "key": "total",
+        "label": "Totale",
+        "format": "int"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Trattato",
+        "total": 25,
+        "c0": 13.5,
+        "c1": 11.5
+      },
+      {
+        "label": "Controllo",
+        "total": 25,
+        "c0": 13.5,
+        "c1": 11.5
+      }
+    ],
+    "notes": [
+      "Le attese sono le frequenze che si vedrebbero se le due variabili fossero indipendenti.",
+      "Tutte le attese sono ≥ 5: l’approssimazione χ² è adeguata."
+    ]
+  },
+  {
+    "id": "cont-residuals",
+    "title": "Residui e contributi al χ²",
+    "subtitle": "Residuo standardizzato = (O − E)/√E",
+    "columns": [
+      {
+        "key": "cell",
+        "label": "Cella",
+        "format": "text"
+      },
+      {
+        "key": "observed",
+        "label": "O",
+        "format": "int"
+      },
+      {
+        "key": "expected",
+        "label": "E",
+        "format": "dec2"
+      },
+      {
+        "key": "residual",
+        "label": "Residuo std.",
+        "format": "dec2"
+      },
+      {
+        "key": "adjusted",
+        "label": "Residuo aggiustato",
+        "format": "dec2"
+      },
+      {
+        "key": "contribution",
+        "label": "Contributo χ²",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "cell": "Trattato · Evento",
+        "observed": 18,
+        "expected": 13.5,
+        "residual": 1.22474487139,
+        "adjusted": 2.55376959228,
+        "contribution": 1.5
+      },
+      {
+        "cell": "Trattato · Nessun evento",
+        "observed": 7,
+        "expected": 11.5,
+        "residual": -1.32697760539,
+        "adjusted": -2.55376959228,
+        "contribution": 1.76086956522
+      },
+      {
+        "cell": "Controllo · Evento",
+        "observed": 9,
+        "expected": 13.5,
+        "residual": -1.22474487139,
+        "adjusted": -2.55376959228,
+        "contribution": 1.5
+      },
+      {
+        "cell": "Controllo · Nessun evento",
+        "observed": 16,
+        "expected": 11.5,
+        "residual": 1.32697760539,
+        "adjusted": 2.55376959228,
+        "contribution": 1.76086956522
+      }
+    ],
+    "notes": [
+      "Un residuo aggiustato oltre ±2 segnala la cella che si discosta di più dall’indipendenza.",
+      "Il contributo è quanto quella cella pesa nel χ² totale: le prime posizioni spiegano l’associazione."
+    ]
+  },
+  {
+    "id": "cont-tests",
+    "title": "Test di indipendenza",
+    "subtitle": "α = 0.05",
+    "columns": [
+      {
+        "key": "test",
+        "label": "Test",
+        "format": "text"
+      },
+      {
+        "key": "statistic",
+        "label": "Statistica",
+        "format": "dec4"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "test": "Pearson χ²",
+        "statistic": 6.52173913043,
+        "df": 1,
+        "p": 0.0106563747213
+      },
+      {
+        "test": "Likelihood ratio G²",
+        "statistic": 6.67580023378,
+        "df": 1,
+        "p": 0.0097730624521
+      },
+      {
+        "test": "Yates (correzione di continuità)",
+        "statistic": 5.15297906602,
+        "df": 1,
+        "p": 0.0232065264067
+      },
+      {
+        "test": "Fisher's exact (two-sided)",
+        "statistic": "NaN",
+        "df": "NaN",
+        "p": 0.0222412956917
+      }
+    ],
+    "notes": [
+      "df = (righe − 1)(colonne − 1) = 1.",
+      "χ² e G² condividono le stesse assunzioni: osservazioni indipendenti, categorie esaustive, attese sufficientemente grandi.",
+      "Il test dice che esiste un’associazione, non quanto sia forte né in quale direzione: per quello servono residui e misure di associazione."
+    ]
+  },
+  {
+    "id": "cont-association",
+    "title": "Ampiezza dell’associazione",
+    "columns": [
+      {
+        "key": "measure",
+        "label": "Misura",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec3"
+      },
+      {
+        "key": "note",
+        "label": "Lettura",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "measure": "φ (phi)",
+        "value": 0.361157559257,
+        "note": "Per tabelle 2×2 coincide con la correlazione tra le due variabili binarie"
+      },
+      {
+        "measure": "Cramér’s V",
+        "value": 0.361157559257,
+        "note": "0 = nessuna associazione, 1 = associazione perfetta"
+      },
+      {
+        "measure": "Coefficiente di contingenza C",
+        "value": 0.339683110243,
+        "note": "Dipende dal numero di categorie: confrontabile solo tra tabelle di stessa forma"
+      }
+    ],
+    "notes": [
+      "Il p-value dipende da N; queste misure no, ed è per questo che vanno riportate insieme."
+    ]
+  }
+]

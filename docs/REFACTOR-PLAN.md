@@ -71,7 +71,8 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 - [x] Fixture deterministica condivisa (`src/stats/testing/fixture.ts`).
 - [x] Golden test di contratto per le 6 analisi legacy, senza test propri
       (`src/stats/testing/golden.test.ts`, rigenerabili con `UPDATE_GOLDEN=1`).
-- [ ] Estendere i golden alle 13 analisi rimanenti, una per commit.
+- [x] Golden anche per le 13 analisi nuove, comprese quelle con fit intermedio
+      (logistica, Cox, PCA, Friedman, misure ripetute, wizard). 23 file, 19/19 analisi coperte.
 - [x] CI: `npm run check` + build su push e pull request (`.github/workflows/check.yml`, verde).
 
 **Fatto quando:** ogni analisi ha un output congelato che il refactor non può cambiare.
@@ -84,7 +85,8 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 - [x] `src/ui/OutputConsole.tsx`: console, `OutputEntry`, `restoredOutputs`.
 - [x] `src/analyses/registry.ts`: registro unico di tab, id ed etichette.
 - [ ] Estrarre la scheda Data (`src/ui/DataTab.tsx`, ~320 righe).
-- [ ] Estrarre la scheda Settings, header, footer e toasts.
+- [x] Estrarre la scheda Settings in `src/ui/SettingsTab.tsx`.
+- [ ] Estrarre header, footer e toasts.
 - [ ] Estrarre la toolbar delle analisi.
 
 **Stato:** `App.tsx` 3.767 → 1.566 righe (-58%). Obiettivo < 300.
@@ -146,8 +148,8 @@ implementazione per ogni test statistico.
 
 | Fase | Stato |
 |---|---|
-| 0 — Rete di sicurezza | 6/19 golden; CI attiva; mancano i 13 golden delle analisi nuove |
-| 1 — Sfoltire `App.tsx` | 6/6 analisi e form estratti, console e registro fatti; `App.tsx` 3.767 → 1.566 righe |
+| 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
+| 1 — Sfoltire `App.tsx` | 6/6 analisi e form, console, registro, Settings; `App.tsx` 3.767 → 1.457 righe |
 | 2 — Contratto unico | non iniziata |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |

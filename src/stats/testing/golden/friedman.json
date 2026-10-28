@@ -1,0 +1,150 @@
+[
+  {
+    "id": "friedman-test",
+    "title": "Test di Friedman",
+    "subtitle": "3 misure ripetute · 30 blocchi",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec4"
+      },
+      {
+        "key": "detail",
+        "label": "Dettaglio",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "χ² di Friedman",
+        "value": 54.6,
+        "detail": "df = 2"
+      },
+      {
+        "metric": "p",
+        "value": 1.39244171748e-12,
+        "detail": "approssimazione χ²"
+      },
+      {
+        "metric": "W di Kendall",
+        "value": 0.91,
+        "detail": "0 = nessuna concordanza, 1 = concordanza perfetta"
+      },
+      {
+        "metric": "Correzione per i ranghi uguali",
+        "value": 1,
+        "detail": "fattore applicato alla statistica"
+      }
+    ],
+    "notes": [
+      "H₀: le k misure provengono dalla stessa distribuzione (nessuna differenza tra trattamenti).",
+      "Blocchi incompleti o valori non numerici vengono esclusi prima del test."
+    ]
+  },
+  {
+    "id": "friedman-ranks",
+    "title": "Ranghi medi per trattamento",
+    "columns": [
+      {
+        "key": "treatment",
+        "label": "Trattamento",
+        "format": "text"
+      },
+      {
+        "key": "meanRank",
+        "label": "Rango medio",
+        "format": "dec3"
+      },
+      {
+        "key": "rankSum",
+        "label": "Somma ranghi",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "treatment": "score",
+        "meanRank": 1.9,
+        "rankSum": 57
+      },
+      {
+        "treatment": "pre",
+        "meanRank": 1.1,
+        "rankSum": 33
+      },
+      {
+        "treatment": "post",
+        "meanRank": 3,
+        "rankSum": 90
+      }
+    ],
+    "notes": [
+      "Ranghi medi più bassi indicano valori più bassi nel confronto within-subject."
+    ]
+  },
+  {
+    "id": "friedman-nemenyi",
+    "title": "Post-hoc Nemenyi",
+    "subtitle": "CI 95% · differenza critica 0.605",
+    "columns": [
+      {
+        "key": "pair",
+        "label": "Confronto",
+        "format": "text"
+      },
+      {
+        "key": "diff",
+        "label": "Δ ranghi medi",
+        "format": "dec3"
+      },
+      {
+        "key": "q",
+        "label": "q",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "significant",
+        "label": "Significativo",
+        "format": "text"
+      }
+    ],
+    "rows": [
+      {
+        "pair": "score vs pre",
+        "diff": 0.8,
+        "q": 3.09838667697,
+        "p": 0.00552380758805,
+        "significant": "sì"
+      },
+      {
+        "pair": "score vs post",
+        "diff": 1.1,
+        "q": 4.26028168083,
+        "p": 0.0000606236662252,
+        "significant": "sì"
+      },
+      {
+        "pair": "pre vs post",
+        "diff": 1.9,
+        "q": 7.35866835779,
+        "p": 5.58331159084e-13,
+        "significant": "sì"
+      }
+    ],
+    "notes": [
+      "SE = 0.258 · q critico = 2.344 (studentized range, df ∞).",
+      "Nemenyi confronta tutte le coppie controllando il family-wise error; con molti trattamenti è conservativo."
+    ]
+  }
+]
