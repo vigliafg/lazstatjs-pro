@@ -170,6 +170,15 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri GEE. */
+export interface GeeParams {
+  dep: number;
+  indeps: number[];
+  cluster: number;
+  family: 'gaussian' | 'binomial';
+  correlation: 'independence' | 'exchangeable';
+}
+
 /** Parametri di permutazione/bootstrap a due gruppi. */
 export interface ResamplingParams {
   outcome: number;
@@ -268,6 +277,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  gee: GeeParams;
   resampling: ResamplingParams;
   parametric: ParametricSurvivalParams;
   mixedanova: MixedAnovaParams;
@@ -403,6 +413,13 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  gee: {
+    dep: 0,
+    indeps: [1],
+    cluster: 2,
+    family: 'gaussian',
+    correlation: 'exchangeable',
   },
   resampling: {
     outcome: 0,

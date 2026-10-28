@@ -14,7 +14,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [x] **Firth logistico**: penalizzazione di Jeffreys per la separazione,
       validata contro brglm2.
 - [x] **Modelli misti (random intercept)**: LMM con intercetta casuale via REML,
-      ICC e varianze; validato contro lme4. Restano slope casuali, GLMM e GEE.
+      ICC e varianze; validato contro lme4.
+- [x] **GEE**: gaussiana/binomiale, independence/exchangeable, SE robusti per
+      cluster; validato contro geepack. Restano slope casuali e GLMM.
 - [x] **EFA + omega**: principal-axis factoring, parallel analysis, varimax,
       comunalità/unicità e omega totale; modalità EFA nella scheda Multivariate.
 - [x] **Dati mancanti (MI numerica)**: MICE con regressione a catene,

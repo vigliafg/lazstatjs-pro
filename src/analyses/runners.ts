@@ -29,6 +29,7 @@ import { buildMiOutput } from './mi/run';
 import { buildMixedAnovaOutput } from './mixedanova/run';
 import { buildParametricOutput } from './parametric/run';
 import { buildResamplingOutput } from './resampling/run';
+import { buildGeeOutput } from './gee/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -105,4 +106,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildParametricOutput({ grid, params: params.parametric, ciLevel }),
   resampling: ({ grid, params, ciLevel }) =>
     buildResamplingOutput({ grid, params: params.resampling, ciLevel }),
+  gee: ({ grid, params, ciLevel }) =>
+    buildGeeOutput({ grid, params: params.gee, ciLevel }),
 };

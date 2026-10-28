@@ -29,6 +29,7 @@ export const ANALYSIS_TABS = [
   { id: 'mixedanova', label: 'Mixed ANOVA' },
   { id: 'parametric', label: 'Parametric Survival' },
   { id: 'resampling', label: 'Resampling' },
+  { id: 'gee', label: 'GEE' },
   { id: 'mi', label: 'Missing Data (MI)' },
   { id: 'timeseries', label: 'Time Series' },
   { id: 'survival', label: 'Survival (KM)' },

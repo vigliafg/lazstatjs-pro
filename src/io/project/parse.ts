@@ -239,6 +239,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
   const nonparamrm = isRecord(raw.nonparamrm) ? raw.nonparamrm : {};
+  const gee = isRecord(raw.gee) ? raw.gee : {};
   const resampling = isRecord(raw.resampling) ? raw.resampling : {};
   const parametric = isRecord(raw.parametric) ? raw.parametric : {};
   const mixedanova = isRecord(raw.mixedanova) ? raw.mixedanova : {};
@@ -402,6 +403,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       right: index(nonparamrm.right, d.nonparamrm.right, width),
       outcome: index(nonparamrm.outcome, d.nonparamrm.outcome, width),
       group: index(nonparamrm.group, d.nonparamrm.group, width),
+    },
+    gee: {
+      dep: index(gee.dep, d.gee.dep, width),
+      indeps: indexList(gee.indeps, d.gee.indeps, width),
+      cluster: index(gee.cluster, d.gee.cluster, width),
+      family: gee.family === 'binomial' ? 'binomial' : d.gee.family,
+      correlation: gee.correlation === 'independence' ? 'independence' : d.gee.correlation,
     },
     resampling: {
       outcome: index(resampling.outcome, d.resampling.outcome, width),

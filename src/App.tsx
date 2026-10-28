@@ -74,6 +74,7 @@ import {
   type MixedAnovaParams,
   type ParametricSurvivalParams,
   type ResamplingParams,
+  type GeeParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -356,6 +357,10 @@ export default function App() {
     boot?.params.resampling ?? DEFAULT_PARAMS.resampling
   );
 
+  const [geeParams, setGeeParams] = useState<GeeParams>(
+    boot?.params.gee ?? DEFAULT_PARAMS.gee
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -391,8 +396,9 @@ export default function App() {
       mixedanova: mixedAnovaParams,
       parametric: parametricParams,
       resampling: resamplingParams,
+      gee: geeParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams, resamplingParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams, resamplingParams, geeParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -434,6 +440,7 @@ export default function App() {
     setMixedAnovaParams(project.params.mixedanova);
     setParametricParams(project.params.parametric);
     setResamplingParams(project.params.resampling);
+    setGeeParams(project.params.gee);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -601,6 +608,8 @@ export default function App() {
             setParametricParams={setParametricParams}
             resamplingParams={resamplingParams}
             setResamplingParams={setResamplingParams}
+            geeParams={geeParams}
+            setGeeParams={setGeeParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}
