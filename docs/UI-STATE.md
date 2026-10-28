@@ -1,6 +1,6 @@
 # UI — stato attuale e backlog
 
-> Aggiornato al commit `79c099c` (`main`, allineato a `origin/main`).
+> Aggiornato dopo la chiusura del backlog griglia (vedi `GRID-STATE.md`).
 > Checkpoint griglia: [`GRID-STATE.md`](GRID-STATE.md).
 > Questo documento fotografa la UI dopo il workbench a tre zone e fissa il
 > lavoro rimanente prima della fase dedicata a inserimento ed editing dei dati.
@@ -27,7 +27,7 @@ Architettura giusta, esecuzione solida, iterazione incompleta.
 
 | Area | Stato | Note |
 |---|---|---|
-| **Data** | invariata nella sostanza | Griglia, tipi, livelli, clean, transform, validazione, filtro, import/export, progetti |
+| **Data** | evoluta | Griglia, tipi, livelli, missing code, formule persistenti, virtualizzazione, inspector, clean, transform, validazione, filtro, import/export, progetti |
 | **Analysis** | ricostruita | Workbench a tre zone |
 | **Settings** | invariata | Alcuni controlli generali restano non collegati |
 | **Help** | aggiornata ai nuovi flussi | Contenuto ancora in parte ereditato dalla vecchia UI |
@@ -318,26 +318,19 @@ La scheda Data ha già:
 
 ### 9.6 Esito dell'analisi
 
-La relazione attuale griglia↔analisi è di tipo **snapshot, non linked**:
+La relazione griglia↔analisi è **snapshot con identità stabile**:
 
-- l'analisi legge la griglia al Run;
-- i parametri sono indici di colonna, non identità stabili;
-- il filtro è view-only;
-- le modifiche ai dati non invalidano l'output;
-- la selezione della griglia non arriva all'analisi.
+- l'analisi legge la griglia al Run, con i codici missing già azzerati;
+- i parametri sono indici rimappati tramite `Column.id`;
+- il filtro è view-only per default, con modalità analysis-filter esplicita;
+- ogni modifica incrementa `dataRevision` e marca `stale` le card dipendenti;
+- la colonna focalizzata può essere assegnata a qualsiasi ruolo dal Setup;
+- un cambio tipo incompatibile con il ruolo blocca il Run e chiede di
+  riselezionare la variabile.
 
-Il difetto più grave è il **remap mancante**: inserire, eliminare o spostare una
-colonna può far puntare i parametri a un'altra variabile senza avviso. Lo stesso
-vale per split, merge, duplicate e per il cambio di dataset con New/Import. Va
-corretto prima di ogni altra evoluzione (DE-0, matrice completa in
-`docs/DATA-EDITING-ANALYSIS.md` §3.6).
-
-Raccomandazione: una sola griglia + Variable Inspector a drawer + ponte
-dati↔analisi esplicito. Multi-tabella solo se diventa un requisito di prodotto.
-
-Implementazione: DE-0, DE-1 e parte di DE-2/DE-3/DE-4 sono stati realizzati;
-checkpoint operativo in [`GRID-STATE.md`](GRID-STATE.md), stato dettagliato e
-blocchi deferred in `docs/DATA-EDITING-ANALYSIS.md` §12.
+DE-0..DE-7 sono completati. Checkpoint operativo in
+[`GRID-STATE.md`](GRID-STATE.md), stato dettagliato e blocchi deferred in
+`docs/DATA-EDITING-ANALYSIS.md` §12.
 
 ## 10. Decisioni aperte
 
