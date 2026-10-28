@@ -13,8 +13,8 @@ import { LogisticForm } from '../analyses/logistic/Form';
 import { CoxForm } from '../analyses/cox/Form';
 import { SurvivalForm } from '../analyses/survival/Form';
 import { TimeSeriesForm } from '../analyses/timeseries/Form';
+import { ContingencyForm } from '../analyses/contingency/Form';
 import { AncovaAnalysis } from '../analyses/AncovaAnalysis';
-import { ContingencyAnalysis } from '../analyses/ContingencyAnalysis';
 import { FactorialAnovaAnalysis } from '../analyses/FactorialAnovaAnalysis';
 import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
 import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
@@ -23,7 +23,7 @@ import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AnovaParams, ChiSqParams, CorrParams, CoxParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
+import type { AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -54,6 +54,8 @@ export interface AnalysisTabProps {
   setSurvivalParams: Dispatch<SetStateAction<SurvivalParams>>;
   timeseriesParams: TimeSeriesParams;
   setTimeseriesParams: Dispatch<SetStateAction<TimeSeriesParams>>;
+  contingencyParams: ContingencyParams;
+  setContingencyParams: Dispatch<SetStateAction<ContingencyParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -100,6 +102,8 @@ export const AnalysisTab = ({
   setSurvivalParams,
   timeseriesParams,
   setTimeseriesParams,
+  contingencyParams,
+  setContingencyParams,
   grid,
   outputs,
   removeOutput,
@@ -286,11 +290,9 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'contingency' && (
-        <ContingencyAnalysis
-          runSignal={runSignal}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+        <ContingencyForm
+          contingencyParams={contingencyParams}
+          setContingencyParams={setContingencyParams}
         />
       )}
 

@@ -310,6 +310,33 @@ describe('project sanitisation', () => {
     assert.equal(restored.params.timeseries.seasonalDifferenceMode, 'auto');
   });
 
+  it('normalises the contingency matrix shape and keeps cell text for the builder', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          contingency: {
+            rows: ['A', 'B'],
+            cols: ['X', 'Y', 'Z'],
+            values: [['1', 2, 'junk'], ['3'], 'oops'],
+            exact: false,
+            monteCarlo: 'yes',
+          },
+        },
+      })
+    );
+    assert.deepEqual(restored.params.contingency.rows, ['A', 'B']);
+    assert.deepEqual(restored.params.contingency.cols, ['X', 'Y', 'Z']);
+    assert.deepEqual(restored.params.contingency.values, [
+      ['1', '2', 'junk'],
+      ['3', '0', '0'],
+    ]);
+    assert.equal(restored.params.contingency.exact, false);
+    assert.equal(restored.params.contingency.monteCarlo, true);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

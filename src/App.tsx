@@ -42,6 +42,7 @@ import {
   loadAutosaveProject,
   type AnovaParams,
   type ChiSqParams,
+  type ContingencyParams,
   type CorrParams,
   type CoxParams,
   type DistributionFitParams,
@@ -270,6 +271,10 @@ export default function App() {
     boot?.params.timeseries ?? DEFAULT_PARAMS.timeseries
   );
 
+  const [contingencyParams, setContingencyParams] = useState<ContingencyParams>(
+    boot?.params.contingency ?? DEFAULT_PARAMS.contingency
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -289,8 +294,9 @@ export default function App() {
       cox: coxParams,
       survival: survivalParams,
       timeseries: timeseriesParams,
+      contingency: contingencyParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -316,6 +322,7 @@ export default function App() {
     setCoxParams(project.params.cox);
     setSurvivalParams(project.params.survival);
     setTimeseriesParams(project.params.timeseries);
+    setContingencyParams(project.params.contingency);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -451,6 +458,8 @@ export default function App() {
             setSurvivalParams={setSurvivalParams}
             timeseriesParams={timeseriesParams}
             setTimeseriesParams={setTimeseriesParams}
+            contingencyParams={contingencyParams}
+            setContingencyParams={setContingencyParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

@@ -128,6 +128,16 @@ export interface TimeSeriesParams {
   seasonalDifferenceMode: TimeSeriesSeasonalDifferenceMode;
 }
 
+/** Parametri della tabella di contingenza R×C. */
+export interface ContingencyParams {
+  rows: string[];
+  cols: string[];
+  /** Frequenze come stringhe: il calcolo usa parseInt, come il form. */
+  values: string[][];
+  exact: boolean;
+  monteCarlo: boolean;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -141,6 +151,7 @@ export interface ProjectParams {
   cox: CoxParams;
   survival: SurvivalParams;
   timeseries: TimeSeriesParams;
+  contingency: ContingencyParams;
 }
 
 export interface ProjectSettings {
@@ -224,6 +235,16 @@ export const DEFAULT_PARAMS: ProjectParams = {
     horizon: 12,
     differenceMode: 'auto',
     seasonalDifferenceMode: 'auto',
+  },
+  contingency: {
+    rows: ['Treatment', 'Control'],
+    cols: ['Improved', 'Unchanged', 'Worse'],
+    values: [
+      ['42', '18', '6'],
+      ['21', '34', '11'],
+    ],
+    exact: true,
+    monteCarlo: true,
   },
 };
 
@@ -328,6 +349,34 @@ const parseSeasonalDifferenceMode = (
     ? (value as TimeSeriesSeasonalDifferenceMode)
     : fallback;
 
+const MAX_CONTINGENCY_LABELS = 50;
+
+const parseContingencyLabels = (value: unknown, fallback: readonly string[]): string[] => {
+  if (!Array.isArray(value)) return [...fallback];
+  const labels = value
+    .filter((label): label is string => typeof label === 'string')
+    .slice(0, MAX_CONTINGENCY_LABELS);
+  return labels.length >= 2 ? labels : [...fallback];
+};
+
+const parseContingencyCell = (value: unknown): string => {
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+  return '0';
+};
+
+const parseContingencyValues = (
+  value: unknown,
+  rows: readonly string[],
+  cols: readonly string[]
+): string[][] => {
+  if (!Array.isArray(value)) return rows.map(() => cols.map(() => '0'));
+  return rows.map((_, rowIndex) => {
+    const source = Array.isArray(value[rowIndex]) ? value[rowIndex] : [];
+    return cols.map((_, colIndex) => parseContingencyCell(source[colIndex]));
+  });
+};
+
 const parseCell = (value: unknown): string => {
   if (typeof value === 'string') return value;
   if (typeof value === 'number') return Number.isFinite(value) ? String(value) : '';
@@ -414,7 +463,14 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const cox = isRecord(raw.cox) ? raw.cox : {};
   const survival = isRecord(raw.survival) ? raw.survival : {};
   const timeseries = isRecord(raw.timeseries) ? raw.timeseries : {};
+  const contingency = isRecord(raw.contingency) ? raw.contingency : null;
   const d = DEFAULT_PARAMS;
+  const contingencyRows = contingency
+    ? parseContingencyLabels(contingency.rows, d.contingency.rows)
+    : [...d.contingency.rows];
+  const contingencyCols = contingency
+    ? parseContingencyLabels(contingency.cols, d.contingency.cols)
+    : [...d.contingency.cols];
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
   const coxTime = index(cox.timeVariable, d.cox.timeVariable, width);
   const coxEvent = index(cox.eventVariable, d.cox.eventVariable, width);
@@ -507,6 +563,17 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
         timeseries.seasonalDifferenceMode,
         d.timeseries.seasonalDifferenceMode
       ),
+    },
+    contingency: {
+      rows: contingencyRows,
+      cols: contingencyCols,
+      values: contingency
+        ? parseContingencyValues(contingency.values, contingencyRows, contingencyCols)
+        : d.contingency.values.map((row) => [...row]),
+      exact: contingency ? bool(contingency.exact, d.contingency.exact) : d.contingency.exact,
+      monteCarlo: contingency
+        ? bool(contingency.monteCarlo, d.contingency.monteCarlo)
+        : d.contingency.monteCarlo,
     },
   };
 };

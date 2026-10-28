@@ -1,0 +1,40 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { buildContingencyOutput } from './run';
+import { DEFAULT_PARAMS } from '../../io/project';
+
+test('contingency builder returns tables and a report for the trial preset', () => {
+  const result = buildContingencyOutput({ params: DEFAULT_PARAMS.contingency, ciLevel: 95 });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  assert.ok(result.tables.length > 0);
+  assert.ok(result.report);
+});
+
+test('contingency builder rejects negative frequencies and a zero total', () => {
+  const negative = buildContingencyOutput({
+    params: {
+      ...DEFAULT_PARAMS.contingency,
+      values: [
+        ['-1', '2'],
+        ['3', '4'],
+      ],
+    },
+    ciLevel: 95,
+  });
+  assert.ok('reason' in negative);
+  if ('reason' in negative) assert.match(negative.reason, /non-negative/);
+
+  const empty = buildContingencyOutput({
+    params: {
+      ...DEFAULT_PARAMS.contingency,
+      values: [
+        ['0', '0'],
+        ['0', '0'],
+      ],
+    },
+    ciLevel: 95,
+  });
+  assert.ok('reason' in empty);
+  if ('reason' in empty) assert.match(empty.reason, /grand total/);
+});

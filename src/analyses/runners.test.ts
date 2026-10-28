@@ -7,6 +7,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
   assert.deepEqual(Object.keys(ANALYSIS_RUNNERS).sort(), [
     'anova',
     'chisquare',
+    'contingency',
     'correlation',
     'cox',
     'descriptive',
