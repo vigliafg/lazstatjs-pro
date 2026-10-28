@@ -19,6 +19,7 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
         <div className="flex flex-col gap-1">
           <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Dependent Var</label>
           <select 
+            aria-label="ANOVA dependent variable"
             className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[120px]"
             value={anovaParams.dep}
             onChange={(e) => setAnovaParams(p => ({ ...p, dep: parseInt(e.target.value) }))}
@@ -30,6 +31,7 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
           <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Group Var</label>
           <div className="flex items-center gap-1">
             <select 
+              aria-label="ANOVA group variable"
               className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[120px]"
               value={anovaParams.grp}
               onChange={(e) => setAnovaParams(p => ({ ...p, grp: parseInt(e.target.value) }))}

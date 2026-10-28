@@ -7,6 +7,8 @@ import {
   FileCode2,
   FileText,
   Image,
+  ClipboardCheck,
+  RotateCcw,
   SlidersHorizontal,
   Table2,
   Trash2,
@@ -41,6 +43,10 @@ export interface OutputConsoleProps {
   onExportXlsx: () => void;
   onBackToData: () => void;
   onOpenAnalysis?: (analysisId: string) => void;
+  onRerun?: (entry: OutputEntry) => void;
+  onApplyParams?: (entry: OutputEntry) => void;
+  /** Current signature of an analysis' parameters, for the params-stale badge. */
+  paramsSignatureFor?: (analysisId: string) => string;
   currentRevision?: number;
   currentDatasetId?: string;
   currentFilterSignature?: string;
@@ -76,6 +82,9 @@ export const OutputConsole = ({
   onExportXlsx,
   onBackToData,
   onOpenAnalysis,
+  onRerun,
+  onApplyParams,
+  paramsSignatureFor,
   currentRevision,
   currentDatasetId,
   currentFilterSignature,
@@ -244,7 +253,11 @@ export const OutputConsole = ({
                   output.datasetId !== currentDatasetId) ||
                 (output.filterSignature !== undefined &&
                   currentFilterSignature !== undefined &&
-                  output.filterSignature !== currentFilterSignature);
+                  output.filterSignature !== currentFilterSignature) ||
+                (output.paramsSignature !== undefined &&
+                  output.analysisId !== undefined &&
+                  paramsSignatureFor !== undefined &&
+                  output.paramsSignature !== paramsSignatureFor(output.analysisId));
               return (
                 <article
                   key={output.id}
@@ -286,6 +299,30 @@ export const OutputConsole = ({
                       <span className="ml-auto hidden min-w-0 truncate text-[10px] text-text3 xl:block">
                         {output.title}
                       </span>
+                    )}
+                    {output.analysisId && output.params !== undefined && onRerun && (
+                      <button
+                        type="button"
+                        onClick={() => onRerun(output)}
+                        className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
+                        title="Run this analysis again with the parameters saved in this card"
+                        aria-label="Re-run with saved parameters"
+                      >
+                        <RotateCcw className="h-3 w-3" />
+                        <span className="hidden xl:inline">Re-run</span>
+                      </button>
+                    )}
+                    {output.analysisId && output.params !== undefined && onApplyParams && (
+                      <button
+                        type="button"
+                        onClick={() => onApplyParams(output)}
+                        className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
+                        title="Load this card's parameters into the setup panel"
+                        aria-label="Apply parameters to setup"
+                      >
+                        <ClipboardCheck className="h-3 w-3" />
+                        <span className="hidden xl:inline">Apply</span>
+                      </button>
                     )}
                     {output.analysisId && analysisMeta(output.analysisId) && onOpenAnalysis && (
                       <button

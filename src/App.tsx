@@ -21,6 +21,12 @@ import {
   validateAnalysisColumnRefs,
 } from './analyses/params';
 import { assignRole, roleStates, validateRoleTypes } from './analyses/roles';
+import {
+  analysisParamsKey,
+  analysisParamsOf,
+  analysisParamsSignature,
+  withAnalysisParams,
+} from './analyses/paramsSnapshot';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import { maskMissingCodes } from './grid/types';
@@ -49,6 +55,7 @@ import { downloadExportFile } from './io/writers';
 import {
   DEFAULT_SETTINGS,
   loadAutosaveProject,
+  parseParams,
   type AnovaParams,
   type AncovaParams,
   type ChiSqParams,
@@ -60,6 +67,7 @@ import {
   type LogisticParams,
   type MultivariateParams,
   type NonParamParams,
+  type ProjectParams,
   type ProjectSettings,
   type ProjectSnapshot,
   type RegParams,
@@ -416,20 +424,26 @@ export default function App() {
 
   // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
   // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
-  const emit = (result: AnalysisRunResult): boolean => {
+  const emit = (
+    result: AnalysisRunResult,
+    analysisId: string = activeAnalysis,
+    paramsUsed = params
+  ): boolean => {
     if ('reason' in result) {
       showToast('Error', result.reason, 'error');
       return false;
     }
-    pushOutput(result.node, result.report, activeAnalysis, {
+    pushOutput(result.node, result.report, analysisId, {
       dataRevision,
       datasetId,
       filterSignature,
+      params: analysisParamsOf(analysisId, paramsUsed),
+      paramsSignature: analysisParamsSignature(analysisId, paramsUsed),
     });
     return true;
   };
 
-  const { runAnalysis } = useAnalysisRun({
+  const { runAnalysis, runAnalysisWith } = useAnalysisRun({
     activeAnalysis,
     grid: analysisGrid,
     params,
@@ -437,6 +451,43 @@ export default function App() {
     emit,
     warn: (message) => showToast('Analysis', message, 'warn'),
   });
+
+  const paramsSignatureFor = (analysisId: string) =>
+    analysisParamsSignature(analysisId, params);
+
+  /** Restore a card's saved parameters into the live project parameters. */
+  const restoreOutputParams = (entry: OutputEntry): ProjectParams | null => {
+    if (!entry.analysisId || entry.params === undefined) return null;
+    if (!analysisParamsKey(entry.analysisId)) return null;
+    const next = parseParams(
+      withAnalysisParams(params, entry.analysisId, entry.params),
+      grid.cols.length
+    );
+    setParams(next);
+    setActiveAnalysis(entry.analysisId);
+    setActiveTab('analysis');
+    return next;
+  };
+
+  const applyOutputParams = (entry: OutputEntry) => {
+    const next = restoreOutputParams(entry);
+    if (!next) {
+      showToast('Output', 'This card has no saved parameters', 'warn');
+      return;
+    }
+    showToast('Output', 'Parameters restored in the setup panel', 'ok');
+  };
+
+  const rerunOutput = (entry: OutputEntry) => {
+    const next = restoreOutputParams(entry);
+    if (!next || !entry.analysisId) {
+      showToast('Output', 'This card has no saved parameters', 'warn');
+      return;
+    }
+    if (runAnalysisWith(entry.analysisId, next)) {
+      showToast('Output', 'Re-ran with the saved parameters', 'ok');
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
@@ -576,6 +627,9 @@ export default function App() {
             onAssignPrimary={assignPrimary}
             roles={roles}
             onAssignRole={assignRoleTo}
+            onRerunOutput={rerunOutput}
+            onApplyOutputParams={applyOutputParams}
+            paramsSignatureFor={paramsSignatureFor}
             removeOutput={removeOutput}
             clearOutput={clearOutput}
             copyOutput={copyOutput}

@@ -123,6 +123,9 @@ export interface AnalysisTabProps {
   onAssignPrimary: (column: number) => void;
   roles: RoleState[];
   onAssignRole: (column: number, roleKey: string) => void;
+  onRerunOutput: (entry: OutputEntry) => void;
+  onApplyOutputParams: (entry: OutputEntry) => void;
+  paramsSignatureFor: (analysisId: string) => string;
   removeOutput: (index: number) => void;
   clearOutput: () => void;
   copyOutput: () => void;

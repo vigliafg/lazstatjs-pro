@@ -56,7 +56,13 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     node: ReactNode,
     report: ReportSpec | null,
     analysisId?: string,
-    meta?: { dataRevision?: number; datasetId?: string; filterSignature?: string }
+    meta?: {
+      dataRevision?: number;
+      datasetId?: string;
+      filterSignature?: string;
+      params?: unknown;
+      paramsSignature?: string;
+    }
   ) => {
     const block = (
       <>
@@ -79,6 +85,8 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       ...(meta?.dataRevision !== undefined ? { dataRevision: meta.dataRevision } : {}),
       ...(meta?.datasetId ? { datasetId: meta.datasetId } : {}),
       ...(meta?.filterSignature ? { filterSignature: meta.filterSignature } : {}),
+      ...(meta?.params !== undefined ? { params: meta.params } : {}),
+      ...(meta?.paramsSignature ? { paramsSignature: meta.paramsSignature } : {}),
       html,
       node: block,
     };

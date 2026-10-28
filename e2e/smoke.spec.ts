@@ -124,3 +124,27 @@ test('typing into a multi-cell selection overwrites every selected cell', async 
   await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('7');
   await expect(page.locator('input[data-cell="1-0"]')).toHaveValue('7');
 });
+
+test('re-runs and applies a stored analysis card', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'analysis cards are exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis' }).click();
+  await page.getByLabel('Search analyses').fill('ANOVA');
+  await page.locator('button[title="Compare means across groups with post-hoc tests."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+
+  await expect(page.getByRole('button', { name: 'Re-run with saved parameters' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Re-run with saved parameters' })).toHaveCount(1);
+
+  await page.getByLabel('ANOVA dependent variable').selectOption('3');
+  await expect(page.getByText('stale', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Apply parameters to setup' }).click();
+  await expect(page.getByText('Parameters restored in the setup panel')).toBeVisible();
+  await expect(page.getByLabel('ANOVA dependent variable')).toHaveValue('0');
+  await expect(page.getByText('stale', { exact: true })).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Re-run with saved parameters' }).first().click();
+  await expect(page.getByRole('button', { name: 'Re-run with saved parameters' })).toHaveCount(2);
+});

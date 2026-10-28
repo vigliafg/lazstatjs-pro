@@ -16,6 +16,8 @@ export const MAX_STORED_OUTPUTS = 20;
 export const MAX_STORED_OUTPUT_CHARS = 1_500_000;
 /** A single block above this size is not stored (defensive on file load). */
 export const MAX_SINGLE_OUTPUT_CHARS = 600_000;
+/** Parameter snapshots are small; anything larger is not trusted. */
+export const MAX_PARAMS_CHARS = 20_000;
 
 export interface StoredOutput {
   id: string;
@@ -23,6 +25,10 @@ export interface StoredOutput {
   createdAt: string;
   /** Analysis that produced the block, when the run knows it. */
   analysisId?: string;
+  /** Snapshot of the analysis parameters used by the run (re-run/apply). */
+  params?: unknown;
+  /** Signature of those parameters, used for the params-stale badge. */
+  paramsSignature?: string;
   html: string;
 }
 
@@ -83,6 +89,14 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
       createdAt: text(raw.createdAt, ''),
       ...(typeof raw.analysisId === 'string' && raw.analysisId.length > 0
         ? { analysisId: raw.analysisId.slice(0, 64) }
+        : {}),
+      ...(isRecord(raw.params) || Array.isArray(raw.params)
+        ? JSON.stringify(raw.params).length <= MAX_PARAMS_CHARS
+          ? { params: raw.params }
+          : {}
+        : {}),
+      ...(typeof raw.paramsSignature === 'string' && raw.paramsSignature.length <= 2048
+        ? { paramsSignature: raw.paramsSignature }
         : {}),
       html,
     });

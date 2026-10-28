@@ -10,7 +10,7 @@ interface UseAnalysisRunOptions {
   params: ProjectParams;
   ciLevel: number;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */
-  emit: (result: AnalysisRunResult) => boolean;
+  emit: (result: AnalysisRunResult, analysisId: string, paramsUsed: ProjectParams) => boolean;
   warn: (message: string) => void;
 }
 
@@ -28,17 +28,23 @@ export const useAnalysisRun = ({
   emit,
   warn,
 }: UseAnalysisRunOptions) => {
-  const runAnalysis = (): boolean => {
-    const invalid = validateAnalysisColumnRefs(activeAnalysis, params, grid.cols.length);
+  const run = (analysisId: string, paramsUsed: ProjectParams): boolean => {
+    const invalid = validateAnalysisColumnRefs(analysisId, paramsUsed, grid.cols.length);
     if (invalid.length > 0) {
       warn(`Reselect the highlighted variable: ${invalid.slice(0, 2).join(' · ')}`);
       return false;
     }
-    const runner = ANALYSIS_RUNNERS[activeAnalysis];
-    if (runner) return emit(runner({ grid, params, ciLevel }));
+    const runner = ANALYSIS_RUNNERS[analysisId];
+    if (runner) return emit(runner({ grid, params: paramsUsed, ciLevel }), analysisId, paramsUsed);
     warn('Analysis type not implemented yet');
     return false;
   };
 
-  return { runAnalysis };
+  const runAnalysis = (): boolean => run(activeAnalysis, params);
+
+  /** Re-run a stored card with its own parameters, without touching state. */
+  const runAnalysisWith = (analysisId: string, paramsUsed: ProjectParams): boolean =>
+    run(analysisId, paramsUsed);
+
+  return { runAnalysis, runAnalysisWith };
 };
