@@ -1,5 +1,5 @@
 import type { CategoryLevel, ColType, GridData } from '../../grid/types';
-import { COL_TYPES, MAX_LEVELS } from '../../grid/types';
+import { COL_TYPES, MAX_LEVELS, createColumnId } from '../../grid/types';
 import { MAX_COLS, MAX_ROWS } from '../readers';
 import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { DistributionName } from '../../stats/distfit';
@@ -205,8 +205,18 @@ export const parseGrid = (value: unknown): GridData => {
         ? record.reference
         : undefined;
     return {
+      id:
+        typeof record.id === 'string' && record.id.trim()
+          ? record.id.trim().slice(0, 80)
+          : createColumnId(),
       name,
       type: parseType(record.type),
+      ...(typeof record.label === 'string' && record.label.trim()
+        ? { label: record.label.trim().slice(0, 120) }
+        : {}),
+      ...(typeof record.description === 'string' && record.description.trim()
+        ? { description: record.description.trim().slice(0, 500) }
+        : {}),
       ...(levels ? { levels } : {}),
       ...(reference ? { reference } : {}),
     };

@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { CategoryLevel, GridData } from '../../grid/types';
+import type { RowFilter } from '../../grid/ops';
 import type { OutputEntry } from '../OutputConsole';
 import type {
   AgreementParams,
@@ -110,6 +111,15 @@ export interface AnalysisTabProps {
   setTdCoxParams: Dispatch<SetStateAction<TdCoxParams>>;
   grid: GridData;
   outputs: OutputEntry[];
+  dataRevision: number;
+  datasetId: string;
+  roleErrors: string[];
+  filterAffectsAnalysis: boolean;
+  visibleRowCount: number;
+  activeRowFilter: RowFilter | null;
+  filterSignature: string;
+  focusedColumn: number | null;
+  onAssignPrimary: (column: number) => void;
   removeOutput: (index: number) => void;
   clearOutput: () => void;
   copyOutput: () => void;

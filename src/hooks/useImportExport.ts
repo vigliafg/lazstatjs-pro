@@ -6,6 +6,7 @@ import { readXlsxSheets, type XlsxSheet } from '../io/xlsx';
 import type { ImportMode } from '../io/ImportWizard';
 import type { ImportTable } from '../io/readers';
 import type { GridData } from '../grid/types';
+import { createColumnId } from '../grid/types';
 import type { Toast } from './useToasts';
 
 export interface PendingImport {
@@ -17,7 +18,7 @@ export interface PendingImport {
 interface UseImportExportOptions {
   initialPrefs?: IoPreferences;
   setGrid: Dispatch<SetStateAction<GridData>>;
-  resetGridHistory: (grid: GridData) => void;
+  replaceDataset: (grid: GridData) => void;
   setValidation: (value: { ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] }) => void;
   setActiveTab: (tab: 'data' | 'analysis' | 'settings' | 'help') => void;
   showToast: (title: string, msg: string, type?: Toast['type']) => void;
@@ -32,7 +33,7 @@ interface UseImportExportOptions {
 export const useImportExport = ({
   initialPrefs,
   setGrid,
-  resetGridHistory,
+  replaceDataset,
   setValidation,
   setActiveTab,
   showToast,
@@ -44,8 +45,8 @@ export const useImportExport = ({
 
   const applyImportTable = (table: ImportTable, mode: ImportMode) => {
     if (mode === 'overwrite') {
-      resetGridHistory({
-        cols: table.names.map((name, i) => ({ name, type: table.types[i] ?? 'str' })),
+      replaceDataset({
+        cols: table.names.map((name, i) => ({ id: createColumnId(), name, type: table.types[i] ?? 'str' })),
         rows: table.rows.map((row) => [...row]),
       } as GridData);
       showToast('Import', `${table.rows.length} rows and ${table.names.length} columns imported`, 'ok');
@@ -79,7 +80,7 @@ export const useImportExport = ({
             colMap[ti] = at;
           } else {
             colMap[ti] = cols.length;
-            cols.push({ name: n, type: table.types[ti] ?? 'str' });
+            cols.push({ id: createColumnId(), name: n, type: table.types[ti] ?? 'str' });
           }
         });
         const rows = prev.rows.map((r, ri) => {

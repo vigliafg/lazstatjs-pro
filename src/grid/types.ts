@@ -22,8 +22,14 @@ export interface CategoryLevel {
 }
 
 export interface Column {
+  /** Stable identity, used to remap analysis parameters across column edits. */
+  id?: string;
   name: string;
   type: ColType;
+  /** Optional human label shown in the inspector and future pickers. */
+  label?: string;
+  /** Optional free-text note about the variable. */
+  description?: string;
   /** Declared categorical levels (code + label), in display order. */
   levels?: CategoryLevel[];
   /** Value used as the reference level in model-based analyses. */
@@ -34,6 +40,18 @@ export interface GridData {
   cols: Column[];
   rows: string[][];
 }
+
+let columnSeq = 0;
+
+/** New stable id for a column. */
+export const createColumnId = (): string =>
+  `col-${Date.now().toString(36)}-${(columnSeq++).toString(36)}`;
+
+/** Preserve valid ids and assign one to legacy columns. */
+export const ensureColumnIds = <T extends Column>(cols: T[]): (T & { id: string })[] =>
+  cols.map(col => (col.id && col.id.trim() ? col : { ...col, id: createColumnId() })) as (T & {
+    id: string;
+  })[];
 
 /** Vista in sola lettura usata dai builder delle analisi. */
 export interface Dataset {

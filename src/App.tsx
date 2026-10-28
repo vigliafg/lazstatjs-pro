@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, type SetStateAction } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
@@ -11,6 +11,14 @@ import { useOutputConsole } from './hooks/useOutputConsole';
 import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
+import { useColumnOperations } from './hooks/useColumnOperations';
+import {
+  defaultParamsForGrid,
+  remapParams,
+  remapParamsByColumns,
+  setPrimaryColumn,
+  validateAnalysisColumnRefs,
+} from './analyses/params';
 import { defaultLogisticParams } from './analyses/logistic/defaults';
 import { defaultCoxParams } from './analyses/cox/defaults';
 import { defaultSurvivalParams } from './analyses/survival/defaults';
@@ -23,6 +31,7 @@ import { defaultWizardParams } from './analyses/wizard/defaults';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
+import { createDefaultGrid } from './grid/defaults';
 import {
   findInvalid as gridFindInvalid,
 } from './grid/ops';
@@ -32,6 +41,7 @@ import {
   setCell as gridSetCell,
   addColumnEnd as gridAddColumn,
   addRowEnd as gridAddRow,
+  newGrid as gridNewGrid,
   setColType as gridSetColType,
   setColumnLevels as gridSetColumnLevels,
   recodeColumnValues as gridRecodeColumnValues,
@@ -81,19 +91,6 @@ import {
   type WizardParams,
 } from './io/project';
 
-const createDefaultGrid = (): GridData => ({
-  cols: [
-    { name: 'Score_Pre', type: 'num' },
-    { name: 'Score_Post', type: 'num' },
-    { name: 'Group', type: 'int' },
-    { name: 'Age', type: 'int' }
-  ],
-  rows: Array.from({ length: 20 }, (_, i) => {
-    if (i < 10) return [(50 + i * 2).toString(), (60 + i * 2.5).toString(), '1', (20 + (i % 3)).toString()];
-    if (i < 20) return [(45 + (i - 10) * 3).toString(), (55 + (i - 10) * 2).toString(), '2', (21 + (i % 2)).toString()];
-    return ['', '', '', ''];
-  })
-});
 
 export default function App() {
   // Restore the last silent autosave before any state is initialised, so the
@@ -109,9 +106,20 @@ export default function App() {
   );
   const gridHistory = useGridHistory(boot?.grid ?? createDefaultGrid());
   const grid = gridHistory.grid;
+  const dataRevision = gridHistory.revision;
   const setGrid = gridHistory.commit;
-  const undoGrid = gridHistory.undo;
-  const redoGrid = gridHistory.redo;
+  const undoGrid = () => {
+    const next = gridHistory.undo();
+    if (!next) return;
+    const result = remapParamsByColumns(params, grid.cols, next.cols);
+    setParams(result.params);
+  };
+  const redoGrid = () => {
+    const next = gridHistory.redo();
+    if (!next) return;
+    const result = remapParamsByColumns(params, grid.cols, next.cols);
+    setParams(result.params);
+  };
   const canUndoGrid = gridHistory.canUndo;
   const canRedoGrid = gridHistory.canRedo;
   const resetGridHistory = gridHistory.setWithoutHistory;
@@ -121,6 +129,10 @@ export default function App() {
   const [showTransform, setShowTransform] = useState(false);
   const [freezeFirstCol, setFreezeFirstCol] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+  const [showInspector, setShowInspector] = useState(false);
+  const [filterAffectsAnalysis, setFilterAffectsAnalysis] = useState(false);
+  const [inspectorCol, setInspectorCol] = useState(0);
+  const [focusedColumn, setFocusedColumn] = useState<number | null>(null);
   const [filterCol, setFilterCol] = useState(0);
   const [filterOp, setFilterOp] = useState<RowFilterOp>('contains');
   const [filterValue, setFilterValue] = useState('');
@@ -138,6 +150,12 @@ export default function App() {
     const max = Math.max(0, grid.cols.length - 1);
     if (filterCol > max) setFilterCol(max);
   }, [grid.cols.length, filterCol]);
+
+  useEffect(() => {
+    if (inspectorCol >= grid.cols.length) {
+      setInspectorCol(Math.max(0, grid.cols.length - 1));
+    }
+  }, [grid.cols.length, inspectorCol]);
 
   useEffect(() => {
     if (!selRange) return;
@@ -183,6 +201,21 @@ export default function App() {
     setGrid((prev) => gridAddRow(prev));
   };
 
+
+  function replaceDataset(next: GridData) {
+    resetGridHistory(next);
+    setParams(defaultParamsForGrid(next.cols.length));
+    setDatasetId(`dataset-${Date.now().toString(36)}`);
+    setOutputs([]);
+    setValidation({ ran: false, issues: [] });
+    setSelRange(null);
+    setFocusCell(null);
+    setFocusedColumn(null);
+    setShowInspector(false);
+    setFilterAffectsAnalysis(false);
+    showToast('Dataset', 'Parameters reset and previous results cleared', 'ok');
+  }
+
   const updateCell = (r: number, c: number, val: string) => {
     setGrid((prev) => gridSetCell(prev, r, c, val), { coalesce: true, kind: `cell-${r}-${c}` });
   };
@@ -200,6 +233,18 @@ export default function App() {
 
   // Rename / merge / clear the group codes of one column; cells, levels,
   // reference and (when needed) the column type move together in one undo step.
+  const updateColumnMeta = (
+    c: number,
+    patch: { label?: string; description?: string }
+  ) => {
+    setGrid(prev => ({
+      ...prev,
+      cols: prev.cols.map((col, index) =>
+        index === c ? { ...col, ...patch } : col
+      ),
+    }));
+  };
+
   const updateColumnRecode = (c: number, mapping: Record<string, string>) => {
     const result = gridRecodeColumnValues(grid, c, mapping);
     if (result.grid === grid) return;
@@ -230,15 +275,32 @@ export default function App() {
   } = useImportExport({
     initialPrefs: boot?.prefs,
     setGrid,
-    resetGridHistory,
+    replaceDataset,
     setValidation,
     setActiveTab,
     showToast,
   });
 
-  const [descVars, setDescVars] = useState<number[]>(
-    boot?.params.descVars ?? DEFAULT_PARAMS.descVars
+  const [datasetId, setDatasetId] = useState(
+    () => `dataset-${Date.now().toString(36)}`
   );
+
+  const [params, setParams] = useState<ProjectParams>(() => {
+    if (boot) return boot.params;
+    return {
+      ...DEFAULT_PARAMS,
+      logistic: defaultLogisticParams(grid),
+      cox: defaultCoxParams(grid),
+      survival: defaultSurvivalParams(grid),
+      ancova: defaultAncovaParams(grid),
+      factorial: defaultFactorialParams(grid),
+      repeatedanova: defaultRepeatedAnovaParams(grid),
+      multivariate: defaultMultivariateParams(grid),
+      nonparamrm: defaultNonParamParams(grid),
+      wizard: defaultWizardParams(grid),
+    };
+  });
+
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const {
     outputs,
@@ -251,167 +313,111 @@ export default function App() {
     exportResultsXlsx,
     exportReportHtml,
   } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
-  const [ttestParams, setTTestParams] = useState<TTestParams>(
-    boot?.params.ttest ?? DEFAULT_PARAMS.ttest
-  );
 
-  const [anovaParams, setAnovaParams] = useState<AnovaParams>(
-    boot?.params.anova ?? DEFAULT_PARAMS.anova
-  );
+  function updateParams<K extends keyof ProjectParams>(
+    key: K,
+    updater: SetStateAction<ProjectParams[K]>
+  ) {
+    setParams(previous => {
+      const current = previous[key];
+      const next =
+        typeof updater === 'function'
+          ? (updater as (value: ProjectParams[K]) => ProjectParams[K])(current)
+          : updater;
+      return next === current ? previous : { ...previous, [key]: next };
+    });
+  }
 
-  const [regParams, setRegParams] = useState<RegParams>(
-    boot?.params.reg ?? DEFAULT_PARAMS.reg
-  );
+  function bindParam<K extends keyof ProjectParams>(key: K) {
+    return (updater: SetStateAction<ProjectParams[K]>) => updateParams(key, updater);
+  }
 
-  const [corrParams, setCorrParams] = useState<CorrParams>(
-    boot?.params.corr ?? DEFAULT_PARAMS.corr
-  );
+  const {
+    descVars,
+    ttest: ttestParams,
+    anova: anovaParams,
+    reg: regParams,
+    corr: corrParams,
+    chisq: chisqParams,
+    samplesize: samplesizeParams,
+    distfit: distfitParams,
+    logistic: logisticParams,
+    cox: coxParams,
+    survival: survivalParams,
+    timeseries: timeseriesParams,
+    contingency: contingencyParams,
+    ancova: ancovaParams,
+    factorial: factorialParams,
+    repeatedanova: repeatedAnovaParams,
+    multivariate: multivariateParams,
+    nonparamrm: nonParamParams,
+    wizard: wizardParams,
+    tost: tostParams,
+    agreement: agreementParams,
+    countreg: countParams,
+    lmm: lmmParams,
+    ordinal: ordinalParams,
+    mi: miParams,
+    mixedanova: mixedAnovaParams,
+    parametric: parametricParams,
+    resampling: resamplingParams,
+    gee: geeParams,
+    stratcox: stratCoxParams,
+    tdcox: tdCoxParams,
+  } = params;
 
-  const [chisqParams, setChisqParams] = useState<ChiSqParams>(
-    boot?.params.chisq ?? DEFAULT_PARAMS.chisq
-  );
+  const setDescVars = bindParam('descVars');
+  const setTTestParams = bindParam('ttest');
+  const setAnovaParams = bindParam('anova');
+  const setRegParams = bindParam('reg');
+  const setCorrParams = bindParam('corr');
+  const setChisqParams = bindParam('chisq');
+  const setSamplesizeParams = bindParam('samplesize');
+  const setDistfitParams = bindParam('distfit');
+  const setLogisticParams = bindParam('logistic');
+  const setCoxParams = bindParam('cox');
+  const setSurvivalParams = bindParam('survival');
+  const setTimeseriesParams = bindParam('timeseries');
+  const setContingencyParams = bindParam('contingency');
+  const setAncovaParams = bindParam('ancova');
+  const setFactorialParams = bindParam('factorial');
+  const setRepeatedAnovaParams = bindParam('repeatedanova');
+  const setMultivariateParams = bindParam('multivariate');
+  const setNonParamParams = bindParam('nonparamrm');
+  const setWizardParams = bindParam('wizard');
+  const setTostParams = bindParam('tost');
+  const setAgreementParams = bindParam('agreement');
+  const setCountParams = bindParam('countreg');
+  const setLmmParams = bindParam('lmm');
+  const setOrdinalParams = bindParam('ordinal');
+  const setMiParams = bindParam('mi');
+  const setMixedAnovaParams = bindParam('mixedanova');
+  const setParametricParams = bindParam('parametric');
+  const setResamplingParams = bindParam('resampling');
+  const setGeeParams = bindParam('gee');
+  const setStratCoxParams = bindParam('stratcox');
+  const setTdCoxParams = bindParam('tdcox');
 
-  const [samplesizeParams, setSamplesizeParams] = useState<SampleSizeParams>(
-    boot?.params.samplesize ?? DEFAULT_PARAMS.samplesize
-  );
+  const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
+    useColumnOperations({ grid, params, setParams, setGrid, showToast });
 
-  const [distfitParams, setDistfitParams] = useState<DistributionFitParams>(
-    boot?.params.distfit ?? DEFAULT_PARAMS.distfit
-  );
-
-  const [logisticParams, setLogisticParams] = useState<LogisticParams>(
-    () => boot?.params.logistic ?? defaultLogisticParams(grid)
-  );
-
-  const [coxParams, setCoxParams] = useState<CoxParams>(
-    () => boot?.params.cox ?? defaultCoxParams(grid)
-  );
-
-  const [survivalParams, setSurvivalParams] = useState<SurvivalParams>(
-    () => boot?.params.survival ?? defaultSurvivalParams(grid)
-  );
-
-  const [timeseriesParams, setTimeseriesParams] = useState<TimeSeriesParams>(
-    boot?.params.timeseries ?? DEFAULT_PARAMS.timeseries
-  );
-
-  const [contingencyParams, setContingencyParams] = useState<ContingencyParams>(
-    boot?.params.contingency ?? DEFAULT_PARAMS.contingency
-  );
-
-  const [ancovaParams, setAncovaParams] = useState<AncovaParams>(
-    () => boot?.params.ancova ?? defaultAncovaParams(grid)
-  );
-
-  const [factorialParams, setFactorialParams] = useState<FactorialParams>(
-    () => boot?.params.factorial ?? defaultFactorialParams(grid)
-  );
-
-  const [repeatedAnovaParams, setRepeatedAnovaParams] = useState<RepeatedAnovaParams>(
-    () => boot?.params.repeatedanova ?? defaultRepeatedAnovaParams(grid)
-  );
-
-  const [multivariateParams, setMultivariateParams] = useState<MultivariateParams>(
-    () => boot?.params.multivariate ?? defaultMultivariateParams(grid)
-  );
-
-  const [nonParamParams, setNonParamParams] = useState<NonParamParams>(
-    () => boot?.params.nonparamrm ?? defaultNonParamParams(grid)
-  );
-
-  const [wizardParams, setWizardParams] = useState<WizardParams>(
-    () => boot?.params.wizard ?? defaultWizardParams(grid)
-  );
-
-  const [tostParams, setTostParams] = useState<TostParams>(
-    boot?.params.tost ?? DEFAULT_PARAMS.tost
-  );
-
-  const [agreementParams, setAgreementParams] = useState<AgreementParams>(
-    boot?.params.agreement ?? DEFAULT_PARAMS.agreement
-  );
-
-  const [countParams, setCountParams] = useState<CountParams>(
-    boot?.params.countreg ?? DEFAULT_PARAMS.countreg
-  );
-
-  const [lmmParams, setLmmParams] = useState<LmmParams>(
-    boot?.params.lmm ?? DEFAULT_PARAMS.lmm
-  );
-
-  const [ordinalParams, setOrdinalParams] = useState<OrdinalParams>(
-    boot?.params.ordinal ?? DEFAULT_PARAMS.ordinal
-  );
-
-  const [miParams, setMiParams] = useState<MiParams>(
-    boot?.params.mi ?? DEFAULT_PARAMS.mi
-  );
-
-  const [mixedAnovaParams, setMixedAnovaParams] = useState<MixedAnovaParams>(
-    boot?.params.mixedanova ?? DEFAULT_PARAMS.mixedanova
-  );
-
-  const [parametricParams, setParametricParams] = useState<ParametricSurvivalParams>(
-    boot?.params.parametric ?? DEFAULT_PARAMS.parametric
-  );
-
-  const [resamplingParams, setResamplingParams] = useState<ResamplingParams>(
-    boot?.params.resampling ?? DEFAULT_PARAMS.resampling
-  );
-
-  const [geeParams, setGeeParams] = useState<GeeParams>(
-    boot?.params.gee ?? DEFAULT_PARAMS.gee
-  );
-
-  const [stratCoxParams, setStratCoxParams] = useState<StratifiedCoxParams>(
-    boot?.params.stratcox ?? DEFAULT_PARAMS.stratcox
-  );
-
-  const [tdCoxParams, setTdCoxParams] = useState<TdCoxParams>(
-    boot?.params.tdcox ?? DEFAULT_PARAMS.tdcox
-  );
+  const assignPrimary = (column: number) => {
+    const result = setPrimaryColumn(activeAnalysis, params, column);
+    if (!result) {
+      showToast('Analysis', 'This procedure has no primary column role', 'warn');
+      return;
+    }
+    setParams(result.params);
+    showToast('Analysis', `Assigned to ${result.role}`, 'ok');
+  };
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
     [ciLevel, activeAnalysis, activeTab]
   );
-  const params = useMemo<ProjectParams>(
-    () => ({
-      descVars,
-      ttest: ttestParams,
-      anova: anovaParams,
-      reg: regParams,
-      corr: corrParams,
-      chisq: chisqParams,
-      samplesize: samplesizeParams,
-      distfit: distfitParams,
-      logistic: logisticParams,
-      cox: coxParams,
-      survival: survivalParams,
-      timeseries: timeseriesParams,
-      contingency: contingencyParams,
-      ancova: ancovaParams,
-      factorial: factorialParams,
-      repeatedanova: repeatedAnovaParams,
-      multivariate: multivariateParams,
-      nonparamrm: nonParamParams,
-      wizard: wizardParams,
-      tost: tostParams,
-      agreement: agreementParams,
-      countreg: countParams,
-      lmm: lmmParams,
-      ordinal: ordinalParams,
-      mi: miParams,
-      mixedanova: mixedAnovaParams,
-      parametric: parametricParams,
-      resampling: resamplingParams,
-      gee: geeParams,
-      stratcox: stratCoxParams,
-      tdcox: tdCoxParams,
-    }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams, resamplingParams, geeParams, stratCoxParams, tdCoxParams]
-  );
+
+  const roleErrors = validateAnalysisColumnRefs(activeAnalysis, params, grid.cols.length);
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
   const activeRowFilter: RowFilter | null =
@@ -421,40 +427,21 @@ export default function App() {
   const visibleRowCount = activeRowFilter
     ? gridFilterIndexes(grid, activeRowFilter).length
     : grid.rows.length;
+  const filterSignature = JSON.stringify({
+    mode: filterAffectsAnalysis ? 'analysis' : 'view',
+    filter: activeRowFilter,
+  });
+  const analysisGrid = useMemo<GridData>(() => {
+    if (!filterAffectsAnalysis || !activeRowFilter) return grid;
+    return {
+      cols: grid.cols,
+      rows: gridFilterIndexes(grid, activeRowFilter).map(index => grid.rows[index]),
+    };
+  }, [grid, filterAffectsAnalysis, activeRowFilter]);
 
   const restoreProject = (project: ProjectSnapshot) => {
     resetGridHistory(project.grid);
-    setDescVars(project.params.descVars);
-    setTTestParams(project.params.ttest);
-    setAnovaParams(project.params.anova);
-    setRegParams(project.params.reg);
-    setCorrParams(project.params.corr);
-    setChisqParams(project.params.chisq);
-    setSamplesizeParams(project.params.samplesize);
-    setDistfitParams(project.params.distfit);
-    setLogisticParams(project.params.logistic);
-    setCoxParams(project.params.cox);
-    setSurvivalParams(project.params.survival);
-    setTimeseriesParams(project.params.timeseries);
-    setContingencyParams(project.params.contingency);
-    setAncovaParams(project.params.ancova);
-    setFactorialParams(project.params.factorial);
-    setRepeatedAnovaParams(project.params.repeatedanova);
-    setMultivariateParams(project.params.multivariate);
-    setNonParamParams(project.params.nonparamrm);
-    setWizardParams(project.params.wizard);
-    setTostParams(project.params.tost);
-    setAgreementParams(project.params.agreement);
-    setCountParams(project.params.countreg);
-    setLmmParams(project.params.lmm);
-    setOrdinalParams(project.params.ordinal);
-    setMiParams(project.params.mi);
-    setMixedAnovaParams(project.params.mixedanova);
-    setParametricParams(project.params.parametric);
-    setResamplingParams(project.params.resampling);
-    setGeeParams(project.params.gee);
-    setStratCoxParams(project.params.stratcox);
-    setTdCoxParams(project.params.tdcox);
+    setParams(project.params);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -469,6 +456,8 @@ export default function App() {
     setValidation({ ran: false, issues: [] });
     setSelRange(null);
     setFocusCell(null);
+    setFocusedColumn(null);
+    setFilterAffectsAnalysis(false);
   };
 
   // --- Project persistence (.lzs + silent autosave) ---
@@ -491,13 +480,17 @@ export default function App() {
       showToast('Error', result.reason, 'error');
       return false;
     }
-    pushOutput(result.node, result.report, activeAnalysis);
+    pushOutput(result.node, result.report, activeAnalysis, {
+      dataRevision,
+      datasetId,
+      filterSignature,
+    });
     return true;
   };
 
   const { runAnalysis } = useAnalysisRun({
     activeAnalysis,
-    grid,
+    grid: analysisGrid,
     params,
     ciLevel,
     emit,
@@ -515,11 +508,16 @@ export default function App() {
           <DataTab
             grid={grid}
             setGrid={setGrid}
+            onNewDataset={() => replaceDataset(gridNewGrid())}
+            onInsertColumn={insertColumn}
+            onDuplicateColumn={duplicateColumn}
+            onMoveColumn={moveColumn}
+            onDeleteColumn={deleteColumn}
+            onColumnOperation={applyColumnOperation}
             canUndoGrid={canUndoGrid}
             canRedoGrid={canRedoGrid}
             undoGrid={undoGrid}
             redoGrid={redoGrid}
-            resetGridHistory={resetGridHistory}
             csvInputRef={csvInputRef}
             projectInputRef={projectInputRef}
             exportCsv={exportCsv}
@@ -538,6 +536,15 @@ export default function App() {
             setFreezeFirstCol={setFreezeFirstCol}
             showFilter={showFilter}
             setShowFilter={setShowFilter}
+            showInspector={showInspector}
+            setShowInspector={setShowInspector}
+            focusedColumn={focusedColumn}
+            onFocusColumn={setFocusedColumn}
+            filterAffectsAnalysis={filterAffectsAnalysis}
+            setFilterAffectsAnalysis={setFilterAffectsAnalysis}
+            inspectorCol={inspectorCol}
+            setInspectorCol={setInspectorCol}
+            onColumnMeta={updateColumnMeta}
             filterCol={filterCol}
             setFilterCol={setFilterCol}
             filterOp={filterOp}
@@ -631,6 +638,15 @@ export default function App() {
             setTdCoxParams={setTdCoxParams}
             grid={grid}
             outputs={outputs}
+            dataRevision={dataRevision}
+            datasetId={datasetId}
+            roleErrors={roleErrors}
+            filterAffectsAnalysis={filterAffectsAnalysis}
+            visibleRowCount={visibleRowCount}
+            activeRowFilter={activeRowFilter}
+            filterSignature={filterSignature}
+            focusedColumn={focusedColumn}
+            onAssignPrimary={assignPrimary}
             removeOutput={removeOutput}
             clearOutput={clearOutput}
             copyOutput={copyOutput}

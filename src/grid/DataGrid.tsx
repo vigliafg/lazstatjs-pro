@@ -23,6 +23,8 @@ interface Props {
   onClearRange: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
   onFillDown: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
   onSortCol?: (col: number, dir: 'asc' | 'desc') => void;
+  onInspectCol?: (col: number) => void;
+  onFocusCol?: (col: number) => void;
   rowFilter?: RowFilter | null;
   freezeFirstCol?: boolean;
   focusCell?: { r: number; c: number; stamp: number } | null;
@@ -251,6 +253,7 @@ export function DataGrid(props: Props) {
                           className={`w-full h-full bg-transparent border-none pl-2 pr-6 py-1 text-text outline-none focus:bg-accent/10 transition-colors cursor-pointer ${extraLevel ? 'italic text-yellow' : ''} ${selected ? 'bg-accent/10' : ''}`}
                           value={rawCell}
                           onFocus={(e) => {
+                            props.onFocusCol?.(cIdx);
                             const ae = e.relatedTarget as HTMLElement | null;
                             if (ae?.dataset?.cell) return;
                             setAnchor({ r: rIdx, c: cIdx });
@@ -298,6 +301,7 @@ export function DataGrid(props: Props) {
                           onFocus={(e) => {
                             // Programmatic focus from keyboard nav already set the
                             // anchor/selection; do not collapse a shift-selection.
+                            props.onFocusCol?.(cIdx);
                             const ae = e.relatedTarget as HTMLElement | null;
                             if (ae?.dataset?.cell) return;
                             setAnchor({ r: rIdx, c: cIdx });
@@ -355,6 +359,13 @@ export function DataGrid(props: Props) {
         >
           {menu.kind === 'col' ? (
             <>
+              <MenuItem
+                label="Variable details"
+                onClick={() => {
+                  props.onInspectCol?.(menu.index);
+                  setMenu(null);
+                }}
+              />
               <MenuItem
                 label="Rename column"
                 onClick={() => {

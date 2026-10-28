@@ -1,6 +1,8 @@
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { CleanPanel } from '../grid/CleanPanel';
+import { VariableInspector } from '../grid/VariableInspector';
+import { fillRightRange as gridFillRight } from '../grid/fillRight';
 import { DataGrid } from '../grid/DataGrid';
 import { TransformPanel } from '../grid/TransformPanel';
 import {
@@ -28,15 +30,21 @@ import {
   type RowFilterOp,
 } from '../grid/ops';
 import type { CategoryLevel, ColType, GridData } from '../grid/types';
+import type { ColumnOperation } from '../grid/columnOps';
 
 export interface DataTabProps {
   grid: GridData;
   setGrid: Dispatch<SetStateAction<GridData>>;
+  onNewDataset: () => void;
+  onInsertColumn: (at: number) => void;
+  onDuplicateColumn: (c: number) => void;
+  onMoveColumn: (c: number, dir: -1 | 1) => void;
+  onDeleteColumn: (c: number) => void;
+  onColumnOperation: (next: GridData, operation: ColumnOperation) => void;
   canUndoGrid: boolean;
   canRedoGrid: boolean;
   undoGrid: () => void;
   redoGrid: () => void;
-  resetGridHistory: (grid: GridData) => void;
   csvInputRef: RefObject<HTMLInputElement | null>;
   projectInputRef: RefObject<HTMLInputElement | null>;
   exportCsv: () => void;
@@ -55,6 +63,15 @@ export interface DataTabProps {
   setFreezeFirstCol: Dispatch<SetStateAction<boolean>>;
   showFilter: boolean;
   setShowFilter: Dispatch<SetStateAction<boolean>>;
+  showInspector: boolean;
+  setShowInspector: Dispatch<SetStateAction<boolean>>;
+  focusedColumn: number | null;
+  onFocusColumn: (column: number) => void;
+  filterAffectsAnalysis: boolean;
+  setFilterAffectsAnalysis: Dispatch<SetStateAction<boolean>>;
+  inspectorCol: number;
+  setInspectorCol: Dispatch<SetStateAction<number>>;
+  onColumnMeta: (column: number, patch: { label?: string; description?: string }) => void;
   filterCol: number;
   setFilterCol: Dispatch<SetStateAction<number>>;
   filterOp: RowFilterOp;
@@ -80,11 +97,16 @@ export interface DataTabProps {
 export const DataTab = ({
   grid,
   setGrid,
+  onNewDataset,
+  onInsertColumn,
+  onDuplicateColumn,
+  onMoveColumn,
+  onDeleteColumn,
+  onColumnOperation,
   canUndoGrid,
   canRedoGrid,
   undoGrid,
   redoGrid,
-  resetGridHistory,
   csvInputRef,
   projectInputRef,
   exportCsv,
@@ -103,6 +125,15 @@ export const DataTab = ({
   setFreezeFirstCol,
   showFilter,
   setShowFilter,
+  showInspector,
+  setShowInspector,
+  focusedColumn,
+  onFocusColumn,
+  filterAffectsAnalysis,
+  setFilterAffectsAnalysis,
+  inspectorCol,
+  setInspectorCol,
+  onColumnMeta,
   filterCol,
   setFilterCol,
   filterOp,
@@ -128,7 +159,7 @@ export const DataTab = ({
 <div className="flex-1 flex flex-col overflow-hidden">
   <div className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
     <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">File:</span>
-    <button className="tb-btn" onClick={() => resetGridHistory(makeNewGrid())}>New</button>
+    <button className="tb-btn" onClick={onNewDataset}>New</button>
     <button className="tb-btn" onClick={() => csvInputRef.current?.click()}>Import</button>
     <button className="tb-btn" onClick={exportCsv}>Export</button>
     <div className="h-4 w-px bg-border mx-1" />
@@ -225,6 +256,13 @@ export const DataTab = ({
       Freeze col
     </button>
     <button
+      className={`tb-btn ${showInspector ? 'bg-accent text-white border-accent' : ''}`}
+      onClick={() => setShowInspector((value) => !value)}
+      title="Open the variable inspector"
+    >
+      Variables
+    </button>
+    <button
       className={`tb-btn ${showFilter ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setShowFilter((v) => !v)}
       title="Filter the rows shown in the grid (view only, data unchanged)"
@@ -280,16 +318,29 @@ export const DataTab = ({
       >
         Clear filter
       </button>
-      <span className="text-text3 text-[10px] italic">view only — analyses still use all rows</span>
+      <button
+        type="button"
+        className={`tb-btn ${filterAffectsAnalysis ? 'bg-accent text-white border-accent' : ''}`}
+        onClick={() => setFilterAffectsAnalysis(value => !value)}
+        title="Choose whether the row filter also limits the rows used by analyses"
+      >
+        {filterAffectsAnalysis ? 'Also filter analyses' : 'View only'}
+      </button>
+      <span className="text-text3 text-[10px] italic">
+        {filterAffectsAnalysis
+          ? `analyses use ${visibleRowCount} of ${grid.rows.length} rows`
+          : 'view only — analyses still use all rows'}
+      </span>
     </div>
   )}
 
   {showTransform && (
     <TransformPanel
       grid={grid}
-      onApply={(next, msg, kind = 'ok') => {
+      onApply={(next, msg, kind = 'ok', operation) => {
         if (next !== grid) {
-          setGrid(next);
+          if (operation) onColumnOperation(next, operation);
+          else setGrid(next);
           setValidation({ ran: false, issues: [] });
         }
         showToast('Transform', msg, kind);
@@ -350,10 +401,12 @@ export const DataTab = ({
     </div>
   )}
   
-  <div className="panel-header">
-    <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-    Grid View
-  </div>
+  <div className="flex min-h-0 flex-1">
+    <div className={`${showInspector ? 'hidden lg:flex' : 'flex'} min-h-0 min-w-0 flex-1 flex-col`}>
+      <div className="panel-header">
+        <div className="w-1.5 h-1.5 bg-accent rounded-full" />
+        Grid View
+      </div>
 
   <DataGrid
     grid={grid}
@@ -366,16 +419,16 @@ export const DataTab = ({
     onColType={updateColType}
     onLevels={updateColumnLevels}
     onRecode={updateColumnRecode}
-    onInsertCol={(at) => setGrid((prev) => gridInsertColumn(prev, at))}
-    onDuplicateCol={(c) => setGrid((prev) => gridDuplicateColumn(prev, c))}
-    onMoveCol={(c, dir) => setGrid((prev) => gridMoveColumn(prev, c, dir))}
+    onInsertCol={onInsertColumn}
+    onDuplicateCol={onDuplicateColumn}
+    onMoveCol={onMoveColumn}
     onDeleteCol={(c) => {
       if (grid.cols.length <= 1) {
         showToast('Columns', 'At least one column is required', 'warn');
         return;
       }
       if (!window.confirm(`Delete column "${grid.cols[c]?.name}"? You can undo.`)) return;
-      setGrid((prev) => gridDeleteColumn(prev, c));
+      onDeleteColumn(c);
     }}
     onInsertRow={(at) => setGrid((prev) => gridInsertRow(prev, at))}
     onDeleteRow={(r) => {
@@ -407,6 +460,11 @@ export const DataTab = ({
       setValidation({ ran: false, issues: [] });
       showToast('Sort', `Sorted by ${grid.cols[col]?.name ?? `column ${col + 1}`} (${dir})`, 'ok');
     }}
+    onFocusCol={onFocusColumn}
+    onInspectCol={(col) => {
+      setInspectorCol(col);
+      setShowInspector(true);
+    }}
   />
   {selRange && (
     <div className="bg-surface border-t border-border px-3 py-1 flex items-center gap-2 text-[10px] font-mono text-text3 shrink-0">
@@ -416,6 +474,9 @@ export const DataTab = ({
       </span>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridFillDown(prev, selRange))}>
         Fill down
+      </button>
+      <button className="tb-btn" onClick={() => setGrid((prev) => gridFillRight(prev, selRange))}>
+        Fill right
       </button>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridClearRange(prev, selRange))}>
         Clear selection
@@ -431,6 +492,37 @@ export const DataTab = ({
       </button>
     </div>
   )}
+    </div>
+
+    {showInspector && (
+      <div className="flex min-h-0 w-full shrink-0 lg:w-[320px]">
+        <VariableInspector
+          grid={grid}
+          column={inspectorCol}
+          onSelectColumn={setInspectorCol}
+          onRename={(c, name) => {
+            setGrid((prev) => gridRenameColumn(prev, c, name));
+            setValidation((v) => ({ ...v, ran: false }));
+          }}
+          onType={updateColType}
+          onMeta={onColumnMeta}
+          onLevels={updateColumnLevels}
+          onRecode={updateColumnRecode}
+          onDuplicate={onDuplicateColumn}
+          onDelete={(c) => {
+            if (grid.cols.length <= 1) {
+              showToast('Columns', 'At least one column is required', 'warn');
+              return;
+            }
+            if (!window.confirm(`Delete column "${grid.cols[c]?.name}"? You can undo.`)) return;
+            onDeleteColumn(c);
+            setShowInspector(false);
+          }}
+          onClose={() => setShowInspector(false)}
+        />
+      </div>
+    )}
+  </div>
 
   <div className="bg-surface border-t border-border p-2 flex gap-2 shrink-0">
     <button className="tb-btn" onClick={addColumn}><Plus className="w-3 h-3 inline mr-1" /> Column</button>

@@ -19,7 +19,9 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **CSV import/export** with quoted fields, comma or semicolon delimiters, decimal-comma normalisation and automatic column-type inference
 - Row/column count displayed in status bar
 - **Freeze first column** (plus row numbers) while scrolling wide sheets; the header row is always sticky
-- **View-only row filter** with type-aware operators (contains, =, ≠, >, ≥, <, ≤, empty/non-empty) and a live `visible / total` count — analyses still use every row
+- **Row filter** with type-aware operators (contains, =, ≠, >, ≥, <, ≤, empty/non-empty) and a live `visible / total` count; choose **View only** or **Also filter analyses**
+- **Variable inspector** drawer: name, type, label, description, role, rows, missing, unique/invalid counts, levels/reference, duplicate and delete
+- **Stable column ids** and parameter remapping: insert, delete, move, duplicate, split and merge never silently point an analysis at another variable
 - **Sort ascending/descending per column** from the column context menu (undoable)
 - **Find & replace** with regex, case sensitivity and single-column scope; whitespace trim, duplicates/empty-row cleanup and mean/median/mode imputation live in the Clean panel
 
@@ -29,6 +31,9 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Sticky Run** at the bottom of the setup panel, `Ctrl/Cmd + Enter` to run and `Ctrl/Cmd + K` to focus the analysis search
 - **Output document**: one collapsible card per run with an outline, timestamp, analysis label and a *Setup* shortcut back to the parameters that produced it; Copy, Charts PNG, Report HTML and Results XLSX keep working
 - **Responsive panes**: below `lg` a segmented control switches between Library, Setup and Output; *Focus output* hides the library and setup on wide screens
+- **Data context** in Setup: rows, variables, missing cells, active filter, **Data peek** and a shortcut to the data editor
+- **Focused column bridge**: focus a cell in the grid, then assign that column to the primary role of the active analysis with one click
+- **Stale badges**: a result whose grid revision, dataset or filter changed is marked stale
 
 ### Help
 - **In-app HELP tab** (next to Settings) with eight inner tabs: Overview, Data Editor, Data prep, Groups & levels, Analyses, Output & reports, Recipes and Shortcuts & settings

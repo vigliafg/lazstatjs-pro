@@ -90,6 +90,16 @@ parametri dentro ogni componente.
 
 Stato, valutazione e backlog: [`docs/UI-STATE.md`](docs/UI-STATE.md).
 
+### Identità delle colonne
+
+Ogni colonna ha un `id` stabile. `src/grid/columnOps.ts` descrive gli effetti
+di insert/delete/move/split/merge sugli indici; `src/analyses/params.ts`
+rimappa i parametri e invalida i ruoli che perdono la variabile. Gli handler
+strutturali vivono in `src/hooks/useColumnOperations.ts`. New/Import overwrite
+resettano i parametri e cambiano `datasetId`; ogni modifica della griglia
+incrementa `dataRevision`, usata dalle card per il badge `stale`.
+
+
 ## Persistenza `.lzs`
 
 `ProjectSnapshot` contiene griglia, preferenze, impostazioni, parametri e

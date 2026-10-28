@@ -28,6 +28,11 @@ const grid: GridData = {
   ],
 };
 
+const withoutIds = (value: GridData): GridData => ({
+  cols: value.cols.map(({ id: _id, ...col }) => col),
+  rows: value.rows,
+});
+
 const makeSnapshot = () =>
   createProjectSnapshot(
     {
@@ -42,7 +47,7 @@ const makeSnapshot = () =>
 describe('project snapshot roundtrip', () => {
   it('serialises and restores grid, settings and params', () => {
     const restored = parseProject(serializeProject(makeSnapshot()));
-    assert.deepEqual(restored.grid, grid);
+    assert.deepEqual(withoutIds(restored.grid), grid);
     assert.equal(restored.savedAt, '2026-10-19T10:00:00.000Z');
     assert.equal(restored.settings.ciLevel, 99);
     assert.equal(restored.settings.activeAnalysis, 'ttest');
@@ -88,6 +93,15 @@ describe('project sanitisation', () => {
 
     const empty = parseGrid({ cols: [{ name: 'Only', type: 'str' }], rows: [] });
     assert.deepEqual(empty.rows, [['']]);
+  });
+
+  it('preserves optional variable metadata', () => {
+    const parsed = parseGrid({
+      cols: [{ name: 'Score', type: 'num', label: 'Punteggio', description: 'Prima del trattamento' }],
+      rows: [['1']],
+    });
+    assert.equal(parsed.cols[0].label, 'Punteggio');
+    assert.equal(parsed.cols[0].description, 'Prima del trattamento');
   });
 
   it('preserves the extended column types in a project file', () => {
@@ -511,7 +525,7 @@ describe('project autosave', () => {
   it('roundtrips through localStorage', () => {
     withStorage(() => {
       assert.equal(saveAutosaveProject(makeSnapshot()), true);
-      assert.deepEqual(loadAutosaveProject()?.grid, grid);
+      assert.deepEqual(withoutIds(loadAutosaveProject()?.grid ?? { cols: [], rows: [] }), grid);
       clearAutosaveProject();
       assert.equal(loadAutosaveProject(), null);
     });

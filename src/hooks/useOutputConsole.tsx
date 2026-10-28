@@ -52,7 +52,12 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
 
   // Each run pushes a single block: the written report is part of that block,
   // so it always closes the run after every table and chart.
-  const pushOutput = (node: ReactNode, report: ReportSpec | null, analysisId?: string) => {
+  const pushOutput = (
+    node: ReactNode,
+    report: ReportSpec | null,
+    analysisId?: string,
+    meta?: { dataRevision?: number; datasetId?: string; filterSignature?: string }
+  ) => {
     const block = (
       <>
         {node}
@@ -71,6 +76,9 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       title: html ? extractOutputTitle(html) : 'Analysis output',
       createdAt: new Date().toISOString(),
       ...(analysisId ? { analysisId } : {}),
+      ...(meta?.dataRevision !== undefined ? { dataRevision: meta.dataRevision } : {}),
+      ...(meta?.datasetId ? { datasetId: meta.datasetId } : {}),
+      ...(meta?.filterSignature ? { filterSignature: meta.filterSignature } : {}),
       html,
       node: block,
     };

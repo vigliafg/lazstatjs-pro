@@ -209,6 +209,9 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             onExportReport={props.exportReportHtml}
             onExportXlsx={props.exportResultsXlsx}
             onBackToData={() => props.setActiveTab('data')}
+            currentRevision={props.dataRevision}
+            currentDatasetId={props.datasetId}
+            currentFilterSignature={props.filterSignature}
             onOpenAnalysis={analysisId => {
               if (!analysisMeta(analysisId)) return;
               props.setActiveAnalysis(analysisId);

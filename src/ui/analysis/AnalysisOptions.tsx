@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Play } from 'lucide-react';
 import { analysisMeta, familyOf } from '../../analyses/registry';
+import { rowMatches } from '../../grid/ops';
 import { DescriptiveForm } from '../../analyses/descriptive/Form';
 import { TTestForm } from '../../analyses/ttest/Form';
 import { AnovaForm } from '../../analyses/anova/Form';
@@ -62,6 +63,16 @@ const inputClass =
 export const AnalysisOptions = (p: AnalysisTabProps) => {
   const meta = analysisMeta(p.activeAnalysis);
   const family = familyOf(p.activeAnalysis);
+  const [peek, setPeek] = useState(false);
+  const rowsForAnalysis =
+    p.filterAffectsAnalysis && p.activeRowFilter
+      ? p.grid.rows.filter(row => rowMatches(p.grid, row, p.activeRowFilter))
+      : p.grid.rows;
+  const missingCells = p.grid.rows.reduce(
+    (count, row) => count + row.filter(cell => String(cell ?? '').trim() === '').length,
+    0
+  );
+  const previewCols = p.grid.cols.slice(0, 6);
 
   const sectionTitle = (() => {
     switch (p.activeAnalysis) {
@@ -365,6 +376,53 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
         <p className="mt-1 text-[10px] leading-relaxed text-text3">
           {meta?.description ?? 'Configure the analysis and run it on the current dataset.'}
         </p>
+        <div className="mt-2 flex flex-wrap gap-1">
+          <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
+            Rows {p.filterAffectsAnalysis ? `${p.visibleRowCount}/${p.grid.rows.length}` : p.grid.rows.length}
+          </span>
+          <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
+            Variables {p.grid.cols.length}
+          </span>
+          <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
+            Missing {missingCells}
+          </span>
+          {p.filterAffectsAnalysis && (
+            <span className="rounded border border-accent/30 bg-accent/10 px-1.5 py-0.5 font-mono text-[9px] text-accent">
+              analysis filter
+            </span>
+          )}
+        </div>
+        {p.focusedColumn !== null && p.grid.cols[p.focusedColumn] && (
+          <div className="mt-2 flex items-center gap-2 rounded border border-border bg-surface3/50 px-2 py-1">
+            <span className="min-w-0 truncate font-mono text-[9px] uppercase tracking-wider text-text3">
+              Focused: <span className="text-text2">{p.grid.cols[p.focusedColumn]?.label?.trim() || p.grid.cols[p.focusedColumn]?.name}</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => p.onAssignPrimary(p.focusedColumn as number)}
+              className="tb-btn ml-auto shrink-0 px-2 py-0.5 text-[10px]"
+              title="Assign the focused grid column to the primary role of this analysis"
+            >
+              Use in analysis
+            </button>
+          </div>
+        )}
+        <div className="mt-2 flex gap-1.5">
+          <button
+            type="button"
+            onClick={() => setPeek(value => !value)}
+            className={`tb-btn px-2 py-0.5 text-[10px] ${peek ? 'border-accent bg-accent/10 text-text' : ''}`}
+          >
+            {peek ? 'Hide data peek' : 'Data peek'}
+          </button>
+          <button
+            type="button"
+            onClick={() => p.setActiveTab('data')}
+            className="tb-btn px-2 py-0.5 text-[10px]"
+          >
+            Open data
+          </button>
+        </div>
       </div>
 
       <div
@@ -372,6 +430,68 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
         className="min-h-0 flex-1 overflow-auto scrollbar p-4"
       >
         <div className="flex flex-col gap-5">
+          {peek && (
+            <div className="rounded border border-border bg-surface3/40 p-2">
+              <div className="overflow-x-auto scrollbar">
+                <table className="w-full border-collapse text-[9px]">
+                  <thead>
+                    <tr>
+                      <th className="border border-border bg-surface2 px-1 py-0.5 text-left font-mono text-text3">
+                        #
+                      </th>
+                      {previewCols.map((col, index) => (
+                        <th
+                          key={col.id ?? index}
+                          className="border border-border bg-surface2 px-1 py-0.5 text-left font-mono text-accent2"
+                        >
+                          {col.label?.trim() || col.name}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rowsForAnalysis.slice(0, 5).map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                        <td className="border border-border px-1 py-0.5 font-mono text-text3">
+                          {rowIndex + 1}
+                        </td>
+                        {previewCols.map((_, columnIndex) => (
+                          <td
+                            key={columnIndex}
+                            className="max-w-[90px] truncate border border-border px-1 py-0.5 font-mono text-text2"
+                          >
+                            {row[columnIndex] ?? ''}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-1 text-[9px] text-text3">
+                First {Math.min(5, rowsForAnalysis.length)} of {rowsForAnalysis.length} rows ·{' '}
+                {p.filterAffectsAnalysis ? 'analysis filter active' : 'view filter only'}
+              </p>
+            </div>
+          )}
+
+          {p.roleErrors.length > 0 && (
+            <div className="rounded border border-yellow/30 bg-yellow/5 p-3">
+              <p className="font-mono text-[9px] uppercase tracking-widest text-yellow">
+                Reselect variables
+              </p>
+              <p className="mt-1 text-[10px] leading-relaxed text-text2">
+                A column edit removed or transformed a variable used by this analysis.
+                Choose the affected fields again before running.
+              </p>
+              <ul className="mt-1.5 list-disc pl-4 text-[10px] text-text3">
+                {p.roleErrors.slice(0, 4).map(label => (
+                  <li key={label}>{label}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <Section title="Confidence level" hint="Applies to every estimate">
             <select
               className={inputClass}
@@ -397,6 +517,7 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
         <button
           type="button"
           onClick={p.runAnalysis}
+          disabled={p.roleErrors.length > 0}
           title="Run analysis (Ctrl/Cmd + Enter)"
           className="run-btn flex h-10 w-full items-center justify-center gap-2"
         >

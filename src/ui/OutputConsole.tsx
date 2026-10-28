@@ -17,6 +17,12 @@ import { sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
 /** Un blocco della console: React live nella sessione, HTML quando ripristinato. */
 export interface OutputEntry extends StoredOutput {
   node?: ReactNode;
+  /** In-session revision of the grid that produced the block. */
+  dataRevision?: number;
+  /** In-session dataset identity. */
+  datasetId?: string;
+  /** Signature of the analysis row filter used for the run. */
+  filterSignature?: string;
 }
 
 /** I blocchi ripristinati sono statici: sanificati una volta e iniettati. */
@@ -35,6 +41,9 @@ export interface OutputConsoleProps {
   onExportXlsx: () => void;
   onBackToData: () => void;
   onOpenAnalysis?: (analysisId: string) => void;
+  currentRevision?: number;
+  currentDatasetId?: string;
+  currentFilterSignature?: string;
 }
 
 const formatTime = (iso: string): string => {
@@ -67,6 +76,9 @@ export const OutputConsole = ({
   onExportXlsx,
   onBackToData,
   onOpenAnalysis,
+  currentRevision,
+  currentDatasetId,
+  currentFilterSignature,
 }: OutputConsoleProps) => {
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
   const lastId = outputs.length > 0 ? outputs[outputs.length - 1].id : null;
@@ -223,6 +235,16 @@ export const OutputConsole = ({
               const title = output.analysisId
                 ? analysisLabel(output.analysisId)
                 : `Result ${index + 1}`;
+              const stale =
+                (output.dataRevision !== undefined &&
+                  currentRevision !== undefined &&
+                  output.dataRevision !== currentRevision) ||
+                (output.datasetId !== undefined &&
+                  currentDatasetId !== undefined &&
+                  output.datasetId !== currentDatasetId) ||
+                (output.filterSignature !== undefined &&
+                  currentFilterSignature !== undefined &&
+                  output.filterSignature !== currentFilterSignature);
               return (
                 <article
                   key={output.id}
@@ -252,6 +274,14 @@ export const OutputConsole = ({
                     <span className="shrink-0 font-mono text-[9px] text-text3">
                       {formatTime(output.createdAt)}
                     </span>
+                    {stale && (
+                      <span
+                        className="shrink-0 rounded border border-yellow/30 bg-yellow/10 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-yellow"
+                        title="The grid changed after this result was produced"
+                      >
+                        stale
+                      </span>
+                    )}
                     {output.title !== 'Analysis output' && (
                       <span className="ml-auto hidden min-w-0 truncate text-[10px] text-text3 xl:block">
                         {output.title}
@@ -279,7 +309,7 @@ export const OutputConsole = ({
                       <Trash2 className="h-3 w-3" />
                     </button>
                   </header>
-                  <div className={isCollapsed ? 'hidden' : 'p-4'}>
+                  <div className={isCollapsed ? 'hidden' : stale ? 'p-4 opacity-70' : 'p-4'}>
                     {output.node ?? (
                       <div
                         className="restored-output"

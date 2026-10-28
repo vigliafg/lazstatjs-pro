@@ -9,6 +9,7 @@ import {
   renameColumn, setColType,
 } from './ops';
 import { COL_TYPES, validateValue, type ColType, type GridData } from './types';
+import { fillRightRange } from './fillRight';
 
 const demo = (): GridData => ({
   cols: [
@@ -50,6 +51,12 @@ describe('grid ops foundation', () => {
   it('fill down copies top row', () => {
     const out = fillDownRange(demo(), { r0: 0, c0: 0, r1: 1, c1: 0 });
     assert.equal(out.rows[1][0], '1');
+  });
+
+  it('fill right copies the left cell across each row', () => {
+    const out = fillRightRange(demo(), { r0: 0, c0: 0, r1: 1, c1: 1 });
+    assert.equal(out.rows[0][1], '1');
+    assert.equal(out.rows[1][1], '3');
   });
 
   it('validation finds bad int cell', () => {

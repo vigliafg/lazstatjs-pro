@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import type { GridData } from './types';
 import { sortByColumn, recodeColumn, splitColumn, mergeColumns, computeColumn } from './ops';
+import type { ColumnOperation } from './columnOps';
 
 interface Props {
   grid: GridData;
-  onApply: (next: GridData, msg: string, kind?: 'ok' | 'warn' | 'error') => void;
+  onApply: (
+    next: GridData,
+    msg: string,
+    kind?: 'ok' | 'warn' | 'error',
+    operation?: ColumnOperation
+  ) => void;
 }
 
 export function TransformPanel({ grid, onApply }: Props) {
@@ -88,7 +94,7 @@ export function TransformPanel({ grid, onApply }: Props) {
             ))}
           </select>
           <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={splitSep} onChange={(e) => setSplitSep(e.target.value)} title="Separator" />
-          <button className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), 'Column split')}>Split</button>
+          <button className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), 'Column split', 'ok', { kind: 'split', at: splitCol })}>Split</button>
           <span className="text-text3">|</span>
           <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={mergeA} onChange={(e) => setMergeA(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
@@ -101,7 +107,7 @@ export function TransformPanel({ grid, onApply }: Props) {
             ))}
           </select>
           <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={mergeSep} onChange={(e) => setMergeSep(e.target.value)} title="Separator" />
-          <button className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), 'Columns merged')}>Merge</button>
+          <button className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), 'Columns merged', 'ok', { kind: 'merge', a: mergeA, b: mergeB })}>Merge</button>
         </div>
       </div>
 

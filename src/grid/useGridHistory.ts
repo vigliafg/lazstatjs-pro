@@ -24,6 +24,8 @@ const sameGrid = (a: GridData, b: GridData): boolean =>
     (c, i) =>
       c.name === b.cols[i]?.name &&
       c.type === b.cols[i]?.type &&
+      c.label === b.cols[i]?.label &&
+      c.description === b.cols[i]?.description &&
       c.reference === b.cols[i]?.reference &&
       sameLevels(c.levels, b.cols[i]?.levels)
   ) &&
@@ -40,6 +42,7 @@ const sameGrid = (a: GridData, b: GridData): boolean =>
 /** Undo/redo stack for the data grid. Call `commit(next)` instead of setState. */
 export function useGridHistory(initial: GridData) {
   const [grid, setGridState] = useState<GridData>(initial);
+  const [revision, setRevision] = useState(0);
   const gridRef = useRef<GridData>(initial);
   const past = useRef<GridData[]>([]);
   const future = useRef<GridData[]>([]);
@@ -72,6 +75,7 @@ export function useGridHistory(initial: GridData) {
       lastCommitKind.current = opts?.kind ?? '';
       gridRef.current = value;
       setGridState(value);
+      setRevision((value) => value + 1);
       bump();
     },
     []
@@ -83,31 +87,37 @@ export function useGridHistory(initial: GridData) {
     lastCommitKind.current = '';
     gridRef.current = next;
     setGridState(next);
+    setRevision((value) => value + 1);
     bump();
   }, []);
 
-  const undo = useCallback(() => {
+  const undo = useCallback((): GridData | null => {
     const last = past.current.pop();
-    if (!last) return;
+    if (!last) return null;
     future.current.push(clone(gridRef.current));
     lastCommitKind.current = '';
     gridRef.current = last;
     setGridState(last);
+    setRevision((value) => value + 1);
     bump();
+    return last;
   }, []);
 
-  const redo = useCallback(() => {
+  const redo = useCallback((): GridData | null => {
     const next = future.current.pop();
-    if (!next) return;
+    if (!next) return null;
     past.current.push(clone(gridRef.current));
     lastCommitKind.current = '';
     gridRef.current = next;
     setGridState(next);
+    setRevision((value) => value + 1);
     bump();
+    return next;
   }, []);
 
   return {
     grid,
+    revision,
     commit,
     setWithoutHistory,
     undo,

@@ -1,5 +1,5 @@
 import type { CategoryLevel, Column, ColType, GridData } from './types';
-import { MAX_LEVELS, distinctColumnValues, emptyRow, uniqueColName, validateValue } from './types';
+import { MAX_LEVELS, createColumnId, distinctColumnValues, emptyRow, uniqueColName, validateValue } from './types';
 
 /* ---------- Structural operations (pure, return new GridData) ---------- */
 
@@ -155,13 +155,13 @@ export const levelsFromColumnValues = (grid: GridData, c: number): CategoryLevel
 
 export const addColumnEnd = (grid: GridData): GridData => {
   const name = uniqueColName(grid.cols, `Var${grid.cols.length + 1}`);
-  return { cols: [...grid.cols, { name, type: 'num' as ColType }], rows: grid.rows.map((r) => [...r, '']) };
+  return { cols: [...grid.cols, { id: createColumnId(), name, type: 'num' as ColType }], rows: grid.rows.map((r) => [...r, '']) };
 };
 
 export const insertColumnAt = (grid: GridData, at: number): GridData => {
   const pos = Math.max(0, Math.min(grid.cols.length, at));
   const name = uniqueColName(grid.cols, `Var${grid.cols.length + 1}`);
-  const cols = [...grid.cols.slice(0, pos), { name, type: 'num' as ColType }, ...grid.cols.slice(pos)];
+  const cols = [...grid.cols.slice(0, pos), { id: createColumnId(), name, type: 'num' as ColType }, ...grid.cols.slice(pos)];
   return { cols, rows: grid.rows.map((r) => [...r.slice(0, pos), '', ...r.slice(pos)]) };
 };
 
@@ -169,7 +169,7 @@ export const duplicateColumn = (grid: GridData, c: number): GridData => {
   if (c < 0 || c >= grid.cols.length) return grid;
   const src = grid.cols[c];
   const name = uniqueColName(grid.cols, `${src.name}_copy`);
-  const cols = [...grid.cols.slice(0, c + 1), { name, type: src.type }, ...grid.cols.slice(c + 1)];
+  const cols = [...grid.cols.slice(0, c + 1), { id: createColumnId(), name, type: src.type }, ...grid.cols.slice(c + 1)];
   const rows = grid.rows.map((r) => [...r.slice(0, c + 1), r[c] ?? '', ...r.slice(c + 1)]);
   return { cols, rows };
 };
@@ -258,7 +258,7 @@ export const pasteTsvAt = (grid: GridData, r0: number, c0: number, block: string
   const needRows = ar + block.length;
   const needCols = Math.max(grid.cols.length, ac + Math.max(0, ...block.map((r) => r.length)));
   let cols: Column[] = [...grid.cols];
-  while (cols.length < needCols) cols = [...cols, { name: uniqueColName(cols, `Var${cols.length + 1}`), type: 'num' }];
+  while (cols.length < needCols) cols = [...cols, { id: createColumnId(), name: uniqueColName(cols, `Var${cols.length + 1}`), type: 'num' }];
   const rows: string[][] = grid.rows.map((r) => {
     const copy = [...r];
     while (copy.length < needCols) copy.push('');
@@ -616,7 +616,7 @@ export const splitColumn = (grid: GridData, col: number, sep: string, newName2?:
   if (col < 0 || col >= grid.cols.length) return grid;
   const src = grid.cols[col];
   const name2 = uniqueColName(grid.cols, newName2?.trim() || `${src.name}_2`);
-  const cols = [...grid.cols.slice(0, col + 1), { name: name2, type: src.type }, ...grid.cols.slice(col + 1)];
+  const cols = [...grid.cols.slice(0, col + 1), { id: createColumnId(), name: name2, type: src.type }, ...grid.cols.slice(col + 1)];
   const rows = grid.rows.map((r) => {
     const v = String(r[col] ?? '');
     const idx = v.indexOf(sep);
@@ -681,7 +681,7 @@ export const computeColumn = (
     return { grid, error: 'Invalid expression' };
   }
   const name = uniqueColName(grid.cols, newName.trim() || 'Computed');
-  const cols = [...grid.cols, { name, type: 'num' as ColType }];
+  const cols = [...grid.cols, { id: createColumnId(), name, type: 'num' as ColType }];
   const rows = grid.rows.map((r) => {
     const nums = r.map((v) => {
       const n = numVal(v);
