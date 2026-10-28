@@ -165,6 +165,13 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri della regressione per conteggi. */
+export interface CountParams {
+  dep: number;
+  indeps: number[];
+  family: 'poisson' | 'negbin';
+}
+
 /** Parametri delle procedure di accordo. */
 export interface AgreementParams {
   mode: 'icc' | 'bland' | 'kappa';
@@ -213,6 +220,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  countreg: CountParams;
   agreement: AgreementParams;
   tost: TostParams;
   wizard: WizardParams;
@@ -336,6 +344,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  countreg: {
+    dep: 0,
+    indeps: [1],
+    family: 'poisson',
   },
   agreement: {
     mode: 'icc',

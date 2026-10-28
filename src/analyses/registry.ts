@@ -23,6 +23,7 @@ export const ANALYSIS_TABS = [
   { id: 'factorial', label: 'Factorial ANOVA' },
   { id: 'ancova', label: 'ANCOVA' },
   { id: 'logistic', label: 'Logistic Regression' },
+  { id: 'countreg', label: 'Count Regression' },
   { id: 'timeseries', label: 'Time Series' },
   { id: 'survival', label: 'Survival (KM)' },
   { id: 'cox', label: 'Cox (PH)' },

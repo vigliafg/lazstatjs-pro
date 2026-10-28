@@ -67,6 +67,7 @@ import {
   type TimeSeriesParams,
   type TostParams,
   type AgreementParams,
+  type CountParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -321,6 +322,10 @@ export default function App() {
     boot?.params.agreement ?? DEFAULT_PARAMS.agreement
   );
 
+  const [countParams, setCountParams] = useState<CountParams>(
+    boot?.params.countreg ?? DEFAULT_PARAMS.countreg
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -349,8 +354,9 @@ export default function App() {
       wizard: wizardParams,
       tost: tostParams,
       agreement: agreementParams,
+      countreg: countParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -385,6 +391,7 @@ export default function App() {
     setWizardParams(project.params.wizard);
     setTostParams(project.params.tost);
     setAgreementParams(project.params.agreement);
+    setCountParams(project.params.countreg);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -538,6 +545,8 @@ export default function App() {
             setTostParams={setTostParams}
             agreementParams={agreementParams}
             setAgreementParams={setAgreementParams}
+            countParams={countParams}
+            setCountParams={setCountParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

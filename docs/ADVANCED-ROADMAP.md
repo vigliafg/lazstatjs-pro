@@ -7,7 +7,8 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 
 - [x] **FDR / Benjamini–Hochberg**: kernel `stats/kernels/multiple.ts`,
       opzione post-hoc ANOVA e Dunn.
-- [ ] **GLM**: Poisson, negativo binomiale, logistico ordinale, Firth.
+- [x] **GLM (conteggi)**: Poisson e binomiale negativa NB2, IRR, dispersione,
+      LR, AIC/BIC. Restano logistico ordinale e Firth.
 - [ ] **Modelli misti**: LMM/GLMM, GEE.
 - [ ] **EFA + omega**: rotazioni, parallel analysis, affidabilità omega.
 - [ ] **Dati mancanti**: imputazione multipla, FIML.

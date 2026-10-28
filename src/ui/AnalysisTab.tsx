@@ -22,9 +22,10 @@ import { NonParamForm } from '../analyses/nonparamrm/Form';
 import { WizardForm } from '../analyses/wizard/Form';
 import { TostForm } from '../analyses/tost/Form';
 import { AgreementForm } from '../analyses/agreement/Form';
+import { CountForm } from '../analyses/countreg/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -73,6 +74,8 @@ export interface AnalysisTabProps {
   setTostParams: Dispatch<SetStateAction<TostParams>>;
   agreementParams: AgreementParams;
   setAgreementParams: Dispatch<SetStateAction<AgreementParams>>;
+  countParams: CountParams;
+  setCountParams: Dispatch<SetStateAction<CountParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -134,6 +137,8 @@ export const AnalysisTab = ({
   setTostParams,
   agreementParams,
   setAgreementParams,
+  countParams,
+  setCountParams,
   grid,
   outputs,
   removeOutput,
@@ -304,6 +309,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'countreg' && (
+        <CountForm grid={grid} countParams={countParams} setCountParams={setCountParams} />
       )}
 
       {activeAnalysis === 'agreement' && (

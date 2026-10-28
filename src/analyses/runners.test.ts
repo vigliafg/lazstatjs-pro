@@ -11,6 +11,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'chisquare',
     'contingency',
     'correlation',
+    'countreg',
     'cox',
     'descriptive',
     'distfit',

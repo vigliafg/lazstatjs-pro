@@ -22,6 +22,7 @@ import { buildNonParamOutput } from './nonparamrm/run';
 import { buildWizardOutput } from './wizard/run';
 import { buildTostOutput } from './tost/run';
 import { buildAgreementOutput } from './agreement/run';
+import { buildCountOutput } from './countreg/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -84,4 +85,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildTostOutput({ grid, params: params.tost, ciLevel }),
   agreement: ({ grid, params, ciLevel }) =>
     buildAgreementOutput({ grid, params: params.agreement, ciLevel }),
+  countreg: ({ grid, params, ciLevel }) =>
+    buildCountOutput({ grid, params: params.countreg, ciLevel }),
 };
