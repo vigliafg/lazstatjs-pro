@@ -13,6 +13,7 @@ export const mixedAnovaReport = (stats: MixedAnovaStats, groupName: string, leve
     intro: [
       `${stats.n} soggetti, ${stats.groups.length} gruppi, ${stats.conditions.length} condizioni within.`,
       `Within: F(${time.df}, ${stats.effects[4].df}) = ${fmtEst(time.f, 3)}, p = ${fmtP(time.p)}; interazione F(${interaction.df}, ${stats.effects[4].df}) = ${fmtEst(interaction.f, 3)}, p = ${fmtP(interaction.p)}.`,
+      `Sfericità: Mauchly p = ${fmtP(stats.sphericity.p)}, ε GG = ${fmtEst(stats.sphericity.ggEpsilon, 3)}; p corretti GG: tempo ${fmtP(stats.pGGTime)}, interazione ${fmtP(stats.pGGInteraction)}.`
     ],
     sections: [
       {
@@ -22,7 +23,7 @@ export const mixedAnovaReport = (stats: MixedAnovaStats, groupName: string, leve
           interaction.p < 1 - level / 100
             ? 'L’interazione è significativa: l’effetto del tempo cambia tra i gruppi, quindi vanno lette le medie cella più che gli effetti principali.'
             : 'L’interazione non è significativa: gli effetti principali sono interpretabili separatamente.',
-          'Il modello assume sfericità per il fattore within con più di due livelli; senza correzione i test within possono essere anti-conservativi.',
+          'Il modello assume sfericità per il fattore within con più di due livelli; la tabella riporta Mauchly, epsilon e p corrette GG.',
         ],
       },
     ],

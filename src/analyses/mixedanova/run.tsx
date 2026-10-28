@@ -34,7 +34,7 @@ export const buildMixedAnovaOutput = ({ grid, params, ciLevel }: MixedAnovaInput
   }
   const conditionNames = params.conditions.map(index => grid.cols[index]?.name ?? `C${index + 1}`);
   const groupName = grid.cols[params.group]?.name ?? 'Group';
-  const tables = mixedAnovaTables(stats, conditionNames, groupName);
+  const tables = mixedAnovaTables(stats, conditionNames, groupName, ciLevel);
   return {
     ok: true,
     tables,

@@ -24,4 +24,28 @@ export interface MixedAnovaStats {
   conditionMeans: number[];
   cellMeans: number[][];
   effects: MixedAnovaEffect[];
+  sphericity: {
+    w: number;
+    chi2: number;
+    df: number;
+    p: number;
+    ggEpsilon: number;
+    hfEpsilon: number;
+  };
+  pGGTime: number;
+  pGGInteraction: number;
+  contrasts: MixedAnovaContrast[];
+}
+
+export interface MixedAnovaContrast {
+  source: string;
+  a: string;
+  b: string;
+  diff: number;
+  se: number;
+  t: number;
+  p: number;
+  adjusted: number;
+  lo: number;
+  hi: number;
 }

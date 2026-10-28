@@ -4,7 +4,8 @@ import type { MixedAnovaStats } from '../mixedanova/types';
 export const mixedAnovaTables = (
   stats: MixedAnovaStats,
   conditionNames: string[],
-  groupName: string
+  groupName: string,
+  level: number
 ): TableSpec[] => [
   {
     id: 'mixed-cells',
@@ -44,7 +45,56 @@ export const mixedAnovaTables = (
     rows: stats.effects.map(effect => ({ ...effect })),
     notes: [
       'Il fattore between è testato sui soggetti within-groups; il fattore within e l’interazione sull’errore within.',
-      'Con più di due condizioni within l’assunzione di sfericità va controllata: qui non è applicata una correzione automatica.',
+      'Con più di due condizioni within l’assunzione di sfericità è controllata nella tabella dedicata.',
     ],
+  },
+  {
+    id: 'mixed-sphericity',
+    title: 'Sfericità e correzioni',
+    subtitle: `Mauchly · CI ${level}%`,
+    columns: [
+      { key: 'metric', label: 'Metrica', format: 'text' },
+      { key: 'value', label: 'Valore', format: 'dec4' },
+    ],
+    rows: [
+      { metric: 'Mauchly W', value: stats.sphericity.w },
+      { metric: 'Mauchly χ²', value: stats.sphericity.chi2 },
+      { metric: 'df', value: stats.sphericity.df },
+      { metric: 'p Mauchly', value: stats.sphericity.p },
+      { metric: 'GG epsilon', value: stats.sphericity.ggEpsilon },
+      { metric: 'HF epsilon', value: stats.sphericity.hfEpsilon },
+      { metric: 'p Time (GG)', value: stats.pGGTime },
+      { metric: 'p Group×Time (GG)', value: stats.pGGInteraction },
+    ],
+    notes: [
+      'Mauchly testa la sfericità della matrice di covarianza within.',
+      'Le p corrette GG usano epsilon di Greenhouse–Geisser; con epsilon vicino a 1 la correzione è minima.',
+    ],
+  },
+  {
+    id: 'mixed-contrasts',
+    title: 'Contrasti pairwise (Holm)',
+    columns: [
+      { key: 'source', label: 'Fonte', format: 'text' },
+      { key: 'a', label: 'A', format: 'text' },
+      { key: 'b', label: 'B', format: 'text' },
+      { key: 'diff', label: 'Differenza', format: 'dec4' },
+      { key: 'se', label: 'SE', format: 'dec4' },
+      { key: 't', label: 't', format: 'dec3' },
+      { key: 'p', label: 'p', format: 'p' },
+      { key: 'adjusted', label: 'p Holm', format: 'p' },
+      { key: 'lo', label: 'CI low', format: 'dec4' },
+      { key: 'hi', label: 'CI high', format: 'dec4' },
+    ],
+    rows: stats.contrasts.map(contrast => ({
+      ...contrast,
+      a: contrast.source === 'Time'
+        ? conditionNames[Number(contrast.a.slice(1)) - 1] ?? contrast.a
+        : contrast.a,
+      b: contrast.source === 'Time'
+        ? conditionNames[Number(contrast.b.slice(1)) - 1] ?? contrast.b
+        : contrast.b,
+    })),
+    notes: ['Confronti tra gruppi sulle medie marginali e tra condizioni within; p aggiustati con Holm.'],
   },
 ];

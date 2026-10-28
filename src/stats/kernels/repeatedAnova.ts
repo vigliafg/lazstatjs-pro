@@ -47,6 +47,58 @@ const contrastCovariance = (S: number[][], C: number[][]): number[][] => {
   );
 };
 
+
+export interface SphericityResult {
+  w: number;
+  chi2: number;
+  df: number;
+  p: number;
+  ggEpsilon: number;
+  hfEpsilon: number;
+}
+
+/** Mauchly e epsilon di Greenhouse–Geisser/Huynh–Feldt da una covarianza within. */
+export const sphericityFromCovariance = (
+  covarianceMatrix: number[][],
+  n: number,
+  k: number
+): SphericityResult => {
+  const C = helmertContrasts(k);
+  const M = contrastCovariance(covarianceMatrix, C);
+  const eigen = eigenSymmetric(M);
+  const values = eigen.values;
+  const d = k - 1;
+  const trace = values.reduce((sum, value) => sum + value, 0);
+  const mauchlyDf = (d * (d + 1)) / 2 - 1;
+
+  let mauchlyW = NaN;
+  let mauchlyChi2 = NaN;
+  let mauchlyP = NaN;
+  if (values.some((value) => value <= 0) || !(trace > 0)) {
+    mauchlyW = 0;
+    mauchlyP = 0;
+  } else {
+    const logDet = values.reduce((sum, value) => sum + Math.log(value), 0);
+    mauchlyW = Math.exp(logDet - d * Math.log(trace / d));
+    const dfResid = n - 1;
+    const correction = 1 - (2 * d * d + d + 2) / (6 * d * dfResid);
+    mauchlyChi2 = -dfResid * correction * Math.log(mauchlyW);
+    const w2 =
+      ((d + 2) * (d - 1) * (d - 2) * (2 * d ** 3 + 6 * d ** 2 + 3 * k + 2)) /
+      (288 * (dfResid * d * correction) ** 2);
+    const p1 = chi2SF(mauchlyChi2, mauchlyDf);
+    const p2 = chi2SF(mauchlyChi2, mauchlyDf + 4);
+    mauchlyP = Math.min(1, Math.max(0, p1 + w2 * (p2 - p1)));
+  }
+
+  const sumSquares = values.reduce((sum, value) => sum + value * value, 0);
+  const ggEpsilon = sumSquares > 0 ? Math.min(1, (trace * trace) / (d * sumSquares)) : 1;
+  const lowerBound = 1 / d;
+  const hfRaw = (n * d * ggEpsilon - 2) / (d * (n - 1 - d * ggEpsilon));
+  const hfEpsilon = Math.max(lowerBound, Math.min(1, hfRaw));
+  return { w: mauchlyW, chi2: mauchlyChi2, df: mauchlyDf, p: mauchlyP, ggEpsilon, hfEpsilon };
+};
+
 export const repeatedMeasuresAnova = (blocks: number[][]): RmAnovaResult | null => {
   if (blocks.length < 2) return null;
   const k = blocks[0].length;
@@ -77,39 +129,13 @@ export const repeatedMeasuresAnova = (blocks: number[][]): RmAnovaResult | null 
   const p = fSF(f, dfConditions, dfError);
 
   const S = covariance(blocks, k, means, n);
-  const C = helmertContrasts(k);
-  const M = contrastCovariance(S, C);
-  const eigen = eigenSymmetric(M);
-  const values = eigen.values;
-  const d = k - 1;
-  const trace = values.reduce((sum, value) => sum + value, 0);
-
-  let mauchlyW = NaN;
-  let mauchlyChi2 = NaN;
-  let mauchlyP = NaN;
-  const mauchlyDf = (d * (d + 1)) / 2 - 1;
-  if (values.some((value) => value <= 0) || !(trace > 0)) {
-    mauchlyW = 0;
-    mauchlyP = 0;
-  } else {
-    const logDet = values.reduce((sum, value) => sum + Math.log(value), 0);
-    mauchlyW = Math.exp(logDet - d * Math.log(trace / d));
-    const dfResid = n - 1;
-    const correction = 1 - (2 * d * d + d + 2) / (6 * d * dfResid);
-    mauchlyChi2 = -dfResid * correction * Math.log(mauchlyW);
-    const w2 =
-      ((d + 2) * (d - 1) * (d - 2) * (2 * d ** 3 + 6 * d ** 2 + 3 * k + 2)) /
-      (288 * (dfResid * d * correction) ** 2);
-    const p1 = chi2SF(mauchlyChi2, mauchlyDf);
-    const p2 = chi2SF(mauchlyChi2, mauchlyDf + 4);
-    mauchlyP = Math.min(1, Math.max(0, p1 + w2 * (p2 - p1)));
-  }
-
-  const sumSquares = values.reduce((sum, value) => sum + value * value, 0);
-  const ggEpsilon = sumSquares > 0 ? Math.min(1, (trace * trace) / (d * sumSquares)) : 1;
-  const lowerBound = 1 / d;
-  const hfRaw = (n * d * ggEpsilon - 2) / (d * (n - 1 - d * ggEpsilon));
-  const hfEpsilon = Math.max(lowerBound, Math.min(1, hfRaw));
+  const sphericity = sphericityFromCovariance(S, n, k);
+  const mauchlyW = sphericity.w;
+  const mauchlyChi2 = sphericity.chi2;
+  const mauchlyDf = sphericity.df;
+  const mauchlyP = sphericity.p;
+  const ggEpsilon = sphericity.ggEpsilon;
+  const hfEpsilon = sphericity.hfEpsilon;
   const pGG = fSF(f, Math.max(1, ggEpsilon * dfConditions), Math.max(1, ggEpsilon * dfError));
   const pHF = fSF(f, Math.max(1, hfEpsilon * dfConditions), Math.max(1, hfEpsilon * dfError));
 

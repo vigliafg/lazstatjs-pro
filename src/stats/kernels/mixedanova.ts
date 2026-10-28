@@ -1,6 +1,7 @@
 import { parseNum } from '../core';
-import { fSF } from '../distributions';
-import type { MixedAnovaEffect, MixedAnovaOptions, MixedAnovaStats } from '../mixedanova/types';
+import { fSF, holmAdjust, tCrit, twoSidedTP } from '../distributions';
+import { sphericityFromCovariance } from './repeatedAnova';
+import type { MixedAnovaContrast, MixedAnovaEffect, MixedAnovaOptions, MixedAnovaStats } from '../mixedanova/types';
 
 /** ANOVA mista split-plot: un fattore between e uno within. */
 export const mixedAnovaStats = (options: MixedAnovaOptions): MixedAnovaStats | null => {
@@ -126,6 +127,66 @@ export const mixedAnovaStats = (options: MixedAnovaOptions): MixedAnovaStats | n
     },
   ];
 
+  const residuals = complete.map((entry, index) =>
+    entry.values.map((value, j) => value - cellMeans[groupIndex[index]][j])
+  );
+  const covarianceMatrix = Array.from({ length: k }, () => new Array<number>(k).fill(0));
+  residuals.forEach(row => {
+    for (let i = 0; i < k; i++) {
+      for (let j = 0; j < k; j++) covarianceMatrix[i][j] += row[i] * row[j];
+    }
+  });
+  for (let i = 0; i < k; i++) {
+    for (let j = 0; j < k; j++) covarianceMatrix[i][j] /= Math.max(1, n - g);
+  }
+  const sphericity = sphericityFromCovariance(covarianceMatrix, n - g, k);
+  const pGGTime = fSF(msTime / msErrorWithin, Math.max(1, dfTime * sphericity.ggEpsilon), Math.max(1, dfErrorWithin * sphericity.ggEpsilon));
+  const pGGInteraction = fSF(
+    msInteraction / msErrorWithin,
+    Math.max(1, dfInteraction * sphericity.ggEpsilon),
+    Math.max(1, dfErrorWithin * sphericity.ggEpsilon)
+  );
+
+  const groupContrasts: MixedAnovaContrast[] = [];
+  for (let i = 0; i < g; i++) {
+    for (let j = i + 1; j < g; j++) {
+      const diff = groupMeans[i] - groupMeans[j];
+      const se = Math.sqrt(msSubjectsWithin * (1 / groupSizes[i] + 1 / groupSizes[j]));
+      const t = se > 0 ? diff / se : NaN;
+      groupContrasts.push({
+        source: 'Group', a: groups[i], b: groups[j], diff, se, t,
+        p: twoSidedTP(t, dfSubjectsWithin), adjusted: NaN, lo: NaN, hi: NaN,
+      });
+    }
+  }
+  const groupAdjusted = holmAdjust(groupContrasts.map(row => row.p));
+  groupContrasts.forEach((row, index) => {
+    row.adjusted = groupAdjusted[index];
+    const crit = tCrit(options.level, dfSubjectsWithin);
+    row.lo = row.diff - crit * row.se;
+    row.hi = row.diff + crit * row.se;
+  });
+
+  const timeContrasts: MixedAnovaContrast[] = [];
+  for (let i = 0; i < k; i++) {
+    for (let j = i + 1; j < k; j++) {
+      const diff = conditionMeans[i] - conditionMeans[j];
+      const se = Math.sqrt((2 * msErrorWithin) / n);
+      const t = se > 0 ? diff / se : NaN;
+      timeContrasts.push({
+        source: 'Time', a: `C${i + 1}`, b: `C${j + 1}`, diff, se, t,
+        p: twoSidedTP(t, dfErrorWithin), adjusted: NaN, lo: NaN, hi: NaN,
+      });
+    }
+  }
+  const timeAdjusted = holmAdjust(timeContrasts.map(row => row.p));
+  timeContrasts.forEach((row, index) => {
+    row.adjusted = timeAdjusted[index];
+    const crit = tCrit(options.level, dfErrorWithin);
+    row.lo = row.diff - crit * row.se;
+    row.hi = row.diff + crit * row.se;
+  });
+
   return {
     n,
     groups,
@@ -135,5 +196,9 @@ export const mixedAnovaStats = (options: MixedAnovaOptions): MixedAnovaStats | n
     conditionMeans,
     cellMeans,
     effects,
+    sphericity,
+    pGGTime,
+    pGGInteraction,
+    contrasts: [...groupContrasts, ...timeContrasts],
   };
 };

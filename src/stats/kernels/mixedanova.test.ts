@@ -37,6 +37,13 @@ test('mixed ANOVA matches aov(y ~ group*time + Error(subject/time))', () => {
   assert.equal(time.df, 2);
   assert.equal(interaction.df, 4);
   assert.equal(error.df, 18);
+  assert.ok(stats.sphericity.ggEpsilon > 0 && stats.sphericity.ggEpsilon <= 1);
+  assert.ok(stats.sphericity.hfEpsilon >= 1 / (stats.conditions.length - 1));
+  assert.ok(stats.pGGTime >= 0 && stats.pGGTime <= 1);
+  assert.ok(stats.pGGInteraction >= 0 && stats.pGGInteraction <= 1);
+  assert.equal(stats.contrasts.filter(row => row.source === 'Group').length, 3);
+  assert.equal(stats.contrasts.filter(row => row.source === 'Time').length, 3);
+  assert.ok(stats.contrasts.every(row => Number.isFinite(row.adjusted)));
 });
 
 test('mixed ANOVA rejects missing groups or too few conditions', () => {
