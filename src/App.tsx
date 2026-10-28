@@ -68,6 +68,7 @@ import {
   type TostParams,
   type AgreementParams,
   type CountParams,
+  type LmmParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -326,6 +327,10 @@ export default function App() {
     boot?.params.countreg ?? DEFAULT_PARAMS.countreg
   );
 
+  const [lmmParams, setLmmParams] = useState<LmmParams>(
+    boot?.params.lmm ?? DEFAULT_PARAMS.lmm
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -355,8 +360,9 @@ export default function App() {
       tost: tostParams,
       agreement: agreementParams,
       countreg: countParams,
+      lmm: lmmParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -392,6 +398,7 @@ export default function App() {
     setTostParams(project.params.tost);
     setAgreementParams(project.params.agreement);
     setCountParams(project.params.countreg);
+    setLmmParams(project.params.lmm);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -547,6 +554,8 @@ export default function App() {
             setAgreementParams={setAgreementParams}
             countParams={countParams}
             setCountParams={setCountParams}
+            lmmParams={lmmParams}
+            setLmmParams={setLmmParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

@@ -167,6 +167,13 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri del modello lineare misto a intercetta casuale. */
+export interface LmmParams {
+  dep: number;
+  indeps: number[];
+  group: number;
+}
+
 /** Parametri della regressione per conteggi. */
 export interface CountParams {
   dep: number;
@@ -222,6 +229,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  lmm: LmmParams;
   countreg: CountParams;
   agreement: AgreementParams;
   tost: TostParams;
@@ -348,6 +356,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  lmm: {
+    dep: 0,
+    indeps: [1],
+    group: 2,
   },
   countreg: {
     dep: 0,

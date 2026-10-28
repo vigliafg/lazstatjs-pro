@@ -23,9 +23,10 @@ import { WizardForm } from '../analyses/wizard/Form';
 import { TostForm } from '../analyses/tost/Form';
 import { AgreementForm } from '../analyses/agreement/Form';
 import { CountForm } from '../analyses/countreg/Form';
+import { LmmForm } from '../analyses/lmm/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -76,6 +77,8 @@ export interface AnalysisTabProps {
   setAgreementParams: Dispatch<SetStateAction<AgreementParams>>;
   countParams: CountParams;
   setCountParams: Dispatch<SetStateAction<CountParams>>;
+  lmmParams: LmmParams;
+  setLmmParams: Dispatch<SetStateAction<LmmParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -139,6 +142,8 @@ export const AnalysisTab = ({
   setAgreementParams,
   countParams,
   setCountParams,
+  lmmParams,
+  setLmmParams,
   grid,
   outputs,
   removeOutput,
@@ -309,6 +314,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'lmm' && (
+        <LmmForm grid={grid} lmmParams={lmmParams} setLmmParams={setLmmParams} />
       )}
 
       {activeAnalysis === 'countreg' && (

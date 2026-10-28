@@ -16,6 +16,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'descriptive',
     'distfit',
     'factorial',
+    'lmm',
     'logistic',
     'multivariate',
     'nonparamrm',

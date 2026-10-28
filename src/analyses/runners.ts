@@ -23,6 +23,7 @@ import { buildWizardOutput } from './wizard/run';
 import { buildTostOutput } from './tost/run';
 import { buildAgreementOutput } from './agreement/run';
 import { buildCountOutput } from './countreg/run';
+import { buildLmmOutput } from './lmm/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -87,4 +88,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildAgreementOutput({ grid, params: params.agreement, ciLevel }),
   countreg: ({ grid, params, ciLevel }) =>
     buildCountOutput({ grid, params: params.countreg, ciLevel }),
+  lmm: ({ grid, params, ciLevel }) =>
+    buildLmmOutput({ grid, params: params.lmm, ciLevel }),
 };
