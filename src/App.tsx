@@ -72,6 +72,7 @@ import {
   type OrdinalParams,
   type MiParams,
   type MixedAnovaParams,
+  type ParametricSurvivalParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -346,6 +347,10 @@ export default function App() {
     boot?.params.mixedanova ?? DEFAULT_PARAMS.mixedanova
   );
 
+  const [parametricParams, setParametricParams] = useState<ParametricSurvivalParams>(
+    boot?.params.parametric ?? DEFAULT_PARAMS.parametric
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -379,8 +384,9 @@ export default function App() {
       ordinal: ordinalParams,
       mi: miParams,
       mixedanova: mixedAnovaParams,
+      parametric: parametricParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -420,6 +426,7 @@ export default function App() {
     setOrdinalParams(project.params.ordinal);
     setMiParams(project.params.mi);
     setMixedAnovaParams(project.params.mixedanova);
+    setParametricParams(project.params.parametric);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -583,6 +590,8 @@ export default function App() {
             setMiParams={setMiParams}
             mixedAnovaParams={mixedAnovaParams}
             setMixedAnovaParams={setMixedAnovaParams}
+            parametricParams={parametricParams}
+            setParametricParams={setParametricParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

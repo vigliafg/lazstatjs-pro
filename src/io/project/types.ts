@@ -168,6 +168,14 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri della sopravvivenza parametrica. */
+export interface ParametricSurvivalParams {
+  time: number;
+  event: number;
+  predictors: number[];
+  distribution: 'weibull' | 'exponential';
+}
+
 /** Parametri dell'ANOVA mista between-within. */
 export interface MixedAnovaParams {
   group: number;
@@ -249,6 +257,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  parametric: ParametricSurvivalParams;
   mixedanova: MixedAnovaParams;
   mi: MiParams;
   ordinal: OrdinalParams;
@@ -380,6 +389,12 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  parametric: {
+    time: 0,
+    event: 2,
+    predictors: [1],
+    distribution: 'weibull',
   },
   mixedanova: {
     group: 2,

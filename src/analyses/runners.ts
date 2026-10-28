@@ -27,6 +27,7 @@ import { buildLmmOutput } from './lmm/run';
 import { buildOrdinalOutput } from './ordinal/run';
 import { buildMiOutput } from './mi/run';
 import { buildMixedAnovaOutput } from './mixedanova/run';
+import { buildParametricOutput } from './parametric/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -99,4 +100,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildMiOutput({ grid, params: params.mi, ciLevel }),
   mixedanova: ({ grid, params, ciLevel }) =>
     buildMixedAnovaOutput({ grid, params: params.mixedanova, ciLevel }),
+  parametric: ({ grid, params, ciLevel }) =>
+    buildParametricOutput({ grid, params: params.parametric, ciLevel }),
 };

@@ -31,8 +31,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [x] **ANOVA mista (split-plot)**: un fattore between, condizioni within,
       interazione e medie cella; validata contro aov. Restano sfericità,
       contrasti e EM means.
-- [ ] **Sopravvivenza estesa**: Cox stratificato, covariate tempo-dipendenti,
-      sopravvivenza parametrica.
+- [x] **Sopravvivenza parametrica**: Weibull ed esponenziale AFT, time ratio e
+      CI; validata contro survival::survreg. Restano Cox stratificato e
+      covariate tempo-dipendenti.
 - [ ] **Bootstrap e permutazione** come inferenza trasversale.
 - [ ] **Potenza estesa**: mixed, survival, equivalenza.
 

@@ -23,6 +23,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'multivariate',
     'nonparamrm',
     'ordinal',
+    'parametric',
     'regression',
     'repeatedanova',
     'samplesize',
