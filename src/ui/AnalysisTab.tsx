@@ -7,6 +7,7 @@ import { useRecentAnalyses } from './analysis/useRecentAnalyses';
 import type { AnalysisTabProps } from './analysis/types';
 import { AnalysisStoreProvider } from './analysis/store';
 import { OutputConsole } from './OutputConsole';
+import { t } from '../i18n';
 
 type Pane = 'library' | 'options' | 'output';
 
@@ -139,7 +140,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
                 pane === item ? 'bg-accent text-white' : 'text-text3 hover:text-text2'
               }`}
             >
-              {item === 'options' ? 'Setup' : item}
+              {item === 'options' ? t('analysis.setup') : t(`analysis.${item}` as 'analysis.library' | 'analysis.output')}
             </button>
           ))}
         </div>
@@ -155,7 +156,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             title={showLibrary ? 'Hide the analysis library' : 'Show the analysis library'}
           >
             <PanelLeft className="h-3 w-3" />
-            Library
+            {t('analysis.library')}
           </button>
           <button
             type="button"
@@ -167,7 +168,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             title={showOptions ? 'Hide the setup panel' : 'Show the setup panel'}
           >
             <SlidersHorizontal className="h-3 w-3" />
-            Setup
+            {t('analysis.setup')}
           </button>
         </div>
 

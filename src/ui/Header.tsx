@@ -1,5 +1,6 @@
 import { BarChart3, Database, HelpCircle, Settings } from 'lucide-react';
 import type { ProjectTab } from '../io/project';
+import { t } from '../i18n';
 
 export interface HeaderProps {
   activeTab: ProjectTab;
@@ -13,7 +14,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
       <div className="flex h-5 w-5 items-center justify-center rounded border border-accent/30 bg-accent/10">
         <BarChart3 className="h-3 w-3 text-accent" />
       </div>
-      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-text2">LazStats</span>
+      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-text2">{t('app.name')}</span>
     </div>
 
     <button
@@ -22,7 +23,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
       title="Data editor"
     >
       <Database className="mr-2 inline h-3 w-3" />
-      Data
+      {t('nav.data')}
     </button>
     <button
       onClick={() => setActiveTab('analysis')}
@@ -30,7 +31,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
       title="Analysis workbench"
     >
       <BarChart3 className="mr-2 inline h-3 w-3" />
-      Analysis
+      {t('nav.analysis')}
     </button>
     <button
       onClick={() => setActiveTab('settings')}
@@ -38,7 +39,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
       title="Settings"
     >
       <Settings className="mr-2 inline h-3 w-3" />
-      Settings
+      {t('nav.settings')}
     </button>
     <button
       onClick={() => setActiveTab('help')}
@@ -46,7 +47,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
       title="Help and examples"
     >
       <HelpCircle className="mr-2 inline h-3 w-3" />
-      Help
+      {t('nav.help')}
     </button>
   </div>
 );

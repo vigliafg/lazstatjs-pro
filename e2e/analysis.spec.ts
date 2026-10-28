@@ -9,7 +9,7 @@ const openAnova = async (page: Page) => {
 test('search, select and run an analysis', async ({ page, isMobile }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Analysis', exact: true }).click();
-  if (isMobile) await page.getByRole('button', { name: 'library', exact: true }).click();
+  if (isMobile) await page.getByRole('button', { name: 'Library', exact: true }).click();
   await page.getByLabel('Search analyses').fill('ANOVA');
   await page.locator('button[title="Compare means across groups with post-hoc tests."]').click();
   await expect(page.getByRole('heading', { name: 'ANOVA' })).toBeVisible();
@@ -61,7 +61,7 @@ test('runs an analysis on the mobile layout', async ({ page, isMobile }) => {
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Analysis', exact: true }).click();
-  await page.getByRole('button', { name: 'library', exact: true }).click();
+  await page.getByRole('button', { name: 'Library', exact: true }).click();
   await page.getByLabel('Search analyses').fill('ANOVA');
   await page.locator('button[title="Compare means across groups with post-hoc tests."]').click();
   await page.getByRole('button', { name: 'Run analysis' }).click();

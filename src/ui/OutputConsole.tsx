@@ -19,6 +19,7 @@ import {
 import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
 import { copyText } from '../io/clipboard';
+import { t } from '../i18n';
 
 /** Un blocco della console: React live nella sessione, HTML quando ripristinato. */
 export interface OutputEntry extends StoredOutput {
@@ -168,7 +169,7 @@ export const OutputConsole = ({
         <div className="flex min-w-0 items-center gap-2">
           <FileText className="h-3.5 w-3.5 shrink-0 text-accent2" />
           <span className="font-mono text-[10px] uppercase tracking-widest text-text3">
-            Output
+            {t('output.title')}
           </span>
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
             {outputs.length} run{outputs.length === 1 ? '' : 's'}
@@ -198,7 +199,7 @@ export const OutputConsole = ({
             aria-label="Open the data editor"
           >
             <Database className="h-3 w-3" />
-            <span className="hidden xl:inline">Data</span>
+            <span className="hidden xl:inline">{t('output.data')}</span>
           </button>
           <button
             type="button"
@@ -209,7 +210,7 @@ export const OutputConsole = ({
             aria-label="Clear every result block"
           >
             <Trash2 className="h-3 w-3" />
-            <span className="hidden xl:inline">Clear</span>
+            <span className="hidden xl:inline">{t('output.clear')}</span>
           </button>
           <button
             type="button"
@@ -220,7 +221,7 @@ export const OutputConsole = ({
             aria-label="Copy the output as text"
           >
             <Copy className="h-3 w-3" />
-            <span className="hidden xl:inline">Copy</span>
+            <span className="hidden xl:inline">{t('output.copy')}</span>
           </button>
           <button
             type="button"
@@ -231,7 +232,7 @@ export const OutputConsole = ({
             aria-label="Download every chart as PNG"
           >
             <Image className="h-3 w-3" />
-            <span className="hidden xl:inline">Charts</span>
+            <span className="hidden xl:inline">{t('output.charts')}</span>
           </button>
           <button
             type="button"
@@ -242,7 +243,7 @@ export const OutputConsole = ({
             aria-label="Download a printable HTML report"
           >
             <FileCode2 className="h-3 w-3" />
-            <span className="hidden xl:inline">Report</span>
+            <span className="hidden xl:inline">{t('output.report')}</span>
           </button>
           <button
             type="button"
@@ -253,7 +254,7 @@ export const OutputConsole = ({
             aria-label="Download the dataset and result tables as Excel"
           >
             <Table2 className="h-3 w-3" />
-            <span className="hidden xl:inline">XLSX</span>
+            <span className="hidden xl:inline">{t('output.xlsx')}</span>
           </button>
         </div>
       </div>
@@ -291,7 +292,7 @@ export const OutputConsole = ({
         {outputs.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-3 text-text3 opacity-70">
             <FileText className="h-10 w-10" />
-            <p className="font-mono text-[11px] uppercase tracking-widest">No analysis output yet</p>
+            <p className="font-mono text-[11px] uppercase tracking-widest">{t('output.empty')}</p>
             <p className="max-w-xs text-center text-[10px] leading-relaxed">
               Choose a procedure from the library, set the variables, then run it.
             </p>
