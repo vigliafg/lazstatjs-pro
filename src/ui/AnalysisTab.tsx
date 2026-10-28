@@ -18,12 +18,12 @@ import { AncovaForm } from '../analyses/ancova/Form';
 import { FactorialForm } from '../analyses/factorial/Form';
 import { RepeatedAnovaForm } from '../analyses/repeatedanova/Form';
 import { MultivariateForm } from '../analyses/multivariate/Form';
-import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
+import { NonParamForm } from '../analyses/nonparamrm/Form';
 import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -64,6 +64,8 @@ export interface AnalysisTabProps {
   setRepeatedAnovaParams: Dispatch<SetStateAction<RepeatedAnovaParams>>;
   multivariateParams: MultivariateParams;
   setMultivariateParams: Dispatch<SetStateAction<MultivariateParams>>;
+  nonParamParams: NonParamParams;
+  setNonParamParams: Dispatch<SetStateAction<NonParamParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -120,6 +122,8 @@ export const AnalysisTab = ({
   setRepeatedAnovaParams,
   multivariateParams,
   setMultivariateParams,
+  nonParamParams,
+  setNonParamParams,
   grid,
   outputs,
   removeOutput,
@@ -286,14 +290,12 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'nonparamrm' && (
-        <NonParamRepeatedAnalysis
-          runSignal={runSignal}
+        <NonParamForm
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+          nonParamParams={nonParamParams}
+          setNonParamParams={setNonParamParams}
         />
       )}
 

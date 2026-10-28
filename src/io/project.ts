@@ -167,6 +167,18 @@ export interface MultivariateParams {
   selected: number[];
 }
 
+export type NonParamMode = 'friedman' | 'mcnemar' | 'cochran' | 'jonckheere';
+
+/** Parametri dei test non parametrici per misure ripetute. */
+export interface NonParamParams {
+  mode: NonParamMode;
+  selected: number[];
+  left: number;
+  right: number;
+  outcome: number;
+  group: number;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -185,6 +197,7 @@ export interface ProjectParams {
   factorial: FactorialParams;
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
+  nonparamrm: NonParamParams;
 }
 
 export interface ProjectSettings {
@@ -297,6 +310,14 @@ export const DEFAULT_PARAMS: ProjectParams = {
     mode: 'pca',
     standardize: true,
     selected: [0, 1, 2],
+  },
+  nonparamrm: {
+    mode: 'friedman',
+    selected: [0, 1, 2],
+    left: 0,
+    right: 1,
+    outcome: 0,
+    group: 1,
   },
 };
 
@@ -520,6 +541,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const factorial = isRecord(raw.factorial) ? raw.factorial : {};
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
+  const nonparamrm = isRecord(raw.nonparamrm) ? raw.nonparamrm : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -653,6 +675,17 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       mode: multivariate.mode === 'alpha' ? 'alpha' : d.multivariate.mode,
       standardize: bool(multivariate.standardize, d.multivariate.standardize),
       selected: indexList(multivariate.selected, d.multivariate.selected, width),
+    },
+    nonparamrm: {
+      mode:
+        nonparamrm.mode === 'mcnemar' || nonparamrm.mode === 'cochran' || nonparamrm.mode === 'jonckheere'
+          ? nonparamrm.mode
+          : d.nonparamrm.mode,
+      selected: indexList(nonparamrm.selected, d.nonparamrm.selected, width),
+      left: index(nonparamrm.left, d.nonparamrm.left, width),
+      right: index(nonparamrm.right, d.nonparamrm.right, width),
+      outcome: index(nonparamrm.outcome, d.nonparamrm.outcome, width),
+      group: index(nonparamrm.group, d.nonparamrm.group, width),
     },
   };
 };

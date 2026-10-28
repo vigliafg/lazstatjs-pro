@@ -401,6 +401,32 @@ describe('project sanitisation', () => {
     assert.deepEqual(restored.params.multivariate.selected, [0, 1]);
   });
 
+  it('restores and sanitises non-parametric parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          nonparamrm: {
+            mode: 'jonckheere',
+            selected: [0, 9, 1],
+            left: 99,
+            right: -2,
+            outcome: 1,
+            group: 0,
+          },
+        },
+      })
+    );
+    assert.equal(restored.params.nonparamrm.mode, 'jonckheere');
+    assert.deepEqual(restored.params.nonparamrm.selected, [0, 1]);
+    assert.equal(restored.params.nonparamrm.left, 2);
+    assert.equal(restored.params.nonparamrm.right, 0);
+    assert.equal(restored.params.nonparamrm.outcome, 1);
+    assert.equal(restored.params.nonparamrm.group, 0);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {
