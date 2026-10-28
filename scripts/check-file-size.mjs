@@ -11,7 +11,7 @@ import { join, relative, sep } from 'node:path';
 const LIMIT = 700;
 const EXCEPTIONS = new Map([
   ['src/help/helpContent.ts', 1474], // contenuto statico, non logica
-  ['src/stats/arima.ts', 1304], // kernel numerico compatto
+  ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
   ['src/stats/report.ts', 898], // prosa dei report
   ['src/io/project.ts', 855], // schema .lzs (da spezzare in Fase 3/4)
   ['src/stats/cox.ts', 818], // kernel numerico compatto
