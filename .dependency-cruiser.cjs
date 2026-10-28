@@ -58,6 +58,20 @@ module.exports = {
       to: { path: '^src/stats/kernels/' },
     },
     {
+      name: 'ui-non-importa-kernel-o-tabelle',
+      severity: 'error',
+      comment: 'La UI compone form e builder: non legge direttamente numeri o tabelle.',
+      from: { path: '^src/ui/' },
+      to: { path: '^src/stats/(kernels|tables)/' },
+    },
+    {
+      name: 'hooks-e-io-non-importano-kernel-o-tabelle',
+      severity: 'error',
+      comment: 'Hook e I/O passano dai barrel pubblici, non dai livelli interni di stats.',
+      from: { path: '^src/(hooks|io)/' },
+      to: { path: '^src/stats/(kernels|tables)/' },
+    },
+    {
       name: 'analyses-non-dipendono-dalla-ui',
       severity: 'error',
       comment: 'analysis/ descrive form e calcolo: la UI li compone, non viceversa.',

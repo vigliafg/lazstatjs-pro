@@ -29,6 +29,8 @@ Le regole attuali (`.dependency-cruiser.cjs`) vietano:
 - `stats/kernels/` verso `stats/tables/` e `stats/reports/`;
 - `stats/tables/` verso `stats/reports/`;
 - `stats/reports/` verso `stats/kernels/` (la prosa legge solo le tabelle);
+- `ui/` verso `stats/kernels/` e `stats/tables/`;
+- `hooks/` e `io/` verso `stats/kernels/` e `stats/tables/` (passano dai barrel);
 - `grid/` verso `ui/`, `analyses/`, `hooks/`, `io/`;
 - `components/` verso `ui/`, `analyses/`, `hooks/`;
 - `io/` verso `ui/`, `analyses/`, `hooks/`;
