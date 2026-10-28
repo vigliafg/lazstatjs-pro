@@ -4,9 +4,19 @@ import type { CategoryLevel, GridData } from './types';
 const CAP = 50;
 
 const clone = (g: GridData): GridData => ({
-  cols: g.cols.map((c) => ({ ...c, levels: c.levels?.map((level) => ({ ...level })) })),
+  cols: g.cols.map((c) => ({
+    ...c,
+    levels: c.levels?.map((level) => ({ ...level })),
+    missing: c.missing ? [...c.missing] : undefined,
+  })),
   rows: g.rows.map((r) => [...r]),
 });
+
+const sameStrings = (a?: string[], b?: string[]): boolean => {
+  const left = a ?? [];
+  const right = b ?? [];
+  return left.length === right.length && left.every((value, i) => value === right[i]);
+};
 
 const sameLevels = (a?: CategoryLevel[], b?: CategoryLevel[]): boolean => {
   const left = a ?? [];
@@ -27,7 +37,8 @@ const sameGrid = (a: GridData, b: GridData): boolean =>
       c.label === b.cols[i]?.label &&
       c.description === b.cols[i]?.description &&
       c.reference === b.cols[i]?.reference &&
-      sameLevels(c.levels, b.cols[i]?.levels)
+      sameLevels(c.levels, b.cols[i]?.levels) &&
+      sameStrings(c.missing, b.cols[i]?.missing)
   ) &&
   a.rows.every((r, i) => {
     const other = b.rows[i] ?? [];
