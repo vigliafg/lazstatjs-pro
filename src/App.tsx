@@ -69,6 +69,7 @@ import {
   type AgreementParams,
   type CountParams,
   type LmmParams,
+  type OrdinalParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -331,6 +332,10 @@ export default function App() {
     boot?.params.lmm ?? DEFAULT_PARAMS.lmm
   );
 
+  const [ordinalParams, setOrdinalParams] = useState<OrdinalParams>(
+    boot?.params.ordinal ?? DEFAULT_PARAMS.ordinal
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -361,8 +366,9 @@ export default function App() {
       agreement: agreementParams,
       countreg: countParams,
       lmm: lmmParams,
+      ordinal: ordinalParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -399,6 +405,7 @@ export default function App() {
     setAgreementParams(project.params.agreement);
     setCountParams(project.params.countreg);
     setLmmParams(project.params.lmm);
+    setOrdinalParams(project.params.ordinal);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -556,6 +563,8 @@ export default function App() {
             setCountParams={setCountParams}
             lmmParams={lmmParams}
             setLmmParams={setLmmParams}
+            ordinalParams={ordinalParams}
+            setOrdinalParams={setOrdinalParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

@@ -8,7 +8,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [x] **FDR / Benjamini–Hochberg**: kernel `stats/kernels/multiple.ts`,
       opzione post-hoc ANOVA e Dunn.
 - [x] **GLM (conteggi)**: Poisson e binomiale negativa NB2, IRR, dispersione,
-      LR, AIC/BIC. Restano logistico ordinale e Firth.
+      LR, AIC/BIC.
+- [x] **Logistico ordinale**: odds proporzionali con link logit, OR, soglie e
+      LR; validato contro `ordinal::clm`. Resta Firth per la logistica binaria.
 - [x] **Modelli misti (random intercept)**: LMM con intercetta casuale via REML,
       ICC e varianze; validato contro lme4. Restano slope casuali, GLMM e GEE.
 - [x] **EFA + omega**: principal-axis factoring, parallel analysis, varimax,

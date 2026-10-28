@@ -25,6 +25,7 @@ export const ANALYSIS_TABS = [
   { id: 'logistic', label: 'Logistic Regression' },
   { id: 'countreg', label: 'Count Regression' },
   { id: 'lmm', label: 'Mixed Model (LMM)' },
+  { id: 'ordinal', label: 'Ordinal Logistic' },
   { id: 'timeseries', label: 'Time Series' },
   { id: 'survival', label: 'Survival (KM)' },
   { id: 'cox', label: 'Cox (PH)' },

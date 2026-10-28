@@ -24,9 +24,10 @@ import { TostForm } from '../analyses/tost/Form';
 import { AgreementForm } from '../analyses/agreement/Form';
 import { CountForm } from '../analyses/countreg/Form';
 import { LmmForm } from '../analyses/lmm/Form';
+import { OrdinalForm } from '../analyses/ordinal/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -79,6 +80,8 @@ export interface AnalysisTabProps {
   setCountParams: Dispatch<SetStateAction<CountParams>>;
   lmmParams: LmmParams;
   setLmmParams: Dispatch<SetStateAction<LmmParams>>;
+  ordinalParams: OrdinalParams;
+  setOrdinalParams: Dispatch<SetStateAction<OrdinalParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -144,6 +147,8 @@ export const AnalysisTab = ({
   setCountParams,
   lmmParams,
   setLmmParams,
+  ordinalParams,
+  setOrdinalParams,
   grid,
   outputs,
   removeOutput,
@@ -314,6 +319,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'ordinal' && (
+        <OrdinalForm grid={grid} ordinalParams={ordinalParams} setOrdinalParams={setOrdinalParams} />
       )}
 
       {activeAnalysis === 'lmm' && (

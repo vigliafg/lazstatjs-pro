@@ -24,6 +24,7 @@ import { buildTostOutput } from './tost/run';
 import { buildAgreementOutput } from './agreement/run';
 import { buildCountOutput } from './countreg/run';
 import { buildLmmOutput } from './lmm/run';
+import { buildOrdinalOutput } from './ordinal/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -90,4 +91,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildCountOutput({ grid, params: params.countreg, ciLevel }),
   lmm: ({ grid, params, ciLevel }) =>
     buildLmmOutput({ grid, params: params.lmm, ciLevel }),
+  ordinal: ({ grid, params, ciLevel }) =>
+    buildOrdinalOutput({ grid, params: params.ordinal, ciLevel }),
 };
