@@ -286,6 +286,30 @@ describe('project sanitisation', () => {
     assert.equal(grouped.params.survival.groupVariable, 1);
   });
 
+  it('restores and sanitises time-series parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          timeseries: {
+            variable: 99,
+            period: 2,
+            horizon: 6,
+            differenceMode: 'bogus',
+            seasonalDifferenceMode: '2',
+          },
+        },
+      })
+    );
+    assert.equal(restored.params.timeseries.variable, 2);
+    assert.equal(restored.params.timeseries.period, 2);
+    assert.equal(restored.params.timeseries.horizon, 6);
+    assert.equal(restored.params.timeseries.differenceMode, 'auto');
+    assert.equal(restored.params.timeseries.seasonalDifferenceMode, 'auto');
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

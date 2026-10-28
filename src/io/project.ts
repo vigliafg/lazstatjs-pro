@@ -116,6 +116,18 @@ export interface SurvivalParams {
   groupVariable: number;
 }
 
+export type TimeSeriesDifferenceMode = 'auto' | '0' | '1' | '2';
+export type TimeSeriesSeasonalDifferenceMode = 'auto' | '0' | '1';
+
+/** Parametri della serie temporale (ARIMA/SARIMA + modelli semplici). */
+export interface TimeSeriesParams {
+  variable: number;
+  period: number;
+  horizon: number;
+  differenceMode: TimeSeriesDifferenceMode;
+  seasonalDifferenceMode: TimeSeriesSeasonalDifferenceMode;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -128,6 +140,7 @@ export interface ProjectParams {
   logistic: LogisticParams;
   cox: CoxParams;
   survival: SurvivalParams;
+  timeseries: TimeSeriesParams;
 }
 
 export interface ProjectSettings {
@@ -204,6 +217,13 @@ export const DEFAULT_PARAMS: ProjectParams = {
     timeVariable: 0,
     eventVariable: 1,
     groupVariable: -1,
+  },
+  timeseries: {
+    variable: 0,
+    period: 0,
+    horizon: 12,
+    differenceMode: 'auto',
+    seasonalDifferenceMode: 'auto',
   },
 };
 
@@ -288,6 +308,25 @@ const parseDistributionList = (
   );
   return Array.from(new Set(valid));
 };
+
+const DIFFERENCE_MODES: readonly TimeSeriesDifferenceMode[] = ['auto', '0', '1', '2'];
+const SEASONAL_DIFFERENCE_MODES: readonly TimeSeriesSeasonalDifferenceMode[] = ['auto', '0', '1'];
+
+const parseDifferenceMode = (
+  value: unknown,
+  fallback: TimeSeriesDifferenceMode
+): TimeSeriesDifferenceMode =>
+  typeof value === 'string' && (DIFFERENCE_MODES as readonly string[]).includes(value)
+    ? (value as TimeSeriesDifferenceMode)
+    : fallback;
+
+const parseSeasonalDifferenceMode = (
+  value: unknown,
+  fallback: TimeSeriesSeasonalDifferenceMode
+): TimeSeriesSeasonalDifferenceMode =>
+  typeof value === 'string' && (SEASONAL_DIFFERENCE_MODES as readonly string[]).includes(value)
+    ? (value as TimeSeriesSeasonalDifferenceMode)
+    : fallback;
 
 const parseCell = (value: unknown): string => {
   if (typeof value === 'string') return value;
@@ -374,6 +413,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const logistic = isRecord(raw.logistic) ? raw.logistic : {};
   const cox = isRecord(raw.cox) ? raw.cox : {};
   const survival = isRecord(raw.survival) ? raw.survival : {};
+  const timeseries = isRecord(raw.timeseries) ? raw.timeseries : {};
   const d = DEFAULT_PARAMS;
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
   const coxTime = index(cox.timeVariable, d.cox.timeVariable, width);
@@ -457,6 +497,16 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       timeVariable: index(survival.timeVariable, d.survival.timeVariable, width),
       eventVariable: index(survival.eventVariable, d.survival.eventVariable, width),
       groupVariable: optionalIndex(survival.groupVariable, d.survival.groupVariable, width),
+    },
+    timeseries: {
+      variable: index(timeseries.variable, d.timeseries.variable, width),
+      period: integer(timeseries.period, d.timeseries.period),
+      horizon: integer(timeseries.horizon, d.timeseries.horizon),
+      differenceMode: parseDifferenceMode(timeseries.differenceMode, d.timeseries.differenceMode),
+      seasonalDifferenceMode: parseSeasonalDifferenceMode(
+        timeseries.seasonalDifferenceMode,
+        d.timeseries.seasonalDifferenceMode
+      ),
     },
   };
 };

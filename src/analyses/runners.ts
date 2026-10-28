@@ -12,6 +12,7 @@ import { buildDistributionFitOutput } from './distfit/run';
 import { buildLogisticOutput } from './logistic/run';
 import { buildCoxOutput } from './cox/run';
 import { buildSurvivalOutput } from './survival/run';
+import { buildTimeSeriesOutput } from './timeseries/run';
 
 export interface AnalysisRunContext {
   grid: GridData;
@@ -24,10 +25,10 @@ export interface AnalysisRunContext {
  *
  * Le sei analisi legacy sono già funzioni `(dati, parametri) -> risultato`:
  * qui ricevono un contesto unico invece di sei chiamate con firme diverse.
- * `samplesize`, `distfit`, `logistic`, `cox` e `survival` sono i pannelli
- * convertiti: parametri nell'App e builder puro, come le analisi legacy. Gli
- * altri 8 restano componenti controllati dal segnale `runSignal`, in attesa di
- * separare i loro parametri dal form.
+ * `samplesize`, `distfit`, `logistic`, `cox`, `survival` e `timeseries` sono i
+ * pannelli convertiti: parametri nell'App e builder puro, come le analisi
+ * legacy. Gli altri 7 restano componenti controllati dal segnale `runSignal`,
+ * in attesa di separare i loro parametri dal form.
  */
 export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => AnalysisRunResult> = {
   descriptive: ({ grid, params, ciLevel }) =>
@@ -56,4 +57,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildCoxOutput({ grid, params: params.cox, ciLevel }),
   survival: ({ grid, params, ciLevel }) =>
     buildSurvivalOutput({ grid, params: params.survival, ciLevel }),
+  timeseries: ({ grid, params, ciLevel }) =>
+    buildTimeSeriesOutput({ grid, params: params.timeseries, ciLevel }),
 };

@@ -52,6 +52,7 @@ import {
   type RegParams,
   type SampleSizeParams,
   type SurvivalParams,
+  type TimeSeriesParams,
   type TTestParams,
 } from './io/project';
 
@@ -265,6 +266,10 @@ export default function App() {
     () => boot?.params.survival ?? defaultSurvivalParams(grid)
   );
 
+  const [timeseriesParams, setTimeseriesParams] = useState<TimeSeriesParams>(
+    boot?.params.timeseries ?? DEFAULT_PARAMS.timeseries
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -283,8 +288,9 @@ export default function App() {
       logistic: logisticParams,
       cox: coxParams,
       survival: survivalParams,
+      timeseries: timeseriesParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -309,6 +315,7 @@ export default function App() {
     setLogisticParams(project.params.logistic);
     setCoxParams(project.params.cox);
     setSurvivalParams(project.params.survival);
+    setTimeseriesParams(project.params.timeseries);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -442,6 +449,8 @@ export default function App() {
             setCoxParams={setCoxParams}
             survivalParams={survivalParams}
             setSurvivalParams={setSurvivalParams}
+            timeseriesParams={timeseriesParams}
+            setTimeseriesParams={setTimeseriesParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}
