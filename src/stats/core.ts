@@ -1,8 +1,4 @@
-import * as jStatNamespace from 'jstat';
-
-// jstat is a CommonJS module without type declarations: resolve it both under
-// Vite (named interop) and under plain Node/tsx (default interop).
-const jStat: any = (jStatNamespace as any).jStat ?? (jStatNamespace as any).default ?? jStatNamespace;
+import { jStat } from './jstat';
 
 export const parseNum = (x: string | number | undefined | null): number => {
   if (x === undefined || x === null) return NaN;

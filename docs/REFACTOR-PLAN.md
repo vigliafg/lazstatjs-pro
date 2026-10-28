@@ -117,7 +117,8 @@ passano dalla stessa strada.
       `src/stats/kernels/`).
 - [x] Assorbire `statsHelpers.ts` nei kernel: `kernels/exact.ts`,
       `kernels/ranks.ts`, `kernels/normality.ts`, con test di equivalenza numerica.
-- [ ] Decidere `jstat`: wrapper unico o vendor isolato dietro un'interfaccia.
+- [x] `jstat` isolato dietro `src/stats/jstat.ts`: nessun altro modulo importa il
+      pacchetto direttamente.
 - [x] Eliminare i `fmt` locali: `fmt`, `fmtP`, `fmtPct` vivono solo in `stats/format.ts`
       (`fmtPctValue` rimosso da `multivariate`).
 
