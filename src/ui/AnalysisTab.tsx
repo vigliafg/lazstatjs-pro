@@ -13,6 +13,9 @@ type Pane = 'library' | 'options' | 'output';
 const isNarrow = (): boolean =>
   typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches;
 
+const isWide = (): boolean =>
+  typeof window === 'undefined' || window.matchMedia('(min-width: 1280px)').matches;
+
 /**
  * Three-zone analysis workbench: library, setup and output.
  *
@@ -21,16 +24,21 @@ const isNarrow = (): boolean =>
  */
 export const AnalysisTab = (props: AnalysisTabProps) => {
   const [pane, setPane] = useState<Pane>('options');
-  const [showLibrary, setShowLibrary] = useState(true);
+  const [showLibrary, setShowLibrary] = useState(isWide);
   const [showOptions, setShowOptions] = useState(true);
   const [focusOutput, setFocusOutput] = useState(false);
   const recent = useRecentAnalyses(props.activeAnalysis);
+
+  const focusPane = (next: Pane) => {
+    requestAnimationFrame(() => document.getElementById(`analysis-pane-${next}`)?.focus());
+  };
 
   const go = (next: Pane) => {
     setFocusOutput(false);
     setPane(next);
     if (next === 'library') setShowLibrary(true);
     if (next === 'options') setShowOptions(true);
+    focusPane(next);
   };
 
   const toggleLibrary = () => {
@@ -67,7 +75,10 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
 
   const selectAnalysis = (id: string) => {
     props.setActiveAnalysis(id);
-    if (isNarrow()) setPane('options');
+    if (isNarrow()) {
+      setPane('options');
+      focusPane('options');
+    }
   };
 
   const run = (): boolean => {
@@ -186,6 +197,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
           className={`${libraryVisibility} min-h-0 w-full shrink-0 lg:w-[210px] xl:w-[238px] 2xl:w-[258px]`}
         >
           <AnalysisLibrary
+            id="analysis-pane-library"
             activeAnalysis={props.activeAnalysis}
             recent={recent}
             onSelect={selectAnalysis}
@@ -196,13 +208,14 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
         <div
           className={`${optionsVisibility} min-h-0 w-full shrink-0 lg:w-[300px] xl:w-[330px] 2xl:w-[360px]`}
         >
-          <AnalysisOptions {...props} runAnalysis={run} />
+          <AnalysisOptions {...props} runAnalysis={run} paneId="analysis-pane-options" />
         </div>
 
         <div
           className={`${outputVisibility} min-h-0 min-w-0 flex-1 flex-col lg:flex`}
         >
           <OutputConsole
+            id="analysis-pane-output"
             outputs={props.outputs}
             onRemove={props.removeOutput}
             onClear={props.clearOutput}

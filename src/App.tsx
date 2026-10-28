@@ -549,6 +549,10 @@ export default function App() {
         />
       )}
 
+      <div role="status" aria-live="polite" className="sr-only">
+        {outputs.length > 0 ? `${outputs[outputs.length - 1].title} ready` : ''}
+      </div>
+
       {/* Footer / Statusbar */}
       <Footer grid={grid} />
 

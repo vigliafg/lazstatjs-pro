@@ -41,6 +41,7 @@ const FAMILY_ICONS: Record<AnalysisFamilyId, LucideIcon> = {
 };
 
 export interface AnalysisLibraryProps {
+  id?: string;
   activeAnalysis: string;
   recent: readonly string[];
   onSelect: (id: string) => void;
@@ -87,6 +88,7 @@ const AnalysisItem = ({
 
 /** Searchable, family-grouped analysis chooser. */
 export const AnalysisLibrary = ({
+  id,
   activeAnalysis,
   recent,
   onSelect,
@@ -133,7 +135,12 @@ export const AnalysisLibrary = ({
   const count = groups.reduce((sum, group) => sum + group.analyses.length, 0);
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface">
+    <div
+      id={id}
+      tabIndex={-1}
+      aria-label="Analysis library"
+      className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
+    >
       <div className="shrink-0 border-b border-border p-3">
         <div className="mb-2 flex items-center justify-between gap-2">
           <div>

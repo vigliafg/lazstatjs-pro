@@ -46,7 +46,7 @@ const inputClass =
  * Setup panel for the active analysis. Forms keep their own controls; the
  * panel supplies the stable frame: title, family, CI, scroll area and Run.
  */
-export const AnalysisOptions = (p: AnalysisTabProps) => {
+export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
   const { params, dispatch } = useAnalysisStore();
   const setSlice = <K extends keyof ProjectParams>(key: K) =>
     (updater: SetStateAction<ProjectParams[K]>) =>
@@ -388,7 +388,12 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
   })();
 
   return (
-    <aside className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface">
+    <aside
+      id={p.paneId}
+      tabIndex={-1}
+      aria-label="Analysis setup"
+      className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
+    >
       <div className="shrink-0 border-b border-border p-4">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-accent2">

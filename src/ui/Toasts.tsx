@@ -7,7 +7,11 @@ export interface ToastsProps {
 
 /** Coda dei messaggi temporanei. La temporizzazione vive in `useToasts`. */
 export const Toasts = ({ toasts }: ToastsProps) => (
-  <div className="fixed bottom-10 right-5 z-[9999] flex flex-col gap-2 pointer-events-none">
+  <div
+    role="status"
+    aria-live="polite"
+    className="pointer-events-none fixed bottom-10 right-5 z-[9999] flex flex-col gap-2"
+  >
     <AnimatePresence>
       {toasts.map(t => (
         <motion.div

@@ -40,6 +40,7 @@ export const restoredOutputs = (stored: StoredOutput[] | undefined): OutputEntry
     .filter((entry) => entry.html.length > 0);
 
 export interface OutputConsoleProps {
+  id?: string;
   outputs: OutputEntry[];
   onRemove: (index: number) => void;
   onClear: () => void;
@@ -79,6 +80,7 @@ const actionClass =
  * the user reads, collapses or removes blocks.
  */
 export const OutputConsole = ({
+  id,
   outputs,
   onRemove,
   onClear,
@@ -156,7 +158,12 @@ export const OutputConsole = ({
   };
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col bg-bg">
+    <div
+      id={id}
+      tabIndex={-1}
+      aria-label="Analysis output"
+      className="flex h-full min-h-0 w-full flex-col bg-bg outline-none"
+    >
       <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border bg-surface px-3 py-1.5">
         <div className="flex min-w-0 items-center gap-2">
           <FileText className="h-3.5 w-3.5 shrink-0 text-accent2" />
