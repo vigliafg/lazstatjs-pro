@@ -14,6 +14,8 @@ const DESIGNS: { id: SampleSizeDesign; label: string }[] = [
   { id: 'twoProportions', label: 'Two proportions' },
   { id: 'correlation', label: 'Correlation' },
   { id: 'anova', label: 'One-way ANOVA' },
+  { id: 'tost', label: 'TOST equivalence' },
+  { id: 'survival', label: 'Survival (log-rank)' },
 ];
 
 const inputClass =
@@ -21,8 +23,10 @@ const inputClass =
 const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
 
 export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: SampleSizeFormProps) => {
-  const { design, alpha, power, delta, sd, p1, p2, r, groups, f, margin } = samplesizeParams;
+  const { design, alpha, power, delta, sd, p1, p2, r, groups, f, margin, hazardRatio, eventRate } = samplesizeParams;
   const meanDesign = design === 'twoMeans' || design === 'oneMean' || design === 'paired';
+  const tostDesign = design === 'tost';
+  const survivalDesign = design === 'survival';
   const update = (patch: Partial<SampleSizeParams>) =>
     setSamplesizeParams(prev => ({ ...prev, ...patch }));
 
@@ -52,6 +56,36 @@ export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: Sample
           <div className="flex flex-col gap-1">
             <label className={labelClass}>CI half-width (optional)</label>
             <input type="number" step="any" min="0" className={`${inputClass} w-24`} value={margin} onChange={e => update({ margin: parseFloat(e.target.value) })} />
+          </div>
+        </>
+      )}
+
+      {tostDesign && (
+        <>
+          <div className="flex flex-col gap-1">
+            <label className={labelClass}>Expected difference</label>
+            <input type="number" step="any" className={`${inputClass} w-24`} value={delta} onChange={e => update({ delta: parseFloat(e.target.value) })} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className={labelClass}>SD</label>
+            <input type="number" step="any" min="0" className={`${inputClass} w-24`} value={sd} onChange={e => update({ sd: parseFloat(e.target.value) })} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className={labelClass}>Equivalence margin</label>
+            <input type="number" step="any" min="0" className={`${inputClass} w-28`} value={margin} onChange={e => update({ margin: parseFloat(e.target.value) })} />
+          </div>
+        </>
+      )}
+
+      {survivalDesign && (
+        <>
+          <div className="flex flex-col gap-1">
+            <label className={labelClass}>Hazard ratio</label>
+            <input type="number" step="0.01" min="0.01" className={`${inputClass} w-24`} value={hazardRatio} onChange={e => update({ hazardRatio: parseFloat(e.target.value) })} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className={labelClass}>Event rate</label>
+            <input type="number" step="0.01" min="0.01" max="1" className={`${inputClass} w-24`} value={eventRate} onChange={e => update({ eventRate: parseFloat(e.target.value) })} />
           </div>
         </>
       )}

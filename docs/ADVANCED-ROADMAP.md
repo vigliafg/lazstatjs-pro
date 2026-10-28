@@ -37,7 +37,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [x] **Bootstrap e permutazione**: scheda Resampling per la differenza tra
       due gruppi (media/mediana, p di permutazione, CI bootstrap). Resta
       l'integrazione nelle altre procedure.
-- [ ] **Potenza estesa**: mixed, survival, equivalenza.
+- [x] **Potenza estesa (TOST e survival)**: numerosità per equivalenza TOST e
+      per log-rank con hazard ratio e tasso di eventi. Resta la potenza per
+      modelli misti.
 
 ## Priorità 3 — fuori perimetro
 

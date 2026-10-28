@@ -10,6 +10,8 @@ import {
   sampleSizeTables,
   sampleSizeTwoMeans,
   sampleSizeTwoProportions,
+  sampleSizeTost,
+  sampleSizeSurvival,
 } from './samplesize';
 import { fSF } from './distributions';
 import type { TableSpec } from './types';
@@ -95,4 +97,21 @@ test('tables and report are produced for every design without NaN text', () => {
 test('impossible inputs return no tables', () => {
   const { tables } = sampleSizeTables({ design: 'twoMeans', alpha: 0.05, power: 0.8, tails: 2, delta: 0, sd: 10 });
   assert.deepEqual(tables, []);
+});
+
+
+test('TOST sample size uses the equivalence margin', () => {
+  const result = sampleSizeTost(0, 10, 2, 0.05, 0.8);
+  assert.equal(result.nPerGroup, 215);
+  assert.equal(result.total, 215);
+  assert.ok(Math.abs(result.achievedPower - 0.8) < 0.01);
+  assert.equal(sampleSizeTost(0, 10, 0, 0.05, 0.8).nPerGroup, NaN);
+});
+
+test('survival sample size uses events and event rate', () => {
+  const result = sampleSizeSurvival(0.5, 0.5, 0.05, 0.8);
+  assert.equal(result.nPerGroup, 17);
+  assert.equal(result.total, 34);
+  assert.ok(Math.abs(result.achievedPower - 0.8154) < 0.01);
+  assert.equal(sampleSizeSurvival(1, 0.5, 0.05, 0.8).nPerGroup, NaN);
 });

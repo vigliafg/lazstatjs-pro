@@ -4,7 +4,9 @@ export type SampleSizeDesign =
   | 'paired'
   | 'twoProportions'
   | 'correlation'
-  | 'anova';
+  | 'anova'
+  | 'tost'
+  | 'survival';
 
 export interface SampleSizeOptions {
   design: SampleSizeDesign;
@@ -22,6 +24,10 @@ export interface SampleSizeOptions {
   f?: number;
   /** Optional precision request: half-width of the confidence interval. */
   margin?: number;
+  /** Survival: hazard ratio to detect. */
+  hazardRatio?: number;
+  /** Survival: proportion of subjects who experience the event. */
+  eventRate?: number;
 }
 
 export interface SampleSizeResult {

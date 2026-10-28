@@ -10,6 +10,8 @@ import {
   sampleSizePrecision,
   sampleSizeTwoMeans,
   sampleSizeTwoProportions,
+  sampleSizeTost,
+  sampleSizeSurvival,
 } from '../kernels/samplesize';
 
 /** Main entry point used by the planner tab: validates, solves and tabulates. */
@@ -40,13 +42,32 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
     case 'anova':
       result = sampleSizeAnova(options.groups ?? 3, options.f ?? 0.25, options.alpha, options.power);
       break;
+    case 'tost':
+      result = sampleSizeTost(
+        options.delta ?? 0,
+        options.sd ?? 0,
+        options.margin ?? 0,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
+    case 'survival':
+      result = sampleSizeSurvival(
+        options.hazardRatio ?? 1,
+        options.eventRate ?? 0.5,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
     default:
       result = sampleSizeTwoMeans(0, 0);
   }
 
   if (!Number.isFinite(result.nPerGroup)) return { tables: [], result };
 
-  const precision = options.margin && options.margin > 0 && options.sd
+  const precision = options.design !== 'tost' && options.design !== 'survival' && options.margin && options.margin > 0 && options.sd
     ? sampleSizePrecision(options.sd, options.margin, 100 * (1 - options.alpha), options.design === 'twoMeans' ? 2 : 1)
     : NaN;
 
@@ -67,6 +88,8 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
     twoProportions: 'Due proporzioni',
     correlation: 'Correlazione',
     anova: 'ANOVA a una via',
+    tost: 'TOST (equivalenza)',
+    survival: 'Sopravvivenza (log-rank)',
   };
 
   const inputRows = [
@@ -75,7 +98,14 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
     { parameter: 'Potenza target', value: `${fmtEst(options.power * 100, 1)}%` },
     { parameter: 'Code', value: options.tails === 2 ? 'due' : 'una' },
   ];
-  if (options.design === 'twoMeans' || options.design === 'oneMean' || options.design === 'paired') {
+  if (options.design === 'tost') {
+    inputRows.push({ parameter: 'Differenza attesa', value: fmtEst(options.delta ?? NaN, 4) });
+    inputRows.push({ parameter: 'SD', value: fmtEst(options.sd ?? NaN, 4) });
+    inputRows.push({ parameter: 'Margine di equivalenza', value: fmtEst(options.margin ?? NaN, 4) });
+  } else if (options.design === 'survival') {
+    inputRows.push({ parameter: 'Hazard ratio', value: fmtEst(options.hazardRatio ?? NaN, 4) });
+    inputRows.push({ parameter: 'Tasso di eventi', value: fmtEst(options.eventRate ?? NaN, 3) });
+  } else if (options.design === 'twoMeans' || options.design === 'oneMean' || options.design === 'paired') {
     inputRows.push({ parameter: 'Differenza da rilevare', value: fmtEst(options.delta ?? NaN, 4) });
     inputRows.push({ parameter: 'SD (dei differenziali se appaiato)', value: fmtEst(options.sd ?? NaN, 4) });
   }

@@ -72,6 +72,8 @@ export interface SampleSizeParams {
   f: number;
   /** Semi-ampiezza dell'intervallo di confidenza (0 = non richiesta). */
   margin: number;
+  hazardRatio: number;
+  eventRate: number;
 }
 
 /** Parametri del fit delle distribuzioni. */
@@ -333,6 +335,8 @@ export const DEFAULT_PARAMS: ProjectParams = {
     groups: 3,
     f: 0.25,
     margin: 0,
+    hazardRatio: 0.7,
+    eventRate: 0.5,
   },
   distfit: {
     variable: 0,

@@ -287,7 +287,85 @@ export const powerAt = (options: SampleSizeOptions, nPerGroup: number): number =
       const critical = jStat.centralF.inv(1 - alpha, df1, df2);
       return noncentralFSF(critical, df1, df2, total * Math.pow(options.f ?? 0, 2));
     }
+    case 'tost': {
+      const sd = options.sd ?? 0;
+      const margin = options.margin ?? 0;
+      const effect = margin - Math.abs(options.delta ?? 0);
+      if (!(sd > 0) || !(effect > 0)) return NaN;
+      const se = sd / Math.sqrt(nPerGroup);
+      const z = zAlpha(alpha, 1);
+      const delta = options.delta ?? 0;
+      return Math.min(1, Math.max(0, normalPower((margin - delta) / se, z) + normalPower((margin + delta) / se, z) - 1));
+    }
+    case 'survival': {
+      const logHr = Math.log(Math.max(1e-12, options.hazardRatio ?? 1));
+      return normalPower(Math.sqrt(nPerGroup) * Math.abs(logHr), zAlpha(alpha, 2));
+    }
     default:
       return NaN;
   }
+};
+
+/** TOST: numerosità per dimostrare equivalenza entro un margine. */
+export const sampleSizeTost = (
+  delta: number,
+  sd: number,
+  margin: number,
+  alpha = 0.05,
+  power = 0.8,
+  tails: 1 | 2 = 2
+): SampleSizeResult => {
+  const effect = margin - Math.abs(delta);
+  if (!(sd > 0) || !(effect > 0)) {
+    return { design: 'tost', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize: NaN, method: '' };
+  }
+  const zA = zAlpha(alpha, 1);
+  const zB = zPower(1 - (1 - power) / 2);
+  const n = Math.max(2, Math.ceil(Math.pow(((zA + zB) * sd) / effect, 2)));
+  const se = sd / Math.sqrt(n);
+  const achievedPower = Math.min(
+    1,
+    Math.max(
+      0,
+      normalPower((margin - delta) / se, zA) +
+        normalPower((margin + delta) / se, zA) -
+        1
+    )
+  );
+  return {
+    design: 'tost',
+    nPerGroup: n,
+    total: n,
+    achievedPower,
+    critical: zA,
+    effectSize: effect / sd,
+    method: 'TOST (approssimazione normale)',
+  };
+};
+
+/** Log-rank: eventi richiesti e numerosità dato il tasso di eventi. */
+export const sampleSizeSurvival = (
+  hazardRatio: number,
+  eventRate: number,
+  alpha = 0.05,
+  power = 0.8,
+  tails: 1 | 2 = 2
+): SampleSizeResult => {
+  if (!(hazardRatio > 0) || hazardRatio === 1 || !(eventRate > 0 && eventRate <= 1)) {
+    return { design: 'survival', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize: NaN, method: '' };
+  }
+  const zA = zAlpha(alpha, tails);
+  const zB = zPower(power);
+  const logHr = Math.log(hazardRatio);
+  const events = Math.ceil(Math.pow((zA + zB) / logHr, 2));
+  const total = Math.ceil(events / eventRate);
+  return {
+    design: 'survival',
+    nPerGroup: events,
+    total,
+    achievedPower: normalPower(Math.sqrt(events) * Math.abs(logHr), zA),
+    critical: zA,
+    effectSize: Math.abs(logHr),
+    method: 'Log-rank (Freedman)',
+  };
 };

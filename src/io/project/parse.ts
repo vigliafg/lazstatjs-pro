@@ -318,6 +318,8 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       groups: integer(samplesize.groups, d.samplesize.groups),
       f: finite(samplesize.f, d.samplesize.f),
       margin: finite(samplesize.margin, d.samplesize.margin),
+      hazardRatio: finite(samplesize.hazardRatio, d.samplesize.hazardRatio),
+      eventRate: finite(samplesize.eventRate, d.samplesize.eventRate),
     },
     distfit: {
       variable: index(distfit.variable, d.distfit.variable, width),
