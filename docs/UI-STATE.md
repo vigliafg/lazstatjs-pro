@@ -334,7 +334,8 @@ Raccomandazione: una sola griglia + Variable Inspector a drawer + ponte
 dati↔analisi esplicito. Multi-tabella solo se diventa un requisito di prodotto.
 
 Implementazione: DE-0, DE-1 e parte di DE-2/DE-3/DE-4 sono stati realizzati;
-stato dettagliato e blocchi deferred in `docs/DATA-EDITING-ANALYSIS.md` §12.
+checkpoint operativo in [`GRID-STATE.md`](GRID-STATE.md), stato dettagliato e
+blocchi deferred in `docs/DATA-EDITING-ANALYSIS.md` §12.
 
 ## 10. Decisioni aperte
 

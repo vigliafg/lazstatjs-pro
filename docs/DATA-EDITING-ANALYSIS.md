@@ -1,6 +1,8 @@
 # Data grid e analisi — stato, relazione e direzione
 
 > Analisi svolta al commit `fb48e17` (`main`).
+> Checkpoint operativo: [`GRID-STATE.md`](GRID-STATE.md).
+>
 > Questo documento risponde a due domande:
 > 1. come si relaziona oggi la griglia dati alla sezione analisi, visivamente e
 >    operativamente;
@@ -442,7 +444,7 @@ Solo dopo: Variable Inspector e ponte dati↔analisi.
 | Blocco | Stato | Note |
 |---|---|---|
 | **DE-0a — Remap** | Fatto | Insert, delete, move, duplicate, split, merge; gli indici sono rimappati. |
-| **DE-0b — Invalidazione** | Fatto | Delete, split, merge e cambio tipo incompatibile marcano il ruolo `-1`; banner nel Setup e Run disabilitato finché non si riseleziona. |
+| **DE-0b — Invalidazione** | Fatto | Delete, split e merge marcano il ruolo `-1`; banner nel Setup e Run disabilitato finché non si riseleziona. Il cambio tipo marca i dati `stale` ma non invalida ancora automaticamente il ruolo. |
 | **DE-0c — Dataset identity** | Fatto | New/Import overwrite resettano i parametri, cambiano `datasetId` e svuotano l'output. |
 | **DE-0d — Revisione dati** | Fatto | Ogni modifica della griglia incrementa `dataRevision`; le card diventano `stale`. Anche il filtro ha una firma e invalida le card quando cambia. |
 | **DE-0e — Test matrix** | Parziale | Test unitari per remap, invalidazione, reset, filtro, `map` per undo/redo; manca una suite UI automatica. |
@@ -469,6 +471,7 @@ Solo dopo: Variable Inspector e ponte dati↔analisi.
 - Cambiare i parametri non marca la card come stale; cambia solo dati, filtro e dataset.
 - La modalità “analysis filter” non è persistita nel progetto e viene disattivata su New/Import.
 - Il calcolo delle colonne resta one-shot.
+- Un cambio tipo (es. gruppo → continuo) non viene ancora validato contro il ruolo: i dati sono `stale`, ma il ruolo resta selezionato finché il runner o l'utente non intervengono.
 
 ### Verifica
 

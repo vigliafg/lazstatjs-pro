@@ -6,7 +6,7 @@ A comprehensive browser-based statistical analysis tool with real-time plotting 
 
 LazStats JS provides a spreadsheet-like data editor and a full suite of parametric and non-parametric statistical analyses, all running entirely in the browser. It features an interactive dark-themed UI with real-time charting via Victory.
 
-**UI status and backlog:** [`docs/UI-STATE.md`](docs/UI-STATE.md)
+**UI status and backlog:** [`docs/UI-STATE.md`](docs/UI-STATE.md) · **Grid checkpoint:** [`docs/GRID-STATE.md`](docs/GRID-STATE.md)
 
 ## Features
 
