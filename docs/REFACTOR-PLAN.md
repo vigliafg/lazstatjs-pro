@@ -88,11 +88,11 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 - [x] Estrarre la scheda Settings in `src/ui/SettingsTab.tsx`.
 - [x] Estrarre la scheda Analysis in `src/ui/AnalysisTab.tsx` (tab, form, 13 pannelli, console).
 - [ ] Estrarre header, footer e toasts.
-- [x] Estrarre `useToasts` e `useOutputConsole` (`src/hooks/`).
-- [ ] Estrarre il resto del controller: `useProjectSession`, `useImportExport`, `useAnalysisRun`.
+- [x] Estrarre `useToasts`, `useOutputConsole` e `useImportExport` (`src/hooks/`).
+- [ ] Estrarre `useProjectSession` e `useAnalysisRun`.
 
-**Stato:** `App.tsx` 3.767 → **893 righe** (-76%). Restano persistenza/import-export
-(`useProjectSession`, `useImportExport`) e i wrapper `run*` (fase 2, `AnalysisSpec`).
+**Stato:** `App.tsx` 3.767 → **787 righe** (-79%). Restano la persistenza del progetto
+(`useProjectSession`) e i wrapper `run*` (fase 2, `AnalysisSpec`).
 
 ### Fase 2 — Unificare il contratto
 
@@ -152,7 +152,7 @@ implementazione per ogni test statistico.
 | Fase | Stato |
 |---|---|
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
-| 1 — Sfoltire `App.tsx` | schermate e console estratte; `App.tsx` 3.767 → 893 righe |
+| 1 — Sfoltire `App.tsx` | schermate, console e import/export estratti; `App.tsx` 3.767 → 787 righe |
 | 2 — Contratto unico | non iniziata |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
