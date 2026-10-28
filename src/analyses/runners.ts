@@ -19,7 +19,8 @@ export interface AnalysisRunContext {
  *
  * Le sei analisi legacy sono già funzioni `(dati, parametri) -> risultato`:
  * qui ricevono un contesto unico invece di sei chiamate con firme diverse.
- * I 13 pannelli con `forwardRef` restano fuori finché non vengono convertiti.
+ * I 13 pannelli restano componenti controllati dal segnale `runSignal`, in
+ * attesa di separare anche i loro parametri dal form.
  */
 export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => AnalysisRunResult> = {
   descriptive: ({ grid, params, ciLevel }) =>

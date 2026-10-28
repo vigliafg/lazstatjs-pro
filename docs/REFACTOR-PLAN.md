@@ -90,22 +90,24 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 - [x] Estrarre header, footer e toasts (`src/ui/Header.tsx`, `Footer.tsx`, `Toasts.tsx`).
 - [x] Estrarre `useToasts`, `useOutputConsole` e `useImportExport` (`src/hooks/`).
 - [x] Estrarre `useProjectSession` (`src/hooks/useProjectSession.ts`).
-- [ ] Estrarre `useAnalysisRun` (fase 2: dipende dal contratto unico).
+- [x] Estrarre `useAnalysisRun` (`src/hooks/useAnalysisRun.ts`).
 
-**Stato:** `App.tsx` 3.767 → **537 righe** (-86%). Restano i wrapper `run*`
-(fase 2, `AnalysisSpec`) e l'estrazione di `useAnalysisRun`.
+**Stato:** `App.tsx` 3.767 → **451 righe** (-88%). Resta la fase 2: portare i
+parametri dei 13 pannelli fuori dai form e unificarne la persistenza.
 
 ### Fase 2 — Unificare il contratto
 
 - [ ] `AnalysisSpec` + `useAnalysisRunner` + `useAnalysisParams`.
 - [x] Un solo punto che appende alla console (niente `pushOutput` sparsa).
 - [x] Registro unico dei builder puri per le 6 analisi legacy (`src/analyses/runners.ts`).
-- [ ] Eliminare `forwardRef`/`useImperativeHandle` dai 14 pannelli.
+- [x] Eliminare `forwardRef`/`useImperativeHandle` dai 13 pannelli: il pulsante
+      "Run" incrementa `runSignal`, osservato da `useRunSignal`.
 - [ ] Persistenza parametri unica per id di analisi (`.lzs` compatibile o migrato con versione).
 
-**Stato:** avviata. Le sei analisi legacy costruiscono un `AnalysisRunResult` e
-passano da `emit()` in `App.tsx`; restano da convertire i 13 pannelli con
-`forwardRef` e da unificare la persistenza dei parametri.
+**Stato:** le 19 analisi partono da `useAnalysisRun`. Sei hanno già builder puro
+e parametri centralizzati; i 13 pannelli osservano `runSignal` ma tengono ancora
+i parametri nello stato locale (non persistiti). Prossimo passo: estrarre quei
+parametri e unificarne la persistenza.
 
 **Fatto quando:** 19/19 analisi passano dalla stessa strada.
 
@@ -158,8 +160,8 @@ implementazione per ogni test statistico.
 | Fase | Stato |
 |---|---|
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
-| 1 — Sfoltire `App.tsx` | **completa** (salvo `useAnalysisRun`): `App.tsx` 3.767 → 537 righe |
-| 2 — Contratto unico | avviata: emissione unica per le 6 analisi legacy |
+| 1 — Sfoltire `App.tsx` | **completa**: `App.tsx` 3.767 → 451 righe |
+| 2 — Contratto unico | avviata: emissione unica, builder legacy e pannelli senza `forwardRef` |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
 | 5 — Guardrail | non iniziata |

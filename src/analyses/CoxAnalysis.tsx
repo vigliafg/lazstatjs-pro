@@ -1,4 +1,5 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, { useState } from 'react';
+import { useRunSignal } from '../hooks/useRunSignal';
 import {
   VictoryAxis,
   VictoryChart,
@@ -11,11 +12,8 @@ import { ResultTables } from '../components/ResultTable';
 import { parseNum } from '../stats/core';
 import type { ReportSpec } from '../stats/report';
 
-export interface CoxHandle {
-  run: () => void;
-}
-
 interface Props {
+  runSignal: number;
   grid: { cols: { name: string }[]; rows: string[][] };
   ciLevel: number;
   onOutput: (node: React.ReactNode, report: ReportSpec | null) => void;
@@ -97,238 +95,240 @@ const encodeColumn = (
   }));
 };
 
-export const CoxAnalysis = forwardRef<CoxHandle, Props>(
-  ({ grid, ciLevel, onOutput, onError }, ref) => {
-    const [timeVariable, setTimeVariable] = useState(() => defaultTime(grid));
-    const [eventVariable, setEventVariable] = useState(() => defaultEvent(grid));
-    const [covariates, setCovariates] = useState<number[]>(() => defaultCovariates(grid));
+export const CoxAnalysis = ({
+  grid,
+  ciLevel,
+  onOutput,
+  onError,
+  runSignal,
+}: Props) => {
+  const [timeVariable, setTimeVariable] = useState(() => defaultTime(grid));
+  const [eventVariable, setEventVariable] = useState(() => defaultEvent(grid));
+  const [covariates, setCovariates] = useState<number[]>(() => defaultCovariates(grid));
 
-    const toggle = (index: number) => {
-      setCovariates(previous =>
-        previous.includes(index) ? previous.filter(item => item !== index) : [...previous, index]
-      );
-    };
+  const toggle = (index: number) => {
+    setCovariates(previous =>
+      previous.includes(index) ? previous.filter(item => item !== index) : [...previous, index]
+    );
+  };
 
-    const run = () => {
-      if (covariates.length === 0) {
-        onError('Select at least one covariate');
+  const run = () => {
+    if (covariates.length === 0) {
+      onError('Select at least one covariate');
+      return;
+    }
+    if (covariates.includes(timeVariable) || covariates.includes(eventVariable)) {
+      onError('Time and event columns cannot be used as covariates');
+      return;
+    }
+
+    const eventLevels = Array.from(
+      new Set(
+        grid.rows
+          .map(row => String(row[eventVariable] ?? '').trim())
+          .filter(value => value !== '')
+      )
+    ).sort();
+    if (eventLevels.length !== 2) {
+      onError('The event column needs exactly two values (for example 0/1 or no/yes)');
+      return;
+    }
+
+    const encoded: EncodedCovariate[] = [];
+    for (const index of covariates) {
+      const columns = encodeColumn(grid.rows, index, grid.cols[index]?.name ?? `X${index + 1}`);
+      const problem = columns.find(column => column.error);
+      if (problem?.error) {
+        onError(problem.error);
         return;
       }
-      if (covariates.includes(timeVariable) || covariates.includes(eventVariable)) {
-        onError('Time and event columns cannot be used as covariates');
-        return;
-      }
+      encoded.push(...columns);
+    }
+    if (encoded.length === 0) {
+      onError('The selected covariates contain no usable values');
+      return;
+    }
 
-      const eventLevels = Array.from(
-        new Set(
-          grid.rows
-            .map(row => String(row[eventVariable] ?? '').trim())
-            .filter(value => value !== '')
-        )
-      ).sort();
-      if (eventLevels.length !== 2) {
-        onError('The event column needs exactly two values (for example 0/1 or no/yes)');
-        return;
-      }
+    const times: number[] = [];
+    const events: number[] = [];
+    const covariateValues: number[][] = encoded.map(() => []);
+    grid.rows.forEach((row, rowIndex) => {
+      const time = parseNum(row[timeVariable]);
+      const label = String(row[eventVariable] ?? '').trim();
+      if (!Number.isFinite(time) || time < 0 || label === '') return;
+      const values = encoded.map(column => column.values[rowIndex]);
+      if (values.some(value => !Number.isFinite(value))) return;
+      times.push(time);
+      events.push(label === eventLevels[1] ? 1 : 0);
+      values.forEach((value, index) => covariateValues[index].push(value));
+    });
 
-      const encoded: EncodedCovariate[] = [];
-      for (const index of covariates) {
-        const columns = encodeColumn(grid.rows, index, grid.cols[index]?.name ?? `X${index + 1}`);
-        const problem = columns.find(column => column.error);
-        if (problem?.error) {
-          onError(problem.error);
-          return;
-        }
-        encoded.push(...columns);
-      }
-      if (encoded.length === 0) {
-        onError('The selected covariates contain no usable values');
-        return;
-      }
+    if (times.length < encoded.length + 3) {
+      onError('Not enough complete rows: time, event and all covariates must be present');
+      return;
+    }
 
-      const times: number[] = [];
-      const events: number[] = [];
-      const covariateValues: number[][] = encoded.map(() => []);
-      grid.rows.forEach((row, rowIndex) => {
-        const time = parseNum(row[timeVariable]);
-        const label = String(row[eventVariable] ?? '').trim();
-        if (!Number.isFinite(time) || time < 0 || label === '') return;
-        const values = encoded.map(column => column.values[rowIndex]);
-        if (values.some(value => !Number.isFinite(value))) return;
-        times.push(time);
-        events.push(label === eventLevels[1] ? 1 : 0);
-        values.forEach((value, index) => covariateValues[index].push(value));
-      });
+    const fit = fitCox({
+      time: times,
+      event: events,
+      covariates: encoded.map((column, index) => ({ name: column.name, values: covariateValues[index] })),
+      level: ciLevel,
+    });
 
-      if (times.length < encoded.length + 3) {
-        onError('Not enough complete rows: time, event and all covariates must be present');
-        return;
-      }
+    if (!fit) {
+      onError('The Cox model could not be estimated: check for constant covariates or too few events');
+      return;
+    }
 
-      const fit = fitCox({
-        time: times,
-        event: events,
-        covariates: encoded.map((column, index) => ({ name: column.name, values: covariateValues[index] })),
-        level: ciLevel,
-      });
+    const tables = coxTables(fit, ciLevel);
 
-      if (!fit) {
-        onError('The Cox model could not be estimated: check for constant covariates or too few events');
-        return;
-      }
+    const usable = fit.coefficients.filter(
+      coefficient =>
+        Number.isFinite(coefficient.hr) &&
+        Number.isFinite(coefficient.lo) &&
+        Number.isFinite(coefficient.hi)
+    );
+    const low = usable.length > 0 ? Math.min(1, ...usable.map(coefficient => coefficient.lo)) : 0.5;
+    const high = usable.length > 0 ? Math.max(1, ...usable.map(coefficient => coefficient.hi)) : 2;
+    const span = high > low ? high - low : Math.max(0.5, Math.abs(high) * 0.2);
+    const forestData = fit.coefficients.map((coefficient, index) => ({
+      term: coefficient.term,
+      y: fit.coefficients.length - 1 - index,
+      hr: coefficient.hr,
+      lo: coefficient.lo,
+      hi: coefficient.hi,
+      usable:
+        Number.isFinite(coefficient.hr) &&
+        Number.isFinite(coefficient.lo) &&
+        Number.isFinite(coefficient.hi),
+    }));
 
-      const tables = coxTables(fit, ciLevel);
+    onOutput(
+      <div className="mb-6">
+        <p className="text-[10px] text-text3 font-mono mb-3">
+          {`Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${times.length} observations · ${fit.events} events`}
+        </p>
+        <ResultTables specs={tables} />
 
-      const usable = fit.coefficients.filter(
-        coefficient =>
-          Number.isFinite(coefficient.hr) &&
-          Number.isFinite(coefficient.lo) &&
-          Number.isFinite(coefficient.hi)
-      );
-      const low = usable.length > 0 ? Math.min(1, ...usable.map(coefficient => coefficient.lo)) : 0.5;
-      const high = usable.length > 0 ? Math.max(1, ...usable.map(coefficient => coefficient.hi)) : 2;
-      const span = high > low ? high - low : Math.max(0.5, Math.abs(high) * 0.2);
-      const forestData = fit.coefficients.map((coefficient, index) => ({
-        term: coefficient.term,
-        y: fit.coefficients.length - 1 - index,
-        hr: coefficient.hr,
-        lo: coefficient.lo,
-        hi: coefficient.hi,
-        usable:
-          Number.isFinite(coefficient.hr) &&
-          Number.isFinite(coefficient.lo) &&
-          Number.isFinite(coefficient.hi),
-      }));
-
-      onOutput(
-        <div className="mb-6">
-          <p className="text-[10px] text-text3 font-mono mb-3">
-            {`Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${times.length} observations · ${fit.events} events`}
-          </p>
-          <ResultTables specs={tables} />
-
-          <section className="mb-6">
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-              <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
-                Hazard ratio per covariata
-              </h3>
-              <span className="text-[10px] text-text3 font-mono">{`IC ${ciLevel}% · scala lineare`}</span>
-            </div>
-            <div className="h-[260px] w-full bg-surface3/30 rounded p-2">
-              <VictoryChart
-                theme={VictoryTheme.material}
-                padding={{ top: 15, bottom: 55, left: 120, right: 30 }}
-                domain={{ x: [low - span * 0.08, high + span * 0.08], y: [-0.5, fit.coefficients.length - 0.5] }}
-              >
-                <VictoryAxis
-                  label="Hazard ratio"
-                  style={{
-                    axis: { stroke: '#333' },
-                    axisLabel: { fill: '#888', fontSize: 10, padding: 32 },
-                    tickLabels: { fill: '#888', fontSize: 9 },
-                    grid: { stroke: '#222' },
-                  }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  tickValues={forestData.map(point => point.y)}
-                  tickFormat={value => {
-                    const point = forestData.find(item => item.y === value);
-                    return point ? point.term : '';
-                  }}
-                  style={{
-                    axis: { stroke: '#333' },
-                    tickLabels: { fill: '#888', fontSize: 9 },
-                    grid: { stroke: 'transparent' },
-                  }}
-                />
-                <VictoryLine
-                  data={[
-                    { x: 1, y: -0.5 },
-                    { x: 1, y: fit.coefficients.length - 0.5 },
-                  ]}
-                  style={{ data: { stroke: '#f87171', strokeDasharray: '4,4', strokeWidth: 1 } }}
-                />
-                {forestData.filter(point => point.usable).map(point => (
-                  <VictoryLine
-                    key={`ci-${point.term}`}
-                    data={[
-                      { x: point.lo, y: point.y },
-                      { x: point.hi, y: point.y },
-                    ]}
-                    style={{ data: { stroke: '#4f9cf9', strokeWidth: 2 } }}
-                  />
-                ))}
-                <VictoryScatter
-                  data={forestData
-                    .filter(point => point.usable)
-                    .map(point => ({ x: point.hr, y: point.y }))}
-                  style={{ data: { fill: '#fbbf24', size: 4 } }}
-                />
-              </VictoryChart>
-            </div>
-            <p className="text-[10px] text-text3 mt-1">
-              Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun
-              effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.
-              {fit.separation
-                ? ' Con stime instabili gli intervalli non finiti sono omessi dal grafico.'
-                : ''}
-            </p>
-          </section>
-        </div>,
-        coxReport(tables, ciLevel)
-      );
-    };
-
-    useImperativeHandle(ref, () => ({ run }));
-
-    return (
-      <div className="flex flex-wrap gap-4 items-start">
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Time</label>
-          <select className={inputClass} value={timeVariable} onChange={e => setTimeVariable(parseInt(e.target.value, 10))}>
-            {grid.cols.map((column, index) => (
-              <option key={index} value={index}>
-                {column.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Event (0/1)</label>
-          <select className={inputClass} value={eventVariable} onChange={e => setEventVariable(parseInt(e.target.value, 10))}>
-            {grid.cols.map((column, index) => (
-              <option key={index} value={index}>
-                {column.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Covariates (X)</label>
-          <div className="bg-surface3 border border-border2 rounded p-2 min-w-[200px] max-h-[110px] overflow-auto scrollbar">
-            {grid.cols.map((column, index) => (
-              <label
-                key={index}
-                className="flex items-center gap-2 text-[11px] text-text2 hover:text-text cursor-pointer py-0.5"
-              >
-                <input
-                  type="checkbox"
-                  className="accent-accent"
-                  checked={covariates.includes(index)}
-                  disabled={index === timeVariable || index === eventVariable}
-                  onChange={() => toggle(index)}
-                />
-                {column.name}
-              </label>
-            ))}
+        <section className="mb-6">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+            <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
+              Hazard ratio per covariata
+            </h3>
+            <span className="text-[10px] text-text3 font-mono">{`IC ${ciLevel}% · scala lineare`}</span>
           </div>
+          <div className="h-[260px] w-full bg-surface3/30 rounded p-2">
+            <VictoryChart
+              theme={VictoryTheme.material}
+              padding={{ top: 15, bottom: 55, left: 120, right: 30 }}
+              domain={{ x: [low - span * 0.08, high + span * 0.08], y: [-0.5, fit.coefficients.length - 0.5] }}
+            >
+              <VictoryAxis
+                label="Hazard ratio"
+                style={{
+                  axis: { stroke: '#333' },
+                  axisLabel: { fill: '#888', fontSize: 10, padding: 32 },
+                  tickLabels: { fill: '#888', fontSize: 9 },
+                  grid: { stroke: '#222' },
+                }}
+              />
+              <VictoryAxis
+                dependentAxis
+                tickValues={forestData.map(point => point.y)}
+                tickFormat={value => {
+                  const point = forestData.find(item => item.y === value);
+                  return point ? point.term : '';
+                }}
+                style={{
+                  axis: { stroke: '#333' },
+                  tickLabels: { fill: '#888', fontSize: 9 },
+                  grid: { stroke: 'transparent' },
+                }}
+              />
+              <VictoryLine
+                data={[
+                  { x: 1, y: -0.5 },
+                  { x: 1, y: fit.coefficients.length - 0.5 },
+                ]}
+                style={{ data: { stroke: '#f87171', strokeDasharray: '4,4', strokeWidth: 1 } }}
+              />
+              {forestData.filter(point => point.usable).map(point => (
+                <VictoryLine
+                  key={`ci-${point.term}`}
+                  data={[
+                    { x: point.lo, y: point.y },
+                    { x: point.hi, y: point.y },
+                  ]}
+                  style={{ data: { stroke: '#4f9cf9', strokeWidth: 2 } }}
+                />
+              ))}
+              <VictoryScatter
+                data={forestData
+                  .filter(point => point.usable)
+                  .map(point => ({ x: point.hr, y: point.y }))}
+                style={{ data: { fill: '#fbbf24', size: 4 } }}
+              />
+            </VictoryChart>
+          </div>
+          <p className="text-[10px] text-text3 mt-1">
+            Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun
+            effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.
+            {fit.separation
+              ? ' Con stime instabili gli intervalli non finiti sono omessi dal grafico.'
+              : ''}
+          </p>
+        </section>
+      </div>,
+      coxReport(tables, ciLevel)
+    );
+  };
+
+  useRunSignal(runSignal, run);
+
+  return (
+    <div className="flex flex-wrap gap-4 items-start">
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Time</label>
+        <select className={inputClass} value={timeVariable} onChange={e => setTimeVariable(parseInt(e.target.value, 10))}>
+          {grid.cols.map((column, index) => (
+            <option key={index} value={index}>
+              {column.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Event (0/1)</label>
+        <select className={inputClass} value={eventVariable} onChange={e => setEventVariable(parseInt(e.target.value, 10))}>
+          {grid.cols.map((column, index) => (
+            <option key={index} value={index}>
+              {column.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Covariates (X)</label>
+        <div className="bg-surface3 border border-border2 rounded p-2 min-w-[200px] max-h-[110px] overflow-auto scrollbar">
+          {grid.cols.map((column, index) => (
+            <label
+              key={index}
+              className="flex items-center gap-2 text-[11px] text-text2 hover:text-text cursor-pointer py-0.5"
+            >
+              <input
+                type="checkbox"
+                className="accent-accent"
+                checked={covariates.includes(index)}
+                disabled={index === timeVariable || index === eventVariable}
+                onChange={() => toggle(index)}
+              />
+              {column.name}
+            </label>
+          ))}
         </div>
       </div>
-    );
-  }
-);
-
-CoxAnalysis.displayName = 'CoxAnalysis';
+    </div>
+  );
+};

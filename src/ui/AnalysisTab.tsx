@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import { Play } from 'lucide-react';
 import { ANALYSIS_TABS } from '../analyses/registry';
 import { DescriptiveForm } from '../analyses/descriptive/Form';
@@ -7,19 +7,19 @@ import { AnovaForm } from '../analyses/anova/Form';
 import { RegressionForm } from '../analyses/regression/Form';
 import { CorrelationForm } from '../analyses/correlation/Form';
 import { ChiSquareForm } from '../analyses/chisquare/Form';
-import { AncovaAnalysis, type AncovaHandle } from '../analyses/AncovaAnalysis';
-import { ContingencyAnalysis, type ContingencyHandle } from '../analyses/ContingencyAnalysis';
-import { CoxAnalysis, type CoxHandle } from '../analyses/CoxAnalysis';
-import { DistributionFitAnalysis, type DistributionFitHandle } from '../analyses/DistributionFitAnalysis';
-import { FactorialAnovaAnalysis, type FactorialAnovaHandle } from '../analyses/FactorialAnovaAnalysis';
-import { LogisticAnalysis, type LogisticHandle } from '../analyses/LogisticAnalysis';
-import { MultivariateAnalysis, type MultivariateHandle } from '../analyses/MultivariateAnalysis';
-import { NonParamRepeatedAnalysis, type NonParamRepeatedHandle } from '../analyses/NonParamRepeatedAnalysis';
-import { RepeatedAnovaAnalysis, type RepeatedAnovaHandle } from '../analyses/RepeatedAnovaAnalysis';
-import { SampleSizeAnalysis, type SampleSizeHandle } from '../analyses/SampleSizeAnalysis';
-import { SurvivalAnalysis, type SurvivalHandle } from '../analyses/SurvivalAnalysis';
-import { TimeSeriesAnalysis, type TimeSeriesHandle } from '../analyses/TimeSeriesAnalysis';
-import { WizardAnalysis, type WizardHandle } from '../analyses/WizardAnalysis';
+import { AncovaAnalysis } from '../analyses/AncovaAnalysis';
+import { ContingencyAnalysis } from '../analyses/ContingencyAnalysis';
+import { CoxAnalysis } from '../analyses/CoxAnalysis';
+import { DistributionFitAnalysis } from '../analyses/DistributionFitAnalysis';
+import { FactorialAnovaAnalysis } from '../analyses/FactorialAnovaAnalysis';
+import { LogisticAnalysis } from '../analyses/LogisticAnalysis';
+import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
+import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
+import { RepeatedAnovaAnalysis } from '../analyses/RepeatedAnovaAnalysis';
+import { SampleSizeAnalysis } from '../analyses/SampleSizeAnalysis';
+import { SurvivalAnalysis } from '../analyses/SurvivalAnalysis';
+import { TimeSeriesAnalysis } from '../analyses/TimeSeriesAnalysis';
+import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
@@ -52,23 +52,11 @@ export interface AnalysisTabProps {
   exportResultsXlsx: () => void;
   setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
   runAnalysis: () => void;
+  runSignal: number;
   pushOutput: (node: ReactNode, report: ReportSpec | null) => void;
   showToast: (title: string, msg: string, type?: 'ok' | 'warn' | 'error') => void;
   updateColumnLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
   updateColumnRecode: (column: number, mapping: Record<string, string>) => void;
-  ancovaRef: RefObject<AncovaHandle | null>;
-  contingencyRef: RefObject<ContingencyHandle | null>;
-  coxRef: RefObject<CoxHandle | null>;
-  distFitRef: RefObject<DistributionFitHandle | null>;
-  factorialRef: RefObject<FactorialAnovaHandle | null>;
-  logisticRef: RefObject<LogisticHandle | null>;
-  multivariateRef: RefObject<MultivariateHandle | null>;
-  nonParamRepeatedRef: RefObject<NonParamRepeatedHandle | null>;
-  repeatedAnovaRef: RefObject<RepeatedAnovaHandle | null>;
-  sampleSizeRef: RefObject<SampleSizeHandle | null>;
-  survivalRef: RefObject<SurvivalHandle | null>;
-  timeSeriesRef: RefObject<TimeSeriesHandle | null>;
-  wizardRef: RefObject<WizardHandle | null>;
 }
 
 export const AnalysisTab = ({
@@ -98,23 +86,11 @@ export const AnalysisTab = ({
   exportResultsXlsx,
   setActiveTab,
   runAnalysis,
+  runSignal,
   pushOutput,
   showToast,
   updateColumnLevels,
   updateColumnRecode,
-  ancovaRef,
-  contingencyRef,
-  coxRef,
-  distFitRef,
-  factorialRef,
-  logisticRef,
-  multivariateRef,
-  nonParamRepeatedRef,
-  repeatedAnovaRef,
-  sampleSizeRef,
-  survivalRef,
-  timeSeriesRef,
-  wizardRef,
 }: AnalysisTabProps) => (
   <>
 <div className="flex-1 flex flex-col overflow-hidden">
@@ -170,7 +146,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'timeseries' && (
         <TimeSeriesAnalysis
-          ref={timeSeriesRef}
+          runSignal={runSignal}
           grid={grid}
           ciLevel={ciLevel}
           onOutput={pushOutput}
@@ -180,7 +156,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'survival' && (
         <SurvivalAnalysis
-          ref={survivalRef}
+          runSignal={runSignal}
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
@@ -192,7 +168,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'cox' && (
         <CoxAnalysis
-          ref={coxRef}
+          runSignal={runSignal}
           grid={grid}
           ciLevel={ciLevel}
           onOutput={pushOutput}
@@ -202,7 +178,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'wizard' && (
         <WizardAnalysis
-          ref={wizardRef}
+          runSignal={runSignal}
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
@@ -214,7 +190,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'logistic' && (
         <LogisticAnalysis
-          ref={logisticRef}
+          runSignal={runSignal}
           grid={grid}
           ciLevel={ciLevel}
           onOutput={pushOutput}
@@ -224,7 +200,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'factorial' && (
         <FactorialAnovaAnalysis
-          ref={factorialRef}
+          runSignal={runSignal}
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
@@ -236,7 +212,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'distfit' && (
         <DistributionFitAnalysis
-          ref={distFitRef}
+          runSignal={runSignal}
           grid={grid}
           ciLevel={ciLevel}
           onOutput={pushOutput}
@@ -246,7 +222,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'samplesize' && (
         <SampleSizeAnalysis
-          ref={sampleSizeRef}
+          runSignal={runSignal}
           ciLevel={ciLevel}
           onOutput={pushOutput}
           onError={(message) => showToast('Error', message, 'error')}
@@ -255,7 +231,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'ancova' && (
         <AncovaAnalysis
-          ref={ancovaRef}
+          runSignal={runSignal}
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
@@ -267,7 +243,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'multivariate' && (
         <MultivariateAnalysis
-          ref={multivariateRef}
+          runSignal={runSignal}
           grid={grid}
           ciLevel={ciLevel}
           onOutput={pushOutput}
@@ -277,7 +253,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'repeatedanova' && (
         <RepeatedAnovaAnalysis
-          ref={repeatedAnovaRef}
+          runSignal={runSignal}
           grid={grid}
           ciLevel={ciLevel}
           onOutput={pushOutput}
@@ -287,7 +263,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'nonparamrm' && (
         <NonParamRepeatedAnalysis
-          ref={nonParamRepeatedRef}
+          runSignal={runSignal}
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
@@ -299,7 +275,7 @@ export const AnalysisTab = ({
 
       {activeAnalysis === 'contingency' && (
         <ContingencyAnalysis
-          ref={contingencyRef}
+          runSignal={runSignal}
           ciLevel={ciLevel}
           onOutput={pushOutput}
           onError={(message) => showToast('Error', message, 'error')}

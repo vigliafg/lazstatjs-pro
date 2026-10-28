@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
-import { ANALYSIS_RUNNERS } from './analyses/runners';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
 import { DataTab } from './ui/DataTab';
@@ -11,21 +10,9 @@ import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
 import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
+import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
-import type { AncovaHandle } from './analyses/AncovaAnalysis';
-import type { ContingencyHandle } from './analyses/ContingencyAnalysis';
-import type { CoxHandle } from './analyses/CoxAnalysis';
-import type { DistributionFitHandle } from './analyses/DistributionFitAnalysis';
-import type { FactorialAnovaHandle } from './analyses/FactorialAnovaAnalysis';
-import type { LogisticHandle } from './analyses/LogisticAnalysis';
-import type { MultivariateHandle } from './analyses/MultivariateAnalysis';
-import type { NonParamRepeatedHandle } from './analyses/NonParamRepeatedAnalysis';
-import type { RepeatedAnovaHandle } from './analyses/RepeatedAnovaAnalysis';
-import type { SampleSizeHandle } from './analyses/SampleSizeAnalysis';
-import type { SurvivalHandle } from './analyses/SurvivalAnalysis';
-import type { TimeSeriesHandle } from './analyses/TimeSeriesAnalysis';
-import type { WizardHandle } from './analyses/WizardAnalysis';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import {
   findInvalid as gridFindInvalid,
@@ -312,19 +299,6 @@ export default function App() {
     showToast,
   });
 
-  const nonParamRepeatedRef = useRef<NonParamRepeatedHandle>(null);
-  const repeatedAnovaRef = useRef<RepeatedAnovaHandle>(null);
-  const multivariateRef = useRef<MultivariateHandle>(null);
-  const ancovaRef = useRef<AncovaHandle>(null);
-  const contingencyRef = useRef<ContingencyHandle>(null);
-  const sampleSizeRef = useRef<SampleSizeHandle>(null);
-  const distFitRef = useRef<DistributionFitHandle>(null);
-  const factorialRef = useRef<FactorialAnovaHandle>(null);
-  const logisticRef = useRef<LogisticHandle>(null);
-  const timeSeriesRef = useRef<TimeSeriesHandle>(null);
-  const survivalRef = useRef<SurvivalHandle>(null);
-  const coxRef = useRef<CoxHandle>(null);
-  const wizardRef = useRef<WizardHandle>(null);
 
   // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
   // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
@@ -336,41 +310,14 @@ export default function App() {
     pushOutput(result.node, result.report);
   };
 
-  const runAnalysis = () => {
-    const runner = ANALYSIS_RUNNERS[activeAnalysis];
-    if (runner) return emit(runner({ grid, params, ciLevel }));
-
-    switch (activeAnalysis) {
-      case 'contingency':
-        return contingencyRef.current?.run();
-      case 'nonparamrm':
-        return nonParamRepeatedRef.current?.run();
-      case 'repeatedanova':
-        return repeatedAnovaRef.current?.run();
-      case 'multivariate':
-        return multivariateRef.current?.run();
-      case 'ancova':
-        return ancovaRef.current?.run();
-      case 'samplesize':
-        return sampleSizeRef.current?.run();
-      case 'distfit':
-        return distFitRef.current?.run();
-      case 'factorial':
-        return factorialRef.current?.run();
-      case 'logistic':
-        return logisticRef.current?.run();
-      case 'timeseries':
-        return timeSeriesRef.current?.run();
-      case 'survival':
-        return survivalRef.current?.run();
-      case 'cox':
-        return coxRef.current?.run();
-      case 'wizard':
-        return wizardRef.current?.run();
-      default:
-        showToast('Analysis', 'Analysis type not implemented yet', 'warn');
-    }
-  };
+  const { runAnalysis, runSignal } = useAnalysisRun({
+    activeAnalysis,
+    grid,
+    params,
+    ciLevel,
+    emit,
+    warn: (message) => showToast('Analysis', message, 'warn'),
+  });
 
   return (
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
@@ -457,23 +404,11 @@ export default function App() {
             exportResultsXlsx={exportResultsXlsx}
             setActiveTab={setActiveTab}
             runAnalysis={runAnalysis}
+            runSignal={runSignal}
             pushOutput={pushOutput}
             showToast={showToast}
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
-            ancovaRef={ancovaRef}
-            contingencyRef={contingencyRef}
-            coxRef={coxRef}
-            distFitRef={distFitRef}
-            factorialRef={factorialRef}
-            logisticRef={logisticRef}
-            multivariateRef={multivariateRef}
-            nonParamRepeatedRef={nonParamRepeatedRef}
-            repeatedAnovaRef={repeatedAnovaRef}
-            sampleSizeRef={sampleSizeRef}
-            survivalRef={survivalRef}
-            timeSeriesRef={timeSeriesRef}
-            wizardRef={wizardRef}
           />
         )}
 
