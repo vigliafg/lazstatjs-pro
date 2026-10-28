@@ -34,6 +34,13 @@ export interface MixedAnovaStats {
   };
   pGGTime: number;
   pGGInteraction: number;
+  emMeans: {
+    grand: number;
+    groups: number[];
+    conditions: number[];
+    groupSe: number[];
+    conditionSe: number[];
+  };
   contrasts: MixedAnovaContrast[];
 }
 

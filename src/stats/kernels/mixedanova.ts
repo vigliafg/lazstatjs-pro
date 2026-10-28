@@ -147,6 +147,15 @@ export const mixedAnovaStats = (options: MixedAnovaOptions): MixedAnovaStats | n
     Math.max(1, dfErrorWithin * sphericity.ggEpsilon)
   );
 
+  const emConditionMeans = Array.from({ length: k }, (_, j) =>
+    groups.reduce((sum, _, gi) => sum + cellMeans[gi][j], 0) / g
+  );
+  const emGrand = emConditionMeans.reduce((sum, value) => sum + value, 0) / k;
+  const emConditionSe = Array.from({ length: k }, () =>
+    Math.sqrt((msErrorWithin / (g * g)) * groups.reduce((sum, _, gi) => sum + 1 / groupSizes[gi], 0))
+  );
+  const emGroupSe = groups.map((_, gi) => Math.sqrt(msSubjectsWithin / groupSizes[gi]));
+
   const groupContrasts: MixedAnovaContrast[] = [];
   for (let i = 0; i < g; i++) {
     for (let j = i + 1; j < g; j++) {
@@ -170,8 +179,8 @@ export const mixedAnovaStats = (options: MixedAnovaOptions): MixedAnovaStats | n
   const timeContrasts: MixedAnovaContrast[] = [];
   for (let i = 0; i < k; i++) {
     for (let j = i + 1; j < k; j++) {
-      const diff = conditionMeans[i] - conditionMeans[j];
-      const se = Math.sqrt((2 * msErrorWithin) / n);
+      const diff = emConditionMeans[i] - emConditionMeans[j];
+      const se = Math.sqrt(emConditionSe[i] * emConditionSe[i] + emConditionSe[j] * emConditionSe[j]);
       const t = se > 0 ? diff / se : NaN;
       timeContrasts.push({
         source: 'Time', a: `C${i + 1}`, b: `C${j + 1}`, diff, se, t,
@@ -199,6 +208,13 @@ export const mixedAnovaStats = (options: MixedAnovaOptions): MixedAnovaStats | n
     sphericity,
     pGGTime,
     pGGInteraction,
+    emMeans: {
+      grand: emGrand,
+      groups: groupMeans,
+      conditions: emConditionMeans,
+      groupSe: emGroupSe,
+      conditionSe: emConditionSe,
+    },
     contrasts: [...groupContrasts, ...timeContrasts],
   };
 };

@@ -31,6 +31,35 @@ export const mixedAnovaTables = (
     ],
   },
   {
+    id: 'mixed-emmeans',
+    title: 'EM means (marginali non pesate)',
+    subtitle: 'Stime bilanciate sui livelli dei fattori',
+    columns: [
+      { key: 'factor', label: 'Fattore', format: 'text' },
+      { key: 'level', label: 'Livello', format: 'text' },
+      { key: 'emmean', label: 'EM mean', format: 'dec4' },
+      { key: 'se', label: 'SE', format: 'dec4' },
+    ],
+    rows: [
+      ...stats.groups.map((group, index) => ({
+        factor: groupName,
+        level: group,
+        emmean: stats.emMeans.groups[index],
+        se: stats.emMeans.groupSe[index],
+      })),
+      ...conditionNames.map((name, index) => ({
+        factor: 'Time',
+        level: name,
+        emmean: stats.emMeans.conditions[index],
+        se: stats.emMeans.conditionSe[index],
+      })),
+    ],
+    notes: [
+      'Le EM means mediano i livelli dell’altro fattore con pesi uguali, quindi non coincidono con le medie grezze in un disegno sbilanciato.',
+      `Media marginale complessiva = ${stats.emMeans.grand}.`,
+    ],
+  },
+  {
     id: 'mixed-anova',
     title: 'ANOVA mista split-plot',
     columns: [

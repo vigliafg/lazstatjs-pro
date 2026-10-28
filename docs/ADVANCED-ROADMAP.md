@@ -32,8 +32,8 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 ## Priorità 2 — estensioni attese
 
 - [x] **ANOVA mista (split-plot)**: un fattore between, condizioni within,
-      interazione e medie cella; Mauchly/GG, contrasti Holm; validata contro aov.
-      Restano EM means per disegni sbilanciati.
+      interazione e medie cella; Mauchly/GG, contrasti Holm, EM means non pesate;
+      validata contro aov/emmeans.
 - [x] **Sopravvivenza parametrica**: Weibull ed esponenziale AFT, time ratio e
       CI; validata contro survival::survreg.
 - [x] **Cox stratificato**: baseline per strato e coefficienti condivisi,

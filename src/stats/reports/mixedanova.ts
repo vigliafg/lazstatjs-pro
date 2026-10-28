@@ -24,6 +24,7 @@ export const mixedAnovaReport = (stats: MixedAnovaStats, groupName: string, leve
             ? 'L’interazione è significativa: l’effetto del tempo cambia tra i gruppi, quindi vanno lette le medie cella più che gli effetti principali.'
             : 'L’interazione non è significativa: gli effetti principali sono interpretabili separatamente.',
           'Il modello assume sfericità per il fattore within con più di due livelli; la tabella riporta Mauchly, epsilon e p corrette GG.',
+          `Le EM means marginali non pesate valgono ${fmtEst(stats.emMeans.grand, 3)} come media complessiva; in caso di gruppi sbilanciati sono la lettura corretta degli effetti principali.`,
         ],
       },
     ],

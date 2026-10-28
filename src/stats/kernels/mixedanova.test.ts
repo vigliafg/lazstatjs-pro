@@ -53,3 +53,20 @@ test('mixed ANOVA rejects missing groups or too few conditions', () => {
     null
   );
 });
+
+
+test('EM means weight groups equally in an unbalanced design', () => {
+  const unbalanced = [
+    ['A', '1', '2'], ['A', '2', '3'],
+    ['B', '10', '11'], ['B', '11', '12'], ['B', '12', '13'],
+    ['C', '20', '21'], ['C', '21', '22'],
+  ];
+  const stats = mixedAnovaStats({ rows: unbalanced, groupIdx: 0, conditionIdxs: [1, 2], level: 95 });
+  assert.ok(stats);
+  if (!stats) return;
+  const expected = stats.cellMeans[0].map((_, j) =>
+    stats.cellMeans.reduce((sum, row) => sum + row[j], 0) / stats.cellMeans.length
+  );
+  stats.emMeans.conditions.forEach((value, index) => close(value, expected[index], 1e-9));
+  close(stats.emMeans.grand, expected.reduce((sum, value) => sum + value, 0) / expected.length, 1e-9);
+});
