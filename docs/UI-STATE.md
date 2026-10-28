@@ -1,6 +1,7 @@
 # UI — stato attuale e backlog
 
-> Aggiornato al commit `6159a82` (`main`, allineato a `origin/main`).
+> Aggiornato al commit `79c099c` (`main`, allineato a `origin/main`).
+> Checkpoint griglia: [`GRID-STATE.md`](GRID-STATE.md).
 > Questo documento fotografa la UI dopo il workbench a tre zone e fissa il
 > lavoro rimanente prima della fase dedicata a inserimento ed editing dei dati.
 
@@ -148,12 +149,13 @@ ancora quella di prima.
 
 ### 5.2 Limiti
 
-1. **Iterazione incompleta.** Non c'è re-run con i parametri storici, non c'è
-   badge `stale`, non c'è live-run. La card è un risultato da leggere, non ancora
-   un'analisi da riaprire e rilanciare.
-2. **Stato centralizzato solo in teoria.** `App.tsx` possiede ancora 30+ coppie
-   `useState` e `AnalysisTab` riceve oltre 70 props. Ogni feature trasversale
-   costa.
+1. **Iterazione parziale.** Il badge `stale` ora copre dati e filtro, ma non ci
+   sono ancora re-run con i parametri storici, “apply parameters” o live-run.
+   La card è un risultato da leggere, non ancora un'analisi da riaprire e
+   rilanciare.
+2. **Store unico, contratto ancora largo.** `App.tsx` ha ora un solo stato
+   `params` con setter tipizzati, ma `AnalysisTab` riceve ancora oltre 70 props.
+   Manca un context/reducer per `AnalysisId` e la riduzione del contratto.
 3. **Form non strutturati internamente.** Le sezioni sono generiche; alcuni
    hint sono in italiano, la shell in inglese.
 4. **Nessun test UI automatico.** Lo smoke test con Playwright è stato manuale.
@@ -185,8 +187,8 @@ Priorità:
 
 | ID | Pri | Intervento | Risultato atteso | Dipendenze | Rischio |
 |---|---|---|---|---|---|
-| **UI-01** | P0 | Iteration loop: salvare i parametri nella card, re-run, apply parameters, badge stale | La card diventa un'analisi riapribile e rilanciabile | UI-02 | Medio |
-| **UI-02** | P0 | Store dei parametri per `AnalysisId` (reducer/context + selector tipizzati) | App senza 30+ `useState`; meno props; base per stale/re-run | — | Alto |
+| **UI-01** | P0 | Iteration loop: salvare i parametri nella card, re-run, apply parameters | La card diventa un'analisi riapribile e rilanciabile; lo stale su dati/filtro è già fatto | UI-02 | Medio |
+| **UI-02** | P0 | Completare lo store: context/reducer per `AnalysisId` e riduzione delle props | Store unico già presente in App; mancano context/reducer e un contratto più stretto | — | Alto |
 | **UI-03** | P1 | Suite Playwright: ricerca, selezione, run, collapse, outline, Setup, mobile, reload | Regressioni UI intercettate in CI | — | Basso/medio |
 | **UI-04** | P2 | Live-run per le analisi `instant`, debounce, stato `running`/`idle` | Feedback immediato in stile JASP; heavy restano esplicite | UI-02, UI-01 | Medio |
 | **UI-05** | P2 | Output workspace: filtro per analisi, pin/confronto, copia card, conferma Clear | Più controllo su sessioni lunghe | UI-01 | Basso |
@@ -199,8 +201,8 @@ Priorità:
 
 ### Ordine consigliato
 
-1. **UI-02** — store dei parametri.
-2. **UI-01** — iteration loop (re-run, stale, apply).
+1. **UI-01** — iteration loop (params snapshot, re-run, apply).
+2. **UI-02** — completare context/reducer e ridurre le props.
 3. **UI-03** — test UI.
 4. **UI-04 / UI-05** — live-run e output workspace.
 5. **UI-06 / UI-07** — coerenza dei form e rifinitura responsive.
