@@ -10,7 +10,8 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [x] **GLM (conteggi)**: Poisson e binomiale negativa NB2, IRR, dispersione,
       LR, AIC/BIC. Restano logistico ordinale e Firth.
 - [ ] **Modelli misti**: LMM/GLMM, GEE.
-- [ ] **EFA + omega**: rotazioni, parallel analysis, affidabilità omega.
+- [x] **EFA + omega**: principal-axis factoring, parallel analysis, varimax,
+      comunalità/unicità e omega totale; modalità EFA nella scheda Multivariate.
 - [ ] **Dati mancanti**: imputazione multipla, FIML.
 - [x] **Errori standard robusti**: HC1/HC3 nella regressione, con tabella
       dedicata e test contro un riferimento sandwich.

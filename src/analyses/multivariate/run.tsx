@@ -9,6 +9,9 @@ import {
   alphaReport,
   alphaTables,
   cronbachAlpha,
+  efaReport,
+  efaTables,
+  exploratoryFactorAnalysis,
   pcaReport,
   pcaTables,
   principalComponents,
@@ -40,16 +43,18 @@ export const buildMultivariateOutput = ({
   params,
   ciLevel,
 }: MultivariateInput): AnalysisRunResult => {
-  const { mode, standardize, selected } = params;
+  const { mode, standardize, selected, factors, rotation } = params;
   const columns = selected.filter(index => isNumericColumn(grid, index));
-  const minimum = 2;
+  const minimum = mode === 'efa' ? 3 : 2;
   if (columns.length < minimum) {
     return {
       ok: false,
       reason:
         mode === 'pca'
           ? 'Select at least two numeric variables'
-          : 'Select at least two numeric items of the scale',
+          : mode === 'efa'
+            ? 'Select at least three numeric variables for EFA'
+            : 'Select at least two numeric items of the scale',
     };
   }
 
@@ -61,6 +66,36 @@ export const buildMultivariateOutput = ({
     return {
       ok: false,
       reason: 'Not enough complete rows: every selected variable must be numeric and present',
+    };
+  }
+
+  if (mode === 'efa') {
+    const result = exploratoryFactorAnalysis({
+      data,
+      variables: names,
+      standardize,
+      factors,
+      rotation,
+    });
+    if (!result) {
+      return {
+        ok: false,
+        reason: 'The factor solution could not be estimated: check constant variables and complete rows',
+      };
+    }
+    const tables = efaTables(result, names);
+    return {
+      ok: true,
+      tables,
+      report: efaReport(tables, result),
+      node: (
+        <div className="mb-6">
+          <p className="text-[10px] text-text3 font-mono mb-3">
+            {`EFA · ${result.n} casi · ${result.p} variabili · ${result.factors} fattori`}
+          </p>
+          <ResultTables specs={tables} />
+        </div>
+      ),
     };
   }
 

@@ -19,6 +19,25 @@ export interface PcaResult {
   determinant: number;
 }
 
+export interface EfaResult {
+  n: number;
+  p: number;
+  factors: number;
+  rotation: 'none' | 'varimax';
+  eigenvalues: number[];
+  parallelThreshold: number[];
+  loadings: number[][];
+  communalities: number[];
+  uniqueness: number[];
+  variancePct: number[];
+  cumulativePct: number[];
+  omega: number;
+  bartlettChi2: number;
+  bartlettDf: number;
+  bartlettP: number;
+  determinant: number;
+}
+
 export interface AlphaItemStat {
   item: string;
   mean: number;

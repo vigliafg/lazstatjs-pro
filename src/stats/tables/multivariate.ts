@@ -2,7 +2,7 @@ import { fmtP, fmtPct, interpretR } from '../format';
 import { isDecided, show } from '../reportKit';
 import { alphaLabel, kmoLabel } from '../multivariate/labels';
 import type { TableSpec } from '../types';
-import type { AlphaResult, PcaResult } from '../multivariate/types';
+import type { AlphaResult, EfaResult, PcaResult } from '../multivariate/types';
 
 export const pcaTables = (result: PcaResult): TableSpec[] => {
   const loadingsColumns = Array.from({ length: result.retained }, (_, index) => ({
@@ -139,5 +139,72 @@ export const alphaTables = (result: AlphaResult): TableSpec[] => [
       ),
     })),
     notes: ['Correlazioni di Pearson sui casi completi; la diagonale è 1.'],
+  },
+];
+
+export const efaTables = (result: EfaResult, variables: string[]): TableSpec[] => [
+  {
+    id: 'efa-adequacy',
+    title: 'Adeguatezza della soluzione',
+    subtitle: `${result.n} casi · ${result.p} variabili · ${result.factors} fattori`,
+    columns: [
+      { key: 'metric', label: 'Metrica', format: 'text' },
+      { key: 'value', label: 'Valore', format: 'dec4' },
+    ],
+    rows: [
+      { metric: 'N', value: result.n },
+      { metric: 'Variabili', value: result.p },
+      { metric: 'Fattori', value: result.factors },
+      { metric: 'Bartlett χ²', value: result.bartlettChi2 },
+      { metric: 'Bartlett df', value: result.bartlettDf },
+      { metric: 'Bartlett p', value: result.bartlettP },
+      { metric: 'Determinante R', value: result.determinant },
+      { metric: 'Omega totale', value: result.omega },
+    ],
+    notes: [
+      'Bartlett verifica che la matrice di correlazione non sia un’identità: è una condizione necessaria, non sufficiente.',
+      'Omega totale è calcolato dai loadings e dalle unicità della soluzione ruotata.',
+    ],
+  },
+  {
+    id: 'efa-eigen',
+    title: 'Autovalori e parallel analysis',
+    subtitle: 'Soglia = 95° percentile dei dati casuali',
+    columns: [
+      { key: 'component', label: 'Componente', format: 'int' },
+      { key: 'eigenvalue', label: 'Autovalore', format: 'dec4' },
+      { key: 'threshold', label: 'Soglia parallela', format: 'dec4' },
+      { key: 'variance', label: '% varianza', format: 'dec2' },
+      { key: 'cumulative', label: '% cumulata', format: 'dec2' },
+    ],
+    rows: result.eigenvalues.map((value, index) => ({
+      component: index + 1,
+      eigenvalue: value,
+      threshold: result.parallelThreshold[index] ?? NaN,
+      variance: result.variancePct[index] ?? NaN,
+      cumulative: result.cumulativePct[index] ?? NaN,
+    })),
+    notes: ['I fattori ritenuti sono quelli con autovalore sopra la soglia della parallel analysis.'],
+  },
+  {
+    id: 'efa-loadings',
+    title: `Loadings (${result.rotation === 'varimax' ? 'varimax' : 'non ruotati'})`,
+    columns: [
+      { key: 'variable', label: 'Variabile', format: 'text' },
+      ...Array.from({ length: result.factors }, (_, index) => ({
+        key: `f${index + 1}`,
+        label: `F${index + 1}`,
+        format: 'dec3' as const,
+      })),
+      { key: 'communality', label: 'Comunalità', format: 'dec3' },
+      { key: 'uniqueness', label: 'Unicità', format: 'dec3' },
+    ],
+    rows: variables.map((name, index) => ({
+      variable: name,
+      ...Object.fromEntries(result.loadings[index].map((value, factor) => [`f${factor + 1}`, value])),
+      communality: result.communalities[index],
+      uniqueness: result.uniqueness[index],
+    })),
+    notes: ['Loadings ≥ 0,40 sono generalmente considerati sostanziali; il segno è arbitrario.'],
   },
 ];

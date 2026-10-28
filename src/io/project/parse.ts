@@ -374,9 +374,14 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       selected: indexList(repeatedanova.selected, d.repeatedanova.selected, width),
     },
     multivariate: {
-      mode: multivariate.mode === 'alpha' ? 'alpha' : d.multivariate.mode,
+      mode:
+        multivariate.mode === 'alpha' || multivariate.mode === 'efa'
+          ? multivariate.mode
+          : d.multivariate.mode,
       standardize: bool(multivariate.standardize, d.multivariate.standardize),
       selected: indexList(multivariate.selected, d.multivariate.selected, width),
+      factors: Math.max(0, integer(multivariate.factors, d.multivariate.factors)),
+      rotation: multivariate.rotation === 'none' ? 'none' : d.multivariate.rotation,
     },
     nonparamrm: {
       mode:

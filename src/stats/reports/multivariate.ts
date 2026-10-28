@@ -4,7 +4,7 @@ import { alphaLabel, kmoLabel } from '../multivariate/labels';
 import { mean } from '../multivariate/math';
 import type { ReportSpec } from '../report';
 import type { TableSpec } from '../types';
-import type { AlphaResult, PcaResult } from '../multivariate/types';
+import type { AlphaResult, EfaResult, PcaResult } from '../multivariate/types';
 
 export const pcaReport = (tables: TableSpec[], result: PcaResult, level: number): ReportSpec => {
   const eigen = tables.find((table) => table.id === 'pca-eigen')?.rows ?? [];
@@ -139,6 +139,40 @@ export const alphaReport = (tables: TableSpec[], result: AlphaResult): ReportSpe
     limitations: [
       'È riportato l’α di Cronbach; ω di McDonald non è calcolato.',
       'Non sono inclusi intervalli di confidenza bootstrapped per α.',
+    ],
+  };
+};
+
+export const efaReport = (tables: TableSpec[], result: EfaResult): ReportSpec => {
+  const strong = result.loadings.reduce(
+    (count, row) => count + row.filter(value => Math.abs(value) >= 0.4).length,
+    0
+  );
+  return {
+    id: 'efa',
+    title: 'Report di analisi fattoriale',
+    headline: `${result.factors} fattori spiegano il ${fmtPct(result.cumulativePct[result.factors - 1] ?? 0)} della varianza; omega = ${show(result.omega, 3)}.`,
+    badge: result.omega >= 0.8 ? 'Affidabilità buona' : result.omega >= 0.7 ? 'Affidabilità accettabile' : 'Affidabilità da valutare',
+    tone: result.omega >= 0.7 ? 'positive' : 'caution',
+    intro: [
+      `Soluzione ${result.rotation === 'varimax' ? 'varimax' : 'non ruotata'} su ${result.n} casi completi.`,
+      `Bartlett χ²(${result.bartlettDf}) = ${show(result.bartlettChi2, 3)}, p = ${fmtP(result.bartlettP)}.`,
+    ],
+    sections: [
+      {
+        heading: 'Lettura',
+        body: [
+          strong > 0
+            ? `Ci sono ${strong} loadings sostanziali (|λ| ≥ 0,40): controlla la tabella per attribuire i fattori alle variabili.`
+            : 'Nessun loading raggiunge 0,40: la struttura fattoriale è debole o il numero di fattori è insufficiente.',
+          `Omega totale = ${show(result.omega, 3)}: stima la quota di varianza affidabile della scala complessiva.`,
+          'La parallel analysis confronta gli autovalori osservati con quelli di dati casuali con la stessa numerosità.',
+        ],
+      },
+    ],
+    limitations: [
+      'La soluzione fattoriale non è unica: rotazioni e numero di fattori cambiano l’interpretazione.',
+      'L’analisi fattoriale esplorativa non sostituisce una CFA con ipotesi pre-specificate.',
     ],
   };
 };

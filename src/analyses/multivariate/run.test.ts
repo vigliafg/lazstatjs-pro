@@ -20,7 +20,7 @@ const grid = {
 
 const base = {
   grid,
-  params: { mode: 'pca' as const, standardize: true, selected: [0, 1, 2] },
+  params: { mode: 'pca' as const, standardize: true, selected: [0, 1, 2], factors: 0, rotation: 'varimax' as const },
   ciLevel: 95,
 };
 

@@ -1,8 +1,8 @@
 import { jStat } from '../jstat';
-import { chi2SF } from '../distributions';
+import { chi2SF, mulberry32 } from '../distributions';
 import { eigenSymmetric } from '../linalg';
 import { mean } from '../multivariate/math';
-import type { AlphaItemStat, AlphaResult, PcaResult } from '../multivariate/types';
+import type { AlphaItemStat, AlphaResult, EfaResult, PcaResult } from '../multivariate/types';
 
 const variance = (values: number[], center: number): number =>
   values.reduce((sum, value) => sum + (value - center) ** 2, 0) / (values.length - 1);
@@ -200,5 +200,183 @@ export const cronbachAlpha = (data: number[][], items: string[]): AlphaResult | 
     correlations,
     totalMean,
     totalSd: Math.sqrt(totalVariance),
+  };
+};
+
+/* ------------------------------------------------------------------------- */
+/* Exploratory factor analysis                                               */
+/* ------------------------------------------------------------------------- */
+
+type Matrix = number[][];
+
+const matMul = (a: Matrix, b: Matrix): Matrix =>
+  a.map(row => b[0].map((_, column) => row.reduce((sum, value, i) => sum + value * b[i][column], 0)));
+
+const matTranspose = (matrix: Matrix): Matrix =>
+  matrix[0].map((_, column) => matrix.map(row => row[column]));
+
+const correlationMatrix = (data: number[][], standardize: boolean): Matrix => {
+  const p = data[0].length;
+  const columns = Array.from({ length: p }, (_, j) => data.map(row => row[j]));
+  const matrix: Matrix = Array.from({ length: p }, () => new Array<number>(p).fill(0));
+  for (let i = 0; i < p; i++) {
+    for (let j = 0; j < p; j++) {
+      if (standardize) {
+        matrix[i][j] = correlation(columns[i], columns[j]);
+      } else {
+        const mi = mean(columns[i]);
+        const mj = mean(columns[j]);
+        matrix[i][j] = columns[i].reduce(
+          (sum, value, index) => sum + (value - mi) * (columns[j][index] - mj),
+          0
+        ) / (columns[i].length - 1);
+      }
+    }
+  }
+  return matrix;
+};
+
+const svdSmall = (matrix: Matrix): { u: Matrix; v: Matrix } => {
+  const k = matrix.length;
+  const bt = matTranspose(matrix);
+  const btb = matMul(bt, matrix);
+  const eig = eigenSymmetric(btb);
+  const singular = eig.values.map(value => Math.sqrt(Math.max(0, value)));
+  const v = eig.vectors;
+  const u = Array.from({ length: k }, (_, i) =>
+    Array.from({ length: k }, (_, j) => {
+      const denominator = singular[j];
+      if (!(denominator > 1e-12)) return i === j ? 1 : 0;
+      return bt[i][j] === undefined ? 0 : matrix[i].reduce((sum, value, r) => sum + value * v[r][j], 0) / denominator;
+    })
+  );
+  return { u, v };
+};
+
+const varimax = (loadings: Matrix, maxIterations = 60): Matrix => {
+  const p = loadings.length;
+  const k = loadings[0].length;
+  if (k < 2) return loadings.map(row => [...row]);
+  const h = loadings.map(row => {
+    const value = Math.sqrt(row.reduce((sum, entry) => sum + entry * entry, 0));
+    return value > 1e-12 ? value : 1;
+  });
+  let x = loadings.map((row, i) => row.map(value => value / h[i]));
+
+  for (let iteration = 0; iteration < maxIterations; iteration++) {
+    const xt = matTranspose(x);
+    const s = matMul(xt, x);
+    const x3 = x.map(row => row.map(value => value ** 3));
+    const adjusted = x.map((row, i) =>
+      row.map((value, j) => x3[i][j] - (value * s[j][j]) / p)
+    );
+    const b = matMul(xt, adjusted);
+    const { u, v } = svdSmall(b);
+    const t = matMul(u, matTranspose(v));
+    x = matMul(x, t);
+  }
+
+  return x.map((row, i) => row.map(value => value * h[i]));
+};
+
+const parallelThresholds = (n: number, p: number, reps = 100): number[] => {
+  const rng = mulberry32(12345);
+  const normal = () => {
+    const u = Math.max(1e-12, rng());
+    const v = Math.max(1e-12, rng());
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  };
+  const values: number[][] = [];
+  for (let rep = 0; rep < reps; rep++) {
+    const data = Array.from({ length: n }, () => Array.from({ length: p }, () => normal()));
+    const r = correlationMatrix(data, true);
+    values.push(eigenSymmetric(r).values);
+  }
+  return Array.from({ length: p }, (_, component) => {
+    const sorted = values.map(row => row[component]).sort((a, b) => a - b);
+    return sorted[Math.floor(0.95 * (sorted.length - 1))];
+  });
+};
+
+export interface EfaInput {
+  data: number[][];
+  variables: string[];
+  standardize: boolean;
+  factors: number;
+  rotation: 'none' | 'varimax';
+}
+
+/** Analisi fattoriale esplorativa con estrazione principal-axis. */
+export const exploratoryFactorAnalysis = (input: EfaInput): EfaResult | null => {
+  const { data, variables, standardize, rotation } = input;
+  const p = variables.length;
+  if (p < 3 || data.length < p + 2) return null;
+  const R = correlationMatrix(data, standardize);
+  const eigen = eigenSymmetric(R);
+  const thresholds = parallelThresholds(data.length, p);
+  let factors = input.factors > 0 ? Math.min(input.factors, p - 1) : 0;
+  if (factors === 0) {
+    factors = eigen.values.filter((value, index) => value > thresholds[index]).length;
+    factors = Math.max(1, Math.min(p - 1, factors));
+  }
+
+  let communalities = new Array<number>(p).fill(1);
+  let loadings: Matrix = Array.from({ length: p }, () => new Array<number>(factors).fill(0));
+  for (let iteration = 0; iteration < 200; iteration++) {
+    const reduced = R.map((row, i) => row.map((value, j) => (i === j ? communalities[i] : value)));
+    const eig = eigenSymmetric(reduced);
+    loadings = Array.from({ length: p }, (_, i) =>
+      Array.from({ length: factors }, (_, j) => {
+        const value = eig.values[j] ?? 0;
+        return value > 0 ? eig.vectors[i][j] * Math.sqrt(value) : 0;
+      })
+    );
+    const next = loadings.map(row => Math.min(1, row.reduce((sum, value) => sum + value * value, 0)));
+    const change = Math.max(...next.map((value, i) => Math.abs(value - communalities[i])));
+    communalities = next;
+    if (change < 1e-7) break;
+  }
+
+  const rotated = rotation === 'varimax' ? varimax(loadings) : loadings;
+  const h2 = rotated.map(row => Math.min(1, row.reduce((sum, value) => sum + value * value, 0)));
+  const uniqueness = h2.map(value => 1 - value);
+  const variance = Array.from({ length: factors }, (_, j) =>
+    rotated.reduce((sum, row) => sum + row[j] * row[j], 0)
+  );
+  const variancePct = variance.map(value => (value / p) * 100);
+  const cumulativePct = variancePct.reduce<number[]>((accumulator, value, index) => {
+    accumulator.push(value + (index > 0 ? accumulator[index - 1] : 0));
+    return accumulator;
+  }, []);
+  const factorSums = Array.from({ length: factors }, (_, j) =>
+    rotated.reduce((sum, row) => sum + row[j], 0)
+  );
+  const explained = factorSums.reduce((sum, value) => sum + value * value, 0);
+  const omega = Math.min(
+    1,
+    Math.max(0, explained / (explained + uniqueness.reduce((sum, value) => sum + value, 0)))
+  );
+
+  const determinant = eigen.values.reduce((product, value) => product * Math.max(1e-12, value), 1);
+  const bartlettChi2 = -(data.length - 1 - (2 * p + 5) / 6) * Math.log(determinant);
+  const bartlettDf = (p * (p - 1)) / 2;
+
+  return {
+    n: data.length,
+    p,
+    factors,
+    rotation,
+    eigenvalues: eigen.values,
+    parallelThreshold: thresholds,
+    loadings: rotated,
+    communalities: h2,
+    uniqueness,
+    variancePct,
+    cumulativePct,
+    omega,
+    bartlettChi2,
+    bartlettDf,
+    bartlettP: chi2SF(bartlettChi2, bartlettDf),
+    determinant,
   };
 };

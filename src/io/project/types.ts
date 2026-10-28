@@ -144,13 +144,15 @@ export interface RepeatedAnovaParams {
   selected: number[];
 }
 
-export type MultivariateMode = 'pca' | 'alpha';
+export type MultivariateMode = 'pca' | 'alpha' | 'efa';
 
 /** Parametri di PCA / Cronbach alpha. */
 export interface MultivariateParams {
   mode: MultivariateMode;
   standardize: boolean;
   selected: number[];
+  factors: number;
+  rotation: 'none' | 'varimax';
 }
 
 export type NonParamMode = 'friedman' | 'mcnemar' | 'cochran' | 'jonckheere';
@@ -336,6 +338,8 @@ export const DEFAULT_PARAMS: ProjectParams = {
     mode: 'pca',
     standardize: true,
     selected: [0, 1, 2],
+    factors: 0,
+    rotation: 'varimax',
   },
   nonparamrm: {
     mode: 'friedman',
