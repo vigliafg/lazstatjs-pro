@@ -153,6 +153,11 @@ export interface FactorialParams {
   interaction: boolean;
 }
 
+/** Parametri dell'ANOVA per misure ripetute. */
+export interface RepeatedAnovaParams {
+  selected: number[];
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -169,6 +174,7 @@ export interface ProjectParams {
   contingency: ContingencyParams;
   ancova: AncovaParams;
   factorial: FactorialParams;
+  repeatedanova: RepeatedAnovaParams;
 }
 
 export interface ProjectSettings {
@@ -273,6 +279,9 @@ export const DEFAULT_PARAMS: ProjectParams = {
     factorA: 1,
     factorB: 2,
     interaction: false,
+  },
+  repeatedanova: {
+    selected: [0, 1, 2],
   },
 };
 
@@ -494,6 +503,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const contingency = isRecord(raw.contingency) ? raw.contingency : null;
   const ancova = isRecord(raw.ancova) ? raw.ancova : {};
   const factorial = isRecord(raw.factorial) ? raw.factorial : {};
+  const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -619,6 +629,9 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       factorA: index(factorial.factorA, d.factorial.factorA, width),
       factorB: index(factorial.factorB, d.factorial.factorB, width),
       interaction: bool(factorial.interaction, d.factorial.interaction),
+    },
+    repeatedanova: {
+      selected: indexList(repeatedanova.selected, d.repeatedanova.selected, width),
     },
   };
 };

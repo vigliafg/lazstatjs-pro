@@ -371,6 +371,20 @@ describe('project sanitisation', () => {
     assert.equal(restored.params.factorial.interaction, false);
   });
 
+  it('restores and sanitises repeated-measures parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          repeatedanova: { selected: [0, 1, 2, 99, -1, 1] },
+        },
+      })
+    );
+    assert.deepEqual(restored.params.repeatedanova.selected, [0, 1, 2]);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

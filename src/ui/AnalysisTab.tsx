@@ -16,14 +16,14 @@ import { TimeSeriesForm } from '../analyses/timeseries/Form';
 import { ContingencyForm } from '../analyses/contingency/Form';
 import { AncovaForm } from '../analyses/ancova/Form';
 import { FactorialForm } from '../analyses/factorial/Form';
+import { RepeatedAnovaForm } from '../analyses/repeatedanova/Form';
 import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
 import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
-import { RepeatedAnovaAnalysis } from '../analyses/RepeatedAnovaAnalysis';
 import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, RegParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -60,6 +60,8 @@ export interface AnalysisTabProps {
   setAncovaParams: Dispatch<SetStateAction<AncovaParams>>;
   factorialParams: FactorialParams;
   setFactorialParams: Dispatch<SetStateAction<FactorialParams>>;
+  repeatedAnovaParams: RepeatedAnovaParams;
+  setRepeatedAnovaParams: Dispatch<SetStateAction<RepeatedAnovaParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -112,6 +114,8 @@ export const AnalysisTab = ({
   setAncovaParams,
   factorialParams,
   setFactorialParams,
+  repeatedAnovaParams,
+  setRepeatedAnovaParams,
   grid,
   outputs,
   removeOutput,
@@ -272,12 +276,10 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'repeatedanova' && (
-        <RepeatedAnovaAnalysis
-          runSignal={runSignal}
+        <RepeatedAnovaForm
           grid={grid}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+          repeatedAnovaParams={repeatedAnovaParams}
+          setRepeatedAnovaParams={setRepeatedAnovaParams}
         />
       )}
 
