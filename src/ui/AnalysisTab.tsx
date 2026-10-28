@@ -25,9 +25,10 @@ import { AgreementForm } from '../analyses/agreement/Form';
 import { CountForm } from '../analyses/countreg/Form';
 import { LmmForm } from '../analyses/lmm/Form';
 import { OrdinalForm } from '../analyses/ordinal/Form';
+import { MiForm } from '../analyses/mi/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -82,6 +83,8 @@ export interface AnalysisTabProps {
   setLmmParams: Dispatch<SetStateAction<LmmParams>>;
   ordinalParams: OrdinalParams;
   setOrdinalParams: Dispatch<SetStateAction<OrdinalParams>>;
+  miParams: MiParams;
+  setMiParams: Dispatch<SetStateAction<MiParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -149,6 +152,8 @@ export const AnalysisTab = ({
   setLmmParams,
   ordinalParams,
   setOrdinalParams,
+  miParams,
+  setMiParams,
   grid,
   outputs,
   removeOutput,
@@ -319,6 +324,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'mi' && (
+        <MiForm grid={grid} miParams={miParams} setMiParams={setMiParams} />
       )}
 
       {activeAnalysis === 'ordinal' && (

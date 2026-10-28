@@ -168,6 +168,13 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri dell'imputazione multipla. */
+export interface MiParams {
+  variables: number[];
+  imputations: number;
+  iterations: number;
+}
+
 /** Parametri della regressione logistica ordinale. */
 export interface OrdinalParams {
   dep: number;
@@ -236,6 +243,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  mi: MiParams;
   ordinal: OrdinalParams;
   lmm: LmmParams;
   countreg: CountParams;
@@ -365,6 +373,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  mi: {
+    variables: [0, 1],
+    imputations: 5,
+    iterations: 10,
   },
   ordinal: {
     dep: 0,

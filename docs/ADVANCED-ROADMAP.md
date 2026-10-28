@@ -17,7 +17,8 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
       ICC e varianze; validato contro lme4. Restano slope casuali, GLMM e GEE.
 - [x] **EFA + omega**: principal-axis factoring, parallel analysis, varimax,
       comunalità/unicità e omega totale; modalità EFA nella scheda Multivariate.
-- [ ] **Dati mancanti**: imputazione multipla, FIML.
+- [x] **Dati mancanti (MI numerica)**: MICE con regressione a catene,
+      pooling di Rubin per media/SD e FMI. Resta FIML e il pooling per modelli.
 - [x] **Errori standard robusti**: HC1/HC3 nella regressione, con tabella
       dedicata e test contro un riferimento sandwich.
 - [x] **Accordo**: ICC(1,1)/(2,1)/(3,1), Bland–Altman con bias/LoA e

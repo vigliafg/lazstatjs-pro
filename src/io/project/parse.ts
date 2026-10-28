@@ -239,6 +239,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
   const nonparamrm = isRecord(raw.nonparamrm) ? raw.nonparamrm : {};
+  const mi = isRecord(raw.mi) ? raw.mi : {};
   const ordinal = isRecord(raw.ordinal) ? raw.ordinal : {};
   const lmm = isRecord(raw.lmm) ? raw.lmm : {};
   const countreg = isRecord(raw.countreg) ? raw.countreg : {};
@@ -396,6 +397,11 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       right: index(nonparamrm.right, d.nonparamrm.right, width),
       outcome: index(nonparamrm.outcome, d.nonparamrm.outcome, width),
       group: index(nonparamrm.group, d.nonparamrm.group, width),
+    },
+    mi: {
+      variables: indexList(mi.variables, d.mi.variables, width),
+      imputations: Math.max(2, Math.min(50, integer(mi.imputations, d.mi.imputations))),
+      iterations: Math.max(1, Math.min(50, integer(mi.iterations, d.mi.iterations))),
     },
     ordinal: {
       dep: index(ordinal.dep, d.ordinal.dep, width),

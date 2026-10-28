@@ -25,6 +25,7 @@ import { buildAgreementOutput } from './agreement/run';
 import { buildCountOutput } from './countreg/run';
 import { buildLmmOutput } from './lmm/run';
 import { buildOrdinalOutput } from './ordinal/run';
+import { buildMiOutput } from './mi/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -93,4 +94,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildLmmOutput({ grid, params: params.lmm, ciLevel }),
   ordinal: ({ grid, params, ciLevel }) =>
     buildOrdinalOutput({ grid, params: params.ordinal, ciLevel }),
+  mi: ({ grid, params, ciLevel }) =>
+    buildMiOutput({ grid, params: params.mi, ciLevel }),
 };
