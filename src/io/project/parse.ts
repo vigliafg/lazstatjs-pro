@@ -239,6 +239,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
   const multivariate = isRecord(raw.multivariate) ? raw.multivariate : {};
   const nonparamrm = isRecord(raw.nonparamrm) ? raw.nonparamrm : {};
+  const tost = isRecord(raw.tost) ? raw.tost : {};
   const wizard = isRecord(raw.wizard) ? raw.wizard : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
@@ -384,6 +385,15 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       right: index(nonparamrm.right, d.nonparamrm.right, width),
       outcome: index(nonparamrm.outcome, d.nonparamrm.outcome, width),
       group: index(nonparamrm.group, d.nonparamrm.group, width),
+    },
+    tost: {
+      design:
+        tost.design === 'paired' || tost.design === 'ind' ? tost.design : d.tost.design,
+      var1: index(tost.var1, d.tost.var1, width),
+      var2: index(tost.var2, d.tost.var2, width),
+      mu: finite(tost.mu, d.tost.mu),
+      margin: finite(tost.margin, d.tost.margin),
+      equalVar: bool(tost.equalVar, d.tost.equalVar),
     },
     wizard: {
       goal: parseWizardGoal(wizard.goal, d.wizard.goal),

@@ -65,6 +65,7 @@ import {
   type SampleSizeParams,
   type SurvivalParams,
   type TimeSeriesParams,
+  type TostParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -311,6 +312,10 @@ export default function App() {
     () => boot?.params.wizard ?? defaultWizardParams(grid)
   );
 
+  const [tostParams, setTostParams] = useState<TostParams>(
+    boot?.params.tost ?? DEFAULT_PARAMS.tost
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -337,8 +342,9 @@ export default function App() {
       multivariate: multivariateParams,
       nonparamrm: nonParamParams,
       wizard: wizardParams,
+      tost: tostParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -371,6 +377,7 @@ export default function App() {
     setMultivariateParams(project.params.multivariate);
     setNonParamParams(project.params.nonparamrm);
     setWizardParams(project.params.wizard);
+    setTostParams(project.params.tost);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -520,6 +527,8 @@ export default function App() {
             setNonParamParams={setNonParamParams}
             wizardParams={wizardParams}
             setWizardParams={setWizardParams}
+            tostParams={tostParams}
+            setTostParams={setTostParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

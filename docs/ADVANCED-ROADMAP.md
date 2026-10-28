@@ -13,7 +13,8 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [ ] **Dati mancanti**: imputazione multipla, FIML.
 - [ ] **Errori standard robusti**: HC1/HC3 e cluster-robust nella regressione.
 - [ ] **Accordo**: ICC, Bland–Altman, kappa di Cohen/Fleiss/pesata.
-- [ ] **TOST / non-inferiorità**.
+- [x] **TOST / non-inferiorità**: nuova scheda Equivalence (TOST) con disegno
+      one-sample, paired e due gruppi indipendenti.
 
 ## Priorità 2 — estensioni attese
 

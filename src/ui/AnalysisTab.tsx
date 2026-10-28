@@ -20,9 +20,10 @@ import { RepeatedAnovaForm } from '../analyses/repeatedanova/Form';
 import { MultivariateForm } from '../analyses/multivariate/Form';
 import { NonParamForm } from '../analyses/nonparamrm/Form';
 import { WizardForm } from '../analyses/wizard/Form';
+import { TostForm } from '../analyses/tost/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -67,6 +68,8 @@ export interface AnalysisTabProps {
   setNonParamParams: Dispatch<SetStateAction<NonParamParams>>;
   wizardParams: WizardParams;
   setWizardParams: Dispatch<SetStateAction<WizardParams>>;
+  tostParams: TostParams;
+  setTostParams: Dispatch<SetStateAction<TostParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -124,6 +127,8 @@ export const AnalysisTab = ({
   setNonParamParams,
   wizardParams,
   setWizardParams,
+  tostParams,
+  setTostParams,
   grid,
   outputs,
   removeOutput,
@@ -293,6 +298,14 @@ export const AnalysisTab = ({
           onRecode={updateColumnRecode}
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
+        />
+      )}
+
+      {activeAnalysis === 'tost' && (
+        <TostForm
+          grid={grid}
+          tostParams={tostParams}
+          setTostParams={setTostParams}
         />
       )}
 

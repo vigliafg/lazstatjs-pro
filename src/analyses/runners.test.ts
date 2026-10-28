@@ -22,6 +22,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'samplesize',
     'survival',
     'timeseries',
+    'tost',
     'ttest',
     'wizard',
   ]);

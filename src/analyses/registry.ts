@@ -26,6 +26,7 @@ export const ANALYSIS_TABS = [
   { id: 'timeseries', label: 'Time Series' },
   { id: 'survival', label: 'Survival (KM)' },
   { id: 'cox', label: 'Cox (PH)' },
+  { id: 'tost', label: 'Equivalence (TOST)' },
 ] as const;
 
 export type AnalysisId = (typeof ANALYSIS_TABS)[number]['id'];

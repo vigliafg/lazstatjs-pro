@@ -164,6 +164,16 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri del test di equivalenza TOST. */
+export interface TostParams {
+  design: 'one' | 'paired' | 'ind';
+  var1: number;
+  var2: number;
+  mu: number;
+  margin: number;
+  equalVar: boolean;
+}
+
 /** Parametri del wizard (selezione corrente e raccomandazione). */
 export interface WizardParams {
   goal: WizardGoal;
@@ -195,6 +205,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  tost: TostParams;
   wizard: WizardParams;
 }
 
@@ -316,6 +327,14 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  tost: {
+    design: 'one',
+    var1: 0,
+    var2: 1,
+    mu: 0,
+    margin: 1,
+    equalVar: true,
   },
   wizard: {
     goal: 'compare',

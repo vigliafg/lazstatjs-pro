@@ -42,7 +42,7 @@ crescere in silenzio.
 
 ## Contratto di un'analisi
 
-Tutte le 19 analisi passano dallo stesso punto:
+Tutte le analisi passano dallo stesso punto:
 
 ```ts
 // src/analyses/<id>/run.tsx
@@ -88,7 +88,8 @@ incompatibili.
 ## Test
 
 - `npm test` usa il glob ricorsivo `src/**/*.test.ts`.
-- Golden di contratto per tutte le 19 analisi (`UPDATE_GOLDEN=1` per rigenerarli).
+- Golden di contratto per le 19 analisi storiche (`UPDATE_GOLDEN=1` per rigenerarli);
+  le procedure aggiunte dopo (TOST) hanno test di kernel dedicati.
 - Ogni builder ha un test dedicato (caso valido + rifiuti).
 - `npm run check` = typecheck + test + guardrail.
 
