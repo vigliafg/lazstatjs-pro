@@ -243,6 +243,22 @@ describe('project sanitisation', () => {
     assert.equal(restored.params.logistic.cutoff, 0.5);
   });
 
+  it('restores and sanitises Cox parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          cox: { timeVariable: 99, eventVariable: 0, covariates: [0, 1, 2, 2] },
+        },
+      })
+    );
+    assert.equal(restored.params.cox.timeVariable, 2);
+    assert.equal(restored.params.cox.eventVariable, 0);
+    assert.deepEqual(restored.params.cox.covariates, [1]);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

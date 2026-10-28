@@ -8,6 +8,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'anova',
     'chisquare',
     'correlation',
+    'cox',
     'descriptive',
     'distfit',
     'logistic',

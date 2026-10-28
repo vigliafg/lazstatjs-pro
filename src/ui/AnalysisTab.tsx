@@ -10,9 +10,9 @@ import { ChiSquareForm } from '../analyses/chisquare/Form';
 import { SampleSizeForm } from '../analyses/samplesize/Form';
 import { DistributionFitForm } from '../analyses/distfit/Form';
 import { LogisticForm } from '../analyses/logistic/Form';
+import { CoxForm } from '../analyses/cox/Form';
 import { AncovaAnalysis } from '../analyses/AncovaAnalysis';
 import { ContingencyAnalysis } from '../analyses/ContingencyAnalysis';
-import { CoxAnalysis } from '../analyses/CoxAnalysis';
 import { FactorialAnovaAnalysis } from '../analyses/FactorialAnovaAnalysis';
 import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
 import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
@@ -23,7 +23,7 @@ import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AnovaParams, ChiSqParams, CorrParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, TTestParams } from '../io/project';
+import type { AnovaParams, ChiSqParams, CorrParams, CoxParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -48,6 +48,8 @@ export interface AnalysisTabProps {
   setDistfitParams: Dispatch<SetStateAction<DistributionFitParams>>;
   logisticParams: LogisticParams;
   setLogisticParams: Dispatch<SetStateAction<LogisticParams>>;
+  coxParams: CoxParams;
+  setCoxParams: Dispatch<SetStateAction<CoxParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -88,6 +90,8 @@ export const AnalysisTab = ({
   setDistfitParams,
   logisticParams,
   setLogisticParams,
+  coxParams,
+  setCoxParams,
   grid,
   outputs,
   removeOutput,
@@ -179,12 +183,10 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'cox' && (
-        <CoxAnalysis
-          runSignal={runSignal}
+        <CoxForm
           grid={grid}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+          coxParams={coxParams}
+          setCoxParams={setCoxParams}
         />
       )}
 

@@ -12,6 +12,7 @@ import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { defaultLogisticParams } from './analyses/logistic/defaults';
+import { defaultCoxParams } from './analyses/cox/defaults';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -41,6 +42,7 @@ import {
   type AnovaParams,
   type ChiSqParams,
   type CorrParams,
+  type CoxParams,
   type DistributionFitParams,
   type LogisticParams,
   type ProjectParams,
@@ -253,6 +255,10 @@ export default function App() {
     () => boot?.params.logistic ?? defaultLogisticParams(grid)
   );
 
+  const [coxParams, setCoxParams] = useState<CoxParams>(
+    () => boot?.params.cox ?? defaultCoxParams(grid)
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -269,8 +275,9 @@ export default function App() {
       samplesize: samplesizeParams,
       distfit: distfitParams,
       logistic: logisticParams,
+      cox: coxParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -293,6 +300,7 @@ export default function App() {
     setSamplesizeParams(project.params.samplesize);
     setDistfitParams(project.params.distfit);
     setLogisticParams(project.params.logistic);
+    setCoxParams(project.params.cox);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -422,6 +430,8 @@ export default function App() {
             setDistfitParams={setDistfitParams}
             logisticParams={logisticParams}
             setLogisticParams={setLogisticParams}
+            coxParams={coxParams}
+            setCoxParams={setCoxParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

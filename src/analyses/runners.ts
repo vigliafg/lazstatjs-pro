@@ -10,6 +10,7 @@ import { buildChiSquareOutput } from './chisquare/run';
 import { buildSampleSizeOutput } from './samplesize/run';
 import { buildDistributionFitOutput } from './distfit/run';
 import { buildLogisticOutput } from './logistic/run';
+import { buildCoxOutput } from './cox/run';
 
 export interface AnalysisRunContext {
   grid: GridData;
@@ -22,10 +23,10 @@ export interface AnalysisRunContext {
  *
  * Le sei analisi legacy sono già funzioni `(dati, parametri) -> risultato`:
  * qui ricevono un contesto unico invece di sei chiamate con firme diverse.
- * `samplesize`, `distfit` e `logistic` sono i pannelli convertiti: parametri
- * nell'App e builder puro, come le analisi legacy. Gli altri 10 restano
- * componenti controllati dal segnale `runSignal`, in attesa di separare i loro
- * parametri dal form.
+ * `samplesize`, `distfit`, `logistic` e `cox` sono i pannelli convertiti:
+ * parametri nell'App e builder puro, come le analisi legacy. Gli altri 9
+ * restano componenti controllati dal segnale `runSignal`, in attesa di separare
+ * i loro parametri dal form.
  */
 export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => AnalysisRunResult> = {
   descriptive: ({ grid, params, ciLevel }) =>
@@ -50,4 +51,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildDistributionFitOutput({ grid, params: params.distfit, ciLevel }),
   logistic: ({ grid, params, ciLevel }) =>
     buildLogisticOutput({ grid, params: params.logistic, ciLevel }),
+  cox: ({ grid, params, ciLevel }) =>
+    buildCoxOutput({ grid, params: params.cox, ciLevel }),
 };

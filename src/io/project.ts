@@ -101,6 +101,13 @@ export interface LogisticParams {
   cutoff: number;
 }
 
+/** Parametri del modello di Cox. */
+export interface CoxParams {
+  timeVariable: number;
+  eventVariable: number;
+  covariates: number[];
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -111,6 +118,7 @@ export interface ProjectParams {
   samplesize: SampleSizeParams;
   distfit: DistributionFitParams;
   logistic: LogisticParams;
+  cox: CoxParams;
 }
 
 export interface ProjectSettings {
@@ -177,6 +185,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     outcome: 0,
     predictors: [1],
     cutoff: 0.5,
+  },
+  cox: {
+    timeVariable: 0,
+    eventVariable: 1,
+    covariates: [],
   },
 };
 
@@ -339,8 +352,11 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const samplesize = isRecord(raw.samplesize) ? raw.samplesize : {};
   const distfit = isRecord(raw.distfit) ? raw.distfit : {};
   const logistic = isRecord(raw.logistic) ? raw.logistic : {};
+  const cox = isRecord(raw.cox) ? raw.cox : {};
   const d = DEFAULT_PARAMS;
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
+  const coxTime = index(cox.timeVariable, d.cox.timeVariable, width);
+  const coxEvent = index(cox.eventVariable, d.cox.eventVariable, width);
 
   return {
     descVars: indexList(raw.descVars, d.descVars, width),
@@ -408,6 +424,13 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
         (value) => value !== logisticOutcome
       ),
       cutoff: finite(logistic.cutoff, d.logistic.cutoff),
+    },
+    cox: {
+      timeVariable: coxTime,
+      eventVariable: coxEvent,
+      covariates: indexList(cox.covariates, d.cox.covariates, width).filter(
+        (value) => value !== coxTime && value !== coxEvent
+      ),
     },
   };
 };
