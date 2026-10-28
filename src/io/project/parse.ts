@@ -204,6 +204,16 @@ export const parseGrid = (value: unknown): GridData => {
       levels && typeof record.reference === 'string' && levels.some((level) => level.value === record.reference)
         ? record.reference
         : undefined;
+    const missing = Array.isArray(record.missing)
+      ? Array.from(
+          new Set(
+            record.missing
+              .filter((value): value is string => typeof value === 'string')
+              .map(value => value.trim().slice(0, 40))
+              .filter(Boolean)
+          )
+        ).slice(0, 20)
+      : [];
     return {
       id:
         typeof record.id === 'string' && record.id.trim()
@@ -219,6 +229,7 @@ export const parseGrid = (value: unknown): GridData => {
         : {}),
       ...(levels ? { levels } : {}),
       ...(reference ? { reference } : {}),
+      ...(missing.length ? { missing } : {}),
     };
   });
 

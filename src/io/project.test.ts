@@ -170,6 +170,26 @@ describe('project sanitisation', () => {
     assert.equal(parsed.cols[0].reference, undefined);
   });
 
+  it('round-trips missing codes and sanitises them', () => {
+    const withMissing = createProjectSnapshot({
+      grid: {
+        cols: [{ name: 'Score', type: 'num', missing: ['-9', 'NA'] }],
+        rows: [['-9'], ['NA'], ['12']],
+      },
+      prefs: DEFAULT_PREFS,
+      settings: DEFAULT_SETTINGS,
+      params: DEFAULT_PARAMS,
+    });
+    const restored = parseProject(serializeProject(withMissing));
+    assert.deepEqual(restored.grid.cols[0].missing, ['-9', 'NA']);
+
+    const parsed = parseGrid({
+      cols: [{ name: 'S', type: 'num', missing: [' -9 ', '-9', '', 7, 'NA'] }],
+      rows: [['-9']],
+    });
+    assert.deepEqual(parsed.cols[0].missing, ['-9', 'NA']);
+  });
+
   it('falls back on invalid settings and params without losing valid ones', () => {
     const base = makeSnapshot();
     const parsed = parseProject(

@@ -23,6 +23,7 @@ import {
 import { assignRole, roleStates, validateRoleTypes } from './analyses/roles';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
+import { maskMissingCodes } from './grid/types';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import { createDefaultGrid } from './grid/defaults';
 import {
@@ -226,7 +227,7 @@ export default function App() {
   // reference and (when needed) the column type move together in one undo step.
   const updateColumnMeta = (
     c: number,
-    patch: { label?: string; description?: string }
+    patch: { label?: string; description?: string; missing?: string[] }
   ) => {
     setGrid(prev => ({
       ...prev,
@@ -405,13 +406,16 @@ export default function App() {
     mode: filterAffectsAnalysis ? 'analysis' : 'view',
     filter: activeRowFilter,
   });
+  // Declared missing codes are blanked before every runner sees the data, so
+  // the analysis N excludes them without changing any kernel.
+  const maskedGrid = useMemo<GridData>(() => maskMissingCodes(grid), [grid]);
   const analysisGrid = useMemo<GridData>(() => {
-    if (!filterAffectsAnalysis || !activeRowFilter) return grid;
+    if (!filterAffectsAnalysis || !activeRowFilter) return maskedGrid;
     return {
-      cols: grid.cols,
-      rows: gridFilterIndexes(grid, activeRowFilter).map(index => grid.rows[index]),
+      cols: maskedGrid.cols,
+      rows: gridFilterIndexes(grid, activeRowFilter).map(index => maskedGrid.rows[index]),
     };
-  }, [grid, filterAffectsAnalysis, activeRowFilter]);
+  }, [grid, maskedGrid, filterAffectsAnalysis, activeRowFilter]);
 
   const restoreProject = (project: ProjectSnapshot) => {
     resetGridHistory(project.grid);

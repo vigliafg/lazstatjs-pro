@@ -5,6 +5,8 @@ import {
   columnLevels,
   distinctColumnValues,
   isGroupColumn,
+  isMissingCode,
+  missingCellCount,
   validateValue,
   type CategoryLevel,
   type ColType,
@@ -18,7 +20,7 @@ interface Props {
   onSelectColumn: (column: number) => void;
   onRename: (column: number, name: string) => void;
   onType: (column: number, type: ColType) => void;
-  onMeta: (column: number, patch: { label?: string; description?: string }) => void;
+  onMeta: (column: number, patch: { label?: string; description?: string; missing?: string[] }) => void;
   onLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
   onRecode: (column: number, mapping: Record<string, string>) => void;
   onDuplicate: (column: number) => void;
@@ -54,11 +56,13 @@ export const VariableInspector = ({
   const [name, setName] = useState(col?.name ?? '');
   const [label, setLabel] = useState(col?.label ?? '');
   const [description, setDescription] = useState(col?.description ?? '');
+  const [missingInput, setMissingInput] = useState('');
 
   useEffect(() => {
     setName(col?.name ?? '');
     setLabel(col?.label ?? '');
     setDescription(col?.description ?? '');
+    setMissingInput('');
   }, [column, col?.name, col?.label, col?.description]);
 
   if (!col) return null;
@@ -71,8 +75,14 @@ export const VariableInspector = ({
     : grouping
       ? columnLevels(col, grid.rows, column)
       : [];
-  const missing = grid.rows.filter(row => String(row[column] ?? '').trim() === '').length;
-  const invalid = grid.rows.filter(row => !validateValue(row[column], col.type)).length;
+  const missingCodes = col.missing ?? [];
+  const codeExcluded = missingCodes.length
+    ? grid.rows.filter(row => isMissingCode(col, row[column])).length
+    : 0;
+  const missing = missingCellCount(grid, column);
+  const invalid = grid.rows.filter(
+    row => !isMissingCode(col, row[column]) && !validateValue(row[column], col.type)
+  ).length;
   const role = grouping
     ? 'Grouping'
     : col.type === 'id'
@@ -90,6 +100,20 @@ export const VariableInspector = ({
     if (nextLabel !== (col.label ?? '') || nextDescription !== (col.description ?? '')) {
       onMeta(column, { label: nextLabel, description: nextDescription });
     }
+  };
+
+  const addMissingCode = () => {
+    const code = missingInput.trim();
+    if (!code || missingCodes.includes(code)) {
+      setMissingInput('');
+      return;
+    }
+    onMeta(column, { missing: [...missingCodes, code] });
+    setMissingInput('');
+  };
+
+  const removeMissingCode = (code: string) => {
+    onMeta(column, { missing: missingCodes.filter(item => item !== code) });
   };
 
   return (
@@ -191,6 +215,60 @@ export const VariableInspector = ({
             className={`${inputClass} mt-1 resize-y`}
           />
         </label>
+
+        <div className="mt-3">
+          <span className="font-mono text-[8px] uppercase tracking-widest text-text3">
+            Missing codes
+          </span>
+          <div className="mt-1.5 flex flex-wrap gap-1">
+            {missingCodes.length === 0 ? (
+              <p className="text-[10px] leading-relaxed text-text3">
+                No declared codes. Blank cells are always missing.
+              </p>
+            ) : (
+              missingCodes.map(code => (
+                <span
+                  key={code}
+                  className="flex items-center gap-1 rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[10px] text-text2"
+                >
+                  {code}
+                  <button
+                    type="button"
+                    onClick={() => removeMissingCode(code)}
+                    aria-label={`Remove missing code ${code}`}
+                    className="text-text3 hover:text-red"
+                  >
+                    <X className="h-2.5 w-2.5" />
+                  </button>
+                </span>
+              ))
+            )}
+          </div>
+          <div className="mt-1 flex gap-1">
+            <input
+              value={missingInput}
+              onChange={event => setMissingInput(event.target.value)}
+              onKeyDown={event => {
+                if (event.key === 'Enter') addMissingCode();
+              }}
+              placeholder="e.g. -9 or NA"
+              aria-label="Add a missing code"
+              className={inputClass}
+            />
+            <button
+              type="button"
+              onClick={addMissingCode}
+              className="tb-btn shrink-0 px-2 py-1 text-[10px]"
+            >
+              Add
+            </button>
+          </div>
+          {codeExcluded > 0 && (
+            <p className="mt-1 text-[9px] text-text3">
+              {codeExcluded} cell{codeExcluded === 1 ? '' : 's'} excluded from analyses.
+            </p>
+          )}
+        </div>
 
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">

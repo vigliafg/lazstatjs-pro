@@ -34,6 +34,8 @@ export interface Column {
   levels?: CategoryLevel[];
   /** Value used as the reference level in model-based analyses. */
   reference?: string;
+  /** Cell values treated as missing by every analysis. */
+  missing?: string[];
 }
 
 export interface GridData {
@@ -109,6 +111,63 @@ export const uniqueColName = (cols: Column[], base: string): string => {
 
 export const nonEmptyRowCount = (rows: readonly (readonly string[])[]): number =>
   rows.filter((r) => r.some((v) => String(v ?? '').trim() !== '')).length;
+
+/** True when a cell value is one of the declared missing codes of its column. */
+export const isMissingCode = (col: Column | undefined, value: string | null | undefined): boolean => {
+  if (!col?.missing?.length) return false;
+  const raw = String(value ?? '');
+  const code = raw.trim();
+  return col.missing.some(entry => entry === raw || entry === code);
+};
+
+/** A cell is missing when blank or when it carries a declared missing code. */
+export const isMissingCell = (col: Column | undefined, value: string | null | undefined): boolean =>
+  String(value ?? '').trim() === '' || isMissingCode(col, value);
+
+/** Cells masked by declared missing codes (blank cells are not counted). */
+export const missingCodeCount = (grid: Dataset): number =>
+  grid.rows.reduce(
+    (count, row) =>
+      count +
+      row.reduce(
+        (rowCount, cell, c) => rowCount + (isMissingCode(grid.cols[c], cell) ? 1 : 0),
+        0
+      ),
+    0
+  );
+
+/** Blank cells plus declared missing codes across the whole grid. */
+export const missingCellCount = (grid: Dataset, column?: number): number => {
+  if (column !== undefined) {
+    const col = grid.cols[column];
+    return grid.rows.reduce(
+      (count, row) => count + (isMissingCell(col, row[column]) ? 1 : 0),
+      0
+    );
+  }
+  return grid.rows.reduce(
+    (count, row) =>
+      count + row.reduce((rowCount, cell, c) => rowCount + (isMissingCell(grid.cols[c], cell) ? 1 : 0), 0),
+    0
+  );
+};
+
+/**
+ * Dataset view where declared missing codes are blanked.
+ *
+ * Analyses already treat `''` as missing, so masking at the boundary gives
+ * every runner (and the N shown in reports) the same semantics without
+ * touching 31 kernels.
+ */
+export const maskMissingCodes = (grid: GridData): GridData => {
+  if (!grid.cols.some(col => col.missing?.length)) return grid;
+  return {
+    cols: grid.cols,
+    rows: grid.rows.map(row =>
+      row.map((cell, c) => (isMissingCode(grid.cols[c], cell) ? '' : cell))
+    ),
+  };
+};
 
 export const countInvalidCells = (grid: Dataset): number => {
   let n = 0;

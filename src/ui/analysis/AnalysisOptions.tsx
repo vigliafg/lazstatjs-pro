@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Play } from 'lucide-react';
 import { analysisMeta, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
+import { isMissingCell, missingCodeCount } from '../../grid/types';
 import { DescriptiveForm } from '../../analyses/descriptive/Form';
 import { TTestForm } from '../../analyses/ttest/Form';
 import { AnovaForm } from '../../analyses/anova/Form';
@@ -73,9 +74,11 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
       ? p.grid.rows.filter(row => rowMatches(p.grid, row, p.activeRowFilter))
       : p.grid.rows;
   const missingCells = p.grid.rows.reduce(
-    (count, row) => count + row.filter(cell => String(cell ?? '').trim() === '').length,
+    (count, row) =>
+      count + row.filter((cell, column) => isMissingCell(p.grid.cols[column], cell)).length,
     0
   );
+  const codeCells = missingCodeCount(p.grid);
   const previewCols = p.grid.cols.slice(0, 6);
 
   const sectionTitle = (() => {
@@ -387,9 +390,17 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
             Variables {p.grid.cols.length}
           </span>
-          <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
+          <span
+            className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3"
+            title={codeCells > 0 ? `${codeCells} cells carry declared missing codes` : 'Blank cells only'}
+          >
             Missing {missingCells}
           </span>
+          {codeCells > 0 && (
+            <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
+              Codes {codeCells}
+            </span>
+          )}
           {p.filterAffectsAnalysis && (
             <span className="rounded border border-accent/30 bg-accent/10 px-1.5 py-0.5 font-mono text-[9px] text-accent">
               analysis filter
