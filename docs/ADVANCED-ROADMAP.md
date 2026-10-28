@@ -34,8 +34,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
       interazione e medie cella; Mauchly/GG, contrasti Holm; validata contro aov.
       Restano EM means per disegni sbilanciati.
 - [x] **Sopravvivenza parametrica**: Weibull ed esponenziale AFT, time ratio e
-      CI; validata contro survival::survreg. Restano Cox stratificato e
-      covariate tempo-dipendenti.
+      CI; validata contro survival::survreg.
+- [x] **Cox stratificato**: baseline per strato e coefficienti condivisi,
+      validato contro coxph(strata). Restano le covariate tempo-dipendenti.
 - [x] **Bootstrap e permutazione**: scheda Resampling per la differenza tra
       due gruppi (media/mediana, p di permutazione, CI bootstrap). Resta
       l'integrazione nelle altre procedure.

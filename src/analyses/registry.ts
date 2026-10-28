@@ -30,6 +30,7 @@ export const ANALYSIS_TABS = [
   { id: 'parametric', label: 'Parametric Survival' },
   { id: 'resampling', label: 'Resampling' },
   { id: 'gee', label: 'GEE' },
+  { id: 'stratcox', label: 'Stratified Cox' },
   { id: 'mi', label: 'Missing Data (MI)' },
   { id: 'timeseries', label: 'Time Series' },
   { id: 'survival', label: 'Survival (KM)' },

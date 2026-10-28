@@ -30,9 +30,10 @@ import { MixedAnovaForm } from '../analyses/mixedanova/Form';
 import { ParametricForm } from '../analyses/parametric/Form';
 import { ResamplingForm } from '../analyses/resampling/Form';
 import { GeeForm } from '../analyses/gee/Form';
+import { StratifiedCoxForm } from '../analyses/stratcox/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, GeeParams, MixedAnovaParams, ParametricSurvivalParams, ResamplingParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, GeeParams, MixedAnovaParams, StratifiedCoxParams, ParametricSurvivalParams, ResamplingParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -97,6 +98,8 @@ export interface AnalysisTabProps {
   setResamplingParams: Dispatch<SetStateAction<ResamplingParams>>;
   geeParams: GeeParams;
   setGeeParams: Dispatch<SetStateAction<GeeParams>>;
+  stratCoxParams: StratifiedCoxParams;
+  setStratCoxParams: Dispatch<SetStateAction<StratifiedCoxParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -174,6 +177,8 @@ export const AnalysisTab = ({
   setResamplingParams,
   geeParams,
   setGeeParams,
+  stratCoxParams,
+  setStratCoxParams,
   grid,
   outputs,
   removeOutput,
@@ -344,6 +349,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'stratcox' && (
+        <StratifiedCoxForm grid={grid} stratCoxParams={stratCoxParams} setStratCoxParams={setStratCoxParams} />
       )}
 
       {activeAnalysis === 'gee' && (

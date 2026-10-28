@@ -30,6 +30,7 @@ import { buildMixedAnovaOutput } from './mixedanova/run';
 import { buildParametricOutput } from './parametric/run';
 import { buildResamplingOutput } from './resampling/run';
 import { buildGeeOutput } from './gee/run';
+import { buildStratifiedCoxOutput } from './stratcox/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -108,4 +109,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildResamplingOutput({ grid, params: params.resampling, ciLevel }),
   gee: ({ grid, params, ciLevel }) =>
     buildGeeOutput({ grid, params: params.gee, ciLevel }),
+  stratcox: ({ grid, params, ciLevel }) =>
+    buildStratifiedCoxOutput({ grid, params: params.stratcox, ciLevel }),
 };

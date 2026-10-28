@@ -75,6 +75,7 @@ import {
   type ParametricSurvivalParams,
   type ResamplingParams,
   type GeeParams,
+  type StratifiedCoxParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -361,6 +362,10 @@ export default function App() {
     boot?.params.gee ?? DEFAULT_PARAMS.gee
   );
 
+  const [stratCoxParams, setStratCoxParams] = useState<StratifiedCoxParams>(
+    boot?.params.stratcox ?? DEFAULT_PARAMS.stratcox
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -397,8 +402,9 @@ export default function App() {
       parametric: parametricParams,
       resampling: resamplingParams,
       gee: geeParams,
+      stratcox: stratCoxParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams, resamplingParams, geeParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams, parametricParams, resamplingParams, geeParams, stratCoxParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -441,6 +447,7 @@ export default function App() {
     setParametricParams(project.params.parametric);
     setResamplingParams(project.params.resampling);
     setGeeParams(project.params.gee);
+    setStratCoxParams(project.params.stratcox);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -610,6 +617,8 @@ export default function App() {
             setResamplingParams={setResamplingParams}
             geeParams={geeParams}
             setGeeParams={setGeeParams}
+            stratCoxParams={stratCoxParams}
+            setStratCoxParams={setStratCoxParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

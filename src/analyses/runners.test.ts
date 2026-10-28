@@ -29,6 +29,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'repeatedanova',
     'resampling',
     'samplesize',
+    'stratcox',
     'survival',
     'timeseries',
     'tost',

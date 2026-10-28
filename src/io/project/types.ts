@@ -170,6 +170,15 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri del Cox stratificato. */
+export interface StratifiedCoxParams {
+  time: number;
+  event: number;
+  covariates: number[];
+  /** -1 = nessuno strato. */
+  stratum: number;
+}
+
 /** Parametri GEE. */
 export interface GeeParams {
   dep: number;
@@ -277,6 +286,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  stratcox: StratifiedCoxParams;
   gee: GeeParams;
   resampling: ResamplingParams;
   parametric: ParametricSurvivalParams;
@@ -413,6 +423,12 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  stratcox: {
+    time: 0,
+    event: 2,
+    covariates: [1],
+    stratum: -1,
   },
   gee: {
     dep: 0,
