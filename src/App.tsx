@@ -48,17 +48,16 @@ import {
   ttestReport,
   type ReportSpec,
 } from './stats/report';
-import { 
-  VictoryChart, 
-  VictoryBar, 
-  VictoryScatter, 
-  VictoryLine, 
-  VictoryAxis, 
-  VictoryTooltip, 
-  VictoryVoronoiContainer,  VictoryBoxPlot,
-  VictoryTheme,
+import {
+  VictoryAxis,
+  VictoryBoxPlot,
+  VictoryChart,
   VictoryLabel,
-} from 'victory';import {
+  VictoryLine,
+  VictoryScatter,
+  VictoryTheme,
+} from 'victory';
+import {
 
   calcWilcoxonSignedRank, 
   calcMannWhitneyU, 
