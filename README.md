@@ -36,7 +36,12 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Responsive panes**: below `lg` a segmented control switches between Library, Setup and Output; *Focus output* hides the library and setup on wide screens
 - **Data context** in Setup: rows, variables, missing cells, active filter, **Data peek** and a shortcut to the data editor
 - **Focused column bridge**: focus a cell in the grid, pick any role of the active analysis and assign the column in two actions; the Data peek shows the role → column map
-- **Stale badges**: a result whose grid revision, dataset or filter changed is marked stale
+- **Stale badges**: a result whose grid revision, dataset, filter or analysis parameters changed is marked stale
+- **Iteration loop**: every card stores the parameters that produced it, with **Re-run** and **Apply parameters** shortcuts
+- **Live-run** for instant procedures: a debounced toggle that replaces the same card instead of stacking results
+- **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear
+- **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
+- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `Advanced`) used by the core procedures
 
 ### Help
 - **In-app HELP tab** (next to Settings) with eight inner tabs: Overview, Data Editor, Data prep, Groups & levels, Analyses, Output & reports, Recipes and Shortcuts & settings
@@ -192,7 +197,7 @@ lazstatjs/
 | `npm run clean` | Remove `dist/` directory |
 | `npm run lint` | TypeScript type-check |
 | `npm test` | Run the statistics reference tests with `node:test` + `tsx` |
-| `npm run test:e2e` | Run the Playwright smoke suite (desktop + mobile) |
+| `npm run test:e2e` | Run the Playwright suite (grid + analysis, desktop + mobile) |
 | `npm run check` | Type-check, unit tests, dependency-cruiser, madge and file-size guard |
 | `npm run guard` | Architecture and size guards only |
 

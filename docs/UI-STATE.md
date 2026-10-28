@@ -1,6 +1,7 @@
 # UI — stato attuale e backlog
 
-> Aggiornato dopo la chiusura del backlog griglia (vedi `GRID-STATE.md`).
+> Aggiornato dopo la chiusura del backlog UI (UI-01…UI-11); griglia in
+> [`GRID-STATE.md`](GRID-STATE.md).
 > Checkpoint griglia: [`GRID-STATE.md`](GRID-STATE.md).
 > Questo documento fotografa la UI dopo il workbench a tre zone e fissa il
 > lavoro rimanente prima della fase dedicata a inserimento ed editing dei dati.
@@ -133,6 +134,17 @@ ancora quella di prima.
 - [x] Chi-Square e Contingency compatti per il pannello stretto.
 - [x] Help, README e ARCHITECTURE aggiornati.
 - [x] Test del registro e della persistenza di `analysisId`.
+- [x] Snapshot dei parametri nella card, **Re-run** e **Apply** dal risultato.
+- [x] Stale anche quando cambiano i parametri dell'analisi.
+- [x] **Live-run** per le procedure `instant`, con debounce e card unica.
+- [x] Output workspace: filtro per analisi, pin, copia card, conferma Clear.
+- [x] Store context/reducer e riduzione di `AnalysisTabProps` da 88 a 38 props.
+- [x] Form system condiviso (`Field`, `VariableSelect`, `Advanced`, …).
+- [x] Ricerca con ranking, preferiti e indice A–Z, navigazione da tastiera.
+- [x] Settings onesta: azioni di sessione e progetti recenti.
+- [x] Shell i18n centralizzata e footer/aria-live responsive.
+- [x] Bundle senza warning: pannelli, help, IO e runners lazy.
+- [x] Suite Playwright per il workspace analisi (desktop + mobile).
 
 ## 5. Valutazione
 
@@ -147,34 +159,30 @@ ancora quella di prima.
 - **La tastiera è di prima classe.** Ricerca, selezione e run hanno una via
   completa senza mouse.
 
-### 5.2 Limiti
+### 5.2 Limiti residui
 
-1. **Iterazione parziale.** Il badge `stale` ora copre dati e filtro, ma non ci
-   sono ancora re-run con i parametri storici, “apply parameters” o live-run.
-   La card è un risultato da leggere, non ancora un'analisi da riaprire e
-   rilanciare.
-2. **Store unico, contratto ancora largo.** `App.tsx` ha ora un solo stato
-   `params` con setter tipizzati, ma `AnalysisTab` riceve ancora oltre 70 props.
-   Manca un context/reducer per `AnalysisId` e la riduzione del contratto.
-3. **Form non strutturati internamente.** Le sezioni sono generiche; alcuni
-   hint sono in italiano, la shell in inglese.
-4. **Nessun test UI automatico.** Lo smoke test con Playwright è stato manuale.
-5. **Ricerca semplice.** Prefisso, nessun ranking, nessuna fuzzy, nessun
-   preferito.
-6. **Settings parzialmente dimostrative.** Separatore decimale e cifre
-   significative non sono collegati.
-7. **Tablet stretto.** A 1024 px tre pannelli sono al limite; le tabelle larghe
-   scorrono.
-8. **Bundle grande.** Il warning Vite >500 kB resta.
+1. **Live-run solo su richiesta.** Le procedure `instant` si aggiornano con il
+   toggle *Live* e 500 ms di debounce; non è il default e le `heavy` restano
+   esplicite.
+2. **Contratto del workspace ancora ampio.** `AnalysisTabProps` è sceso da 88 a
+   38 props e le slice passano dal reducer, ma griglia, output e ruoli restano
+   props esplicite.
+3. **Form system adottato dai form core.** ANOVA, T-test, Descriptive,
+   Regression e Correlation usano `Field`/`VariableSelect`/`Advanced`; gli altri
+   pannelli mantengono il markup precedente.
+4. **i18n della shell.** Header, footer, settings e toolbar passano da
+   `src/i18n.ts`; le etichette interne dei form restano inglesi e locali.
+5. **Preferiti locali.** Il ranking è per parole (non fuzzy) e i preferiti
+   vivono in `localStorage`.
+6. **Settings senza recent cliccabili.** I progetti recenti sono un elenco di
+   nomi: senza File System Access non possono essere riaperti con un click.
 
 ### 5.3 Debito tecnico
 
-- `AnalysisTabProps` è un contratto unico ma enorme.
-- I form hanno classi e layout duplicati; mancano primitive condivise.
-- `outputs` contiene HTML + nodo React, ma non i parametri che hanno prodotto il
-  run: il re-run richiede un'estensione dello snapshot.
-- La UI non ha un livello di test DOM; l'unica verifica è manuale.
-- La lingua non è decisa: shell inglese, report e hint italiani.
+- `AnalysisTabProps` è ancora un contratto unico ampio.
+- I form non migrati ripetono classi e layout.
+- I preferiti non sono persistiti nel progetto `.lzs` (solo browser).
+- La lingua delle etichette dei form non è centralizzata.
 
 ## 6. Backlog
 
@@ -185,28 +193,25 @@ Priorità:
 - **P2** — qualità e produttività.
 - **P3** — rifinitura e scala.
 
-| ID | Pri | Intervento | Risultato atteso | Dipendenze | Rischio |
-|---|---|---|---|---|---|
-| **UI-01** | P0 | Iteration loop: salvare i parametri nella card, re-run, apply parameters | La card diventa un'analisi riapribile e rilanciabile; lo stale su dati/filtro è già fatto | UI-02 | Medio |
-| **UI-02** | P0 | Completare lo store: context/reducer per `AnalysisId` e riduzione delle props | Store unico già presente in App; mancano context/reducer e un contratto più stretto | — | Alto |
-| **UI-03** | P1 | Suite Playwright: ricerca, selezione, run, collapse, outline, Setup, mobile, reload | Regressioni UI intercettate in CI | — | Basso/medio |
-| **UI-04** | P2 | Live-run per le analisi `instant`, debounce, stato `running`/`idle` | Feedback immediato in stile JASP; heavy restano esplicite | UI-02, UI-01 | Medio |
-| **UI-05** | P2 | Output workspace: filtro per analisi, pin/confronto, copia card, conferma Clear | Più controllo su sessioni lunghe | UI-01 | Basso |
-| **UI-06** | P2 | Form system: `Field`, `Section`, `VariableSlot`, `Advanced`, validazione inline | Form coerenti e sezioni reali, non un blocco unico | UI-02 | Medio |
-| **UI-07** | P2 | Responsive/a11y: due pannelli a 1024, footer mobile, focus management, `aria-live` | Uso solido su tablet e tastiera | — | Basso |
-| **UI-08** | P3 | Ricerca con ranking/fuzzy, preferiti, indice alfabetico, navigazione da tastiera | Libreria che regge 50+ procedure | — | Basso |
-| **UI-09** | P3 | Settings e progetto: collegare o rimuovere i controlli demo; File menu e recenti | UI onesta e sessione più gestibile | — | Basso/medio |
-| **UI-10** | P3 | i18n: decidere lingua e centralizzare le stringhe | Shell, help, report e hint coerenti | Decisione | Medio |
-| **UI-11** | P3 | Code splitting di stats/charts e pannelli lazy | Bundle sotto il warning; first load più rapido | — | Basso/medio |
+| ID | Pri | Intervento | Stato | Note |
+|---|---|---|---|---|
+| **UI-01** | P0 | Iteration loop: parametri nella card, re-run, apply | **Fatto** | `params`/`paramsSignature` nello snapshot; Re-run e Apply nella card; stale anche sui parametri |
+| **UI-02** | P0 | Store context/reducer e riduzione props | **Fatto** | `ui/analysis/store.tsx`; 88 → 38 props; `applyAnalysisAction` testato |
+| **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 7 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria |
+| **UI-04** | P2 | Live-run `instant` con debounce e stato | **Fatto** | Toggle Live, 500 ms, card unica sostituita, indicatore “syncing” |
+| **UI-05** | P2 | Output workspace: filtro, pin, copia, conferma Clear | **Fatto** | Filtro per analisi, pin in cima, copia card, conferma su Clear |
+| **UI-06** | P2 | Form system condiviso | **Parziale** | `Field`, `Section`, `VariableSelect`, `VariableList`, `Advanced`, `CheckboxField`; adottati dai 5 form core |
+| **UI-07** | P2 | Responsive/a11y | **Fatto** | Footer mobile, focus dei pannelli, `aria-live`, libreria nascosta sotto 1280 px |
+| **UI-08** | P3 | Ricerca con ranking, preferiti, A–Z, tastiera | **Fatto** | Punteggio per label/keyword/descrizione, preferiti, indice piatto, frecce/Home/End |
+| **UI-09** | P3 | Settings e progetto | **Fatto** | Rimossi i controlli demo; azioni di sessione; elenco progetti recenti |
+| **UI-10** | P3 | i18n | **Parziale** | Lingua UI = inglese; shell centralizzata in `src/i18n.ts`, form locali |
+| **UI-11** | P3 | Code splitting | **Fatto** | `AnalysisTab`, help, import/export e runners lazy; chunk vendor separati; nessun warning >500 kB |
 
-### Ordine consigliato
+### Esito
 
-1. **UI-01** — iteration loop (params snapshot, re-run, apply).
-2. **UI-02** — completare context/reducer e ridurre le props.
-3. **UI-03** — test UI.
-4. **UI-04 / UI-05** — live-run e output workspace.
-5. **UI-06 / UI-07** — coerenza dei form e rifinitura responsive.
-6. **UI-08 / UI-09 / UI-10 / UI-11** — scala e rifinitura.
+Tutti i blocchi sono chiusi o parziali come indicato. I residui (form non
+migrati, i18n dei form, preferiti locali) sono miglioramenti incrementali, non
+prerequisiti.
 
 ## 7. Criteri di accettazione
 
