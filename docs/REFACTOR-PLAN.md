@@ -115,9 +115,9 @@ passano dalla stessa strada.
 
 - [x] Separare `kernels` / `tables` / `reports`: ogni analisi ha la sua cartella
       con `types`, `tables`, `reports` e un barrel `stats/<id>.ts`.
-      I sei moduli legacy (`ttest`, `anova`, `regression`, `correlation`,
-      `chisquare`, `descriptive`) espongono solo tabelle e vivono in `tables/`;
-      l'estrazione dei loro kernel è annotata come debito.
+      I sei moduli legacy espongono solo tabelle e vivono in `tables/`;
+      `chisquare` e `correlation` hanno già il kernel estratto, gli altri quattro
+      sono annotati come debito.
 - [x] Assorbire `statsHelpers.ts` nei kernel: `kernels/exact.ts`,
       `kernels/ranks.ts`, `kernels/normality.ts`, con test di equivalenza numerica.
 - [x] `jstat` isolato dietro `src/stats/jstat.ts`: nessun altro modulo importa il
