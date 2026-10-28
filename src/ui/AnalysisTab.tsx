@@ -8,10 +8,10 @@ import { RegressionForm } from '../analyses/regression/Form';
 import { CorrelationForm } from '../analyses/correlation/Form';
 import { ChiSquareForm } from '../analyses/chisquare/Form';
 import { SampleSizeForm } from '../analyses/samplesize/Form';
+import { DistributionFitForm } from '../analyses/distfit/Form';
 import { AncovaAnalysis } from '../analyses/AncovaAnalysis';
 import { ContingencyAnalysis } from '../analyses/ContingencyAnalysis';
 import { CoxAnalysis } from '../analyses/CoxAnalysis';
-import { DistributionFitAnalysis } from '../analyses/DistributionFitAnalysis';
 import { FactorialAnovaAnalysis } from '../analyses/FactorialAnovaAnalysis';
 import { LogisticAnalysis } from '../analyses/LogisticAnalysis';
 import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
@@ -23,7 +23,7 @@ import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AnovaParams, ChiSqParams, CorrParams, RegParams, SampleSizeParams, TTestParams } from '../io/project';
+import type { AnovaParams, ChiSqParams, CorrParams, DistributionFitParams, RegParams, SampleSizeParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -44,6 +44,8 @@ export interface AnalysisTabProps {
   setChisqParams: Dispatch<SetStateAction<ChiSqParams>>;
   samplesizeParams: SampleSizeParams;
   setSamplesizeParams: Dispatch<SetStateAction<SampleSizeParams>>;
+  distfitParams: DistributionFitParams;
+  setDistfitParams: Dispatch<SetStateAction<DistributionFitParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -80,6 +82,8 @@ export const AnalysisTab = ({
   setChisqParams,
   samplesizeParams,
   setSamplesizeParams,
+  distfitParams,
+  setDistfitParams,
   grid,
   outputs,
   removeOutput,
@@ -215,12 +219,10 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'distfit' && (
-        <DistributionFitAnalysis
-          runSignal={runSignal}
+        <DistributionFitForm
           grid={grid}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+          distfitParams={distfitParams}
+          setDistfitParams={setDistfitParams}
         />
       )}
 

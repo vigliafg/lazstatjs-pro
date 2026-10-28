@@ -3,12 +3,13 @@ import assert from 'node:assert/strict';
 import { ANALYSIS_RUNNERS } from './runners';
 import { ANALYSIS_IDS } from './registry';
 
-test('the pure-builder registry covers exactly the six legacy analyses and sample size', () => {
+test('the pure-builder registry covers the six legacy analyses and the converted panels', () => {
   assert.deepEqual(Object.keys(ANALYSIS_RUNNERS).sort(), [
     'anova',
     'chisquare',
     'correlation',
     'descriptive',
+    'distfit',
     'regression',
     'samplesize',
     'ttest',

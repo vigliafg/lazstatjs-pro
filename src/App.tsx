@@ -40,6 +40,7 @@ import {
   type AnovaParams,
   type ChiSqParams,
   type CorrParams,
+  type DistributionFitParams,
   type ProjectParams,
   type ProjectSettings,
   type ProjectSnapshot,
@@ -242,6 +243,10 @@ export default function App() {
     boot?.params.samplesize ?? DEFAULT_PARAMS.samplesize
   );
 
+  const [distfitParams, setDistfitParams] = useState<DistributionFitParams>(
+    boot?.params.distfit ?? DEFAULT_PARAMS.distfit
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -256,8 +261,9 @@ export default function App() {
       corr: corrParams,
       chisq: chisqParams,
       samplesize: samplesizeParams,
+      distfit: distfitParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -278,6 +284,7 @@ export default function App() {
     setCorrParams(project.params.corr);
     setChisqParams(project.params.chisq);
     setSamplesizeParams(project.params.samplesize);
+    setDistfitParams(project.params.distfit);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -403,6 +410,8 @@ export default function App() {
             setChisqParams={setChisqParams}
             samplesizeParams={samplesizeParams}
             setSamplesizeParams={setSamplesizeParams}
+            distfitParams={distfitParams}
+            setDistfitParams={setDistfitParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

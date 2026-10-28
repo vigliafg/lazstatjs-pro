@@ -10,6 +10,7 @@
 import type { CategoryLevel, ColType, GridData } from '../grid/types';
 import { COL_TYPES, MAX_LEVELS } from '../grid/types';
 import type { SampleSizeDesign } from '../stats/samplesize';
+import type { DistributionName } from '../stats/distfit';
 import { MAX_COLS, MAX_ROWS } from './readers';
 import { normalizePrefs, type IoPreferences } from './prefs';
 import {
@@ -87,6 +88,12 @@ export interface SampleSizeParams {
   margin: number;
 }
 
+/** Parametri del fit delle distribuzioni. */
+export interface DistributionFitParams {
+  variable: number;
+  selected: DistributionName[];
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -95,6 +102,7 @@ export interface ProjectParams {
   corr: CorrParams;
   chisq: ChiSqParams;
   samplesize: SampleSizeParams;
+  distfit: DistributionFitParams;
 }
 
 export interface ProjectSettings {
@@ -153,6 +161,10 @@ export const DEFAULT_PARAMS: ProjectParams = {
     f: 0.25,
     margin: 0,
   },
+  distfit: {
+    variable: 0,
+    selected: ['normal', 'lognormal', 'exponential', 'gamma', 'weibull'],
+  },
 };
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
@@ -210,6 +222,26 @@ const parseSampleSizeDesign = (value: unknown, fallback: SampleSizeDesign): Samp
   typeof value === 'string' && (SAMPLE_SIZE_DESIGNS as readonly string[]).includes(value)
     ? (value as SampleSizeDesign)
     : fallback;
+
+const DISTRIBUTION_NAMES: readonly DistributionName[] = [
+  'normal',
+  'lognormal',
+  'exponential',
+  'gamma',
+  'weibull',
+];
+
+const parseDistributionList = (
+  value: unknown,
+  fallback: readonly DistributionName[]
+): DistributionName[] => {
+  if (!Array.isArray(value)) return [...fallback];
+  const valid = value.filter(
+    (name): name is DistributionName =>
+      typeof name === 'string' && (DISTRIBUTION_NAMES as readonly string[]).includes(name)
+  );
+  return Array.from(new Set(valid));
+};
 
 const parseCell = (value: unknown): string => {
   if (typeof value === 'string') return value;
@@ -292,6 +324,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const corr = isRecord(raw.corr) ? raw.corr : {};
   const chisq = isRecord(raw.chisq) ? raw.chisq : {};
   const samplesize = isRecord(raw.samplesize) ? raw.samplesize : {};
+  const distfit = isRecord(raw.distfit) ? raw.distfit : {};
   const d = DEFAULT_PARAMS;
 
   return {
@@ -349,6 +382,10 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       groups: integer(samplesize.groups, d.samplesize.groups),
       f: finite(samplesize.f, d.samplesize.f),
       margin: finite(samplesize.margin, d.samplesize.margin),
+    },
+    distfit: {
+      variable: index(distfit.variable, d.distfit.variable, width),
+      selected: parseDistributionList(distfit.selected, d.distfit.selected),
     },
   };
 };

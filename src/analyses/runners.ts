@@ -8,6 +8,7 @@ import { buildRegressionOutput } from './regression/run';
 import { buildCorrelationOutput } from './correlation/run';
 import { buildChiSquareOutput } from './chisquare/run';
 import { buildSampleSizeOutput } from './samplesize/run';
+import { buildDistributionFitOutput } from './distfit/run';
 
 export interface AnalysisRunContext {
   grid: GridData;
@@ -20,9 +21,10 @@ export interface AnalysisRunContext {
  *
  * Le sei analisi legacy sono già funzioni `(dati, parametri) -> risultato`:
  * qui ricevono un contesto unico invece di sei chiamate con firme diverse.
- * `samplesize` è il primo pannello convertito: parametri nell'App e builder
- * puro, come le analisi legacy. Gli altri 12 restano componenti controllati dal
- * segnale `runSignal`, in attesa di separare i loro parametri dal form.
+ * `samplesize` e `distfit` sono i primi pannelli convertiti: parametri nell'App
+ * e builder puro, come le analisi legacy. Gli altri 11 restano componenti
+ * controllati dal segnale `runSignal`, in attesa di separare i loro parametri
+ * dal form.
  */
 export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => AnalysisRunResult> = {
   descriptive: ({ grid, params, ciLevel }) =>
@@ -43,4 +45,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
   chisquare: ({ grid, params, ciLevel }) =>
     buildChiSquareOutput({ grid, chisqParams: params.chisq, ciLevel }),
   samplesize: ({ params }) => buildSampleSizeOutput(params.samplesize),
+  distfit: ({ grid, params, ciLevel }) =>
+    buildDistributionFitOutput({ grid, params: params.distfit, ciLevel }),
 };

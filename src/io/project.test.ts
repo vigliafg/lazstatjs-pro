@@ -211,6 +211,22 @@ describe('project sanitisation', () => {
     assert.equal(junk.params.samplesize.groups, 2);
   });
 
+  it('restores and sanitises distribution-fit parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          distfit: { variable: 99, selected: ['normal', 'bogus', 'normal'] },
+        },
+      })
+    );
+    // The base grid has three columns: the index is clamped to the last one.
+    assert.equal(restored.params.distfit.variable, 2);
+    assert.deepEqual(restored.params.distfit.selected, ['normal']);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

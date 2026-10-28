@@ -105,12 +105,12 @@ parametri dei 13 pannelli fuori dai form e unificarne la persistenza.
 - [ ] Persistenza parametri unica per id di analisi (`.lzs` compatibile o migrato con versione):
       `samplesize` già persistito in `ProjectParams`, restano 12 pannelli.
 
-**Stato:** le 19 analisi partono da `useAnalysisRun`. Sette hanno builder puro e
+**Stato:** le 19 analisi partono da `useAnalysisRun`. Otto hanno builder puro e
 parametri centralizzati/persistiti (`descriptive`, `ttest`, `anova`, `regression`,
-`correlation`, `chisquare`, `samplesize`); gli altri 12 pannelli osservano
-`runSignal` ma tengono ancora i parametri nello stato locale (non persistiti).
-`samplesize` è il modello da replicare: `Form.tsx` + `run.tsx` + parametri in
-`ProjectParams`.
+`correlation`, `chisquare`, `samplesize`, `distfit`); gli altri 11 pannelli
+osservano `runSignal` ma tengono ancora i parametri nello stato locale (non
+persistiti). `samplesize` e `distfit` sono il modello da replicare: `Form.tsx` +
+`run.tsx` + parametri in `ProjectParams`.
 
 **Fatto quando:** 19/19 analisi passano dalla stessa strada.
 
@@ -164,7 +164,7 @@ implementazione per ogni test statistico.
 |---|---|
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
 | 1 — Sfoltire `App.tsx` | **completa**: `App.tsx` 3.767 → 451 righe |
-| 2 — Contratto unico | avviata: 7/19 con builder puro; pannelli senza `forwardRef` |
+| 2 — Contratto unico | avviata: 8/19 con builder puro; pannelli senza `forwardRef` |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
 | 5 — Guardrail | non iniziata |
