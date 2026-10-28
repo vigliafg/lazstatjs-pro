@@ -9,11 +9,11 @@ import { CorrelationForm } from '../analyses/correlation/Form';
 import { ChiSquareForm } from '../analyses/chisquare/Form';
 import { SampleSizeForm } from '../analyses/samplesize/Form';
 import { DistributionFitForm } from '../analyses/distfit/Form';
+import { LogisticForm } from '../analyses/logistic/Form';
 import { AncovaAnalysis } from '../analyses/AncovaAnalysis';
 import { ContingencyAnalysis } from '../analyses/ContingencyAnalysis';
 import { CoxAnalysis } from '../analyses/CoxAnalysis';
 import { FactorialAnovaAnalysis } from '../analyses/FactorialAnovaAnalysis';
-import { LogisticAnalysis } from '../analyses/LogisticAnalysis';
 import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
 import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
 import { RepeatedAnovaAnalysis } from '../analyses/RepeatedAnovaAnalysis';
@@ -23,7 +23,7 @@ import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AnovaParams, ChiSqParams, CorrParams, DistributionFitParams, RegParams, SampleSizeParams, TTestParams } from '../io/project';
+import type { AnovaParams, ChiSqParams, CorrParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -46,6 +46,8 @@ export interface AnalysisTabProps {
   setSamplesizeParams: Dispatch<SetStateAction<SampleSizeParams>>;
   distfitParams: DistributionFitParams;
   setDistfitParams: Dispatch<SetStateAction<DistributionFitParams>>;
+  logisticParams: LogisticParams;
+  setLogisticParams: Dispatch<SetStateAction<LogisticParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -84,6 +86,8 @@ export const AnalysisTab = ({
   setSamplesizeParams,
   distfitParams,
   setDistfitParams,
+  logisticParams,
+  setLogisticParams,
   grid,
   outputs,
   removeOutput,
@@ -197,12 +201,10 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'logistic' && (
-        <LogisticAnalysis
-          runSignal={runSignal}
+        <LogisticForm
           grid={grid}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+          logisticParams={logisticParams}
+          setLogisticParams={setLogisticParams}
         />
       )}
 

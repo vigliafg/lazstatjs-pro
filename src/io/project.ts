@@ -94,6 +94,13 @@ export interface DistributionFitParams {
   selected: DistributionName[];
 }
 
+/** Parametri della regressione logistica. */
+export interface LogisticParams {
+  outcome: number;
+  predictors: number[];
+  cutoff: number;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -103,6 +110,7 @@ export interface ProjectParams {
   chisq: ChiSqParams;
   samplesize: SampleSizeParams;
   distfit: DistributionFitParams;
+  logistic: LogisticParams;
 }
 
 export interface ProjectSettings {
@@ -164,6 +172,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
   distfit: {
     variable: 0,
     selected: ['normal', 'lognormal', 'exponential', 'gamma', 'weibull'],
+  },
+  logistic: {
+    outcome: 0,
+    predictors: [1],
+    cutoff: 0.5,
   },
 };
 
@@ -325,7 +338,9 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const chisq = isRecord(raw.chisq) ? raw.chisq : {};
   const samplesize = isRecord(raw.samplesize) ? raw.samplesize : {};
   const distfit = isRecord(raw.distfit) ? raw.distfit : {};
+  const logistic = isRecord(raw.logistic) ? raw.logistic : {};
   const d = DEFAULT_PARAMS;
+  const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
 
   return {
     descVars: indexList(raw.descVars, d.descVars, width),
@@ -386,6 +401,13 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
     distfit: {
       variable: index(distfit.variable, d.distfit.variable, width),
       selected: parseDistributionList(distfit.selected, d.distfit.selected),
+    },
+    logistic: {
+      outcome: logisticOutcome,
+      predictors: indexList(logistic.predictors, d.logistic.predictors, width).filter(
+        (value) => value !== logisticOutcome
+      ),
+      cutoff: finite(logistic.cutoff, d.logistic.cutoff),
     },
   };
 };

@@ -227,6 +227,22 @@ describe('project sanitisation', () => {
     assert.deepEqual(restored.params.distfit.selected, ['normal']);
   });
 
+  it('restores and sanitises logistic parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          logistic: { outcome: 99, predictors: [0, 1, 0, 2], cutoff: 'x' },
+        },
+      })
+    );
+    assert.equal(restored.params.logistic.outcome, 2);
+    assert.deepEqual(restored.params.logistic.predictors, [0, 1]);
+    assert.equal(restored.params.logistic.cutoff, 0.5);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

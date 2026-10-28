@@ -10,6 +10,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'correlation',
     'descriptive',
     'distfit',
+    'logistic',
     'regression',
     'samplesize',
     'ttest',

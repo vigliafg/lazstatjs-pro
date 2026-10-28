@@ -11,6 +11,7 @@ import { useOutputConsole } from './hooks/useOutputConsole';
 import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
+import { defaultLogisticParams } from './analyses/logistic/defaults';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -41,6 +42,7 @@ import {
   type ChiSqParams,
   type CorrParams,
   type DistributionFitParams,
+  type LogisticParams,
   type ProjectParams,
   type ProjectSettings,
   type ProjectSnapshot,
@@ -247,6 +249,10 @@ export default function App() {
     boot?.params.distfit ?? DEFAULT_PARAMS.distfit
   );
 
+  const [logisticParams, setLogisticParams] = useState<LogisticParams>(
+    () => boot?.params.logistic ?? defaultLogisticParams(grid)
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -262,8 +268,9 @@ export default function App() {
       chisq: chisqParams,
       samplesize: samplesizeParams,
       distfit: distfitParams,
+      logistic: logisticParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -285,6 +292,7 @@ export default function App() {
     setChisqParams(project.params.chisq);
     setSamplesizeParams(project.params.samplesize);
     setDistfitParams(project.params.distfit);
+    setLogisticParams(project.params.logistic);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -412,6 +420,8 @@ export default function App() {
             setSamplesizeParams={setSamplesizeParams}
             distfitParams={distfitParams}
             setDistfitParams={setDistfitParams}
+            logisticParams={logisticParams}
+            setLogisticParams={setLogisticParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}
