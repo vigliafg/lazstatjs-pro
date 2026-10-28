@@ -93,5 +93,5 @@ incompatibili.
 - `src/io/project.ts` contiene lo schema completo (855 righe): da spezzare in
   `io/project/` quando si affronterà la Fase 4.
 - `stats/` non è ancora diviso in `kernels`/`tables`/`reports` per tutte le
-  analisi: `samplesize` è il modello, gli altri moduli tengono ancora calcolo,
-  tabelle e prosa nello stesso file.
+  analisi: `samplesize`, `distfit` e `logistic` sono i modelli, gli altri moduli
+  tengono ancora calcolo, tabelle e prosa nello stesso file.
