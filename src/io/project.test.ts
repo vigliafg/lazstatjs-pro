@@ -354,6 +354,23 @@ describe('project sanitisation', () => {
     assert.deepEqual(restored.params.ancova.covariates, [0]);
   });
 
+  it('restores and sanitises factorial parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          factorial: { response: 99, factorA: -3, factorB: 1, interaction: 'yes' },
+        },
+      })
+    );
+    assert.equal(restored.params.factorial.response, 2);
+    assert.equal(restored.params.factorial.factorA, 0);
+    assert.equal(restored.params.factorial.factorB, 1);
+    assert.equal(restored.params.factorial.interaction, false);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

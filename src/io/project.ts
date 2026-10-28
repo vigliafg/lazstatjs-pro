@@ -145,6 +145,14 @@ export interface AncovaParams {
   covariates: number[];
 }
 
+/** Parametri dell'ANOVA fattoriale a due fattori. */
+export interface FactorialParams {
+  response: number;
+  factorA: number;
+  factorB: number;
+  interaction: boolean;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -160,6 +168,7 @@ export interface ProjectParams {
   timeseries: TimeSeriesParams;
   contingency: ContingencyParams;
   ancova: AncovaParams;
+  factorial: FactorialParams;
 }
 
 export interface ProjectSettings {
@@ -258,6 +267,12 @@ export const DEFAULT_PARAMS: ProjectParams = {
     response: 0,
     factor: 1,
     covariates: [],
+  },
+  factorial: {
+    response: 0,
+    factorA: 1,
+    factorB: 2,
+    interaction: false,
   },
 };
 
@@ -478,6 +493,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const timeseries = isRecord(raw.timeseries) ? raw.timeseries : {};
   const contingency = isRecord(raw.contingency) ? raw.contingency : null;
   const ancova = isRecord(raw.ancova) ? raw.ancova : {};
+  const factorial = isRecord(raw.factorial) ? raw.factorial : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -597,6 +613,12 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       covariates: indexList(ancova.covariates, d.ancova.covariates, width).filter(
         (value) => value !== ancovaResponse && value !== ancovaFactor
       ),
+    },
+    factorial: {
+      response: index(factorial.response, d.factorial.response, width),
+      factorA: index(factorial.factorA, d.factorial.factorA, width),
+      factorB: index(factorial.factorB, d.factorial.factorB, width),
+      interaction: bool(factorial.interaction, d.factorial.interaction),
     },
   };
 };

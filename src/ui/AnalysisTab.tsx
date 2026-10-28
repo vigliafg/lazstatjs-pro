@@ -15,7 +15,7 @@ import { SurvivalForm } from '../analyses/survival/Form';
 import { TimeSeriesForm } from '../analyses/timeseries/Form';
 import { ContingencyForm } from '../analyses/contingency/Form';
 import { AncovaForm } from '../analyses/ancova/Form';
-import { FactorialAnovaAnalysis } from '../analyses/FactorialAnovaAnalysis';
+import { FactorialForm } from '../analyses/factorial/Form';
 import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
 import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
 import { RepeatedAnovaAnalysis } from '../analyses/RepeatedAnovaAnalysis';
@@ -23,7 +23,7 @@ import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, RegParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -58,6 +58,8 @@ export interface AnalysisTabProps {
   setContingencyParams: Dispatch<SetStateAction<ContingencyParams>>;
   ancovaParams: AncovaParams;
   setAncovaParams: Dispatch<SetStateAction<AncovaParams>>;
+  factorialParams: FactorialParams;
+  setFactorialParams: Dispatch<SetStateAction<FactorialParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -108,6 +110,8 @@ export const AnalysisTab = ({
   setContingencyParams,
   ancovaParams,
   setAncovaParams,
+  factorialParams,
+  setFactorialParams,
   grid,
   outputs,
   removeOutput,
@@ -223,14 +227,12 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'factorial' && (
-        <FactorialAnovaAnalysis
-          runSignal={runSignal}
+        <FactorialForm
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+          factorialParams={factorialParams}
+          setFactorialParams={setFactorialParams}
         />
       )}
 
