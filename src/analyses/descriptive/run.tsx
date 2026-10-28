@@ -20,6 +20,7 @@ import { descriptiveReport } from '../../stats/report';
 import { fmtEst } from '../../stats/format';
 import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
+import type { AnalysisRunResult } from '../types';
 import { ResultTables } from '../../components/ResultTable';
 
 export interface DescriptiveInput {
@@ -31,9 +32,7 @@ export interface DescriptiveInput {
   level: number;
 }
 
-export type DescriptiveOutputResult =
-  | { ok: true; node: ReactNode; tables: TableSpec[]; report: ReportSpec }
-  | { ok: false; reason: string };
+export type DescriptiveOutputResult = AnalysisRunResult;
 
 /**
  * Calcolo + grafici + tabelle + report dell'analisi descrittiva.
