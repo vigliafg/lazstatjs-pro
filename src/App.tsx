@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
-import { DataTab } from './ui/DataTab';
+import { DataWorkspace } from './ui/DataWorkspace';
 import { Header } from './ui/Header';
 import { Footer } from './ui/Footer';
 import { Toasts } from './ui/Toasts';
@@ -115,15 +115,8 @@ export default function App() {
   const canUndoGrid = gridHistory.canUndo;
   const canRedoGrid = gridHistory.canRedo;
   const resetGridHistory = gridHistory.setWithoutHistory;
-  const [focusCell, setFocusCell] = useState<{ r: number; c: number; stamp: number } | null>(null);
-  const [selRange, setSelRange] = useState<{ r0: number; c0: number; r1: number; c1: number } | null>(null);
-  const [showClean, setShowClean] = useState(false);
-  const [showTransform, setShowTransform] = useState(false);
-  const [freezeFirstCol, setFreezeFirstCol] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [showInspector, setShowInspector] = useState(false);
   const [filterAffectsAnalysis, setFilterAffectsAnalysis] = useState(false);
-  const [inspectorCol, setInspectorCol] = useState(0);
   const [focusedColumn, setFocusedColumn] = useState<number | null>(null);
   const [filterCol, setFilterCol] = useState(0);
   const [filterOp, setFilterOp] = useState<RowFilterOp>('contains');
@@ -135,35 +128,6 @@ export default function App() {
     setValidation({ ran: true, issues: gridFindInvalid(grid) });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grid]);
-  // Selection bar holds raw indexes: clamp them after delete/merge/paste so
-  // Fill/Copy/Clear never address rows/cols that no longer exist.
-  // Column indexes in the filter bar go stale after delete/merge.
-  useEffect(() => {
-    const max = Math.max(0, grid.cols.length - 1);
-    if (filterCol > max) setFilterCol(max);
-  }, [grid.cols.length, filterCol]);
-
-  useEffect(() => {
-    if (inspectorCol >= grid.cols.length) {
-      setInspectorCol(Math.max(0, grid.cols.length - 1));
-    }
-  }, [grid.cols.length, inspectorCol]);
-
-  useEffect(() => {
-    if (!selRange) return;
-    const maxR = Math.max(0, grid.rows.length - 1);
-    const maxC = Math.max(0, grid.cols.length - 1);
-    const clamp = (v: number, m: number) => Math.max(0, Math.min(m, v));
-    const next = {
-      r0: clamp(selRange.r0, maxR),
-      c0: clamp(selRange.c0, maxC),
-      r1: clamp(selRange.r1, maxR),
-      c1: clamp(selRange.c1, maxC),
-    };
-    if (next.r0 !== selRange.r0 || next.c0 !== selRange.c0 || next.r1 !== selRange.r1 || next.c1 !== selRange.c1) {
-      setSelRange(next);
-    }
-  }, [grid.rows.length, grid.cols.length, selRange]);
   const [validation, setValidation] = useState<{ ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] }>({
     ran: false,
     issues: [],
@@ -200,10 +164,7 @@ export default function App() {
     setDatasetId(`dataset-${Date.now().toString(36)}`);
     setOutputs([]);
     setValidation({ ran: false, issues: [] });
-    setSelRange(null);
-    setFocusCell(null);
     setFocusedColumn(null);
-    setShowInspector(false);
     setFilterAffectsAnalysis(false);
     showToast('Dataset', 'Parameters reset and previous results cleared', 'ok');
   }
@@ -432,8 +393,6 @@ export default function App() {
     // from, so the console and the grid always belong to the same session.
     setOutputs(restoredOutputs(project.outputs));
     setValidation({ ran: false, issues: [] });
-    setSelRange(null);
-    setFocusCell(null);
     setFocusedColumn(null);
     setFilterAffectsAnalysis(false);
   };
@@ -483,7 +442,7 @@ export default function App() {
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
         {activeTab === 'data' && (
-          <DataTab
+          <DataWorkspace
             grid={grid}
             setGrid={setGrid}
             onNewDataset={() => replaceDataset(gridNewGrid())}
@@ -506,23 +465,12 @@ export default function App() {
             showToast={showToast}
             validation={validation}
             setValidation={setValidation}
-            focusCell={focusCell}
-            setFocusCell={setFocusCell}
-            selRange={selRange}
-            setSelRange={setSelRange}
-            freezeFirstCol={freezeFirstCol}
-            setFreezeFirstCol={setFreezeFirstCol}
-            showFilter={showFilter}
-            setShowFilter={setShowFilter}
-            showInspector={showInspector}
-            setShowInspector={setShowInspector}
             focusedColumn={focusedColumn}
             onFocusColumn={setFocusedColumn}
             filterAffectsAnalysis={filterAffectsAnalysis}
             setFilterAffectsAnalysis={setFilterAffectsAnalysis}
-            inspectorCol={inspectorCol}
-            setInspectorCol={setInspectorCol}
-            onColumnMeta={updateColumnMeta}
+            showFilter={showFilter}
+            setShowFilter={setShowFilter}
             filterCol={filterCol}
             setFilterCol={setFilterCol}
             filterOp={filterOp}
@@ -532,10 +480,7 @@ export default function App() {
             filterNeedsValue={filterNeedsValue}
             activeRowFilter={activeRowFilter}
             visibleRowCount={visibleRowCount}
-            showClean={showClean}
-            setShowClean={setShowClean}
-            showTransform={showTransform}
-            setShowTransform={setShowTransform}
+            onColumnMeta={updateColumnMeta}
             updateCell={updateCell}
             updateColType={updateColType}
             updateColumnLevels={updateColumnLevels}
