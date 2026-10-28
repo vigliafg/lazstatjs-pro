@@ -1,33 +1,16 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import {
-  AlertCircle,
-  BarChart3,
-  CheckCircle2,
-  ChevronDown,
-  Database,
-  Download,
-  FileText,
-  HelpCircle,
-  Info,
-  Settings,
-  Upload,
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import { jStat } from './stats/jstat';
-import { ResultTables } from './components/ResultTable';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
-import { buildDescriptiveOutput } from './analyses/descriptive/run';
-import { buildChiSquareOutput } from './analyses/chisquare/run';
-import { buildCorrelationOutput } from './analyses/correlation/run';
-import { buildAnovaOutput } from './analyses/anova/run';
-import { buildRegressionOutput } from './analyses/regression/run';
-import { buildTTestOutput } from './analyses/ttest/run';
+import { ANALYSIS_RUNNERS } from './analyses/runners';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
 import { DataTab } from './ui/DataTab';
+import { Header } from './ui/Header';
+import { Footer } from './ui/Footer';
+import { Toasts } from './ui/Toasts';
 import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
 import { useImportExport } from './hooks/useImportExport';
+import { useProjectSession } from './hooks/useProjectSession';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { AncovaHandle } from './analyses/AncovaAnalysis';
@@ -43,40 +26,11 @@ import type { SampleSizeHandle } from './analyses/SampleSizeAnalysis';
 import type { SurvivalHandle } from './analyses/SurvivalAnalysis';
 import type { TimeSeriesHandle } from './analyses/TimeSeriesAnalysis';
 import type { WizardHandle } from './analyses/WizardAnalysis';
-import {
-  type ReportSpec,
-} from './stats/report';
-import {
-  VictoryAxis,
-  VictoryBoxPlot,
-  VictoryChart,
-  VictoryLabel,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
-import {
-
-  calcWilcoxonSignedRank, 
-  calcMannWhitneyU, 
-  calcKruskalWallis, 
-  calcTheilSen, 
-  calcKendallTau,
-  NormalityResult
-} from './statsHelpers';
-import { pairedValues, parseNum } from './stats/core';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import {
   findInvalid as gridFindInvalid,
 } from './grid/ops';
-import {
-  nonEmptyRowCount,
-  countInvalidCells,
-  analysisRows,
-  groupColumnIndexes,
-  isGroupColumn,
-} from './grid/types';
 import { useGridHistory } from './grid/useGridHistory';
-import { LevelsEditor } from './grid/LevelsEditor';
 import { HelpPanel } from './help/HelpPanel';
 import {
   setCell as gridSetCell,
@@ -89,51 +43,22 @@ import {
   type RowFilter,
   type RowFilterOp,
 } from './grid/ops';
-import { DataGrid } from './grid/DataGrid';
-import { CleanPanel } from './grid/CleanPanel';
-import { TransformPanel } from './grid/TransformPanel';
 import { ImportWizard } from './io/ImportWizard';
 import { ExportDialog } from './io/ExportDialog';
-import { downloadExportFile, downloadText } from './io/writers';
-import { readXlsxSheets } from './io/xlsx';
-import { savePrefs } from './io/prefs';
+import { downloadExportFile } from './io/writers';
 import {
   DEFAULT_PARAMS,
   DEFAULT_SETTINGS,
-  createProjectSnapshot,
   loadAutosaveProject,
-  parseProject,
-  saveAutosaveText,
-  serializeProject,
   type AnovaParams,
   type ChiSqParams,
   type CorrParams,
+  type ProjectParams,
+  type ProjectSettings,
   type ProjectSnapshot,
   type RegParams,
   type TTestParams,
 } from './io/project';
-
-// --- Types ---
-interface AnalysisConfig {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-}
-
-// --- Constants ---
-const PALETTE = ['#4f9cf9', '#34d399', '#f87171', '#fbbf24', '#a78bfa', '#38bdf8', '#fb923c', '#e879f9'];
-
-// --- Helper Functions ---
-const fmt = (x: number, d = 4) => {
-  if (isNaN(x) || !isFinite(x)) return '—';
-  return parseFloat(x.toFixed(d)).toString();
-};
-
-const fmtP = (p: number) => {
-  if (isNaN(p) || !isFinite(p)) return '—';
-  if (p < 0.001) return '< 0.001';
-  return p.toFixed(4);
-};
 
 const createDefaultGrid = (): GridData => ({
   cols: [
@@ -325,16 +250,22 @@ export default function App() {
     boot?.params.chisq ?? DEFAULT_PARAMS.chisq
   );
 
-  // --- Project persistence (.lzs + silent autosave) ---
-  const projectInputRef = useRef<HTMLInputElement>(null);
-  const [lastAutosave, setLastAutosave] = useState<string | null>(() =>
-    boot ? new Date(boot.savedAt).toLocaleTimeString() : null
+  // Identità stabile: il timer di autosave non deve ripartire a ogni render.
+  const settings = useMemo<ProjectSettings>(
+    () => ({ ciLevel, activeAnalysis, activeTab }),
+    [ciLevel, activeAnalysis, activeTab]
   );
-  const autosaveWarned = useRef(false);
-  // Canonical serialization of what is already stored: avoids redundant
-  // writes on mount/StrictMode re-runs and keeps mounts from clobbering a
-  // newer tab with identical content.
-  const lastSavedProject = useRef<string | null>(boot ? serializeProject(boot) : null);
+  const params = useMemo<ProjectParams>(
+    () => ({
+      descVars,
+      ttest: ttestParams,
+      anova: anovaParams,
+      reg: regParams,
+      corr: corrParams,
+      chisq: chisqParams,
+    }),
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams]
+  );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
   const activeRowFilter: RowFilter | null =
@@ -345,43 +276,7 @@ export default function App() {
     ? gridFilterIndexes(grid, activeRowFilter).length
     : grid.rows.length;
 
-  const buildProject = (): ProjectSnapshot =>
-    createProjectSnapshot({
-      grid,
-      prefs: ioPrefs,
-      settings: { ciLevel, activeAnalysis, activeTab },
-      params: {
-        descVars,
-        ttest: ttestParams,
-        anova: anovaParams,
-        reg: regParams,
-        corr: corrParams,
-        chisq: chisqParams,
-      },
-      outputs,
-    });
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const snapshot = buildProject();
-      const json = serializeProject(snapshot);
-      if (json === lastSavedProject.current) return;
-      if (saveAutosaveText(json)) {
-        lastSavedProject.current = json;
-        autosaveWarned.current = false;
-        setLastAutosave(new Date().toLocaleTimeString());
-      } else if (!autosaveWarned.current) {
-        // Quota exceeded or oversized grid: warn once, not on every keystroke.
-        autosaveWarned.current = true;
-        setLastAutosave(null);
-        showToast('Autosave', 'Autosave unavailable (storage full or data too large) — use Save project', 'warn');
-      }
-    }, 800);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grid, ioPrefs, ciLevel, activeAnalysis, activeTab, descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, outputs]);
-
-  const applyProject = (project: ProjectSnapshot) => {
+  const restoreProject = (project: ProjectSnapshot) => {
     resetGridHistory(project.grid);
     setDescVars(project.params.descVars);
     setTTestParams(project.params.ttest);
@@ -397,53 +292,25 @@ export default function App() {
     );
     setActiveTab(project.settings.activeTab);
     setIoPrefs(project.prefs);
-    savePrefs(project.prefs);
     // Output snapshots are restored together with the data they were computed
     // from, so the console and the grid always belong to the same session.
-    const restored = restoredOutputs(project.outputs);
-    setOutputs(restored);
+    setOutputs(restoredOutputs(project.outputs));
     setValidation({ ran: false, issues: [] });
     setSelRange(null);
     setFocusCell(null);
-    setLastAutosave(new Date().toLocaleTimeString());
-    showToast(
-      'Project',
-      `Loaded ${nonEmptyRowCount(project.grid.rows)} rows and ${restored.length} result block(s)`,
-      'ok'
-    );
   };
 
-  const saveProjectFile = () => {
-    downloadText(
-      serializeProject(buildProject()),
-      'lazstats-project.lzs',
-      'application/json;charset=utf-8'
-    );
-    showToast('Project', 'Project saved as .lzs', 'ok');
-  };
-
-  const openProjectFile = async (file: File) => {
-    try {
-      if (file.size > 25_000_000) throw new Error('The project file is too large');
-      const project = parseProject(await file.text());
-      if (!window.confirm(`Load "${file.name}"? The current grid will be replaced and the output console cleared.`)) {
-        return;
-      }
-      applyProject(project);
-    } catch (error) {
-      showToast('Project', error instanceof Error ? error.message : 'Could not read the project', 'error');
-    }
-  };
-
-  const bootNoticeShown = useRef(false);
-  useEffect(() => {
-    if (bootNoticeShown.current) return;
-    bootNoticeShown.current = true;
-    if (boot) {
-      showToast('Session', `Restored ${nonEmptyRowCount(boot.grid.rows)} rows from the last session`, 'ok');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // --- Project persistence (.lzs + silent autosave) ---
+  const { projectInputRef, lastAutosave, saveProjectFile, openProjectFile } = useProjectSession({
+    boot,
+    grid,
+    prefs: ioPrefs,
+    settings,
+    params,
+    outputs,
+    restore: restoreProject,
+    showToast,
+  });
 
   const nonParamRepeatedRef = useRef<NonParamRepeatedHandle>(null);
   const repeatedAnovaRef = useRef<RepeatedAnovaHandle>(null);
@@ -470,26 +337,10 @@ export default function App() {
   };
 
   const runAnalysis = () => {
+    const runner = ANALYSIS_RUNNERS[activeAnalysis];
+    if (runner) return emit(runner({ grid, params, ciLevel }));
+
     switch (activeAnalysis) {
-      case 'descriptive':
-        return emit(
-          buildDescriptiveOutput({
-            rows: grid.rows,
-            columnNames: grid.cols.map(col => col.name),
-            indices: descVars,
-            level: ciLevel,
-          })
-        );
-      case 'ttest':
-        return emit(buildTTestOutput({ grid, ttestParams, ciLevel }));
-      case 'anova':
-        return emit(buildAnovaOutput({ grid, anovaParams, ciLevel }));
-      case 'regression':
-        return emit(buildRegressionOutput({ grid, regParams, ciLevel }));
-      case 'correlation':
-        return emit(buildCorrelationOutput({ grid, corrParams, ciLevel }));
-      case 'chisquare':
-        return emit(buildChiSquareOutput({ grid, chisqParams, ciLevel }));
       case 'contingency':
         return contingencyRef.current?.run();
       case 'nonparamrm':
@@ -524,36 +375,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <div className="bg-surface2 border-b border-border px-2 pt-1.5 flex gap-0.5 shrink-0 sticky top-0 z-50">
-        <button 
-          onClick={() => setActiveTab('data')}
-          className={`main-tab ${activeTab === 'data' ? 'active' : ''}`}
-        >
-          <Database className="w-3 h-3 inline mr-2" />
-          Data Editor
-        </button>
-        <button 
-          onClick={() => setActiveTab('analysis')}
-          className={`main-tab ${activeTab === 'analysis' ? 'active' : ''}`}
-        >
-          <BarChart3 className="w-3 h-3 inline mr-2" />
-          Analysis & Output
-        </button>
-        <button 
-          onClick={() => setActiveTab('settings')}
-          className={`main-tab ${activeTab === 'settings' ? 'active' : ''}`}
-        >
-          <Settings className="w-3 h-3 inline mr-2" />
-          Settings
-        </button>
-        <button 
-          onClick={() => setActiveTab('help')}
-          className={`main-tab ${activeTab === 'help' ? 'active' : ''}`}
-        >
-          <HelpCircle className="w-3 h-3 inline mr-2" />
-          Help
-        </button>
-      </div>
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
@@ -685,43 +507,10 @@ export default function App() {
       )}
 
       {/* Footer / Statusbar */}
-      <footer className="h-8 bg-surface border-t border-border flex items-center px-4 text-[10px] font-mono text-text3 gap-6 shrink-0">
-        <div>ROWS: <span className="text-text2">{nonEmptyRowCount(grid.rows)}/{grid.rows.length}</span></div>
-        <div className="w-px h-3 bg-border" />
-        <div>COLS: <span className="text-text2">{grid.cols.length}</span></div>
-        <div className="w-px h-3 bg-border" />
-        <div>INVALID: <span className={countInvalidCells(grid) > 0 ? 'text-yellow' : 'text-green'}>{countInvalidCells(grid)}</span></div>
-        <div className="w-px h-3 bg-border" />
-        <div>STATUS: <span className="text-green">READY</span></div>
-        <div className="ml-auto flex items-center gap-2">
-          <Info className="w-3 h-3" />
-          <span>LazStats JS v3.0.0</span>
-        </div>
-      </footer>
+      <Footer grid={grid} />
 
       {/* Toasts */}
-      <div className="fixed bottom-10 right-5 z-[9999] flex flex-col gap-2 pointer-events-none">
-        <AnimatePresence>
-          {toasts.map(t => (
-            <motion.div 
-              key={t.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className={`bg-surface border border-border2 rounded p-3 shadow-2xl min-w-[250px] pointer-events-auto border-l-4 ${
-                t.type === 'ok' ? 'border-l-green' : t.type === 'warn' ? 'border-l-yellow' : 'border-l-red'
-              }`}
-            >
-              <div className={`text-[11px] font-bold mb-1 ${
-                t.type === 'ok' ? 'text-green' : t.type === 'warn' ? 'text-yellow' : 'text-red'
-              }`}>
-                {t.title}
-              </div>
-              <div className="text-[11px] text-text2" dangerouslySetInnerHTML={{ __html: t.msg }} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+      <Toasts toasts={toasts} />
     </div>
   );
 }

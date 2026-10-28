@@ -87,19 +87,25 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 - [x] Estrarre la scheda Data in `src/ui/DataTab.tsx` (45 prop esplicite).
 - [x] Estrarre la scheda Settings in `src/ui/SettingsTab.tsx`.
 - [x] Estrarre la scheda Analysis in `src/ui/AnalysisTab.tsx` (tab, form, 13 pannelli, console).
-- [ ] Estrarre header, footer e toasts.
+- [x] Estrarre header, footer e toasts (`src/ui/Header.tsx`, `Footer.tsx`, `Toasts.tsx`).
 - [x] Estrarre `useToasts`, `useOutputConsole` e `useImportExport` (`src/hooks/`).
-- [ ] Estrarre `useProjectSession` e `useAnalysisRun`.
+- [x] Estrarre `useProjectSession` (`src/hooks/useProjectSession.ts`).
+- [ ] Estrarre `useAnalysisRun` (fase 2: dipende dal contratto unico).
 
-**Stato:** `App.tsx` 3.767 → **787 righe** (-79%). Restano la persistenza del progetto
-(`useProjectSession`) e i wrapper `run*` (fase 2, `AnalysisSpec`).
+**Stato:** `App.tsx` 3.767 → **537 righe** (-86%). Restano i wrapper `run*`
+(fase 2, `AnalysisSpec`) e l'estrazione di `useAnalysisRun`.
 
 ### Fase 2 — Unificare il contratto
 
 - [ ] `AnalysisSpec` + `useAnalysisRunner` + `useAnalysisParams`.
-- [ ] Un solo punto che appende alla console (niente `pushOutput` sparsa).
+- [x] Un solo punto che appende alla console (niente `pushOutput` sparsa).
+- [x] Registro unico dei builder puri per le 6 analisi legacy (`src/analyses/runners.ts`).
 - [ ] Eliminare `forwardRef`/`useImperativeHandle` dai 14 pannelli.
 - [ ] Persistenza parametri unica per id di analisi (`.lzs` compatibile o migrato con versione).
+
+**Stato:** avviata. Le sei analisi legacy costruiscono un `AnalysisRunResult` e
+passano da `emit()` in `App.tsx`; restano da convertire i 13 pannelli con
+`forwardRef` e da unificare la persistenza dei parametri.
 
 **Fatto quando:** 19/19 analisi passano dalla stessa strada.
 
@@ -152,8 +158,8 @@ implementazione per ogni test statistico.
 | Fase | Stato |
 |---|---|
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
-| 1 — Sfoltire `App.tsx` | schermate, console e import/export estratti; `App.tsx` 3.767 → 787 righe |
-| 2 — Contratto unico | non iniziata |
+| 1 — Sfoltire `App.tsx` | **completa** (salvo `useAnalysisRun`): `App.tsx` 3.767 → 537 righe |
+| 2 — Contratto unico | avviata: emissione unica per le 6 analisi legacy |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
 | 5 — Guardrail | non iniziata |
