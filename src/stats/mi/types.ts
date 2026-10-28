@@ -4,6 +4,10 @@ export interface MiOptions {
   imputations: number;
   iterations: number;
   level: number;
+  /** 'descriptives' = solo medie/SD; 'linear' = pooled OLS. */
+  model?: 'descriptives' | 'linear';
+  outcome?: number;
+  predictors?: number[];
 }
 
 export interface MiVariable {
@@ -19,9 +23,28 @@ export interface MiVariable {
   fmi: number;
 }
 
+export interface MiCoefficient {
+  term: string;
+  beta: number;
+  se: number;
+  t: number;
+  p: number;
+  lo: number;
+  hi: number;
+  df: number;
+  fmi: number;
+}
+
+export interface MiRegression {
+  n: number;
+  r2: number;
+  coefficients: MiCoefficient[];
+}
+
 export interface MiStats {
   n: number;
   imputations: number;
   iterations: number;
   variables: MiVariable[];
+  regression: MiRegression | null;
 }

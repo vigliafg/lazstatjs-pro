@@ -446,6 +446,9 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       variables: indexList(mi.variables, d.mi.variables, width),
       imputations: Math.max(2, Math.min(50, integer(mi.imputations, d.mi.imputations))),
       iterations: Math.max(1, Math.min(50, integer(mi.iterations, d.mi.iterations))),
+      model: mi.model === 'linear' ? 'linear' : d.mi.model,
+      outcome: index(mi.outcome, d.mi.outcome, width),
+      predictors: indexList(mi.predictors, d.mi.predictors, width),
     },
     ordinal: {
       dep: index(ordinal.dep, d.ordinal.dep, width),

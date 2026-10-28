@@ -25,6 +25,9 @@ export const miReport = (tables: TableSpec[], stats: MiStats, names: string[], l
             ? 'Una FMI alta indica che i dati mancanti dominano l’incertezza: interpreta le stime con cautela.'
             : 'La frazione di informazione mancante è contenuta: le stime sono relativamente stabili.',
           `Il livello di confidenza delle stime pooled è ${level}%.`,
+          stats.regression
+            ? `Modello lineare pooled: R² medio = ${fmtEst(stats.regression.r2, 3)} su ${stats.regression.coefficients.length - 1} predittori.`
+            : 'Nessun modello di regressione pooled richiesto.',
         ],
       },
     ],

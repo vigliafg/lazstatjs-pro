@@ -19,8 +19,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
       cluster; validato contro geepack. Restano slope casuali e GLMM.
 - [x] **EFA + omega**: principal-axis factoring, parallel analysis, varimax,
       comunalità/unicità e omega totale; modalità EFA nella scheda Multivariate.
-- [x] **Dati mancanti (MI numerica)**: MICE con regressione a catene,
-      pooling di Rubin per media/SD e FMI. Resta FIML e il pooling per modelli.
+- [x] **Dati mancanti (MI numerica)**: MICE con regressione a catene, pooling
+      di Rubin per media/SD, FMI e regressione lineare pooled. Restano FIML e
+      modelli non lineari.
 - [x] **Errori standard robusti**: HC1/HC3 nella regressione, con tabella
       dedicata e test contro un riferimento sandwich.
 - [x] **Accordo**: ICC(1,1)/(2,1)/(3,1), Bland–Altman con bias/LoA e

@@ -2,7 +2,7 @@ import type { TableSpec } from '../types';
 import { fmtEst } from '../format';
 import type { MiStats } from '../mi/types';
 
-export const miTables = (stats: MiStats, names: string[], level: number): TableSpec[] => [
+export const miTables = (stats: MiStats, names: string[], level: number, predictorNames: string[] = []): TableSpec[] => [
   {
     id: 'mi-missing',
     title: 'Dati mancanti',
@@ -50,4 +50,26 @@ export const miTables = (stats: MiStats, names: string[], level: number): TableS
       `FMI = frazione di informazione mancante; df approssimati con la formula di Barnard–Rubin.`,
     ],
   },
+  ...(stats.regression
+    ? [{
+        id: 'mi-regression',
+        title: 'Regressione pooled',
+        subtitle: `R² medio = ${stats.regression.r2.toFixed(3)} · ${level}% CI`,
+        columns: [
+          { key: 'term', label: 'Termine', format: 'text' as const },
+          { key: 'beta', label: 'β', format: 'dec4' as const },
+          { key: 'se', label: 'SE', format: 'dec4' as const },
+          { key: 't', label: 't', format: 'dec3' as const },
+          { key: 'p', label: 'p', format: 'p' as const },
+          { key: 'lo', label: 'CI low', format: 'dec4' as const },
+          { key: 'hi', label: 'CI high', format: 'dec4' as const },
+          { key: 'fmi', label: 'FMI', format: 'dec3' as const },
+        ],
+        rows: stats.regression.coefficients.map((coefficient, index) => ({
+          ...coefficient,
+          term: index === 0 ? '(Intercept)' : predictorNames[index - 1] ?? coefficient.term,
+        })),
+        notes: ['Coefficienti pooled con regole di Rubin; R² è la media delle imputazioni.'],
+      }]
+    : []),
 ];

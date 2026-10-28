@@ -224,6 +224,9 @@ export interface MiParams {
   variables: number[];
   imputations: number;
   iterations: number;
+  model: 'descriptives' | 'linear';
+  outcome: number;
+  predictors: number[];
 }
 
 /** Parametri della regressione logistica ordinale. */
@@ -473,6 +476,9 @@ export const DEFAULT_PARAMS: ProjectParams = {
     variables: [0, 1],
     imputations: 5,
     iterations: 10,
+    model: 'descriptives',
+    outcome: 0,
+    predictors: [1],
   },
   ordinal: {
     dep: 0,

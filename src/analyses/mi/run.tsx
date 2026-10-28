@@ -23,6 +23,9 @@ export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunRe
     imputations: params.imputations,
     iterations: params.iterations,
     level: ciLevel,
+    model: params.model,
+    outcome: params.outcome,
+    predictors: params.predictors,
   });
   if (!stats) {
     return {
@@ -32,7 +35,8 @@ export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunRe
   }
 
   const names = params.variables.map(index => grid.cols[index]?.name ?? `V${index + 1}`);
-  const tables = miTables(stats, names, ciLevel);
+  const predictorNames = params.predictors.map(index => grid.cols[index]?.name ?? `X${index + 1}`);
+  const tables = miTables(stats, names, ciLevel, predictorNames);
   return {
     ok: true,
     tables,

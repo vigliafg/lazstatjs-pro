@@ -35,3 +35,48 @@ test('MI rejects variables with fewer than two observations', () => {
     null
   );
 });
+
+
+test('MI pools a linear regression when there is no missingness', () => {
+  const data = Array.from({ length: 20 }, (_, index) => [
+    String(1 + 2 * index),
+    String(index),
+  ]);
+  const stats = miStats({
+    rows: data,
+    variables: [0, 1],
+    imputations: 3,
+    iterations: 2,
+    level: 95,
+    model: 'linear',
+    outcome: 0,
+    predictors: [1],
+  });
+  assert.ok(stats?.regression);
+  if (!stats?.regression) return;
+  const [intercept, slope] = stats.regression.coefficients;
+  assert.ok(Math.abs(intercept.beta - 1) < 1e-6);
+  assert.ok(Math.abs(slope.beta - 2) < 1e-6);
+  assert.ok(stats.regression.r2 > 0.999);
+});
+
+test('MI pooled regression produces finite estimates with missing data', () => {
+  const data = [
+    ['1', '0'], ['3', ''], ['5', '2'], ['7', '3'], ['', '4'],
+    ['11', '5'], ['13', '6'], ['15', '7'], ['17', '8'], ['19', '9'],
+  ];
+  const stats = miStats({
+    rows: data,
+    variables: [0, 1],
+    imputations: 5,
+    iterations: 5,
+    level: 95,
+    model: 'linear',
+    outcome: 0,
+    predictors: [1],
+  });
+  assert.ok(stats?.regression);
+  if (!stats?.regression) return;
+  assert.ok(stats.regression.coefficients.every(coefficient => Number.isFinite(coefficient.beta)));
+  assert.ok(stats.regression.coefficients.every(coefficient => Number.isFinite(coefficient.se)));
+});
