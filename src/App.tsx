@@ -66,6 +66,7 @@ import {
   type SurvivalParams,
   type TimeSeriesParams,
   type TostParams,
+  type AgreementParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -316,6 +317,10 @@ export default function App() {
     boot?.params.tost ?? DEFAULT_PARAMS.tost
   );
 
+  const [agreementParams, setAgreementParams] = useState<AgreementParams>(
+    boot?.params.agreement ?? DEFAULT_PARAMS.agreement
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -343,8 +348,9 @@ export default function App() {
       nonparamrm: nonParamParams,
       wizard: wizardParams,
       tost: tostParams,
+      agreement: agreementParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -378,6 +384,7 @@ export default function App() {
     setNonParamParams(project.params.nonparamrm);
     setWizardParams(project.params.wizard);
     setTostParams(project.params.tost);
+    setAgreementParams(project.params.agreement);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -529,6 +536,8 @@ export default function App() {
             setWizardParams={setWizardParams}
             tostParams={tostParams}
             setTostParams={setTostParams}
+            agreementParams={agreementParams}
+            setAgreementParams={setAgreementParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

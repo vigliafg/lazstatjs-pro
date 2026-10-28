@@ -21,9 +21,10 @@ import { MultivariateForm } from '../analyses/multivariate/Form';
 import { NonParamForm } from '../analyses/nonparamrm/Form';
 import { WizardForm } from '../analyses/wizard/Form';
 import { TostForm } from '../analyses/tost/Form';
+import { AgreementForm } from '../analyses/agreement/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -70,6 +71,8 @@ export interface AnalysisTabProps {
   setWizardParams: Dispatch<SetStateAction<WizardParams>>;
   tostParams: TostParams;
   setTostParams: Dispatch<SetStateAction<TostParams>>;
+  agreementParams: AgreementParams;
+  setAgreementParams: Dispatch<SetStateAction<AgreementParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -129,6 +132,8 @@ export const AnalysisTab = ({
   setWizardParams,
   tostParams,
   setTostParams,
+  agreementParams,
+  setAgreementParams,
   grid,
   outputs,
   removeOutput,
@@ -299,6 +304,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'agreement' && (
+        <AgreementForm grid={grid} agreementParams={agreementParams} setAgreementParams={setAgreementParams} />
       )}
 
       {activeAnalysis === 'tost' && (

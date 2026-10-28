@@ -165,6 +165,13 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri delle procedure di accordo. */
+export interface AgreementParams {
+  mode: 'icc' | 'bland' | 'kappa';
+  columns: number[];
+  weight: 'none' | 'linear' | 'quadratic';
+}
+
 /** Parametri del test di equivalenza TOST. */
 export interface TostParams {
   design: 'one' | 'paired' | 'ind';
@@ -206,6 +213,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  agreement: AgreementParams;
   tost: TostParams;
   wizard: WizardParams;
 }
@@ -328,6 +336,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  agreement: {
+    mode: 'icc',
+    columns: [0, 1],
+    weight: 'none',
   },
   tost: {
     design: 'one',

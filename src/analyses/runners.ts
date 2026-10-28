@@ -21,6 +21,7 @@ import { buildMultivariateOutput } from './multivariate/run';
 import { buildNonParamOutput } from './nonparamrm/run';
 import { buildWizardOutput } from './wizard/run';
 import { buildTostOutput } from './tost/run';
+import { buildAgreementOutput } from './agreement/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -81,4 +82,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildWizardOutput({ grid, params: params.wizard, ciLevel }),
   tost: ({ grid, params, ciLevel }) =>
     buildTostOutput({ grid, params: params.tost, ciLevel }),
+  agreement: ({ grid, params, ciLevel }) =>
+    buildAgreementOutput({ grid, params: params.agreement, ciLevel }),
 };

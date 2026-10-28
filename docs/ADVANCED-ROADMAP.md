@@ -13,7 +13,8 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 - [ ] **Dati mancanti**: imputazione multipla, FIML.
 - [x] **Errori standard robusti**: HC1/HC3 nella regressione, con tabella
       dedicata e test contro un riferimento sandwich.
-- [ ] **Accordo**: ICC, Bland–Altman, kappa di Cohen/Fleiss/pesata.
+- [x] **Accordo**: ICC(1,1)/(2,1)/(3,1), Bland–Altman con bias/LoA e
+      regressione del bias, Cohen/Fleiss kappa con pesi lineari o quadratici.
 - [x] **TOST / non-inferiorità**: nuova scheda Equivalence (TOST) con disegno
       one-sample, paired e due gruppi indipendenti.
 
