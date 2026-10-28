@@ -33,6 +33,8 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
         title: entry.title,
         createdAt: entry.createdAt,
         ...(entry.analysisId ? { analysisId: entry.analysisId } : {}),
+        ...(entry.params !== undefined ? { params: entry.params } : {}),
+        ...(entry.paramsSignature ? { paramsSignature: entry.paramsSignature } : {}),
         html: entry.html,
       }))
   ),

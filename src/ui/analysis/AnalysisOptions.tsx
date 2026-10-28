@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, type ReactNode, type SetStateAction } from 'react';
 import { Play } from 'lucide-react';
 import { analysisMeta, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
@@ -34,7 +34,9 @@ import { ResamplingForm } from '../../analyses/resampling/Form';
 import { GeeForm } from '../../analyses/gee/Form';
 import { StratifiedCoxForm } from '../../analyses/stratcox/Form';
 import { TdCoxForm } from '../../analyses/tdcox/Form';
+import type { ProjectParams } from '../../io/project';
 import type { AnalysisTabProps } from './types';
+import { useAnalysisStore } from './store';
 
 const Section = ({
   title,
@@ -62,6 +64,10 @@ const inputClass =
  * panel supplies the stable frame: title, family, CI, scroll area and Run.
  */
 export const AnalysisOptions = (p: AnalysisTabProps) => {
+  const { params, dispatch } = useAnalysisStore();
+  const setSlice = <K extends keyof ProjectParams>(key: K) =>
+    (updater: SetStateAction<ProjectParams[K]>) =>
+      dispatch({ type: 'slice', key, updater });
   const meta = analysisMeta(p.activeAnalysis);
   const family = familyOf(p.activeAnalysis);
   const [peek, setPeek] = useState(false);
@@ -112,21 +118,21 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
   const form = (() => {
     switch (p.activeAnalysis) {
       case 'descriptive':
-        return <DescriptiveForm grid={p.grid} descVars={p.descVars} setDescVars={p.setDescVars} />;
+        return <DescriptiveForm grid={p.grid} descVars={params.descVars} setDescVars={setSlice('descVars')} />;
       case 'ttest':
         return (
           <TTestForm
             grid={p.grid}
-            ttestParams={p.ttestParams}
-            setTTestParams={p.setTTestParams}
+            ttestParams={params.ttest}
+            setTTestParams={setSlice('ttest')}
           />
         );
       case 'anova':
         return (
           <AnovaForm
             grid={p.grid}
-            anovaParams={p.anovaParams}
-            setAnovaParams={p.setAnovaParams}
+            anovaParams={params.anova}
+            setAnovaParams={setSlice('anova')}
             onLevels={p.updateColumnLevels}
             onRecode={p.updateColumnRecode}
           />
@@ -135,32 +141,32 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
         return (
           <RegressionForm
             grid={p.grid}
-            regParams={p.regParams}
-            setRegParams={p.setRegParams}
+            regParams={params.reg}
+            setRegParams={setSlice('reg')}
           />
         );
       case 'correlation':
         return (
           <CorrelationForm
             grid={p.grid}
-            corrParams={p.corrParams}
-            setCorrParams={p.setCorrParams}
+            corrParams={params.corr}
+            setCorrParams={setSlice('corr')}
           />
         );
       case 'chisquare':
         return (
           <ChiSquareForm
             grid={p.grid}
-            chisqParams={p.chisqParams}
-            setChisqParams={p.setChisqParams}
+            chisqParams={params.chisq}
+            setChisqParams={setSlice('chisq')}
           />
         );
       case 'timeseries':
         return (
           <TimeSeriesForm
             grid={p.grid}
-            timeseriesParams={p.timeseriesParams}
-            setTimeseriesParams={p.setTimeseriesParams}
+            timeseriesParams={params.timeseries}
+            setTimeseriesParams={setSlice('timeseries')}
           />
         );
       case 'survival':
@@ -169,16 +175,16 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
             grid={p.grid}
             onLevels={p.updateColumnLevels}
             onRecode={p.updateColumnRecode}
-            survivalParams={p.survivalParams}
-            setSurvivalParams={p.setSurvivalParams}
+            survivalParams={params.survival}
+            setSurvivalParams={setSlice('survival')}
           />
         );
       case 'cox':
         return (
           <CoxForm
             grid={p.grid}
-            coxParams={p.coxParams}
-            setCoxParams={p.setCoxParams}
+            coxParams={params.cox}
+            setCoxParams={setSlice('cox')}
           />
         );
       case 'wizard':
@@ -189,16 +195,16 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
             onRecode={p.updateColumnRecode}
             onOpenAnalysis={analysisId => p.setActiveAnalysis(analysisId)}
             ciLevel={p.ciLevel}
-            wizardParams={p.wizardParams}
-            setWizardParams={p.setWizardParams}
+            wizardParams={params.wizard}
+            setWizardParams={setSlice('wizard')}
           />
         );
       case 'logistic':
         return (
           <LogisticForm
             grid={p.grid}
-            logisticParams={p.logisticParams}
-            setLogisticParams={p.setLogisticParams}
+            logisticParams={params.logistic}
+            setLogisticParams={setSlice('logistic')}
           />
         );
       case 'factorial':
@@ -207,23 +213,23 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
             grid={p.grid}
             onLevels={p.updateColumnLevels}
             onRecode={p.updateColumnRecode}
-            factorialParams={p.factorialParams}
-            setFactorialParams={p.setFactorialParams}
+            factorialParams={params.factorial}
+            setFactorialParams={setSlice('factorial')}
           />
         );
       case 'distfit':
         return (
           <DistributionFitForm
             grid={p.grid}
-            distfitParams={p.distfitParams}
-            setDistfitParams={p.setDistfitParams}
+            distfitParams={params.distfit}
+            setDistfitParams={setSlice('distfit')}
           />
         );
       case 'samplesize':
         return (
           <SampleSizeForm
-            samplesizeParams={p.samplesizeParams}
-            setSamplesizeParams={p.setSamplesizeParams}
+            samplesizeParams={params.samplesize}
+            setSamplesizeParams={setSlice('samplesize')}
           />
         );
       case 'ancova':
@@ -232,24 +238,24 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
             grid={p.grid}
             onLevels={p.updateColumnLevels}
             onRecode={p.updateColumnRecode}
-            ancovaParams={p.ancovaParams}
-            setAncovaParams={p.setAncovaParams}
+            ancovaParams={params.ancova}
+            setAncovaParams={setSlice('ancova')}
           />
         );
       case 'multivariate':
         return (
           <MultivariateForm
             grid={p.grid}
-            multivariateParams={p.multivariateParams}
-            setMultivariateParams={p.setMultivariateParams}
+            multivariateParams={params.multivariate}
+            setMultivariateParams={setSlice('multivariate')}
           />
         );
       case 'repeatedanova':
         return (
           <RepeatedAnovaForm
             grid={p.grid}
-            repeatedAnovaParams={p.repeatedAnovaParams}
-            setRepeatedAnovaParams={p.setRepeatedAnovaParams}
+            repeatedAnovaParams={params.repeatedanova}
+            setRepeatedAnovaParams={setSlice('repeatedanova')}
           />
         );
       case 'nonparamrm':
@@ -258,103 +264,103 @@ export const AnalysisOptions = (p: AnalysisTabProps) => {
             grid={p.grid}
             onLevels={p.updateColumnLevels}
             onRecode={p.updateColumnRecode}
-            nonParamParams={p.nonParamParams}
-            setNonParamParams={p.setNonParamParams}
+            nonParamParams={params.nonparamrm}
+            setNonParamParams={setSlice('nonparamrm')}
           />
         );
       case 'tdcox':
         return (
           <TdCoxForm
             grid={p.grid}
-            tdCoxParams={p.tdCoxParams}
-            setTdCoxParams={p.setTdCoxParams}
+            tdCoxParams={params.tdcox}
+            setTdCoxParams={setSlice('tdcox')}
           />
         );
       case 'stratcox':
         return (
           <StratifiedCoxForm
             grid={p.grid}
-            stratCoxParams={p.stratCoxParams}
-            setStratCoxParams={p.setStratCoxParams}
+            stratCoxParams={params.stratcox}
+            setStratCoxParams={setSlice('stratcox')}
           />
         );
       case 'gee':
         return (
           <GeeForm
             grid={p.grid}
-            geeParams={p.geeParams}
-            setGeeParams={p.setGeeParams}
+            geeParams={params.gee}
+            setGeeParams={setSlice('gee')}
           />
         );
       case 'resampling':
         return (
           <ResamplingForm
             grid={p.grid}
-            resamplingParams={p.resamplingParams}
-            setResamplingParams={p.setResamplingParams}
+            resamplingParams={params.resampling}
+            setResamplingParams={setSlice('resampling')}
           />
         );
       case 'parametric':
         return (
           <ParametricForm
             grid={p.grid}
-            parametricParams={p.parametricParams}
-            setParametricParams={p.setParametricParams}
+            parametricParams={params.parametric}
+            setParametricParams={setSlice('parametric')}
           />
         );
       case 'mixedanova':
         return (
           <MixedAnovaForm
             grid={p.grid}
-            mixedAnovaParams={p.mixedAnovaParams}
-            setMixedAnovaParams={p.setMixedAnovaParams}
+            mixedAnovaParams={params.mixedanova}
+            setMixedAnovaParams={setSlice('mixedanova')}
           />
         );
       case 'mi':
         return (
-          <MiForm grid={p.grid} miParams={p.miParams} setMiParams={p.setMiParams} />
+          <MiForm grid={p.grid} miParams={params.mi} setMiParams={setSlice('mi')} />
         );
       case 'ordinal':
         return (
           <OrdinalForm
             grid={p.grid}
-            ordinalParams={p.ordinalParams}
-            setOrdinalParams={p.setOrdinalParams}
+            ordinalParams={params.ordinal}
+            setOrdinalParams={setSlice('ordinal')}
           />
         );
       case 'lmm':
         return (
-          <LmmForm grid={p.grid} lmmParams={p.lmmParams} setLmmParams={p.setLmmParams} />
+          <LmmForm grid={p.grid} lmmParams={params.lmm} setLmmParams={setSlice('lmm')} />
         );
       case 'countreg':
         return (
           <CountForm
             grid={p.grid}
-            countParams={p.countParams}
-            setCountParams={p.setCountParams}
+            countParams={params.countreg}
+            setCountParams={setSlice('countreg')}
           />
         );
       case 'agreement':
         return (
           <AgreementForm
             grid={p.grid}
-            agreementParams={p.agreementParams}
-            setAgreementParams={p.setAgreementParams}
+            agreementParams={params.agreement}
+            setAgreementParams={setSlice('agreement')}
           />
         );
       case 'tost':
         return (
           <TostForm
             grid={p.grid}
-            tostParams={p.tostParams}
-            setTostParams={p.setTostParams}
+            tostParams={params.tost}
+            setTostParams={setSlice('tost')}
           />
         );
       case 'contingency':
         return (
           <ContingencyForm
-            contingencyParams={p.contingencyParams}
-            setContingencyParams={p.setContingencyParams}
+            contingencyParams={params.contingency}
+            setContingencyParams={setSlice('contingency')}
           />
         );
       default:

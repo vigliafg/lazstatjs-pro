@@ -250,7 +250,7 @@ export default function App() {
     () => `dataset-${Date.now().toString(36)}`
   );
 
-  const { params, setParams, bindParam } = useProjectParams(boot, grid);
+  const { params, setParams } = useProjectParams(boot, grid);
 
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const {
@@ -264,72 +264,6 @@ export default function App() {
     exportResultsXlsx,
     exportReportHtml,
   } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
-
-  const {
-    descVars,
-    ttest: ttestParams,
-    anova: anovaParams,
-    reg: regParams,
-    corr: corrParams,
-    chisq: chisqParams,
-    samplesize: samplesizeParams,
-    distfit: distfitParams,
-    logistic: logisticParams,
-    cox: coxParams,
-    survival: survivalParams,
-    timeseries: timeseriesParams,
-    contingency: contingencyParams,
-    ancova: ancovaParams,
-    factorial: factorialParams,
-    repeatedanova: repeatedAnovaParams,
-    multivariate: multivariateParams,
-    nonparamrm: nonParamParams,
-    wizard: wizardParams,
-    tost: tostParams,
-    agreement: agreementParams,
-    countreg: countParams,
-    lmm: lmmParams,
-    ordinal: ordinalParams,
-    mi: miParams,
-    mixedanova: mixedAnovaParams,
-    parametric: parametricParams,
-    resampling: resamplingParams,
-    gee: geeParams,
-    stratcox: stratCoxParams,
-    tdcox: tdCoxParams,
-  } = params;
-
-  const setDescVars = bindParam('descVars');
-  const setTTestParams = bindParam('ttest');
-  const setAnovaParams = bindParam('anova');
-  const setRegParams = bindParam('reg');
-  const setCorrParams = bindParam('corr');
-  const setChisqParams = bindParam('chisq');
-  const setSamplesizeParams = bindParam('samplesize');
-  const setDistfitParams = bindParam('distfit');
-  const setLogisticParams = bindParam('logistic');
-  const setCoxParams = bindParam('cox');
-  const setSurvivalParams = bindParam('survival');
-  const setTimeseriesParams = bindParam('timeseries');
-  const setContingencyParams = bindParam('contingency');
-  const setAncovaParams = bindParam('ancova');
-  const setFactorialParams = bindParam('factorial');
-  const setRepeatedAnovaParams = bindParam('repeatedanova');
-  const setMultivariateParams = bindParam('multivariate');
-  const setNonParamParams = bindParam('nonparamrm');
-  const setWizardParams = bindParam('wizard');
-  const setTostParams = bindParam('tost');
-  const setAgreementParams = bindParam('agreement');
-  const setCountParams = bindParam('countreg');
-  const setLmmParams = bindParam('lmm');
-  const setOrdinalParams = bindParam('ordinal');
-  const setMiParams = bindParam('mi');
-  const setMixedAnovaParams = bindParam('mixedanova');
-  const setParametricParams = bindParam('parametric');
-  const setResamplingParams = bindParam('resampling');
-  const setGeeParams = bindParam('gee');
-  const setStratCoxParams = bindParam('stratcox');
-  const setTdCoxParams = bindParam('tdcox');
 
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
     useColumnOperations({ grid, params, setParams, setGrid, showToast });
@@ -552,68 +486,8 @@ export default function App() {
             setActiveAnalysis={setActiveAnalysis}
             ciLevel={ciLevel}
             setCiLevel={setCiLevel}
-            descVars={descVars}
-            setDescVars={setDescVars}
-            ttestParams={ttestParams}
-            setTTestParams={setTTestParams}
-            anovaParams={anovaParams}
-            setAnovaParams={setAnovaParams}
-            regParams={regParams}
-            setRegParams={setRegParams}
-            corrParams={corrParams}
-            setCorrParams={setCorrParams}
-            chisqParams={chisqParams}
-            setChisqParams={setChisqParams}
-            samplesizeParams={samplesizeParams}
-            setSamplesizeParams={setSamplesizeParams}
-            distfitParams={distfitParams}
-            setDistfitParams={setDistfitParams}
-            logisticParams={logisticParams}
-            setLogisticParams={setLogisticParams}
-            coxParams={coxParams}
-            setCoxParams={setCoxParams}
-            survivalParams={survivalParams}
-            setSurvivalParams={setSurvivalParams}
-            timeseriesParams={timeseriesParams}
-            setTimeseriesParams={setTimeseriesParams}
-            contingencyParams={contingencyParams}
-            setContingencyParams={setContingencyParams}
-            ancovaParams={ancovaParams}
-            setAncovaParams={setAncovaParams}
-            factorialParams={factorialParams}
-            setFactorialParams={setFactorialParams}
-            repeatedAnovaParams={repeatedAnovaParams}
-            setRepeatedAnovaParams={setRepeatedAnovaParams}
-            multivariateParams={multivariateParams}
-            setMultivariateParams={setMultivariateParams}
-            nonParamParams={nonParamParams}
-            setNonParamParams={setNonParamParams}
-            wizardParams={wizardParams}
-            setWizardParams={setWizardParams}
-            tostParams={tostParams}
-            setTostParams={setTostParams}
-            agreementParams={agreementParams}
-            setAgreementParams={setAgreementParams}
-            countParams={countParams}
-            setCountParams={setCountParams}
-            lmmParams={lmmParams}
-            setLmmParams={setLmmParams}
-            ordinalParams={ordinalParams}
-            setOrdinalParams={setOrdinalParams}
-            miParams={miParams}
-            setMiParams={setMiParams}
-            mixedAnovaParams={mixedAnovaParams}
-            setMixedAnovaParams={setMixedAnovaParams}
-            parametricParams={parametricParams}
-            setParametricParams={setParametricParams}
-            resamplingParams={resamplingParams}
-            setResamplingParams={setResamplingParams}
-            geeParams={geeParams}
-            setGeeParams={setGeeParams}
-            stratCoxParams={stratCoxParams}
-            setStratCoxParams={setStratCoxParams}
-            tdCoxParams={tdCoxParams}
-            setTdCoxParams={setTdCoxParams}
+            params={params}
+            setParams={setParams}
             grid={grid}
             outputs={outputs}
             dataRevision={dataRevision}

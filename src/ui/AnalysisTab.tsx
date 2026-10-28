@@ -5,6 +5,7 @@ import { AnalysisLibrary } from './analysis/AnalysisLibrary';
 import { AnalysisOptions } from './analysis/AnalysisOptions';
 import { useRecentAnalyses } from './analysis/useRecentAnalyses';
 import type { AnalysisTabProps } from './analysis/types';
+import { AnalysisStoreProvider } from './analysis/store';
 import { OutputConsole } from './OutputConsole';
 
 type Pane = 'library' | 'options' | 'output';
@@ -113,6 +114,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
   const outputVisibility = pane === 'output' || selectedPaneHidden ? 'flex' : 'hidden';
 
   return (
+    <AnalysisStoreProvider params={props.params} onChange={props.setParams}>
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
       <div className="flex h-9 shrink-0 items-center gap-1 border-b border-border bg-surface px-2">
         <div className="flex items-center gap-0.5 rounded border border-border2 bg-surface3/60 p-0.5 lg:hidden">
@@ -224,5 +226,6 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
         </div>
       </div>
     </div>
+    </AnalysisStoreProvider>
   );
 };
