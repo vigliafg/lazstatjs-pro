@@ -88,6 +88,8 @@ un pannello alla volta; *Focus output* nasconde libreria e setup. Le schede
 mantengono il contratto `AnalysisTabProps` per non duplicare i 31 slice di
 parametri dentro ogni componente.
 
+Stato, valutazione e backlog: [`docs/UI-STATE.md`](docs/UI-STATE.md).
+
 ## Persistenza `.lzs`
 
 `ProjectSnapshot` contiene griglia, preferenze, impostazioni, parametri e
