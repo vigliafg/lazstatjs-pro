@@ -78,12 +78,16 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 
 ### Fase 1 — Sfoltire `App.tsx`
 
-- [x] Estrarre `runDescriptive` in `src/analyses/descriptive/run.tsx` (calcolo + grafici + report).
-- [ ] Estrarre le altre 5 analisi inline con lo stesso taglio.
-- [ ] Estrarre `OutputConsole`, toolbar e tab bar in `src/ui/`.
-- [ ] Spostare `ANALYSIS_TABS` in un registro unico (`src/analyses/registry.ts`).
+- [x] Estrarre le 6 analisi legacy: `descriptive`, `ttest`, `anova`, `regression`,
+      `correlation`, `chisquare` (calcolo, grafici, tabelle, report) in `src/analyses/*/run.tsx`.
+- [x] Estrarre i 6 form in `src/analyses/*/Form.tsx`.
+- [x] `src/ui/OutputConsole.tsx`: console, `OutputEntry`, `restoredOutputs`.
+- [x] `src/analyses/registry.ts`: registro unico di tab, id ed etichette.
+- [ ] Estrarre la scheda Data (`src/ui/DataTab.tsx`, ~320 righe).
+- [ ] Estrarre la scheda Settings, header, footer e toasts.
+- [ ] Estrarre la toolbar delle analisi.
 
-**Fatto quando:** `App.tsx` < 300 righe e contiene solo composizione.
+**Stato:** `App.tsx` 3.767 → 1.566 righe (-58%). Obiettivo < 300.
 
 ### Fase 2 — Unificare il contratto
 
@@ -143,7 +147,7 @@ implementazione per ogni test statistico.
 | Fase | Stato |
 |---|---|
 | 0 — Rete di sicurezza | 6/19 golden; CI attiva; mancano i 13 golden delle analisi nuove |
-| 1 — Sfoltire `App.tsx` | avviata: `App.tsx` 3.767 → 3.526 righe, descriptive estratta |
+| 1 — Sfoltire `App.tsx` | 6/6 analisi e form estratti, console e registro fatti; `App.tsx` 3.767 → 1.566 righe |
 | 2 — Contratto unico | non iniziata |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
