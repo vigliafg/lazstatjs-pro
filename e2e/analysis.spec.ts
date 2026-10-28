@@ -82,3 +82,30 @@ test('live-run replaces one card when parameters change', async ({ page, isMobil
   await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 5000 });
   await expect(page.getByRole('button', { name: 'Live run' })).toHaveAttribute('aria-pressed', 'true');
 });
+
+test('filters, pins and clears result cards', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'output workspace is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(2);
+
+  const filter = page.getByLabel('Filter results by analysis');
+  await expect(filter).toBeVisible();
+  await filter.selectOption({ label: 'ANOVA' });
+  await expect(page.locator('article.output-card')).toHaveCount(1);
+  await filter.selectOption({ label: 'All analyses' });
+
+  await page.getByRole('button', { name: 'Pin result' }).first().click();
+  await expect(page.getByRole('button', { name: 'Unpin result' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copy result card' })).toHaveCount(2);
+
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'Clear every result block' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(0);
+});

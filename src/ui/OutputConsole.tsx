@@ -7,7 +7,10 @@ import {
   FileCode2,
   FileText,
   Image,
+  Check,
   ClipboardCheck,
+  Pin,
+  PinOff,
   RotateCcw,
   SlidersHorizontal,
   Table2,
@@ -15,6 +18,7 @@ import {
 } from 'lucide-react';
 import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
+import { copyText } from '../io/clipboard';
 
 /** Un blocco della console: React live nella sessione, HTML quando ripristinato. */
 export interface OutputEntry extends StoredOutput {
@@ -92,6 +96,12 @@ export const OutputConsole = ({
   currentFilterSignature,
 }: OutputConsoleProps) => {
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
+  const [pinned, setPinned] = useState<Set<string>>(() => new Set());
+  const [filterId, setFilterId] = useState('all');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const analysisIds = Array.from(
+    new Set(outputs.map(entry => entry.analysisId).filter((id): id is string => Boolean(id)))
+  );
   const lastId = outputs.length > 0 ? outputs[outputs.length - 1].id : null;
   const [activeId, setActiveId] = useState<string | null>(lastId);
 
@@ -106,6 +116,31 @@ export const OutputConsole = ({
       else next.add(id);
       return next;
     });
+  };
+
+  const togglePin = (id: string) => {
+    setPinned(previous => {
+      const next = new Set(previous);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const copyCard = async (entry: OutputEntry) => {
+    const card = document.getElementById(`output-block-${entry.id}`);
+    if (!card) return;
+    const clone = card.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('button, [data-no-print]').forEach(node => node.remove());
+    const ok = await copyText(clone.innerText);
+    if (ok) {
+      setCopiedId(entry.id);
+      setTimeout(() => setCopiedId(current => (current === entry.id ? null : current)), 1500);
+    }
+  };
+
+  const confirmClear = () => {
+    if (window.confirm('Clear every result block?')) onClear();
   };
 
   const jumpTo = (id: string) => {
@@ -131,6 +166,21 @@ export const OutputConsole = ({
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
             {outputs.length} run{outputs.length === 1 ? '' : 's'}
           </span>
+          {analysisIds.length > 1 && (
+            <select
+              aria-label="Filter results by analysis"
+              value={filterId}
+              onChange={event => setFilterId(event.target.value)}
+              className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 text-[10px] text-text2"
+            >
+              <option value="all">All analyses</option>
+              {analysisIds.map(id => (
+                <option key={id} value={id}>
+                  {analysisLabel(id)}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-1">
           <button
@@ -146,7 +196,7 @@ export const OutputConsole = ({
           <button
             type="button"
             className={actionClass}
-            onClick={onClear}
+            onClick={confirmClear}
             disabled={outputs.length === 0}
             title="Clear every result block"
             aria-label="Clear every result block"
@@ -241,7 +291,14 @@ export const OutputConsole = ({
           </div>
         ) : (
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-            {outputs.map((output, index) => {
+            {outputs
+              .map((output, index) => ({ output, index }))
+              .filter(({ output }) => filterId === 'all' || output.analysisId === filterId)
+              .sort(
+                (a, b) =>
+                  Number(pinned.has(b.output.id)) - Number(pinned.has(a.output.id))
+              )
+              .map(({ output, index }) => {
               const isCollapsed = collapsed.has(output.id);
               const title = output.analysisId
                 ? analysisLabel(output.analysisId)
@@ -302,6 +359,24 @@ export const OutputConsole = ({
                         {output.title}
                       </span>
                     )}
+                    <button
+                      type="button"
+                      onClick={() => togglePin(output.id)}
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
+                      title={pinned.has(output.id) ? 'Unpin this result' : 'Pin this result to the top'}
+                      aria-label={pinned.has(output.id) ? 'Unpin result' : 'Pin result'}
+                    >
+                      {pinned.has(output.id) ? <PinOff className="h-3 w-3" /> : <Pin className="h-3 w-3" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void copyCard(output)}
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
+                      title="Copy this result card"
+                      aria-label="Copy result card"
+                    >
+                      {copiedId === output.id ? <Check className="h-3 w-3 text-green" /> : <Copy className="h-3 w-3" />}
+                    </button>
                     {output.analysisId && output.params !== undefined && onRerun && (
                       <button
                         type="button"
