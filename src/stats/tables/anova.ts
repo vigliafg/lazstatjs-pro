@@ -1,22 +1,9 @@
-import { jStat } from '../jstat';
-import { parseNum } from '../core';
 import type { TableSpec } from '../types';
-import { calcKruskalWallis } from '../kernels';
-import {
-  bonferroniAdjust,
-  chi2SF,
-  dunnTest,
-  fSF,
-  holmAdjust,
-  leveneTest,
-  meanCI,
-  tCrit,
-  twoSidedTP,
-  welchAnova,
-} from '../distributions';
-import { interpretD, interpretEta } from '../format';
+import { interpretEta } from '../format';
+import { anovaStats } from '../kernels/anova';
+import type { PostHocMethod } from '../kernels/anova';
 
-export type PostHocMethod = 'none' | 'tukey' | 'bonferroni' | 'holm' | 'gameshowell';
+export type { PostHocMethod } from '../kernels/anova';
 
 export interface AnovaTablesOptions {
   rows: readonly (readonly string[])[];
@@ -30,59 +17,15 @@ export interface AnovaTablesOptions {
   useNonParam: boolean;
 }
 
-const jbFor = (values: number[]) => {
-  const n = values.length;
-  if (n < 3) return { stat: NaN, p: NaN };
-  const skew = jStat.skewness(values);
-  const kurt = jStat.kurtosis(values);
-  const stat = (n / 6) * (skew * skew + (kurt * kurt) / 4);
-  return { stat, p: chi2SF(stat, 2) };
-};
-
 export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
   const { rows, depIdx, grpIdx, depName, grpName, posthoc, kwPosthoc, level, useNonParam } = options;
 
-  const groups: { [key: string]: number[] } = {};
-  rows.forEach(row => {
-    const value = parseNum(row[depIdx]);
-    const group = row[grpIdx];
-    if (!isNaN(value) && group !== '' && group !== undefined) {
-      if (!groups[group]) groups[group] = [];
-      groups[group].push(value);
-    }
-  });
+  const stats = anovaStats({ rows, depIdx, grpIdx, posthoc, kwPosthoc, level, useNonParam });
+  if (!stats) return [];
 
-  const keys = Object.keys(groups);
-  if (keys.length < 2) return [];
-
-  const allData = Object.values(groups).flat();
-  const nTotal = allData.length;
-  const k = keys.length;
-  const grandMean = jStat.mean(allData);
-
-  let ssBetween = 0;
-  let ssWithin = 0;
-  keys.forEach(key => {
-    const values = groups[key];
-    const mean = jStat.mean(values);
-    ssBetween += values.length * Math.pow(mean - grandMean, 2);
-    values.forEach(value => {
-      ssWithin += Math.pow(value - mean, 2);
-    });
-  });
-
-  const dfBetween = k - 1;
-  const dfWithin = nTotal - k;
-  const msBetween = ssBetween / dfBetween;
-  const msWithin = ssWithin / dfWithin;
-  const f = msWithin > 0 ? msBetween / msWithin : NaN;
-  const p = fSF(f, dfBetween, dfWithin);
-  const ssTotal = ssBetween + ssWithin;
-
-  const eta2 = ssTotal > 0 ? ssBetween / ssTotal : NaN;
-  const omega2 = ssTotal + msWithin > 0 ? (ssBetween - (k - 1) * msWithin) / (ssTotal + msWithin) : NaN;
-  const epsilon2 = ssTotal > 0 ? (ssBetween - (k - 1) * msWithin) / ssTotal : NaN;
-  const cohenF = eta2 >= 0 && eta2 < 1 ? Math.sqrt(eta2 / (1 - eta2)) : NaN;
+  const { keys, groupStats, test, effects, assumptions, leveneP, posthocPairs, kruskal, dunn } = stats;
+  const { ssBetween, ssWithin, ssTotal, dfBetween, dfWithin, msBetween, msWithin, f, p, nTotal } = test;
+  const { eta2, omega2, epsilon2, cohenF } = effects;
 
   const tables: TableSpec[] = [];
 
@@ -105,22 +48,18 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
       { key: 'ciLo', label: 'CI low', format: 'dec4' },
       { key: 'ciHi', label: 'CI high', format: 'dec4' },
     ],
-    rows: keys.map(key => {
-      const values = groups[key];
-      const ci = meanCI(values, level);
-      return {
-        group: key,
-        n: values.length,
-        mean: ci.mean,
-        sd: jStat.stdev(values, true),
-        se: ci.se,
-        median: jStat.median(values),
-        min: jStat.min(values),
-        max: jStat.max(values),
-        ciLo: ci.lo,
-        ciHi: ci.hi,
-      };
-    }),
+    rows: groupStats.map(item => ({
+      group: item.group,
+      n: item.n,
+      mean: item.mean,
+      sd: item.sd,
+      se: item.se,
+      median: item.median,
+      min: item.min,
+      max: item.max,
+      ciLo: item.ciLo,
+      ciHi: item.ciHi,
+    })),
     notes: ['CI della media entro gruppo: t di Student con df = n_gruppo − 1.'],
   });
 
@@ -171,28 +110,26 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
   // -------------------------------------------------------------------------
   // Assumptions
   // -------------------------------------------------------------------------
-  const levene = leveneTest(keys.map(key => groups[key]), 'mean');
-  const brownForsythe = leveneTest(keys.map(key => groups[key]), 'median');
-  const welch = welchAnova(keys.map(key => groups[key]));
-  const groupSds = keys.map(key => jStat.stdev(groups[key], true)).filter(value => isFinite(value));
-  const minSd = groupSds.length ? Math.min(...groupSds) : NaN;
-  const sdRatio = minSd > 0 ? Math.max(...groupSds) / minSd : NaN;
-  const assumptionRows: { [key: string]: any }[] = [
-    { check: 'Levene (media)', statistic: levene.stat, df1: levene.df1, df2: levene.df2, p: levene.p, note: 'omoschedasticità' },
-    { check: 'Brown–Forsythe (mediana)', statistic: brownForsythe.stat, df1: brownForsythe.df1, df2: brownForsythe.df2, p: brownForsythe.p, note: 'robusto agli outlier' },
-    { check: 'Rapporto SD max/min', statistic: sdRatio, df1: NaN, df2: NaN, p: NaN, note: 'omogeneità descrittiva delle SD' },
-    { check: 'Welch ANOVA', statistic: welch.stat, df1: welch.df1, df2: welch.df2, p: welch.p, note: 'alternativa con varianze diseguali' },
-  ];
-  keys.forEach(key => {
-    const jb = jbFor(groups[key]);
-    assumptionRows.push({
-      check: `Jarque–Bera ${key}`,
-      statistic: jb.stat,
-      df1: 2,
-      df2: NaN,
-      p: jb.p,
-      note: `normalità residui del gruppo (N = ${groups[key].length})`,
-    });
+  const assumptionRows = assumptions.map(item => {
+    switch (item.kind) {
+      case 'levene':
+        return { check: 'Levene (media)', statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: 'omoschedasticità' };
+      case 'brownForsythe':
+        return { check: 'Brown–Forsythe (mediana)', statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: 'robusto agli outlier' };
+      case 'sdRatio':
+        return { check: 'Rapporto SD max/min', statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: 'omogeneità descrittiva delle SD' };
+      case 'welch':
+        return { check: 'Welch ANOVA', statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: 'alternativa con varianze diseguali' };
+      default:
+        return {
+          check: `Jarque–Bera ${item.group}`,
+          statistic: item.statistic,
+          df1: item.df1,
+          df2: item.df2,
+          p: item.p,
+          note: `normalità residui del gruppo (N = ${item.n})`,
+        };
+    }
   });
 
   tables.push({
@@ -208,7 +145,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
     ],
     rows: assumptionRows,
     notes: [
-      levene.p < 0.05
+      leveneP < 0.05
         ? 'Levene significativo: varianze non omogenee. Riportare anche la Welch ANOVA e/o Kruskal-Wallis.'
         : 'Nessuna evidenza di eteroschedasticità.',
       'Il rapporto max(SD)/min(SD) è un ulteriore controllo descrittivo della omogeneità.',
@@ -218,58 +155,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
   // -------------------------------------------------------------------------
   // Post-hoc
   // -------------------------------------------------------------------------
-  if (posthoc !== 'none' && k >= 2 && dfWithin > 0) {
-    const pairs: {
-      a: string;
-      b: string;
-      diff: number;
-      se: number;
-      df: number;
-      t: number;
-      pRaw: number;
-      pAdj: number;
-      ciLo: number;
-      ciHi: number;
-      d: number;
-    }[] = [];
-
-    for (let i = 0; i < keys.length; i++) {
-      for (let j = i + 1; j < keys.length; j++) {
-        const a = keys[i];
-        const b = keys[j];
-        const na = groups[a].length;
-        const nb = groups[b].length;
-        const diff = jStat.mean(groups[a]) - jStat.mean(groups[b]);
-
-        if (posthoc === 'gameshowell') {
-          const va = jStat.variance(groups[a], true);
-          const vb = jStat.variance(groups[b], true);
-          const se = Math.sqrt(va / na + vb / nb);
-          const df = Math.pow(va / na + vb / nb, 2) /
-            (Math.pow(va / na, 2) / (na - 1) + Math.pow(vb / nb, 2) / (nb - 1));
-          const t = se > 0 ? diff / se : NaN;
-          pairs.push({ a, b, diff, se, df, t, pRaw: twoSidedTP(t, df), pAdj: NaN, ciLo: NaN, ciHi: NaN, d: NaN });
-        } else {
-          const se = Math.sqrt(msWithin * (1 / na + 1 / nb));
-          const t = se > 0 ? diff / se : NaN;
-          pairs.push({ a, b, diff, se, df: dfWithin, t, pRaw: twoSidedTP(t, dfWithin), pAdj: NaN, ciLo: NaN, ciHi: NaN, d: msWithin > 0 ? diff / Math.sqrt(msWithin) : NaN });
-        }
-      }
-    }
-
-    const raw = pairs.map(pair => pair.pRaw);
-    let adjusted: number[] = raw;
-    if (posthoc === 'holm') adjusted = holmAdjust(raw);
-    else if (posthoc === 'bonferroni') adjusted = bonferroniAdjust(raw);
-    else adjusted = raw.map(value => Math.min(1, value * raw.length));
-
-    pairs.forEach((pair, index) => {
-      pair.pAdj = adjusted[index];
-      const crit = tCrit(level, pair.df);
-      pair.ciLo = pair.diff - crit * pair.se;
-      pair.ciHi = pair.diff + crit * pair.se;
-    });
-
+  if (posthocPairs) {
     const labels: { [key in Exclude<PostHocMethod, 'none'>]: string } = {
       tukey: 'Tukey–Kramer (approssimazione Bonferroni)',
       bonferroni: 'Bonferroni',
@@ -293,7 +179,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
         { key: 'ciHi', label: 'CI high', format: 'dec4' },
         { key: 'd', label: "Cohen's d", format: 'dec3' },
       ],
-      rows: pairs.map(pair => ({
+      rows: posthocPairs.map(pair => ({
         comparison: `${pair.a} vs ${pair.b}`,
         diff: pair.diff,
         se: pair.se,
@@ -316,10 +202,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
   // -------------------------------------------------------------------------
   // Kruskal-Wallis
   // -------------------------------------------------------------------------
-  if (useNonParam) {
-    const kw = calcKruskalWallis(groups);
-    const etaH = nTotal > k ? Math.max(0, (kw.hStat - k + 1) / (nTotal - k)) : NaN;
-
+  if (kruskal) {
     tables.push({
       id: 'anova-kruskal',
       title: 'Kruskal–Wallis H (non parametrico)',
@@ -329,7 +212,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
         { key: 'p', label: 'p', format: 'p' },
         { key: 'etaH', label: 'η²_H', format: 'dec3' },
       ],
-      rows: [{ h: kw.hStat, df: kw.df, p: kw.pValue, etaH }],
+      rows: [{ h: kruskal.hStat, df: kruskal.df, p: kruskal.pValue, etaH: kruskal.etaH }],
       notes: ['H corretto per i ranghi pari; η²_H = (H − k + 1)/(N − k) è una dimensione dell’effetto.'],
     });
 
@@ -344,14 +227,13 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
       ],
       rows: keys.map(key => ({
         group: key,
-        n: kw.groupNs[key],
-        rankSum: kw.groupRankSums[key],
-        meanRank: kw.groupMeanRanks[key],
+        n: kruskal.groupNs[key],
+        rankSum: kruskal.groupRankSums[key],
+        meanRank: kruskal.groupMeanRanks[key],
       })),
     });
 
-    if (kwPosthoc !== 'none' && k > 2) {
-      const dunn = dunnTest(groups, kwPosthoc);
+    if (dunn) {
       tables.push({
         id: 'anova-dunn',
         title: 'Post-hoc Dunn',

@@ -115,9 +115,9 @@ passano dalla stessa strada.
 
 - [x] Separare `kernels` / `tables` / `reports`: ogni analisi ha la sua cartella
       con `types`, `tables`, `reports` e un barrel `stats/<id>.ts`.
-      I sei moduli legacy espongono solo tabelle e vivono in `tables/`;
-      `chisquare` e `correlation` hanno già il kernel estratto, gli altri quattro
-      sono annotati come debito.
+      I sei moduli legacy (`ttest`, `anova`, `regression`, `correlation`,
+      `chisquare`, `descriptive`) hanno il kernel numerico estratto e vivono in
+      `tables/`.
 - [x] Assorbire `statsHelpers.ts` nei kernel: `kernels/exact.ts`,
       `kernels/ranks.ts`, `kernels/normality.ts`, con test di equivalenza numerica.
 - [x] `jstat` isolato dietro `src/stats/jstat.ts`: nessun altro modulo importa il
@@ -126,8 +126,8 @@ passano dalla stessa strada.
       (`fmtPctValue` rimosso da `multivariate`).
 
 **Fatto quando:** nessun kernel importa React, nessun report ricalcola, una sola
-implementazione per ogni test statistico. ✔ (resta il debito dei kernel legacy
-dentro i table builder, senza impatto sui report)
+implementazione per ogni test statistico. ✔ (tutti i moduli legacy hanno il
+kernel estratto)
 
 ### Fase 4 — Confine dei dati
 
@@ -178,6 +178,6 @@ dentro i table builder, senza impatto sui report)
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
 | 1 — Sfoltire `App.tsx` | **completa**: estrazioni fatte (451 righe); la fase 2 ha aggiunto gli stati dei parametri |
 | 2 — Contratto unico | **completa**: 19/19 con builder puro e parametri persistiti |
-| 3 — Stratificare `stats/` | **completa** (struttura): tutti i moduli in types/tables/reports + kernel condivisi |
+| 3 — Stratificare `stats/` | **completa**: tutti i moduli in types/tables/reports/kernels |
 | 4 — Confine dati | **completa**: `Dataset` readonly, helper condivisi e schema `.lzs` diviso |
 | 5 — Guardrail | **completa**: dependency-cruiser, madge, limite righe, ARCHITECTURE.md |
