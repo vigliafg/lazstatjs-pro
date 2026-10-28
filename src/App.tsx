@@ -25,6 +25,8 @@ import { buildCorrelationOutput } from './analyses/correlation/run';
 import { buildAnovaOutput } from './analyses/anova/run';
 import { buildRegressionOutput } from './analyses/regression/run';
 import { buildTTestOutput } from './analyses/ttest/run';
+import { OutputConsole, restoredOutputs, type OutputEntry } from './ui/OutputConsole';
+import { ANALYSIS_TABS } from './analyses/registry';
 import { DescriptiveForm } from './analyses/descriptive/Form';
 import { TTestForm } from './analyses/ttest/Form';
 import { AnovaForm } from './analyses/anova/Form';
@@ -158,41 +160,8 @@ interface AnalysisConfig {
   icon: React.ReactNode;
 }
 
-/** A console block: live React nodes plus the HTML snapshot stored in the project. */
-interface OutputEntry extends StoredOutput {
-  node?: React.ReactNode;
-}
-
-/** Restored blocks are static: sanitise once, then inject the stored markup. */
-const restoredOutputs = (stored: StoredOutput[] | undefined): OutputEntry[] =>
-  (stored ?? [])
-    .map((entry) => ({ ...entry, html: sanitizeOutputHtml(entry.html) }))
-    .filter((entry) => entry.html.length > 0);
-
 // --- Constants ---
 const PALETTE = ['#4f9cf9', '#34d399', '#f87171', '#fbbf24', '#a78bfa', '#38bdf8', '#fb923c', '#e879f9'];
-
-const ANALYSIS_TABS = [
-  { id: 'wizard', label: 'Wizard' },
-  { id: 'descriptive', label: 'Descriptive' },
-  { id: 'ttest', label: 'T-Test' },
-  { id: 'anova', label: 'ANOVA' },
-  { id: 'regression', label: 'Regression' },
-  { id: 'correlation', label: 'Correlation' },
-  { id: 'multivariate', label: 'Multivariate' },
-  { id: 'chisquare', label: 'Chi-Square (χ²)' },
-  { id: 'contingency', label: 'Contingency (R×C)' },
-  { id: 'nonparamrm', label: 'Non-parametric RM' },
-  { id: 'repeatedanova', label: 'Repeated ANOVA' },
-  { id: 'samplesize', label: 'Sample Size / Power' },
-  { id: 'distfit', label: 'Distribution Fit' },
-  { id: 'factorial', label: 'Factorial ANOVA' },
-  { id: 'ancova', label: 'ANCOVA' },
-  { id: 'logistic', label: 'Logistic Regression' },
-  { id: 'timeseries', label: 'Time Series' },
-  { id: 'survival', label: 'Survival (KM)' },
-  { id: 'cox', label: 'Cox (PH)' },
-];
 
 // --- Helper Functions ---
 const fmt = (x: number, d = 4) => {
@@ -1402,97 +1371,16 @@ export default function App() {
               </div>
             </div>
 
-            <div className="bg-surface border-b border-border px-3 py-1 flex flex-wrap items-center justify-between gap-2 shrink-0">
-              <span className="font-mono text-[10px] text-text3 uppercase tracking-widest">Output Console</span>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  className="tb-btn flex items-center gap-1"
-                  onClick={() => setActiveTab('data')}
-                  aria-label="Back to Data Editor"
-                >
-                  <Database className="w-3 h-3" /> Data Editor
-                </button>
-                <button className="tb-btn" onClick={clearOutput}>Clear</button>
-                <button className="tb-btn" onClick={copyOutput}>Copy</button>
-                <button
-                  className="tb-btn"
-                  onClick={exportChartPngs}
-                  disabled={outputs.length === 0}
-                  title="Download every chart in the output console as a PNG"
-                >
-                  Charts PNG
-                </button>
-                <button
-                  className="tb-btn"
-                  onClick={exportReportHtml}
-                  disabled={outputs.length === 0}
-                  title="Download a self-contained printable HTML report"
-                >
-                  Report HTML
-                </button>
-                <button
-                  className="tb-btn"
-                  onClick={exportResultsXlsx}
-                  disabled={outputs.length === 0}
-                  title="Download an Excel workbook with the dataset and every result table"
-                >
-                  Results XLSX
-                </button>
-              </div>
-            </div>
-
-            {/* THE FIX: Margine di rispetto inferiore applicato via ID in index.css */}
-            <div id="output-content" className="scrollbar">
-              {outputs.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-text3 opacity-50 gap-4">
-                  <FileText className="w-12 h-12" />
-                  <p className="text-[11px] uppercase tracking-widest">No analysis output yet</p>
-                </div>
-              ) : (
-                <div className="max-w-4xl mx-auto">
-                  {outputs.map((output, i) => (
-                    <div key={output.id} className="relative output-run group">
-                      <button
-                        type="button"
-                        onClick={() => removeOutput(i)}
-                        data-no-print
-                        title="Remove this result"
-                        aria-label="Remove this result block"
-                        className="output-remove"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                      {i > 0 && (
-                        <div className="output-separator">
-                          <div className="output-separator-dot">
-                            <span />
-                            <span />
-                            <span />
-                          </div>
-                        </div>
-                      )}
-                      {output.node ?? (
-                        <div
-                          className="restored-output"
-                          dangerouslySetInnerHTML={{ __html: output.html }}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {outputs.length > 0 && (
-              <button
-                type="button"
-                onClick={() => setActiveTab('data')}
-                className="lg:hidden fixed bottom-4 right-4 z-50 tb-btn shadow-lg bg-surface2 border-accent text-accent"
-                aria-label="Back to Data Editor"
-              >
-                <Database className="w-3 h-3 inline mr-1" /> Data Editor
-              </button>
-            )}
+            <OutputConsole
+              outputs={outputs}
+              onRemove={removeOutput}
+              onClear={clearOutput}
+              onCopy={copyOutput}
+              onExportCharts={exportChartPngs}
+              onExportReport={exportReportHtml}
+              onExportXlsx={exportResultsXlsx}
+              onBackToData={() => setActiveTab('data')}
+            />
           </div>
         )}
 
