@@ -9,6 +9,7 @@
 
 import type { CategoryLevel, ColType, GridData } from '../grid/types';
 import { COL_TYPES, MAX_LEVELS } from '../grid/types';
+import type { SampleSizeDesign } from '../stats/samplesize';
 import { MAX_COLS, MAX_ROWS } from './readers';
 import { normalizePrefs, type IoPreferences } from './prefs';
 import {
@@ -69,6 +70,23 @@ export interface ChiSqParams {
   runFisherExact: boolean;
 }
 
+/** Parametri del calcolatore di numerosità campionaria. */
+export interface SampleSizeParams {
+  design: SampleSizeDesign;
+  alpha: number;
+  power: number;
+  /** Differenza da rilevare (medie o differenze appaiate). */
+  delta: number;
+  sd: number;
+  p1: number;
+  p2: number;
+  r: number;
+  groups: number;
+  f: number;
+  /** Semi-ampiezza dell'intervallo di confidenza (0 = non richiesta). */
+  margin: number;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -76,6 +94,7 @@ export interface ProjectParams {
   reg: RegParams;
   corr: CorrParams;
   chisq: ChiSqParams;
+  samplesize: SampleSizeParams;
 }
 
 export interface ProjectSettings {
@@ -121,6 +140,19 @@ export const DEFAULT_PARAMS: ProjectParams = {
     col2Label: 'Failure',
     runFisherExact: true,
   },
+  samplesize: {
+    design: 'twoMeans',
+    alpha: 0.05,
+    power: 0.8,
+    delta: 5,
+    sd: 10,
+    p1: 0.5,
+    p2: 0.3,
+    r: 0.3,
+    groups: 3,
+    f: 0.25,
+    margin: 0,
+  },
 };
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
@@ -164,6 +196,20 @@ const indexList = (value: unknown, fallback: number[], width: number): number[] 
 
 const parseType = (value: unknown): ColType =>
   typeof value === 'string' && COL_TYPES.some((t) => t.id === value) ? (value as ColType) : 'str';
+
+const SAMPLE_SIZE_DESIGNS: readonly SampleSizeDesign[] = [
+  'twoMeans',
+  'oneMean',
+  'paired',
+  'twoProportions',
+  'correlation',
+  'anova',
+];
+
+const parseSampleSizeDesign = (value: unknown, fallback: SampleSizeDesign): SampleSizeDesign =>
+  typeof value === 'string' && (SAMPLE_SIZE_DESIGNS as readonly string[]).includes(value)
+    ? (value as SampleSizeDesign)
+    : fallback;
 
 const parseCell = (value: unknown): string => {
   if (typeof value === 'string') return value;
@@ -245,6 +291,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const reg = isRecord(raw.reg) ? raw.reg : {};
   const corr = isRecord(raw.corr) ? raw.corr : {};
   const chisq = isRecord(raw.chisq) ? raw.chisq : {};
+  const samplesize = isRecord(raw.samplesize) ? raw.samplesize : {};
   const d = DEFAULT_PARAMS;
 
   return {
@@ -289,6 +336,19 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       col1Label: text(chisq.col1Label, d.chisq.col1Label),
       col2Label: text(chisq.col2Label, d.chisq.col2Label),
       runFisherExact: bool(chisq.runFisherExact, d.chisq.runFisherExact),
+    },
+    samplesize: {
+      design: parseSampleSizeDesign(samplesize.design, d.samplesize.design),
+      alpha: finite(samplesize.alpha, d.samplesize.alpha),
+      power: finite(samplesize.power, d.samplesize.power),
+      delta: finite(samplesize.delta, d.samplesize.delta),
+      sd: finite(samplesize.sd, d.samplesize.sd),
+      p1: finite(samplesize.p1, d.samplesize.p1),
+      p2: finite(samplesize.p2, d.samplesize.p2),
+      r: finite(samplesize.r, d.samplesize.r),
+      groups: integer(samplesize.groups, d.samplesize.groups),
+      f: finite(samplesize.f, d.samplesize.f),
+      margin: finite(samplesize.margin, d.samplesize.margin),
     },
   };
 };

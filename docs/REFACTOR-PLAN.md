@@ -102,12 +102,15 @@ parametri dei 13 pannelli fuori dai form e unificarne la persistenza.
 - [x] Registro unico dei builder puri per le 6 analisi legacy (`src/analyses/runners.ts`).
 - [x] Eliminare `forwardRef`/`useImperativeHandle` dai 13 pannelli: il pulsante
       "Run" incrementa `runSignal`, osservato da `useRunSignal`.
-- [ ] Persistenza parametri unica per id di analisi (`.lzs` compatibile o migrato con versione).
+- [ ] Persistenza parametri unica per id di analisi (`.lzs` compatibile o migrato con versione):
+      `samplesize` già persistito in `ProjectParams`, restano 12 pannelli.
 
-**Stato:** le 19 analisi partono da `useAnalysisRun`. Sei hanno già builder puro
-e parametri centralizzati; i 13 pannelli osservano `runSignal` ma tengono ancora
-i parametri nello stato locale (non persistiti). Prossimo passo: estrarre quei
-parametri e unificarne la persistenza.
+**Stato:** le 19 analisi partono da `useAnalysisRun`. Sette hanno builder puro e
+parametri centralizzati/persistiti (`descriptive`, `ttest`, `anova`, `regression`,
+`correlation`, `chisquare`, `samplesize`); gli altri 12 pannelli osservano
+`runSignal` ma tengono ancora i parametri nello stato locale (non persistiti).
+`samplesize` è il modello da replicare: `Form.tsx` + `run.tsx` + parametri in
+`ProjectParams`.
 
 **Fatto quando:** 19/19 analisi passano dalla stessa strada.
 
@@ -161,7 +164,7 @@ implementazione per ogni test statistico.
 |---|---|
 | 0 — Rete di sicurezza | **completa**: 19/19 analisi coperte (23 golden), CI attiva |
 | 1 — Sfoltire `App.tsx` | **completa**: `App.tsx` 3.767 → 451 righe |
-| 2 — Contratto unico | avviata: emissione unica, builder legacy e pannelli senza `forwardRef` |
+| 2 — Contratto unico | avviata: 7/19 con builder puro; pannelli senza `forwardRef` |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
 | 5 — Guardrail | non iniziata |

@@ -179,6 +179,38 @@ describe('project sanitisation', () => {
     assert.equal(parsed.params.ttest.mu, 0);
   });
 
+  it('restores and sanitises sample-size parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          samplesize: { ...DEFAULT_PARAMS.samplesize, design: 'anova', groups: 4, f: 0.4 },
+        },
+      })
+    );
+    assert.deepEqual(restored.params.samplesize, {
+      ...DEFAULT_PARAMS.samplesize,
+      design: 'anova',
+      groups: 4,
+      f: 0.4,
+    });
+
+    const junk = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          samplesize: { design: 'bogus', alpha: 'x', groups: 2.7 },
+        },
+      })
+    );
+    assert.equal(junk.params.samplesize.design, 'twoMeans');
+    assert.equal(junk.params.samplesize.alpha, 0.05);
+    assert.equal(junk.params.samplesize.groups, 2);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {
