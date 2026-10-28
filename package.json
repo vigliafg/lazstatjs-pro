@@ -11,7 +11,11 @@
     "lint": "tsc --noEmit",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "test:update": "UPDATE_GOLDEN=1 node --import tsx --test \"src/**/*.test.ts\"",
-    "check": "npm run lint && npm test"
+    "depcruise": "depcruise src --config .dependency-cruiser.cjs",
+    "madge": "madge --circular --extensions ts,tsx src",
+    "filesize": "node scripts/check-file-size.mjs",
+    "guard": "npm run depcruise && npm run madge && npm run filesize",
+    "check": "npm run lint && npm test && npm run guard"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -33,6 +37,8 @@
     "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
+    "dependency-cruiser": "^16.10.4",
+    "madge": "^8.0.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

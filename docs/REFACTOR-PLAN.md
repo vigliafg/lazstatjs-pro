@@ -130,12 +130,13 @@ implementazione per ogni test statistico.
 
 ### Fase 5 — Guardrail
 
-- [ ] `dependency-cruiser` con le regole di dipendenza.
-- [ ] `madge --circular`.
-- [ ] Limite righe per file, con lista eccezioni esplicita.
-- [ ] `ARCHITECTURE.md` + checklist "aggiungi un'analisi = 1 spec + 1 test".
+- [x] `dependency-cruiser` con le regole di dipendenza (`.dependency-cruiser.cjs`).
+- [x] `madge --circular`.
+- [x] Limite righe per file, con lista eccezioni esplicita (`scripts/check-file-size.mjs`).
+- [x] `ARCHITECTURE.md` + checklist "aggiungi un'analisi = form + run + params + runner + test".
+- [x] `npm run guard` dentro `npm run check`; la CI lo esegue già.
 
-**Fatto quando:** il rispetto delle regole è automatico, non volontario.
+**Fatto quando:** il rispetto delle regole è automatico, non volontario. ✔
 
 ## Vincoli noti del codebase
 
@@ -164,4 +165,4 @@ implementazione per ogni test statistico.
 | 2 — Contratto unico | **completa**: 19/19 con builder puro e parametri persistiti |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
-| 5 — Guardrail | non iniziata |
+| 5 — Guardrail | **completa**: dependency-cruiser, madge, limite righe, ARCHITECTURE.md |
