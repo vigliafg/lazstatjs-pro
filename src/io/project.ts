@@ -138,6 +138,13 @@ export interface ContingencyParams {
   monteCarlo: boolean;
 }
 
+/** Parametri dell'ANCOVA. */
+export interface AncovaParams {
+  response: number;
+  factor: number;
+  covariates: number[];
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -152,6 +159,7 @@ export interface ProjectParams {
   survival: SurvivalParams;
   timeseries: TimeSeriesParams;
   contingency: ContingencyParams;
+  ancova: AncovaParams;
 }
 
 export interface ProjectSettings {
@@ -245,6 +253,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     ],
     exact: true,
     monteCarlo: true,
+  },
+  ancova: {
+    response: 0,
+    factor: 1,
+    covariates: [],
   },
 };
 
@@ -464,6 +477,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const survival = isRecord(raw.survival) ? raw.survival : {};
   const timeseries = isRecord(raw.timeseries) ? raw.timeseries : {};
   const contingency = isRecord(raw.contingency) ? raw.contingency : null;
+  const ancova = isRecord(raw.ancova) ? raw.ancova : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -471,6 +485,8 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const contingencyCols = contingency
     ? parseContingencyLabels(contingency.cols, d.contingency.cols)
     : [...d.contingency.cols];
+  const ancovaResponse = index(ancova.response, d.ancova.response, width);
+  const ancovaFactor = index(ancova.factor, d.ancova.factor, width);
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
   const coxTime = index(cox.timeVariable, d.cox.timeVariable, width);
   const coxEvent = index(cox.eventVariable, d.cox.eventVariable, width);
@@ -574,6 +590,13 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       monteCarlo: contingency
         ? bool(contingency.monteCarlo, d.contingency.monteCarlo)
         : d.contingency.monteCarlo,
+    },
+    ancova: {
+      response: ancovaResponse,
+      factor: ancovaFactor,
+      covariates: indexList(ancova.covariates, d.ancova.covariates, width).filter(
+        (value) => value !== ancovaResponse && value !== ancovaFactor
+      ),
     },
   };
 };

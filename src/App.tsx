@@ -14,6 +14,7 @@ import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { defaultLogisticParams } from './analyses/logistic/defaults';
 import { defaultCoxParams } from './analyses/cox/defaults';
 import { defaultSurvivalParams } from './analyses/survival/defaults';
+import { defaultAncovaParams } from './analyses/ancova/defaults';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -41,6 +42,7 @@ import {
   DEFAULT_SETTINGS,
   loadAutosaveProject,
   type AnovaParams,
+  type AncovaParams,
   type ChiSqParams,
   type ContingencyParams,
   type CorrParams,
@@ -275,6 +277,10 @@ export default function App() {
     boot?.params.contingency ?? DEFAULT_PARAMS.contingency
   );
 
+  const [ancovaParams, setAncovaParams] = useState<AncovaParams>(
+    () => boot?.params.ancova ?? defaultAncovaParams(grid)
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -295,8 +301,9 @@ export default function App() {
       survival: survivalParams,
       timeseries: timeseriesParams,
       contingency: contingencyParams,
+      ancova: ancovaParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -323,6 +330,7 @@ export default function App() {
     setSurvivalParams(project.params.survival);
     setTimeseriesParams(project.params.timeseries);
     setContingencyParams(project.params.contingency);
+    setAncovaParams(project.params.ancova);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -460,6 +468,8 @@ export default function App() {
             setTimeseriesParams={setTimeseriesParams}
             contingencyParams={contingencyParams}
             setContingencyParams={setContingencyParams}
+            ancovaParams={ancovaParams}
+            setAncovaParams={setAncovaParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}

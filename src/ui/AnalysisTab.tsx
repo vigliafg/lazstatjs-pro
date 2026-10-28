@@ -14,7 +14,7 @@ import { CoxForm } from '../analyses/cox/Form';
 import { SurvivalForm } from '../analyses/survival/Form';
 import { TimeSeriesForm } from '../analyses/timeseries/Form';
 import { ContingencyForm } from '../analyses/contingency/Form';
-import { AncovaAnalysis } from '../analyses/AncovaAnalysis';
+import { AncovaForm } from '../analyses/ancova/Form';
 import { FactorialAnovaAnalysis } from '../analyses/FactorialAnovaAnalysis';
 import { MultivariateAnalysis } from '../analyses/MultivariateAnalysis';
 import { NonParamRepeatedAnalysis } from '../analyses/NonParamRepeatedAnalysis';
@@ -23,7 +23,7 @@ import { WizardAnalysis } from '../analyses/WizardAnalysis';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { ReportSpec } from '../stats/report';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, LogisticParams, RegParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, TTestParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -56,6 +56,8 @@ export interface AnalysisTabProps {
   setTimeseriesParams: Dispatch<SetStateAction<TimeSeriesParams>>;
   contingencyParams: ContingencyParams;
   setContingencyParams: Dispatch<SetStateAction<ContingencyParams>>;
+  ancovaParams: AncovaParams;
+  setAncovaParams: Dispatch<SetStateAction<AncovaParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -104,6 +106,8 @@ export const AnalysisTab = ({
   setTimeseriesParams,
   contingencyParams,
   setContingencyParams,
+  ancovaParams,
+  setAncovaParams,
   grid,
   outputs,
   removeOutput,
@@ -246,14 +250,12 @@ export const AnalysisTab = ({
       )}
 
       {activeAnalysis === 'ancova' && (
-        <AncovaAnalysis
-          runSignal={runSignal}
+        <AncovaForm
           grid={grid}
           onLevels={updateColumnLevels}
           onRecode={updateColumnRecode}
-          ciLevel={ciLevel}
-          onOutput={pushOutput}
-          onError={(message) => showToast('Error', message, 'error')}
+          ancovaParams={ancovaParams}
+          setAncovaParams={setAncovaParams}
         />
       )}
 

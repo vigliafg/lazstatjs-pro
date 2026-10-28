@@ -337,6 +337,23 @@ describe('project sanitisation', () => {
     assert.equal(restored.params.contingency.monteCarlo, true);
   });
 
+  it('restores and sanitises ANCOVA parameters', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          ancova: { response: 99, factor: 1, covariates: [0, 1, 2, 2] },
+        },
+      })
+    );
+    assert.equal(restored.params.ancova.response, 2);
+    assert.equal(restored.params.ancova.factor, 1);
+    // Response and factor are removed from the covariate list.
+    assert.deepEqual(restored.params.ancova.covariates, [0]);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {
