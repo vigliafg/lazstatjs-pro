@@ -26,9 +26,10 @@ import { CountForm } from '../analyses/countreg/Form';
 import { LmmForm } from '../analyses/lmm/Form';
 import { OrdinalForm } from '../analyses/ordinal/Form';
 import { MiForm } from '../analyses/mi/Form';
+import { MixedAnovaForm } from '../analyses/mixedanova/Form';
 import { OutputConsole, type OutputEntry } from './OutputConsole';
 import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, MixedAnovaParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
 
 export interface AnalysisTabProps {
   activeAnalysis: string;
@@ -85,6 +86,8 @@ export interface AnalysisTabProps {
   setOrdinalParams: Dispatch<SetStateAction<OrdinalParams>>;
   miParams: MiParams;
   setMiParams: Dispatch<SetStateAction<MiParams>>;
+  mixedAnovaParams: MixedAnovaParams;
+  setMixedAnovaParams: Dispatch<SetStateAction<MixedAnovaParams>>;
   grid: GridData;
   outputs: OutputEntry[];
   removeOutput: (index: number) => void;
@@ -154,6 +157,8 @@ export const AnalysisTab = ({
   setOrdinalParams,
   miParams,
   setMiParams,
+  mixedAnovaParams,
+  setMixedAnovaParams,
   grid,
   outputs,
   removeOutput,
@@ -324,6 +329,10 @@ export const AnalysisTab = ({
           nonParamParams={nonParamParams}
           setNonParamParams={setNonParamParams}
         />
+      )}
+
+      {activeAnalysis === 'mixedanova' && (
+        <MixedAnovaForm grid={grid} mixedAnovaParams={mixedAnovaParams} setMixedAnovaParams={setMixedAnovaParams} />
       )}
 
       {activeAnalysis === 'mi' && (

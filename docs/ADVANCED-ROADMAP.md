@@ -28,7 +28,9 @@ Bayes, DOE, serie temporali avanzate, ecc.) sono fuori perimetro.
 
 ## Priorità 2 — estensioni attese
 
-- [ ] **ANOVA mista** between-within, contrasti e medie marginali.
+- [x] **ANOVA mista (split-plot)**: un fattore between, condizioni within,
+      interazione e medie cella; validata contro aov. Restano sfericità,
+      contrasti e EM means.
 - [ ] **Sopravvivenza estesa**: Cox stratificato, covariate tempo-dipendenti,
       sopravvivenza parametrica.
 - [ ] **Bootstrap e permutazione** come inferenza trasversale.

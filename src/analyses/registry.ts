@@ -26,6 +26,7 @@ export const ANALYSIS_TABS = [
   { id: 'countreg', label: 'Count Regression' },
   { id: 'lmm', label: 'Mixed Model (LMM)' },
   { id: 'ordinal', label: 'Ordinal Logistic' },
+  { id: 'mixedanova', label: 'Mixed ANOVA' },
   { id: 'mi', label: 'Missing Data (MI)' },
   { id: 'timeseries', label: 'Time Series' },
   { id: 'survival', label: 'Survival (KM)' },

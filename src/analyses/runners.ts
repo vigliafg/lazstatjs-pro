@@ -26,6 +26,7 @@ import { buildCountOutput } from './countreg/run';
 import { buildLmmOutput } from './lmm/run';
 import { buildOrdinalOutput } from './ordinal/run';
 import { buildMiOutput } from './mi/run';
+import { buildMixedAnovaOutput } from './mixedanova/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -96,4 +97,6 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildOrdinalOutput({ grid, params: params.ordinal, ciLevel }),
   mi: ({ grid, params, ciLevel }) =>
     buildMiOutput({ grid, params: params.mi, ciLevel }),
+  mixedanova: ({ grid, params, ciLevel }) =>
+    buildMixedAnovaOutput({ grid, params: params.mixedanova, ciLevel }),
 };

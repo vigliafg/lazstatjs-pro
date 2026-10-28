@@ -168,6 +168,12 @@ export interface NonParamParams {
   group: number;
 }
 
+/** Parametri dell'ANOVA mista between-within. */
+export interface MixedAnovaParams {
+  group: number;
+  conditions: number[];
+}
+
 /** Parametri dell'imputazione multipla. */
 export interface MiParams {
   variables: number[];
@@ -243,6 +249,7 @@ export interface ProjectParams {
   repeatedanova: RepeatedAnovaParams;
   multivariate: MultivariateParams;
   nonparamrm: NonParamParams;
+  mixedanova: MixedAnovaParams;
   mi: MiParams;
   ordinal: OrdinalParams;
   lmm: LmmParams;
@@ -373,6 +380,10 @@ export const DEFAULT_PARAMS: ProjectParams = {
     right: 1,
     outcome: 0,
     group: 1,
+  },
+  mixedanova: {
+    group: 2,
+    conditions: [0, 1],
   },
   mi: {
     variables: [0, 1],

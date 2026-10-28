@@ -71,6 +71,7 @@ import {
   type LmmParams,
   type OrdinalParams,
   type MiParams,
+  type MixedAnovaParams,
   type TTestParams,
   type WizardParams,
 } from './io/project';
@@ -341,6 +342,10 @@ export default function App() {
     boot?.params.mi ?? DEFAULT_PARAMS.mi
   );
 
+  const [mixedAnovaParams, setMixedAnovaParams] = useState<MixedAnovaParams>(
+    boot?.params.mixedanova ?? DEFAULT_PARAMS.mixedanova
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -373,8 +378,9 @@ export default function App() {
       lmm: lmmParams,
       ordinal: ordinalParams,
       mi: miParams,
+      mixedanova: mixedAnovaParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams, timeseriesParams, contingencyParams, ancovaParams, factorialParams, repeatedAnovaParams, multivariateParams, nonParamParams, wizardParams, tostParams, agreementParams, countParams, lmmParams, ordinalParams, miParams, mixedAnovaParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -413,6 +419,7 @@ export default function App() {
     setLmmParams(project.params.lmm);
     setOrdinalParams(project.params.ordinal);
     setMiParams(project.params.mi);
+    setMixedAnovaParams(project.params.mixedanova);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -574,6 +581,8 @@ export default function App() {
             setOrdinalParams={setOrdinalParams}
             miParams={miParams}
             setMiParams={setMiParams}
+            mixedAnovaParams={mixedAnovaParams}
+            setMixedAnovaParams={setMixedAnovaParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}
