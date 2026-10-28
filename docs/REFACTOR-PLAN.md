@@ -72,7 +72,7 @@ blocco nella console, report e test di contratto. Il codice bespoke si riduce al
 - [x] Golden test di contratto per le 6 analisi legacy, senza test propri
       (`src/stats/testing/golden.test.ts`, rigenerabili con `UPDATE_GOLDEN=1`).
 - [ ] Estendere i golden alle 13 analisi rimanenti, una per commit.
-- [ ] CI: `npm run check` su push e pull request.
+- [x] CI: `npm run check` + build su push e pull request (`.github/workflows/check.yml`, verde).
 
 **Fatto quando:** ogni analisi ha un output congelato che il refactor non può cambiare.
 
@@ -142,8 +142,8 @@ implementazione per ogni test statistico.
 
 | Fase | Stato |
 |---|---|
-| 0 — Rete di sicurezza | in corso (golden legacy fatti, CI e 13 golden mancanti) |
-| 1 — Sfoltire `App.tsx` | avviata (descriptive estratta) |
+| 0 — Rete di sicurezza | 6/19 golden; CI attiva; mancano i 13 golden delle analisi nuove |
+| 1 — Sfoltire `App.tsx` | avviata: `App.tsx` 3.767 → 3.526 righe, descriptive estratta |
 | 2 — Contratto unico | non iniziata |
 | 3 — Stratificare `stats/` | non iniziata |
 | 4 — Confine dati | non iniziata |
