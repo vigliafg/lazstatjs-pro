@@ -21,6 +21,8 @@ export interface StoredOutput {
   id: string;
   title: string;
   createdAt: string;
+  /** Analysis that produced the block, when the run knows it. */
+  analysisId?: string;
   html: string;
 }
 
@@ -79,6 +81,9 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
       id: text(raw.id, `run-${entries.length + 1}`),
       title: text(raw.title, 'Analysis output'),
       createdAt: text(raw.createdAt, ''),
+      ...(typeof raw.analysisId === 'string' && raw.analysisId.length > 0
+        ? { analysisId: raw.analysisId.slice(0, 64) }
+        : {}),
       html,
     });
   });

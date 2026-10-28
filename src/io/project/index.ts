@@ -32,6 +32,7 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
         id: entry.id,
         title: entry.title,
         createdAt: entry.createdAt,
+        ...(entry.analysisId ? { analysisId: entry.analysisId } : {}),
         html: entry.html,
       }))
   ),

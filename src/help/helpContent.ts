@@ -53,8 +53,7 @@ export const HELP_TABS: HelpTab[] = [
     id: 'overview',
     label: 'Overview',
     title: 'What LazStats JS is and how to get through it',
-    blurb:
-      'Everything runs in your browser: the data never leaves the machine. A session is three steps — put data in, run an analysis, take the results out.',
+    blurb: 'Everything runs in your browser: the data never leaves the machine. A session is three steps — put data in, run an analysis, take the results out.',
     sections: [
       {
         id: 'tour',
@@ -63,14 +62,13 @@ export const HELP_TABS: HelpTab[] = [
         blocks: [
           {
             title: 'What the application does',
-            intro:
-              'LazStats JS is a spreadsheet-like data editor with a full statistics suite: descriptive statistics, t-tests, ANOVA family, regression, correlations, contingency tables, non-parametric tests, time series, survival analysis and a guided Wizard that chooses the right test for you.',
+            intro: 'LazStats JS is a spreadsheet-like data editor with a full statistics suite: descriptive statistics, t-tests, ANOVA family, regression, correlations, contingency tables, non-parametric tests, time series, survival analysis and a guided Wizard that chooses the right test for you.',
             steps: [
-              'Type or paste data in DATA EDITOR, or bring a CSV/TSV/JSON/Excel file in through Import.',
+              'Type or paste data in DATA, or bring a CSV/TSV/JSON/Excel file in through Import.',
               'Declare which columns are groups and, if you want, give their codes readable labels.',
-              'Choose an analysis in ANALYSIS & OUTPUT, set its parameters and press Run Analysis.',
-              'Read the tables, the charts and the written report in the output console.',
-              'Copy a single table, export PNG charts, a printable HTML report or an Excel workbook.',
+              'Switch to ANALYSIS: search the library or open a family, select the procedure, fill the Setup panel and press Run Analysis.',
+              'Read the result cards in the output document: tables, charts and the written report.',
+              'Collapse a card, jump to it from the Outline, copy a table or export PNG charts, an HTML report or an Excel workbook.',
             ],
           },
           {
@@ -78,42 +76,42 @@ export const HELP_TABS: HelpTab[] = [
             table: {
               head: ['Tab', 'Use it for'],
               rows: [
-                ['DATA EDITOR', 'Grid, column types, groups and levels, cleaning and transforming, import, export, projects'],
-                ['ANALYSIS & OUTPUT', 'Analysis panels, CI level, Run Analysis, the output console and its exports'],
+                ['DATA', 'Grid, column types, groups and levels, cleaning and transforming, import, export, projects'],
+                ['ANALYSIS', 'Analysis library, Setup panel, CI level, Run Analysis and the output document'],
                 ['SETTINGS', 'Import/export defaults and output preferences'],
-                ['HELP', 'This guide, organised by tab with step-by-step examples'],
+                ['HELP', 'This guide, organised by area with step-by-step examples'],
               ],
             },
           },
           {
             title: 'The golden path',
             steps: [
-              'Open DATA EDITOR and press New to start from an empty grid, or Import to load a file.',
+              'Open DATA and press New to start from an empty grid, or Import to load a file.',
               'Check the type dropdown under each header (num, int, cat, str, ...) so validation and the pickers behave.',
               'Use Clean (find/replace, missing values, tidy) and Transform (sort, recode, split/merge, compute) to prepare the data.',
               'For grouping columns, open the levels editor and set labels, order and a reference level.',
-              'Switch to ANALYSIS & OUTPUT, pick the analysis, set the parameters, press Run Analysis.',
+              'Switch to ANALYSIS, search or browse the library, select the procedure, fill the Setup panel and press Run Analysis.',
               'Read the "Report di lettura" card that closes every run and export what you need.',
             ],
           },
           {
             title: 'How one run works',
             steps: [
-              'The CI level (90/95/99%) at the top of ANALYSIS & OUTPUT applies to every table of the run.',
-              'The panel of the selected analysis shows only the parameters it needs.',
-              'Run Analysis appends one block to the output console: tables first, charts in the middle, the written report last.',
-              'Running again appends a new block; nothing is overwritten, so you can compare two specifications.',
-              'Each block can be removed on its own with the ✕ button next to it; Clear empties the whole console.',
+              'The CI level (90/95/99%) at the top of the Setup panel applies to every table of the run.',
+              'The Setup panel of the selected procedure shows only the parameters it needs.',
+              'Run Analysis appends one card to the output document: tables first, charts in the middle, the written report last.',
+              'Running again appends a new card; nothing is overwritten, so you can compare two specifications.',
+              'Each card can be collapsed with the chevron, reached from the Outline, reopened from its Setup button, or removed with the trash icon; Clear empties the whole document.',
             ],
-            tip: 'Analysis parameters are not autosaved between reloads: after reopening a project the panel restarts from grid defaults. The data, the levels and the console survive.',
+            tip: 'Analysis parameters are restored with the project; the output cards are static snapshots after a reload. The grid, the levels and the output document survive.',
           },
           {
             title: 'Where your work lives',
             steps: [
-              'A silent autosave keeps grid, settings, parameters and the output console in this browser; the toolbar shows the time of the last one.',
+              'A silent autosave keeps grid, settings, parameters and the output document in this browser; the DATA toolbar shows the time of the last one.',
               'Save project writes a .lzs file (JSON) with the dataset, settings and parameters.',
               'Open project replaces the current session with the file content; bad or newer files are refused with a message.',
-              'The output console is stored as static snapshots (max 20 runs / 1.5 MB): after a reload they are read-only, but Copy, Charts PNG, Report HTML and Results XLSX still work.',
+              'The output document is stored as static snapshots (max 20 runs / 1.5 MB): after a reload they are read-only, but Copy, Charts PNG, Report HTML and Results XLSX still work.',
             ],
           },
         ],
@@ -326,7 +324,7 @@ export const HELP_TABS: HelpTab[] = [
     label: 'Data prep',
     title: 'Clean, transform, import and export',
     blurb:
-      'The Clean and Transform panels sit under the grid toolbar; Import and Export open dialogs over the DATA EDITOR tab.',
+      'The Clean and Transform panels sit under the grid toolbar; Import and Export open dialogs over the DATA tab.',
     sections: [
       {
         id: 'clean',
@@ -467,7 +465,7 @@ export const HELP_TABS: HelpTab[] = [
           {
             title: 'Export',
             steps: [
-              'Press Export in the DATA EDITOR toolbar (the same file also has a default format in SETTINGS).',
+              'Press Export in the DATA toolbar (the same file also has a default format in SETTINGS).',
               'Choose the Format: CSV (Excel, R), TSV (tab), Pipe TXT, JSON (records), SPSS (CSV + .sps syntax) or Excel workbook (.xlsx).',
               'For text formats choose the Delimiter (comma, semicolon, tab, pipe) and the Decimals (dot or comma).',
               'The options to include the header row and quoted fields are checked by default.',
@@ -479,7 +477,7 @@ export const HELP_TABS: HelpTab[] = [
             steps: [
               'Save project writes a .lzs file with dataset, settings, analysis parameters and the output snapshots.',
               'Open project loads such a file and replaces the current session (it asks via the file picker only, never silently).',
-              'Autosave runs by default and shows its time in the toolbar; restored sessions come back with the grid and the console.',
+              'Autosave runs by default and shows its time in the toolbar; restored sessions come back with the grid and the output document.',
               'New resets the grid to a single empty column; it is undoable.',
             ],
             tip: '.lzs files are versioned: a file written by a newer version is refused instead of half-read.',
@@ -499,7 +497,7 @@ export const HELP_TABS: HelpTab[] = [
       {
         id: 'levels',
         title: 'Declare levels',
-        summary: 'The levels editor under the column type, and the same editor inside the analysis panels.',
+        summary: 'The levels editor under the column type, and the same editor inside the analysis setup.',
         blocks: [
           {
             title: 'What a group column is',
@@ -520,8 +518,8 @@ export const HELP_TABS: HelpTab[] = [
           {
             title: 'Open the levels editor',
             steps: [
-              'In DATA EDITOR, find the small "N levels" button under the type dropdown of a group column.',
-              'In any analysis panel, press "Modifica livelli" next to a group selector — it is the same editor.',
+              'In DATA, find the small "N levels" button under the type dropdown of a group column.',
+              'In any analysis setup, press "Modifica livelli" next to a group selector — it is the same editor.',
               'For a plain integer column with 2–12 codes, the button appears as soon as it qualifies.',
             ],
           },
@@ -565,7 +563,7 @@ export const HELP_TABS: HelpTab[] = [
           {
             title: 'Open the recode mode',
             steps: [
-              'Open the levels editor from the grid header or from any panel.',
+              'Open the levels editor from the grid header or from any analysis setup.',
               'Press Recode values in the modal header: every code of the column is listed with its current label and row count.',
               'The preview under the list updates as you type.',
             ],
@@ -623,33 +621,32 @@ export const HELP_TABS: HelpTab[] = [
   {
     id: 'analyses',
     label: 'Analyses',
-    title: 'Every analysis panel, step by step',
-    blurb:
-      'All panels follow the same rhythm: choose the CI level, fill the selectors, press Run Analysis, read tables → charts → written report.',
+    title: 'Every procedure, step by step',
+    blurb: 'All procedures follow the same rhythm: pick one from the library, fill the Setup panel, press Run Analysis, then read tables → charts → written report.',
     sections: [
       {
         id: 'model',
         title: 'The common run model',
-        summary: 'What is identical in all nineteen panels.',
+        summary: 'What is identical across every procedure.',
         blocks: [
           {
             title: 'Running an analysis',
             steps: [
-              'Open ANALYSIS & OUTPUT and click the analysis tab you need (they scroll horizontally).',
-              'Set CI Level (90/95/99%): it applies to every confidence interval and to the written report.',
-              'Fill the selectors of the panel; group selectors accept only group columns, and "Modifica livelli" opens the levels editor.',
-              'Press Run Analysis.',
-              'The run is appended to the output console as one block: tables, then charts, then the "Report di lettura" card.',
+              'Open ANALYSIS: search the library, open a family, or pick a recent procedure.',
+              'Set CI Level (90/95/99%) in the Setup panel: it applies to every confidence interval and to the written report.',
+              'Fill the selectors of the procedure; group selectors accept only group columns, and "Modifica livelli" opens the levels editor.',
+              'Press Run Analysis (or Ctrl/Cmd + Enter).',
+              'The run is appended to the output document as one card: tables, then charts, then the "Report di lettura" card.',
             ],
             tip: 'A red toast appears when the inputs are wrong (for example two groups with complete data are required, or the response equals the factor). Nothing is appended in that case.',
           },
           {
-            title: 'What every block contains',
+            title: 'What every card contains',
             steps: [
               'Tables with a TSV button in their header to copy that table alone.',
               'Charts (where relevant) drawn with Victory; hovering gives tooltips on live runs.',
               'A written report: headline, what the test does, the reading of each result, effect size, assumptions, non-parametric counterpart, glossary and caveats.',
-              'A ✕ button to remove that single run from the console.',
+              'A card header with collapse, Setup and remove controls.',
             ],
           },
         ],
@@ -665,8 +662,8 @@ export const HELP_TABS: HelpTab[] = [
               'Answer section 1 — "Che domanda vuoi rispondere?": Descrivere i dati, Confrontare gruppi, Studiare un’associazione, Prevedere un esito, Tempo fino a un evento, Prevedere una serie, Pianificare lo studio.',
               'Fill the selectors it asks for: Variabile di esito, Gruppi (optional), Seconda variabile, Disegno.',
               'Read the Raccomandazione card: it names the test, explains why and lists the checks it ran (normality, Levene, paired differences).',
-              'Press Apri <test> to jump to the real panel, then Run Analysis there.',
-              'Press Run Analysis in the Wizard to print the recommendation itself as a block in the console.',
+              'Press Apri <test> to jump to the real procedure, then Run Analysis there.',
+              'Press Run Analysis in the Wizard to print the recommendation itself as a card in the output document.',
             ],
             example: {
               title: 'Two groups, one numeric outcome',
@@ -1118,17 +1115,18 @@ export const HELP_TABS: HelpTab[] = [
     id: 'output',
     label: 'Output & reports',
     title: 'Reading and exporting the results',
-    blurb:
-      'Every run lands in the output console as a block of tables, charts and a written report. Each block can be copied, exported or removed on its own.',
+    blurb: 'Every run lands in the output document as a collapsible card with tables, charts and a written report. Each card can be collapsed, reopened from its Setup shortcut, copied, exported or removed on its own.',
     sections: [
       {
         id: 'console',
-        title: 'The output console',
-        summary: 'The ribbon above the results and what its buttons do.',
+        title: 'The output document',
+        summary: 'The toolbar, the Outline and the card controls.',
         blocks: [
           {
-            title: 'What a block looks like',
+            title: 'What a card looks like',
             steps: [
+              'A card header naming the analysis, with collapse, Setup and remove controls.',
+              'The Outline above the document jumps back to any card.',
               'A heading naming the analysis and the columns it used.',
               'Result tables, each with a TSV button in its header.',
               'Charts where the analysis produces them (boxplots, forest plots, curves, forecasts, scree plots...).',
@@ -1136,17 +1134,19 @@ export const HELP_TABS: HelpTab[] = [
             ],
           },
           {
-            title: 'Console buttons',
+            title: 'Output buttons',
             table: {
               head: ['Button', 'Effect'],
               rows: [
-                ['Data Editor', 'Switch back to the grid (useful on narrow screens)'],
-                ['Clear', 'Empty the whole console (asks nothing, the runs are gone)'],
-                ['Copy', 'Copy the console text to the clipboard'],
+                ['Data', 'Switch back to the grid (useful on narrow screens)'],
+                ['Clear', 'Empty the whole output document (asks nothing, the runs are gone)'],
+                ['Copy', 'Copy the result text to the clipboard'],
                 ['Charts PNG', 'Download every chart as its own 2× PNG on a dark background'],
                 ['Report HTML', 'Download a self-contained printable HTML report'],
                 ['Results XLSX', 'Download an Excel workbook with the dataset and every result table'],
-                ['✕ next to a block', 'Remove just that run'],
+                ['Trash icon in a card header', 'Remove just that run'],
+                ['Setup in a card header', 'Open the procedure that produced the card'],
+                ['Chevron in a card header', 'Collapse or expand the card'],
                 ['TSV in a table header', 'Copy that single table, formatted as shown'],
               ],
             },
@@ -1154,10 +1154,10 @@ export const HELP_TABS: HelpTab[] = [
           {
             title: 'Restored sessions',
             steps: [
-              'After a reload or after opening a .lzs file the console shows static snapshots of the previous runs.',
+              'After a reload or after opening a .lzs file the output document shows static snapshots of the previous runs.',
               'In snapshots, Copy, Charts PNG, Report HTML and Results XLSX keep working.',
               'Per-table TSV buttons and chart tooltips exist only on live runs of the current session.',
-              'Snapshots are capped at 20 runs or about 1.5 MB; older ones are dropped first.',
+              'Snapshots are capped at 20 runs or about 1.5 MB; older ones are dropped first. The Setup shortcut still works because each card stores the analysis that produced it.',
             ],
           },
         ],
@@ -1165,7 +1165,7 @@ export const HELP_TABS: HelpTab[] = [
       {
         id: 'exports',
         title: 'Exports in detail',
-        summary: 'How to turn a console into a document or a dataset.',
+        summary: 'How to turn the output document into a report or a dataset.',
         blocks: [
           {
             title: 'Printable report → PDF',
@@ -1187,7 +1187,7 @@ export const HELP_TABS: HelpTab[] = [
             title: 'Excel workbook of results',
             steps: [
               'Press Results XLSX.',
-              'The workbook contains the dataset and each result table of the console on its own sheet.',
+              'The workbook contains the dataset and each result table of the output document on its own sheet.',
               'Use it to keep numbers in a spreadsheet without retyping them.',
             ],
           },
@@ -1226,9 +1226,9 @@ export const HELP_TABS: HelpTab[] = [
           {
             title: 'Two groups, one numeric outcome',
             steps: [
-              'DATA EDITOR: declare the group column as cat (or leave it int with 2–12 codes).',
+              'DATA: declare the group column as cat (or leave it int with 2–12 codes).',
               'Open the levels editor, label the codes and apply.',
-              'ANALYSIS & OUTPUT → ANOVA with Dependent Var = the response and Group Var = the group.',
+              'ANALYSIS → ANOVA with Dependent Var = the response and Group Var = the group.',
               'Tick Kruskal-Wallis H if the distributions are far from normal.',
               'Run Analysis; read the post-hoc table and the report.',
             ],
@@ -1320,7 +1320,7 @@ export const HELP_TABS: HelpTab[] = [
             steps: [
               'Wizard → answer the question and fill the selectors.',
               'Read the recommendation, the reasons and the assumption checks.',
-              'Press Apri <test> to land on the real panel with the columns already chosen, then Run Analysis.',
+              'Press Apri <test> to land on the real procedure with the columns already chosen, then Run Analysis.',
             ],
           },
         ],
@@ -1356,7 +1356,7 @@ export const HELP_TABS: HelpTab[] = [
             },
           },
           {
-            title: 'Toolbar of the DATA EDITOR',
+            title: 'Toolbar of the DATA',
             table: {
               head: ['Control', 'What it does'],
               rows: [
@@ -1377,7 +1377,7 @@ export const HELP_TABS: HelpTab[] = [
       {
         id: 'settings',
         title: 'Settings tab',
-        summary: 'Defaults that apply to import, export and the output console.',
+        summary: 'Defaults that apply to import, export and the output document.',
         blocks: [
           {
             title: 'Import / Export preferences',
@@ -1394,7 +1394,7 @@ export const HELP_TABS: HelpTab[] = [
             steps: [
               'Decimal Separator: how numbers are displayed.',
               'Significant Digits: the precision used in the printed numbers.',
-              'Output Settings: Show Summary Interpretation and Include Plots in Output are on by default; turn them off for a leaner console.',
+              'Output Settings: Show Summary Interpretation and Include Plots in Output are on by default; turn them off for a leaner output.',
             ],
             tip: 'The CI level is not here: it belongs to the analysis toolbar, so it is part of the analysis parameters and not of the display preferences.',
           },

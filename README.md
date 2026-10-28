@@ -21,10 +21,17 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Sort ascending/descending per column** from the column context menu (undoable)
 - **Find & replace** with regex, case sensitivity and single-column scope; whitespace trim, duplicates/empty-row cleanup and mean/median/mode imputation live in the Clean panel
 
+### Analysis workbench
+- **Three-pane workspace**: a searchable analysis library on the left, a setup panel in the middle and the output document on the right
+- **Library grouped into ten families** (Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power), with search across labels, descriptions, keywords and family names, recent analyses and a `heavy` badge for expensive procedures
+- **Sticky Run** at the bottom of the setup panel, `Ctrl/Cmd + Enter` to run and `Ctrl/Cmd + K` to focus the analysis search
+- **Output document**: one collapsible card per run with an outline, timestamp, analysis label and a *Setup* shortcut back to the parameters that produced it; Copy, Charts PNG, Report HTML and Results XLSX keep working
+- **Responsive panes**: below `lg` a segmented control switches between Library, Setup and Output; *Focus output* hides the library and setup on wide screens
+
 ### Help
 - **In-app HELP tab** (next to Settings) with eight inner tabs: Overview, Data Editor, Data prep, Groups & levels, Analyses, Output & reports, Recipes and Shortcuts & settings
 - Every block is written as a numbered sequence of the buttons and selectors the user actually sees, with a worked example, tables for reference and highlighted tips
-- The Analyses tab documents all nineteen panels (steps + example each); the Recipes tab walks through twelve end-to-end questions
+- The Analyses tab documents every analysis panel (steps + example each); the Recipes tab walks through twelve end-to-end questions
 - Content lives in `src/help/helpContent.ts` as plain data and is guarded by `src/help/helpContent.test.ts` (structure, coverage of every analysis panel, presence of the main tool labels)
 
 ### Project persistence
@@ -68,7 +75,7 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 ### Visualization
 - Bar charts, boxplots, scatter plots, line charts, histograms
 - Probability plots, interaction plots, power curves, ACF bars, forecast lines and intervals, Kaplan–Meier step curves, hazard-ratio forest plots
-- Cumulative output console with tabbed results
+- Output document with an outline, collapsible cards and per-run setup shortcuts
 
 ### Written reports
 - Every run of an analysis closes with a **Report di lettura** card: plain-language headline of the outcome, what the test actually does, the reading of each result (difference, effect size, assumptions, non-parametric counterpart), a glossary of the statistics shown and the caveats that apply

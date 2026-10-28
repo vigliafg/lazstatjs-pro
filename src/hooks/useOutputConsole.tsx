@@ -33,15 +33,26 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
   const runSeq = useRef(0);
 
   useEffect(() => {
-    // Scroll only the output container: scrollIntoView() also scrolls the
-    // document/ancestors in some browsers, hiding the main tabs and controls.
-    const el = document.getElementById('output-content');
-    if (el) el.scrollTop = el.scrollHeight;
+    // Bring the newest block into view from its top: the reader should see the
+    // title and tables first, not the tail of the written report.
+    const last = outputs[outputs.length - 1];
+    if (!last) return;
+    const frame = requestAnimationFrame(() => {
+      const container = document.getElementById('output-content');
+      const target = document.getElementById(`output-block-${last.id}`);
+      if (!container || !target) return;
+      const offset = target.getBoundingClientRect().top - container.getBoundingClientRect().top;
+      container.scrollTo({
+        top: Math.max(0, container.scrollTop + offset - 8),
+        behavior: 'smooth',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [outputs]);
 
   // Each run pushes a single block: the written report is part of that block,
   // so it always closes the run after every table and chart.
-  const pushOutput = (node: ReactNode, report: ReportSpec | null) => {
+  const pushOutput = (node: ReactNode, report: ReportSpec | null, analysisId?: string) => {
     const block = (
       <>
         {node}
@@ -59,6 +70,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       id: `run-${Date.now()}-${runSeq.current++}`,
       title: html ? extractOutputTitle(html) : 'Analysis output',
       createdAt: new Date().toISOString(),
+      ...(analysisId ? { analysisId } : {}),
       html,
       node: block,
     };
@@ -78,7 +90,17 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
   const copyOutput = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
-    const ok = await copyText(el.innerText);
+    // Keep the analysis text, drop the per-block toolbars from the clipboard.
+    const clone = el.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('button, [data-no-print]').forEach(node => node.remove());
+    clone.querySelectorAll('.hidden').forEach(node => node.classList.remove('hidden'));
+    clone.style.position = 'fixed';
+    clone.style.left = '-10000px';
+    clone.style.top = '0';
+    document.body.appendChild(clone);
+    const text = clone.innerText;
+    clone.remove();
+    const ok = await copyText(text);
     showToast('Output', ok ? 'Output copied to clipboard' : 'Could not copy the output', ok ? 'ok' : 'error');
   };
 

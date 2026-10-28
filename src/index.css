@@ -40,7 +40,7 @@
 
   /* Custom classes for the statistical app */
   .main-tab {
-    @apply font-mono text-[11px] tracking-widest uppercase px-5 py-1.5 cursor-pointer text-text3 border border-transparent border-b-0 rounded-t transition-all relative -bottom-px select-none;
+    @apply font-mono text-[11px] tracking-widest uppercase px-4 py-1.5 cursor-pointer text-text3 border border-transparent border-b-0 rounded-t transition-all relative -bottom-px select-none whitespace-nowrap;
   }
   .main-tab:hover {
     @apply text-text2 bg-surface3;
@@ -72,6 +72,32 @@
   }
   .tb-btn:disabled:hover {
     @apply bg-surface3 border-border2 text-text2;
+  }
+
+  .tb-btn:focus-visible,
+  .main-tab:focus-visible,
+  .atab:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .run-btn {
+    @apply rounded text-[12px] font-semibold text-white transition-all;
+    background: var(--color-accent);
+  }
+  .run-btn:hover {
+    background: var(--color-accent2);
+  }
+  .run-btn:active {
+    transform: translateY(1px);
+  }
+  .run-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .output-card {
+    @apply overflow-hidden rounded-lg border border-border bg-surface;
   }
 
   .output-block {
@@ -140,9 +166,10 @@
     opacity: 1;
   }
 
-  /* THE FIX: Margine di rispetto inferiore */
+  /* Output scroll container: the workbench owns the height, so no floating
+     controls need a large safety margin at the bottom. */
   #output-content {
-    @apply flex-1 overflow-auto p-4 font-mono text-[12px] leading-relaxed text-text2 bg-bg min-h-0 pb-32;
+    @apply flex-1 overflow-auto p-4 font-mono text-[12px] leading-relaxed text-text2 bg-bg min-h-0 min-w-0 pb-8;
   }
 }
 

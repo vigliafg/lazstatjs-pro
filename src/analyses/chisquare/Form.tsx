@@ -31,7 +31,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                 <th className="p-1">
                   <input
                     type="text"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-28 font-semibold"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-20 font-semibold"
                     value={chisqParams.col1Label}
                     onChange={(e) => setChisqParams(p => ({ ...p, col1Label: e.target.value }))}
                   />
@@ -39,7 +39,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                 <th className="p-1">
                   <input
                     type="text"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-28 font-semibold"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-20 font-semibold"
                     value={chisqParams.col2Label}
                     onChange={(e) => setChisqParams(p => ({ ...p, col2Label: e.target.value }))}
                   />
@@ -51,7 +51,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                 <td className="p-1">
                   <input
                     type="text"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded font-semibold w-28"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded font-semibold w-20"
                     value={chisqParams.row1Label}
                     onChange={(e) => setChisqParams(p => ({ ...p, row1Label: e.target.value }))}
                   />
@@ -60,7 +60,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                   <input
                     type="number"
                     min="0"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-28"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-20"
                     value={chisqParams.row1col1}
                     onChange={(e) => {
                       const val = parseInt(e.target.value);
@@ -72,7 +72,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                   <input
                     type="number"
                     min="0"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-28"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-20"
                     value={chisqParams.row1col2}
                     onChange={(e) => {
                       const val = parseInt(e.target.value);
@@ -85,7 +85,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                 <td className="p-1">
                   <input
                     type="text"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded font-semibold w-28"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded font-semibold w-20"
                     value={chisqParams.row2Label}
                     onChange={(e) => setChisqParams(p => ({ ...p, row2Label: e.target.value }))}
                   />
@@ -94,7 +94,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                   <input
                     type="number"
                     min="0"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-28"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-20"
                     value={chisqParams.row2col1}
                     onChange={(e) => {
                       const val = parseInt(e.target.value);
@@ -106,7 +106,7 @@ export const ChiSquareForm = ({ grid, chisqParams, setChisqParams }: ChiSquareFo
                   <input
                     type="number"
                     min="0"
-                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-28"
+                    className="bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-20"
                     value={chisqParams.row2col2}
                     onChange={(e) => {
                       const val = parseInt(e.target.value);

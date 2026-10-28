@@ -1,437 +1,222 @@
-import type { Dispatch, SetStateAction } from 'react';
-import { Play } from 'lucide-react';
-import { ANALYSIS_TABS } from '../analyses/registry';
-import { DescriptiveForm } from '../analyses/descriptive/Form';
-import { TTestForm } from '../analyses/ttest/Form';
-import { AnovaForm } from '../analyses/anova/Form';
-import { RegressionForm } from '../analyses/regression/Form';
-import { CorrelationForm } from '../analyses/correlation/Form';
-import { ChiSquareForm } from '../analyses/chisquare/Form';
-import { SampleSizeForm } from '../analyses/samplesize/Form';
-import { DistributionFitForm } from '../analyses/distfit/Form';
-import { LogisticForm } from '../analyses/logistic/Form';
-import { CoxForm } from '../analyses/cox/Form';
-import { SurvivalForm } from '../analyses/survival/Form';
-import { TimeSeriesForm } from '../analyses/timeseries/Form';
-import { ContingencyForm } from '../analyses/contingency/Form';
-import { AncovaForm } from '../analyses/ancova/Form';
-import { FactorialForm } from '../analyses/factorial/Form';
-import { RepeatedAnovaForm } from '../analyses/repeatedanova/Form';
-import { MultivariateForm } from '../analyses/multivariate/Form';
-import { NonParamForm } from '../analyses/nonparamrm/Form';
-import { WizardForm } from '../analyses/wizard/Form';
-import { TostForm } from '../analyses/tost/Form';
-import { AgreementForm } from '../analyses/agreement/Form';
-import { CountForm } from '../analyses/countreg/Form';
-import { LmmForm } from '../analyses/lmm/Form';
-import { OrdinalForm } from '../analyses/ordinal/Form';
-import { MiForm } from '../analyses/mi/Form';
-import { MixedAnovaForm } from '../analyses/mixedanova/Form';
-import { ParametricForm } from '../analyses/parametric/Form';
-import { ResamplingForm } from '../analyses/resampling/Form';
-import { GeeForm } from '../analyses/gee/Form';
-import { StratifiedCoxForm } from '../analyses/stratcox/Form';
-import { TdCoxForm } from '../analyses/tdcox/Form';
-import { OutputConsole, type OutputEntry } from './OutputConsole';
-import type { CategoryLevel, GridData } from '../grid/types';
-import type { AncovaParams, AnovaParams, ChiSqParams, ContingencyParams, CorrParams, CoxParams, DistributionFitParams, FactorialParams, LogisticParams, MultivariateParams, NonParamParams, RegParams, RepeatedAnovaParams, SampleSizeParams, SurvivalParams, TimeSeriesParams, AgreementParams, CountParams, LmmParams, MiParams, GeeParams, MixedAnovaParams, StratifiedCoxParams, TdCoxParams, ParametricSurvivalParams, ResamplingParams, OrdinalParams, TostParams, TTestParams, WizardParams } from '../io/project';
+import { useEffect, useState } from 'react';
+import { BarChart3, Maximize2, Minimize2, PanelLeft, SlidersHorizontal } from 'lucide-react';
+import { analysisLabel, analysisMeta } from '../analyses/registry';
+import { AnalysisLibrary } from './analysis/AnalysisLibrary';
+import { AnalysisOptions } from './analysis/AnalysisOptions';
+import { useRecentAnalyses } from './analysis/useRecentAnalyses';
+import type { AnalysisTabProps } from './analysis/types';
+import { OutputConsole } from './OutputConsole';
 
-export interface AnalysisTabProps {
-  activeAnalysis: string;
-  setActiveAnalysis: Dispatch<SetStateAction<string>>;
-  ciLevel: number;
-  setCiLevel: Dispatch<SetStateAction<number>>;
-  descVars: number[];
-  setDescVars: Dispatch<SetStateAction<number[]>>;
-  ttestParams: TTestParams;
-  setTTestParams: Dispatch<SetStateAction<TTestParams>>;
-  anovaParams: AnovaParams;
-  setAnovaParams: Dispatch<SetStateAction<AnovaParams>>;
-  regParams: RegParams;
-  setRegParams: Dispatch<SetStateAction<RegParams>>;
-  corrParams: CorrParams;
-  setCorrParams: Dispatch<SetStateAction<CorrParams>>;
-  chisqParams: ChiSqParams;
-  setChisqParams: Dispatch<SetStateAction<ChiSqParams>>;
-  samplesizeParams: SampleSizeParams;
-  setSamplesizeParams: Dispatch<SetStateAction<SampleSizeParams>>;
-  distfitParams: DistributionFitParams;
-  setDistfitParams: Dispatch<SetStateAction<DistributionFitParams>>;
-  logisticParams: LogisticParams;
-  setLogisticParams: Dispatch<SetStateAction<LogisticParams>>;
-  coxParams: CoxParams;
-  setCoxParams: Dispatch<SetStateAction<CoxParams>>;
-  survivalParams: SurvivalParams;
-  setSurvivalParams: Dispatch<SetStateAction<SurvivalParams>>;
-  timeseriesParams: TimeSeriesParams;
-  setTimeseriesParams: Dispatch<SetStateAction<TimeSeriesParams>>;
-  contingencyParams: ContingencyParams;
-  setContingencyParams: Dispatch<SetStateAction<ContingencyParams>>;
-  ancovaParams: AncovaParams;
-  setAncovaParams: Dispatch<SetStateAction<AncovaParams>>;
-  factorialParams: FactorialParams;
-  setFactorialParams: Dispatch<SetStateAction<FactorialParams>>;
-  repeatedAnovaParams: RepeatedAnovaParams;
-  setRepeatedAnovaParams: Dispatch<SetStateAction<RepeatedAnovaParams>>;
-  multivariateParams: MultivariateParams;
-  setMultivariateParams: Dispatch<SetStateAction<MultivariateParams>>;
-  nonParamParams: NonParamParams;
-  setNonParamParams: Dispatch<SetStateAction<NonParamParams>>;
-  wizardParams: WizardParams;
-  setWizardParams: Dispatch<SetStateAction<WizardParams>>;
-  tostParams: TostParams;
-  setTostParams: Dispatch<SetStateAction<TostParams>>;
-  agreementParams: AgreementParams;
-  setAgreementParams: Dispatch<SetStateAction<AgreementParams>>;
-  countParams: CountParams;
-  setCountParams: Dispatch<SetStateAction<CountParams>>;
-  lmmParams: LmmParams;
-  setLmmParams: Dispatch<SetStateAction<LmmParams>>;
-  ordinalParams: OrdinalParams;
-  setOrdinalParams: Dispatch<SetStateAction<OrdinalParams>>;
-  miParams: MiParams;
-  setMiParams: Dispatch<SetStateAction<MiParams>>;
-  mixedAnovaParams: MixedAnovaParams;
-  setMixedAnovaParams: Dispatch<SetStateAction<MixedAnovaParams>>;
-  parametricParams: ParametricSurvivalParams;
-  setParametricParams: Dispatch<SetStateAction<ParametricSurvivalParams>>;
-  resamplingParams: ResamplingParams;
-  setResamplingParams: Dispatch<SetStateAction<ResamplingParams>>;
-  geeParams: GeeParams;
-  setGeeParams: Dispatch<SetStateAction<GeeParams>>;
-  stratCoxParams: StratifiedCoxParams;
-  setStratCoxParams: Dispatch<SetStateAction<StratifiedCoxParams>>;
-  tdCoxParams: TdCoxParams;
-  setTdCoxParams: Dispatch<SetStateAction<TdCoxParams>>;
-  grid: GridData;
-  outputs: OutputEntry[];
-  removeOutput: (index: number) => void;
-  clearOutput: () => void;
-  copyOutput: () => void;
-  exportChartPngs: () => void;
-  exportReportHtml: () => void;
-  exportResultsXlsx: () => void;
-  setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
-  runAnalysis: () => void;
-  updateColumnLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
-  updateColumnRecode: (column: number, mapping: Record<string, string>) => void;
-}
+type Pane = 'library' | 'options' | 'output';
 
-export const AnalysisTab = ({
-  activeAnalysis,
-  setActiveAnalysis,
-  ciLevel,
-  setCiLevel,
-  descVars,
-  setDescVars,
-  ttestParams,
-  setTTestParams,
-  anovaParams,
-  setAnovaParams,
-  regParams,
-  setRegParams,
-  corrParams,
-  setCorrParams,
-  chisqParams,
-  setChisqParams,
-  samplesizeParams,
-  setSamplesizeParams,
-  distfitParams,
-  setDistfitParams,
-  logisticParams,
-  setLogisticParams,
-  coxParams,
-  setCoxParams,
-  survivalParams,
-  setSurvivalParams,
-  timeseriesParams,
-  setTimeseriesParams,
-  contingencyParams,
-  setContingencyParams,
-  ancovaParams,
-  setAncovaParams,
-  factorialParams,
-  setFactorialParams,
-  repeatedAnovaParams,
-  setRepeatedAnovaParams,
-  multivariateParams,
-  setMultivariateParams,
-  nonParamParams,
-  setNonParamParams,
-  wizardParams,
-  setWizardParams,
-  tostParams,
-  setTostParams,
-  agreementParams,
-  setAgreementParams,
-  countParams,
-  setCountParams,
-  lmmParams,
-  setLmmParams,
-  ordinalParams,
-  setOrdinalParams,
-  miParams,
-  setMiParams,
-  mixedAnovaParams,
-  setMixedAnovaParams,
-  parametricParams,
-  setParametricParams,
-  resamplingParams,
-  setResamplingParams,
-  geeParams,
-  setGeeParams,
-  stratCoxParams,
-  setStratCoxParams,
-  tdCoxParams,
-  setTdCoxParams,
-  grid,
-  outputs,
-  removeOutput,
-  clearOutput,
-  copyOutput,
-  exportChartPngs,
-  exportReportHtml,
-  exportResultsXlsx,
-  setActiveTab,
-  runAnalysis,
-  updateColumnLevels,
-  updateColumnRecode,
-}: AnalysisTabProps) => (
-  <>
-<div className="flex-1 flex flex-col overflow-hidden">
-  <div className="bg-surface border-b border-border shrink-0">
-    <div className="flex overflow-x-auto scrollbar">
-      {ANALYSIS_TABS.map(a => (
-        <button 
-          key={a.id}
-          onClick={() => setActiveAnalysis(a.id)}
-          className={`atab ${activeAnalysis === a.id ? 'active' : ''}`}
-        >
-          {a.label}
-        </button>
-      ))}
-    </div>
-    
-    <div className="p-4 flex flex-wrap gap-6 items-start">
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">CI Level</label>
-        <select
-          className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[90px]"
-          value={ciLevel}
-          onChange={(e) => setCiLevel(parseInt(e.target.value))}
-        >
-          <option value={90}>90%</option>
-          <option value={95}>95%</option>
-          <option value={99}>99%</option>
-        </select>
+const isNarrow = (): boolean =>
+  typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches;
+
+/**
+ * Three-zone analysis workbench: library, setup and output.
+ *
+ * On wide screens the three panes live side by side and can be hidden
+ * independently; below `lg` the segmented control shows one pane at a time.
+ */
+export const AnalysisTab = (props: AnalysisTabProps) => {
+  const [pane, setPane] = useState<Pane>('options');
+  const [showLibrary, setShowLibrary] = useState(true);
+  const [showOptions, setShowOptions] = useState(true);
+  const [focusOutput, setFocusOutput] = useState(false);
+  const recent = useRecentAnalyses(props.activeAnalysis);
+
+  const go = (next: Pane) => {
+    setFocusOutput(false);
+    setPane(next);
+    if (next === 'library') setShowLibrary(true);
+    if (next === 'options') setShowOptions(true);
+  };
+
+  const toggleLibrary = () => {
+    if (focusOutput) {
+      setFocusOutput(false);
+      setShowLibrary(true);
+      return;
+    }
+    const next = !showLibrary;
+    setShowLibrary(next);
+    if (!next && pane === 'library') setPane('output');
+  };
+
+  const toggleOptions = () => {
+    if (focusOutput) {
+      setFocusOutput(false);
+      setShowOptions(true);
+      return;
+    }
+    const next = !showOptions;
+    setShowOptions(next);
+    if (!next && pane === 'options') setPane('output');
+  };
+
+  const toggleFocus = () => {
+    if (focusOutput) {
+      setFocusOutput(false);
+      // Never restore an empty workbench: the label promises the setup panel.
+      if (!showLibrary && !showOptions) setShowOptions(true);
+      return;
+    }
+    setFocusOutput(true);
+  };
+
+  const selectAnalysis = (id: string) => {
+    props.setActiveAnalysis(id);
+    if (isNarrow()) setPane('options');
+  };
+
+  const run = (): boolean => {
+    const ok = props.runAnalysis();
+    if (ok && isNarrow()) {
+      setFocusOutput(false);
+      setPane('output');
+    }
+    return ok;
+  };
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+        event.preventDefault();
+        run();
+      }
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        go('library');
+        requestAnimationFrame(() => {
+          document.getElementById('analysis-search')?.focus();
+        });
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // `run` reads the latest props through the closure of this render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.runAnalysis, props.activeAnalysis]);
+
+  const libraryVisibility =
+    focusOutput || !showLibrary
+      ? 'hidden'
+      : `${pane === 'library' ? 'flex' : 'hidden'} lg:flex`;
+  const optionsVisibility =
+    focusOutput || !showOptions
+      ? 'hidden'
+      : `${pane === 'options' ? 'flex' : 'hidden'} lg:flex`;
+  // A pane hidden from the desktop toolbar must not leave a blank mobile view.
+  const selectedPaneHidden =
+    (pane === 'library' && !showLibrary) || (pane === 'options' && !showOptions);
+  const outputVisibility = pane === 'output' || selectedPaneHidden ? 'flex' : 'hidden';
+
+  return (
+    <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+      <div className="flex h-9 shrink-0 items-center gap-1 border-b border-border bg-surface px-2">
+        <div className="flex items-center gap-0.5 rounded border border-border2 bg-surface3/60 p-0.5 lg:hidden">
+          {(['library', 'options', 'output'] as const).map(item => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => go(item)}
+              aria-pressed={pane === item}
+              className={`rounded px-2 py-1 font-mono text-[9px] uppercase tracking-wider transition-colors ${
+                pane === item ? 'bg-accent text-white' : 'text-text3 hover:text-text2'
+              }`}
+            >
+              {item === 'options' ? 'Setup' : item}
+            </button>
+          ))}
+        </div>
+
+        <div className="hidden items-center gap-1 lg:flex">
+          <button
+            type="button"
+            onClick={toggleLibrary}
+            aria-pressed={showLibrary}
+            className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
+              showLibrary ? 'text-text' : 'text-text3'
+            }`}
+            title={showLibrary ? 'Hide the analysis library' : 'Show the analysis library'}
+          >
+            <PanelLeft className="h-3 w-3" />
+            Library
+          </button>
+          <button
+            type="button"
+            onClick={toggleOptions}
+            aria-pressed={showOptions}
+            className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
+              showOptions ? 'text-text' : 'text-text3'
+            }`}
+            title={showOptions ? 'Hide the setup panel' : 'Show the setup panel'}
+          >
+            <SlidersHorizontal className="h-3 w-3" />
+            Setup
+          </button>
+        </div>
+
+        <div className="ml-auto flex min-w-0 items-center gap-2">
+          <span className="hidden min-w-0 items-center gap-1.5 text-[10px] text-text3 sm:flex">
+            <BarChart3 className="h-3 w-3 shrink-0 text-accent2" />
+            <span className="truncate">{analysisLabel(props.activeAnalysis)}</span>
+          </span>
+          <button
+            type="button"
+            onClick={toggleFocus}
+            aria-pressed={focusOutput}
+            aria-label={focusOutput ? 'Show library and setup' : 'Focus output'}
+            className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
+              focusOutput ? 'border-accent bg-accent/10 text-text' : ''
+            }`}
+            title={focusOutput ? 'Show library and setup again' : 'Give the output the full width'}
+          >
+            {focusOutput ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
+            <span className="hidden xl:inline">{focusOutput ? 'Show setup' : 'Focus output'}</span>
+          </button>
+        </div>
       </div>
-      {activeAnalysis === 'descriptive' && (
-        <DescriptiveForm grid={grid} descVars={descVars} setDescVars={setDescVars} />
-      )}
 
-      {activeAnalysis === 'ttest' && (
-        <TTestForm grid={grid} ttestParams={ttestParams} setTTestParams={setTTestParams} />
-      )}
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        <div
+          className={`${libraryVisibility} min-h-0 w-full shrink-0 lg:w-[210px] xl:w-[238px] 2xl:w-[258px]`}
+        >
+          <AnalysisLibrary
+            activeAnalysis={props.activeAnalysis}
+            recent={recent}
+            onSelect={selectAnalysis}
+            onClose={() => go('options')}
+          />
+        </div>
 
-      {activeAnalysis === 'anova' && (
-        <AnovaForm grid={grid} anovaParams={anovaParams} setAnovaParams={setAnovaParams} onLevels={updateColumnLevels} onRecode={updateColumnRecode} />
-      )}
+        <div
+          className={`${optionsVisibility} min-h-0 w-full shrink-0 lg:w-[300px] xl:w-[330px] 2xl:w-[360px]`}
+        >
+          <AnalysisOptions {...props} runAnalysis={run} />
+        </div>
 
-      {activeAnalysis === 'regression' && (
-        <RegressionForm grid={grid} regParams={regParams} setRegParams={setRegParams} />
-      )}
-
-      {activeAnalysis === 'correlation' && (
-        <CorrelationForm grid={grid} corrParams={corrParams} setCorrParams={setCorrParams} />
-      )}
-
-      {activeAnalysis === 'chisquare' && (
-        <ChiSquareForm grid={grid} chisqParams={chisqParams} setChisqParams={setChisqParams} />
-      )}
-
-      {activeAnalysis === 'timeseries' && (
-        <TimeSeriesForm
-          grid={grid}
-          timeseriesParams={timeseriesParams}
-          setTimeseriesParams={setTimeseriesParams}
-        />
-      )}
-
-      {activeAnalysis === 'survival' && (
-        <SurvivalForm
-          grid={grid}
-          onLevels={updateColumnLevels}
-          onRecode={updateColumnRecode}
-          survivalParams={survivalParams}
-          setSurvivalParams={setSurvivalParams}
-        />
-      )}
-
-      {activeAnalysis === 'cox' && (
-        <CoxForm
-          grid={grid}
-          coxParams={coxParams}
-          setCoxParams={setCoxParams}
-        />
-      )}
-
-      {activeAnalysis === 'wizard' && (
-        <WizardForm
-          grid={grid}
-          onLevels={updateColumnLevels}
-          onRecode={updateColumnRecode}
-          onOpenAnalysis={analysisId => setActiveAnalysis(analysisId)}
-          ciLevel={ciLevel}
-          wizardParams={wizardParams}
-          setWizardParams={setWizardParams}
-        />
-      )}
-
-      {activeAnalysis === 'logistic' && (
-        <LogisticForm
-          grid={grid}
-          logisticParams={logisticParams}
-          setLogisticParams={setLogisticParams}
-        />
-      )}
-
-      {activeAnalysis === 'factorial' && (
-        <FactorialForm
-          grid={grid}
-          onLevels={updateColumnLevels}
-          onRecode={updateColumnRecode}
-          factorialParams={factorialParams}
-          setFactorialParams={setFactorialParams}
-        />
-      )}
-
-      {activeAnalysis === 'distfit' && (
-        <DistributionFitForm
-          grid={grid}
-          distfitParams={distfitParams}
-          setDistfitParams={setDistfitParams}
-        />
-      )}
-
-      {activeAnalysis === 'samplesize' && (
-        <SampleSizeForm
-          samplesizeParams={samplesizeParams}
-          setSamplesizeParams={setSamplesizeParams}
-        />
-      )}
-
-      {activeAnalysis === 'ancova' && (
-        <AncovaForm
-          grid={grid}
-          onLevels={updateColumnLevels}
-          onRecode={updateColumnRecode}
-          ancovaParams={ancovaParams}
-          setAncovaParams={setAncovaParams}
-        />
-      )}
-
-      {activeAnalysis === 'multivariate' && (
-        <MultivariateForm
-          grid={grid}
-          multivariateParams={multivariateParams}
-          setMultivariateParams={setMultivariateParams}
-        />
-      )}
-
-      {activeAnalysis === 'repeatedanova' && (
-        <RepeatedAnovaForm
-          grid={grid}
-          repeatedAnovaParams={repeatedAnovaParams}
-          setRepeatedAnovaParams={setRepeatedAnovaParams}
-        />
-      )}
-
-      {activeAnalysis === 'nonparamrm' && (
-        <NonParamForm
-          grid={grid}
-          onLevels={updateColumnLevels}
-          onRecode={updateColumnRecode}
-          nonParamParams={nonParamParams}
-          setNonParamParams={setNonParamParams}
-        />
-      )}
-
-      {activeAnalysis === 'tdcox' && (
-        <TdCoxForm grid={grid} tdCoxParams={tdCoxParams} setTdCoxParams={setTdCoxParams} />
-      )}
-
-      {activeAnalysis === 'stratcox' && (
-        <StratifiedCoxForm grid={grid} stratCoxParams={stratCoxParams} setStratCoxParams={setStratCoxParams} />
-      )}
-
-      {activeAnalysis === 'gee' && (
-        <GeeForm grid={grid} geeParams={geeParams} setGeeParams={setGeeParams} />
-      )}
-
-      {activeAnalysis === 'resampling' && (
-        <ResamplingForm grid={grid} resamplingParams={resamplingParams} setResamplingParams={setResamplingParams} />
-      )}
-
-      {activeAnalysis === 'parametric' && (
-        <ParametricForm grid={grid} parametricParams={parametricParams} setParametricParams={setParametricParams} />
-      )}
-
-      {activeAnalysis === 'mixedanova' && (
-        <MixedAnovaForm grid={grid} mixedAnovaParams={mixedAnovaParams} setMixedAnovaParams={setMixedAnovaParams} />
-      )}
-
-      {activeAnalysis === 'mi' && (
-        <MiForm grid={grid} miParams={miParams} setMiParams={setMiParams} />
-      )}
-
-      {activeAnalysis === 'ordinal' && (
-        <OrdinalForm grid={grid} ordinalParams={ordinalParams} setOrdinalParams={setOrdinalParams} />
-      )}
-
-      {activeAnalysis === 'lmm' && (
-        <LmmForm grid={grid} lmmParams={lmmParams} setLmmParams={setLmmParams} />
-      )}
-
-      {activeAnalysis === 'countreg' && (
-        <CountForm grid={grid} countParams={countParams} setCountParams={setCountParams} />
-      )}
-
-      {activeAnalysis === 'agreement' && (
-        <AgreementForm grid={grid} agreementParams={agreementParams} setAgreementParams={setAgreementParams} />
-      )}
-
-      {activeAnalysis === 'tost' && (
-        <TostForm
-          grid={grid}
-          tostParams={tostParams}
-          setTostParams={setTostParams}
-        />
-      )}
-
-      {activeAnalysis === 'contingency' && (
-        <ContingencyForm
-          contingencyParams={contingencyParams}
-          setContingencyParams={setContingencyParams}
-        />
-      )}
-
-      <button className="run-btn h-9 self-end" onClick={runAnalysis}>
-        <Play className="w-3 h-3 inline mr-2" />
-        Run Analysis
-      </button>
+        <div
+          className={`${outputVisibility} min-h-0 min-w-0 flex-1 flex-col lg:flex`}
+        >
+          <OutputConsole
+            outputs={props.outputs}
+            onRemove={props.removeOutput}
+            onClear={props.clearOutput}
+            onCopy={props.copyOutput}
+            onExportCharts={props.exportChartPngs}
+            onExportReport={props.exportReportHtml}
+            onExportXlsx={props.exportResultsXlsx}
+            onBackToData={() => props.setActiveTab('data')}
+            onOpenAnalysis={analysisId => {
+              if (!analysisMeta(analysisId)) return;
+              props.setActiveAnalysis(analysisId);
+              go('options');
+            }}
+          />
+        </div>
+      </div>
     </div>
-  </div>
-
-  <OutputConsole
-    outputs={outputs}
-    onRemove={removeOutput}
-    onClear={clearOutput}
-    onCopy={copyOutput}
-    onExportCharts={exportChartPngs}
-    onExportReport={exportReportHtml}
-    onExportXlsx={exportResultsXlsx}
-    onBackToData={() => setActiveTab('data')}
-  />
-</div>
-  </>
-);
+  );
+};

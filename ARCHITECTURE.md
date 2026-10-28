@@ -70,12 +70,23 @@ Checklist minima:
 4. **Default grid-aware** — se il vecchio pannello sceglieva colonne in base ai
    dati, metti la scelta in `src/analyses/<id>/defaults.ts` e usala nell'App.
 5. **Runner** — aggiungi la voce in `ANALYSIS_RUNNERS` e il test del registro.
-6. **Wiring** — stato nell'App, prop in `AnalysisTab`, render del Form.
+6. **Wiring** — stato nell'App, contratto in `src/ui/analysis/types.ts`, render del
+   Form in `AnalysisOptions`; famiglia, descrizione, keyword e costo vivono in
+   `registry.ts`.
 7. **Test** — builder valido + validazioni; parsing `.lzs` con valori fuori
    range; se il calcolo è nuovo, golden test.
 
 Una voce in più è un errore: la lista delle analisi vive solo in
 `src/analyses/registry.ts` e nel registro dei runner.
+
+## UI
+
+`src/ui/AnalysisTab.tsx` è il workbench a tre zone: `AnalysisLibrary` (ricerca,
+famiglie, recenti), `AnalysisOptions` (CI, form, Run sticky) e `OutputConsole`
+(documento a schede, outline, collapse). Sotto `lg` il segmented control mostra
+un pannello alla volta; *Focus output* nasconde libreria e setup. Le schede
+mantengono il contratto `AnalysisTabProps` per non duplicare i 31 slice di
+parametri dentro ogni componente.
 
 ## Persistenza `.lzs`
 

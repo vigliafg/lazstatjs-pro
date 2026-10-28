@@ -6,35 +6,46 @@ export interface HeaderProps {
   setActiveTab: (tab: ProjectTab) => void;
 }
 
-/** Barra delle schede principali. Nessuno stato proprio: solo navigazione. */
+/** Main navigation: brand plus the four top-level areas. */
 export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
-  <div className="bg-surface2 border-b border-border px-2 pt-1.5 flex gap-0.5 shrink-0 sticky top-0 z-50">
+  <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-surface2 px-2 pt-1.5 scrollbar">
+    <div className="mr-1 flex shrink-0 items-center gap-2 border-r border-border px-2 pb-1.5">
+      <div className="flex h-5 w-5 items-center justify-center rounded border border-accent/30 bg-accent/10">
+        <BarChart3 className="h-3 w-3 text-accent" />
+      </div>
+      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-text2">LazStats</span>
+    </div>
+
     <button
       onClick={() => setActiveTab('data')}
       className={`main-tab ${activeTab === 'data' ? 'active' : ''}`}
+      title="Data editor"
     >
-      <Database className="w-3 h-3 inline mr-2" />
-      Data Editor
+      <Database className="mr-2 inline h-3 w-3" />
+      Data
     </button>
     <button
       onClick={() => setActiveTab('analysis')}
       className={`main-tab ${activeTab === 'analysis' ? 'active' : ''}`}
+      title="Analysis workbench"
     >
-      <BarChart3 className="w-3 h-3 inline mr-2" />
-      Analysis & Output
+      <BarChart3 className="mr-2 inline h-3 w-3" />
+      Analysis
     </button>
     <button
       onClick={() => setActiveTab('settings')}
       className={`main-tab ${activeTab === 'settings' ? 'active' : ''}`}
+      title="Settings"
     >
-      <Settings className="w-3 h-3 inline mr-2" />
+      <Settings className="mr-2 inline h-3 w-3" />
       Settings
     </button>
     <button
       onClick={() => setActiveTab('help')}
       className={`main-tab ${activeTab === 'help' ? 'active' : ''}`}
+      title="Help and examples"
     >
-      <HelpCircle className="w-3 h-3 inline mr-2" />
+      <HelpCircle className="mr-2 inline h-3 w-3" />
       Help
     </button>
   </div>

@@ -27,7 +27,7 @@ const PRESETS = {
 };
 
 const cellInput =
-  'bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-16 font-mono';
+  'bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-14 font-mono';
 const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
 const smallButton =
   'text-[10px] bg-surface hover:bg-border px-2 py-0.5 rounded font-mono text-text3 hover:text-text border border-border cursor-pointer';
@@ -115,7 +115,7 @@ export const ContingencyForm = ({
               {cols.map((col, j) => (
                 <th key={j} className="p-1">
                   <input
-                    className="bg-surface border border-border2 text-text text-[10px] p-1 rounded text-center w-16 font-semibold"
+                    className="bg-surface border border-border2 text-text text-[9px] p-1 rounded text-center w-14 font-semibold"
                     value={col}
                     onChange={e =>
                       setContingencyParams(prev => ({
@@ -133,7 +133,7 @@ export const ContingencyForm = ({
               <tr key={i}>
                 <td className="p-1">
                   <input
-                    className="bg-surface border border-border2 text-text text-[10px] p-1 rounded font-semibold w-20"
+                    className="bg-surface border border-border2 text-text text-[10px] p-1 rounded font-semibold w-16"
                     value={rows[i] ?? ''}
                     onChange={e =>
                       setContingencyParams(prev => ({

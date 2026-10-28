@@ -486,12 +486,13 @@ export default function App() {
 
   // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
   // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
-  const emit = (result: AnalysisRunResult) => {
+  const emit = (result: AnalysisRunResult): boolean => {
     if ('reason' in result) {
       showToast('Error', result.reason, 'error');
-      return;
+      return false;
     }
-    pushOutput(result.node, result.report);
+    pushOutput(result.node, result.report, activeAnalysis);
+    return true;
   };
 
   const { runAnalysis } = useAnalysisRun({

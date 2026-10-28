@@ -90,6 +90,12 @@ describe('output snapshot validation', () => {
     assert.equal(parsed[0].title, 'Analysis output');
   });
 
+  it('keeps the analysis id that produced a block', () => {
+    const parsed = parseStoredOutputs([{ html: 'ok', analysisId: 'anova' }]);
+    assert.equal(parsed[0].analysisId, 'anova');
+    assert.equal(parseStoredOutputs([{ html: 'ok', analysisId: 42 }])[0].analysisId, undefined);
+  });
+
   it('caps a hostile array before it reaches the app', () => {
     const many = Array.from({ length: 60 }, (_, i) => entry(i, 100));
     assert.equal(parseStoredOutputs(many).length, MAX_STORED_OUTPUTS);
@@ -125,6 +131,7 @@ describe('output snapshots in project files', () => {
       id: 'run-1',
       title: extractOutputTitle(html),
       createdAt: '2026-10-19T10:00:00.000Z',
+      analysisId: 'descriptive',
       html,
     };
     const snapshot = createProjectSnapshot({
@@ -137,6 +144,7 @@ describe('output snapshots in project files', () => {
     const restored = parseProject(serializeProject(snapshot));
     assert.equal(restored.outputs.length, 1);
     assert.equal(restored.outputs[0].title, 'Descriptive Statistics');
+    assert.equal(restored.outputs[0].analysisId, 'descriptive');
     assert.ok(restored.outputs[0].html.includes('<table'));
     assert.ok(restored.outputs[0].html.includes('Mean'));
   });

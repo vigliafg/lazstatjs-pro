@@ -9,14 +9,14 @@ interface UseAnalysisRunOptions {
   params: ProjectParams;
   ciLevel: number;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */
-  emit: (result: AnalysisRunResult) => void;
+  emit: (result: AnalysisRunResult) => boolean;
   warn: (message: string) => void;
 }
 
 /**
  * Avvio dell'analisi attiva.
  *
- * Tutte le 19 analisi hanno un builder puro nel registro: non servono più
+ * Tutte le analisi hanno un builder puro nel registro: non servono più
  * segnali o handle imperativi per raggiungere i pannelli.
  */
 export const useAnalysisRun = ({
@@ -27,10 +27,11 @@ export const useAnalysisRun = ({
   emit,
   warn,
 }: UseAnalysisRunOptions) => {
-  const runAnalysis = () => {
+  const runAnalysis = (): boolean => {
     const runner = ANALYSIS_RUNNERS[activeAnalysis];
     if (runner) return emit(runner({ grid, params, ciLevel }));
     warn('Analysis type not implemented yet');
+    return false;
   };
 
   return { runAnalysis };
