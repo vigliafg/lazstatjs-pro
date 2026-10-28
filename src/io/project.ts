@@ -108,6 +108,14 @@ export interface CoxParams {
   covariates: number[];
 }
 
+/** Parametri della sopravvivenza (Kaplan–Meier). */
+export interface SurvivalParams {
+  timeVariable: number;
+  eventVariable: number;
+  /** -1 = nessun raggruppamento. */
+  groupVariable: number;
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -119,6 +127,7 @@ export interface ProjectParams {
   distfit: DistributionFitParams;
   logistic: LogisticParams;
   cox: CoxParams;
+  survival: SurvivalParams;
 }
 
 export interface ProjectSettings {
@@ -191,6 +200,11 @@ export const DEFAULT_PARAMS: ProjectParams = {
     eventVariable: 1,
     covariates: [],
   },
+  survival: {
+    timeVariable: 0,
+    eventVariable: 1,
+    groupVariable: -1,
+  },
 };
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
@@ -209,6 +223,12 @@ const integer = (value: unknown, fallback: number): number => Math.trunc(finite(
 
 const index = (value: unknown, fallback: number, width: number): number =>
   Math.max(0, Math.min(Math.max(0, width - 1), integer(value, fallback)));
+
+/** Come `index`, ma -1 resta "nessuna selezione". */
+const optionalIndex = (value: unknown, fallback: number, width: number): number => {
+  const raw = finite(value, fallback);
+  return raw < 0 ? -1 : index(raw, fallback, width);
+};
 
 const bool = (value: unknown, fallback: boolean): boolean =>
   typeof value === 'boolean' ? value : fallback;
@@ -353,6 +373,7 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
   const distfit = isRecord(raw.distfit) ? raw.distfit : {};
   const logistic = isRecord(raw.logistic) ? raw.logistic : {};
   const cox = isRecord(raw.cox) ? raw.cox : {};
+  const survival = isRecord(raw.survival) ? raw.survival : {};
   const d = DEFAULT_PARAMS;
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
   const coxTime = index(cox.timeVariable, d.cox.timeVariable, width);
@@ -431,6 +452,11 @@ const parseParams = (value: unknown, width: number): ProjectParams => {
       covariates: indexList(cox.covariates, d.cox.covariates, width).filter(
         (value) => value !== coxTime && value !== coxEvent
       ),
+    },
+    survival: {
+      timeVariable: index(survival.timeVariable, d.survival.timeVariable, width),
+      eventVariable: index(survival.eventVariable, d.survival.eventVariable, width),
+      groupVariable: optionalIndex(survival.groupVariable, d.survival.groupVariable, width),
     },
   };
 };

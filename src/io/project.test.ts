@@ -259,6 +259,33 @@ describe('project sanitisation', () => {
     assert.deepEqual(restored.params.cox.covariates, [1]);
   });
 
+  it('restores survival parameters, preserving the "no group" sentinel', () => {
+    const base = makeSnapshot();
+    const restored = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          survival: { timeVariable: 99, eventVariable: 0, groupVariable: -1 },
+        },
+      })
+    );
+    assert.equal(restored.params.survival.timeVariable, 2);
+    assert.equal(restored.params.survival.eventVariable, 0);
+    assert.equal(restored.params.survival.groupVariable, -1);
+
+    const grouped = parseProject(
+      JSON.stringify({
+        ...base,
+        params: {
+          ...DEFAULT_PARAMS,
+          survival: { timeVariable: 0, eventVariable: 1, groupVariable: 1 },
+        },
+      })
+    );
+    assert.equal(grouped.params.survival.groupVariable, 1);
+  });
+
   it('clamps parameter indexes to the restored grid width', () => {
     const narrow = createProjectSnapshot(
       {

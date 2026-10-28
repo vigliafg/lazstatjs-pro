@@ -13,6 +13,7 @@ import { useProjectSession } from './hooks/useProjectSession';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { defaultLogisticParams } from './analyses/logistic/defaults';
 import { defaultCoxParams } from './analyses/cox/defaults';
+import { defaultSurvivalParams } from './analyses/survival/defaults';
 import { AnalysisTab } from './ui/AnalysisTab';
 import { ANALYSIS_TABS } from './analyses/registry';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
@@ -50,6 +51,7 @@ import {
   type ProjectSnapshot,
   type RegParams,
   type SampleSizeParams,
+  type SurvivalParams,
   type TTestParams,
 } from './io/project';
 
@@ -259,6 +261,10 @@ export default function App() {
     () => boot?.params.cox ?? defaultCoxParams(grid)
   );
 
+  const [survivalParams, setSurvivalParams] = useState<SurvivalParams>(
+    () => boot?.params.survival ?? defaultSurvivalParams(grid)
+  );
+
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
     () => ({ ciLevel, activeAnalysis, activeTab }),
@@ -276,8 +282,9 @@ export default function App() {
       distfit: distfitParams,
       logistic: logisticParams,
       cox: coxParams,
+      survival: survivalParams,
     }),
-    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams]
+    [descVars, ttestParams, anovaParams, regParams, corrParams, chisqParams, samplesizeParams, distfitParams, logisticParams, coxParams, survivalParams]
   );
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
@@ -301,6 +308,7 @@ export default function App() {
     setDistfitParams(project.params.distfit);
     setLogisticParams(project.params.logistic);
     setCoxParams(project.params.cox);
+    setSurvivalParams(project.params.survival);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -432,6 +440,8 @@ export default function App() {
             setLogisticParams={setLogisticParams}
             coxParams={coxParams}
             setCoxParams={setCoxParams}
+            survivalParams={survivalParams}
+            setSurvivalParams={setSurvivalParams}
             grid={grid}
             outputs={outputs}
             removeOutput={removeOutput}
