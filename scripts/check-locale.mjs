@@ -110,7 +110,9 @@ const sourceIds = () => {
 };
 
 const reportBase = `src/stats/reportCopy/catalog/${locale}`;
-if (!existsSync(reportBase)) {
+if (locale === 'it') {
+  notes.push('report: Italian is the source language, no catalog needed');
+} else if (!existsSync(reportBase)) {
   fail(`missing report catalog: ${reportBase}`);
 } else {
   const merged = await import('../src/stats/reportCopy/catalog/index.ts');
