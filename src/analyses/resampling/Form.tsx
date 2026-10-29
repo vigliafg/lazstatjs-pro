@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { ResamplingParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
   VariableSelect,
@@ -24,7 +25,7 @@ export const ResamplingForm = ({
     <VariableSelect
       label={t('form.outcome')}
       value={resamplingParams.outcome}
-      options={variableOptions(grid.cols)}
+      options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
       onChange={value => setResamplingParams(prev => ({ ...prev, outcome: value }))}
     />
     <VariableSelect

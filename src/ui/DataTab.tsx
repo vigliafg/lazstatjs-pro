@@ -38,6 +38,7 @@ import type { ColumnOperation } from '../grid/columnOps';
 
 export interface DataTabProps {
   grid: GridData;
+  datasetId: string;
   setGrid: Dispatch<SetStateAction<GridData>>;
   onNewDataset: () => void;
   onInsertColumn: (at: number) => void;
@@ -100,6 +101,7 @@ export interface DataTabProps {
 
 export const DataTab = ({
   grid,
+  datasetId,
   setGrid,
   onNewDataset,
   onInsertColumn,
@@ -161,7 +163,8 @@ export const DataTab = ({
 }: DataTabProps) => (
   <>
 <div className="flex-1 flex flex-col overflow-hidden">
-  <div className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
+  <div role="toolbar" aria-label={t('data.toolbar')} className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
+    <div role="group" aria-label={t('data.groupFile')} className="flex flex-wrap items-center gap-2">
     <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">{t('data.file')}:</span>
     <button className="tb-btn" onClick={onNewDataset}>{t('data.new')}</button>
     <button className="tb-btn" onClick={() => csvInputRef.current?.click()}>{t('data.import')}</button>
@@ -200,13 +203,16 @@ export const DataTab = ({
         {t('data.autosave')} {lastAutosave}
       </span>
     )}
+    </div>
     <div className="h-4 w-px bg-border mx-1" />
+    <div role="group" aria-label={t('data.groupEdit')} className="flex flex-wrap items-center gap-2">
     <button className="tb-btn" disabled={!canUndoGrid} onClick={undoGrid} title={`${t('data.undo')} (Ctrl+Z)`}>
       {t('data.undo')}
     </button>
     <button className="tb-btn" disabled={!canRedoGrid} onClick={redoGrid} title={`${t('data.redo')} (Ctrl+Y)`}>
       {t('data.redo')}
     </button>
+    </div>
     <input
       ref={csvInputRef}
       type="file"
@@ -219,6 +225,7 @@ export const DataTab = ({
       }}
     />
     <div className="h-4 w-px bg-border mx-2" />
+    <div role="group" aria-label={t('data.groupTools')} className="flex flex-wrap items-center gap-2">
     <button
       className="tb-btn text-yellow"
       onClick={() => {
@@ -251,7 +258,9 @@ export const DataTab = ({
     <button className={`tb-btn ${showTransform ? 'bg-accent text-white border-accent' : ''}`} onClick={() => setShowTransform((v) => !v)}>
       {t('data.transform')}
     </button>
+    </div>
     <div className="h-4 w-px bg-border mx-1" />
+    <div role="group" aria-label={t('data.groupView')} className="flex flex-wrap items-center gap-2">
     <button
       className={`tb-btn ${freezeFirstCol ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setFreezeFirstCol((v) => !v)}
@@ -273,6 +282,7 @@ export const DataTab = ({
     >
       {t('data.filter')}
     </button>
+    </div>
   </div>
 
   {showFilter && (
@@ -431,6 +441,7 @@ export const DataTab = ({
 
   <DataGrid
     grid={grid}
+    resetKey={datasetId}
     focusCell={focusCell}
     onCell={updateCell}
     onRenameCol={(c, name) => {

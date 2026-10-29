@@ -15,7 +15,7 @@ interface UseAnalysisRunOptions {
     result: AnalysisRunResult,
     analysisId: string,
     paramsUsed: ProjectParams,
-    options?: { live?: boolean; ciLevel?: number }
+    options?: { live?: boolean; ciLevel?: number; isCurrent?: () => boolean }
   ) => boolean;
   warn: (message: string) => void;
 }
@@ -37,7 +37,7 @@ export const useAnalysisRun = ({
   const run = async (
     analysisId: string,
     paramsUsed: ProjectParams,
-    options?: { live?: boolean; ciLevel?: number }
+    options?: { live?: boolean; ciLevel?: number; isCurrent?: () => boolean }
   ): Promise<boolean> => {
     const level = options?.ciLevel ?? ciLevel;
     const invalid = validateAnalysisColumnRefs(analysisId, paramsUsed, grid.cols.length);
@@ -50,6 +50,8 @@ export const useAnalysisRun = ({
     const { ANALYSIS_RUNNERS } = await import('../analyses/runners');
     const runner = ANALYSIS_RUNNERS[analysisId];
     if (runner) {
+      // A stale live run may finish after a newer one: never publish it.
+      if (options?.isCurrent && !options.isCurrent()) return false;
       return emit(
         runner({ grid, params: paramsUsed, ciLevel: level }),
         analysisId,
@@ -71,7 +73,8 @@ export const useAnalysisRun = ({
   ): Promise<boolean> => run(analysisId, paramsUsed, { ciLevel: level });
 
   /** Live run: replaces the previous live card instead of appending. */
-  const runAnalysisLive = (): Promise<boolean> => run(activeAnalysis, params, { live: true });
+  const runAnalysisLive = (isCurrent?: () => boolean): Promise<boolean> =>
+    run(activeAnalysis, params, { live: true, isCurrent });
 
   return { runAnalysis, runAnalysisWith, runAnalysisLive };
 };

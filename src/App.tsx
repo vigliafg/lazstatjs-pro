@@ -113,7 +113,7 @@ export default function App() {
       ? boot.settings.activeAnalysis
       : DEFAULT_SETTINGS.activeAnalysis
   );
-  const gridHistory = useGridHistory(boot?.grid ?? createDefaultGrid());
+  const gridHistory = useGridHistory(boot?.grid ?? createDefaultGrid(), boot?.dataRevision ?? 0);
   const grid = gridHistory.grid;
   const dataRevision = gridHistory.revision;
   const setGrid = gridHistory.commit;
@@ -203,7 +203,12 @@ export default function App() {
   }
 
   const updateCell = (r: number, c: number, val: string) => {
-    setGrid((prev) => gridSetCell(prev, r, c, val), { coalesce: true, kind: `cell-${r}-${c}` });
+    setGrid((prev) => gridSetCell(prev, r, c, val), {
+      coalesce: true,
+      kind: `cell-${r}-${c}`,
+      changedCell: { r, c },
+      changedCol: c,
+    });
   };
 
   const updateColType = (c: number, type: ColType) => {
@@ -272,7 +277,7 @@ export default function App() {
   });
 
   const [datasetId, setDatasetId] = useState(
-    () => `dataset-${Date.now().toString(36)}`
+    () => boot?.datasetId ?? `dataset-${Date.now().toString(36)}`
   );
 
   const { params, setParams } = useProjectParams(boot, grid);
@@ -350,7 +355,8 @@ export default function App() {
   }, [grid, maskedGrid, filterAffectsAnalysis, activeRowFilter]);
 
   const restoreProject = (project: ProjectSnapshot) => {
-    resetGridHistory(project.grid);
+    resetGridHistory(project.grid, project.dataRevision ?? 0);
+    setDatasetId(project.datasetId ?? `dataset-${Date.now().toString(36)}`);
     setParams(project.params);
     setCiLevel(project.settings.ciLevel);
     setActiveAnalysis(
@@ -383,6 +389,8 @@ export default function App() {
   } = useProjectSession({
     boot,
     grid,
+    datasetId,
+    dataRevision,
     prefs: ioPrefs,
     settings,
     params,
@@ -470,9 +478,10 @@ export default function App() {
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
-        {activeTab === 'data' && (
+        <div className={activeTab === 'data' ? 'flex min-h-0 flex-1 flex-col' : 'hidden'}>
           <DataWorkspace
             grid={grid}
+            datasetId={datasetId}
             setGrid={setGrid}
             onNewDataset={newDataset}
             onInsertColumn={insertColumn}
@@ -518,7 +527,7 @@ export default function App() {
             addColumn={addColumn}
             addRow={addRow}
           />
-        )}
+        </div>
 
         {activeTab === 'analysis' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingAnalysis')}</div>}>

@@ -1,4 +1,11 @@
-import { type ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useId,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import { columnLabel, type Column } from '../grid/types';
 import { t } from '../i18n';
 
@@ -32,21 +39,50 @@ export const Field = ({
   hint?: string;
   htmlFor?: string;
   children: ReactNode;
-}) => (
-  <div className="flex flex-col gap-1">
-    <label
-      htmlFor={htmlFor}
-      className="font-mono text-[10px] uppercase tracking-widest text-text3"
-    >
-      {label}
-    </label>
-    {children}
-    {hint && <span className="text-[9px] leading-relaxed text-text3">{hint}</span>}
-  </div>
-);
+}) => {
+  const generatedId = useId();
+  const controlId = htmlFor ?? generatedId;
+  // A raw <select>/<input>/<textarea> can be associated automatically. Wrapper
+  // components (VariableSelect) pass their own id through htmlFor.
+  const single = Children.count(children) === 1 ? Children.only(children) : null;
+  const control =
+    isValidElement<{ id?: string }>(single) &&
+    (single.type === 'select' || single.type === 'input' || single.type === 'textarea')
+      ? cloneElement(single as ReactElement<{ id?: string }>, { id: controlId })
+      : children;
+  return (
+    <div className="flex flex-col gap-1">
+      <label
+        htmlFor={controlId}
+        className="font-mono text-[10px] uppercase tracking-widest text-text3"
+      >
+        {label}
+      </label>
+      {control}
+      {hint && <span className="text-[9px] leading-relaxed text-text3">{hint}</span>}
+    </div>
+  );
+};
 
 const selectClass =
   'min-w-[120px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text focus:border-accent focus:outline-none';
+
+/** Fieldset wrapper for checkbox groups: gives the group an accessible name. */
+const FieldSet = ({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: ReactNode;
+}) => (
+  <fieldset className="m-0 flex min-w-0 flex-col gap-1 border-0 p-0">
+    <legend className="font-mono text-[10px] uppercase tracking-widest text-text3">{label}</legend>
+    {children}
+    {hint && <p className="text-[9px] leading-relaxed text-text3">{hint}</p>}
+  </fieldset>
+);
 
 export interface VariableOption {
   value: number;
@@ -70,28 +106,32 @@ export const VariableSelect = ({
   onChange: (value: number) => void;
   hint?: string;
   trailing?: ReactNode;
-}) => (
-  <Field label={label} hint={hint}>
-    <div className="flex items-center gap-1">
-      <select
-        aria-label={ariaLabel ?? label}
-        className={`${selectClass} min-w-0 flex-1`}
-        value={value}
-        onChange={event => onChange(Number(event.target.value))}
-      >
-        {options.map(option => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-        {!options.some(option => option.value === value) && (
-          <option value={value}>—</option>
-        )}
-      </select>
-      {trailing}
-    </div>
-  </Field>
-);
+}) => {
+  const id = useId();
+  return (
+    <Field label={label} hint={hint} htmlFor={id}>
+      <div className="flex items-center gap-1">
+        <select
+          id={id}
+          aria-label={ariaLabel ?? label}
+          className={`${selectClass} min-w-0 flex-1`}
+          value={value}
+          onChange={event => onChange(Number(event.target.value))}
+        >
+          {options.map(option => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+          {!options.some(option => option.value === value) && (
+            <option value={value}>—</option>
+          )}
+        </select>
+        {trailing}
+      </div>
+    </Field>
+  );
+};
 
 export const variableOptions = (cols: Column[]): VariableOption[] =>
   cols.map((col, index) => ({ value: index, label: columnLabel(col) }));
@@ -130,7 +170,7 @@ export const VariableList = ({
 }) => {
   const indexes = only ?? cols.map((_, index) => index);
   return (
-    <Field label={label} hint={hint}>
+    <FieldSet label={label} hint={hint}>
       <div className="max-h-[120px] min-w-[200px] overflow-auto rounded border border-border2 bg-surface3 p-2 scrollbar">
         {indexes.length === 0 && emptyText && (
           <p className="text-[10px] italic text-text3">{emptyText}</p>
@@ -156,7 +196,7 @@ export const VariableList = ({
           );
         })}
       </div>
-    </Field>
+    </FieldSet>
   );
 };
 
@@ -172,7 +212,7 @@ export const CheckboxList = <T extends string>({
   hint?: string;
   columns?: boolean;
 }) => (
-  <Field label={label} hint={hint}>
+  <FieldSet label={label} hint={hint}>
     <div
       className={`flex max-w-[360px] rounded border border-border2 bg-surface3 p-2 ${
         columns ? 'flex-wrap gap-x-3 gap-y-1' : 'flex-col gap-0.5'
@@ -194,7 +234,7 @@ export const CheckboxList = <T extends string>({
         </label>
       ))}
     </div>
-  </Field>
+  </FieldSet>
 );
 
 /** Progressive disclosure for options that most runs do not need. */

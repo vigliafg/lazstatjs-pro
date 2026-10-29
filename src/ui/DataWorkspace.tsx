@@ -52,6 +52,8 @@ interface Props {
   filterNeedsValue: boolean;
   activeRowFilter: RowFilter | null;
   visibleRowCount: number;
+  /** Identity of the current dataset: resets selection when it changes. */
+  datasetId: string;
 }
 
 /**
@@ -69,6 +71,15 @@ export const DataWorkspace = (p: Props) => {
   const [freezeFirstCol, setFreezeFirstCol] = useState(false);
   const [showInspector, setShowInspector] = useState(false);
   const [inspectorCol, setInspectorCol] = useState(0);
+
+  // A new dataset (New/Import/Open) must not keep a selection or an inspector
+  // pointing at the previous one; the DataGrid also clears its internal anchor.
+  useEffect(() => {
+    setFocusCell(null);
+    setSelRange(null);
+    setInspectorCol(0);
+    setShowInspector(false);
+  }, [p.datasetId]);
 
   // Column indexes in the filter bar go stale after delete/merge.
   useEffect(() => {
@@ -108,6 +119,7 @@ export const DataWorkspace = (p: Props) => {
   return (
     <DataTab
       grid={p.grid}
+      datasetId={p.datasetId}
       setGrid={p.setGrid}
       onNewDataset={p.onNewDataset}
       onInsertColumn={p.onInsertColumn}

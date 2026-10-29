@@ -1,5 +1,5 @@
 import { parseNum } from '../../stats/core';
-import type { Dataset } from '../../grid/types';
+import { isContinuousColumn, type Dataset } from '../../grid/types';
 
 /** Celle testuali di una colonna, già ripulite dagli spazi. */
 export const columnStrings = (grid: Dataset, index: number): string[] =>
@@ -14,9 +14,14 @@ export const distinctValues = (grid: Dataset, index: number): Set<string> =>
  * Regola unica per form, default e builder delle analisi.
  */
 export const isNumericColumn = (grid: Dataset, index: number): boolean => {
+  if (!isContinuousColumn(grid.cols[index])) return false;
   const values = columnStrings(grid, index).filter(value => value !== '');
   return values.length >= 2 && values.every(value => Number.isFinite(parseNum(value)));
 };
 
 export const numericColumnIndexes = (grid: Dataset): number[] =>
   grid.cols.map((_, index) => index).filter(index => isNumericColumn(grid, index));
+
+/** Type-compatible columns for a continuous role (same rule as validation). */
+export const continuousColumnIndexes = (grid: Dataset): number[] =>
+  grid.cols.map((col, index) => (isContinuousColumn(col) ? index : -1)).filter(index => index >= 0);

@@ -97,6 +97,16 @@ describe('output snapshot validation', () => {
     assert.equal(parseStoredOutputs([{ html: 'ok', analysisId: 42 }])[0].analysisId, undefined);
   });
 
+  it('keeps the dataset identity and revision used by a card', () => {
+    const parsed = parseStoredOutputs([
+      { html: 'ok', datasetId: 'dataset-1', dataRevision: 4 },
+    ]);
+    assert.equal(parsed[0].datasetId, 'dataset-1');
+    assert.equal(parsed[0].dataRevision, 4);
+    assert.equal(parseStoredOutputs([{ html: 'ok', dataRevision: -1 }])[0].dataRevision, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok', dataRevision: 1.5 }])[0].dataRevision, undefined);
+  });
+
   it('keeps a valid confidence level and rejects invalid ones', () => {
     assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: 95 }])[0].ciLevel, 95);
     assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: 99.9 }])[0].ciLevel, 99.9);
@@ -162,19 +172,29 @@ describe('output snapshots in project files', () => {
       title: extractOutputTitle(html),
       createdAt: '2026-10-19T10:00:00.000Z',
       analysisId: 'descriptive',
+      ciLevel: 95,
+      dataRevision: 3,
+      datasetId: 'dataset-1',
       html,
     };
     const snapshot = createProjectSnapshot({
       grid,
+      datasetId: 'dataset-1',
+      dataRevision: 3,
       prefs: DEFAULT_PREFS,
       settings: DEFAULT_SETTINGS,
       params: DEFAULT_PARAMS,
       outputs: [stored],
     });
     const restored = parseProject(serializeProject(snapshot));
+    assert.equal(restored.datasetId, 'dataset-1');
+    assert.equal(restored.dataRevision, 3);
     assert.equal(restored.outputs.length, 1);
     assert.equal(restored.outputs[0].title, 'Descriptive Statistics');
     assert.equal(restored.outputs[0].analysisId, 'descriptive');
+    assert.equal(restored.outputs[0].ciLevel, 95);
+    assert.equal(restored.outputs[0].dataRevision, 3);
+    assert.equal(restored.outputs[0].datasetId, 'dataset-1');
     assert.ok(restored.outputs[0].html.includes('<table'));
     assert.ok(restored.outputs[0].html.includes('Mean'));
   });

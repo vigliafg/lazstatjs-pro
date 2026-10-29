@@ -6,6 +6,8 @@ import type {
   TimeSeriesSeasonalDifferenceMode,
 } from '../../io/project';
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface TimeSeriesFormProps {
@@ -30,7 +32,7 @@ export const TimeSeriesForm = ({
       <VariableSelect
         label={t('form.seriesY')}
         value={variable}
-        options={variableOptions(grid.cols)}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => update({ variable: value })}
       />
       <div className="flex gap-2">

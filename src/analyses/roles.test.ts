@@ -63,6 +63,16 @@ test('type/role validation blocks categorical continua and continuous groups', (
   assert.deepEqual(validateRoleTypes('anova', valid, grid()), []);
 });
 
+test('a categorical column stays invalid even when its codes are numeric', () => {
+  const numericCat: GridData = {
+    cols: [{ id: 'c', name: 'Code', type: 'cat' }],
+    rows: [['1'], ['2'], ['1']],
+  };
+  const params = { ...DEFAULT_PARAMS, anova: { ...DEFAULT_PARAMS.anova, dep: 0 } };
+  const errors = validateRoleTypes('anova', params, numericCat);
+  assert.ok(errors.some(error => error.startsWith('ANOVA: dependent variable')));
+});
+
 test('type/role validation ignores roles outside the grid', () => {
   const params = { ...DEFAULT_PARAMS, anova: { ...DEFAULT_PARAMS.anova, dep: -1, grp: 99 } };
   assert.deepEqual(validateRoleTypes('anova', params, grid()), []);

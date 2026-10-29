@@ -8,6 +8,7 @@ import {
   VariableList,
 } from '../../components/FormFields';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 
 export interface CorrelationFormProps {
   grid: GridData;
@@ -20,6 +21,7 @@ export const CorrelationForm = ({ grid, corrParams, setCorrParams }: Correlation
     <VariableList
       label={t('form.variables')}
       cols={grid.cols}
+      only={continuousColumnIndexes(grid)}
       selected={corrParams.vars}
       onToggle={(column, checked) =>
         setCorrParams(previous => ({

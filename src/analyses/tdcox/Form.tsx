@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TdCoxParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import { VariableList, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface TdCoxFormProps {
@@ -35,6 +36,7 @@ export const TdCoxForm = ({ grid, tdCoxParams, setTdCoxParams }: TdCoxFormProps)
       <VariableList
         label={t('form.covariatesX')}
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={tdCoxParams.covariates}
         disabled={[tdCoxParams.start, tdCoxParams.stop, tdCoxParams.event]}
         showType

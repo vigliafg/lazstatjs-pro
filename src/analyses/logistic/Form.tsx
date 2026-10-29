@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { LogisticParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   CheckboxField,
   Field,
@@ -29,6 +30,7 @@ export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: Logist
       <VariableList
         label={t('form.predictorsX')}
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={predictors}
         disabled={[outcome]}
         onToggle={(index, checked) =>

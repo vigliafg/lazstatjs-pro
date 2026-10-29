@@ -36,6 +36,18 @@ test('collapses a result and reopens it from the setup shortcut', async ({ page,
   await expect(page.locator('article.output-card')).toHaveCount(2);
 });
 
+test('associates a form label with its control', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the setup form is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+
+  await page.locator('label', { hasText: 'Test type' }).click();
+  await expect(page.getByLabel('Test type')).toBeFocused();
+});
+
 test('marks cards stale when the CI changes and re-runs with the saved level', async ({ page, isMobile }) => {
   test.skip(isMobile, 'the CI selector is exercised on the desktop layout');
 
@@ -71,6 +83,13 @@ test('restores cards and their saved parameters after reload', async ({ page, is
   await expect(card).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Re-run with saved parameters' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Apply parameters to setup' })).toBeVisible();
+  // The persisted dataset/revision must make an untouched project fresh.
+  await expect(page.getByText('stale', { exact: true })).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Data', exact: true }).click();
+  await page.locator('input[data-cell="0-0"]').fill('51');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await expect(page.getByText('stale', { exact: true })).toHaveCount(1);
 });
 
 test('runs an analysis on the mobile layout', async ({ page, isMobile }) => {
@@ -100,6 +119,22 @@ test('live-run replaces one card when parameters change', async ({ page, isMobil
   await expect(page.getByRole('button', { name: 'Live run' })).toHaveAttribute('aria-pressed', 'true');
 });
 
+test('turning Live off invalidates the pending run', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'live-run toggle is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Live run' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 5000 });
+
+  await page.getByLabel('ANOVA dependent variable').selectOption('3');
+  await page.getByRole('button', { name: 'Live run' }).click();
+  await page.waitForTimeout(800);
+
+  await expect(page.locator('article.output-card')).toHaveCount(1);
+  await expect(page.getByRole('button', { name: 'Live run' })).toHaveAttribute('aria-pressed', 'false');
+});
+
 test('filters, pins and clears result cards', async ({ page, isMobile }) => {
   test.skip(isMobile, 'output workspace is exercised on the desktop layout');
 
@@ -125,6 +160,55 @@ test('filters, pins and clears result cards', async ({ page, isMobile }) => {
   page.once('dialog', dialog => dialog.accept());
   await page.getByRole('button', { name: 'Clear every result block' }).click();
   await expect(page.locator('article.output-card')).toHaveCount(0);
+});
+
+test('hides categorical columns from continuous predictors', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the setup form is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByLabel(/Type.*Score_Pre/).selectOption('cat');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('Logistic');
+  await page.locator('button[title="Binary outcome with odds ratios and cutoff analysis."]').click();
+
+  await expect(page.locator('aside').locator('label', { hasText: 'Score_Pre' })).toHaveCount(0);
+});
+
+test('returns to all analyses when the filtered card is removed', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the output workspace is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(2);
+
+  await page.getByLabel('Filter results by analysis').selectOption({ label: 'ANOVA' });
+  await page.getByRole('button', { name: 'Remove this result block' }).click();
+
+  await expect(page.locator('article.output-card')).toHaveCount(1);
+  await expect(page.getByLabel('Filter results by analysis')).toHaveCount(0);
+  await expect(page.getByText('No results match this filter')).toHaveCount(0);
+});
+
+test('follows the wide breakpoint and keeps an explicit library choice', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop breakpoints are exercised here');
+
+  await page.setViewportSize({ width: 1100, height: 800 });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await expect(page.getByLabel('Analysis library', { exact: true })).toBeHidden();
+
+  await page.setViewportSize({ width: 1400, height: 800 });
+  await expect(page.getByLabel('Analysis library', { exact: true })).toBeVisible();
+
+  await page.getByTitle('Hide the analysis library').click();
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await page.setViewportSize({ width: 1400, height: 800 });
+  await expect(page.getByLabel('Analysis library', { exact: true })).toBeHidden();
 });
 
 test('favorites, A–Z index and keyboard navigation in the library', async ({ page, isMobile }) => {

@@ -4,6 +4,7 @@ import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { AnalysisLibrary } from './analysis/AnalysisLibrary';
 import { AnalysisOptions } from './analysis/AnalysisOptions';
 import { useRecentAnalyses } from './analysis/useRecentAnalyses';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { AnalysisTabProps } from './analysis/types';
 import { AnalysisStoreProvider } from './analysis/store';
 import { OutputConsole } from './OutputConsole';
@@ -11,11 +12,6 @@ import { t } from '../i18n';
 
 type Pane = 'library' | 'options' | 'output';
 
-const isNarrow = (): boolean =>
-  typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches;
-
-const isWide = (): boolean =>
-  typeof window === 'undefined' || window.matchMedia('(min-width: 1280px)').matches;
 
 /**
  * Three-zone analysis workbench: library, setup and output.
@@ -24,11 +20,20 @@ const isWide = (): boolean =>
  * independently; below `lg` the segmented control shows one pane at a time.
  */
 export const AnalysisTab = (props: AnalysisTabProps) => {
+  const narrow = useMediaQuery('(max-width: 1023px)');
+  const wide = useMediaQuery('(min-width: 1280px)');
   const [pane, setPane] = useState<Pane>('options');
-  const [showLibrary, setShowLibrary] = useState(isWide);
+  const [showLibrary, setShowLibrary] = useState(wide);
+  const [libraryTouched, setLibraryTouched] = useState(false);
   const [showOptions, setShowOptions] = useState(true);
   const [focusOutput, setFocusOutput] = useState(false);
   const recent = useRecentAnalyses(props.activeAnalysis);
+
+  // The responsive default follows the breakpoint until the user makes an
+  // explicit choice; after that, resizing must not reopen a hidden library.
+  useEffect(() => {
+    if (!libraryTouched) setShowLibrary(wide);
+  }, [wide, libraryTouched]);
 
   const focusPane = (next: Pane) => {
     requestAnimationFrame(() => document.getElementById(`analysis-pane-${next}`)?.focus());
@@ -37,12 +42,16 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
   const go = (next: Pane) => {
     setFocusOutput(false);
     setPane(next);
-    if (next === 'library') setShowLibrary(true);
+    if (next === 'library') {
+      setShowLibrary(true);
+      setLibraryTouched(true);
+    }
     if (next === 'options') setShowOptions(true);
     focusPane(next);
   };
 
   const toggleLibrary = () => {
+    setLibraryTouched(true);
     if (focusOutput) {
       setFocusOutput(false);
       setShowLibrary(true);
@@ -76,7 +85,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
 
   const selectAnalysis = (id: string) => {
     props.setActiveAnalysis(id);
-    if (isNarrow()) {
+    if (narrow) {
       setPane('options');
       focusPane('options');
     }
@@ -84,7 +93,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
 
   const run = async (): Promise<boolean> => {
     const ok = await props.runAnalysis();
-    if (ok && isNarrow()) {
+    if (ok && narrow) {
       setFocusOutput(false);
       setPane('output');
     }

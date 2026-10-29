@@ -2,6 +2,8 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { MiParams } from '../../io/project';
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
   VariableList,
@@ -20,6 +22,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
     <VariableList
       label={t('form.variables')}
       cols={grid.cols}
+      only={continuousColumnIndexes(grid)}
       selected={miParams.variables}
       showType
       hint={t('hint.mi')}
@@ -50,12 +53,13 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
         <VariableSelect
           label={t('form.outcome')}
           value={miParams.outcome}
-          options={variableOptions(grid.cols)}
+          options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
           onChange={value => setMiParams(prev => ({ ...prev, outcome: value }))}
         />
         <VariableList
           label={t('form.predictorsX')}
           cols={grid.cols}
+          only={continuousColumnIndexes(grid)}
           selected={miParams.predictors}
           disabled={[miParams.outcome]}
           onToggle={(index, checked) =>

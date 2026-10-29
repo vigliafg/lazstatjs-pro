@@ -31,6 +31,10 @@ export interface StoredOutput {
   paramsSignature?: string;
   /** Confidence level used by the run (global setting at that moment). */
   ciLevel?: number;
+  /** In-session grid revision that produced the card (persisted for reload). */
+  dataRevision?: number;
+  /** Dataset identity that produced the card (persisted for reload). */
+  datasetId?: string;
   html: string;
 }
 
@@ -135,6 +139,12 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
         : {}),
       ...(typeof raw.ciLevel === 'number' && Number.isFinite(raw.ciLevel) && raw.ciLevel > 0 && raw.ciLevel < 100
         ? { ciLevel: raw.ciLevel }
+        : {}),
+      ...(typeof raw.dataRevision === 'number' && Number.isInteger(raw.dataRevision) && raw.dataRevision >= 0
+        ? { dataRevision: raw.dataRevision }
+        : {}),
+      ...(typeof raw.datasetId === 'string' && raw.datasetId.length > 0
+        ? { datasetId: raw.datasetId.slice(0, 80) }
         : {}),
       html,
     });

@@ -276,26 +276,35 @@ Sono stati implementati i **cinque passi a maggior impatto** del piano. Il repor
 
 ### Passo 5 — Chrome statica e documentazione
 
-- `src/i18n.ts` passa a **693 chiavi**; tutte le stringhe statiche di shell, form, editor dati, dialoghi e toast sono centralizzate (`SettingsTab`, `AnalysisOptions`, `OutputConsole`, `AnalysisLibrary`, `AnalysisTab`, `Header`, `DataTab`, `TransformPanel`, `VariableInspector`, `DataGrid`, `CleanPanel`, `ImportWizard`, `ExportDialog`, hook di sessione/IO/output).
+- `src/i18n.ts` passa a **701 chiavi**; tutte le stringhe statiche di shell, form, editor dati, dialoghi e toast sono centralizzate (`SettingsTab`, `AnalysisOptions`, `OutputConsole`, `AnalysisLibrary`, `AnalysisTab`, `Header`, `DataTab`, `TransformPanel`, `VariableInspector`, `DataGrid`, `CleanPanel`, `ImportWizard`, `ExportDialog`, hook di sessione/IO/output).
 - `i18n.test.ts` ora verifica anche che ogni chiave statica sia referenziata (allowlist per le chiavi risolte dinamicamente).
 - Wizard: label/hint dei goal in inglese; la prosa della raccomandazione resta italiana come contenuto.
 - Fuori perimetro dichiarato: catalogo analisi (label/descrizioni), help/report, messaggi di dominio dei kernel, sentinel dei titoli output.
 - `docs/UI-STATE.md`, `docs/GRID-STATE.md` e `README.md` aggiornati (conteggi, i18n, stale, App, `statsHelpers`, runner).
-- `scripts/check-file-size.mjs`: eccezione per `src/i18n.ts` (725 righe, dizionario statico).
+- `scripts/check-file-size.mjs`: eccezione per `src/i18n.ts` (733 righe, dizionario statico).
 
 ### Verifica finale
 
-- `npm run check`: **446 test**, 0 fail; dependency-cruiser, madge e file-size guard ok.
-- `npm run test:e2e`: **24 passed, 18 skipped**, 0 fail.
+- `npm run check`: **461 test**, 0 fail; dependency-cruiser, madge e file-size guard ok.
+- `npm run test:e2e`: **34 passed, 26 skipped**, 0 fail.
 - `npm run build`: ok, nessun chunk >500 kB.
 
-### Residui (passi 6–9 del piano)
+## Seconda tranche — chiusura dei rilievi UI (R8–R18)
 
-Non implementati in questo giro, restano nel backlog:
+Implementati tutti i passi 6–9 del piano (`docs/plans/2026-10-29-chiusura-rilievi-ui.md`):
 
-1. **A11y**: `htmlFor` in `Field`, nome del select CI, celle con nome accessibile, fill handle tastierabile.
-2. **Stato live/output**: `livePending` non azzerato su ruolo invalido (R9, sospetto) e stato vuoto del filtro output (R8).
-3. **Coerenza form**: filtri colonna per ruolo e guard Stratified Cox time/event (R12, sospetto).
-4. **Test**: copertura dei due sospetti e dei form non core.
+- **R8** — `src/ui/analysis/outputSelection.ts`: filtro memoizzato, reset a “All analyses” quando l'analisi filtrata sparisce, stato vuoto difensivo. Test unit + e2e.
+- **R9/R17** — `src/ui/analysis/liveGate.ts`: token monotono; un run live vecchio non pubblica e non azzera il pending del run corrente. Deps sulla firma dello slice attivo, ref al runner più recente. Test unit + e2e (Live off).
+- **R10** — `Field` associa i controlli raw con `id` generato; `VariableSelect` usa `useId`; `VariableList`/`CheckboxList` sono `fieldset`/`legend`; celle con nome colonna+riga, header con `scope`, fill handle focusabile con Tab e Enter/Shift+Enter. Test e2e.
+- **R11/R12** — `isContinuousColumn` unica regola in `grid/types.ts`; `continuousColumnIndexes` per form/default; `validateRoleTypes` resta type-only; Stratified Cox rifiuta time/event e il form li deseleziona. Test unit + e2e.
+- **R15/R16** — `useMediaQuery` per i breakpoint; `DataWorkspace` resta montata e nascosta; `DataGrid` riceve `resetKey`/`datasetId` e azzera selezione, anchor, inspector e focus al cambio dataset. Test e2e (resize, selezione tra tab, New).
+- **R4** — fast-path `changedCell`/`changedCol`: se la colonna modificata non è referenziata da formule, il ricalcolo viene saltato. Benchmark `npm run bench:grid`: 50k×10 indipendente ~0,1 ms, dipendente ~37,5 ms; il clone resta protetto. Test formula/immutabilità.
+- **R18** — `dataRevision`, `datasetId` e `ciLevel` persistiti in card e progetto; revisione iniziale ripristinata nella history; reload senza modifiche non stale, edit dopo reload stale. `filterSignature` resta session-only e documentato.
+- **DataGrid UX** — toolbar con `role="toolbar"` e gruppi File/Edit/Tools/View; pulsante “Add level” nella cella `cat` che apre `LevelsEditor` e restituisce il focus.
+- **Documenti** — `UI-STATE`, `GRID-STATE`, `README` e questo report aggiornati; piano in `docs/plans/2026-10-29-chiusura-rilievi-ui.md`.
 
-I rilievi R13 (ragged) resta **non riproducibile**; R18 (metadati di freschezza nei `.lzs`) resta un limite noto documentato; R19 (doppio dispatch nello stesso tick) resta da verificare.
+### Limiti residui dichiarati
+
+- **R18 — filtro analysis**: la firma del filtro non è persistita; una card prodotta con filtro analysis non viene confrontata dopo reload.
+- **R13** (righe ragged) resta **non riproducibile**; **R19** (doppio dispatch nello stesso tick) resta da verificare.
+- **R4 — formula dipendente**: il fast-path non copre l'edit di una colonna referenziata; il caso resta misurato (~37,5 ms a 50k) e documentato.

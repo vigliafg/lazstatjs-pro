@@ -2,6 +2,8 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { CountParams } from '../../io/project';
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 import { Field, VariableList, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface CountFormProps {
@@ -18,12 +20,13 @@ export const CountForm = ({ grid, countParams, setCountParams }: CountFormProps)
       <VariableSelect
         label={t('form.countOutcome')}
         value={dep}
-        options={variableOptions(grid.cols)}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setCountParams(prev => ({ ...prev, dep: value }))}
       />
       <VariableList
         label={t('form.predictorsX')}
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={indeps}
         disabled={[dep]}
         showType

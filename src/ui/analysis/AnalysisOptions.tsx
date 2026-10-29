@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode, type SetStateAction } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode, type SetStateAction } from 'react';
 import { Play } from 'lucide-react';
 import { analysisMeta, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
@@ -38,6 +38,8 @@ import type { ProjectParams } from '../../io/project';
 import type { AnalysisTabProps } from './types';
 import { useAnalysisStore } from './store';
 import { Section } from '../../components/FormFields';
+import { analysisParamsSignature } from '../../analyses/paramsSnapshot';
+import { createRunGate } from './liveGate';
 import { t } from '../../i18n';
 
 const inputClass =
@@ -63,32 +65,53 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
     : p.roles[0]?.key ?? '';
   // Live mode recomputes instant procedures after a short pause; heavy ones
   // stay explicit. The previous live card is replaced, not stacked.
+  const runGate = useRef(createRunGate()).current;
+  const liveRunRef = useRef(p.runAnalysisLive);
+  const activeParamsSignature = analysisParamsSignature(p.activeAnalysis, params);
+
+  // Keep the latest runner closure without restarting the debounce when only
+  // an unrelated parameter slice changes.
+  useEffect(() => {
+    liveRunRef.current = p.runAnalysisLive;
+  });
+
   useEffect(() => {
     setLive(false);
-  }, [p.activeAnalysis]);
+    runGate.invalidate();
+    setLivePending(false);
+  }, [p.activeAnalysis, runGate]);
 
   useEffect(() => {
     if (!live) {
+      runGate.invalidate();
       setLivePending(false);
       return;
     }
-    if (p.roleErrors.length > 0) return;
+    if (p.roleErrors.length > 0) {
+      runGate.invalidate();
+      setLivePending(false);
+      return;
+    }
+    const token = runGate.next();
     setLivePending(true);
     const timer = setTimeout(() => {
-      void p.runAnalysisLive();
-      setLivePending(false);
+      void liveRunRef.current(() => runGate.isCurrent(token)).finally(() => {
+        if (runGate.isCurrent(token)) setLivePending(false);
+      });
     }, 500);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (runGate.isCurrent(token)) runGate.invalidate();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     live,
-    params,
-    p.grid.rows,
-    p.grid.cols,
+    activeParamsSignature,
+    p.grid,
     p.ciLevel,
     p.roleErrors.length,
-    p.activeRowFilter,
-    p.filterAffectsAnalysis,
+    p.filterSignature,
+    p.activeAnalysis,
   ]);
 
   const rowFilter = p.activeRowFilter;

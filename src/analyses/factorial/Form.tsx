@@ -3,6 +3,7 @@ import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../gri
 import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
 import type { FactorialParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   CheckboxField,
   Field,
@@ -35,7 +36,7 @@ export const FactorialForm = ({
       <VariableSelect
         label={t('form.responseY')}
         value={response}
-        options={variableOptions(grid.cols)}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setFactorialParams(prev => ({ ...prev, response: value }))}
       />
       <VariableSelect

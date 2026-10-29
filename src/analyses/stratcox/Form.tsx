@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { StratifiedCoxParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   VariableList,
   VariableSelect,
@@ -27,13 +28,25 @@ export const StratifiedCoxForm = ({
         label={t('form.time')}
         value={stratCoxParams.time}
         options={options}
-        onChange={value => setStratCoxParams(prev => ({ ...prev, time: value }))}
+        onChange={value =>
+          setStratCoxParams(prev => ({
+            ...prev,
+            time: value,
+            covariates: prev.covariates.filter(column => column !== value),
+          }))
+        }
       />
       <VariableSelect
         label={t('form.event')}
         value={stratCoxParams.event}
         options={options}
-        onChange={value => setStratCoxParams(prev => ({ ...prev, event: value }))}
+        onChange={value =>
+          setStratCoxParams(prev => ({
+            ...prev,
+            event: value,
+            covariates: prev.covariates.filter(column => column !== value),
+          }))
+        }
       />
       <VariableSelect
         label={t('form.stratum')}
@@ -42,11 +55,18 @@ export const StratifiedCoxForm = ({
           { value: -1, label: t('form.none') },
           ...variableOptionsFrom(grid.cols, groupColumnIndexes(grid)),
         ]}
-        onChange={value => setStratCoxParams(prev => ({ ...prev, stratum: value }))}
+        onChange={value =>
+          setStratCoxParams(prev => ({
+            ...prev,
+            stratum: value,
+            covariates: prev.covariates.filter(column => column !== value),
+          }))
+        }
       />
       <VariableList
         label={t('form.covariatesX')}
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={stratCoxParams.covariates}
         disabled={[stratCoxParams.time, stratCoxParams.event, stratCoxParams.stratum]}
         showType

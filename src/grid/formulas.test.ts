@@ -1,7 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { GridData } from './types';
-import { columnIndex, evalFormula, recalculateFormulas, renameFormulaReferences } from './formulas';
+import {
+  columnIndex,
+  evalFormula,
+  formulaReferencesColumn,
+  recalculateFormulas,
+  renameFormulaReferences,
+} from './formulas';
 import { computeColumn, renameColumn } from './ops';
 
 const grid = (): GridData => ({
@@ -35,6 +41,40 @@ test('recalculateFormulas re-derives formula columns after a data edit', () => {
   assert.equal(next.rows[0][2], '3');
   assert.equal(next.rows[1][2], '8');
   assert.equal(recalculateFormulas(g), g);
+});
+
+test('formula dependency detects the edited column by name', () => {
+  const g = grid();
+  assert.equal(formulaReferencesColumn('Post - Pre', g.cols, 0), true);
+  assert.equal(formulaReferencesColumn('Post - Pre', g.cols, 1), true);
+  assert.equal(formulaReferencesColumn('Post - Pre', g.cols, 2), false);
+  assert.equal(formulaReferencesColumn('PrePost - 1', g.cols, 0), false);
+});
+
+test('recalculating skips when the edited column is not referenced', () => {
+  const g = grid();
+  const edited: GridData = {
+    cols: g.cols,
+    rows: [['5', '9', '4', '100'], ['2', '10', '8', '200']],
+  };
+  const withExtra: GridData = {
+    ...edited,
+    cols: [...g.cols, { id: 'd', name: 'Extra', type: 'num' }],
+  };
+  const untouched = recalculateFormulas(withExtra, 3);
+  assert.equal(untouched, withExtra);
+  const touched = recalculateFormulas(withExtra, 0);
+  assert.equal(touched.rows[0][2], '4');
+});
+
+test('editing a computed column still restores its formula', () => {
+  const g = grid();
+  const edited: GridData = {
+    cols: g.cols,
+    rows: [['5', '9', '999'], ['2', '10', '8']],
+  };
+  const next = recalculateFormulas(edited, 2);
+  assert.equal(next.rows[0][2], '4');
 });
 
 test('formulas can reference an earlier computed column', () => {

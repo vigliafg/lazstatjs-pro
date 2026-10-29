@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import {
   ChevronDown,
   ChevronRight,
@@ -20,6 +20,7 @@ import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { isOutputStale, sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
 import { copyText } from '../io/clipboard';
 import { t } from '../i18n';
+import { analysisIdsOf, isValidFilter, selectOutputs } from './analysis/outputSelection';
 
 /** Un blocco della console: React live nella sessione, HTML quando ripristinato. */
 export interface OutputEntry extends StoredOutput {
@@ -104,15 +105,20 @@ export const OutputConsole = ({
   const [pinned, setPinned] = useState<Set<string>>(() => new Set());
   const [filterId, setFilterId] = useState('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const analysisIds = Array.from(
-    new Set(outputs.map(entry => entry.analysisId).filter((id): id is string => Boolean(id)))
-  );
+  const analysisIds = useMemo(() => analysisIdsOf(outputs), [outputs]);
+  const visibleOutputs = useMemo(() => selectOutputs(outputs, filterId), [outputs, filterId]);
   const lastId = outputs.length > 0 ? outputs[outputs.length - 1].id : null;
   const [activeId, setActiveId] = useState<string | null>(lastId);
 
   useEffect(() => {
     setActiveId(lastId);
   }, [lastId]);
+
+  // Removing the last card of the filtered analysis leaves a filter that no
+  // longer exists: return to "all" instead of showing a dead select value.
+  useEffect(() => {
+    if (!isValidFilter(filterId, analysisIds)) setFilterId('all');
+  }, [filterId, analysisIds]);
 
   const toggle = (id: string) => {
     setCollapsed(previous => {
@@ -299,11 +305,17 @@ export const OutputConsole = ({
               {t('output.emptyHint')}
             </p>
           </div>
+        ) : visibleOutputs.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center gap-3 text-text3">
+            <p className="text-[11px]">{t('output.emptyFilter')}</p>
+            <button type="button" className="tb-btn px-2 py-1 text-[10px]" onClick={() => setFilterId('all')}>
+              {t('output.showAll')}
+            </button>
+          </div>
         ) : (
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-            {outputs
-              .map((output, index) => ({ output, index }))
-              .filter(({ output }) => filterId === 'all' || output.analysisId === filterId)
+            {visibleOutputs
+              .slice()
               .sort(
                 (a, b) =>
                   Number(pinned.has(b.output.id)) - Number(pinned.has(a.output.id))

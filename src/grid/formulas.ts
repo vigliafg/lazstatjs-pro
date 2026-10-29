@@ -60,6 +60,18 @@ export const evalFormula = (
   return { values };
 };
 
+/** True when a formula mentions the given grid column by name. */
+export const formulaReferencesColumn = (
+  formula: string,
+  cols: readonly { name: string }[],
+  column: number
+): boolean => {
+  const name = cols[column]?.name;
+  if (!formula || !name) return false;
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`\\b${escaped}\\b`).test(formula);
+};
+
 /** Name → index map used by formula evaluation. */
 export const columnIndex = (cols: readonly { name: string }[]): Record<string, number> => {
   const index: Record<string, number> = {};
@@ -77,11 +89,21 @@ export const columnIndex = (cols: readonly { name: string }[]): Record<string, n
  * referenced column was deleted) keeps its previous values instead of silently
  * blanking the column; undo of the structural edit restores the reference.
  */
-export const recalculateFormulas = (grid: GridData): GridData => {
+export const recalculateFormulas = (grid: GridData, changedColumn?: number): GridData => {
   const computed = grid.cols.map((col, index) => (col.formula?.trim() ? index : -1)).filter((c) => c >= 0);
   if (computed.length === 0) return grid;
 
   const cols = grid.cols;
+  // Cell edits only need a rebuild when a formula references the edited
+  // column; structural edits pass no `changedColumn` and keep the full pass.
+  if (
+    changedColumn !== undefined &&
+    !cols[changedColumn]?.formula?.trim() &&
+    !cols.some(col => col.formula?.trim() && formulaReferencesColumn(col.formula, cols, changedColumn))
+  ) {
+    return grid;
+  }
+
   const index = columnIndex(cols);
   const rows = grid.rows.map((row) => [...row]);
   let changed = false;

@@ -24,6 +24,8 @@ interface UseProjectSessionOptions {
   /** Snapshot ripristinato all'avvio (autosave), già letto una volta. */
   boot: ProjectSnapshot | null;
   grid: GridData;
+  datasetId: string;
+  dataRevision: number;
   prefs: IoPreferences;
   settings: ProjectSettings;
   params: ProjectParams;
@@ -44,6 +46,8 @@ interface UseProjectSessionOptions {
 export const useProjectSession = ({
   boot,
   grid,
+  datasetId,
+  dataRevision,
   prefs,
   settings,
   params,
@@ -76,7 +80,7 @@ export const useProjectSession = ({
   const lastSavedProject = useRef<string | null>(boot ? serializeProject(boot) : null);
 
   const buildProject = (): ProjectSnapshot =>
-    createProjectSnapshot({ grid, prefs, settings, params, outputs });
+    createProjectSnapshot({ grid, datasetId, dataRevision, prefs, settings, params, outputs });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -96,7 +100,7 @@ export const useProjectSession = ({
     }, 800);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grid, prefs, settings, params, outputs]);
+  }, [grid, datasetId, dataRevision, prefs, settings, params, outputs]);
 
   const bootNoticeShown = useRef(false);
   useEffect(() => {

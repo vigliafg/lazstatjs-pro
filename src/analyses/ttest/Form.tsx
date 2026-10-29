@@ -3,6 +3,8 @@ import type { GridData } from '../../grid/types';
 import type { TTestParams } from '../../io/project';
 import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 
 export interface TTestFormProps {
   grid: GridData;
@@ -11,7 +13,7 @@ export interface TTestFormProps {
 }
 
 export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps) => {
-  const options = variableOptions(grid.cols);
+  const options = variableOptionsFrom(grid.cols, continuousColumnIndexes(grid));
   return (
     <>
       <Field label={t('form.testType')}>

@@ -10,6 +10,8 @@ import {
   variableOptions,
 } from '../../components/FormFields';
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 
 export interface RegressionFormProps {
   grid: GridData;
@@ -22,12 +24,13 @@ export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionForm
     <VariableSelect
       label={t('form.dependentY')}
       value={regParams.dep}
-      options={variableOptions(grid.cols)}
+      options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
       onChange={value => setRegParams(previous => ({ ...previous, dep: value }))}
     />
     <VariableList
       label={t('form.independentsX')}
       cols={grid.cols}
+      only={continuousColumnIndexes(grid)}
       selected={regParams.indeps}
       onToggle={(column, checked) =>
         setRegParams(previous => ({

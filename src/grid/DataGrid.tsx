@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown, Pencil } from 'lucide-react';
 import type { CategoryLevel, ColType, GridData } from './types';
-import { COL_TYPES, columnLevels, isGroupColumn, levelLabel, validateValue } from './types';
+import { COL_TYPES, columnLabel, columnLevels, isGroupColumn, levelLabel, validateValue } from './types';
 import { rowMatches, type RowFilter } from './ops';
 import { ROW_HEIGHT, visibleWindow } from './virtual';
 import { t } from '../i18n';
@@ -32,6 +32,8 @@ interface Props {
   rowFilter?: RowFilter | null;
   freezeFirstCol?: boolean;
   focusCell?: { r: number; c: number; stamp: number } | null;
+  /** Change this key to clear the selection after a dataset replacement. */
+  resetKey?: string;
 }
 
 export function DataGrid(props: Props) {
@@ -52,6 +54,7 @@ export function DataGrid(props: Props) {
     start: { r0: number; c0: number; r1: number; c1: number };
     target: { r: number; c: number };
   } | null>(null);
+  const [levelEditorCell, setLevelEditorCell] = useState<{ r: number; c: number } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [viewportH, setViewportH] = useState(600);
@@ -91,6 +94,15 @@ export function DataGrid(props: Props) {
     const c1 = Math.max(sel.c0, sel.c1);
     return r >= r0 && r <= r1 && c >= c0 && c <= c1;
   };
+
+  useEffect(() => {
+    setAnchor(null);
+    setSel(null);
+    setFillDrag(null);
+    setEditingCol(null);
+    setMenu(null);
+    setLevelEditorCell(null);
+  }, [props.resetKey]);
 
   useEffect(() => {
     if (!menu) return;
@@ -156,6 +168,26 @@ export function DataGrid(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleRows.length]);
 
+  /**
+   * When a multi-cell selection is active, Tab from its bottom-right cell
+   * moves focus to the fill handle instead of skipping it. The handle is the
+   * next focusable element and keeps the normal Tab order afterwards.
+   */
+  const focusFillHandle = (
+    event: React.KeyboardEvent<HTMLElement>,
+    row: number,
+    column: number
+  ): boolean => {
+    if (!sel || (sel.r0 === sel.r1 && sel.c0 === sel.c1)) return false;
+    if (Math.max(sel.r0, sel.r1) !== row || Math.max(sel.c0, sel.c1) !== column) return false;
+    const handle = event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(
+      '[data-fill-handle]'
+    );
+    if (!handle) return false;
+    handle.focus();
+    return true;
+  };
+
   const commitRename = (c: number) => {
     if (draftName.trim() && draftName.trim() !== grid.cols[c].name) props.onRenameCol(c, draftName);
     setEditingCol(null);
@@ -196,10 +228,11 @@ export function DataGrid(props: Props) {
         <table className="w-full border-collapse font-mono text-[11px]">
           <thead className="sticky top-0 z-20">
             <tr className="bg-surface2">
-              <th className={`w-10 border border-border p-1 text-text3 ${freezeFirstCol ? 'sticky left-0 z-30 bg-surface2' : ''}`}>#</th>
+              <th scope="col" className={`w-10 border border-border p-1 text-text3 ${freezeFirstCol ? 'sticky left-0 z-30 bg-surface2' : ''}`}>#</th>
               {grid.cols.map((col, i) => (
                 <th
                   key={i}
+                  scope="col"
                   className={`group border border-border p-1 text-accent2 min-w-[100px] cursor-context-menu select-none ${
                     freezeFirstCol && i === 0 ? 'sticky left-10 z-20 bg-surface2' : ''
                   }`}
@@ -249,6 +282,7 @@ export function DataGrid(props: Props) {
             </tr>
             <tr className="bg-surface2/80 backdrop-blur">
               <th
+                scope="col"
                 className={`border border-border text-[8px] text-text3 uppercase p-1 ${freezeFirstCol ? 'sticky left-0 z-30 bg-surface2' : ''}`}
                 title={
                   t('grid.typeHint') + '\n' +
@@ -260,6 +294,7 @@ export function DataGrid(props: Props) {
               {grid.cols.map((col, i) => (
                 <th
                   key={i}
+                  scope="col"
                   className={`border border-border p-0 ${
                     freezeFirstCol && i === 0 ? 'sticky left-10 z-20 bg-surface2' : ''
                   }`}
@@ -310,15 +345,16 @@ export function DataGrid(props: Props) {
             )}
             {windowRows.map(({ row, index: rIdx }) => (
               <tr key={rIdx} style={{ height: ROW_HEIGHT }} className="hover:bg-white/5 transition-colors">
-                <td
-                  className={`border border-border text-center text-text3 bg-surface2/30 cursor-context-menu select-none ${
+                <th
+                  scope="row"
+                  className={`border border-border text-center font-normal text-text3 bg-surface2/30 cursor-context-menu select-none ${
                     freezeFirstCol ? 'sticky left-0 z-10 bg-surface2' : ''
                   }`}
                   title={t('grid.rowMenu')}
                   onContextMenu={(e) => openMenu(e, 'row', rIdx)}
                 >
                   {rIdx + 1}
-                </td>
+                </th>
                 {row.map((cell, cIdx) => {
                   const col = grid.cols[cIdx];
                   const isValid = validateValue(cell, col?.type ?? 'str');
@@ -330,6 +366,7 @@ export function DataGrid(props: Props) {
                   return (
                     <td
                       key={cIdx}
+                      data-selected={selected || undefined}
                       onMouseEnter={() => {
                         if (fillDrag) setFillDrag({ ...fillDrag, target: { r: rIdx, c: cIdx } });
                       }}
@@ -340,9 +377,10 @@ export function DataGrid(props: Props) {
                       }`}
                     >
                       {isCat ? (
+                        <div className="relative h-full">
                         <select
                           data-cell={`${rIdx}-${cIdx}`}
-                          aria-label={`${col?.name ?? t('form.group')} ${t('grid.valueAria')}`}
+                          aria-label={`${col ? columnLabel(col) : t('form.group')} ${t('grid.rowLabel')} ${rIdx + 1}`}
                           title={extraLevel ? `${rawCell} ${t('grid.notInLevels')}` : undefined}
                           className={`w-full h-full bg-transparent border-none pl-2 pr-6 py-1 text-text outline-none focus:bg-accent/10 transition-colors cursor-pointer ${extraLevel ? 'italic text-yellow' : ''} ${selected ? 'bg-accent/10' : ''}`}
                           value={rawCell}
@@ -368,7 +406,11 @@ export function DataGrid(props: Props) {
                           }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') { e.preventDefault(); moveTo(rIdx, cIdx, e.shiftKey ? -1 : 1, 0, e.shiftKey); }
-                            else if (e.key === 'Tab') { e.preventDefault(); moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey); }
+                            else if (e.key === 'Tab') {
+                              e.preventDefault();
+                              if (!e.shiftKey && focusFillHandle(e, rIdx, cIdx)) return;
+                              moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey);
+                            }
                             else if (e.key === 'Escape') { e.currentTarget.blur(); }
                           }}
                           onPaste={(e) => {
@@ -390,10 +432,45 @@ export function DataGrid(props: Props) {
                           ))}
                           {extraLevel && <option value={rawCell}>{rawCell} {t('grid.notInList')}</option>}
                         </select>
+                        <button
+                          type="button"
+                          data-add-level={cIdx}
+                          aria-label={`${t('grid.addLevel')}: ${col ? columnLabel(col) : t('form.group')}`}
+                          title={t('grid.addLevel')}
+                          className="absolute right-1 top-1/2 -translate-y-1/2 rounded px-1 text-[10px] text-text3 hover:bg-border hover:text-accent"
+                          onMouseDown={event => event.stopPropagation()}
+                          onClick={event => {
+                            event.stopPropagation();
+                            setLevelEditorCell({ r: rIdx, c: cIdx });
+                          }}
+                        >
+                          +
+                        </button>
+                        {levelEditorCell?.r === rIdx && levelEditorCell.c === cIdx && (
+                          <LevelsEditor
+                            grid={grid}
+                            column={cIdx}
+                            onLevels={props.onLevels}
+                            onRecode={props.onRecode}
+                            controlledOpen
+                            showTrigger={false}
+                            onOpenChange={open => {
+                              if (open) return;
+                              setLevelEditorCell(null);
+                              requestAnimationFrame(() => {
+                                document
+                                  .querySelector<HTMLElement>(`[data-cell="${rIdx}-${cIdx}"]`)
+                                  ?.focus();
+                              });
+                            }}
+                          />
+                        )}
+                        </div>
                       ) : (
                         <input
                           type="text"
                           data-cell={`${rIdx}-${cIdx}`}
+                          aria-label={`${col ? columnLabel(col) : t('form.group')} ${t('grid.rowLabel')} ${rIdx + 1}`}
                           className={`w-full h-full bg-transparent border-none px-2 py-1 text-text outline-none focus:bg-accent/10 transition-colors ${!isValid ? 'cell-invalid' : ''} ${selected ? 'bg-accent/10' : ''}`}
                           value={cell}
                           onFocus={(e) => {
@@ -424,7 +501,11 @@ export function DataGrid(props: Props) {
                             else if (e.key === 'ArrowLeft') { e.preventDefault(); moveTo(rIdx, cIdx, 0, -1, e.shiftKey); }
                             else if (e.key === 'ArrowRight') { e.preventDefault(); moveTo(rIdx, cIdx, 0, 1, e.shiftKey); }
                             else if (e.key === 'Enter') { e.preventDefault(); moveTo(rIdx, cIdx, e.shiftKey ? -1 : 1, 0, e.shiftKey); }
-                            else if (e.key === 'Tab') { e.preventDefault(); moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey); }
+                            else if (e.key === 'Tab') {
+                              e.preventDefault();
+                              if (!e.shiftKey && focusFillHandle(e, rIdx, cIdx)) return;
+                              moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey);
+                            }
                             else if ((e.key === 'Delete' || e.key === 'Backspace') && e.ctrlKey && sel) {
                               e.preventDefault();
                               props.onClearRange(sel);
@@ -451,11 +532,13 @@ export function DataGrid(props: Props) {
                       {sel &&
                         Math.max(sel.r0, sel.r1) === rIdx &&
                         Math.max(sel.c0, sel.c1) === cIdx && (
-                          <span
-                            role="button"
+                          <button
+                            type="button"
+                            data-fill-handle
                             aria-label={t('grid.fillHandle')}
+                            aria-keyshortcuts="Enter Shift+Enter"
                             title={t('grid.fillHandleTitle')}
-                            className="absolute bottom-0 right-0 z-10 h-2 w-2 cursor-crosshair border border-white/70 bg-accent"
+                            className="absolute bottom-0 right-0 z-10 h-2 w-2 cursor-crosshair border border-white/70 bg-accent focus:outline focus:outline-2 focus:outline-accent"
                             onMouseDown={event => {
                               event.preventDefault();
                               event.stopPropagation();
@@ -468,6 +551,19 @@ export function DataGrid(props: Props) {
                                 },
                                 target: { r: rIdx, c: cIdx },
                               });
+                            }}
+                            onKeyDown={event => {
+                              if (event.key !== 'Enter') return;
+                              event.preventDefault();
+                              event.stopPropagation();
+                              const range = {
+                                r0: Math.min(sel.r0, sel.r1),
+                                c0: Math.min(sel.c0, sel.c1),
+                                r1: Math.max(sel.r0, sel.r1),
+                                c1: Math.max(sel.c0, sel.c1),
+                              };
+                              if (event.shiftKey) props.onFillRight(range);
+                              else props.onFillDown(range);
                             }}
                           />
                         )}

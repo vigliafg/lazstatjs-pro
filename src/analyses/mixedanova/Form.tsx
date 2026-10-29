@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { MixedAnovaParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   VariableList,
   VariableSelect,
@@ -29,6 +30,7 @@ export const MixedAnovaForm = ({
     <VariableList
       label={t('form.withinConditions')}
       cols={grid.cols}
+      only={continuousColumnIndexes(grid)}
       selected={mixedAnovaParams.conditions}
       disabled={[mixedAnovaParams.group]}
       showType

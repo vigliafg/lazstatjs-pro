@@ -3,6 +3,8 @@ import { DISTRIBUTION_LABEL, type DistributionName } from '../../stats/distfit';
 import type { GridData } from '../../grid/types';
 import type { DistributionFitParams } from '../../io/project';
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 import { CheckboxList, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface DistributionFitFormProps {
@@ -32,7 +34,7 @@ export const DistributionFitForm = ({
       <VariableSelect
         label={t('form.variable')}
         value={distfitParams.variable}
-        options={variableOptions(grid.cols)}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setDistfitParams(prev => ({ ...prev, variable: value }))}
       />
       <CheckboxList

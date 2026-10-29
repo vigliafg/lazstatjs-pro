@@ -18,6 +18,11 @@ interface Props {
   label?: string;
   className?: string;
   disabled?: boolean;
+  /** Controlled open state for callers that open the editor from a cell. */
+  controlledOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Hide the trigger when the caller supplies its own button. */
+  showTrigger?: boolean;
 }
 
 type Mode = 'levels' | 'recode';
@@ -49,8 +54,16 @@ export const LevelsEditor: React.FC<Props> = ({
   label,
   className,
   disabled,
+  controlledOpen,
+  onOpenChange,
+  showTrigger = true,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const changeOpen = (next: boolean) => {
+    if (controlledOpen === undefined) setInternalOpen(next);
+    onOpenChange?.(next);
+  };
   const [mode, setMode] = useState<Mode>('levels');
   const [draftLevels, setDraftLevels] = useState<CategoryLevel[]>([]);
   const [draftRef, setDraftRef] = useState('');
@@ -63,7 +76,7 @@ export const LevelsEditor: React.FC<Props> = ({
 
   const openEditor = () => {
     if (!col) return;
-    setOpen(true);
+    changeOpen(true);
     setMode('levels');
     setDraftLevels(columnLevels(col, grid.rows, column).map((level) => ({ ...level })));
     setDraftRef(col.reference ?? '');
@@ -109,12 +122,12 @@ export const LevelsEditor: React.FC<Props> = ({
 
   const apply = () => {
     onLevels(column, draftLevels, draftRef || undefined);
-    setOpen(false);
+    changeOpen(false);
   };
 
   const applyRecode = () => {
     onRecode(column, recodeMapping);
-    setOpen(false);
+    changeOpen(false);
   };
 
   const addLevel = () => {
@@ -160,6 +173,7 @@ export const LevelsEditor: React.FC<Props> = ({
 
   return (
     <>
+      {showTrigger && (
       <button
         type="button"
         disabled={disabled || !col}
@@ -174,11 +188,12 @@ export const LevelsEditor: React.FC<Props> = ({
         <List className="w-2.5 h-2.5" />
         {label ?? `${count} ${count === 1 ? t('levels.triggerOne') : t('levels.triggerMany')}`}
       </button>
+      )}
 
       {open && col && (
         <div
           className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
-          onClick={() => setOpen(false)}
+          onClick={() => changeOpen(false)}
         >
           <div
             className="bg-surface2 border border-border2 rounded-lg shadow-2xl w-full max-w-[600px] max-h-[85vh] flex flex-col"
@@ -218,7 +233,7 @@ export const LevelsEditor: React.FC<Props> = ({
                   type="button"
                   aria-label={t('levels.close')}
                   className="text-text3 hover:text-text p-1"
-                  onClick={() => setOpen(false)}
+                  onClick={() => changeOpen(false)}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -412,7 +427,7 @@ export const LevelsEditor: React.FC<Props> = ({
             </div>
 
             <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-border">
-              <button type="button" className="tb-btn" onClick={() => setOpen(false)}>
+              <button type="button" className="tb-btn" onClick={() => changeOpen(false)}>
                 {t('levels.cancel')}
               </button>
               {mode === 'levels' ? (

@@ -1,4 +1,6 @@
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, isGroupColumn } from '../../grid/types';
 import type { CategoryLevel, GridData } from '../../grid/types';
@@ -33,7 +35,7 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
         label={t('form.dependentVar')}
         ariaLabel="ANOVA dependent variable"
         value={anovaParams.dep}
-        options={variableOptions(grid.cols)}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setAnovaParams(previous => ({ ...previous, dep: value }))}
       />
       <VariableSelect

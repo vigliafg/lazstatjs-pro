@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { LmmParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   VariableList,
   VariableSelect,
@@ -22,12 +23,13 @@ export const LmmForm = ({ grid, lmmParams, setLmmParams }: LmmFormProps) => {
       <VariableSelect
         label={t('form.outcomeY')}
         value={dep}
-        options={variableOptions(grid.cols)}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setLmmParams(prev => ({ ...prev, dep: value }))}
       />
       <VariableList
         label={t('form.fixedPredictors')}
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={indeps}
         disabled={[dep, group]}
         showType

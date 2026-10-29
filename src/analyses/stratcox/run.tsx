@@ -26,6 +26,9 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
   if (params.covariates.includes(params.stratum)) {
     return { ok: false, reason: 'The stratum cannot also be a covariate' };
   }
+  if (params.covariates.includes(params.time) || params.covariates.includes(params.event)) {
+    return { ok: false, reason: 'Time and event columns cannot be covariates' };
+  }
 
   const time = grid.rows.map(row => Number(row[params.time]));
   const event = grid.rows.map(row => Number(row[params.event]));

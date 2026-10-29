@@ -100,15 +100,17 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 
 ### 3.4 Stale
 
-- `useGridHistory` espone `revision`, incrementata su commit/undo/redo/reset.
-- Ogni run salva `dataRevision`, `datasetId` e `filterSignature` nella card
-  (solo in sessione).
+- `useGridHistory` espone `revision`, incrementata su commit/undo/redo e
+  ripristinata esattamente quando si apre un progetto.
+- Ogni run salva `dataRevision`, `datasetId` e `ciLevel` nella card; revision e
+  dataset sono persistiti nel progetto, la firma del filtro resta di sessione.
 - Una card è `stale` se revision, dataset, firma del filtro, firma dei
   parametri o livello di confidenza non coincidono.
-- Gli output ripristinati da `.lzs` non hanno revision/dataset/filtro e non
-  vengono marcati stale; il CI e i parametri salvati vengono comunque usati dal
-  re-run.
-- Cambiare i parametri o il CI marca la card stale.
+- Dopo reload un progetto non modificato non produce card stale; una modifica
+  successiva incrementa la revision e le marca. I file legacy senza metadati
+  restano non stale, come prima.
+- La firma del filtro non è persistita: un filtro analysis non riapplicato non
+  può essere confrontato dopo reload (limite noto).
 
 ### 3.5 Ruoli invalidi
 
@@ -198,10 +200,10 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 
 ## 5. Verifica
 
-- `npm run check`: **446 test verdi**, dependency-cruiser, madge e file-size
+- `npm run check`: **461 test verdi**, dependency-cruiser, madge e file-size
   guard ok (3 eccezioni statiche: help, arima, dizionario i18n).
 - `npm run build`: ok, nessun warning >500 kB.
-- `npm run test:e2e`: **24 passed, 18 skipped**, 2 progetti (desktop esegue
+- `npm run test:e2e`: **34 passed, 26 skipped**, 2 progetti (desktop esegue
   tutti i flussi, mobile quelli compatibili). Coprono:
   - caricamento della griglia seed, edit + undo;
   - missing code dall'inspector;
@@ -217,9 +219,9 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 
 ## 6. Limiti noti
 
-1. **Stale solo in sessione.** Dopo reload le card ripristinate non hanno
-   revision/dataset/filtro e non vengono marcate stale, anche se il CI e i
-   parametri salvati sono usati dal re-run.
+1. **Firma del filtro solo in sessione.** Revision, dataset e CI sono
+   persistiti; la firma del filtro no, quindi una card prodotta con filtro
+   analysis non viene confrontata dopo reload.
 2. **Invalidati non recuperati dall'undo.** Undo riporta la colonna, ma il
    ruolo resta `-1` e va riselezionato.
 3. **Formule ricalcolate solo sugli edit.** Un progetto caricato mostra i
@@ -236,7 +238,6 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 
 | Priorità | Intervento | Perché |
 |---|---|---|
-| **P1** | Persistere revision/dataset/firma nelle card `.lzs` | Chiude lo stale in-session |
 | **P1** | Recuperare il ruolo invalidato dall'undo per id | Evita di riselezionare dopo un undo |
 | **P2** | Report esclusioni per variabile (missing codes) | Rende verificabile l'N delle analisi |
 | **P2** | Suite Playwright per import/export/livelli | Copre i modali rimasti manuali |

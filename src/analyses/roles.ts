@@ -1,6 +1,6 @@
 import type { ProjectParams } from '../io/project';
-import type { ColType, GridData } from '../grid/types';
-import { isGroupColumn } from '../grid/types';
+import type { GridData } from '../grid/types';
+import { isContinuousColumn, isGroupColumn } from '../grid/types';
 
 export type RoleKind = 'continuous' | 'group' | 'any';
 
@@ -603,8 +603,6 @@ export const assignRole = (
   return role ? role.set(params, column) : null;
 };
 
-const NON_NUMERIC: ColType[] = ['cat', 'str', 'alp', 'chr', 'dat', 'dtm', 'tim', 'id'];
-
 /**
  * Type/role compatibility for the active analysis.
  *
@@ -624,7 +622,7 @@ export const validateRoleTypes = (
     for (const index of role.get(params)) {
       if (index < 0 || index >= grid.cols.length) continue;
       const col = grid.cols[index];
-      if (role.kind === 'continuous' && NON_NUMERIC.includes(col.type)) {
+      if (role.kind === 'continuous' && !isContinuousColumn(col)) {
         errors.push(`${role.label} (${col.name}: ${col.type} is not numeric)`);
       } else if (role.kind === 'group' && !isGroupColumn(grid, index)) {
         errors.push(`${role.label} (${col.name}: not a grouping variable)`);

@@ -4,6 +4,7 @@ import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
 import type { AncovaParams } from '../../io/project';
 import { numericColumnIndexes } from '../shared/columns';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   VariableList,
   VariableSelect,
@@ -26,7 +27,7 @@ export const AncovaForm = ({
   setAncovaParams,
 }: AncovaFormProps) => {
   const { response, factor, covariates } = ancovaParams;
-  const numericColumns = numericColumnIndexes(grid);
+  const numericColumns = continuousColumnIndexes(grid);
   const factorColumns = groupColumnIndexes(grid);
   const availableCovariates = numericColumns.filter(
     index => index !== response && index !== factor

@@ -4,6 +4,7 @@ import type { RepeatedAnovaParams } from '../../io/project';
 import { defaultRepeatedAnovaParams } from './defaults';
 import { numericColumnIndexes } from '../shared/columns';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import { VariableList } from '../../components/FormFields';
 
 export interface RepeatedAnovaFormProps {
@@ -17,7 +18,7 @@ export const RepeatedAnovaForm = ({
   repeatedAnovaParams,
   setRepeatedAnovaParams,
 }: RepeatedAnovaFormProps) => {
-  const numericColumns = numericColumnIndexes(grid);
+  const numericColumns = continuousColumnIndexes(grid);
   // A change in the number of columns re-picks the default conditions. The
   // first mount must not overwrite restored params.
   const previousCols = useRef(grid.cols.length);

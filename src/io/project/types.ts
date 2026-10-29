@@ -322,6 +322,10 @@ export interface ProjectSnapshot {
   app: typeof PROJECT_APP;
   version: number;
   savedAt: string;
+  /** Stable identity of the dataset; optional for legacy projects. */
+  datasetId?: string;
+  /** Grid revision at save time; optional for legacy projects. */
+  dataRevision?: number;
   grid: GridData;
   prefs: IoPreferences;
   settings: ProjectSettings;
@@ -331,6 +335,8 @@ export interface ProjectSnapshot {
 }
 
 export interface ProjectInput {
+  datasetId?: string;
+  dataRevision?: number;
   grid: GridData;
   prefs: IoPreferences;
   settings: ProjectSettings;

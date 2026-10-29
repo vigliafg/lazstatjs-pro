@@ -5,6 +5,7 @@ import type { NonParamMode, NonParamParams } from '../../io/project';
 import { defaultSelection, isBinaryColumn } from './defaults';
 import { numericColumnIndexes } from '../shared/columns';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
   VariableList,
@@ -110,13 +111,13 @@ export const NonParamForm = ({
           <VariableSelect
             label={t('form.firstMeasure')}
             value={left}
-            options={variableOptions(grid.cols)}
+            options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
             onChange={value => setNonParamParams(prev => ({ ...prev, left: value }))}
           />
           <VariableSelect
             label={t('form.secondMeasure')}
             value={right}
-            options={variableOptions(grid.cols)}
+            options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
             onChange={value => setNonParamParams(prev => ({ ...prev, right: value }))}
           />
         </>
@@ -127,7 +128,7 @@ export const NonParamForm = ({
           <VariableSelect
             label={t('form.numericOutcome')}
             value={outcome}
-            options={variableOptions(grid.cols)}
+            options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
             onChange={value => setNonParamParams(prev => ({ ...prev, outcome: value }))}
           />
           <VariableSelect

@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { GeeParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
   VariableList,
@@ -21,12 +22,13 @@ export const GeeForm = ({ grid, geeParams, setGeeParams }: GeeFormProps) => (
     <VariableSelect
       label={t('form.outcome')}
       value={geeParams.dep}
-      options={variableOptions(grid.cols)}
+      options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
       onChange={value => setGeeParams(prev => ({ ...prev, dep: value }))}
     />
     <VariableList
       label={t('form.predictorsX')}
       cols={grid.cols}
+      only={continuousColumnIndexes(grid)}
       selected={geeParams.indeps}
       disabled={[geeParams.dep, geeParams.cluster]}
       showType

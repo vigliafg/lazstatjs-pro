@@ -6,6 +6,11 @@ test('loads the seed grid', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Data' })).toHaveClass(/active/);
 });
 
+test('gives grid cells an accessible column and row name', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('input[data-cell="0-0"]')).toHaveAccessibleName(/Score_Pre.*row 1/i);
+});
+
 test('edits a cell and undoes it', async ({ page }) => {
   await page.goto('/');
   const cell = page.locator('input[data-cell="0-0"]');
@@ -14,6 +19,26 @@ test('edits a cell and undoes it', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Undo' }).click();
   await expect(cell).toHaveValue('50');
+});
+
+test('adds a category level from a categorical cell', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the categorical editor is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByLabel(/Type.*Score_Pre/).selectOption('cat');
+  await page.locator('[data-cell="0-0"]').click();
+  await page.locator('[data-add-level="0"]').first().click();
+
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await page.getByLabel('New level code').fill('99');
+  await page.getByLabel('New level label').fill('Ninety-nine');
+  await page.getByRole('button', { name: 'Add', exact: true }).click();
+  await page.getByRole('button', { name: 'Apply levels' }).click();
+
+  await expect(dialog).toHaveCount(0);
+  await expect(page.locator('[data-cell="0-0"]')).toHaveValue('50');
+  await expect(page.locator('[data-cell="0-0"]')).toBeFocused();
 });
 
 test('declares a missing code from the variable inspector', async ({ page, isMobile }) => {
@@ -138,6 +163,45 @@ test('clears a view filter when jumping to a hidden invalid cell', async ({ page
 
   await expect(page.getByPlaceholder('Value')).toHaveCount(0);
   await expect(page.locator('input[data-cell="19-0"]')).toBeFocused();
+});
+
+test('reaches the fill handle with Tab and fills down with Enter', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the keyboard fill handle is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.locator('input[data-cell="0-0"]').click();
+  await page.locator('input[data-cell="0-0"]').press('Shift+ArrowDown');
+  await page.keyboard.press('Tab');
+
+  const handle = page.getByRole('button', { name: 'Fill handle' });
+  await expect(handle).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('input[data-cell="1-0"]')).toHaveValue('50');
+
+  await page.getByRole('button', { name: 'Undo' }).click();
+  await expect(page.locator('input[data-cell="1-0"]')).toHaveValue('52');
+});
+
+test('keeps the data view state across tab switches', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the data view state is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Freeze col' }).click();
+  await page.locator('input[data-cell="0-0"]').click();
+  await page.locator('input[data-cell="0-0"]').press('Shift+ArrowDown');
+  await page.getByRole('button', { name: 'Variables' }).click();
+  await expect(page.getByText('Variable', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByRole('button', { name: 'Data', exact: true }).click();
+
+  await expect(page.getByRole('button', { name: 'Freeze col' })).toHaveClass(/bg-accent/);
+  await expect(page.locator('td[data-selected]')).toHaveCount(2);
+  await expect(page.getByText('Variable', { exact: true })).toBeVisible();
+
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await expect(page.locator('td[data-selected]')).toHaveCount(0);
 });
 
 test('keeps a computed column in sync when its source changes', async ({ page, isMobile }) => {

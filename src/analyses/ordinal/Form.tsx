@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { OrdinalParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import { VariableList, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface OrdinalFormProps {
@@ -23,6 +24,7 @@ export const OrdinalForm = ({ grid, ordinalParams, setOrdinalParams }: OrdinalFo
       <VariableList
         label={t('form.predictorsX')}
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={indeps}
         disabled={[dep]}
         showType

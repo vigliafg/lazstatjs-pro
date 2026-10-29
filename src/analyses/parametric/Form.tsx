@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { ParametricSurvivalParams } from '../../io/project';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
   VariableList,
@@ -38,6 +39,7 @@ export const ParametricForm = ({
       <VariableList
         label={t('form.predictorsX')}
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={predictors}
         disabled={[time, event]}
         showType

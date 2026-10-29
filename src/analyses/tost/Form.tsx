@@ -2,6 +2,8 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TostParams } from '../../io/project';
 import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
 import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface TostFormProps {
@@ -14,7 +16,7 @@ export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => 
   const { design, var1, var2, mu, margin, equalVar } = tostParams;
   const update = (patch: Partial<TostParams>) =>
     setTostParams(prev => ({ ...prev, ...patch }));
-  const options = variableOptions(grid.cols);
+  const options = variableOptionsFrom(grid.cols, continuousColumnIndexes(grid));
   const inputClass =
     'w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text';
 

@@ -52,9 +52,9 @@ const sameGrid = (a: GridData, b: GridData): boolean =>
   });
 
 /** Undo/redo stack for the data grid. Call `commit(next)` instead of setState. */
-export function useGridHistory(initial: GridData) {
+export function useGridHistory(initial: GridData, initialRevision = 0) {
   const [grid, setGridState] = useState<GridData>(initial);
-  const [revision, setRevision] = useState(0);
+  const [revision, setRevision] = useState(initialRevision);
   const gridRef = useRef<GridData>(initial);
   const past = useRef<GridData[]>([]);
   const future = useRef<GridData[]>([]);
@@ -67,13 +67,32 @@ export function useGridHistory(initial: GridData) {
   // Coalesce rapid cell edits (typing) into a single history entry so one
   // Undo restores the pre-typing value instead of one char at a time.
   const commit = useCallback(
-    (next: GridData | ((prev: GridData) => GridData), opts?: { coalesce?: boolean; kind?: string }) => {
+    (
+      next: GridData | ((prev: GridData) => GridData),
+      opts?: {
+        coalesce?: boolean;
+        kind?: string;
+        changedCell?: { r: number; c: number };
+        changedCol?: number;
+      }
+    ) => {
       const prev = gridRef.current;
       const raw = typeof next === 'function' ? (next as (p: GridData) => GridData)(prev) : next;
+      // A cell edit that did not change the value must not touch history,
+      // formulas or validation.
+      if (
+        opts?.changedCell &&
+        (prev.rows[opts.changedCell.r]?.[opts.changedCell.c] ?? '') ===
+          (raw.rows[opts.changedCell.r]?.[opts.changedCell.c] ?? '')
+      ) {
+        return;
+      }
       // Persistent formulas are the source of truth for their column: any
       // edit re-derives them before the commit is recorded.
-      const value = recalculateFormulas(raw);
-      if (sameGrid(prev, value)) return;
+      const value = recalculateFormulas(raw, opts?.changedCol);
+      // When the edited column is not referenced by any formula, only that
+      // cell can differ; skip the full-grid comparison.
+      if (!(opts?.changedCell && value === raw) && sameGrid(prev, value)) return;
       const now = Date.now();
       const canCoalesce =
         opts?.coalesce &&
@@ -96,13 +115,13 @@ export function useGridHistory(initial: GridData) {
     []
   );
 
-  const setWithoutHistory = useCallback((next: GridData) => {
+  const setWithoutHistory = useCallback((next: GridData, nextRevision = 0) => {
     future.current = [];
     past.current = [];
     lastCommitKind.current = '';
     gridRef.current = next;
     setGridState(next);
-    setRevision((value) => value + 1);
+    setRevision(nextRevision);
     bump();
   }, []);
 

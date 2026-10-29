@@ -3,6 +3,7 @@ import type { GridData } from '../../grid/types';
 import type { AgreementParams } from '../../io/project';
 import { Field, VariableList } from '../../components/FormFields';
 import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
 
 export interface AgreementFormProps {
   grid: GridData;
@@ -48,6 +49,7 @@ export const AgreementForm = ({ grid, agreementParams, setAgreementParams }: Agr
               : t('form.measurements')
         }
         cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
         selected={columns}
         showType
         onToggle={(index, checked) =>

@@ -190,6 +190,16 @@ export const MAX_LEVELS = 50;
 /** Column types that are categorical by declaration. `id` is never a group. */
 export const CATEGORICAL_TYPES: ColType[] = ['cat', 'bol', 'dat', 'dtm', 'tim', 'str', 'alp', 'chr'];
 
+/**
+ * Types a continuous analysis role can read. This is the single rule shared by
+ * `validateRoleTypes`, the form pickers and the defaults: a declared `cat` is
+ * never a continuous variable, even when its codes look numeric.
+ */
+export const NON_CONTINUOUS_TYPES: ColType[] = ['cat', 'str', 'alp', 'chr', 'dat', 'dtm', 'tim', 'id'];
+
+export const isContinuousColumn = (col: { type: ColType } | undefined): boolean =>
+  Boolean(col) && !NON_CONTINUOUS_TYPES.includes((col as { type: ColType }).type);
+
 /** Natural order: 1, 2, 10 instead of 1, 10, 2. */
 export const naturalCompare = (a: string, b: string): number =>
   a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
