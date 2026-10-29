@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 
+// The three checks share the same dev server and the same iframe surface: run
+// them in order so the first-load of the book cannot race the server start.
+test.describe.configure({ mode: 'serial' });
+
 /**
  * Language menu and handbook integration.
  *

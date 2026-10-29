@@ -10,7 +10,6 @@ import { join, relative, sep } from 'node:path';
  */
 const LIMIT = 700;
 const EXCEPTIONS = new Map([
-  ['src/help/helpContent.ts', 1474], // contenuto statico, non logica
   ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
 ]);
 

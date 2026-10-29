@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode, type SetStateAction } from 'react';
 import { Play } from 'lucide-react';
-import { analysisDescription, analysisLabel, analysisMeta, familyLabel, familyOf } from '../../analyses/registry';
+import { analysisMeta, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
 import { isMissingCell, missingCodeCount } from '../../grid/types';
 import { DescriptiveForm } from '../../analyses/descriptive/Form';
@@ -43,8 +43,7 @@ import { createRunGate } from './liveGate';
 import { CodeExport } from './CodeExport';
 import { presetsFor } from './presets';
 import { t } from '../../i18n';
-import { HelpButton } from '../../help/HelpButton';
-import { topicForAnalysis } from '../../help/book';
+import { AnalysisHeader } from './AnalysisHeader';
 
 const inputClass =
   'w-full bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded focus:border-accent focus:outline-none';
@@ -432,23 +431,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
       className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
     >
       <div className="shrink-0 border-b border-border p-4">
-        <div className="mb-1 flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-accent2">
-            {family ? familyLabel(family) : t('analysis.familyFallback')}
-          </span>
-          {meta?.cost === 'heavy' && (
-            <span className="rounded border border-yellow/25 bg-yellow/5 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-yellow/80">
-              {t('analysis.heavyBadge')}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-1">
-          <h2 className="text-[15px] font-semibold text-text">{meta ? analysisLabel(meta.id) : p.activeAnalysis}</h2>
-          {meta && <HelpButton topicId={topicForAnalysis(meta.id)} />}
-        </div>
-        <p className="mt-1 text-[10px] leading-relaxed text-text3">
-          {meta ? analysisDescription(meta) : t('analysis.descriptionFallback')}
-        </p>
+        <AnalysisHeader meta={meta} family={family} activeAnalysis={p.activeAnalysis} />
         <div className="mt-2 flex flex-wrap gap-1">
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
             {t('analysis.rows')} {p.filterAffectsAnalysis ? `${p.visibleRowCount}/${p.grid.rows.length}` : p.grid.rows.length}

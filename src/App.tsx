@@ -298,15 +298,9 @@ export default function App() {
 
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
-  const [uiLocale, setUiLocale] = useState<Locale>(
-    boot?.settings.uiLocale ?? getLocale()
-  );
-  const [reportLocale, setReportLocale] = useState<Locale>(
-    boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale
-  );
-  const [helpLocale, setHelpLocale] = useState<HelpLocale>(
-    boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale
-  );
+  const [uiLocale, setUiLocale] = useState<Locale>(boot?.settings.uiLocale ?? getLocale());
+  const [reportLocale, setReportLocale] = useState<Locale>(boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale);
+  const [helpLocale, setHelpLocale] = useState<HelpLocale>(boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale);
 
   // The store drives `t()` everywhere; updating it re-renders the shell through
   // the `useLocale()` subscription below.
@@ -530,15 +524,7 @@ export default function App() {
     <UiModeProvider mode={uiMode}>
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <Header
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        uiMode={uiMode}
-        setUiMode={setUiMode}
-        uiLocale={uiLocale}
-        setUiLocale={setUiLocale}
-        reportLocale={reportLocale}
-      />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
