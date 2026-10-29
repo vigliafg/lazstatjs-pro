@@ -7,8 +7,8 @@ export const mixedanovaCopy: Record<string, string> = {
   'ANOVA mista split-plot': 'Gemischte Split-Plot-ANOVA',
   B: 'B',
   'c{s1}': 's{s1}',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'Con gruppi sbilanciati l’ANOVA split-plot classica non è banale: qui è riportata la decomposizione standard.':
     'Bei unbalancierten Gruppen ist die klassische Split-Plot-ANOVA nicht trivial: Hier wird die Standardzerlegung berichtet.',
   'Con più di due condizioni within l’assunzione di sfericità è controllata nella tabella dedicata.':
@@ -50,7 +50,7 @@ export const mixedanovaCopy: Record<string, string> = {
   'Le p corrette GG usano epsilon di Greenhouse–Geisser; con epsilon vicino a 1 la correzione è minima.':
     'Die GG-korrigierten p verwenden das Greenhouse–Geisser-Epsilon; bei Epsilon nahe 1 ist die Korrektur minimal.',
   Livello: 'Stufe',
-  'Mauchly · CI {s1}%': 'Mauchly · KI {s1} %',
+  'Mauchly · CI {s1}%': 'Mauchly · CI {s1} %',
   'Mauchly testa la sfericità della matrice di covarianza within.':
     'Mauchly prüft die Sphärizität der Within-Kovarianzmatrix.',
   'Mauchly W': 'Mauchly W',

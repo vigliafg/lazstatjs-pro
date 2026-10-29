@@ -127,8 +127,9 @@ incompatibili.
 - `catalogFor(locale)` fa fallback su inglese per le lingue non ancora tradotte;
 - `t(chiave, parametri)` resta una funzione pura usabile fuori da React;
   `useT()`/`useLocale()` (via `useSyncExternalStore`) fanno ridisegnare l'albero
-  al cambio lingua. `ACTIVE_LOCALES` elenca le lingue selezionabili, `REPORT_LOCALES`
-  quelle con prosa dei report tradotta.
+  al cambio lingua. `ACTIVE_LOCALES` elenca le lingue selezionabili (oggi
+  en, it, fr, es, de, pt-PT), `REPORT_LOCALES` quelle con prosa dei report
+  tradotta e `PLANNED_LOCALES` le lingue future (vuoto).
 
 `io/project` importa solo `src/i18n/locales.ts` (nessun catalogo), così il
 parsing di `.lzs` non trascina il dizionario. `uiLocale`, `reportLocale` e
@@ -153,6 +154,9 @@ aprono con i default e `PROJECT_VERSION` non cambia.
   metriche) continuano a trovare i numeri in ogni lingua;
 - `scripts/check-locale.mjs <locale>` valida un'ondata (chiavi UI, pagine del
   manuale, prosa dei report, segnaposto) prima di dichiararla attiva;
+- `scripts/normalize-report-copy.mjs <locale>` normalizza un'ondata: rimuove le
+  chiavi duplicate che TypeScript rifiuta, ordina e riporta quante stringhe
+  restano identiche alla sorgente (sigle, simboli, nomi di metodi);
   `docs/glossary/glossary.md` fissa la terminologia nelle sei lingue.
 
 La lingua dei report si sceglie in Impostazioni ed è persistita nel progetto:

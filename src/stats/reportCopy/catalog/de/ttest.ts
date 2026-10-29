@@ -19,21 +19,21 @@ export const ttestCopy: Record<string, string> = {
   'Brown–Forsythe (mediana)': 'Brown–Forsythe (Median)',
   'Campione e statistiche descrittive':
     'Stichprobe und deskriptive Statistiken',
-  'CI {s1}%': 'KI {s1} %',
+  'CI {s1}%': 'CI {s1} %',
   'CI bootstrap con 400 repliche e seed fisso.':
-    'Bootstrap-KI mit 400 Wiederholungen und festem Seed.',
+    'Bootstrap-CI mit 400 Wiederholungen und festem Seed.',
   'CI bootstrap con 500 repliche e seed fisso; può differire leggermente da software che usa il metodo esatto.':
-    'Bootstrap-KI mit 500 Wiederholungen und festem Seed; kann leicht von Software abweichen, die das exakte Verfahren verwendet.',
+    'Bootstrap-CI mit 500 Wiederholungen und festem Seed; kann leicht von Software abweichen, die das exakte Verfahren verwendet.',
   'CI bootstrap con 500 repliche e seed fisso.':
-    'Bootstrap-KI mit 500 Wiederholungen und festem Seed.',
+    'Bootstrap-CI mit 500 Wiederholungen und festem Seed.',
   'CI della differenza: (M − μ₀) ± t({s1}%, df = {s2}) · SE.':
-    'KI der Differenz: (M − μ₀) ± t({s1} %, df = {s2}) · SE.',
+    'CI der Differenz: (M − μ₀) ± t({s1} %, df = {s2}) · SE.',
   'CI della differenza: diff ± t({s1}%, df) · SE.':
-    'KI der Differenz: Differenz ± t({s1} %, df) · SE.',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+    'CI der Differenz: Differenz ± t({s1} %, df) · SE.',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'CI: diff ± t({s1}%, df = {s2}) · SE.':
-    'KI: Differenz ± t({s1} %, df = {s2}) · SE.',
+    'CI: Differenz ± t({s1} %, df = {s2}) · SE.',
   CLES: 'CLES',
   'CLES = U₁/(n₁n₂) = probabilità che un valore del gruppo A superi uno del gruppo B; rank-biserial = 2·CLES − 1.':
     'CLES = U₁/(n₁n₂) = Wahrscheinlichkeit, dass ein Wert der Gruppe A einen der Gruppe B übersteigt; Rang-biserial = 2·CLES − 1.',
@@ -62,7 +62,7 @@ export const ttestCopy: Record<string, string> = {
   'Correlazione con l’appartenenza al gruppo: r = {s1}, cioè un’associazione {s2}.':
     'Korrelation mit der Gruppenzugehörigkeit: r = {s1}, also ein {s2} Zusammenhang.',
   'd = (M − μ₀) / SD; SE(d) ≈ √(1/N + d²/(2N)); CI normale approssimato.':
-    'd = (M − μ₀) / SD; SE(d) ≈ √(1/N + d²/(2N)); approximiertes normales KI.',
+    'd = (M − μ₀) / SD; SE(d) ≈ √(1/N + d²/(2N)); approximiertes normales CI.',
   'd = (M₁ − M₂)/sp; SE(d) ≈ √((n₁+n₂)/(n₁n₂) + d²/(2(n₁+n₂))).':
     'd = (M₁ − M₂)/sp; SE(d) ≈ √((n₁+n₂)/(n₁n₂) + d²/(2(n₁+n₂))).',
   'd_z = media delle differenze / SD delle differenze; SE(d_z) ≈ √(1/n + d_z²/(2n)).':
@@ -148,9 +148,9 @@ export const ttestCopy: Record<string, string> = {
   'Mean rank': 'Mittlerer Rang',
   Median: 'Median',
   'mediana delle differenze; CI bootstrap percentile':
-    'Median der Differenzen; Perzentil-Bootstrap-KI',
+    'Median der Differenzen; Perzentil-Bootstrap-CI',
   'mediana di tutte le differenze A − B; CI bootstrap percentile':
-    'Median aller Differenzen A − B; Perzentil-Bootstrap-KI',
+    'Median aller Differenzen A − B; Perzentil-Bootstrap-CI',
   Metodo: 'Methode',
   Min: 'Min',
   Missing: 'Fehlend',

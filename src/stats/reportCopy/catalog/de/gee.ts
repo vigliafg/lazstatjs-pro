@@ -1,10 +1,10 @@
 /** de: report and table prose (normalised). */
 export const geeCopy: Record<string, string> = {
-  '{s1} · {s2} · CI {s3}%': '{s1} · {s2} · KI {s3} %',
+  '{s1} · {s2} · CI {s3}%': '{s1} · {s2} · CI {s3} %',
   'Alpha (correlazione di lavoro)': 'Alpha (Arbeitskorrelation)',
   'Alpha = {s1}; phi = {s2}.': 'Alpha = {s1}; phi = {s2}.',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   Cluster: 'Cluster',
   Coefficienti: 'Koeffizienten',
   'Con meno di 10–15 cluster il sandwich può sottostimare l’errore.':

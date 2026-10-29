@@ -1,8 +1,8 @@
 /** de: report and table prose (normalised). */
 export const tostCopy: Record<string, string> = {
-  '{s1} · CI {s2}% · margine ±{s3}': '{s1} · KI {s2} % · Marge ±{s3}',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  '{s1} · CI {s2}% · margine ±{s3}': '{s1} · CI {s2} % · Marge ±{s3}',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   df: 'df',
   Differenza: 'Differenz',
   'Differenza e intervallo di confidenza': 'Differenz und Konfidenzintervall',
@@ -15,7 +15,7 @@ export const tostCopy: Record<string, string> = {
   'H0: differenza ≤ −{s1}': 'H0: Differenz ≤ −{s1}',
   'H0: differenza ≥ +{s1}': 'H0: Differenz ≥ +{s1}',
   'Il CI esce dal margine oppure il p TOST non è sotto alpha: non si può concludere l’equivalenza. Questo non dimostra che i trattamenti siano diversi.':
-    'Das KI verlässt die Marge oder das TOST-p liegt nicht unter Alpha: Äquivalenz lässt sich nicht schließen. Das beweist nicht, dass die Behandlungen unterschiedlich sind.',
+    'Das CI verlässt die Marge oder das TOST-p liegt nicht unter Alpha: Äquivalenz lässt sich nicht schließen. Das beweist nicht, dass die Behandlungen unterschiedlich sind.',
   'Il margine di equivalenza è una scelta clinica o pratica, non statistica.':
     'Die Äquivalenzmarge ist eine klinische oder praktische Entscheidung, keine statistische.',
   'Il TOST verifica due ipotesi unilaterali: la differenza non è inferiore a −{s1} e non è superiore a +{s2}.':
@@ -37,7 +37,7 @@ export const tostCopy: Record<string, string> = {
   'p TOST = {s1}; {s2} al livello {s3}%.':
     'TOST-p = {s1}; {s2} auf dem Niveau {s3} %.',
   'Poiché il CI è interamente dentro il margine, l’ipotesi di equivalenza non viene rifiutata: i due trattamenti sono compatibili con una differenza clinicamente irrilevante.':
-    'Da das KI vollständig innerhalb der Marge liegt, wird die Äquivalenzhypothese nicht verworfen: Die beiden Behandlungen sind mit einer klinisch irrelevanten Differenz vereinbar.',
+    'Da das CI vollständig innerhalb der Marge liegt, wird die Äquivalenzhypothese nicht verworfen: Die beiden Behandlungen sind mit einer klinisch irrelevanten Differenz vereinbar.',
   'Report di equivalenza': 'Äquivalenzbericht',
   'SD A': 'SD A',
   'SD B': 'SD B',

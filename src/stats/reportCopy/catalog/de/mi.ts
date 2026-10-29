@@ -5,9 +5,9 @@ export const miCopy: Record<string, string> = {
   '{s1} righe · {s2} imputazioni · {s3} iterazioni':
     '{s1} Zeilen · {s2} Imputationen · {s3} Iterationen',
   '% mancante': '% fehlend',
-  'CI {s1}%': 'KI {s1} %',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  'CI {s1}%': 'CI {s1} %',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'Coefficienti pooled con regole di Rubin; R² è la media delle imputazioni.':
     'Gepoolte Koeffizienten nach den Rubin-Regeln; R² ist der Mittelwert über die Imputationen.',
   'Con poche osservazioni o variabili molto correlate il modello di imputazione può essere instabile.':
@@ -23,7 +23,7 @@ export const miCopy: Record<string, string> = {
   'La frazione di informazione mancante è contenuta: le stime sono relativamente stabili.':
     'Der Anteil fehlender Information ist gering: Die Schätzungen sind relativ stabil.',
   'Le stime pooled combinano la variabilità dentro e tra le imputazioni: i CI tengono conto dell’incertezza dovuta ai dati mancanti.':
-    'Die gepoolten Schätzungen kombinieren die Variabilität innerhalb und zwischen den Imputationen: Die KI berücksichtigen die Unsicherheit durch die fehlenden Daten.',
+    'Die gepoolten Schätzungen kombinieren die Variabilität innerhalb und zwischen den Imputationen: Die CI berücksichtigen die Unsicherheit durch die fehlenden Daten.',
   'Le stime pooled qui riportate riguardano media e SD, non modelli di regressione completi.':
     'Die hier berichteten gepoolten Schätzungen betreffen Mittelwert und SD, nicht vollständige Regressionsmodelle.',
   'Le variabili selezionate vengono imputate con un modello lineare sulle altre variabili.':
@@ -41,7 +41,7 @@ export const miCopy: Record<string, string> = {
   p: 'p',
   'Pooling di Rubin: varianza totale = varianza within + (1 + 1/m)·varianza between.':
     'Rubin-Pooling: Gesamtvarianz = Within-Varianz + (1 + 1/m)·Between-Varianz.',
-  'R² medio = {s1} · {s2}% CI': 'Mittleres R² = {s1} · KI {s2} %',
+  'R² medio = {s1} · {s2}% CI': 'Mittleres R² = {s1} · CI {s2} %',
   'Regressione pooled': 'Gepoolte Regression',
   'Report di imputazione multipla': 'Bericht zur multiplen Imputation',
   'SD pooled': 'Gepoolte SD',

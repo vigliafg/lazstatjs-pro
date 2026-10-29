@@ -1,10 +1,10 @@
 /** de: report and table prose (normalised). */
 export const agreementCopy: Record<string, string> = {
-  '{s1} coppie · CI {s2}%': '{s1} Paare · KI {s2} %',
+  '{s1} coppie · CI {s2}%': '{s1} Paare · CI {s2} %',
   '{s1} soggetti × {s2} misure · CI {s3}%':
-    '{s1} Personen × {s2} Messungen · KI {s3} %',
+    '{s1} Personen × {s2} Messungen · CI {s3} %',
   '{s1} soggetti × {s2} rater · {s3} categorie · CI {s4}%':
-    '{s1} Personen × {s2} Beurteiler · {s3} Kategorien · KI {s4} %',
+    '{s1} Personen × {s2} Beurteiler · {s3} Kategorien · CI {s4} %',
   'Accordo atteso': 'Erwartete Übereinstimmung',
   'Accordo debole': 'Schwache Übereinstimmung',
   'Accordo moderato': 'Mäßige Übereinstimmung',
@@ -19,20 +19,20 @@ export const agreementCopy: Record<string, string> = {
   Bias: 'Bias',
   'bias + 1.96·SD': 'Bias + 1.96·SD',
   'Bias = {s1} (CI {s2}%: {s3} – {s4}).':
-    'Bias = {s1} (KI {s2} %: {s3} – {s4}).',
+    'Bias = {s1} (CI {s2} %: {s3} – {s4}).',
   'bias − 1.96·SD': 'Bias − 1.96·SD',
   'Bias contenuto': 'Bias gering',
   'Bias da valutare': 'Bias zu prüfen',
   'bias proporzionale': 'proportionaler Bias',
   'Bland–Altman': 'Bland–Altman',
-  'CI bias high': 'KI Bias oben',
-  'CI bias low': 'KI Bias unten',
-  'CI high': 'KI oben',
-  'CI limite inf. high': 'KI untere Grenze oben',
-  'CI limite inf. low': 'KI untere Grenze unten',
-  'CI limite sup. high': 'KI obere Grenze oben',
-  'CI limite sup. low': 'KI obere Grenze unten',
-  'CI low': 'KI unten',
+  'CI bias high': 'CI Bias oben',
+  'CI bias low': 'CI Bias unten',
+  'CI high': 'CI oben',
+  'CI limite inf. high': 'CI untere Grenze oben',
+  'CI limite inf. low': 'CI untere Grenze unten',
+  'CI limite sup. high': 'CI obere Grenze oben',
+  'CI limite sup. low': 'CI obere Grenze unten',
+  'CI low': 'CI unten',
   'Cohen kappa': 'Cohen-Kappa',
   'Con due rater viene usato Cohen kappa; le discordanze possono essere pesate se le categorie sono ordinate.':
     'Bei zwei Beurteilern wird Cohen-Kappa verwendet; Abweichungen können gewichtet werden, wenn die Kategorien geordnet sind.',
@@ -46,7 +46,7 @@ export const agreementCopy: Record<string, string> = {
   'I limiti di accordo non sono limiti di confidenza: descrivono la variabilità individuale.':
     'Die Übereinstimmungsgrenzen sind keine Konfidenzgrenzen: Sie beschreiben die individuelle Variabilität.',
   'I limiti di accordo sono stimati come bias ± 1.96·SD; i loro CI usano l’approssimazione sqrt(3·SD²/n).':
-    'Die Übereinstimmungsgrenzen werden als Bias ± 1.96·SD geschätzt; ihre KI verwenden die Näherung sqrt(3·SD²/n).',
+    'Die Übereinstimmungsgrenzen werden als Bias ± 1.96·SD geschätzt; ihre CI verwenden die Näherung sqrt(3·SD²/n).',
   'ICC vicino a 1 indica che le misure sono intercambiabili; valori sotto 0,5 indicano che la variabilità tra soggetti non è distinguibile dall’errore di misura.':
     'Ein ICC nahe 1 bedeutet, dass die Messungen austauschbar sind; Werte unter 0,5 bedeuten, dass die Variabilität zwischen den Personen nicht von der Streuung durch Messfehler zu unterscheiden ist.',
   'ICC(1,1) one-way': 'ICC(1,1) einfaktoriell',
@@ -67,7 +67,7 @@ export const agreementCopy: Record<string, string> = {
   'Intraclass correlation': 'Intraklassenkorrelation',
   Kappa: 'Kappa',
   'Kappa = {s1} (CI {s2}%: {s3} – {s4}).':
-    'Kappa = {s1} (KI {s2} %: {s3} – {s4}).',
+    'Kappa = {s1} (CI {s2} %: {s3} – {s4}).',
   'Kappa corregge l’accordo osservato per quello atteso dal caso. Le soglie 0,4/0,6/0,8 sono convenzioni, non leggi.':
     'Kappa korrigiert die beobachtete Übereinstimmung um die zufällig erwartete. Die Schwellen 0,4/0,6/0,8 sind Konventionen, keine Naturgesetze.',
   'Kappa è sensibile alla prevalenza delle categorie e al numero di categorie.':

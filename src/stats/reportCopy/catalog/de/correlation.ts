@@ -14,14 +14,14 @@ export const correlationCopy: Record<string, string> = {
   'Calcolate su casi completi per tutte le variabili selezionate (listwise deletion), per garantire una matrice invertibile.':
     'Berechnet auf vollständigen Fällen für alle ausgewählten Variablen (Listwise Deletion), um eine invertierbare Matrix zu gewährleisten.',
   'CI di Pearson: trasformazione z di Fisher, tanh(z ± z_crit/√(N−3)).':
-    'KI von Pearson: Fisher-z-Transformation, tanh(z ± z_krit/√(N−3)).',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+    'CI von Pearson: Fisher-z-Transformation, tanh(z ± z_krit/√(N−3)).',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'Coefficiente lineare di Pearson.': 'Linearer Koeffizient nach Pearson.',
   'Coefficiente non disponibile.': 'Koeffizient nicht verfügbar.',
   'Come leggere i numeri': 'Wie die Zahlen zu lesen sind',
   'controllando per le altre {s1} variabili · CI {s2}%':
-    'unter Kontrolle der anderen {s1} Variablen · KI {s2} %',
+    'unter Kontrolle der anderen {s1} Variablen · CI {s2} %',
   Controllate: 'Kontrolliert',
   'Coppia per coppia': 'Paar für Paar',
   'coppia supera': 'Paar überschreitet',
@@ -54,7 +54,7 @@ export const correlationCopy: Record<string, string> = {
   Mean: 'Mittelwert',
   Median: 'Median',
   'Metodo primario: {s1} · CI {s2}% · eliminazione pairwise':
-    'Primäre Methode: {s1} · KI {s2} % · paarweiser Ausschluss',
+    'Primäre Methode: {s1} · CI {s2} % · paarweiser Ausschluss',
   Min: 'Min',
   'Misura se due variabili si muovono insieme e con quale intensità, senza ipotizzare quale delle due influenzi l’altra.':
     'Misst, ob sich zwei Variablen gemeinsam bewegen und mit welcher Intensität, ohne anzunehmen, welche von beiden die andere beeinflusst.',

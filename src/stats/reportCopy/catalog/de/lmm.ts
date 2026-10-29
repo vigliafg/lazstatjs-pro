@@ -1,9 +1,9 @@
 /** de: report and table prose (normalised). */
 export const lmmCopy: Record<string, string> = {
-  '{s1} ~ {s2} + (1 | {s3}) · CI {s4}%': '{s1} ~ {s2} + (1 | {s3}) · KI {s4} %',
-  'CI {s1}% · t con df = {s2}': 'KI {s1} % · t mit df = {s2}',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  '{s1} ~ {s2} + (1 | {s3}) · CI {s4}%': '{s1} ~ {s2} + (1 | {s3}) · CI {s4} %',
+  'CI {s1}% · t con df = {s2}': 'CI {s1} % · t mit df = {s2}',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'Con meno di 5–10 gruppi la varianza tra gruppi è imprecisa.':
     'Mit weniger als 5–10 Gruppen ist die Varianz zwischen den Gruppen ungenau.',
   'Effetti fissi': 'Feste Effekte',
@@ -20,7 +20,7 @@ export const lmmCopy: Record<string, string> = {
   N: 'N',
   p: 'p',
   'p e CI usano una t con df = N − parametri; con pochi gruppi sono approssimati.':
-    'p und KI verwenden eine t mit df = N − Parameter; bei wenigen Gruppen sind sie approximativ.',
+    'p und CI verwenden eine t mit df = N − Parameter; bei wenigen Gruppen sind sie approximativ.',
   'REML logLik (a meno di costante)': 'REML-LogLik (bis auf eine Konstante)',
   'Report del modello misto': 'Bericht zum gemischten Modell',
   SE: 'SE',

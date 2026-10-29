@@ -14,7 +14,7 @@ export const distfitCopy: Record<string, string> = {
   'Bontà di adattamento': 'Anpassungsgüte',
   'chiaramente migliore': 'deutlich besser',
   'CI {s1}% non applicabile ai percentili stimati':
-    'KI {s1} % nicht anwendbar auf geschätzte Perzentile',
+    'CI {s1} % nicht anwendbar auf geschätzte Perzentile',
   'Come leggere il confronto': 'Wie der Vergleich zu lesen ist',
   'Con N piccolo le code sono le più incerte: evita di leggere P1 o P99 come limiti affidabili.':
     'Bei kleinem N sind die Ränder am unsichersten: Lesen Sie P1 oder P99 nicht als verlässliche Grenzen.',

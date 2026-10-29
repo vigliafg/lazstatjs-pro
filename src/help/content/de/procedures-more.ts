@@ -41,7 +41,7 @@ export const moreTopics: HelpTopic[] = [
         "Wählen Sie die Arbeitskorrelation (Unabhängigkeit oder Austauschbar).",
         "Führen Sie das Modell aus und lesen Sie die Koeffizienten mit robusten Fehlern.",
       ],
-      expected: "Marginale Koeffizienten mit KI und ein Hinweis auf die verwendete Arbeitskorrelation.",
+      expected: "Marginale Koeffizienten mit CI und ein Hinweis auf die verwendete Arbeitskorrelation.",
     },
     advanced: {
       assumptions: [
@@ -104,7 +104,7 @@ export const moreTopics: HelpTopic[] = [
         "Aktivieren Sie den exakten Test nach Fisher.",
         "Führen Sie den Test aus und lesen Sie Chi-Quadrat, p und die Assoziationsmaße.",
       ],
-      expected: "Häufigkeitstabelle, Chi-Quadrat mit Freiheitsgraden, Fisher und Odds Ratio mit KI.",
+      expected: "Häufigkeitstabelle, Chi-Quadrat mit Freiheitsgraden, Fisher und Odds Ratio mit CI.",
     },
     advanced: {
       assumptions: ["Unabhängige Beobachtungen; für Chi-Quadrat ausreichend große erwartete Häufigkeiten."],
@@ -163,7 +163,7 @@ export const moreTopics: HelpTopic[] = [
       steps: [
         "Wählen Sie ICC für kontinuierliche Messungen, Kappa für Kategorien, Bland–Altman für den grafischen Vergleich.",
         "Wählen Sie die beiden Spalten mit den Messungen derselben Person.",
-        "Führen Sie die Analyse aus und lesen Sie den ICC mit KI oder das Diagramm mit den Übereinstimmungsgrenzen.",
+        "Führen Sie die Analyse aus und lesen Sie den ICC mit CI oder das Diagramm mit den Übereinstimmungsgrenzen.",
       ],
       expected: "ICC mit Konfidenzintervall und Modelltyp oder ein Bland–Altman-Diagramm mit Verzerrung und Grenzen.",
     },
@@ -203,7 +203,7 @@ export const moreTopics: HelpTopic[] = [
         "Wählen Sie die Gruppenvariable.",
         "Führen Sie die Analyse aus und lesen Sie den Log-Rank-Test und das mediane Überleben pro Gruppe.",
       ],
-      expected: "Kaplan–Meier-Kurven, Zahlen unter Risiko, Log-Rank-p und Mediane mit KI.",
+      expected: "Kaplan–Meier-Kurven, Zahlen unter Risiko, Log-Rank-p und Mediane mit CI.",
     },
     advanced: {
       assumptions: [
@@ -234,10 +234,10 @@ export const moreTopics: HelpTopic[] = [
       dataset: "score-groups.csv",
       steps: [
         "Legen Sie Zeit, Ereignis und Prädiktoren fest.",
-        "Führen Sie das Modell aus und lesen Sie die Hazard Ratios mit KI.",
+        "Führen Sie das Modell aus und lesen Sie die Hazard Ratios mit CI.",
         "Prüfen Sie den Test auf proportionale Hazards.",
       ],
-      expected: "Koeffizienten mit Hazard Ratios, KI, globale Tests und die Prüfung der Proportionalität.",
+      expected: "Koeffizienten mit Hazard Ratios, CI, globale Tests und die Prüfung der Proportionalität.",
     },
     advanced: {
       assumptions: ["Proportionale Hazards: Der relative Effekt bleibt über die Zeit konstant."],
@@ -295,7 +295,7 @@ export const moreTopics: HelpTopic[] = [
       steps: [
         "Organisieren Sie die Daten im Start-Stopp-Format: eine Zeile pro Zeitintervall.",
         "Legen Sie Start, Ende, Ereignis und die sich ändernden Kovariaten fest.",
-        "Führen Sie das Modell aus und lesen Sie die Hazard Ratios mit KI.",
+        "Führen Sie das Modell aus und lesen Sie die Hazard Ratios mit CI.",
       ],
       expected: "Koeffizienten mit HR, Anzahl der Intervalle und Zeilen pro Person.",
     },
@@ -325,7 +325,7 @@ export const moreTopics: HelpTopic[] = [
         "Legen Sie Zeit, Ereignis und Prädiktoren fest.",
         "Führen Sie das Modell aus und lesen Sie die Koeffizienten auf der Zeitskala und den Formparameter.",
       ],
-      expected: "AFT-Koeffizienten, Formparameter mit KI und Kriterien zum Vergleich der Verteilungen.",
+      expected: "AFT-Koeffizienten, Formparameter mit CI und Kriterien zum Vergleich der Verteilungen.",
     },
     advanced: {
       assumptions: ["Die gewählte Verteilung beschreibt die Zeiten tatsächlich; Ereignis 0/1; positive Zeiten."],
@@ -382,7 +382,7 @@ export const moreTopics: HelpTopic[] = [
       steps: [
         "Wählen Sie die Modellvariablen und die Hilfsvariablen.",
         "Legen Sie die Zahl der Imputationen (mindestens 5) und die Iterationen fest.",
-        "Führen Sie die Analyse aus und lesen Sie die gepoolten Schätzungen mit KI und den Anteil fehlender Information.",
+        "Führen Sie die Analyse aus und lesen Sie die gepoolten Schätzungen mit CI und den Anteil fehlender Information.",
       ],
       expected: "Gepoolte Schätzungen, Standardfehler zwischen den Imputationen und Diagnostik zur Zahl der Imputationen.",
     },

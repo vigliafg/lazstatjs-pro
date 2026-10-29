@@ -9,7 +9,7 @@ import type { Locale } from '../../i18n/locales';
 export type ReportLocale = Extract<Locale, 'it' | 'en' | 'fr' | 'es' | 'de' | 'pt-PT'>;
 
 /** Languages whose report prose is complete (mirrors `REPORT_LOCALES`). */
-export const TRANSLATED_REPORT_LOCALES: readonly ReportLocale[] = ['it', 'en', 'de'];
+export const TRANSLATED_REPORT_LOCALES: readonly ReportLocale[] = ['it', 'en', 'fr', 'es', 'de', 'pt-PT'];
 
 export const isReportLocale = (value: unknown): value is ReportLocale =>
   (TRANSLATED_REPORT_LOCALES as readonly unknown[]).includes(value);

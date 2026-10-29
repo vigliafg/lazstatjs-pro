@@ -6,11 +6,11 @@ export const repeatedCopy: Record<string, string> = {
   ' positivo, ': ' positiv, ',
   '{s1}': '{s1}',
   '{s1} condizioni binarie · {s2} blocchi · CI {s3}%':
-    '{s1} binäre Bedingungen · {s2} Blöcke · KI {s3} %',
+    '{s1} binäre Bedingungen · {s2} Blöcke · CI {s3} %',
   '{s1} confronti significativi': '{s1} signifikante Vergleiche',
   '{s1} confronto significativo': '{s1} signifikanter Vergleich',
   '{s1} gruppi ordinati · N = {s2} · CI {s3}%':
-    '{s1} geordnete Gruppen · N = {s2} · KI {s3} %',
+    '{s1} geordnete Gruppen · N = {s2} · CI {s3} %',
   '{s1} misure ripetute · {s2} blocchi':
     '{s1} wiederholte Messungen · {s2} Blöcke',
   '{s1} vs {s2}': '{s1} vs. {s2}',
@@ -29,7 +29,7 @@ export const repeatedCopy: Record<string, string> = {
     'Unvollständige Blöcke oder nicht numerische Werte werden vor dem Test ausgeschlossen.',
   'c (0 → 1)': 'c (0 → 1)',
   'Cambiamento asimmetrico': 'Asymmetrische Veränderung',
-  'CI {s1}% · differenza critica {s2}': 'KI {s1} % · kritische Differenz {s2}',
+  'CI {s1}% · differenza critica {s2}': 'CI {s1} % · kritische Differenz {s2}',
   'Cochran Q è l’estensione di McNemar a tre o più condizioni binarie misurate sulle stesse unità: verifica se la probabilità di successo cambia tra le condizioni.':
     'Cochran Q ist die Erweiterung von McNemar auf drei oder mehr binäre Bedingungen, die an denselben Einheiten gemessen wurden: Es prüft, ob sich die Erfolgswahrscheinlichkeit zwischen den Bedingungen ändert.',
   Combinazione: 'Kombination',
@@ -44,7 +44,7 @@ export const repeatedCopy: Record<string, string> = {
   Condizione: 'Bedingung',
   Confronto: 'Vergleich',
   'coppie discordanti = {s1} · CI {s2}%':
-    'diskordante Paare = {s1} · KI {s2} %',
+    'diskordante Paare = {s1} · CI {s2} %',
   'Correzione per i ranghi uguali': 'Korrektur für gleiche Ränge',
   'Descrittive per gruppo': 'Deskriptive Werte pro Gruppe',
   Dettaglio: 'Detail',

@@ -9,8 +9,8 @@ export const ancovaCopy: Record<string, string> = {
   '{s1} covariate': '{s1} Kovariaten',
   'ANCOVA — effetti (SS tipo III)': 'ANCOVA — Effekte (Typ-III-QS)',
   B: 'B',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'codifica treatment · riferimento: {s1}':
     'Treatment-Kodierung · Referenz: {s1}',
   'Coefficienti del modello': 'Modellkoeffizienten',
@@ -123,6 +123,6 @@ export const ancovaCopy: Record<string, string> = {
     'Eine Kovariate mit starkem Messfehler dämpft die Adjustierung und kann die Power verringern.',
   Valore: 'Wert',
   'valutate alla media delle covariate · CI {s1}%':
-    'bewertet am Mittelwert der Kovariaten · KI {s1} %',
+    'bewertet am Mittelwert der Kovariaten · CI {s1} %',
   'η²p': 'η²p',
 };

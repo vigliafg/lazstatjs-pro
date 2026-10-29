@@ -9,7 +9,7 @@ export const tdcoxCopy: Record<string, string> = {
     'Start-Stopp-Format: Jede Zeile ist ein Intervall, in dem die Kovariaten konstant sind.',
   'Gli hazard ratio sono interpretati come effetto istantaneo della covariata corrente.':
     'Die Hazard Ratios werden als momentaner Effekt der aktuellen Kovariate interpretiert.',
-  'Hazard ratio · CI {s1}%': 'Hazard Ratio · KI {s1} %',
+  'Hazard ratio · CI {s1}%': 'Hazard Ratio · CI {s1} %',
   HR: 'HR',
   'HR > 1 indica un rischio maggiore per un’unità in più della covariata tempo-dipendente.':
     'HR > 1 zeigt ein höheres Risiko pro zusätzlicher Einheit der zeitabhängigen Kovariate.',

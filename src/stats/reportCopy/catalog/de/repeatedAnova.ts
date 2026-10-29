@@ -2,15 +2,15 @@
 export const repeatedAnovaCopy: Record<string, string> = {
   ' corretto GG': ' GG-korrigiert',
   '{s1} soggetti · {s2} condizioni · CI {s3}%':
-    '{s1} Personen · {s2} Bedingungen · KI {s3} %',
+    '{s1} Personen · {s2} Bedingungen · CI {s3} %',
   '{s1}, {s2}': '{s1}, {s2}',
   '1 = sfericità perfetta': '1 = perfekte Sphärizität',
   'ANOVA a misure ripetute': 'Messwiederholungs-ANOVA',
   'Assunzioni e cautele': 'Annahmen und Vorsichtsmaßnahmen',
   'CI = media ± t({s1}%, df = {s2})·SE.':
-    'KI = Mittelwert ± t({s1} %, df = {s2})·SE.',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+    'CI = Mittelwert ± t({s1} %, df = {s2})·SE.',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'Con pochi soggetti Mauchly è poco potente: considera comunque le correzioni se ε è basso.':
     'Bei wenigen Personen ist Mauchly wenig mächtig: Erwägen Sie die Korrekturen trotzdem, wenn ε niedrig ist.',
   Condizione: 'Bedingung',

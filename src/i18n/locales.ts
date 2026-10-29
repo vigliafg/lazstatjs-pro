@@ -4,10 +4,10 @@
  * `io/` and `grid/` may depend on this module to validate persisted settings
  * without pulling the whole dictionary into their bundle.
  */
-export const ACTIVE_LOCALES = ['en', 'it', 'de'] as const;
+export const ACTIVE_LOCALES = ['en', 'it', 'fr', 'es', 'de', 'pt-PT'] as const;
 
 /** Locales the project targets; catalogs are added wave by wave. */
-export const PLANNED_LOCALES = ['fr', 'es', 'pt-PT'] as const;
+export const PLANNED_LOCALES = [] as const;
 
 export type Locale = (typeof ACTIVE_LOCALES)[number] | (typeof PLANNED_LOCALES)[number];
 
@@ -16,7 +16,7 @@ export const DEFAULT_LOCALE: Locale = 'en';
 export const DEFAULT_REPORT_LOCALE: Locale = 'it';
 
 /** Locales whose report prose is translated and selectable in Settings. */
-export const REPORT_LOCALES: readonly Locale[] = ['it', 'en', 'de'];
+export const REPORT_LOCALES: readonly Locale[] = ['it', 'en', 'fr', 'es', 'de', 'pt-PT'];
 
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: 'English',

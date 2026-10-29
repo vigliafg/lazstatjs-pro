@@ -63,3 +63,39 @@ test('the report language switches the written card, not just the interface', as
   await expect(page.getByText('The main test')).toBeVisible();
   await expect(page.getByText('Report di lettura — Test t')).toHaveCount(0);
 });
+
+test('the German wave reaches the interface, the handbook and the report', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
+  await page.getByRole('main').getByLabel('Report language').selectOption('de');
+  await page.getByRole('main').getByLabel('Interface language').selectOption('de');
+
+  await expect(page.getByRole('button', { name: 'Daten', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Hilfe', exact: true }).click();
+  const book = page.frameLocator('iframe[title="Hilfehandbuch"]');
+  await expect(book.locator('h1')).toHaveText('LazStats Handbuch');
+
+  await page.getByRole('button', { name: 'Analyse', exact: true }).click();
+  await page.getByPlaceholder('Analysen suchen…').fill('T-Test');
+  await page.getByText('T-Test', { exact: true }).first().click();
+  await page.getByRole('button', { name: 'Analyse ausführen' }).click();
+  await expect(page.getByText('Lesetext — t-Test')).toBeVisible();
+});
+
+for (const [locale, nav, helpTab, bookTitle] of [
+  ['fr', 'Données', 'Aide', 'Manuel LazStats'],
+  ['es', 'Datos', 'Ayuda', 'Manual de LazStats'],
+  ['pt-PT', 'Dados', 'Ajuda', 'Manual do LazStats'],
+] as const) {
+  test(`the ${locale} wave reaches the interface and the handbook`, async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Settings', exact: true }).click();
+    await page.getByRole('main').getByLabel('Interface language').selectOption(locale);
+
+    await expect(page.getByRole('button', { name: nav, exact: true })).toBeVisible();
+    await page.getByRole('button', { name: helpTab, exact: true }).click();
+    const book = page.frameLocator('main iframe');
+    await expect(book.locator('h1')).toHaveText(bookTitle);
+    await expect(book.locator('a[href$=".html"]').first()).toBeVisible();
+  });
+}

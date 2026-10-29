@@ -5,12 +5,12 @@ export const regressionCopy: Record<string, string> = {
   ', Lilliefors {s1}': ', Lilliefors {s1}',
   '; VIF = {s1} segnala collinearità': '; VIF = {s1} zeigt Kollinearität an',
   '; β standardizzato = {s1}': '; β standardisiert = {s1}',
-  '{s1} · CI {s2}%': '{s1} · KI {s2} %',
+  '{s1} · CI {s2}%': '{s1} · CI {s2} %',
   '{s1} ~ {s2}': '{s1} ~ {s2}',
   '{s1} osservazioni con residuo studentizzato oltre 3 SD: verificane l’influenza sulle stime.':
     '{s1} Beobachtungen mit studentisiertem Residuum über 3 SD: Prüfen Sie ihren Einfluss auf die Schätzungen.',
   '{s1}: B = {s2} (CI {s3}% {s4}), {s5} → {s6}. In media, un aumento di una unità di {s7} {s8} {s9} di {s10} a parità delle altre variabili{s11}{s12}.':
-    '{s1}: B = {s2} (KI {s3} % {s4}), {s5} → {s6}. Im Mittel {s8} eine Einheit mehr bei {s7} {s9} um {s10}, bei Konstanthaltung der anderen Variablen{s11}{s12}.',
+    '{s1}: B = {s2} (CI {s3} % {s4}), {s5} → {s6}. Im Mittel {s8} eine Einheit mehr bei {s7} {s9} um {s10}, bei Konstanthaltung der anderen Variablen{s11}{s12}.',
   '→ collinearità problematica: i coefficienti dei predittori coinvolti sono instabili':
     '→ problematische Kollinearität: Die Koeffizienten der beteiligten Prädiktoren sind instabil',
   '→ collinearità sotto la soglia di attenzione (5)':
@@ -32,11 +32,11 @@ export const regressionCopy: Record<string, string> = {
   'Breusch–Pagan p': 'Breusch–Pagan p',
   'Breusch–Pagan richiede l’ipotesi di normalità dei residui; con N piccolo ha potenza limitata.':
     'Breusch–Pagan setzt die Normalität der Residuen voraus; bei kleinem N ist die Power begrenzt.',
-  'CI {s1}% · stima OLS': 'KI {s1} % · OLS-Schätzung',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  'CI {s1}% · stima OLS': 'CI {s1} % · OLS-Schätzung',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'CI: B ± t({s1}%, df = {s2})·SE. β std. = B·SD(x)/SD(y).':
-    'KI: B ± t({s1} %, df = {s2})·SE. Std. β = B·SD(x)/SD(y).',
+    'CI: B ± t({s1} %, df = {s2})·SE. Std. β = B·SD(x)/SD(y).',
   Coefficienti: 'Koeffizienten',
   'Come leggere i numeri': 'Wie die Zahlen zu lesen sind',
   'Con più predittori il Theil–Sen è calcolato separatamente per ciascun predittore e non controlla gli altri: usarlo solo come diagnostica descrittiva.':
@@ -80,7 +80,7 @@ export const regressionCopy: Record<string, string> = {
   'I residui Theil–Sen sono disponibili per la regressione semplice; con più predittori il TS è univariato e non definisce un modello congiunto.':
     'Theil–Sen-Residuen sind für die einfache Regression verfügbar; bei mehreren Prädiktoren ist TS univariat und definiert kein gemeinsames Modell.',
   'Il CI al {s1}% del coefficiente è la forbice dei valori plausibili: se contiene lo zero l’effetto non è distinguibile da nessun effetto.':
-    'Das KI von {s1} % des Koeffizienten ist die Spanne der plausiblen Werte: Enthält es die Null, ist der Effekt von keinem Effekt zu unterscheiden.',
+    'Das CI von {s1} % des Koeffizienten ist die Spanne der plausiblen Werte: Enthält es die Null, ist der Effekt von keinem Effekt zu unterscheiden.',
   'Il modello cerca la retta (o l’iperpiano) che rende minima la somma degli scarti al quadrato: i coefficienti indicano l’effetto di ogni variabile tenendo ferme le altre.':
     'Das Modell sucht die Gerade (oder Hyperebene), die die Summe der quadrierten Abweichungen minimiert: Die Koeffizienten geben den Effekt jeder Variablen bei Konstanthaltung der übrigen an.',
   'Il modello è significativo (F = {s1}, {s2}) e spiega il {s3}% della variabilità di {s4}.':
@@ -150,7 +150,7 @@ export const regressionCopy: Record<string, string> = {
   'p (F)': 'p (F)',
   Parametro: 'Parameter',
   'Pendenza OLS = {s1}, pendenza Theil–Sen = {s2} (CI {s3}% {s4}).':
-    'OLS-Steigung = {s1}, Theil–Sen-Steigung = {s2} (KI {s3} % {s4}).',
+    'OLS-Steigung = {s1}, Theil–Sen-Steigung = {s2} (CI {s3} % {s4}).',
   Predictor: 'Prädiktor',
   'predittore significativo': 'signifikanter Prädiktor',
   'quadrati e prodotti incrociati dei predittori':
@@ -197,10 +197,10 @@ export const regressionCopy: Record<string, string> = {
   'Theil–Sen': 'Theil–Sen',
   'Theil–Sen slope': 'Theil–Sen-Steigung',
   'Theil–Sen: mediana delle pendenze tra tutte le coppie di punti; CI bootstrap percentile (600 repliche, seed fisso).':
-    'Theil–Sen: Median der Steigungen zwischen allen Punktpaaren; Perzentil-Bootstrap-KI (600 Wiederholungen, fester Seed).',
+    'Theil–Sen: Median der Steigungen zwischen allen Punktpaaren; Perzentil-Bootstrap-CI (600 Wiederholungen, fester Seed).',
   Tolerance: 'Toleranz',
-  'TS CI high': 'TS-KI oben',
-  'TS CI low': 'TS-KI unten',
+  'TS CI high': 'TS-CI oben',
+  'TS CI low': 'TS-CI unten',
   Valore: 'Wert',
   'valori > 1 indicano osservazioni influenti':
     'Werte > 1 zeigen einflussreiche Beobachtungen',

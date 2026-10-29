@@ -8,7 +8,7 @@ export const stratcoxCopy: Record<string, string> = {
   Eventi: 'Ereignisse',
   'Gli hazard ratio sono comuni agli strati: la stratificazione non stima effetti diversi per strato.':
     'Die Hazard Ratios gelten gemeinsam für die Schichten: Die Stratifizierung schätzt keine unterschiedlichen Effekte pro Schicht.',
-  'Hazard ratio · CI {s1}%': 'Hazard Ratio · KI {s1} %',
+  'Hazard ratio · CI {s1}%': 'Hazard Ratio · CI {s1} %',
   HR: 'HR',
   'HR > 1 indica un rischio maggiore per un’unità in più del predittore, a parità di strato.':
     'HR > 1 zeigt ein höheres Risiko pro zusätzlicher Einheit des Prädiktors, bei gleicher Schicht.',

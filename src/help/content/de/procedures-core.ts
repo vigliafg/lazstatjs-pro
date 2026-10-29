@@ -91,7 +91,7 @@ export const coreTopics: HelpTopic[] = [
         "Lassen Sie Varianzen auf Welch, sofern Sie nicht wissen, dass sie gleich sind.",
         "Führen Sie ihn aus und lesen Sie Differenz, Konfidenzintervall und p-Wert.",
       ],
-      expected: "Zwei deskriptive Zeilen, der t-Test mit Freiheitsgraden, die Differenz mit ihrem KI und der Lesetext.",
+      expected: "Zwei deskriptive Zeilen, der t-Test mit Freiheitsgraden, die Differenz mit ihrem CI und der Lesetext.",
     },
     advanced: {
       assumptions: [
@@ -128,7 +128,7 @@ export const coreTopics: HelpTopic[] = [
         "Lassen Sie Post-hoc = Holm und aktivieren Sie die nicht parametrische Alternative.",
         "Führen Sie sie aus und prüfen Sie die Haupttabelle, dann die Post-hoc-Vergleiche.",
       ],
-      expected: "ANOVA-Tabelle mit F, Freiheitsgraden und p; Post-hoc-Differenzen mit KI; Kruskal-Wallis als Kontrolle.",
+      expected: "ANOVA-Tabelle mit F, Freiheitsgraden und p; Post-hoc-Differenzen mit CI; Kruskal-Wallis als Kontrolle.",
     },
     advanced: {
       assumptions: ["Unabhängigkeit, normale Residuen, ähnliche Varianzen zwischen den Gruppen."],
@@ -364,7 +364,7 @@ export const coreTopics: HelpTopic[] = [
       steps: [
         "Wählen Sie zwei oder mehr Variablen.",
         "Wählen Sie die primäre Methode: Pearson für lineare Beziehungen, Spearman bei Ausreißern oder Rängen.",
-        "Führen Sie sie aus und lesen Sie Koeffizient, KI und p; die Matrix zeigt jedes Paar.",
+        "Führen Sie sie aus und lesen Sie Koeffizient, CI und p; die Matrix zeigt jedes Paar.",
       ],
       expected: "Koeffizient mit Konfidenzintervall, p-Wert und eine Korrelationsmatrix mit Einsen auf der Diagonale.",
     },
@@ -399,10 +399,10 @@ export const coreTopics: HelpTopic[] = [
       steps: [
         "Abhängige Variable = Score, Unabhängige = Age.",
         "Lassen Sie OLS und aktivieren Sie unter „Erweitert“ robuste Standardfehler, wenn Sie Heteroskedastizität vermuten.",
-        "Führen Sie die Regression aus und lesen Sie Koeffizient, Standardfehler, KI und R².",
+        "Führen Sie die Regression aus und lesen Sie Koeffizient, Standardfehler, CI und R².",
         "Prüfen Sie die Diagnosediagramme der Residuen.",
       ],
-      expected: "Koeffiziententabelle mit KI, Anpassungsgüte und Residuendiagnostik.",
+      expected: "Koeffiziententabelle mit CI, Anpassungsgüte und Residuendiagnostik.",
     },
     advanced: {
       assumptions: [
@@ -440,7 +440,7 @@ export const coreTopics: HelpTopic[] = [
         "Sehen Sie sich die Klassifikationstabelle und den vorgeschlagenen Grenzwert an.",
         "Aktivieren Sie Firth bei wenigen Ereignissen oder Separation.",
       ],
-      expected: "Koeffizienten, Odds Ratios mit KI, Trennschärfemaße und eine Klassifikationstabelle.",
+      expected: "Koeffizienten, Odds Ratios mit CI, Trennschärfemaße und eine Klassifikationstabelle.",
     },
     advanced: {
       assumptions: ["Unabhängige Beobachtungen; Logit linear in den Prädiktoren."],
@@ -475,7 +475,7 @@ export const coreTopics: HelpTopic[] = [
       steps: [
         "Wählen Sie das Zählergebnis und die Prädiktoren.",
         "Beginnen Sie mit Poisson; liegt die geschätzte Dispersion deutlich über 1, wechseln Sie zur negativen Binomialverteilung.",
-        "Führen Sie die Regression aus und lesen Sie die Ratenverhältnisse mit KI.",
+        "Führen Sie die Regression aus und lesen Sie die Ratenverhältnisse mit CI.",
       ],
       expected: "Koeffizienten, Ratenverhältnisse, einen Überdispersions-Test und die Anpassungsgüte.",
     },
@@ -503,7 +503,7 @@ export const coreTopics: HelpTopic[] = [
       steps: [
         "Wählen Sie das ordinale Ergebnis (mindestens drei geordnete Kategorien).",
         "Wählen Sie die Prädiktoren und prüfen Sie die Stufenreihenfolge in der Spalte.",
-        "Führen Sie die Regression aus und lesen Sie die kumulativen Odds Ratios mit KI.",
+        "Führen Sie die Regression aus und lesen Sie die kumulativen Odds Ratios mit CI.",
       ],
       expected: "Koeffizienten mit kumulativen Odds Ratios und einem Test der Annahme proportionaler Odds.",
     },
@@ -532,7 +532,7 @@ export const coreTopics: HelpTopic[] = [
       dataset: "score-groups.csv",
       steps: [
         "Wählen Sie das Ergebnis, die festen Prädiktoren und die Spalte der Person oder des Clusters.",
-        "Führen Sie das Modell aus und lesen Sie die festen Koeffizienten mit KI.",
+        "Führen Sie das Modell aus und lesen Sie die festen Koeffizienten mit CI.",
         "Vergleichen Sie die Residuenvarianz mit der Varianz des zufälligen Achsenabschnitts.",
       ],
       expected: "Feste Effekte mit Standardfehlern, Schätzung der zufälligen Varianz und Anpassungskriterien.",

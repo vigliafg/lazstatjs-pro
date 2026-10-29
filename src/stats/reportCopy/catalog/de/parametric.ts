@@ -1,6 +1,6 @@
 /** de: report and table prose (normalised). */
 export const parametricCopy: Record<string, string> = {
-  '{s1} · CI {s2}%': '{s1} · KI {s2} %',
+  '{s1} · CI {s2}%': '{s1} · CI {s2} %',
   '{s1} AFT su {s2} osservazioni e {s3} eventi.':
     '{s1} AFT mit {s2} Beobachtungen und {s3} Ereignissen.',
   AIC: 'AIC',
@@ -40,7 +40,7 @@ export const parametricCopy: Record<string, string> = {
   'Time ratio': 'Time Ratio',
   'Time ratio > 1 indica tempi di sopravvivenza più lunghi per un’unità in più del predittore.':
     'Time Ratio > 1 zeigt längere Überlebenszeiten pro zusätzlicher Einheit des Prädiktors.',
-  'Time ratio e CI': 'Time Ratio und KI',
+  'Time ratio e CI': 'Time Ratio und CI',
   'TR high': 'TR oben',
   'TR low': 'TR unten',
   Valore: 'Wert',

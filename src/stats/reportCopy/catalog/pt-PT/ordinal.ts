@@ -1,46 +1,89 @@
-/** European Portuguese prose of the ordinal report and its tables. */
+/** pt-PT: report and table prose (normalised). */
 export const ordinalCopy: Record<string, string> = {
-  "Report di regressione ordinale": "Relatório de regressão ordinal",
-  "Modello a odds proporzionali su {s1} categorie e {s2} casi.": "Modelo de odds proporcionais com {s1} categorias e {s2} casos.",
-  "Predittori associati all’esito": "Preditores associados ao resultado",
-  "Nessun predittore significativo": "Nenhum preditor significativo",
-  "LR vs modello nullo: χ² = {s1}, p = {s2}.": "LR vs. modelo nulo: χ² = {s1}, p = {s2}.",
-  "Predittori: {s1}.": "Preditores: {s1}.",
-  "{s1} predittore/i spostano significativamente la probabilità verso le categorie più alte.": "{s1} preditor(es) deslocam significativamente a probabilidade para as categorias mais altas.",
-  "Nessun predittore raggiunge la significatività al livello scelto.": "Nenhum preditor atinge a significância ao nível escolhido.",
-  "L’ipotesi di odds proporzionali assume che l’effetto di ogni predittore sia lo stesso su tutti i tagli: se non regge, servono modelli ordinali non proporzionali.": "A hipótese de odds proporcionais assume que o efeito de cada preditor é o mesmo em todos os cortes: se não se verificar, são necessários modelos ordinais não proporcionais.",
-  "Con poche osservazioni per categoria le stime sono instabili.": "Com poucas observações por categoria as estimativas são instáveis.",
-  "Il modello assume categorie ordinate: l’ordine è quello alfabetico/numerico delle etichette.": "O modelo assume categorias ordenadas: a ordem é a alfabética/numérica das etiquetas.",
-  "Modello ordinale": "Modelo ordinal",
-  "{s1} categorie · {s2} casi · CI {s3}%": "{s1} categorias · {s2} casos · CI {s3}%",
-  "Metrica": "Métrica",
-  "Valore": "Valor",
-  "N": "N",
-  "Categorie": "Categorias",
-  "Log-verosimiglianza": "Log-verosimilhança",
-  "LR vs nullo": "LR vs. nulo",
-  "p LR": "p do LR",
-  "McFadden R²": "R² de McFadden",
-  "AIC": "AIC",
-  "BIC": "BIC",
-  "Modello a odds proporzionali con link logit: l’effetto dei predittori è costante su tutti i tagli.": "Modelo de odds proporcionais com ligação logit: o efeito dos preditores é constante em todos os cortes.",
-  "Le categorie sono ordinate alfabeticamente/numericamente in base alle etichette.": "As categorias são ordenadas alfabeticamente/numericamente com base nas etiquetas.",
-  "Coefficienti": "Coeficientes",
-  "OR e CI": "OR e CI",
-  "Termine": "Termo",
-  "β": "β",
-  "SE": "SE",
-  "z": "z",
-  "p": "p",
-  "OR": "OR",
-  "OR low": "OR inferior",
-  "OR high": "OR superior",
-  "OR > 1 indica uno spostamento verso le categorie più alte.": "OR > 1 indica um deslocamento para as categorias mais altas.",
-  "Soglie": "Limiares",
-  "Tagli tra categorie adiacenti": "Cortes entre categorias adjacentes",
-  "Taglio": "Corte",
-  "α": "α",
-  "CI low": "CI inferior",
-  "CI high": "CI superior",
-  "Le soglie sono in scala logit e devono restare ordinate.": "Os limiares estão na escala logit e têm de permanecer ordenados.",
+  '{s1} categorie · {s2} casi · CI {s3}%':
+    '{s1} categorias · {s2} casos · CI {s3}%',
+  '{s1} predittore/i spostano significativamente la probabilità verso le categorie più alte.':
+    '{s1} preditor(es) deslocam significativamente a probabilidade para as categorias mais altas.',
+  'AIC':
+    'AIC',
+  'BIC':
+    'BIC',
+  'Categorie':
+    'Categorias',
+  'CI high':
+    'CI superior',
+  'CI low':
+    'CI inferior',
+  'Coefficienti':
+    'Coeficientes',
+  'Con poche osservazioni per categoria le stime sono instabili.':
+    'Com poucas observações por categoria as estimativas são instáveis.',
+  'Il modello assume categorie ordinate: l’ordine è quello alfabetico/numerico delle etichette.':
+    'O modelo assume categorias ordenadas: a ordem é a alfabética/numérica das etiquetas.',
+  'L’ipotesi di odds proporzionali assume che l’effetto di ogni predittore sia lo stesso su tutti i tagli: se non regge, servono modelli ordinali non proporzionali.':
+    'A hipótese de odds proporcionais assume que o efeito de cada preditor é o mesmo em todos os cortes: se não se verificar, são necessários modelos ordinais não proporcionais.',
+  'Le categorie sono ordinate alfabeticamente/numericamente in base alle etichette.':
+    'As categorias são ordenadas alfabeticamente/numericamente com base nas etiquetas.',
+  'Le soglie sono in scala logit e devono restare ordinate.':
+    'Os limiares estão na escala logit e têm de permanecer ordenados.',
+  'Log-verosimiglianza':
+    'Log-verosimilhança',
+  'LR vs modello nullo: χ² = {s1}, p = {s2}.':
+    'LR vs. modelo nulo: χ² = {s1}, p = {s2}.',
+  'LR vs nullo':
+    'LR vs. nulo',
+  'McFadden R²':
+    'R² de McFadden',
+  'Metrica':
+    'Métrica',
+  'Modello a odds proporzionali con link logit: l’effetto dei predittori è costante su tutti i tagli.':
+    'Modelo de odds proporcionais com ligação logit: o efeito dos preditores é constante em todos os cortes.',
+  'Modello a odds proporzionali su {s1} categorie e {s2} casi.':
+    'Modelo de odds proporcionais com {s1} categorias e {s2} casos.',
+  'Modello ordinale':
+    'Modelo ordinal',
+  'N':
+    'N',
+  'Nessun predittore raggiunge la significatività al livello scelto.':
+    'Nenhum preditor atinge a significância ao nível escolhido.',
+  'Nessun predittore significativo':
+    'Nenhum preditor significativo',
+  'OR':
+    'OR',
+  'OR > 1 indica uno spostamento verso le categorie più alte.':
+    'OR > 1 indica um deslocamento para as categorias mais altas.',
+  'OR e CI':
+    'OR e CI',
+  'OR high':
+    'OR superior',
+  'OR low':
+    'OR inferior',
+  'p':
+    'p',
+  'p LR':
+    'p do LR',
+  'Predittori associati all’esito':
+    'Preditores associados ao resultado',
+  'Predittori: {s1}.':
+    'Preditores: {s1}.',
+  'Report di regressione ordinale':
+    'Relatório de regressão ordinal',
+  'SE':
+    'SE',
+  'Soglie':
+    'Limiares',
+  'Tagli tra categorie adiacenti':
+    'Cortes entre categorias adjacentes',
+  'Taglio':
+    'Corte',
+  'Termine':
+    'Termo',
+  'Valore':
+    'Valor',
+  'z':
+    'z',
+  'α':
+    'α',
+  'β':
+    'β',
 };

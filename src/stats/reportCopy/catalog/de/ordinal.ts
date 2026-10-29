@@ -1,14 +1,14 @@
 /** de: report and table prose (normalised). */
 export const ordinalCopy: Record<string, string> = {
   '{s1} categorie · {s2} casi · CI {s3}%':
-    '{s1} Kategorien · {s2} Fälle · KI {s3} %',
+    '{s1} Kategorien · {s2} Fälle · CI {s3} %',
   '{s1} predittore/i spostano significativamente la probabilità verso le categorie più alte.':
     '{s1} Prädiktor(en) verschieben die Wahrscheinlichkeit signifikant zu den höheren Kategorien.',
   AIC: 'AIC',
   BIC: 'BIC',
   Categorie: 'Kategorien',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   Coefficienti: 'Koeffizienten',
   'Con poche osservazioni per categoria le stime sono instabili.':
     'Bei wenigen Beobachtungen pro Kategorie sind die Schätzungen instabil.',
@@ -38,7 +38,7 @@ export const ordinalCopy: Record<string, string> = {
   OR: 'OR',
   'OR > 1 indica uno spostamento verso le categorie più alte.':
     'OR > 1 zeigt eine Verschiebung zu den höheren Kategorien.',
-  'OR e CI': 'OR und KI',
+  'OR e CI': 'OR und CI',
   'OR high': 'OR oben',
   'OR low': 'OR unten',
   p: 'p',

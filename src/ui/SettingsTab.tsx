@@ -165,10 +165,9 @@ export const SettingsTab = ({
             </div>
             <p className="rounded border border-border2 bg-surface3/40 px-2 py-1.5 text-[10px] leading-relaxed text-text3">
               {t('settings.reportCoverage', { locales: REPORT_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.
-              {' '}
-              {t('settings.plannedNote', { locales: PLANNED_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.
-              {' '}
-              {t('settings.reportItOnly')}
+              {PLANNED_LOCALES.length > 0 && (
+                <> {t('settings.plannedNote', { locales: PLANNED_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.</>
+              )}
             </p>
             <p className="text-[10px] leading-relaxed text-text3">{t('settings.reportSnapshotNote')}</p>
           </div>

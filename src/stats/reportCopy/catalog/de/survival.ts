@@ -11,9 +11,9 @@ export const survivalCopy: Record<string, string> = {
     'Nicht informative Zensierung: Wer die Studie verlässt, darf kein anderes Risiko haben als wer bleibt.',
   Censurati: 'Zensiert',
   'CI {s1}% log-log · stima prodotto-limite':
-    'KI {s1} % Log-Log · Produkt-Limit-Schätzung',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+    'CI {s1} % Log-Log · Produkt-Limit-Schätzung',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'Con più di due gruppi l’hazard ratio non è riportato: usa la regressione di Cox per un HR aggiustato.':
     'Bei mehr als zwei Gruppen wird das Hazard Ratio nicht berichtet: Verwenden Sie die Cox-Regression für ein adjustiertes HR.',
   'Con pochi eventi per gruppo il test ha poca potenza e l’HR è instabile.':
@@ -31,14 +31,14 @@ export const survivalCopy: Record<string, string> = {
   'Hazard ratio (Mantel–Haenszel)': 'Hazard Ratio (Mantel–Haenszel)',
   'Hazard ratio = {s1} ({s2} – {s3}): {s4}':
     'Hazard Ratio = {s1} ({s2} – {s3}): {s4}',
-  'HR CI high': 'HR-KI oben',
-  'HR CI low': 'HR-KI unten',
+  'HR CI high': 'HR-CI oben',
+  'HR CI low': 'HR-CI unten',
   'I censurati escono dal rischio senza far scendere la curva: è il motivo per cui serve un’analisi di sopravvivenza invece di una media.':
     'Zensierte verlassen das Risiko, ohne die Kurve zu senken: Deshalb braucht es eine Überlebensanalyse statt eines Mittelwerts.',
   'I tempi di censura coincidenti con un evento sono trattati come eventi allo stesso tempo (nessuna correzione per i ties oltre alla gestione standard del risk set).':
     'Zensierungszeiten, die mit einem Ereignis zusammenfallen, werden als Ereignisse zum selben Zeitpunkt behandelt (keine Korrektur für Bindungen über die übliche Behandlung des Risikosets hinaus).',
   'Il CI della mediana deriva dagli intervalli log-log della curva; RMST è l’area sotto la curva fino all’ultimo tempo osservato.':
-    'Das KI des Medians stammt aus den Log-Log-Intervallen der Kurve; RMST ist die Fläche unter der Kurve bis zum letzten beobachteten Zeitpunkt.',
+    'Das CI des Medians stammt aus den Log-Log-Intervallen der Kurve; RMST ist die Fläche unter der Kurve bis zum letzten beobachteten Zeitpunkt.',
   'Il log-rank assume rischi proporzionali: curve che si incrociano richiedono altri test.':
     'Der Log-Rank setzt proportionale Risiken voraus: sich kreuzende Kurven erfordern andere Tests.',
   'Il log-rank confronta il numero di eventi osservati in ogni gruppo con quelli attesi se le curve fossero uguali.':

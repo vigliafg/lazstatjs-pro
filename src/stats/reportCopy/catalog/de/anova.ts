@@ -4,12 +4,12 @@ export const anovaCopy: Record<string, string> = {
   ', η² = {s1} (effetto {s2})': ', η² = {s1} (Effekt: {s2})',
   '; Cohen’s d = {s1} ({s2})': '; Cohen’s d = {s1} ({s2})',
   '{s1} (soglia α = {s2}).': '{s1} (Schwelle α = {s2}).',
-  '{s1} per {s2} · CI {s3}%': '{s1} pro {s2} · KI {s3} %',
+  '{s1} per {s2} · CI {s3}%': '{s1} pro {s2} · CI {s3} %',
   '{s1} vs {s2}': '{s1} vs. {s2}',
   '{s1}: differenza {s2}, {s3} → {s4}{s5}.':
     '{s1}: Differenz {s2}, {s3} → {s4}{s5}.',
   '{s1}: n = {s2}, media {s3} (CI {s4}% {s5}), mediana {s6}, SD {s7}.':
-    '{s1}: n = {s2}, Mittelwert {s3} (KI {s4} % {s5}), Median {s6}, SD {s7}.',
+    '{s1}: n = {s2}, Mittelwert {s3} (CI {s4} % {s5}), Median {s6}, SD {s7}.',
   'Almeno una media di gruppo è diversa dalle altre: l’ipotesi nulla di medie tutte uguali viene rifiutata.':
     'Mindestens ein Gruppenmittelwert weicht von den anderen ab: Die Nullhypothese gleicher Mittelwerte wird verworfen.',
   'alternativa con varianze diseguali': 'Alternative bei ungleichen Varianzen',
@@ -22,9 +22,9 @@ export const anovaCopy: Record<string, string> = {
   'Between (gruppi)': 'Zwischen (Gruppen)',
   'Brown–Forsythe (mediana)': 'Brown–Forsythe (Median)',
   'CI della media entro gruppo: t di Student con df = n_gruppo − 1.':
-    'KI des Mittelwerts innerhalb der Gruppe: Students t mit df = n_Gruppe − 1.',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+    'CI des Mittelwerts innerhalb der Gruppe: Students t mit df = n_Gruppe − 1.',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   "Cohen's d": "Cohen's d",
   'Cohen’s d per confronto usa la SD within pooled (√MS_within).':
     'Cohens d pro Vergleich verwendet die gepoolte Within-SD (√MS_innerhalb).',
@@ -67,7 +67,7 @@ export const anovaCopy: Record<string, string> = {
   'H₀: tutte le medie uguali · α = {s1}':
     'H₀: alle Mittelwerte gleich · α = {s1}',
   'I CI sono individuali (non simultanei) al livello scelto; per Holm/Bonferroni il p è corretto, il CI no.':
-    'Die KI sind individuell (nicht simultan) auf dem gewählten Niveau; bei Holm/Bonferroni ist das p korrigiert, das KI nicht.',
+    'Die CI sind individuell (nicht simultan) auf dem gewählten Niveau; bei Holm/Bonferroni ist das p korrigiert, das CI nicht.',
   'I gruppi dovrebbero provenire da osservazioni indipendenti: la stessa unità non deve comparire in due gruppi.':
     'Die Gruppen sollten aus unabhängigen Beobachtungen stammen: Dieselbe Einheit darf nicht in zwei Gruppen auftauchen.',
   'I p post-hoc sono già corretti: usali al posto dei p dei singoli t-test, che sarebbero troppo ottimisti.':

@@ -65,9 +65,9 @@ export const coxCopy: Record<string, string> = {
   'I tempi di evento uguali sono gestiti con l’approssimazione di Breslow, che con molti pareggi può sottostimare lievemente gli errori standard.':
     'Gleiche Ereigniszeiten werden mit der Breslow-Näherung behandelt, die bei vielen Bindungen die Standardfehler leicht unterschätzen kann.',
   'IC {s1}% · HR per un’unità di incremento della covariata':
-    'KI {s1} % · HR pro Einheit Zunahme der Kovariate',
+    'CI {s1} % · HR pro Einheit Zunahme der Kovariate',
   'IC dell’HR che non contiene 1 è coerente con un test di Wald significativo; l’intervallo è moltiplicativo, quindi 0,5 e 2 sono effetti simmetrici.':
-    'Ein HR-KI, das die 1 nicht enthält, ist mit einem signifikanten Wald-Test vereinbar; das Intervall ist multiplikativ, daher sind 0,5 und 2 symmetrische Effekte.',
+    'Ein HR-CI, das die 1 nicht enthält, ist mit einem signifikanten Wald-Test vereinbar; das Intervall ist multiplikativ, daher sind 0,5 und 2 symmetrische Effekte.',
   'Il modello di Cox non è stimabile con i dati disponibili.':
     'Das Cox-Modell ist mit den verfügbaren Daten nicht schätzbar.',
   'Il modello è significativo (LR χ² = {s1}, {s2}) e la covariata più forte è {s3} (HR = {s4}).':
@@ -78,7 +78,7 @@ export const coxCopy: Record<string, string> = {
   'il modello spiega i tempi meglio del nulla':
     'das Modell erklärt die Zeiten besser als das Nullmodell',
   'Il profilo di rischio cambia con {s1}: per ogni unità in più l’hazard ratio è {s2}. Riporta sempre l’IC e il numero di eventi, e verifica se l’effetto è stabile nei sottogruppi.':
-    'Das Risikoprofil ändert sich mit {s1}: Pro zusätzlicher Einheit beträgt das Hazard Ratio {s2}. Berichten Sie immer das KI und die Zahl der Ereignisse und prüfen Sie, ob der Effekt in Untergruppen stabil ist.',
+    'Das Risikoprofil ändert sich mit {s1}: Pro zusätzlicher Einheit beträgt das Hazard Ratio {s2}. Berichten Sie immer das CI und die Zahl der Ereignisse und prüfen Sie, ob der Effekt in Untergruppen stabil ist.',
   'Il test aggiunge un coefficiente per covariata × log(t): se quel coefficiente è diverso da zero l’effetto cambia con il tempo.':
     'Der Test ergänzt einen Koeffizienten für Kovariate × log(t): Ist dieser Koeffizient von null verschieden, ändert sich der Effekt über die Zeit.',
   'Il test confronta il modello con uno che aggiunge covariata × log(t): un p piccolo segnala che l’effetto non è costante.':

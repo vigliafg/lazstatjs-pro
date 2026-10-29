@@ -12,7 +12,7 @@ export const countregCopy: Record<string, string> = {
   'df residui': 'Residuen-df',
   'Dispersione (Pearson/df)': 'Dispersion (Pearson/df)',
   'Il primo predittore ha IRR = {s1} (CI {s2}%: {s3} – {s4}).':
-    'Der erste Prädiktor hat IRR = {s1} (KI {s2} %: {s3} – {s4}).',
+    'Der erste Prädiktor hat IRR = {s1} (CI {s2} %: {s3} – {s4}).',
   'Il test LR confronta il modello con l’intercetta sola.':
     'Der LR-Test vergleicht das Modell mit dem Modell, das nur den Achsenabschnitt enthält.',
   IRR: 'IRR',
@@ -20,7 +20,7 @@ export const countregCopy: Record<string, string> = {
     'IRR = exp(β): Multiplikator der erwarteten Rate pro zusätzlicher Einheit des Prädiktors.',
   'IRR > 1 indica un tasso atteso più alto per un’unità in più del predittore; IRR < 1 un tasso più basso.':
     'IRR > 1 bedeutet eine höhere erwartete Rate pro zusätzlicher Einheit des Prädiktors; IRR < 1 eine niedrigere Rate.',
-  'IRR e CI {s1}%': 'IRR und KI {s1} %',
+  'IRR e CI {s1}%': 'IRR und CI {s1} %',
   'IRR high': 'IRR oben',
   'IRR low': 'IRR unten',
   'La dispersione è chiaramente sopra 1: il Poisson sottostima l’errore. Usa la negative binomiale.':

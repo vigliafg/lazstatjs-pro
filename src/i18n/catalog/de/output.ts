@@ -114,7 +114,7 @@ export const outputMessages: Record<keyof typeof enOutput, string> = {
   'output.reportTitle': 'LazStats JS — Analysebericht',
   'output.rows': 'Zeilen',
   'output.columns': 'Spalten',
-  'output.ci': 'KI',
+  'output.ci': 'CI',
   'report.limitations': 'Einschränkungen und Hinweise',
   'xlsx.table': 'Tabelle {n}',
   'output.untitled': 'Analyseausgabe',

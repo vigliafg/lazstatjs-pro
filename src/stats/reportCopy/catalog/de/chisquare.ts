@@ -18,11 +18,11 @@ export const chisquareCopy: Record<string, string> = {
     'Es gibt einen Zusammenhang zwischen den beiden Variablen, aber die Stärke ist {s1}: Bei vielen Daten wird auch ein schwacher Zusammenhang signifikant, daher beurteilen Sie die Größe, bevor Sie handeln.',
   Cella: 'Zelle',
   'Celle con E < 5': 'Zellen mit E < 5',
-  'CI {s1}%': 'KI {s1} %',
+  'CI {s1}%': 'CI {s1} %',
   'CI di φ/V: bootstrap percentile (500 repliche, seed fisso) ricampionando le osservazioni dalla tabella.':
-    'KI von φ/V: Perzentil-Bootstrap (500 Wiederholungen, fester Seed) durch Resampling der Beobachtungen aus der Tabelle.',
-  'CI high': 'KI oben',
-  'CI low': 'KI unten',
+    'CI von φ/V: Perzentil-Bootstrap (500 Wiederholungen, fester Seed) durch Resampling der Beobachtungen aus der Tabelle.',
+  'CI high': 'CI oben',
+  'CI low': 'CI unten',
   'Cochran: tutte ≥ 5 desiderabile': 'Cochran: alle ≥ 5 wünschenswert',
   'Column %': 'Spalten-%',
   'Come leggere i numeri': 'Wie die Zahlen zu lesen sind',
@@ -91,13 +91,13 @@ export const chisquareCopy: Record<string, string> = {
   'numerosità totale': 'Gesamtfallzahl',
   'Odds Ratio': 'Odds Ratio',
   'Odds ratio = {s1} (CI {s2}% {s3}): le odds di {s4} in {s5} sono {s6}.':
-    'Odds Ratio = {s1} (KI {s2} % {s3}): Die Odds von {s4} in {s5} sind {s6}.',
+    'Odds Ratio = {s1} (CI {s2} % {s3}): Die Odds von {s4} in {s5} sind {s6}.',
   'Odds ratio non calcolabile (celle a zero).':
     'Odds Ratio nicht berechenbar (Zellen mit null).',
   'Ogni osservazione deve stare in una sola cella: conteggi ripetuti della stessa unità gonfiano artificialmente la significatività.':
     'Jede Beobachtung muss in genau einer Zelle liegen: Wiederholte Zählungen derselben Einheit blähen die Signifikanz künstlich auf.',
   'OR: CI di Woolf su log(OR). RR: CI di Katz su log(RR). RD: CI di Wald. Con celle vuote le stime OR/RR non sono definite.':
-    'OR: Woolf-KI auf log(OR). RR: Katz-KI auf log(RR). RD: Wald-KI. Bei leeren Zellen sind die OR/RR-Schätzungen nicht definiert.',
+    'OR: Woolf-CI auf log(OR). RR: Katz-CI auf log(RR). RD: Wald-CI. Bei leeren Zellen sind die OR/RR-Schätzungen nicht definiert.',
   Osservato: 'Beobachtet',
   p: 'p',
   'Pearson χ²': 'Pearson χ²',

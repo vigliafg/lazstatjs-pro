@@ -69,7 +69,10 @@ test('every active catalog covers every key, with identical placeholders', () =>
   }
 });
 
-test('planned locales fall back to English until their catalog ships', () => {
+test('a locale without a catalog falls back to English', () => {
+  // Every shipped locale is active; the fallback still protects a future wave
+  // and any unknown value read from an old project file.
+  assert.equal(catalogFor('ja' as never), catalogFor('en'));
   for (const locale of PLANNED_LOCALES) {
     assert.equal(catalogFor(locale), catalogFor('en'));
   }
@@ -109,7 +112,7 @@ test('every family and analysis has localised metadata in every active locale', 
 test('translate selects the requested catalog and interpolates parameters', () => {
   assert.equal(translate('it', 'nav.data'), 'Dati');
   assert.equal(translate('en', 'nav.data'), 'Data');
-  assert.equal(translate('fr', 'nav.data'), 'Data');
+  assert.equal(translate('fr', 'nav.data'), 'Données');
   assert.equal(translate('it', 'output.rows'), 'righe');
 });
 

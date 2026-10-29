@@ -81,19 +81,50 @@ src/ui/analysis/AnalysisHeader.tsx
 
 | # | Fase | Deliverable | Gate | Stato |
 |---|---|---|---|---|
-| 0 | Censimento e glossario | inventario stringhe, decisioni di prodotto | — | ✅ (censimento eseguito; glossario non ancora come documento) |
+| 0 | Censimento e glossario | inventario stringhe, decisioni di prodotto | — | ✅ `docs/glossary/glossary.md` |
 | 1 | Core i18n reattivo | store, `t` con parametri, cataloghi per area, fallback | parità chiavi/placeholder, orfani | ✅ |
-| 2 | UI EN+IT | 738 chiavi, registry, assi dei grafici, export shell | `npm run check` | ✅ |
-| 3 | Report locale-aware | prosa e tabelle per procedura in EN/IT | golden doppi per lingua | ✅ meccanismo `reportCopy`, catalogo EN completo (2002 msgid), `REPORT_LOCALES = it, en` |
+| 2 | UI multilingua | 847 chiavi × 6 lingue, registry, assi dei grafici, export shell | `npm run check` | ✅ |
+| 3 | Report locale-aware | prosa e tabelle per procedura, 2003 msgid × 6 lingue | copertura, segnaposto, niente italiano residuo | ✅ |
 | 4 | Menu lingue | sezione Impostazioni + selettore header, persistenza | e2e cambio/persistenza | ✅ |
 | 5 | Infrastruttura manuale | schema, generatore, ricerca, stampa | build del libro | ✅ |
-| 6 | Contenuti manuale | 40 schede × 2 livelli × IT/EN | copertura registry | ✅ |
+| 6 | Contenuti manuale | 40 schede × 2 livelli × 6 lingue | copertura registry | ✅ |
 | 7 | Integrazione manuale | scheda HELP, popup, deep-link | e2e tab + popup | ✅ |
-| 8 | Ondate di traduzione | FR, ES, DE, PT-PT (UI, report, manuale) | parità + revisione | ⏳ in corso con un subagente per lingua |
+| 8 | Ondate di traduzione | FR, ES, DE, PT-PT (UI, report, manuale) | parità + revisione | ✅ testi completi; resta la revisione madrelingua |
+
+## Architettura delle traduzioni
+
+### Interfaccia (`src/i18n/`)
+
+`catalog/en/` è la fonte delle chiavi; ogni lingua è un
+`Record<keyof typeof enMessages, string>` diviso per area (`shell`, `form`,
+`data`, `analysis`, `output`, `meta`) e unito da `catalog/index.ts`.
+`catalogFor(locale)` fa fallback sull'inglese per una lingua non ancora
+registrata.
+
+### Manuale (`src/help/content/<locale>/`)
+
+Stessi `id` e stesso ordine (`TOPIC_ORDER`) per tutte le lingue; il generatore
+`scripts/build-help.mjs` produce `public/help/<locale>/`. `BOOKS` elenca le
+edizioni disponibili e `HelpPanel`/`HelpDialog` usano la lingua della guida
+(`helpLocale`, con `auto` = segui l'interfaccia).
+
+### Report e tabelle (`src/stats/reportCopy/`)
+
+- i builder scrivono la frase italiana come **msgid** e la avvolgono in
+  `copy('… {s1} …', { s1 })`; il catalogo della lingua attiva sostituisce il
+  testo, con fallback italiano;
+- `withReportLocale()` isola la lingua per una singola esecuzione
+  (`useAnalysisRun`), `sourceOf()` riporta un'etichetta tradotta al msgid e
+  mantiene validi i lookup dei report (`rowLike`, `rowBy`, nomi delle metriche);
+- `scripts/normalize-report-copy.mjs <locale>` normalizza un'ondata (rimuove le
+  chiavi duplicate, ordina, segnala quante stringhe restano identiche alla
+  sorgente);
+- `scripts/check-locale.mjs <locale>` è il gate di un'ondata: chiavi UI,
+  pagine del manuale, msgid dei report, segnaposto.
 
 ## Stato di avanzamento (verificato)
 
-Branch `wip/sessione-2` (worktree isolato), commit:
+Branch `wip/sessione-2` (worktree isolato). Commit della prima consegna:
 
 | Commit | Contenuto |
 |---|---|
@@ -102,28 +133,61 @@ Branch `wip/sessione-2` (worktree isolato), commit:
 | `394ad5a` | rientro nel limite di 700 righe dopo l'i18n delle etichette |
 | `190b981` | libro HTML/CSS/JS bilingue a due livelli, scheda + popup, dataset di esempio |
 | `2c031dd` | gating della lingua dei report, shell localizzata, documentazione, e2e |
+| `e94bc67` | piano e stato di avanzamento nel worktree, estrazione `AnalysisHeader` |
+| `096f423` | `reportCopy`, catalogo EN completo, report e tabelle localizzati, `REPORT_LOCALES = it, en` |
+| `a50b7e6` | ondata tedesca attiva |
+| vedi `git log` | ondate FR, ES, PT-PT, e2e per lingua, documentazione finale |
 
-Verifiche eseguite sull'ultimo commit:
+Verifiche eseguite sullo stato attuale:
 
-- `npm run check`: **471 test**, 0 falliti; depcruise 374 moduli senza violazioni; nessun ciclo; file-size ok con **una sola eccezione** (`src/stats/kernels/arima.ts`). L'eccezione storica di `helpContent.ts` è stata rimossa insieme al file.
-- `npm run build`: ok, `dist/help/en|it/*.html` presenti (il libro entra nel bundle statico).
-- `npx playwright test --project=desktop`: **36 passati, 1 skipped** (skip preesistente), inclusi i 3 nuovi test su lingua persistente, libro nella scheda HELP e popup con deep-link (`e2e/locale.spec.ts`, in modalità serial perché condividono lo stesso dev server).
+- `npm run check`: **481 test**, 0 falliti; depcruise 585 moduli senza
+  violazioni; nessun ciclo; file-size ok con **una sola eccezione**
+  (`src/stats/kernels/arima.ts`).
+- `npm run build`: ok, `dist/help/{it,en,fr,es,de,pt-PT}/*.html` presenti.
+- `npx playwright test --project=desktop`: **41 passati, 1 skipped**
+  (skip preesistente); `e2e/locale.spec.ts` copre cambio e persistenza della
+  lingua, libro nella scheda HELP per ogni ondata, popup con deep-link, card di
+  report nella lingua scelta e ondata tedesca end-to-end.
 
 Numeri del contenuto:
 
-- 738 chiavi di interfaccia × 2 lingue; 31 procedure + 10 famiglie con metadati localizzati;
-- manuale: 40 schede per lingua (9 d'area + 31 di procedura), ognuna con tutorial + avanzato, dataset `score-groups.csv`;
-- il badge "pesante"/"stale", i toast, gli export e le etichette del libro sono già localizzati.
+- 847 chiavi di interfaccia × 6 lingue (en, it, fr, es, de, pt-PT);
+- manuale: 40 schede per lingua (9 d'area + 31 di procedura), ognuna con
+  tutorial + avanzato, dataset `score-groups.csv`; 6 edizioni generate;
+- report: 2003 msgid unici (prosa + etichette di colonna, `metric`, `measure`,
+  `check`) tradotti in 5 lingue oltre alla sorgente italiana;
+- 31 procedure + 10 famiglie con metadati localizzati; badge, toast, export e
+  interfaccia del libro seguono la lingua scelta.
 
-## Debito residuo (in ordine di valore)
+## Debito residuo
 
-1. **Prosa dei report in inglese.** `src/stats/reports/*.ts` (29 file, ~18.600 parole) e le etichette delle tabelle (`src/stats/tables/*.ts`, ~980 stringhe) sono ancora italiane. Serve un catalogo per procedura (`src/stats/reports/catalog/en/<proc>.ts`, `src/stats/tables/catalog/en/<area>.ts`) con placeholder, `locale` inoltrato da `buildOutput` e golden doppi. Finché non è completo, `REPORT_LOCALES = ['it']` e Impostazioni lo dichiara esplicitamente.
-2. **Ondate FR/ES/DE/PT-PT.** Aggiungere `src/i18n/catalog/<locale>/` + `src/help/content/<locale>/`, poi `ACTIVE_LOCALES`; ogni ondata passa da parità chiavi, pseudo-locale e revisione madrelingua.
-3. **Glossario vincolante** (`docs/glossary/`) per coerenza terminologica nelle traduzioni.
-4. **Estensioni del manuale**: dataset di esempio dedicato alle procedure che oggi riusano `score-groups.csv`; link "apri questo esempio nel programma"; e2e per famiglia che esegue l'esempio e verifica l'headline del report.
+1. **Revisione madrelingua delle ondate.** I testi FR/ES/DE/PT-PT sono completi
+   e coerenti col glossario, ma vanno riletti da una persona madrelingua prima
+   di considerarli definitivi, soprattutto per la prosa dei report.
+2. **Msgid ambigui condivisi.** Alcune etichette valgono in due contesti (es.
+   `A` intestazione della life table e livello di un contrasto): per rispettare
+   "stessa traduzione per lo stesso msgid" restano identiche. Se serve
+   distinguerle, vanno separati i msgid nei rispettivi builder.
+3. **Lookup dei report.** Chi aggiunge un lookup su una riga di tabella deve
+   usare `rowBy`/`rowLike` o confrontare con `sourceOf(...)`; un confronto
+   diretto con una stringa italiana si rompe nelle altre lingue.
+4. **Card storiche.** Restano nella lingua in cui sono state prodotte (modello
+   snapshot): `Re-run all` le rigenera con la lingua corrente.
+5. **Estensioni del manuale**: dataset dedicati alle procedure che oggi riusano
+   `score-groups.csv`; link "apri questo esempio nel programma"; e2e per
+   famiglia che esegue l'esempio e verifica l'headline del report.
 
 ## Come estendere
 
-- **Nuova lingua attiva**: tradurre `src/i18n/catalog/<locale>/` (il tipo impone tutte le chiavi), `src/help/content/<locale>/` (stessi `id`), aggiungere il locale ad `ACTIVE_LOCALES` e al registro `BOOKS`; `npm run help:build` e `npm run check`.
-- **Nuova procedura**: aggiungere la voce al registry e la scheda con l'`id` corrispondente in `procedures-*.ts` per ogni lingua; `src/help/content.test.ts` fallisce finché manca (o non ha entrambi i livelli).
-- **Nuova lingua dei report**: tradurre tutte le procedure, poi aggiungere il locale a `REPORT_LOCALES`.
+- **Nuova lingua**: copiare `src/i18n/catalog/en/`, `src/help/content/en/` e
+  `src/stats/reportCopy/catalog/en/` nella nuova cartella e tradurre; eseguire
+  `node --import tsx scripts/check-locale.mjs <locale>` finché è verde; poi
+  registrare la lingua in `ACTIVE_LOCALES`, `catalog/index.ts`, `BOOKS`,
+  `REPORT_LOCALES` e `TRANSLATED_REPORT_LOCALES`. `npm run help:build` e
+  `npm run check`.
+- **Nuova procedura**: aggiungere la voce al registry e la scheda con l'`id`
+  corrispondente in `procedures-*.ts` per ogni lingua; `src/help/content.test.ts`
+  fallisce finché manca (o non ha entrambi i livelli).
+- **Nuovo testo in un report**: scrivere il msgid italiano dentro `copy(...)`,
+  eseguire `npm run check` e tradurre la voce nei cataloghi di tutte le lingue;
+  il test di copertura elenca esattamente ciò che manca.

@@ -99,7 +99,7 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'samplesize.delta': 'Differenz (Δ)',
   'samplesize.expectedDiff': 'Erwartete Differenz',
   'samplesize.sd': 'SD',
-  'samplesize.halfWidth': 'Halbbreite des KI (optional)',
+  'samplesize.halfWidth': 'Halbbreite des CI (optional)',
   'samplesize.margin': 'Äquivalenzmarge',
   'samplesize.hazardRatio': 'Hazard Ratio',
   'samplesize.eventRate': 'Ereignisrate',

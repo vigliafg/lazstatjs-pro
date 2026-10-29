@@ -3,7 +3,7 @@ export const logisticCopy: Record<string, string> = {
   '{s1} · N = {s2}': '{s1} · N = {s2}',
   '{s1} predittori pesano': '{s1} Prädiktoren wiegen',
   '{s1}: OR = {s2} (CI {s3} – {s4}), p = {s5}: un’unità in più {s6} le probabilità dell’esito di circa {s7}%.':
-    '{s1}: OR = {s2} (KI {s3} – {s4}), p = {s5}: Eine Einheit mehr {s6} die Odds des Ergebnisses um etwa {s7} %.',
+    '{s1}: OR = {s2} (CI {s3} – {s4}), p = {s5}: Eine Einheit mehr {s6} die Odds des Ergebnisses um etwa {s7} %.',
   '{s1}%': '{s1} %',
   '1 predittore pesa': '1 Prädiktor wiegt',
   Accuratezza: 'Genauigkeit',
@@ -17,7 +17,7 @@ export const logisticCopy: Record<string, string> = {
     'AUC = {s1}: Wahrscheinlichkeit, dass ein Fall mit positivem Ergebnis einen höheren Score erhält als ein negativer Fall. Genauigkeit an der gewählten Schwelle: {s2}.',
   B: 'B',
   BIC: 'BIC',
-  'CI {s1}%': 'KI {s1} %',
+  'CI {s1}%': 'CI {s1} %',
   Classificazione: 'Klassifikation',
   'Coefficienti e odds ratio': 'Koeffizienten und Odds Ratios',
   'Come leggere gli odds ratio': 'Wie die Odds Ratios zu lesen sind',
@@ -30,7 +30,7 @@ export const logisticCopy: Record<string, string> = {
   'Gli esiti devono essere indipendenti tra loro (una riga = una unità).':
     'Die Ergebnisse müssen untereinander unabhängig sein (eine Zeile = eine Einheit).',
   'Gli OR sono stimati al netto degli altri predittori e con un CI al {s1}%: un intervallo che contiene 1 corrisponde a un effetto non significativo.':
-    'Die OR werden bereinigt um die anderen Prädiktoren und mit einem KI von {s1} % geschätzt: Ein Intervall, das die 1 enthält, entspricht einem nicht signifikanten Effekt.',
+    'Die OR werden bereinigt um die anderen Prädiktoren und mit einem CI von {s1} % geschätzt: Ein Intervall, das die 1 enthält, entspricht einem nicht signifikanten Effekt.',
   'I dati separano quasi perfettamente gli esiti: le stime non sono affidabili.':
     'Die Daten trennen die Ergebnisse nahezu perfekt: Die Schätzungen sind nicht zuverlässig.',
   'Il modello contiene {s1} predittore/i su {s2} osservazioni e {s3} eventi.':
@@ -89,8 +89,8 @@ export const logisticCopy: Record<string, string> = {
   OR: 'OR',
   'OR > 1 aumenta le probabilità dell’esito per un’unità in più del predittore; OR < 1 le riduce. OR = 1 non ha effetto.':
     'OR > 1 erhöht die Odds des Ergebnisses pro zusätzlicher Einheit des Prädiktors; OR < 1 senkt sie. OR = 1 hat keinen Effekt.',
-  'OR CI high': 'OR-KI oben',
-  'OR CI low': 'OR-KI unten',
+  'OR CI high': 'OR-CI oben',
+  'OR CI low': 'OR-CI unten',
   Osservazioni: 'Beobachtungen',
   p: 'p',
   'p del modello': 'p des Modells',
