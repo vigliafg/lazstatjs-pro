@@ -2,8 +2,8 @@
 
 **Data:** 29 ottobre 2026  
 **Branch:** `grid-roadmap`  
-**HEAD:** `7032a73` — base della quinta tranche (dataset di prova, non ancora committata)
-**Stato git:** working tree con la quinta tranche; branch `grid-roadmap`
+**HEAD:** `982c179` — `Test: dataset di prova multi-formato per famiglia di analisi`
+**Stato git:** working tree pulito, branch allineato a `origin/grid-roadmap`
 **Verifica:** `npm run check` → 480 test, 0 fail; Playwright → 43 passed / 35 skipped; build ok, nessun chunk >500 kB; file-size guard ok (340 file, 3 eccezioni).
 
 ---
