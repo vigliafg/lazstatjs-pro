@@ -265,7 +265,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
                 </thead>
                 <tbody>
                   {preview.map((row, r) => (
-                    <tr key={r} className="hover:bg-white/5">
+                    <tr key={r} className="hover:bg-text/5">
                       {table.names.map((_, c) => (
                         <td key={c} className="border border-border px-2 py-0.5 text-text2 max-w-[160px] truncate" title={row[c] ?? ''}>
                           {row[c] ?? ''}
@@ -284,7 +284,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
           <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
           <button
             data-import="apply"
-            className="tb-btn bg-accent text-white border-accent disabled:opacity-40"
+            className="tb-btn bg-accent text-on-accent border-accent disabled:opacity-40"
             disabled={!table}
             onClick={() => {
               if (!table) return;

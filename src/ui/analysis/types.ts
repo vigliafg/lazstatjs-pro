@@ -38,6 +38,8 @@ export interface AnalysisTabProps {
   onApplyOutputParams: (entry: OutputEntry) => void;
   paramsSignatureFor: (analysisId: string) => string;
   limitationsLabel: string;
+  /** CSS custom properties for the output/report window only. */
+  outputStyle: Record<string, string>;
   onUpdateChart: (entryId: string, chartId: string, options: ChartOptions) => void;
   removeOutput: (index: number) => void;
   clearOutput: () => void;

@@ -1,13 +1,19 @@
-import { BarChart3, Database, Globe, HelpCircle, Settings } from 'lucide-react';
+import { BarChart3, Database, Globe, HelpCircle, Palette, Settings } from 'lucide-react';
 import type { ProjectTab } from '../io/project';
 import type { UiMode } from '../components/UiMode';
+import { themesByMode, type ThemeId } from '../theme';
 import { ACTIVE_LOCALES, LOCALE_LABELS, t, type Locale } from '../i18n';
+
+const themeModeLabel = (mode: 'dark' | 'light') =>
+  mode === 'dark' ? t('settings.themeDark') : t('settings.themeLight');
 
 export interface HeaderProps {
   activeTab: ProjectTab;
   setActiveTab: (tab: ProjectTab) => void;
   uiMode: UiMode;
   setUiMode: (mode: UiMode) => void;
+  theme: ThemeId;
+  setTheme: (theme: ThemeId) => void;
   uiLocale: Locale;
   setUiLocale: (locale: Locale) => void;
   /** Shown as a hint: the report language can differ from the interface one. */
@@ -20,6 +26,8 @@ export const Header = ({
   setActiveTab,
   uiMode,
   setUiMode,
+  theme,
+  setTheme,
   uiLocale,
   setUiLocale,
   reportLocale,
@@ -65,6 +73,26 @@ export const Header = ({
       {t('nav.help')}
     </button>
     <label className="ml-auto flex shrink-0 items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-text3">
+      <Palette className="h-3 w-3" aria-hidden="true" />
+      <span className="sr-only">{t('settings.theme')}</span>
+      <select
+        aria-label={t('settings.theme')}
+        className="max-w-[120px] rounded border border-border2 bg-surface3 px-1 py-0.5 text-[10px] text-text"
+        value={theme}
+        onChange={event => setTheme(event.target.value as ThemeId)}
+      >
+        {(['dark', 'light'] as const).map(mode => (
+          <optgroup key={mode} label={themeModeLabel(mode)}>
+            {themesByMode(mode).map(option => (
+              <option key={option.id} value={option.id}>
+                {option.name}
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
+    </label>
+    <label className="flex shrink-0 items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-text3">
       <Globe className="h-3 w-3" aria-hidden="true" />
       <span className="sr-only">{t('settings.uiLanguage')}</span>
       <select

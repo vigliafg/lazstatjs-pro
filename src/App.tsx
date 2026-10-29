@@ -15,6 +15,7 @@ import { useProjectSession } from './hooks/useProjectSession';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { useColumnOperations } from './hooks/useColumnOperations';
 import { useProjectParams } from './hooks/useProjectParams';
+import { useUiTheme } from './hooks/useUiTheme';
 import {
   defaultParamsForGrid,
   remapParams,
@@ -280,18 +281,16 @@ export default function App() {
   const [datasetId, setDatasetId] = useState(
     () => boot?.datasetId ?? `dataset-${Date.now().toString(36)}`
   );
-
   const { params, setParams } = useProjectParams(boot, grid);
-
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
+  const { theme, setTheme, outputAppearance, setOutputAppearance, outputStyle } = useUiTheme(boot?.settings.theme, boot?.settings.outputAppearance);
   const [uiLocale, setUiLocale] = useState<Locale>(boot?.settings.uiLocale ?? getLocale());
   const [reportLocale, setReportLocale] = useState<Locale>(boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale);
   const [helpLocale, setHelpLocale] = useState<HelpLocale>(boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale);
   const [chartDefaults, setChartDefaults] = useState<ChartDefaults>(
     () => boot?.settings.chartDefaults ?? DEFAULT_SETTINGS.chartDefaults
   );
-
   // The store drives `t()` everywhere; updating it re-renders the shell through
   // the `useLocale()` subscription below.
   useEffect(() => setLocale(activeLocaleOf(uiLocale)), [uiLocale]);
@@ -310,10 +309,8 @@ export default function App() {
     exportReportWord,
   } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast });
   useEffect(() => { outputsRef.current = outputs; }, [outputs]);
-
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
     useColumnOperations({ grid, params, setParams, setGrid, showToast });
-
   const assignPrimary = (column: number) => {
     const result = setPrimaryColumn(activeAnalysis, params, column);
     if (!result) {
@@ -337,8 +334,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale, chartDefaults }),
-    [ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale, chartDefaults]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, outputAppearance }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, outputAppearance]
   );
 
   const roleErrors = [
@@ -376,6 +373,8 @@ export default function App() {
     setParams(project.params);
     setCiLevel(project.settings.ciLevel);
     setUiMode(project.settings.uiMode);
+    setTheme(project.settings.theme);
+    setOutputAppearance(project.settings.outputAppearance);
     setUiLocale(project.settings.uiLocale);
     setReportLocale(project.settings.reportLocale);
     setHelpLocale(project.settings.helpLocale);
@@ -521,7 +520,7 @@ export default function App() {
     <UiModeProvider mode={uiMode}>
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} theme={theme} setTheme={setTheme} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
@@ -576,7 +575,6 @@ export default function App() {
             addRow={addRow}
           />
         </div>
-
         {activeTab === 'analysis' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingAnalysis')}</div>}>
           <AnalysisTab
@@ -620,16 +618,15 @@ export default function App() {
             cancelAnalysis={cancelAnalysisAndStop}
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
+            outputStyle={outputStyle}
           />
           </Suspense>
         )}
-
         {activeTab === 'help' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingHelp')}</div>}>
             <HelpPanel locale={bookLocaleFor(helpLocale, uiLocale)} />
           </Suspense>
         )}
-
         {activeTab === 'settings' && (
           <SettingsTab
             ioPrefs={ioPrefs}
@@ -647,6 +644,9 @@ export default function App() {
             setReportLocale={setReportLocale}
             helpLocale={helpLocale}
             setHelpLocale={setHelpLocale}
+            theme={theme}
+            setTheme={setTheme}
+            outputAppearance={outputAppearance} setOutputAppearance={setOutputAppearance}
             chartDefaults={chartDefaults}
             setChartDefaults={setChartDefaults}
           />

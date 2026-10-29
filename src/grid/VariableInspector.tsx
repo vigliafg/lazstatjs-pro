@@ -359,7 +359,7 @@ export const VariableInspector = ({
         <button
           type="button"
           onClick={() => onDelete(column)}
-          className="tb-btn flex flex-1 items-center justify-center gap-1 px-2 py-1 text-[10px] text-red/90 hover:bg-red hover:text-white"
+          className="tb-btn flex flex-1 items-center justify-center gap-1 px-2 py-1 text-[10px] text-red/90 hover:bg-red hover:text-on-accent"
         >
           <Trash2 className="h-3 w-3" />
           {t('inspector.delete')}

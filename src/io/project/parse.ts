@@ -6,6 +6,8 @@ import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 import { isActiveLocale, isHelpLocale, isLocale } from '../../i18n/locales';
 import { normalizeChartDefaults } from '../../charts/defaults';
+import { isThemeId } from '../../theme/themes';
+import { normalizeOutputAppearance } from '../../theme/outputAppearance';
 import {
   DEFAULT_PARAMS, DEFAULT_SETTINGS,
   type ProjectParams, type ProjectSettings,
@@ -530,11 +532,14 @@ export const parseSettings = (value: unknown): ProjectSettings => {
         ? activeTab
         : DEFAULT_SETTINGS.activeTab,
     uiMode: raw.uiMode === 'expert' ? 'expert' : 'guided',
+    // Optional in projects saved before the theme registry existed.
+    theme: isThemeId(raw.theme) ? raw.theme : DEFAULT_SETTINGS.theme,
     // Locales are optional: projects saved before multilingual support keep working.
     uiLocale: isActiveLocale(raw.uiLocale) ? raw.uiLocale : DEFAULT_SETTINGS.uiLocale,
     reportLocale: isLocale(raw.reportLocale) ? raw.reportLocale : DEFAULT_SETTINGS.reportLocale,
     helpLocale: isHelpLocale(raw.helpLocale) ? raw.helpLocale : DEFAULT_SETTINGS.helpLocale,
     chartDefaults: normalizeChartDefaults(raw.chartDefaults),
+    outputAppearance: normalizeOutputAppearance(raw.outputAppearance),
   };
 };
 

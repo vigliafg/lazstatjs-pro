@@ -11,6 +11,11 @@ import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 import { DEFAULT_CHART_DEFAULTS, type ChartDefaults } from '../../charts/defaults';
+import { DEFAULT_THEME_ID, type ThemeId } from '../../theme/themes';
+import {
+  DEFAULT_OUTPUT_APPEARANCE,
+  type OutputAppearance,
+} from '../../theme/outputAppearance';
 
 export const PROJECT_APP = 'lazstats';
 export const PROJECT_VERSION = 3;
@@ -325,6 +330,8 @@ export interface ProjectSettings {
   activeTab: ProjectTab;
   /** Guided hides the advanced form sections; Expert shows everything. */
   uiMode: 'guided' | 'expert';
+  /** Interface colours; one of the five dark or five light themes. */
+  theme: ThemeId;
   /** Interface language. */
   uiLocale: Locale;
   /** Language of the written report of every new run. */
@@ -333,6 +340,8 @@ export interface ProjectSettings {
   helpLocale: HelpLocale;
   /** Factory defaults for new charts (never applied retroactively). */
   chartDefaults: ChartDefaults;
+  /** Optional overrides for the output/report window only. */
+  outputAppearance: OutputAppearance;
 }
 
 export interface ProjectSnapshot {
@@ -544,8 +553,10 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   activeAnalysis: 'wizard',
   activeTab: 'data',
   uiMode: 'guided',
+  theme: DEFAULT_THEME_ID,
   uiLocale: DEFAULT_LOCALE,
   reportLocale: DEFAULT_REPORT_LOCALE,
   helpLocale: 'auto',
   chartDefaults: DEFAULT_CHART_DEFAULTS,
+  outputAppearance: DEFAULT_OUTPUT_APPEARANCE,
 };

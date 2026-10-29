@@ -156,7 +156,7 @@ export function ExportDialog({ grid, rowFilter, filterAffectsAnalysis, onClose, 
         <pre className="mx-4 mb-2 p-2 bg-surface3/40 border border-border rounded text-[10px] font-mono text-text2 overflow-auto max-h-40 scrollbar whitespace-pre-wrap">{preview}</pre>
         <div className="px-4 py-3 border-t border-border flex justify-end gap-2">
           <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
-          <button data-export="download" className="tb-btn bg-accent text-white border-accent" onClick={doExport} disabled={rows.length === 0}>
+          <button data-export="download" className="tb-btn bg-accent text-on-accent border-accent" onClick={doExport} disabled={rows.length === 0}>
             {t('io.download')}
           </button>
         </div>

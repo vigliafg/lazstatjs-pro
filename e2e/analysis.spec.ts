@@ -167,11 +167,12 @@ test('chart defaults apply to new runs and survive reload', async ({ page, isMob
   await page.goto('/');
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Charts' })).toBeVisible();
-  await page.getByLabel('Theme').selectOption('light');
+  const chartsSection = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Charts' }) });
+  await chartsSection.getByLabel('Theme').selectOption('light');
   await page.waitForTimeout(1200);
   await page.reload();
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
-  await expect(page.getByLabel('Theme')).toHaveValue('light');
+  await expect(chartsSection.getByLabel('Theme')).toHaveValue('light');
 
   await page.getByRole('button', { name: 'Analysis', exact: true }).click();
   await openAnova(page);

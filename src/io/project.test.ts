@@ -43,10 +43,12 @@ const makeSnapshot = () =>
         activeAnalysis: 'ttest',
         activeTab: 'analysis',
         uiMode: 'guided',
+        theme: 'dracula',
         uiLocale: 'it',
         reportLocale: 'it',
         helpLocale: 'auto',
         chartDefaults: DEFAULT_SETTINGS.chartDefaults,
+        outputAppearance: DEFAULT_SETTINGS.outputAppearance,
       },
       params: DEFAULT_PARAMS,
     },
@@ -71,6 +73,8 @@ describe('project snapshot roundtrip', () => {
     assert.equal(restored.settings.ciLevel, 99);
     assert.equal(restored.settings.activeAnalysis, 'ttest');
     assert.equal(restored.settings.activeTab, 'analysis');
+    assert.equal(restored.settings.theme, 'dracula');
+    assert.deepEqual(restored.settings.outputAppearance, DEFAULT_SETTINGS.outputAppearance);
     assert.deepEqual(restored.params, DEFAULT_PARAMS);
     assert.deepEqual(restored.settings.chartDefaults, DEFAULT_SETTINGS.chartDefaults);
   });
@@ -242,6 +246,15 @@ describe('project sanitisation', () => {
     assert.equal(parsed.params.anova.kwPosthoc, 'bonferroni');
     assert.equal(parsed.params.ttest.type, 'ind');
     assert.equal(parsed.params.ttest.mu, 0);
+  });
+
+  it('keeps a valid UI theme and rejects an unknown one', () => {
+    const base = makeSnapshot();
+    assert.equal(parseProject(serializeProject(base)).settings.theme, 'dracula');
+    const invalid = parseProject(
+      JSON.stringify({ ...base, settings: { ...base.settings, theme: 'neon-rainbow' } })
+    );
+    assert.equal(invalid.settings.theme, DEFAULT_SETTINGS.theme);
   });
 
   it('restores and sanitises sample-size parameters', () => {

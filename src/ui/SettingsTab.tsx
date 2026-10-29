@@ -1,8 +1,11 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { Clock3, FileDown, FilePlus2, FolderOpen, Save, Trash2 } from 'lucide-react';
+import { Check, Clock3, FileDown, FilePlus2, FolderOpen, Save, Trash2 } from 'lucide-react';
 import { savePrefs, type IoPreferences } from '../io/prefs';
 import { ChartDefaultsEditor } from '../components/charts/ChartDefaultsEditor';
 import type { ChartDefaults } from '../charts/defaults';
+import { themesByMode, type ThemeId } from '../theme';
+import type { OutputAppearance } from '../theme/outputAppearance';
+import { OutputAppearanceSettings } from './OutputAppearanceSettings';
 import {
   ACTIVE_LOCALES,
   LOCALE_LABELS,
@@ -29,12 +32,19 @@ export interface SettingsTabProps {
   setReportLocale: (locale: Locale) => void;
   helpLocale: HelpLocale;
   setHelpLocale: (locale: HelpLocale) => void;
+  theme: ThemeId;
+  setTheme: (theme: ThemeId) => void;
+  outputAppearance: OutputAppearance;
+  setOutputAppearance: Dispatch<SetStateAction<OutputAppearance>>;
   chartDefaults: ChartDefaults;
   setChartDefaults: Dispatch<SetStateAction<ChartDefaults>>;
 }
 
 const sectionTitle =
   'text-accent2 font-mono text-[11px] font-bold uppercase tracking-widest mb-6 pb-2 border-b border-border';
+
+const themeModeLabel = (mode: 'dark' | 'light') =>
+  mode === 'dark' ? t('settings.themeDark') : t('settings.themeLight');
 
 export const SettingsTab = ({
   ioPrefs,
@@ -52,6 +62,10 @@ export const SettingsTab = ({
   setReportLocale,
   helpLocale,
   setHelpLocale,
+  theme,
+  setTheme,
+  outputAppearance,
+  setOutputAppearance,
   chartDefaults,
   setChartDefaults,
 }: SettingsTabProps) => (
@@ -118,6 +132,91 @@ export const SettingsTab = ({
           </div>
         </section>
 
+
+        <section className="rounded-lg border border-border bg-surface p-6">
+          <h2 className={sectionTitle}>{t('settings.appearance')}</h2>
+          <p className="mb-4 text-[11px] leading-relaxed text-text3">{t('settings.themeHint')}</p>
+          <div className="space-y-5">
+            {(['dark', 'light'] as const).map(mode => (
+              <div key={mode}>
+                <h3 className="mb-2 font-mono text-[9px] uppercase tracking-widest text-text3">
+                  {themeModeLabel(mode)}
+                </h3>
+                <div
+                  role="radiogroup"
+                  aria-label={themeModeLabel(mode)}
+                  className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                >
+                  {themesByMode(mode).map(option => {
+                    const selected = theme === option.id;
+                    return (
+                      <button
+                        key={option.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        aria-label={`${option.name} · ${themeModeLabel(mode)}`}
+                        data-theme-option={option.id}
+                        onClick={() => setTheme(option.id as ThemeId)}
+                        className={`flex items-center gap-3 rounded border p-2 text-left transition-all ${
+                          selected
+                            ? 'border-accent bg-accent/10 shadow-[inset_0_0_0_1px_var(--color-accent)]'
+                            : 'border-border bg-surface3/40 hover:border-border2 hover:bg-surface3'
+                        }`}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="flex h-11 w-16 shrink-0 overflow-hidden rounded border border-border2"
+                          style={{ background: option.tokens.bg }}
+                        >
+                          <span
+                            className="m-1 flex flex-1 flex-col justify-between rounded-sm p-1"
+                            style={{ background: option.tokens.surface }}
+                          >
+                            <span className="flex gap-0.5">
+                              {option.chart.palette.slice(0, 4).map(color => (
+                                <span
+                                  key={color}
+                                  className="h-1.5 flex-1 rounded-full"
+                                  style={{ backgroundColor: color }}
+                                />
+                              ))}
+                            </span>
+                            <span
+                              className="font-mono text-[8px] font-semibold leading-none"
+                              style={{ color: option.tokens.text }}
+                            >
+                              Aa
+                            </span>
+                          </span>
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-center gap-1 text-[12px] font-medium text-text">
+                            {option.name}
+                            {selected && <Check className="h-3 w-3 shrink-0 text-accent" aria-hidden="true" />}
+                          </span>
+                          <span className="block font-mono text-[9px] uppercase tracking-widest text-text3">
+                            {themeModeLabel(mode)}
+                          </span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-lg border border-border bg-surface p-6">
+          <h2 className={sectionTitle}>{t('settings.outputStyle')}</h2>
+          <p className="mb-4 text-[11px] leading-relaxed text-text3">{t('settings.outputStyleHint')}</p>
+          <OutputAppearanceSettings
+            theme={theme}
+            appearance={outputAppearance}
+            onChange={setOutputAppearance}
+          />
+        </section>
 
         <section className="rounded-lg border border-border bg-surface p-6">
           <h2 className={sectionTitle}>{t('settings.language')}</h2>

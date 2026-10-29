@@ -303,7 +303,7 @@ export function DataGrid(props: Props) {
                     <select
                       aria-label={`${t('inspector.type')}: ${col.name}`}
                       title={COL_TYPES.find((t) => t.id === col.type)?.full ?? col.type}
-                      className="w-full bg-transparent border-none text-accent2 text-[10px] font-semibold py-1 pl-1 pr-5 outline-none appearance-none text-center cursor-pointer hover:bg-white/5"
+                      className="w-full bg-transparent border-none text-accent2 text-[10px] font-semibold py-1 pl-1 pr-5 outline-none appearance-none text-center cursor-pointer hover:bg-text/5"
                       value={col.type}
                       onChange={(e) => props.onColType(i, e.target.value as ColType)}
                     >
@@ -344,7 +344,7 @@ export function DataGrid(props: Props) {
               </tr>
             )}
             {windowRows.map(({ row, index: rIdx }) => (
-              <tr key={rIdx} style={{ height: ROW_HEIGHT }} className="hover:bg-white/5 transition-colors">
+              <tr key={rIdx} style={{ height: ROW_HEIGHT }} className="hover:bg-text/5 transition-colors">
                 <th
                   scope="row"
                   className={`border border-border text-center font-normal text-text3 bg-surface2/30 cursor-context-menu select-none ${
@@ -648,7 +648,7 @@ export function DataGrid(props: Props) {
 function MenuItem({ label, onClick, danger }: { label: string; onClick: () => void; danger?: boolean }) {
   return (
     <button
-      className={`w-full text-left px-3 py-1.5 hover:bg-accent hover:text-white transition-colors ${danger ? 'text-red/90' : 'text-text2'}`}
+      className={`w-full text-left px-3 py-1.5 hover:bg-accent hover:text-on-accent transition-colors ${danger ? 'text-red/90' : 'text-text2'}`}
       onClick={onClick}
     >
       {label}

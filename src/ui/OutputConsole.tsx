@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import {
   ChevronDown,
   ChevronRight,
@@ -89,6 +89,8 @@ export interface OutputConsoleProps {
   currentCiLevel?: number;
   /** Localised "Limitations and caveats" label for the report body. */
   limitationsLabel?: string;
+  /** Presentation overrides scoped to `#output-content`. */
+  outputStyle?: Record<string, string>;
   /** Done in the chart editor: persist new options without re-running. */
   onUpdateChart?: (entryId: string, chartId: string, options: ChartOptions) => void;
 }
@@ -134,6 +136,7 @@ export const OutputConsole = ({
   currentFilterSignature,
   currentCiLevel,
   limitationsLabel,
+  outputStyle,
   onUpdateChart,
 }: OutputConsoleProps) => {
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
@@ -362,7 +365,11 @@ export const OutputConsole = ({
         </div>
       )}
 
-      <div id="output-content" className="scrollbar min-h-0 flex-1 overflow-auto bg-bg p-4">
+      <div
+        id="output-content"
+        className="scrollbar min-h-0 flex-1 overflow-auto p-4"
+        style={outputStyle as CSSProperties | undefined}
+      >
         {outputs.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-3 text-text3 opacity-70">
             <FileText className="h-10 w-10" />
@@ -500,7 +507,7 @@ export const OutputConsole = ({
                     <button
                       type="button"
                       onClick={() => onRemove(index)}
-                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-red hover:text-white"
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-red hover:text-on-accent"
                       title={t('output.remove')}
                       aria-label={t('output.removeAria')}
                     >

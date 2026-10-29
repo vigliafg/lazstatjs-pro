@@ -146,7 +146,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
               onClick={() => go(item)}
               aria-pressed={pane === item}
               className={`rounded px-2 py-1 font-mono text-[9px] uppercase tracking-wider transition-colors ${
-                pane === item ? 'bg-accent text-white' : 'text-text3 hover:text-text2'
+                pane === item ? 'bg-accent text-on-accent' : 'text-text3 hover:text-text2'
               }`}
             >
               {item === 'options' ? t('analysis.setup') : t(`analysis.${item}` as 'analysis.library' | 'analysis.output')}
@@ -240,6 +240,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             onApplyParams={props.onApplyOutputParams}
             paramsSignatureFor={props.paramsSignatureFor}
             limitationsLabel={props.limitationsLabel}
+            outputStyle={props.outputStyle}
             onUpdateChart={props.onUpdateChart}
             currentRevision={props.dataRevision}
             currentDatasetId={props.datasetId}

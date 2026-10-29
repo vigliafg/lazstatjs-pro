@@ -220,7 +220,7 @@ export const ChartEditorDialog = ({
           </button>
           <button
             type="button"
-            className="tb-btn border-accent bg-accent px-3 py-1 text-[10px] text-white hover:bg-accent2"
+            className="tb-btn border-accent bg-accent px-3 py-1 text-[10px] text-on-accent hover:bg-accent2"
             onClick={() => onDone(draft)}
           >
             {t('chart.done')}

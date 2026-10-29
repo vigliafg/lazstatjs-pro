@@ -253,31 +253,31 @@ export const DataTab = ({
     >
       {t('data.autoFix')}
     </button>
-    <button className={`tb-btn ${showClean ? 'bg-accent text-white border-accent' : ''}`} onClick={() => setShowClean((v) => !v)}>
+    <button className={`tb-btn ${showClean ? 'bg-accent text-on-accent border-accent' : ''}`} onClick={() => setShowClean((v) => !v)}>
       {t('data.clean')}
     </button>
-    <button className={`tb-btn ${showTransform ? 'bg-accent text-white border-accent' : ''}`} onClick={() => setShowTransform((v) => !v)}>
+    <button className={`tb-btn ${showTransform ? 'bg-accent text-on-accent border-accent' : ''}`} onClick={() => setShowTransform((v) => !v)}>
       {t('data.transform')}
     </button>
     </div>
     <div className="h-4 w-px bg-border mx-1" />
     <div role="group" aria-label={t('data.groupView')} className="flex flex-wrap items-center gap-2">
     <button
-      className={`tb-btn ${freezeFirstCol ? 'bg-accent text-white border-accent' : ''}`}
+      className={`tb-btn ${freezeFirstCol ? 'bg-accent text-on-accent border-accent' : ''}`}
       onClick={() => setFreezeFirstCol((v) => !v)}
       title={t('data.freezeHint')}
     >
       {t('data.freezeCol')}
     </button>
     <button
-      className={`tb-btn ${showInspector ? 'bg-accent text-white border-accent' : ''}`}
+      className={`tb-btn ${showInspector ? 'bg-accent text-on-accent border-accent' : ''}`}
       onClick={() => setShowInspector((value) => !value)}
       title={t('data.variablesHint')}
     >
       {t('data.variables')}
     </button>
     <button
-      className={`tb-btn ${showFilter ? 'bg-accent text-white border-accent' : ''}`}
+      className={`tb-btn ${showFilter ? 'bg-accent text-on-accent border-accent' : ''}`}
       onClick={() => setShowFilter((v) => !v)}
       title={t('data.filterHint')}
     >
@@ -335,7 +335,7 @@ export const DataTab = ({
       </button>
       <button
         type="button"
-        className={`tb-btn ${filterAffectsAnalysis ? 'bg-accent text-white border-accent' : ''}`}
+        className={`tb-btn ${filterAffectsAnalysis ? 'bg-accent text-on-accent border-accent' : ''}`}
         onClick={() => setFilterAffectsAnalysis(value => !value)}
         title={t('data.affectsHint')}
       >
@@ -573,7 +573,7 @@ export const DataTab = ({
     <button className="tb-btn" onClick={addColumn}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addColumn')}</button>
     <button className="tb-btn" onClick={addRow}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addRow')}</button>
     <button
-      className="tb-btn text-red/80 hover:bg-red hover:text-white"
+      className="tb-btn text-red/80 hover:bg-red hover:text-on-accent"
       onClick={() => {
         if (!window.confirm(t('data.confirmClear'))) return;
         setGrid((prev) => gridClear(prev));

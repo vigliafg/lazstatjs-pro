@@ -180,7 +180,7 @@ export const LevelsEditor: React.FC<Props> = ({
         onClick={openEditor}
         className={
           className ??
-          'w-full flex items-center justify-center gap-1 text-[8px] font-mono uppercase tracking-wider text-text3 hover:text-accent hover:bg-white/5 py-0.5 border-t border-border/50 disabled:opacity-40'
+          'w-full flex items-center justify-center gap-1 text-[8px] font-mono uppercase tracking-wider text-text3 hover:text-accent hover:bg-text/5 py-0.5 border-t border-border/50 disabled:opacity-40'
         }
         title={`${t('levels.editFor')} ${col?.name ?? t('form.group')}: ${t('levels.editTitle')}`}
         aria-label={`${t('levels.editFor')} ${col?.name ?? t('form.group')}`}
@@ -431,7 +431,7 @@ export const LevelsEditor: React.FC<Props> = ({
                 {t('levels.cancel')}
               </button>
               {mode === 'levels' ? (
-                <button type="button" className="tb-btn bg-accent text-white border-accent" onClick={apply}>
+                <button type="button" className="tb-btn bg-accent text-on-accent border-accent" onClick={apply}>
                   {t('levels.applyLevels')}
                 </button>
               ) : (
@@ -441,7 +441,7 @@ export const LevelsEditor: React.FC<Props> = ({
                   </button>
                   <button
                     type="button"
-                    className="tb-btn bg-accent text-white border-accent"
+                    className="tb-btn bg-accent text-on-accent border-accent"
                     disabled={Object.keys(recodeMapping).length === 0}
                     onClick={applyRecode}
                   >

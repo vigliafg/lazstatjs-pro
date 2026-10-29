@@ -12,18 +12,28 @@
   --color-border2: #343a50;
   --color-accent: #4f9cf9;
   --color-accent2: #38bdf8;
+  --color-on-accent: #0d0f14;
+  --color-on-accent2: #0d0f14;
   --color-green: #34d399;
   --color-yellow: #fbbf24;
   --color-red: #f87171;
   --color-purple: #a78bfa;
   --color-text: #e2e8f0;
   --color-text2: #94a3b8;
-  --color-text3: #64748b;
+  --color-text3: #8491a6;
 }
 
 @layer base {
+  :root {
+    color-scheme: dark;
+  }
   body {
     @apply bg-bg text-text font-sans text-[13px] h-screen flex flex-col overflow-hidden;
+  }
+  input,
+  select,
+  textarea {
+    accent-color: var(--color-accent);
   }
 }
 
@@ -64,7 +74,7 @@
   }
 
   .tb-btn {
-    @apply bg-surface3 border border-border2 text-text2 font-sans text-[11px] px-2.5 py-1 cursor-pointer rounded transition-all hover:bg-accent hover:text-white hover:border-accent;
+    @apply bg-surface3 border border-border2 text-text2 font-sans text-[11px] px-2.5 py-1 cursor-pointer rounded transition-all hover:bg-accent hover:text-on-accent hover:border-accent;
   }
   .tb-btn:disabled {
     opacity: 0.45;
@@ -82,11 +92,12 @@
   }
 
   .run-btn {
-    @apply rounded text-[12px] font-semibold text-white transition-all;
+    @apply rounded text-[12px] font-semibold text-on-accent transition-all;
     background: var(--color-accent);
   }
   .run-btn:hover {
     background: var(--color-accent2);
+    color: var(--color-on-accent2);
   }
   .run-btn:active {
     transform: translateY(1px);
@@ -107,7 +118,7 @@
   /* Per-run remove control: revealed on hover/focus, always faintly visible
      on touch devices where hover does not exist. */
   .output-remove {
-    @apply absolute top-0 right-0 z-20 flex items-center rounded border border-border2 bg-surface3/90 p-1 text-text3 cursor-pointer transition-all opacity-0 hover:bg-red hover:text-white hover:border-red focus:opacity-100;
+    @apply absolute top-0 right-0 z-20 flex items-center rounded border border-border2 bg-surface3/90 p-1 text-text3 cursor-pointer transition-all opacity-0 hover:bg-red hover:text-on-accent hover:border-red focus:opacity-100;
   }
   .output-run:hover > .output-remove,
   .output-run:focus-within > .output-remove {
@@ -133,7 +144,7 @@
     @apply border border-border px-3 py-0.5 text-text2 text-[11px];
   }
   .output-table tr:nth-child(even) td {
-    @apply bg-white/5;
+    background: color-mix(in srgb, var(--color-text) 5%, transparent);
   }
 
   .summary-box {
@@ -167,9 +178,40 @@
   }
 
   /* Output scroll container: the workbench owns the height, so no floating
-     controls need a large safety margin at the bottom. */
+     controls need a large safety margin at the bottom. The `--output-*`
+     variables are injected inline by the output appearance settings; the
+     re-mapped semantic tokens keep cards, tables and the restored report
+     coherent with a custom background/foreground, without leaking outside
+     this container. */
   #output-content {
-    @apply flex-1 overflow-auto p-4 font-mono text-[12px] leading-relaxed text-text2 bg-bg min-h-0 min-w-0 pb-8;
+    @apply flex-1 overflow-auto p-4 leading-relaxed min-h-0 min-w-0 pb-8;
+    background: var(--output-bg);
+    color: var(--output-fg);
+    font-family: var(--output-font);
+    font-size: var(--output-size);
+    --color-bg: var(--output-bg);
+    --color-surface: var(--output-surface);
+    --color-surface2: var(--output-surface2);
+    --color-surface3: var(--output-surface3);
+    --color-border: var(--output-border);
+    --color-border2: var(--output-border2);
+    --color-text: var(--output-text);
+    --color-text2: var(--output-text2);
+    --color-text3: var(--output-text3);
+  }
+  #output-content .output-title,
+  #output-content .output-card p,
+  #output-content .output-card li,
+  #output-content .output-card td,
+  #output-content .output-card th {
+    font-size: var(--output-size);
+  }
+  #output-content .output-card h3,
+  #output-content .output-card h4 {
+    font-size: calc(var(--output-size) * 0.92);
+  }
+  #output-content .font-mono {
+    font-family: var(--output-font);
   }
 }
 
@@ -178,6 +220,6 @@
    `bg-transparent text-text` (utilities are sorted by name, not by the class
    attribute), which left invalid cells looking normal. */
 .cell-invalid {
-  background-color: rgba(248, 113, 113, 0.12);
+  background-color: color-mix(in srgb, var(--color-red) 14%, transparent);
   color: var(--color-red);
 }

@@ -25,7 +25,10 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
     rows: input.grid.rows.map((row) => [...row]),
   },
   prefs: { ...input.prefs },
-  settings: { ...input.settings },
+  settings: {
+    ...input.settings,
+    outputAppearance: { ...input.settings.outputAppearance },
+  },
   params: parseParams(input.params, input.grid.cols.length),
   outputs: capStoredOutputs(
     (input.outputs ?? [])
