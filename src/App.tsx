@@ -35,6 +35,7 @@ const AnalysisTab = lazy(() =>
 import { ANALYSIS_TABS } from './analyses/registry';
 import {
   activeLocaleOf,
+  getLocale,
   setLocale,
   t,
   useLocale,
@@ -298,7 +299,7 @@ export default function App() {
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
   const [uiLocale, setUiLocale] = useState<Locale>(
-    boot?.settings.uiLocale ?? DEFAULT_SETTINGS.uiLocale
+    boot?.settings.uiLocale ?? getLocale()
   );
   const [reportLocale, setReportLocale] = useState<Locale>(
     boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale

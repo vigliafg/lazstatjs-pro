@@ -41,13 +41,13 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Live-run** for instant procedures: a debounced toggle that replaces the same card instead of stacking results
 - **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear
 - **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
-- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with static UI chrome centralised in `src/i18n.ts`; catalogue, help/report prose and domain messages stay content
+- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with static UI chrome centralised in `src/i18n/` (English + Italian catalogs); catalogue metadata, help book and report prose are content modules
 
-### Help
-- **In-app HELP tab** (next to Settings) with eight inner tabs: Overview, Data Editor, Data prep, Groups & levels, Analyses, Output & reports, Recipes and Shortcuts & settings
-- Every block is written as a numbered sequence of the buttons and selectors the user actually sees, with a worked example, tables for reference and highlighted tips
-- The Analyses tab documents every analysis panel (steps + example each); the Recipes tab walks through twelve end-to-end questions
-- Content lives in `src/help/helpContent.ts` as plain data and is guarded by `src/help/helpContent.test.ts` (structure, coverage of every analysis panel, presence of the main tool labels)
+### Help handbook
+- **HELP tab** hosts the generated handbook (plain HTML + CSS + JS) in an iframe: cover, contents, search, previous/next navigation and a printable edition of the whole book
+- Every page has **two levels**: a tutorial with a worked example on a real dataset (`score-groups.csv`) and an advanced reading in plain language (assumptions, when to use/avoid the procedure, how to read the output, pitfalls, key terms)
+- The same page can be opened as a **popup from the analysis panel and from every output card** (`?` button), deep-linked to the tutorial or the advanced section
+- Content is authored as structured data in `src/help/content/<locale>/` (40 pages per language) and rendered by `scripts/build-help.mjs` into `public/help/<locale>/` on `predev`/`prebuild`; `src/help/content.test.ts` checks that every registry procedure has both levels, that locales stay aligned and that datasets exist
 
 ### Project persistence
 - **Silent autosave** of the grid, CI level, analysis parameters, IO preferences and the output console to `localStorage` (debounced), restored automatically on the next visit
@@ -95,6 +95,7 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 ### Written reports
 - Every run of an analysis closes with a **Report di lettura** card: plain-language headline of the outcome, what the test actually does, the reading of each result (difference, effect size, assumptions, non-parametric counterpart), a glossary of the statistics shown and the caveats that apply
 - The text is generated from the computed tables, so it always matches the numbers on screen and follows the selected confidence level (90/95/99%)
+- Report prose is currently written in Italian; the interface, the handbook and the export shells are already multilingual (English + Italian) and the remaining report languages are the next translation wave
 
 ## Tech Stack
 

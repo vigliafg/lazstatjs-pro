@@ -15,6 +15,9 @@ export type Locale = (typeof ACTIVE_LOCALES)[number] | (typeof PLANNED_LOCALES)[
 export const DEFAULT_LOCALE: Locale = 'en';
 export const DEFAULT_REPORT_LOCALE: Locale = 'it';
 
+/** Locales whose report prose is translated and selectable in Settings. */
+export const REPORT_LOCALES: readonly Locale[] = ['it'];
+
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: 'English',
   it: 'Italiano',

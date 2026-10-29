@@ -5,6 +5,7 @@ import {
   ACTIVE_LOCALES,
   LOCALE_LABELS,
   PLANNED_LOCALES,
+  REPORT_LOCALES,
   t,
   type HelpLocale,
   type Locale,
@@ -139,7 +140,7 @@ export const SettingsTab = ({
                 value={reportLocale}
                 onChange={e => setReportLocale(e.target.value as Locale)}
               >
-                {ACTIVE_LOCALES.map(locale => (
+                {REPORT_LOCALES.map(locale => (
                   <option key={locale} value={locale}>
                     {LOCALE_LABELS[locale]}
                   </option>
@@ -163,9 +164,11 @@ export const SettingsTab = ({
               </select>
             </div>
             <p className="rounded border border-border2 bg-surface3/40 px-2 py-1.5 text-[10px] leading-relaxed text-text3">
-              {t('settings.reportCoverage', { locales: ACTIVE_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.
+              {t('settings.reportCoverage', { locales: REPORT_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.
               {' '}
               {t('settings.plannedNote', { locales: PLANNED_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.
+              {' '}
+              {t('settings.reportItOnly')}
             </p>
             <p className="text-[10px] leading-relaxed text-text3">{t('settings.reportSnapshotNote')}</p>
           </div>

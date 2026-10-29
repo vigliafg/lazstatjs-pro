@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx';
 import type { GridData } from '../grid/types';
 import { toImportTable, type ImportTable } from './readers';
 import type { ColType } from '../grid/types';
+import { t } from '../i18n';
 
 export const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
@@ -186,7 +187,7 @@ export const buildResultsWorkbookFromElement = (root: HTMLElement, grid: GridDat
   const sheets: WorkbookSheet[] = [data, infoSheet(grid, rowsExported)];
   root.querySelectorAll('table.output-table').forEach((table, index) => {
     const heading = table.closest('section')?.querySelector('h3')?.textContent?.trim();
-    const title = heading && heading !== '' ? heading : `Tabella ${index + 1}`;
+    const title = heading && heading !== '' ? heading : t('xlsx.table', { n: index + 1 });
     const rows = renderTableRows(table as HTMLTableElement);
     if (rows.length === 0) return;
     sheets.push({ name: names.take(title), rows });

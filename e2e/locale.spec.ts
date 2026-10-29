@@ -1,0 +1,46 @@
+import { test, expect } from '@playwright/test';
+
+/**
+ * Language menu and handbook integration.
+ *
+ * The catalogs are unit-tested; these checks protect the parts that only exist
+ * in the browser: the reactive language switch, its persistence and the iframe
+ * of the generated book (tab and popup).
+ */
+test('the interface language switches and persists across reloads', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: 'Data', exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
+  await page.getByRole('main').getByLabel('Interface language').selectOption('it');
+
+  await expect(page.getByRole('button', { name: 'Dati', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Analisi', exact: true })).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Dati', exact: true })).toBeVisible();
+});
+
+test('the help tab hosts the generated book', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Help', exact: true }).click();
+
+  const book = page.frameLocator('iframe[title="Help handbook"]');
+  await expect(book.locator('h1')).toHaveText('LazStats Handbook');
+  await expect(book.getByRole('link', { name: 'T-Test' }).first()).toBeVisible();
+});
+
+test('the procedure popup deep-links to the handbook page', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByPlaceholder('Search analyses…').fill('T-Test');
+  await page.getByText('T-Test', { exact: true }).first().click();
+
+  await page.getByRole('button', { name: 'Open the handbook page for this procedure' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Help handbook' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('iframe')).toHaveAttribute('src', /\/help\/en\/ttest\.html#tutorial$/);
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+});

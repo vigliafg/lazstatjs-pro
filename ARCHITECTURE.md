@@ -116,10 +116,45 @@ incompatibili.
 - Ogni builder ha un test dedicato (caso valido + rifiuti).
 - `npm run check` = typecheck + test + guardrail.
 
+## Lingue
+
+`src/i18n/` è l'unico punto delle stringhe di interfaccia:
+
+- `catalog/en/` è la **fonte delle chiavi** (`MessageKey = keyof typeof enMessages`),
+  divisa per area (shell, form, data, analysis, output, meta);
+- `catalog/it/` è tipato `Record<keyof typeof enMessages, string>`: una chiave
+  mancante è un errore di compilazione, una chiave in più pure;
+- `catalogFor(locale)` fa fallback su inglese per le lingue non ancora tradotte;
+- `t(chiave, parametri)` resta una funzione pura usabile fuori da React;
+  `useT()`/`useLocale()` (via `useSyncExternalStore`) fanno ridisegnare l'albero
+  al cambio lingua. `ACTIVE_LOCALES` elenca le lingue selezionabili, `REPORT_LOCALES`
+  quelle con prosa dei report tradotta.
+
+`io/project` importa solo `src/i18n/locales.ts` (nessun catalogo), così il
+parsing di `.lzs` non trascina il dizionario. `uiLocale`, `reportLocale` e
+`helpLocale` sono campi opzionali di `ProjectSettings`: i progetti vecchi si
+aprono con i default e `PROJECT_VERSION` non cambia.
+
+## Manuale (help)
+
+- contenuto strutturato in `src/help/content/<locale>/` (`areas.ts`,
+  `procedures-core.ts`, `procedures-more.ts`, `book.ts`), ordinato da
+  `TOPIC_ORDER` in `content/order.ts`;
+- `scripts/build-help.mjs` genera `public/help/<locale>/` (HTML, CSS, JS,
+  indice, ricerca, `print.html`) ed è agganciato a `predev`/`prebuild`;
+  la cartella generata è in `.gitignore`;
+- `src/help/book.ts` costruisce gli URL, `HelpPanel` ospita il libro nella scheda
+  HELP, `HelpButton` + `HelpDialog` aprono la pagina di una procedura in popup;
+- `src/help/content.test.ts` impone la parità tra lingue, la copertura di ogni
+  procedura del registry con entrambi i livelli e l'esistenza dei dataset.
+
 ## Debito noto
 
 - Lo schema `.lzs` è diviso in `io/project/types.ts`, `parse.ts` e `index.ts`.
-- Restano solo due eccezioni di dimensione, entrambe motivate: `helpContent.ts`
-  (contenuto statico) e `kernels/arima.ts` (kernel numerico compatto).
+- Resta una sola eccezione di dimensione motivata: `kernels/arima.ts`
+  (kernel numerico compatto).
+- La prosa dei report (`src/stats/reports/`) è ancora italiana: il cambio lingua
+  dei report richiede i cataloghi `en` (e poi fr/es/de/pt-PT) per ogni procedura.
+  Fino ad allora `REPORT_LOCALES` espone solo `it` e Impostazioni lo dichiara.
 - Nessun modulo legacy calcola più dentro il table builder: tutti e sei sono
   stati estratti in `stats/kernels/`.

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookOpen, ShieldAlert } from 'lucide-react';
 import type { ReportSection, ReportSpec, ReportTone } from '../stats/report';
+import { t } from '../i18n';
 
 const TONE_STYLES: Record<ReportTone, { border: string; badge: string }> = {
   positive: {
@@ -79,7 +80,7 @@ export const AnalysisReport: React.FC<{ spec: ReportSpec }> = ({ spec }) => {
         <div className="mt-4 pt-2.5 border-t border-border/40">
           <div className="flex items-center gap-1.5 mb-1">
             <ShieldAlert className="w-3 h-3 text-text3 shrink-0" />
-            <span className="text-[9px] text-text3 font-mono uppercase tracking-widest">Limiti e cautele</span>
+            <span className="text-[9px] text-text3 font-mono uppercase tracking-widest">{t('report.limitations')}</span>
           </div>
           <ul className="list-disc pl-4 space-y-1">
             {spec.limitations.map((limitation, index) => (
