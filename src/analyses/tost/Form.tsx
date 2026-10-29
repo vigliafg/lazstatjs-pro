@@ -1,7 +1,8 @@
-import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TostParams } from '../../io/project';
+import { t } from '../../i18n';
+import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface TostFormProps {
   grid: GridData;
@@ -9,71 +10,78 @@ export interface TostFormProps {
   setTostParams: Dispatch<SetStateAction<TostParams>>;
 }
 
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[130px]';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
-
 export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => {
   const { design, var1, var2, mu, margin, equalVar } = tostParams;
   const update = (patch: Partial<TostParams>) =>
     setTostParams(prev => ({ ...prev, ...patch }));
+  const options = variableOptions(grid.cols);
+  const inputClass =
+    'w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text';
 
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Design</label>
-        <select className={inputClass} value={design} onChange={e => update({ design: e.target.value as TostParams['design'] })}>
-          <option value="one">One-sample / vs target</option>
-          <option value="paired">Paired measures</option>
-          <option value="ind">Two independent groups</option>
+    <div className="flex flex-col gap-3">
+      <Field label={t('form.design')}>
+        <select
+          aria-label={t('form.design')}
+          className="min-w-[170px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={design}
+          onChange={e => update({ design: e.target.value as TostParams['design'] })}
+        >
+          <option value="one">{t('form.oneSampleTarget')}</option>
+          <option value="paired">{t('form.pairedMeasures')}</option>
+          <option value="ind">{t('form.twoIndependentGroups')}</option>
         </select>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Variable 1</label>
-        <select className={inputClass} value={var1} onChange={e => update({ var1: parseInt(e.target.value, 10) })}>
-          {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{columnLabel(column)}</option>
-          ))}
-        </select>
-      </div>
-
+      </Field>
+      <VariableSelect
+        label={t('form.variable1')}
+        value={var1}
+        options={options}
+        onChange={value => update({ var1: value })}
+      />
       {design !== 'one' && (
-        <div className="flex flex-col gap-1">
-          <label className={labelClass}>Variable 2</label>
-          <select className={inputClass} value={var2} onChange={e => update({ var2: parseInt(e.target.value, 10) })}>
-            {grid.cols.map((column, index) => (
-              <option key={index} value={index}>{columnLabel(column)}</option>
-            ))}
-          </select>
-        </div>
+        <VariableSelect
+          label={t('form.variable2')}
+          value={var2}
+          options={options}
+          onChange={value => update({ var2: value })}
+        />
       )}
-
       {design === 'one' && (
-        <div className="flex flex-col gap-1">
-          <label className={labelClass}>Target (μ₀)</label>
-          <input type="number" step="any" className={`${inputClass} w-24`} value={mu} onChange={e => update({ mu: parseFloat(e.target.value) })} />
-        </div>
+        <Field label={t('form.targetMu')}>
+          <input
+            type="number"
+            step="any"
+            aria-label={t('form.targetMu')}
+            className={inputClass}
+            value={mu}
+            onChange={e => update({ mu: parseFloat(e.target.value) })}
+          />
+        </Field>
       )}
-
       {design === 'ind' && (
-        <div className="flex flex-col gap-1">
-          <label className={labelClass}>Variances</label>
-          <select className={inputClass} value={equalVar ? 'equal' : 'welch'} onChange={e => update({ equalVar: e.target.value === 'equal' })}>
-            <option value="equal">Equal (pooled)</option>
-            <option value="welch">Unequal (Welch)</option>
+        <Field label={t('form.variances')}>
+          <select
+            aria-label={t('form.variances')}
+            className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+            value={equalVar ? 'equal' : 'welch'}
+            onChange={e => update({ equalVar: e.target.value === 'equal' })}
+          >
+            <option value="equal">{t('form.equalPooled')}</option>
+            <option value="welch">{t('form.unequalWelch')}</option>
           </select>
-        </div>
+        </Field>
       )}
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Equivalence margin</label>
-        <input type="number" min="0" step="any" className={`${inputClass} w-28`} value={margin} onChange={e => update({ margin: parseFloat(e.target.value) })} />
-      </div>
-
-      <p className="text-[10px] text-text3 max-w-[320px] self-end pb-1">
-        Il margine va fissato prima di vedere i dati. Il livello di confidenza è quello globale della scheda.
-      </p>
+      <Field label={t('form.equivalenceMargin')} hint={t('hint.tost')}>
+        <input
+          type="number"
+          min="0"
+          step="any"
+          aria-label={t('form.equivalenceMargin')}
+          className={inputClass}
+          value={margin}
+          onChange={e => update({ margin: parseFloat(e.target.value) })}
+        />
+      </Field>
     </div>
   );
 };

@@ -1,7 +1,8 @@
-import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { CountParams } from '../../io/project';
+import { t } from '../../i18n';
+import { Field, VariableList, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface CountFormProps {
   grid: GridData;
@@ -9,62 +10,49 @@ export interface CountFormProps {
   setCountParams: Dispatch<SetStateAction<CountParams>>;
 }
 
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[130px]';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
-
 export const CountForm = ({ grid, countParams, setCountParams }: CountFormProps) => {
   const { dep, indeps, family } = countParams;
-  const toggle = (index: number) => {
-    setCountParams(prev => ({
-      ...prev,
-      indeps: prev.indeps.includes(index)
-        ? prev.indeps.filter(item => item !== index)
-        : [...prev.indeps, index],
-    }));
-  };
 
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Count outcome</label>
-        <select className={inputClass} value={dep} onChange={e => setCountParams(prev => ({ ...prev, dep: parseInt(e.target.value, 10) }))}>
-          {grid.cols.map((column, index) => (
-            <option key={index} value={index}>{columnLabel(column)}</option>
-          ))}
+    <div className="flex flex-col gap-3">
+      <VariableSelect
+        label={t('form.countOutcome')}
+        value={dep}
+        options={variableOptions(grid.cols)}
+        onChange={value => setCountParams(prev => ({ ...prev, dep: value }))}
+      />
+      <VariableList
+        label={t('form.predictorsX')}
+        cols={grid.cols}
+        selected={indeps}
+        disabled={[dep]}
+        showType
+        hint={t('hint.countreg')}
+        onToggle={(index, checked) =>
+          setCountParams(prev => ({
+            ...prev,
+            indeps: checked
+              ? [...prev.indeps, index]
+              : prev.indeps.filter(item => item !== index),
+          }))
+        }
+      />
+      <Field label={t('form.family')}>
+        <select
+          aria-label={t('form.family')}
+          className="min-w-[180px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={family}
+          onChange={e =>
+            setCountParams(prev => ({
+              ...prev,
+              family: e.target.value as CountParams['family'],
+            }))
+          }
+        >
+          <option value="poisson">{t('form.poisson')}</option>
+          <option value="negbin">{t('form.negativeBinomial')}</option>
         </select>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Predictors (X)</label>
-        <div className="bg-surface3 border border-border2 rounded p-2 min-w-[220px] max-h-[120px] overflow-auto scrollbar">
-          {grid.cols.map((column, index) => (
-            <label key={index} className="flex items-center gap-2 px-1 py-0.5 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-accent"
-                checked={indeps.includes(index)}
-                disabled={index === dep}
-                onChange={() => toggle(index)}
-              />
-              <span className="text-[11px] text-text2">{columnLabel(column)}</span>
-              <span className="text-[9px] text-text3 font-mono">{column.type}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Family</label>
-        <select className={inputClass} value={family} onChange={e => setCountParams(prev => ({ ...prev, family: e.target.value as CountParams['family'] }))}>
-          <option value="poisson">Poisson</option>
-          <option value="negbin">Negative binomial (NB2)</option>
-        </select>
-      </div>
-
-      <p className="text-[10px] text-text3 max-w-[340px] self-end pb-1">
-        L’esito deve essere un conteggio non negativo. Con overdispersion usa la negative binomiale.
-      </p>
+      </Field>
     </div>
   );
 };

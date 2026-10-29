@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, isGroupColumn } from '../../grid/types';
 import type { CategoryLevel, GridData } from '../../grid/types';
@@ -47,7 +48,7 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
             column={anovaParams.grp}
             onLevels={onLevels}
             onRecode={onRecode}
-            label="Modifica livelli"
+            label={t('action.levels')}
             className="tb-btn flex h-[29px] items-center gap-1 whitespace-nowrap px-2 text-[10px]"
           />
         }

@@ -1,13 +1,17 @@
-import { columnLabel } from '../../grid/types';
 import { useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
 import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
 import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
 import type { NonParamMode, NonParamParams } from '../../io/project';
-import {
-  defaultSelection,
-  isBinaryColumn,
-} from './defaults';
+import { defaultSelection, isBinaryColumn } from './defaults';
 import { numericColumnIndexes } from '../shared/columns';
+import { t } from '../../i18n';
+import {
+  Field,
+  VariableList,
+  VariableSelect,
+  variableOptions,
+  variableOptionsFrom,
+} from '../../components/FormFields';
 
 export interface NonParamFormProps {
   grid: GridData;
@@ -16,10 +20,6 @@ export interface NonParamFormProps {
   nonParamParams: NonParamParams;
   setNonParamParams: Dispatch<SetStateAction<NonParamParams>>;
 }
-
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[120px]';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
 
 export const NonParamForm = ({
   grid,
@@ -30,9 +30,8 @@ export const NonParamForm = ({
 }: NonParamFormProps) => {
   const { mode, selected, left, right, outcome, group } = nonParamParams;
 
-  // Il pannello resettava le misure al cambio di modalità o di colonne e
-  // clampava gli indici. Ripetiamo l'effetto solo quando qualcosa cambia
-  // davvero: il primo mount non deve sovrascrivere i parametri ripristinati.
+  // Reset the measures when the mode or the grid width changes, but never on
+  // the first mount (restored parameters must survive).
   const previousMode = useRef(mode);
   const previousCols = useRef(grid.cols.length);
   useEffect(() => {
@@ -56,15 +55,6 @@ export const NonParamForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, grid.cols.length]);
 
-  const toggle = (index: number) => {
-    setNonParamParams(prev => ({
-      ...prev,
-      selected: prev.selected.includes(index)
-        ? prev.selected.filter(item => item !== index)
-        : [...prev.selected, index],
-    }));
-  };
-
   const numericColumns = numericColumnIndexes(grid);
   const binaryColumns = grid.cols
     .map((_, index) => index)
@@ -72,124 +62,91 @@ export const NonParamForm = ({
   const listColumns = mode === 'friedman' ? numericColumns : mode === 'cochran' ? binaryColumns : [];
 
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Test</label>
+    <div className="flex flex-col gap-3">
+      <Field label={t('form.test')}>
         <select
-          className={inputClass}
+          aria-label={t('form.test')}
+          className="min-w-[170px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
           value={mode}
           onChange={event =>
-            setNonParamParams(prev => ({ ...prev, mode: event.target.value as NonParamMode }))
+            setNonParamParams(prev => ({
+              ...prev,
+              mode: event.target.value as NonParamMode,
+            }))
           }
         >
-          <option value="friedman">Friedman + Nemenyi</option>
-          <option value="mcnemar">McNemar</option>
-          <option value="cochran">Cochran Q</option>
-          <option value="jonckheere">Jonckheere–Terpstra</option>
+          <option value="friedman">{t('nonparam.friedman')}</option>
+          <option value="mcnemar">{t('nonparam.mcnemar')}</option>
+          <option value="cochran">{t('nonparam.cochran')}</option>
+          <option value="jonckheere">{t('nonparam.jonckheere')}</option>
         </select>
-      </div>
+      </Field>
 
       {(mode === 'friedman' || mode === 'cochran') && (
-        <div className="flex flex-col gap-1">
-          <label className={labelClass}>
-            {mode === 'friedman' ? 'Numeric measures (≥ 3)' : 'Binary conditions (≥ 3)'}
-          </label>
-          <div className="bg-surface3 border border-border2 rounded p-2 min-w-[220px] max-h-[120px] overflow-auto scrollbar">
-            {listColumns.length === 0 && (
-              <p className="text-[10px] text-text3 italic">No suitable columns</p>
-            )}
-            {listColumns.map(index => (
-              <label key={index} className="flex items-center gap-2 px-1 py-0.5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="accent-accent"
-                  checked={selected.includes(index)}
-                  onChange={() => toggle(index)}
-                />
-                <span className="text-[11px] text-text2">{columnLabel(grid.cols[index])}</span>
-                <span className="text-[9px] text-text3 font-mono">{grid.cols[index]?.type}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <VariableList
+          label={
+            mode === 'friedman'
+              ? t('form.numericMeasures3')
+              : t('form.binaryConditions3')
+          }
+          cols={grid.cols}
+          only={listColumns}
+          selected={selected}
+          showType
+          emptyText={t('form.noSuitableColumns')}
+          onToggle={(index, checked) =>
+            setNonParamParams(prev => ({
+              ...prev,
+              selected: checked
+                ? [...prev.selected, index]
+                : prev.selected.filter(item => item !== index),
+            }))
+          }
+        />
       )}
 
       {mode === 'mcnemar' && (
         <>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>First measure</label>
-            <select
-              className={inputClass}
-              value={left}
-              onChange={event =>
-                setNonParamParams(prev => ({ ...prev, left: Number(event.target.value) }))
-              }
-            >
-              {grid.cols.map((column, index) => (
-                <option key={index} value={index}>{columnLabel(column)}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Second measure</label>
-            <select
-              className={inputClass}
-              value={right}
-              onChange={event =>
-                setNonParamParams(prev => ({ ...prev, right: Number(event.target.value) }))
-              }
-            >
-              {grid.cols.map((column, index) => (
-                <option key={index} value={index}>{columnLabel(column)}</option>
-              ))}
-            </select>
-          </div>
+          <VariableSelect
+            label={t('form.firstMeasure')}
+            value={left}
+            options={variableOptions(grid.cols)}
+            onChange={value => setNonParamParams(prev => ({ ...prev, left: value }))}
+          />
+          <VariableSelect
+            label={t('form.secondMeasure')}
+            value={right}
+            options={variableOptions(grid.cols)}
+            onChange={value => setNonParamParams(prev => ({ ...prev, right: value }))}
+          />
         </>
       )}
 
       {mode === 'jonckheere' && (
         <>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Numeric outcome</label>
-            <select
-              className={inputClass}
-              value={outcome}
-              onChange={event =>
-                setNonParamParams(prev => ({ ...prev, outcome: Number(event.target.value) }))
-              }
-            >
-              {grid.cols.map((column, index) => (
-                <option key={index} value={index}>{columnLabel(column)}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Ordered groups (2–10)</label>
-            <div className="flex items-center gap-1">
-              <select
-                className={inputClass}
-                value={group}
-                onChange={event =>
-                  setNonParamParams(prev => ({ ...prev, group: Number(event.target.value) }))
-                }
-              >
-                {groupColumnIndexes(grid).map(index => (
-                  <option key={index} value={index}>{columnLabel(grid.cols[index])}</option>
-                ))}
-              </select>
+          <VariableSelect
+            label={t('form.numericOutcome')}
+            value={outcome}
+            options={variableOptions(grid.cols)}
+            onChange={value => setNonParamParams(prev => ({ ...prev, outcome: value }))}
+          />
+          <VariableSelect
+            label={t('form.orderedGroups')}
+            value={group}
+            options={variableOptionsFrom(grid.cols, groupColumnIndexes(grid))}
+            hint={t('hint.jonckheere')}
+            onChange={value => setNonParamParams(prev => ({ ...prev, group: value }))}
+            trailing={
               <LevelsEditor
                 grid={grid}
                 column={group}
                 onLevels={onLevels}
                 onRecode={onRecode}
-                label="Modifica livelli"
+                label={t('action.levels')}
                 className={LEVELS_BUTTON_CLASS}
               />
-            </div>
-          </div>
-          <p className="text-[10px] text-text3 max-w-[220px] self-end pb-1">
-            Il test usa l’ordine alfabetico/numerico dei livelli del gruppo.
-          </p>
+            }
+          />
         </>
       )}
     </div>

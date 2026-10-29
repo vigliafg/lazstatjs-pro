@@ -1,7 +1,13 @@
-import { columnLabel } from '../../grid/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type GridData } from '../../grid/types';
 import type { ResamplingParams } from '../../io/project';
+import { t } from '../../i18n';
+import {
+  Field,
+  VariableSelect,
+  variableOptions,
+  variableOptionsFrom,
+} from '../../components/FormFields';
 
 export interface ResamplingFormProps {
   grid: GridData;
@@ -9,50 +15,70 @@ export interface ResamplingFormProps {
   setResamplingParams: Dispatch<SetStateAction<ResamplingParams>>;
 }
 
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[130px]';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
-
-export const ResamplingForm = ({ grid, resamplingParams, setResamplingParams }: ResamplingFormProps) => (
-  <div className="flex flex-wrap gap-4 items-start">
-    <div className="flex flex-col gap-1">
-      <label className={labelClass}>Outcome</label>
-      <select className={inputClass} value={resamplingParams.outcome} onChange={e => setResamplingParams(prev => ({ ...prev, outcome: parseInt(e.target.value, 10) }))}>
-        {grid.cols.map((column, index) => (
-          <option key={index} value={index}>{columnLabel(column)}</option>
-        ))}
+export const ResamplingForm = ({
+  grid,
+  resamplingParams,
+  setResamplingParams,
+}: ResamplingFormProps) => (
+  <div className="flex flex-col gap-3">
+    <VariableSelect
+      label={t('form.outcome')}
+      value={resamplingParams.outcome}
+      options={variableOptions(grid.cols)}
+      onChange={value => setResamplingParams(prev => ({ ...prev, outcome: value }))}
+    />
+    <VariableSelect
+      label={t('form.group')}
+      value={resamplingParams.group}
+      options={variableOptionsFrom(grid.cols, groupColumnIndexes(grid))}
+      onChange={value => setResamplingParams(prev => ({ ...prev, group: value }))}
+    />
+    <Field label={t('form.statistic')}>
+      <select
+        aria-label={t('form.statistic')}
+        className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+        value={resamplingParams.statistic}
+        onChange={e =>
+          setResamplingParams(prev => ({
+            ...prev,
+            statistic: e.target.value as ResamplingParams['statistic'],
+          }))
+        }
+      >
+        <option value="mean">{t('form.diffMeans')}</option>
+        <option value="median">{t('form.diffMedians')}</option>
       </select>
+    </Field>
+    <div className="flex gap-2">
+      <Field label={t('form.permutations')}>
+        <input
+          type="number"
+          min="99"
+          max="50000"
+          step="100"
+          aria-label={t('form.permutations')}
+          className="w-28 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={resamplingParams.permutations}
+          onChange={e =>
+            setResamplingParams(prev => ({ ...prev, permutations: parseInt(e.target.value, 10) }))
+          }
+        />
+      </Field>
+      <Field label={t('form.bootstrapReps')}>
+        <input
+          type="number"
+          min="99"
+          max="50000"
+          step="100"
+          aria-label={t('form.bootstrapReps')}
+          className="w-28 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={resamplingParams.bootstrap}
+          onChange={e =>
+            setResamplingParams(prev => ({ ...prev, bootstrap: parseInt(e.target.value, 10) }))
+          }
+        />
+      </Field>
     </div>
-
-    <div className="flex flex-col gap-1">
-      <label className={labelClass}>Group (2 levels)</label>
-      <select className={inputClass} value={resamplingParams.group} onChange={e => setResamplingParams(prev => ({ ...prev, group: parseInt(e.target.value, 10) }))}>
-        {groupColumnIndexes(grid).map(index => (
-          <option key={index} value={index}>{columnLabel(grid.cols[index])}</option>
-        ))}
-      </select>
-    </div>
-
-    <div className="flex flex-col gap-1">
-      <label className={labelClass}>Statistic</label>
-      <select className={inputClass} value={resamplingParams.statistic} onChange={e => setResamplingParams(prev => ({ ...prev, statistic: e.target.value as ResamplingParams['statistic'] }))}>
-        <option value="mean">Difference of means</option>
-        <option value="median">Difference of medians</option>
-      </select>
-    </div>
-
-    <div className="flex flex-col gap-1">
-      <label className={labelClass}>Permutations</label>
-      <input type="number" min="99" max="50000" step="100" className={`${inputClass} w-28`} value={resamplingParams.permutations} onChange={e => setResamplingParams(prev => ({ ...prev, permutations: parseInt(e.target.value, 10) }))} />
-    </div>
-
-    <div className="flex flex-col gap-1">
-      <label className={labelClass}>Bootstrap reps</label>
-      <input type="number" min="99" max="50000" step="100" className={`${inputClass} w-28`} value={resamplingParams.bootstrap} onChange={e => setResamplingParams(prev => ({ ...prev, bootstrap: parseInt(e.target.value, 10) }))} />
-    </div>
-
-    <p className="text-[10px] text-text3 max-w-[340px] self-end pb-1">
-      Permutazione a due code e bootstrap percentile della differenza tra due gruppi.
-    </p>
+    <p className="max-w-[340px] text-[10px] text-text3">{t('hint.resampling')}</p>
   </div>
 );

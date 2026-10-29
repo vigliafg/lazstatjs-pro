@@ -1,9 +1,10 @@
-import { columnLabel } from '../../grid/types';
 import { useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { RepeatedAnovaParams } from '../../io/project';
 import { defaultRepeatedAnovaParams } from './defaults';
 import { numericColumnIndexes } from '../shared/columns';
+import { t } from '../../i18n';
+import { VariableList } from '../../components/FormFields';
 
 export interface RepeatedAnovaFormProps {
   grid: GridData;
@@ -16,56 +17,37 @@ export const RepeatedAnovaForm = ({
   repeatedAnovaParams,
   setRepeatedAnovaParams,
 }: RepeatedAnovaFormProps) => {
-  const { selected } = repeatedAnovaParams;
   const numericColumns = numericColumnIndexes(grid);
-
-  // Keep the old behaviour: a change in the number of columns re-picks the
-  // default conditions. The first mount must not overwrite restored params.
+  // A change in the number of columns re-picks the default conditions. The
+  // first mount must not overwrite restored params.
   const previousCols = useRef(grid.cols.length);
   useEffect(() => {
     if (previousCols.current === grid.cols.length) return;
     previousCols.current = grid.cols.length;
-    setRepeatedAnovaParams(prev => ({ ...prev, selected: defaultRepeatedAnovaParams(grid).selected }));
+    setRepeatedAnovaParams(prev => ({
+      ...prev,
+      selected: defaultRepeatedAnovaParams(grid).selected,
+    }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grid.cols.length]);
 
-  const toggle = (index: number) => {
-    setRepeatedAnovaParams(prev => ({
-      ...prev,
-      selected: prev.selected.includes(index)
-        ? prev.selected.filter(item => item !== index)
-        : [...prev.selected, index],
-    }));
-  };
-
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">
-          Within-subject conditions (≥ 3)
-        </label>
-        <div className="bg-surface3 border border-border2 rounded p-2 min-w-[240px] max-h-[120px] overflow-auto scrollbar">
-          {numericColumns.length === 0 && (
-            <p className="text-[10px] text-text3 italic">No numeric columns</p>
-          )}
-          {numericColumns.map(index => (
-            <label key={index} className="flex items-center gap-2 px-1 py-0.5 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-accent"
-                checked={selected.includes(index)}
-                onChange={() => toggle(index)}
-              />
-              <span className="text-[11px] text-text2">{columnLabel(grid.cols[index])}</span>
-              <span className="text-[9px] text-text3 font-mono">{grid.cols[index]?.type}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-      <p className="text-[10px] text-text3 max-w-[360px] self-end pb-1">
-        Una riga = un soggetto. Le condizioni sono confrontate within-subject; Mauchly e le
-        correzioni Greenhouse–Geisser/Huynh–Feldt sono calcolate automaticamente.
-      </p>
-    </div>
+    <VariableList
+      label={t('form.withinConditions3')}
+      cols={grid.cols}
+      only={numericColumns}
+      selected={repeatedAnovaParams.selected}
+      showType
+      emptyText={t('form.noNumericColumns')}
+      hint={t('hint.repeatedanova')}
+      onToggle={(index, checked) =>
+        setRepeatedAnovaParams(prev => ({
+          ...prev,
+          selected: checked
+            ? [...prev.selected, index]
+            : prev.selected.filter(item => item !== index),
+        }))
+      }
+    />
   );
 };

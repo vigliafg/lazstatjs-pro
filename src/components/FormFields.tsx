@@ -95,6 +95,15 @@ export const VariableSelect = ({
 export const variableOptions = (cols: Column[]): VariableOption[] =>
   cols.map((col, index) => ({ value: index, label: columnLabel(col) }));
 
+/** Options restricted to a subset of grid indexes (order preserved). */
+export const variableOptionsFrom = (
+  cols: Column[],
+  indexes: readonly number[]
+): VariableOption[] =>
+  indexes
+    .filter(index => Boolean(cols[index]))
+    .map(index => ({ value: index, label: columnLabel(cols[index]) }));
+
 /** Checkbox list used by multi-variable procedures. */
 export const VariableList = ({
   label,
@@ -102,27 +111,85 @@ export const VariableList = ({
   selected,
   onToggle,
   hint,
+  only,
+  disabled = [],
+  showType = false,
+  emptyText,
 }: {
   label: string;
   cols: Column[];
   selected: readonly number[];
   onToggle: (column: number, checked: boolean) => void;
   hint?: string;
+  /** Render only these grid indexes (order preserved). */
+  only?: readonly number[];
+  disabled?: readonly number[];
+  showType?: boolean;
+  emptyText?: string;
+}) => {
+  const indexes = only ?? cols.map((_, index) => index);
+  return (
+    <Field label={label} hint={hint}>
+      <div className="max-h-[120px] min-w-[200px] overflow-auto rounded border border-border2 bg-surface3 p-2 scrollbar">
+        {indexes.length === 0 && emptyText && (
+          <p className="text-[10px] italic text-text3">{emptyText}</p>
+        )}
+        {indexes.map(index => {
+          const col = cols[index];
+          if (!col) return null;
+          return (
+            <label
+              key={col.id ?? index}
+              className="flex cursor-pointer items-center gap-2 py-0.5 text-[11px] text-text2 hover:text-text"
+            >
+              <input
+                type="checkbox"
+                className="accent-accent"
+                checked={selected.includes(index)}
+                disabled={disabled.includes(index)}
+                onChange={event => onToggle(index, event.target.checked)}
+              />
+              <span>{columnLabel(col)}</span>
+              {showType && <span className="font-mono text-[9px] text-text3">{col.type}</span>}
+            </label>
+          );
+        })}
+      </div>
+    </Field>
+  );
+};
+
+/** Compact checkbox group for non-column options (distributions, methods, …). */
+export const CheckboxList = <T extends string>({
+  label,
+  items,
+  hint,
+  columns = false,
+}: {
+  label: string;
+  items: readonly { value: T; label: string; checked: boolean; disabled?: boolean; onChange: (checked: boolean) => void }[];
+  hint?: string;
+  columns?: boolean;
 }) => (
   <Field label={label} hint={hint}>
-    <div className="max-h-[120px] min-w-[200px] overflow-auto rounded border border-border2 bg-surface3 p-2 scrollbar">
-      {cols.map((col, index) => (
+    <div
+      className={`flex max-w-[360px] rounded border border-border2 bg-surface3 p-2 ${
+        columns ? 'flex-wrap gap-x-3 gap-y-1' : 'flex-col gap-0.5'
+      }`}
+    >
+      {items.map(item => (
         <label
-          key={col.id ?? index}
-          className="flex cursor-pointer items-center gap-2 py-0.5 text-[11px] text-text2 hover:text-text"
+          key={item.value}
+          className="flex cursor-pointer items-center gap-1.5 text-[11px] text-text2 hover:text-text"
         >
           <input
             type="checkbox"
             className="accent-accent"
-            checked={selected.includes(index)}
-            onChange={event => onToggle(index, event.target.checked)}
+            checked={item.checked}
+            disabled={item.disabled}
+            onChange={event => item.onChange(event.target.checked)}
           />
-          {columnLabel(col)}
+          {item.label}
         </label>
       ))}
     </div>
