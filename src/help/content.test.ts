@@ -50,6 +50,21 @@ test('every registry procedure has a complete two-level page', () => {
   }
 });
 
+test('every procedure page lists the charts it produces', () => {
+  for (const book of BOOKS) {
+    for (const analysisId of ANALYSIS_IDS) {
+      const id = topicOf(analysisId);
+      const topic = book.topics.find(entry => entry.id === id);
+      assert.ok(topic, `${book.locale}: missing topic for ${analysisId}`);
+      if (id === 'wizard') {
+        assert.equal(topic.advanced.charts, undefined, `${book.locale}: wizard should not list charts`);
+      } else {
+        nonEmpty(topic.advanced.charts, `${book.locale}: ${id} charts`);
+      }
+    }
+  }
+});
+
 test('ids are unique, chapters are known and cross references resolve', () => {
   for (const book of BOOKS) {
     const ids = book.topics.map(topic => topic.id);

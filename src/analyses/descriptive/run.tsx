@@ -1,16 +1,3 @@
-import type { ReactNode } from 'react';
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryBoxPlot,
-  VictoryChart,
-  VictoryLabel,
-  VictoryLine,
-  VictoryScatter,
-  VictoryTheme,
-  VictoryTooltip,
-  VictoryVoronoiContainer,
-} from 'victory';
 import { jStat } from '../../stats/jstat';
 import { buildHistogram, parseNum } from '../../stats/core';
 import { calcNormalityTests } from '../../stats/kernels';
@@ -21,8 +8,9 @@ import { fmtEst } from '../../stats/format';
 import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
 import type { AnalysisRunResult } from '../types';
-import { ResultTables } from '../../components/ResultTable';
-import { t } from '../../i18n';
+import { copy } from '../../stats/reportCopy';
+import { makeChart, boxRows } from '../../charts/kits/common';
+import type { AnalysisChart } from '../../stats/charts';
 
 export interface DescriptiveInput {
   rows: readonly (readonly string[])[];
@@ -100,7 +88,7 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
       return { 
         name, n, mean, median, stdev, min, max, range, sum, variance, skewness, kurtosis,
         q1: quartiles[0], q3: quartiles[2], histData: histogram.data, histBins: histogram.bins,
-        normality, lilliefors, qqData, qqLineData
+        normality, lilliefors, qqData, qqLineData, data
       };
     }).filter(r => r !== null);
 
@@ -116,183 +104,61 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
     );
     const descReport = descriptiveReport(descTables, input.level);
 
-    const node = (
-      <div className="output-block" key={Date.now()}>
-        <div className="output-title">Descriptive Statistics</div>
-        <ResultTables specs={descTables} />
+    const groups = results.map(r => ({ category: r.name, values: r.data }));
+    const boxes = boxRows(groups);
+    const charts: AnalysisChart[] = [
+      makeChart({
+        id: 'desc-means',
+        kind: 'bar',
+        title: copy('Confronto delle medie'),
+        subtitle: copy('Valori medi delle variabili selezionate'),
+        data: { bars: results.map(r => ({ category: r.name, value: r.mean })) },
+        fields: { xLabel: copy('Variabile'), yLabel: copy('Media') },
+        options: { valueLabels: true } as never,
+      }),
+      makeChart({
+        id: 'desc-box',
+        kind: 'box',
+        title: copy('Grafico a scatola e baffi'),
+        subtitle: copy('Distribuzione delle variabili selezionate'),
+        data: { summary: boxes.summary, points: boxes.points, outliers: boxes.outliers },
+        fields: { xLabel: copy('Variabile'), yLabel: copy('Valore') },
+      }),
+    ];
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-          <div className="h-[300px] bg-surface3/30 rounded p-2">
-            <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter">Means Comparison</p>
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={20}
-              padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-              containerComponent={<VictoryVoronoiContainer />}
-            >
-              <VictoryAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' } }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-              />
-              <VictoryBar
-                data={results.map(r => ({ x: r.name, y: r.mean }))}
-                style={{ data: { fill: '#4f9cf9', width: 25 } }}
-                labels={({ datum }) => `Mean: ${fmtEst(datum.y)}`}
-                labelComponent={<VictoryTooltip style={{ fontSize: 10 }} flyoutStyle={{ fill: '#1e1e1e', stroke: '#333' }} />}
-              />
-            </VictoryChart>
-          </div>
+    results.slice(0, 1).forEach(r => {
+      charts.push(
+        makeChart({
+          id: `desc-hist-${r.name}`,
+          kind: 'histogram',
+          title: copy('Distribuzione (istogramma): {s1}', { s1: r.name }),
+          subtitle: copy('{s1} osservazioni', { s1: r.n }),
+          data: { values: r.data.map(value => ({ value })) },
+          fields: { xLabel: r.name, yLabel: copy('Frequenza') },
+        })
+      );
+    });
 
-          <div className="h-[300px] bg-surface3/30 rounded p-2">
-            <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter">Box & Whisker Plot</p>
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={50}
-              padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-            >
-              <VictoryAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' } }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-              />
-              <VictoryBoxPlot
-                data={results.map(r => ({
-                  x: r.name,
-                  min: r.min,
-                  q1: r.q1,
-                  median: r.median,
-                  q3: r.q3,
-                  max: r.max
-                }))}
-                style={{
-                  min: { stroke: "#f87171", strokeWidth: 2 },
-                  max: { stroke: "#f87171", strokeWidth: 2 },
-                  q1: { fill: "#4f9cf9", fillOpacity: 0.5 },
-                  q3: { fill: "#4f9cf9", fillOpacity: 0.5 },
-                  median: { stroke: "#fff", strokeWidth: 2 }
-                }}
-              />
-            </VictoryChart>
-          </div>
-        </div>
+    results.slice(0, 8).forEach(r => {
+      if (r.qqData.length === 0) return;
+      charts.push(
+        makeChart({
+          id: `desc-qq-${r.name}`,
+          kind: 'qq',
+          title: copy('Q-Q normale: {s1}', { s1: r.name }),
+          subtitle: copy('{s1} osservazioni', { s1: r.n }),
+          note: copy('I punti vicini alla diagonale indicano una distribuzione compatibile con la normale.'),
+          data: { points: r.qqData, reference: r.qqLineData },
+          fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Valori osservati') },
+        })
+      );
+    });
 
-        {results.length > 0 && (
-          <div className="h-[300px] w-full mt-4 bg-surface3/30 rounded p-2">
-            <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter">Distribution (Histogram): {results[0].name}</p>
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={{ x: results[0].histBins > 1 ? 190 / results[0].histBins : 20 }}
-              padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-            >
-              <VictoryAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' } }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-              />
-              <VictoryBar
-                data={results[0].histData}
-                style={{ data: { fill: '#34d399', width: results[0].histBins > 1 ? 380 / results[0].histBins : 40 } }}
-                labels={({ datum }) => `Freq: ${datum.y}`}
-                labelComponent={<VictoryTooltip style={{ fontSize: 10 }} flyoutStyle={{ fill: '#1e1e1e', stroke: '#333' }} />}
-              />
-            </VictoryChart>
-          </div>
-        )}
-
-        {results.length > 0 && (
-          <div className="mt-8 border-t border-border/40 pt-6">
-            <h3 className="text-xs font-mono uppercase tracking-widest text-text2 mb-4">Normality Diagnostics & Q-Q Plots</h3>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              {results.map((r, rIdx) => {
-                const isNormalJB = r.normality.jbPValue > 0.05;
-                const isNormalKS = r.lilliefors.p > 0.05;
-                
-                return (
-                  <div key={rIdx} className="bg-surface3/30 border border-border2 rounded-lg p-4 flex flex-col justify-between">
-                    <div>
-                      <h4 className="text-xs font-bold text-accent mb-3 font-mono tracking-wider">{r.name}</h4>
-                      
-                      <div className="grid grid-cols-2 gap-4 mb-4 text-[11px] font-mono text-text2 bg-surface2/40 rounded p-3 border border-border/40">
-                        <div>
-                          <div className="text-[9px] text-text3 uppercase mb-1 font-semibold tracking-tighter font-sans">Jarque-Bera Test</div>
-                          <div>JB Stat: <span className="text-text font-semibold">{fmtEst(r.normality.jbStat)}</span></div>
-                          <div>p-value: <span className={`font-bold ${isNormalJB ? 'text-green' : 'text-red/90'}`}>{fmtEst(r.normality.jbPValue)}</span></div>
-                          <div className="text-[10px] mt-1 text-text3 font-sans">
-                            {isNormalJB ? '✓ Normal' : '✗ Non-Normal'}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-[9px] text-text3 uppercase mb-1 font-semibold tracking-tighter font-sans">Kolmogorov-Smirnov (Lilliefors)</div>
-                          <div>D Stat: <span className="text-text font-semibold">{fmtEst(r.lilliefors.d)}</span></div>
-                          <div>p-value: <span className={`font-bold ${isNormalKS ? 'text-green' : 'text-red/90'}`}>{fmtEst(r.lilliefors.p)}</span></div>
-                          <div className="text-[10px] mt-1 text-text3 font-sans">
-                            {isNormalKS ? '✓ Normal' : '✗ Non-Normal'}
-                          </div>
-                        </div>
-                        <div className="col-span-2 border-t border-border/30 pt-2 mt-1 grid grid-cols-2 font-sans">
-                          <div>Skewness: <span className="text-text font-semibold font-mono">{fmtEst(r.skewness)}</span></div>
-                          <div>Kurtosis (ex): <span className="text-text font-semibold font-mono">{fmtEst(r.kurtosis)}</span></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="h-[260px] w-full bg-surface2/20 rounded p-1">
-                      <p className="text-[9px] text-text3 uppercase tracking-tighter text-center mb-1 font-mono">Normal Q-Q Plot</p>
-                      <VictoryChart
-                        theme={VictoryTheme.material}
-                        padding={{ top: 15, bottom: 40, left: 55, right: 15 }}
-                      >
-                        <VictoryAxis
-                          label={t('chart.theoreticalQuantiles')}
-                          style={{ 
-                            axis: { stroke: '#444' }, 
-                            axisLabel: { fill: '#888', fontSize: 9, padding: 25 },
-                            tickLabels: { fill: '#888', fontSize: 8 },
-                            grid: { stroke: '#333', strokeDasharray: '3 3' }
-                          }}
-                        />
-                        <VictoryAxis
-                          dependentAxis
-                          label={t('chart.observedValues')}
-                          style={{ 
-                            axis: { stroke: '#444' }, 
-                            axisLabel: { fill: '#888', fontSize: 9, padding: 35 },
-                            tickLabels: { fill: '#888', fontSize: 8 },
-                            grid: { stroke: '#333', strokeDasharray: '3 3' }
-                          }}
-                        />
-                        <VictoryScatter
-                          data={r.qqData}
-                          style={{ data: { fill: '#4f9cf9', fillOpacity: 0.8, r: 3 } }}
-                          labels={({ datum }) => `Obs: ${fmtEst(datum.y)}\nTh: ${fmtEst(datum.x)}`}
-                          labelComponent={<VictoryTooltip style={{ fontSize: 9 }} flyoutStyle={{ fill: '#1e1e1e', stroke: '#444' }} />}
-                        />
-                        <VictoryLine
-                          data={r.qqLineData}
-                          style={{ data: { stroke: '#ef4444', strokeWidth: 1.5 } }}
-                        />
-                      </VictoryChart>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-    return { ok: true, node, tables: descTables, report: descReport };
+    return {
+      ok: true,
+      title: copy('Statistiche descrittive'),
+      tables: descTables,
+      report: descReport,
+      charts,
+    };
   };

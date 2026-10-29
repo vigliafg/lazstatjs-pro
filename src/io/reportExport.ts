@@ -76,9 +76,9 @@ const PRINT_CSS = `
     max-width: 100%;
     height: auto;
     margin: 8px 0 14px;
-    background: #0d0f14;
     border-radius: 6px;
   }
+  [data-chart-surface] { page-break-inside: avoid; }
   [data-report] {
     border: 1px solid #cbd5e1;
     border-left: 4px solid #0ea5e9;
@@ -129,8 +129,9 @@ ${bodyHtml}
 
 /**
  * Snapshot the console into a self-contained document: interactive chrome is
- * removed, the SVGs already rendered by Victory stay inline, and the print
+ * removed, the Vega SVG already rendered stays inline, and the print
  * stylesheet replaces the app's Tailwind classes (which are not copied).
+ * The chart background comes from the card, not from a forced dark colour.
  */
 export const buildReportFromElement = (root: HTMLElement, meta: ReportMeta): string => {
   const clone = root.cloneNode(true) as HTMLElement;

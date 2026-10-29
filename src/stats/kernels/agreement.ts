@@ -180,6 +180,8 @@ export const kappaStats = (
     return {
       raters: 2,
       categories: C,
+      categoryLabels: categories,
+      matrix: counts,
       n,
       po,
       pe,
@@ -201,6 +203,15 @@ export const kappaStats = (
     return perCategory;
   });
   const k = columns.length;
+  const matrix = Array.from({ length: C }, () => new Array<number>(C).fill(0));
+  ratings.forEach(row => {
+    for (let i = 0; i < row.length; i++) {
+      for (let j = i + 1; j < row.length; j++) {
+        matrix[indexOf.get(row[i])!][indexOf.get(row[j])!] += 1;
+        matrix[indexOf.get(row[j])!][indexOf.get(row[i])!] += 1;
+      }
+    }
+  });
   const P = counts.reduce((sum, row) => {
     const squares = row.reduce((total, count) => total + count * count, 0);
     return sum + (squares - k) / (k * (k - 1));
@@ -218,6 +229,8 @@ export const kappaStats = (
   return {
     raters: k,
     categories: C,
+    categoryLabels: categories,
+    matrix,
     n,
     po: P,
     pe: Pe,

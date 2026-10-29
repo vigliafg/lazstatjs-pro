@@ -1,16 +1,20 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AnalysisReport } from '../components/AnalysisReport';
+import { AnalysisOutput } from '../components/AnalysisOutput';
 import { copyText } from '../io/clipboard';
+import { awaitChartsReady } from '../io/chartReady';
 import { exportChartsAsPng } from '../io/chartExport';
 import { buildReportFromElement } from '../io/reportExport';
 
 import { downloadBytes, downloadText } from '../io/writers';
 import { capStoredOutputs, extractOutputTitle, type StoredOutput } from '../io/outputs';
+import { fitChartBudget } from '../charts/schema';
 import { nonEmptyRowCount } from '../grid/types';
 import type { GridData } from '../grid/types';
-import type { ReportSpec } from '../stats/report';
+import type { AnalysisRunResult } from '../analyses/types';
+import type { AnalysisChart, ChartOptions } from '../stats/charts';
 import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
+import { analysisLabel } from '../analyses/registry';
 import type { Toast } from './useToasts';
 import { t, translate, type Locale } from '../i18n';
 
@@ -24,12 +28,20 @@ interface UseOutputConsoleOptions {
   showToast: (title: string, msg: string, type?: Toast['type']) => void;
 }
 
+const settled = async (root: ParentNode, showToast: (title: string, msg: string, type?: Toast['type']) => void) => {
+  const ready = await awaitChartsReady(root);
+  if (!ready.ready || ready.failed > 0) {
+    showToast(t('toast.charts'), t('output.chartsPending'), 'warn');
+  }
+  return ready;
+};
+
 /**
  * Stato e azioni della console dei risultati.
  *
- * Ogni esecuzione produce un blocco unico (tabelle + grafici + report) e uno
- * snapshot HTML statico, così la console sopravvive a reload e file `.lzs`.
- * Gli export lavorano sul DOM già renderizzato: nessun ricalcolo.
+ * Ogni esecuzione produce un blocco unico (tabelle + prosa + grafici). Lo
+ * snapshot HTML conserva tabelle e prosa; i modelli dei grafici sono salvati a
+ * parte, così dopo un reload restano renderizzabili e modificabili.
  */
 export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToast }: UseOutputConsoleOptions) => {
   const reportText = (key: Parameters<typeof translate>[1]): string => translate(reportLocale, key);
@@ -54,11 +66,10 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     return () => cancelAnimationFrame(frame);
   }, [outputs]);
 
-  // Each run pushes a single block: the written report is part of that block,
-  // so it always closes the run after every table and chart.
+  // Each run pushes a single block. The HTML snapshot keeps tables and prose
+  // only: charts are live models and must not be replaced by a static SVG.
   const pushOutput = (
-    node: ReactNode,
-    report: ReportSpec | null,
+    result: AnalysisRunResult,
     analysisId?: string,
     meta?: {
       dataRevision?: number;
@@ -70,13 +81,16 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       live?: boolean;
     }
   ) => {
+    if ('reason' in result) return;
+    const title = result.title || (analysisId ? analysisLabel(analysisId) : extractOutputTitle(''));
     const block = (
-      <>
-        {node}
-        {report && (
-          <AnalysisReport spec={report} limitationsLabel={reportText('report.limitations')} />
-        )}
-      </>
+      <AnalysisOutput
+        title={title}
+        header={result.header}
+        tables={result.tables}
+        report={result.report}
+        limitationsLabel={reportText('report.limitations')}
+      />
     );
     let html = '';
     try {
@@ -85,9 +99,10 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       // A failed snapshot must never lose the run that is on screen.
       console.error('Could not snapshot the output block', error);
     }
+    const budget = fitChartBudget(result.charts ?? [], html.length);
     const entry: OutputEntry = {
       id: `run-${Date.now()}-${runSeq.current++}`,
-      title: html ? extractOutputTitle(html) : 'Analysis output',
+      title,
       createdAt: new Date().toISOString(),
       ...(analysisId ? { analysisId } : {}),
       ...(meta?.dataRevision !== undefined ? { dataRevision: meta.dataRevision } : {}),
@@ -98,7 +113,18 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       ...(meta?.ciLevel !== undefined ? { ciLevel: meta.ciLevel } : {}),
       ...(meta?.live ? { live: true } : {}),
       html,
-      node: block,
+      ...(budget.charts.length > 0 ? { charts: budget.charts } : {}),
+      ...(budget.overflow > 0 ? { chartOverflow: budget.overflow } : {}),
+      ...(budget.omitted > 0 ? { chartOmitted: budget.omitted } : {}),
+      session: {
+        title,
+        header: result.header,
+        tables: result.tables,
+        report: result.report,
+        warnings: result.warnings,
+        charts: result.charts,
+        callout: result.callout,
+      },
     };
     setOutputs(prev => {
       // A live run owns one card per analysis: replace it instead of stacking
@@ -108,6 +134,26 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
         : prev;
       return capStoredOutputs([...base, entry]);
     });
+  };
+
+  /** Done in the chart editor: update options without re-running the analysis. */
+  const updateOutputChart = (entryId: string, chartId: string, options: ChartOptions) => {
+    setOutputs(prev =>
+      prev.map(entry => {
+        if (entry.id !== entryId) return entry;
+        const update = (charts: AnalysisChart[] | undefined) =>
+          charts?.map((chart: AnalysisChart) =>
+            chart.id === chartId ? { ...chart, options } : chart
+          );
+        return {
+          ...entry,
+          ...(entry.charts ? { charts: update(entry.charts) } : {}),
+          ...(entry.session
+            ? { session: { ...entry.session, charts: update(entry.session.charts) } }
+            : {}),
+        };
+      })
+    );
   };
 
   const clearOutput = () => {
@@ -123,6 +169,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
   const copyOutput = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
+    await settled(el, showToast);
     // Keep the analysis text, drop the per-block toolbars from the clipboard.
     const clone = el.cloneNode(true) as HTMLElement;
     clone.querySelectorAll('button, [data-no-print]').forEach(node => node.remove());
@@ -141,10 +188,14 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     const el = document.getElementById('output-content');
     if (!el) return;
     const result = await exportChartsAsPng(el, 'lazstats-chart');
-    if (result.exported === 0 && result.failed === 0) {
+    if (result.exported === 0 && result.failed === 0 && result.pending === 0) {
       showToast(t('toast.charts'), t('output.noCharts'), 'warn');
-    } else if (result.failed > 0) {
-      showToast(t('toast.charts'), `${result.exported} ${t('output.chartsPartial')} ${result.failed} ${t('output.failed')}`, 'warn');
+    } else if (result.failed > 0 || result.pending > 0) {
+      showToast(
+        t('toast.charts'),
+        `${result.exported} ${t('output.chartsPartial')} ${result.failed + result.pending} ${t('output.failed')}`,
+        'warn'
+      );
     } else {
       showToast(t('toast.charts'), `${result.exported} ${t('output.chartsExported')}`, 'ok');
     }
@@ -163,9 +214,10 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     }
   };
 
-  const exportReportWord = () => {
+  const exportReportWord = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
+    await settled(el, showToast);
     const html = buildReportFromElement(el, {
       title: reportText('output.reportTitle'),
       generatedAt: new Date().toLocaleString(reportLocale),
@@ -175,9 +227,10 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     showToast(t('toast.report'), t('output.reportReady'), 'ok');
   };
 
-  const exportReportHtml = () => {
+  const exportReportHtml = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
+    await settled(el, showToast);
     const html = buildReportFromElement(el, {
       title: reportText('output.reportTitle'),
       generatedAt: new Date().toLocaleString(reportLocale),
@@ -191,6 +244,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     outputs,
     setOutputs,
     pushOutput,
+    updateOutputChart,
     clearOutput,
     removeOutput,
     copyOutput,

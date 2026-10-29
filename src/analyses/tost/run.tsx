@@ -1,7 +1,8 @@
-import { ResultTables } from '../../components/ResultTable';
 import { tostStats } from '../../stats/kernels/tost';
 import { tostTables } from '../../stats/tables/tost';
 import { tostReport } from '../../stats/reports/tost';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import type { Dataset } from '../../grid/types';
 import type { TostParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -33,14 +34,28 @@ export const buildTostOutput = ({ grid, params, ciLevel }: TostInput): AnalysisR
   }
 
   const tables = tostTables(stats, ciLevel);
+  const chart = makeChart({
+    id: 'tost-difference',
+    kind: 'bar',
+    title: copy('TOST: differenza e margini di equivalenza'),
+    subtitle: copy('Differenza {s1} · IC {s2}% · margine ±{s3}', {
+      s1: stats.diff.toFixed(3),
+      s2: ciLevel,
+      s3: stats.margin,
+    }),
+    note: copy('La barra è la differenza stimata con il suo intervallo; le linee tratteggiate sono i margini di equivalenza.'),
+    data: {
+      bars: [{ category: copy('Differenza'), value: stats.diff, lo: stats.ciLo, hi: stats.ciHi }],
+      rules: [{ value: -stats.margin }, { value: stats.margin }],
+    },
+    fields: { xLabel: copy('Stima'), yLabel: copy('Differenza') },
+    options: { error: 'ci', valueLabels: true } as never,
+  });
   return {
     ok: true,
+    title: copy('Equivalenza TOST'),
     tables,
     report: tostReport(tables, stats, ciLevel),
-    node: (
-      <div className="mb-6">
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts: [chart],
   };
 };

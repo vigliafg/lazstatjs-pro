@@ -1,13 +1,6 @@
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryGroup,
-  VictoryLegend,
-  VictoryTheme,
-} from 'victory';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import { ancovaReport, ancovaTables } from '../../stats/ancova';
-import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import {
   analysisRows,
@@ -24,13 +17,6 @@ export interface AncovaInput {
   params: AncovaParams;
   ciLevel: number;
 }
-
-const AXIS_STYLE = {
-  axis: { stroke: '#333' },
-  axisLabel: { fill: '#888', fontSize: 10, padding: 38 },
-  tickLabels: { fill: '#888', fontSize: 9 },
-  grid: { stroke: '#222' },
-};
 
 /** ANCOVA: tabelle, medie grezze/aggiustate e report. */
 export const buildAncovaOutput = ({ grid, params, ciLevel }: AncovaInput): AnalysisRunResult => {
@@ -104,68 +90,32 @@ export const buildAncovaOutput = ({ grid, params, ciLevel }: AncovaInput): Analy
     raw: Number(row.rawMean ?? NaN),
     adjusted: Number(row.adjusted ?? NaN),
   }));
-  const domainX = chartData.map(point => point.x);
+  const bars = chartData.flatMap(point => [
+    ...(Number.isFinite(point.raw)
+      ? [{ category: point.group, value: point.raw, series: copy('Grezza') }]
+      : []),
+    ...(Number.isFinite(point.adjusted)
+      ? [{ category: point.group, value: point.adjusted, series: copy('Aggiustata') }]
+      : []),
+  ]);
 
   return {
     ok: true,
+    title: copy('ANCOVA: {s1} per {s2}', { s1: responseName, s2: factorName }),
+    header: `ANCOVA · ${responseName} ~ ${factorName} + ${covariateNames.join(' + ')} · ${levels.length} righe`,
     tables,
     report: ancovaReport(tables, factorName, covariateNames, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`ANCOVA · ${responseName} ~ ${factorName} + ${covariateNames.join(' + ')} · ${levels.length} righe`}
-        </p>
-        <ResultTables specs={tables} />
-        <section className="mb-6">
-          <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider mb-2">
-            Medie grezze e aggiustate
-          </h3>
-          <div className="h-[300px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={{ x: 28 }}
-              padding={{ top: 45, bottom: 55, left: 60, right: 20 }}
-            >
-              <VictoryLegend
-                x={60}
-                y={10}
-                orientation="horizontal"
-                gutter={18}
-                style={{
-                  labels: { fill: '#aaa', fontSize: 9 },
-                  data: { strokeWidth: 0 },
-                }}
-                data={[
-                  { name: 'Grezza', symbol: { fill: '#4f9cf9' } },
-                  { name: 'Aggiustata', symbol: { fill: '#34d399' } },
-                ]}
-              />
-              <VictoryAxis
-                tickValues={domainX}
-                tickFormat={(value: number) => chartData[value]?.group ?? ''}
-                style={AXIS_STYLE}
-              />
-              <VictoryAxis dependentAxis label={responseName} style={AXIS_STYLE} />
-              <VictoryGroup offset={18} colorScale={['#4f9cf9', '#34d399']}>
-                <VictoryBar
-                  data={chartData.map(point => ({ x: point.x, y: point.raw }))}
-                  labels={({ datum }) => (Number.isFinite(datum.y) ? datum.y.toFixed(2) : '')}
-                  style={{ data: { width: 16 } }}
-                />
-                <VictoryBar
-                  data={chartData.map(point => ({ x: point.x, y: point.adjusted }))}
-                  labels={({ datum }) => (Number.isFinite(datum.y) ? datum.y.toFixed(2) : '')}
-                  style={{ data: { width: 16 } }}
-                />
-              </VictoryGroup>
-            </VictoryChart>
-          </div>
-          <p className="text-[10px] text-text3 mt-1">
-            Le barre verdi sono le medie aggiustate alla media delle covariate: è questa la
-            differenza che l’ANCOVA testa.
-          </p>
-        </section>
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'ancova-means',
+        kind: 'bar',
+        title: copy('Medie grezze e aggiustate'),
+        subtitle: `${factorName} × ${responseName}`,
+        note: copy('Le barre aggiustate sono le medie alla media delle covariate: è questa la differenza che l’ANCOVA testa.'),
+        data: { bars },
+        fields: { xLabel: factorName, yLabel: responseName, series: copy('Stima') },
+        options: { valueLabels: true } as never,
+      }),
+    ],
   };
 };

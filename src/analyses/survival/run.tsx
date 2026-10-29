@@ -1,16 +1,11 @@
-import {
-  VictoryAxis,
-  VictoryChart,
-  VictoryLine,
-  VictoryTheme,
-} from 'victory';
 import { survivalReport, survivalTables } from '../../stats/survival';
-import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import { analysisRows, type Dataset } from '../../grid/types';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import type { SurvivalParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
-import { t } from '../../i18n';
+import type { ChartRow } from '../../stats/charts';
 
 export interface SurvivalInput {
   grid: Dataset;
@@ -18,14 +13,8 @@ export interface SurvivalInput {
   ciLevel: number;
 }
 
-const COLORS = ['#4f9cf9', '#34d399', '#fbbf24', '#a78bfa', '#f87171', '#38bdf8'];
-
 /** Kaplan–Meier: tabelle, curve per gruppo e report. */
-export const buildSurvivalOutput = ({
-  grid,
-  params,
-  ciLevel,
-}: SurvivalInput): AnalysisRunResult => {
+export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): AnalysisRunResult => {
   const { timeVariable, eventVariable, groupVariable } = params;
 
   if (timeVariable === eventVariable) {
@@ -76,78 +65,42 @@ export const buildSurvivalOutput = ({
 
   const kmRows = tables.find(spec => spec.id === 'surv-km')?.rows ?? [];
   const groups = Array.from(new Set(kmRows.map(row => String(row.group))));
-  const curves = groups.map((group, index) => ({
-    group,
-    color: COLORS[index % COLORS.length],
-    data: [
-      { x: 0, y: 100 },
-      ...kmRows
-        .filter(row => String(row.group) === group)
-        .map(row => ({ x: Number(row.time), y: Number(row.survival) * 100 })),
-    ],
-  }));
+  const curves: ChartRow[] = [];
+  const censored: ChartRow[] = [];
+  groups.forEach(group => {
+    curves.push({ x: 0, y: 1, series: group, lo: 1, hi: 1 });
+    kmRows
+      .filter(row => String(row.group) === group)
+      .forEach(row => {
+        const survival = Number(row.survival);
+        const point = { x: Number(row.time), y: survival, series: group, lo: Number(row.lo), hi: Number(row.hi) };
+        curves.push(point);
+        if (Number(row.censored) > 0) {
+          censored.push({ x: point.x, y: point.y, series: group });
+        }
+      });
+  });
+
+  const timeName = grid.cols[timeVariable]?.name ?? 'T';
+  const eventName = grid.cols[eventVariable]?.name ?? 'E';
+  const header = `Time: ${timeName} · event: ${eventName} = "${eventLevels[1]}" · ${rows.length} observations`;
 
   return {
     ok: true,
+    title: copy('Sopravvivenza: {s1} per {s2}', { s1: timeName, s2: eventName }),
+    header,
     tables,
     report: survivalReport(tables, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${rows.length} observations`}
-        </p>
-        <ResultTables specs={tables} />
-
-        <section className="mb-6">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-            <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
-              Curve di Kaplan–Meier
-            </h3>
-            <span className="text-[10px] text-text3 font-mono">{`CI ${ciLevel}%`}</span>
-          </div>
-          <div className="h-[300px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 50, left: 65, right: 25 }} domain={{ y: [0, 100] }}>
-              <VictoryAxis
-                label={t('chart.time')}
-                style={{
-                  axis: { stroke: '#333' },
-                  axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickFormat={value => `${value}%`}
-                style={{
-                  axis: { stroke: '#333' },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              {curves.map(curve => (
-                <VictoryLine
-                  key={curve.group}
-                  data={curve.data}
-                  interpolation="stepAfter"
-                  style={{ data: { stroke: curve.color, strokeWidth: 2 } }}
-                />
-              ))}
-            </VictoryChart>
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-            {curves.map(curve => (
-              <span key={curve.group} className="flex items-center gap-1.5 text-[10px] text-text3 font-mono">
-                <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: curve.color }} />
-                {curve.group}
-              </span>
-            ))}
-          </div>
-          <p className="text-[10px] text-text3 mt-1">
-            Ogni gradino è un evento; i tratti piatti indicano che in quell’intervallo non ci sono stati eventi.
-          </p>
-        </section>
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'survival-km',
+        kind: 'survival',
+        title: copy('Curve di Kaplan–Meier'),
+        subtitle: copy('IC {s1}%', { s1: ciLevel }),
+        note: copy('Ogni gradino è un evento; i tratti piatti indicano che in quell’intervallo non ci sono stati eventi.'),
+        data: { curves, censored },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Gruppo') },
+      }),
+    ],
   };
 };

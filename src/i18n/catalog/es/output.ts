@@ -122,4 +122,5 @@ export const outputMessages: Record<keyof typeof enOutput, string> = {
   'project.loaded': 'Cargado',
   'project.rowsAnd': 'filas y',
   'project.resultBlocks': 'bloque(s) de resultados',
+  'output.chartsPending': "Gráficos aún cargando o no disponibles: la exportación puede estar incompleta",
 };

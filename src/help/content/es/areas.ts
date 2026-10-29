@@ -269,7 +269,8 @@ export const areaTopics: HelpTopic[] = [
       goal: 'Sacar los resultados en un formato que puedas usar.',
       dataset: 'score-groups.csv',
       steps: [
-        'Ejecuta un análisis y mira la tarjeta: primero las tablas, luego los gráficos y después el informe de lectura.',
+        'Ejecuta un análisis y mira la tarjeta: primero las tablas, luego el informe de lectura y después los gráficos editables.',
+        'Haz clic en un gráfico para abrir el editor: cambia el tema, los colores y las opciones de la procedencia, y pulsa Hecho.',
         'Abre el Esquema para saltar a una tarjeta o contráela con la flecha.',
         'Pulsa Informe para descargar un archivo HTML imprimible, o Word para uno editable.',
         'Usa XLSX para obtener datos y tablas en un libro; Gráficos descarga los archivos PNG.',
@@ -283,7 +284,8 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         '«obsoleto» significa que los datos cambiaron después de la ejecución: vuelve a ejecutar antes de exportar.',
-        'Las tarjetas restauradas de un proyecto son estáticas: copiar y exportar funcionan, recalcular no.',
+        'Los gráficos siguen siendo editables tras recargar; las tarjetas guardadas con el motor anterior son estáticas: vuelve a ejecutarlas para obtener un gráfico editable.',
+        'Ajustes → Gráficos define el estilo predeterminado de los gráficos futuros; las tarjetas existentes no cambian.',
       ],
       pitfalls: [
         'Exportar una tarjeta obsoleta produce un informe formalmente correcto pero desactualizado.',

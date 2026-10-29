@@ -10,9 +10,10 @@ import type { StoredOutput } from '../outputs';
 import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
+import { DEFAULT_CHART_DEFAULTS, type ChartDefaults } from '../../charts/defaults';
 
 export const PROJECT_APP = 'lazstats';
-export const PROJECT_VERSION = 2;
+export const PROJECT_VERSION = 3;
 export const PROJECT_STORAGE_KEY = 'lazstats.project.v1';
 /** Keep autosave comfortably below the ~5 MB localStorage budget. */
 export const MAX_AUTOSAVE_CHARS = 4_000_000;
@@ -330,6 +331,8 @@ export interface ProjectSettings {
   reportLocale: Locale;
   /** Language of the help book; `auto` follows the interface. */
   helpLocale: HelpLocale;
+  /** Factory defaults for new charts (never applied retroactively). */
+  chartDefaults: ChartDefaults;
 }
 
 export interface ProjectSnapshot {
@@ -544,4 +547,5 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   uiLocale: DEFAULT_LOCALE,
   reportLocale: DEFAULT_REPORT_LOCALE,
   helpLocale: 'auto',
+  chartDefaults: DEFAULT_CHART_DEFAULTS,
 };

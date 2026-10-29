@@ -31,5 +31,10 @@ export interface GeeStats {
   phi: number;
   alpha: number;
   iterations: number;
+  clusterLabels: string[];
+  rowClusters: string[];
+  observed: number[];
+  fitted: number[];
+  residuals: number[];
   coefficients: GeeCoefficient[];
 }

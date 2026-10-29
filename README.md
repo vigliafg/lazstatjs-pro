@@ -4,7 +4,7 @@ A comprehensive browser-based statistical analysis tool with real-time plotting 
 
 ## Overview
 
-LazStats JS provides a spreadsheet-like data editor and a full suite of parametric and non-parametric statistical analyses, all running entirely in the browser. It features an interactive dark-themed UI with real-time charting via Victory.
+LazStats JS provides a spreadsheet-like data editor and a full suite of parametric and non-parametric statistical analyses, all running entirely in the browser. It features an interactive dark-themed UI with real-time Vega-Lite charts.
 
 **UI status and backlog:** [`docs/UI-STATE.md`](docs/UI-STATE.md) · **Grid checkpoint:** [`docs/GRID-STATE.md`](docs/GRID-STATE.md)
 
@@ -55,7 +55,8 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 ### Project persistence
 - **Silent autosave** of the grid, CI level, analysis parameters, IO preferences and the output console to `localStorage` (debounced), restored automatically on the next visit
 - **Save/Open `.lzs` projects**: a versioned JSON file with the dataset, settings, parameters and results; invalid, corrupted or newer-version files are rejected with a readable message
-- **Output console persistence**: every run also stores a static HTML snapshot (tables, Victory charts as inline SVG and the written report) capped at 20 blocks / 1.5 MB. Restored blocks are sanitised before injection and are read-only snapshots — Copy, Charts PNG, Report HTML and Results XLSX keep working, while per-table TSV buttons and chart tooltips exist only on live runs. Panel-internal parameters still restart from the grid defaults
+- **Output console persistence**: every run stores a static HTML snapshot (tables and written report) plus the chart models, capped at 20 blocks / 1.5 MB. Restored blocks are sanitised before injection; charts are rendered live from their models and stay editable after reload. Cards saved with the old Victory engine remain readable but static — re-run the analysis to get an editable card. Copy, Charts PNG, Report HTML and Results XLSX keep working; per-table TSV buttons and chart tooltips exist only on live runs. Panel-internal parameters still restart from the grid defaults
+- **Editable charts**: every chart is a serializable model compiled to Vega-Lite on demand. Click a chart to open the editor: general style toolbar, procedure-specific options, live preview, Done/Cancel/Reset. Changes are saved by autosave and `.lzs` without re-running the analysis. Settings → Charts sets the default style for future runs without touching existing cards. See [`docs/CHART-ENGINE.md`](docs/CHART-ENGINE.md)
 
 ### Statistical Analyses
 
@@ -106,7 +107,7 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 - **Framework:** React 19, TypeScript
 - **Build:** Vite 6
 - **Styling:** Tailwind CSS 4, dark theme
-- **Charts:** Victory 37
+- **Charts:** Vega-Lite 6 + Vega 6 + `vega-embed` 7 (loaded on demand)
 - **Statistics:** jStat, custom modules under `src/stats/`
 - **Statistical files:** `@irbisadm/statfmt` (TypeScript port of ReadStat) for SPSS/Stata import
 - **Icons:** Lucide React

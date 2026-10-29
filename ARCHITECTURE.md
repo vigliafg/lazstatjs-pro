@@ -12,9 +12,10 @@ src/
                 `Dataset` è la vista readonly usata dalle analisi
   stats/        motore numerico e prosa dei report (nessun React):
                 kernels/ numeri puri, tables/ TableSpec, reports/ ReportSpec
+  charts/       modello grafico puro + adapter Vega-Lite (nessun React)
   analyses/     una cartella per analisi: Form.tsx + run.tsx (+ defaults.ts)
                 e helper condivisi in analyses/shared/
-  components/   componenti riusabili (tabelle, report) senza schermate
+  components/   componenti riusabili (tabelle, report, card grafico) senza schermate
   io/           import/export, progetto .lzs, formattazione dei file
   hooks/        stato e orchestrazione (console, sessione, import/export)
   ui/           shell e schede: compone analyses, hooks e components
@@ -34,7 +35,8 @@ Le regole attuali (`.dependency-cruiser.cjs`) vietano:
 - `grid/` verso `ui/`, `analyses/`, `hooks/`, `io/`;
 - `components/` verso `ui/`, `analyses/`, `hooks/`;
 - `io/` verso `ui/`, `analyses/`, `hooks/`;
-- `analyses/` verso `ui/`.
+- `analyses/` verso `ui/`;
+- `charts/` verso `ui/`, `analyses/`, `hooks/`, `components/`, `io/`.
 
 Le eccezioni di dimensione sono in `scripts/check-file-size.mjs`: un file sopra
 700 righe va spezzato o aggiunto con una motivazione. Le eccezioni non possono
@@ -48,13 +50,24 @@ Tutte le analisi passano dallo stesso punto:
 // src/analyses/<id>/run.tsx
 buildOutput({ grid, params, ciLevel }): AnalysisRunResult
 // grid è un Dataset in sola lettura
-// ok: { ok: true, node, tables, report }
+// ok: { ok: true, title, tables, report, charts, header?, warnings?, callout? }
 // no: { ok: false, reason }
 ```
 
 `src/analyses/runners.ts` mappa `id -> buildOutput`; `useAnalysisRun` chiama il
 runner attivo e `App.emit` appende alla console (o mostra il motivo del rifiuto).
 Nessun pannello espone `forwardRef` o chiama la console direttamente.
+
+## Grafici
+
+`AnalysisChart` vive in `src/stats/charts.ts`: dati già aggregati, etichette,
+statistiche derivate e `ChartOptions` (unione discriminata per `kind`). Il
+runner non importa React e non costruisce SVG. `src/charts/vega/buildSpec.ts`
+compila il modello in Vega-Lite; `src/components/charts/VegaChart.tsx` monta
+`vega-embed` con renderer SVG e `data-chart-state` per gli export asincroni.
+L'editor (`ChartEditorDialog`) lavora su una copia delle opzioni e committa solo
+con Done; la persistenza salva i modelli, non un'immagine. Dettagli, feature e
+limiti in [`docs/CHART-ENGINE.md`](docs/CHART-ENGINE.md).
 
 ## Aggiungere un'analisi
 
@@ -63,7 +76,8 @@ Checklist minima:
 1. **Form** — `src/analyses/<id>/Form.tsx`, controllato:
    riceve `params` e il setter, non tiene stato proprio.
 2. **Builder** — `src/analyses/<id>/run.tsx`: numeri, tabelle, grafici e
-   `report`, senza console/toast; restituisce `AnalysisRunResult`.
+   `report`, senza console/toast; restituisce `AnalysisRunResult`. I grafici
+   sono `AnalysisChart` (modello serializzabile), mai JSX o Victory.
 3. **Parametri** — tipo in `ProjectParams` (`src/io/project.ts`), default in
    `DEFAULT_PARAMS`, parsing difensivo in `parseParams` (indici clampati,
    enum validati, campi mancanti = default).

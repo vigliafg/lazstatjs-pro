@@ -239,6 +239,8 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             onRerunAll={props.onRerunAllOutputs}
             onApplyParams={props.onApplyOutputParams}
             paramsSignatureFor={props.paramsSignatureFor}
+            limitationsLabel={props.limitationsLabel}
+            onUpdateChart={props.onUpdateChart}
             currentRevision={props.dataRevision}
             currentDatasetId={props.datasetId}
             currentFilterSignature={props.filterSignature}

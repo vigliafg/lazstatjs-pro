@@ -19,6 +19,11 @@ export interface LmmCoefficient {
 export interface LmmStats {
   n: number;
   groups: number;
+  groupLabels: string[];
+  groupMeans: number[];
+  observed: number[];
+  fitted: number[];
+  residuals: number[];
   k: number;
   df: number;
   sigmaU2: number;

@@ -35,6 +35,9 @@ export interface BlandAltmanResult {
 export interface KappaResult {
   raters: number;
   categories: number;
+  categoryLabels: string[];
+  /** Agreement matrix between categories (all rater pairs). */
+  matrix: number[][];
   n: number;
   po: number;
   pe: number;

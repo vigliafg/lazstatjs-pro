@@ -274,7 +274,8 @@ export const areaTopics: HelpTopic[] = [
       goal: "Ergebnisse in einem Format entnehmen, das Sie verwenden können.",
       dataset: "score-groups.csv",
       steps: [
-        "Führen Sie eine Analyse aus und sehen Sie sich die Karte an: zuerst Tabellen, dann Diagramme, dann den Lesetext.",
+        "Führen Sie eine Analyse aus und sehen Sie sich die Karte an: zuerst Tabellen, dann den Lesetext, dann die bearbeitbaren Diagramme.",
+        "Klicken Sie auf ein Diagramm, um den Editor zu öffnen: Ändern Sie Thema, Farben und verfahrensspezifische Optionen, und drücken Sie dann Fertig.",
         "Öffnen Sie die Gliederung, um zu einer Karte zu springen, oder klappen Sie sie mit dem Pfeil ein.",
         "Drücken Sie Bericht, um eine druckbare HTML-Datei herunterzuladen, oder Word für eine bearbeitbare.",
         "Mit XLSX erhalten Sie Daten und Tabellen in einer Arbeitsmappe; Diagramme lädt die PNG-Dateien herunter.",
@@ -288,7 +289,8 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         "„veraltet“ bedeutet, dass sich die Daten nach dem Lauf geändert haben: Führen Sie vor dem Export erneut aus.",
-        "Aus einem Projekt wiederhergestellte Karten sind statisch: Kopieren und Exportieren funktionieren, die Neuberechnung nicht.",
+        "Diagramme bleiben nach dem Neuladen bearbeitbar; mit der alten Engine gespeicherte Karten bleiben statisch: Führen Sie sie erneut aus, um ein bearbeitbares Diagramm zu erhalten.",
+        "Einstellungen → Diagramme legt den Standardstil künftiger Diagramme fest; bestehende Karten bleiben unverändert.",
       ],
       pitfalls: [
         "Der Export einer veralteten Karte erzeugt einen formal korrekten, aber überholten Bericht.",

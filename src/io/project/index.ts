@@ -40,6 +40,9 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
         ...(entry.ciLevel !== undefined ? { ciLevel: entry.ciLevel } : {}),
         ...(entry.dataRevision !== undefined ? { dataRevision: entry.dataRevision } : {}),
         ...(entry.datasetId ? { datasetId: entry.datasetId } : {}),
+        ...(entry.charts && entry.charts.length > 0 ? { charts: entry.charts } : {}),
+        ...(entry.chartOverflow ? { chartOverflow: entry.chartOverflow } : {}),
+        ...(entry.chartOmitted ? { chartOmitted: entry.chartOmitted } : {}),
         html: entry.html,
       }))
   ),
@@ -57,7 +60,7 @@ export const parseProject = (text: string): ProjectSnapshot => {
   }
   if (!isRecord(raw)) throw new Error('Not a valid .lzs project');
   if (raw.app !== PROJECT_APP) throw new Error('Not a LazStats project file');
-  if (raw.version !== 1 && raw.version !== PROJECT_VERSION) {
+  if (raw.version !== 1 && raw.version !== 2 && raw.version !== PROJECT_VERSION) {
     throw new Error(
       typeof raw.version === 'number'
         ? `Unsupported project version ${raw.version} (expected ${PROJECT_VERSION})`

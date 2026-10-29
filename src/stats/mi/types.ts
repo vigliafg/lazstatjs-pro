@@ -46,5 +46,8 @@ export interface MiStats {
   imputations: number;
   iterations: number;
   variables: MiVariable[];
+  /** Observed values and values after the last imputation, per variable. */
+  observedValues: number[][];
+  imputedValues: number[][];
   regression: MiRegression | null;
 }

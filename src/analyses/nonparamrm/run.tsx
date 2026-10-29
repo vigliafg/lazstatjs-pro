@@ -1,9 +1,5 @@
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryTheme,
-} from 'victory';
+import { copy } from '../../stats/reportCopy';
+import { makeChart, boxRows } from '../../charts/kits/common';
 import {
   cochranQ,
   cochranReport,
@@ -19,7 +15,6 @@ import {
   mcnemarTest,
   nemenyiPosthoc,
 } from '../../stats/repeated';
-import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import { analysisRows, type Dataset } from '../../grid/types';
 import type { NonParamParams } from '../../io/project';
@@ -33,18 +28,6 @@ export interface NonParamInput {
   params: NonParamParams;
   ciLevel: number;
 }
-
-const gridTheme = {
-  ...VictoryTheme.material,
-  axis: {
-    style: {
-      axis: { stroke: '#333' },
-      tickLabels: { fill: '#888', fontSize: 9 },
-      grid: { stroke: '#222' },
-      axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
-    },
-  },
-};
 
 const buildFriedman = (
   { grid, params, ciLevel }: NonParamInput
@@ -77,32 +60,20 @@ const buildFriedman = (
 
   return {
     ok: true,
+    title: copy('Friedman: ranghi medi'),
     tables,
     report: friedmanReport(tables, names, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`Friedman · ${blocks.length} blocchi · ${columns.length} misure ripetute`}
-        </p>
-        <ResultTables specs={tables} />
-        <section className="mb-6">
-          <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider mb-2">
-            Ranghi medi
-          </h3>
-          <div className="h-[260px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart theme={gridTheme} domainPadding={{ x: 30 }} padding={{ top: 15, bottom: 55, left: 55, right: 20 }}>
-              <VictoryAxis style={gridTheme.axis.style} />
-              <VictoryAxis dependentAxis style={gridTheme.axis.style} />
-              <VictoryBar
-                data={data}
-                style={{ data: { fill: '#4f9cf9' } }}
-                labels={({ datum }) => datum.y.toFixed(2)}
-              />
-            </VictoryChart>
-          </div>
-        </section>
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'friedman-ranks',
+        kind: 'bar',
+        title: copy('Ranghi medi'),
+        subtitle: copy('{s1} blocchi · {s2} misure ripetute', { s1: blocks.length, s2: columns.length }),
+        data: { bars: data.map(point => ({ category: point.x, value: point.y })) },
+        fields: { xLabel: copy('Condizione'), yLabel: copy('Rango medio') },
+        options: { valueLabels: true } as never,
+      }),
+    ],
   };
 };
 
@@ -142,18 +113,29 @@ const buildMcNemar = (
   ];
   const tables = mcnemarTables(result, names, ciLevel);
 
+  const discordant = [
+    { category: copy('Entrambi positivi'), value: result.a },
+    { category: copy('Solo {s1}', { s1: names[0] }), value: result.b },
+    { category: copy('Solo {s1}', { s1: names[1] }), value: result.c },
+    { category: copy('Entrambi negativi'), value: result.d },
+  ];
   return {
     ok: true,
+    title: copy('McNemar: accordo tra misure binarie'),
     tables,
     report: mcnemarReport(tables, names, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`McNemar · ${pairs.length} coppie · evento = valore più alto`}
-        </p>
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'mcnemar-discordant',
+        kind: 'bar',
+        title: copy('Coppie concordanti e discordanti'),
+        subtitle: copy('{s1} coppie · p esatto = {s2}', { s1: result.n, s2: result.exactP.toFixed(4) }),
+        note: copy('Il test usa le coppie discordanti: quelle in cui i due valutatori non concordano.'),
+        data: { bars: discordant },
+        fields: { xLabel: copy('Categoria'), yLabel: copy('Conteggio') },
+        options: { valueLabels: true } as never,
+      }),
+    ],
   };
 };
 
@@ -199,32 +181,20 @@ const buildCochran = (
 
   return {
     ok: true,
+    title: copy('Cochran Q: proporzione di successi'),
     tables,
     report: cochranReport(tables, names, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`Cochran Q · ${result.n} blocchi · ${result.k} condizioni binarie`}
-        </p>
-        <ResultTables specs={tables} />
-        <section className="mb-6">
-          <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider mb-2">
-            Proporzione di successi
-          </h3>
-          <div className="h-[260px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart theme={gridTheme} domain={{ y: [0, 1] }} domainPadding={{ x: 30 }} padding={{ top: 15, bottom: 55, left: 55, right: 20 }}>
-              <VictoryAxis style={gridTheme.axis.style} />
-              <VictoryAxis dependentAxis style={gridTheme.axis.style} />
-              <VictoryBar
-                data={data}
-                style={{ data: { fill: '#34d399' } }}
-                labels={({ datum }) => datum.y.toFixed(2)}
-              />
-            </VictoryChart>
-          </div>
-        </section>
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'cochran-proportions',
+        kind: 'bar',
+        title: copy('Proporzione di successi'),
+        subtitle: copy('{s1} blocchi · {s2} condizioni binarie', { s1: result.n, s2: result.k }),
+        data: { bars: data.map(point => ({ category: point.x, value: point.y })) },
+        fields: { xLabel: copy('Condizione'), yLabel: copy('Proporzione') },
+        options: { valueLabels: true, zeroBaseline: true } as never,
+      }),
+    ],
   };
 };
 
@@ -268,18 +238,27 @@ const buildJonckheere = (
   const names = groupLevels;
   const tables = jonckheereTables(result, buckets, names, ciLevel);
 
+  const box = boxRows(buckets.map((values, index) => ({ category: names[index] ?? `G${index + 1}`, values })));
   return {
     ok: true,
+    title: copy('Jonckheere–Terpstra: {s1} per {s2}', {
+      s1: grid.cols[outcome]?.name ?? 'Y',
+      s2: grid.cols[group]?.name ?? 'G',
+    }),
     tables,
     report: jonckheereReport(tables, names, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`Jonckheere–Terpstra · ${grid.cols[outcome]?.name} per ${grid.cols[group]?.name} · ordine: ${names.join(' < ')}`}
-        </p>
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'jonckheere-groups',
+        kind: 'box',
+        title: copy('Distribuzione per gruppo ordinato'),
+        subtitle: names.join(' < '),
+        note: copy('Il test cerca un aumento monotono dell’esito lungo l’ordine dei gruppi.'),
+        data: { summary: box.summary, points: box.points, outliers: box.outliers },
+        fields: { xLabel: copy('Gruppo'), yLabel: grid.cols[outcome]?.name ?? 'Y' },
+        options: { showPoints: true } as never,
+      }),
+    ],
   };
 };
 

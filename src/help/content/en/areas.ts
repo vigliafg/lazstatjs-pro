@@ -269,7 +269,8 @@ export const areaTopics: HelpTopic[] = [
       goal: 'Take results out in a format you can use.',
       dataset: 'score-groups.csv',
       steps: [
-        'Run an analysis and look at the card: tables, then charts, then the reading report.',
+        'Run an analysis and look at the card: tables, then the reading report, then the editable charts.',
+        'Click a chart to open the editor: change theme, colours and procedure-specific options, then press Done.',
         'Open the Outline to jump to a card or collapse it with the chevron.',
         'Press Report to download a printable HTML file, or Word for an editable one.',
         'Use XLSX to get data and tables in a workbook; Charts downloads the PNG files.',
@@ -283,7 +284,8 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         '“stale” means data changed after the run: re-run before exporting.',
-        'Cards restored from a project are static: copy and export work, recalculation does not.',
+        'Charts stay editable after reload; cards saved with the old engine remain static: re-run them to get an editable chart.',
+        'Settings → Charts sets the default style of future charts; existing cards are not changed.',
       ],
       pitfalls: [
         'Exporting a stale card produces a formally correct but outdated report.',

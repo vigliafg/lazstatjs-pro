@@ -35,5 +35,9 @@ export interface CountStats {
   aic: number;
   bic: number;
   nonInteger: number;
+  /** Complete-case observed and fitted counts, for the diagnostic charts. */
+  observed: number[];
+  fitted: number[];
+  residuals: number[];
   coefficients: CountCoefficient[];
 }

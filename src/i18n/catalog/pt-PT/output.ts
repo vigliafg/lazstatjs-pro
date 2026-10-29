@@ -120,4 +120,5 @@ export const outputMessages = {
   'project.loaded': 'Carregado',
   'project.rowsAnd': 'linhas e',
   'project.resultBlocks': 'bloco(s) de resultados',
+  'output.chartsPending': "Gráficos ainda a carregar ou indisponíveis: a exportação pode estar incompleta",
 } as const;

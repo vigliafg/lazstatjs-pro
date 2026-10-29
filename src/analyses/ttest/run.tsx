@@ -1,24 +1,17 @@
-import type { ReactNode } from 'react';
-import {
-  VictoryAxis,
-  VictoryBoxPlot,
-  VictoryChart,
-  VictoryLabel,
-  VictoryLine,
-  VictoryTheme,
-} from 'victory';
 import { jStat } from '../../stats/jstat';
 import { pairedValues, parseNum, pooledTTest, welchTTest } from '../../stats/core';
 import { ttestTables } from '../../stats/ttest';
 import { ttestReport } from '../../stats/report';
 import { calcMannWhitneyU, calcWilcoxonSignedRank } from '../../stats/kernels';
-import { ResultTables } from '../../components/ResultTable';
 import type { TableSpec } from '../../stats/types';
 import type { ReportSpec } from '../../stats/report';
 import type { Dataset } from '../../grid/types';
 import type { TTestParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { isFiniteNumber } from '../shared/numbers';
+import { copy } from '../../stats/reportCopy';
+import { makeChart, boxRows } from '../../charts/kits/common';
+import type { AnalysisChart } from '../../stats/charts';
 
 export interface TTestRunInput {
   grid: Dataset;
@@ -44,7 +37,8 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
       return { ok: false, reason: 'Insufficient data for T-Test' };
     }
 
-    let resultHtml: ReactNode;
+    let charts: AnalysisChart[] = [];
+    let title = copy('T-test');
     let reportSpec: ReportSpec | null = null;
     let tables: TableSpec[] = [];
 
@@ -95,87 +89,37 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
         useNonParam,
       });
 
-      resultHtml = (
-        <div className="output-block" key={Date.now()}>
-          <div className="output-title">One-Sample T-Test & Wilcoxon Signed-Rank: {grid.cols[var1].name}</div>
-          
-          <ResultTables specs={tables} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-            <div className="h-[250px] bg-surface3/30 rounded p-2">
-              <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Parametric: Sample Distribution & Test Value (μ)</p>
-              <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={50}
-                padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-              >
-                <VictoryAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' } }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-                />
-                <VictoryBoxPlot
-                  data={boxData}
-                  style={{
-                    min: { stroke: "#f87171", strokeWidth: 1.5 },
-                    max: { stroke: "#f87171", strokeWidth: 1.5 },
-                    q1: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                    q3: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                    median: { stroke: "#fff", strokeWidth: 2 }
-                  }}
-                />
-                <VictoryLine
-                  y={() => mu}
-                  style={{ data: { stroke: '#ef4444', strokeWidth: 1.5, strokeDasharray: "4 4" } }}
-                  labels={["μ"]}
-                  labelComponent={<VictoryLabel dx={10} style={{ fill: '#ef4444', fontSize: 9 }} />}
-                />
-              </VictoryChart>
-            </div>
-
-            {useNonParam && !isNaN(wilcox.wStat) && (
-              <div className="h-[250px] bg-surface3/30 rounded p-2">
-                <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Non-Parametric: Boxplot & Test Value Median (H₀)</p>
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  domainPadding={50}
-                  padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-                >
-                  <VictoryAxis
-                    tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                    style={{ axis: { stroke: '#333' } }}
-                  />
-                  <VictoryAxis
-                    dependentAxis
-                    tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                    style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-                  />
-                  <VictoryBoxPlot
-                    data={boxData}
-                    style={{
-                      min: { stroke: "#f87171", strokeWidth: 1.5 },
-                      max: { stroke: "#f87171", strokeWidth: 1.5 },
-                      q1: { fill: "#34d399", fillOpacity: 0.4 },
-                      q3: { fill: "#34d399", fillOpacity: 0.4 },
-                      median: { stroke: "#fff", strokeWidth: 2 }
-                    }}
-                  />
-                  <VictoryLine
-                    y={() => mu}
-                    style={{ data: { stroke: '#ef4444', strokeWidth: 1.5, strokeDasharray: "4 4" } }}
-                    labels={["μ₀"]}
-                    labelComponent={<VictoryLabel dx={10} style={{ fill: '#ef4444', fontSize: 9 }} />}
-                  />
-                </VictoryChart>
-              </div>
-            )}
-          </div>
-        </div>
-      );
+      charts = [
+        makeChart({
+          id: 'ttest-one-box',
+          kind: 'box',
+          title: copy('T-test a un campione: {s1}', { s1: grid.cols[var1].name }),
+          subtitle: copy('Valore test μ = {s1}', { s1: mu }),
+          note: copy('La linea tratteggiata è il valore di test; la media osservata è il punto.'),
+          data: (() => {
+            const box = boxRows([{ category: grid.cols[var1].name, values: a1 }]);
+            return { summary: box.summary, points: box.points, outliers: box.outliers };
+          })(),
+          fields: { xLabel: copy('Campione'), yLabel: grid.cols[var1].name },
+          options: { showPoints: true, showMean: true } as never,
+        }),
+      ];
+      if (useNonParam && !isNaN(wilcox.wStat)) {
+        const box = boxRows([{ category: grid.cols[var1].name, values: a1 }]);
+        charts.push(
+          makeChart({
+            id: 'ttest-one-rank',
+            kind: 'box',
+            title: copy('Wilcoxon: distribuzione e mediana H₀'),
+            subtitle: copy('Valore di riferimento = {s1}', { s1: mu }),
+            note: copy('Il test non parametrico confronta la mediana con il valore di riferimento.'),
+            data: { summary: box.summary, points: box.points, outliers: box.outliers, rules: [{ y: mu }] },
+            fields: { xLabel: copy('Campione'), yLabel: grid.cols[var1].name },
+            options: { showPoints: true } as never,
+          })
+        );
+      }
+      title = copy('T-test a un campione e Wilcoxon: {s1}', { s1: grid.cols[var1].name });
     } else if (type === 'ind') {
       const n1 = a1.length;
       const n2 = a2.length;
@@ -281,76 +225,41 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
         useNonParam,
       });
 
-      resultHtml = (
-        <div className="output-block" key={Date.now()}>
-          <div className="output-title">Independent Samples T-Test & Mann-Whitney U</div>
-          <p className="text-[11px] mb-4 text-accent2">{grid.cols[var1].name} vs {grid.cols[var2].name}</p>
-          
-          <ResultTables specs={tables} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-            <div className="h-[250px] bg-surface3/30 rounded p-2">
-              <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Parametric: Group Boxplots (Values)</p>
-              <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={40}
-                padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-              >
-                <VictoryAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' } }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-                />
-                <VictoryBoxPlot
-                  data={boxDataInd}
-                  style={{
-                    min: { stroke: "#f87171", strokeWidth: 1.5 },
-                    max: { stroke: "#f87171", strokeWidth: 1.5 },
-                    q1: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                    q3: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                    median: { stroke: "#fff", strokeWidth: 2 }
-                  }}
-                />
-              </VictoryChart>
-            </div>
-
-            {useNonParam && !isNaN(mw.uStat) && (
-              <div className="h-[250px] bg-surface3/30 rounded p-2">
-                <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Non-Parametric: Group Rank Boxplots</p>
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  domainPadding={40}
-                  padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-                >
-                  <VictoryAxis
-                    tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                    style={{ axis: { stroke: '#333' } }}
-                  />
-                  <VictoryAxis
-                    dependentAxis
-                    tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                    style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-                  />
-                  <VictoryBoxPlot
-                    data={boxDataRanks}
-                    style={{
-                      min: { stroke: "#f87171", strokeWidth: 1.5 },
-                      max: { stroke: "#f87171", strokeWidth: 1.5 },
-                      q1: { fill: "#818cf8", fillOpacity: 0.4 },
-                      q3: { fill: "#818cf8", fillOpacity: 0.4 },
-                      median: { stroke: "#fff", strokeWidth: 2 }
-                    }}
-                  />
-                </VictoryChart>
-              </div>
-            )}
-          </div>
-        </div>
-      );
+      const box = boxRows([
+        { category: grid.cols[var1].name, values: a1 },
+        { category: grid.cols[var2].name, values: a2 },
+      ]);
+      charts = [
+        makeChart({
+          id: 'ttest-ind-box',
+          kind: 'box',
+          title: copy('T-test per campioni indipendenti'),
+          subtitle: `${grid.cols[var1].name} vs ${grid.cols[var2].name}`,
+          note: copy('Confronta la distribuzione dei due gruppi; la linea centrale è la mediana.'),
+          data: { summary: box.summary, points: box.points, outliers: box.outliers },
+          fields: { xLabel: copy('Gruppo'), yLabel: copy('Valore') },
+          options: { showPoints: true } as never,
+        }),
+      ];
+      if (useNonParam && !isNaN(mw.uStat)) {
+        const rankBox = boxRows([
+          { category: grid.cols[var1].name, values: ranks1 },
+          { category: grid.cols[var2].name, values: ranks2 },
+        ]);
+        charts.push(
+          makeChart({
+            id: 'ttest-ind-rank',
+            kind: 'box',
+            title: copy('Mann-Whitney: ranghi per gruppo'),
+            subtitle: `${grid.cols[var1].name} vs ${grid.cols[var2].name}`,
+            note: copy('Il test non parametrico confronta i ranghi dei due gruppi.'),
+            data: { summary: rankBox.summary, points: rankBox.points, outliers: rankBox.outliers },
+            fields: { xLabel: copy('Gruppo'), yLabel: copy('Rango') },
+            options: { showPoints: true } as never,
+          })
+        );
+      }
+      title = copy('T-test per campioni indipendenti e Mann-Whitney');
     } else if (type === 'dep') {
       // Paired samples: only rows where both columns hold a numeric value
       const n = paired.a.length;
@@ -427,82 +336,38 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
         useNonParam,
       });
 
-      resultHtml = (
-        <div className="output-block" key={Date.now()}>
-          <div className="output-title">Paired Samples T-Test & Wilcoxon Signed-Rank</div>
-          <p className="text-[11px] mb-4 text-accent2">{grid.cols[var1].name} - {grid.cols[var2].name}</p>
-          
-          <ResultTables specs={tables} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-            <div className="h-[250px] bg-surface3/30 rounded p-2">
-              <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Parametric: Group Boxplots (Values)</p>
-              <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={40}
-                padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-              >
-                <VictoryAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' } }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-                />
-                <VictoryBoxPlot
-                  data={boxDataPaired}
-                  style={{
-                    min: { stroke: "#f87171", strokeWidth: 1.5 },
-                    max: { stroke: "#f87171", strokeWidth: 1.5 },
-                    q1: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                    q3: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                    median: { stroke: "#fff", strokeWidth: 2 }
-                  }}
-                />
-              </VictoryChart>
-            </div>
-
-            {useNonParam && !isNaN(wilcox.wStat) && (
-              <div className="h-[250px] bg-surface3/30 rounded p-2">
-                <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Non-Parametric: Boxplot of Differences (H₀: Median = 0)</p>
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  domainPadding={50}
-                  padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-                >
-                  <VictoryAxis
-                    tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                    style={{ axis: { stroke: '#333' } }}
-                  />
-                  <VictoryAxis
-                    dependentAxis
-                    tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                    style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-                  />
-                  <VictoryBoxPlot
-                    data={boxDataDiffs}
-                    style={{
-                      min: { stroke: "#f87171", strokeWidth: 1.5 },
-                      max: { stroke: "#f87171", strokeWidth: 1.5 },
-                      q1: { fill: "#a78bfa", fillOpacity: 0.4 },
-                      q3: { fill: "#a78bfa", fillOpacity: 0.4 },
-                      median: { stroke: "#fff", strokeWidth: 2 }
-                    }}
-                  />
-                  <VictoryLine
-                    y={() => 0}
-                    style={{ data: { stroke: '#ef4444', strokeWidth: 1.5, strokeDasharray: "4 4" } }}
-                    labels={["0"]}
-                    labelComponent={<VictoryLabel dx={10} style={{ fill: '#ef4444', fontSize: 9 }} />}
-                  />
-                </VictoryChart>
-              </div>
-            )}
-          </div>
-        </div>
-      );
+      const box = boxRows([
+        { category: grid.cols[var1].name, values: paired.a },
+        { category: grid.cols[var2].name, values: paired.b },
+      ]);
+      charts = [
+        makeChart({
+          id: 'ttest-dep-box',
+          kind: 'box',
+          title: copy('T-test per campioni appaiati'),
+          subtitle: `${grid.cols[var1].name} − ${grid.cols[var2].name}`,
+          note: copy('Confronta le due misurazioni appaiate; ogni coppia resta sullo stesso soggetto.'),
+          data: { summary: box.summary, points: box.points, outliers: box.outliers },
+          fields: { xLabel: copy('Misurazione'), yLabel: copy('Valore') },
+          options: { showPoints: true } as never,
+        }),
+      ];
+      if (useNonParam && !isNaN(wilcox.wStat)) {
+        const diffBox = boxRows([{ category: copy('Differenze'), values: diffs }]);
+        charts.push(
+          makeChart({
+            id: 'ttest-dep-diff',
+            kind: 'box',
+            title: copy('Wilcoxon: distribuzione delle differenze'),
+            subtitle: copy('H₀: mediana = 0'),
+            note: copy('La linea tratteggiata è lo zero; il test non parametrico confronta le differenze con zero.'),
+            data: { summary: diffBox.summary, points: diffBox.points, outliers: diffBox.outliers, rules: [{ y: 0 }] },
+            fields: { xLabel: copy('Differenze'), yLabel: copy('Differenza') },
+            options: { showPoints: true } as never,
+          })
+        );
+      }
+      title = copy('T-test per campioni appaiati e Wilcoxon');
     }
-    return { ok: true, node: resultHtml, tables, report: reportSpec };
+    return { ok: true, title, tables, report: reportSpec, charts };
   };

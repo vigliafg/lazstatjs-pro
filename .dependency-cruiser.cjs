@@ -72,6 +72,13 @@ module.exports = {
       to: { path: '^src/stats/(kernels|tables)/' },
     },
     {
+      name: 'charts-non-dipendono-dalla-ui',
+      severity: 'error',
+      comment: 'charts/ è un adapter puro: conosce il contratto stats, non React né schermate.',
+      from: { path: '^src/charts/' },
+      to: { path: '^src/(ui|analyses|hooks|components|io)/' },
+    },
+    {
       name: 'analyses-non-dipendono-dalla-ui',
       severity: 'error',
       comment: 'analysis/ descrive form e calcolo: la UI li compone, non viceversa.',

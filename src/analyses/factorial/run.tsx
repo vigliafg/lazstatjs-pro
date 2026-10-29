@@ -1,26 +1,16 @@
-import {
-  VictoryAxis,
-  VictoryChart,
-  VictoryGroup,
-  VictoryLine,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import { factorialCells, factorialReport, factorialTables } from '../../stats/factorial';
-import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import { analysisRows, type Dataset } from '../../grid/types';
 import type { FactorialParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
-import { t } from '../../i18n';
 
 export interface FactorialInput {
   grid: Dataset;
   params: FactorialParams;
   ciLevel: number;
 }
-
-const COLORS = ['#4f9cf9', '#34d399', '#fbbf24', '#a78bfa', '#f87171', '#38bdf8'];
 
 /** ANOVA fattoriale 2×2+: tabelle, interaction plot e report. */
 export const buildFactorialOutput = ({
@@ -75,75 +65,42 @@ export const buildFactorialOutput = ({
   const cells = factorialCells(options);
   const bLevels = Array.from(new Set(cells.map(cell => cell.b))).sort();
   const aLevels = Array.from(new Set(cells.map(cell => cell.a))).sort();
-  const plotGroups = aLevels.map((level, index) => ({
-    level,
-    color: COLORS[index % COLORS.length],
-    data: bLevels
-      .map((b, bIndex) => {
+  const series = aLevels.flatMap(level =>
+    bLevels
+      .map(b => {
         const cell = cells.find(item => item.a === level && item.b === b);
-        return { x: bIndex, y: cell?.mean ?? NaN };
+        return cell
+          ? { x: b, y: cell.mean, series: `${grid.cols[factorA]?.name} = ${level}` }
+          : null;
       })
-      // Cells with no observations are simply not drawn instead of passing NaN to Victory.
-      .filter(point => Number.isFinite(point.y)),
-  }));
+      .filter((row): row is { x: string; y: number; series: string } => row !== null)
+  );
 
   return {
     ok: true,
+    title: copy('ANOVA fattoriale: {s1} per {s2} × {s3}', {
+      s1: grid.cols[response]?.name ?? 'Y',
+      s2: grid.cols[factorA]?.name ?? 'A',
+      s3: grid.cols[factorB]?.name ?? 'B',
+    }),
     tables,
     report: factorialReport(tables, ciLevel),
-    node: (
-      <div className="mb-6">
-        <ResultTables specs={tables} />
-        <section className="mb-6">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-            <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
-              Interaction plot
-            </h3>
-            <span className="text-[10px] text-text3 font-mono">
-              {`${grid.cols[factorA]?.name} × ${grid.cols[factorB]?.name}`}
-            </span>
-          </div>
-          <div className="h-[280px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 55, left: 65, right: 25 }}>
-              <VictoryAxis
-                tickValues={bLevels.map((_, index) => index)}
-                tickFormat={(value: number) => bLevels[value] ?? ''}
-                label={grid.cols[factorB]?.name}
-                style={{
-                  axis: { stroke: '#333' },
-                  axisLabel: { fill: '#888', fontSize: 10, padding: 32 },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              <VictoryAxis
-                dependentAxis
-                label={t('chart.mean')}
-                style={{
-                  axis: { stroke: '#333' },
-                  axisLabel: { fill: '#888', fontSize: 10, padding: 40 },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              {plotGroups.map(group => (
-                <VictoryGroup key={group.level} data={group.data}>
-                  <VictoryLine style={{ data: { stroke: group.color, strokeWidth: 2 } }} />
-                  <VictoryScatter style={{ data: { fill: group.color, size: 3.5 } }} />
-                </VictoryGroup>
-              ))}
-            </VictoryChart>
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-            {plotGroups.map(group => (
-              <span key={group.level} className="flex items-center gap-1.5 text-[10px] text-text3 font-mono">
-                <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: group.color }} />
-                {`${grid.cols[factorA]?.name} = ${group.level}`}
-              </span>
-            ))}
-          </div>
-        </section>
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'factorial-interaction',
+        kind: 'line',
+        title: copy('Grafico dell’interazione'),
+        subtitle: `${grid.cols[factorA]?.name} × ${grid.cols[factorB]?.name}`,
+        note: copy('Linee non parallele indicano che l’effetto di un fattore cambia a seconda del livello dell’altro.'),
+        data: { series },
+        fields: {
+          xType: 'nominal',
+          xLabel: grid.cols[factorB]?.name ?? 'B',
+          yLabel: copy('Media'),
+          series: grid.cols[factorA]?.name ?? 'A',
+        },
+        options: { showMarkers: true, showBand: false } as never,
+      }),
+    ],
   };
 };

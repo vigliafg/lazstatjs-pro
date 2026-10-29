@@ -1,19 +1,11 @@
-import type { ReactNode } from 'react';
-import {
-  VictoryAxis,
-  VictoryBoxPlot,
-  VictoryChart,
-  VictoryLabel,
-  VictoryLine,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
 import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { regressionTables } from '../../stats/regression';
 import { regressionReport } from '../../stats/report';
 import { calcNormalityTests, calcTheilSen } from '../../stats/kernels';
-import { ResultTables } from '../../components/ResultTable';
+import { copy } from '../../stats/reportCopy';
+import { makeChart, boxStats } from '../../charts/kits/common';
+import type { AnalysisChart, ChartRow } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { RegParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -24,353 +16,282 @@ export interface RegressionRunInput {
   ciLevel: number;
 }
 
-/** Regressione lineare multipla: tabelle, diagnostica, grafici e report. Estratto da App.tsx. */
-  export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunResult => {
+const qqRows = (values: number[]): ChartRow[] => {
+  const sorted = [...values].filter(value => Number.isFinite(value)).sort((a, b) => a - b);
+  const n = sorted.length;
+  if (n < 3) return [];
+  return sorted.map((value, index) => {
+    const p = (index + 1 - 0.375) / (n + 0.25);
+    return { x: jStat.normal.inv(p, 0, 1), y: value };
+  });
+};
+
+const qqReference = (points: ChartRow[]): ChartRow[] => {
+  if (points.length < 2) return [];
+  const xs = points.map(row => Number(row.x));
+  const ys = points.map(row => Number(row.y));
+  const meanX = jStat.mean(xs);
+  const meanY = jStat.mean(ys);
+  const sxx = xs.reduce((sum, x) => sum + (x - meanX) ** 2, 0);
+  const sxy = xs.reduce((sum, x, index) => sum + (x - meanX) * (ys[index] - meanY), 0);
+  const slope = sxx === 0 ? 0 : sxy / sxx;
+  const intercept = meanY - slope * meanX;
+  const min = Math.min(...xs);
+  const max = Math.max(...xs);
+  return [
+    { x: min, y: intercept + slope * min },
+    { x: max, y: intercept + slope * max },
+  ];
+};
+
+/** Regressione lineare multipla: tabelle, diagnostica, grafici e report. */
+export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunResult => {
   const { grid, regParams, ciLevel } = input;
-    const { dep, indeps, useNonParam } = regParams;
-    if (indeps.length === 0) {
-      return { ok: false, reason: 'Select at least one predictor' };
+  const { dep, indeps, useNonParam } = regParams;
+  if (indeps.length === 0) return { ok: false, reason: 'Select at least one predictor' };
+
+  const validRows = grid.rows.filter(row => {
+    const y = parseNum(row[dep]);
+    if (isNaN(y)) return false;
+    return indeps.every(idx => !isNaN(parseNum(row[idx])));
+  });
+
+  if (validRows.length <= indeps.length + 1) {
+    return { ok: false, reason: 'Insufficient data for regression' };
+  }
+
+  for (const idx of indeps) {
+    const vals = validRows.map(row => parseNum(row[idx]));
+    const mean = jStat.mean(vals);
+    const sumSqDiff = vals.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0);
+    if (sumSqDiff === 0) {
+      return { ok: false, reason: `Predictor '${grid.cols[idx].name}' has zero variance (all values are identical).` };
     }
+  }
 
-    // Filter valid rows
-    const validRows = grid.rows.filter(row => {
-      const y = parseNum(row[dep]);
-      if (isNaN(y)) return false;
-      return indeps.every(idx => !isNaN(parseNum(row[idx])));
-    });
+  const Y = validRows.map(row => parseNum(row[dep]));
+  const X = validRows.map(row => [1, ...indeps.map(idx => parseNum(row[idx]))]);
+  const n = Y.length;
+  const k = indeps.length;
+  const df = n - k - 1;
 
-    if (validRows.length <= indeps.length + 1) {
-      return { ok: false, reason: 'Insufficient data for regression' };
-    }
+  let coef: number[] = [];
+  let R2 = 0;
+  let se: number[] = [];
+  let tStats: number[] = [];
+  let pValues: number[] = [];
+  let meanX = 0;
+  let sxx = 1;
+  let mse = 1;
 
-    // Check for zero variance in predictors
-    for (const idx of indeps) {
-      const vals = validRows.map(row => parseNum(row[idx]));
-      const mean = jStat.mean(vals);
-      const sumSqDiff = vals.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0);
-      if (sumSqDiff === 0) {
-        return { ok: false, reason: `Predictor '${grid.cols[idx].name}' has zero variance (all values are identical).` };
+  try {
+    if (k === 1) {
+      const xs = validRows.map(row => parseNum(row[indeps[0]]));
+      const ys = Y;
+      meanX = jStat.mean(xs);
+      const meanY = jStat.mean(ys);
+      let sumXX = 0;
+      let sumYY = 0;
+      let sumXY = 0;
+      for (let i = 0; i < n; i++) {
+        const diffX = xs[i] - meanX;
+        const diffY = ys[i] - meanY;
+        sumXX += diffX * diffX;
+        sumYY += diffY * diffY;
+        sumXY += diffX * diffY;
       }
-    }
-
-    const Y = validRows.map(row => parseNum(row[dep]));
-    const X = validRows.map(row => [1, ...indeps.map(idx => parseNum(row[idx]))]);
-
-    const n = Y.length;
-    const k = indeps.length;
-    const df = n - k - 1;
-
-    let coef: number[] = [];
-    let R2 = 0;
-    let se: number[] = [];
-    let tStats: number[] = [];
-    let pValues: number[] = [];
-
-    try {
-      if (k === 1) {
-        // Analytical path for simple linear regression (highly stable, avoids QR decomposition instability)
-        const xs = validRows.map(row => parseNum(row[indeps[0]]));
-        const ys = Y;
-
-        const meanX = jStat.mean(xs);
-        const meanY = jStat.mean(ys);
-
-        let sumXX = 0;
-        let sumYY = 0;
-        let sumXY = 0;
-        for (let i = 0; i < n; i++) {
-          const diffX = xs[i] - meanX;
-          const diffY = ys[i] - meanY;
-          sumXX += diffX * diffX;
-          sumYY += diffY * diffY;
-          sumXY += diffX * diffY;
-        }
-
-        const slope = sumXY / sumXX;
-        const intercept = meanY - slope * meanX;
-        coef = [intercept, slope];
-
-        // Residual sum of squares
-        const residuals = ys.map((y, i) => y - (intercept + slope * xs[i]));
-        const rss = residuals.reduce((sum, r) => sum + r * r, 0);
-        const mse = rss / df;
-
-        R2 = sumYY === 0 ? 0 : 1 - (rss / sumYY);
-        if (R2 < 0) R2 = 0;
-
-        const seSlope = Math.sqrt(mse / sumXX);
-        const seIntercept = Math.sqrt(mse * (1 / n + (meanX * meanX) / sumXX));
-        se = [seIntercept, seSlope];
-
-        tStats = [intercept / seIntercept, slope / seSlope];
-        pValues = tStats.map(t => 2 * (1 - jStat.studentt.cdf(Math.abs(t), df)));
-      } else {
-        // Fallback to jStat models for multiple regression
-        const ols = jStat.models.ols(Y, X);
-        coef = ols.coef;
-        R2 = ols.R2;
-        const rss = ols.resid.reduce((a: number, b: number) => a + b * b, 0);
-        const mse = rss / df;
-
-        // X'X inverse
-        const Xt = jStat.transpose(X);
-        const XtX = jStat.multiply(Xt, X);
-        const XtXinv = jStat.inv(XtX);
-
-        se = coef.map((_: any, i: number) => Math.sqrt(mse * XtXinv[i][i]));
-        tStats = coef.map((c: number, i: number) => c / se[i]);
-        pValues = tStats.map(t => 2 * (1 - jStat.studentt.cdf(Math.abs(t), df)));
-      }
-    } catch (err) {
-      console.error(err);
-      return { ok: false, reason: 'Regression failed. Please check if variables are collinear or have insufficient variance.' };
-    }
-
-    const scatterData = validRows.map(row => ({
-      x: parseNum(row[indeps[0]]),
-      y: parseNum(row[dep])
-    })).filter(d => !isNaN(d.x) && !isNaN(d.y));
-
-    // Calculate Theil-Sen Robust Regression
-    let tsSlope = NaN;
-    let tsIntercept = NaN;
-    let tsLineData: { x: number; y: number }[] = [];
-    const tsEstimators: { name: string; slope: number; intercept: number }[] = [];
-
-    if (k === 1 && scatterData.length > 0) {
-      const xs = scatterData.map(d => d.x);
-      const ys = scatterData.map(d => d.y);
-      const tsResult = calcTheilSen(xs, ys);
-      tsSlope = tsResult.slope;
-      tsIntercept = tsResult.intercept;
+      sxx = sumXX;
+      const slope = sumXY / sumXX;
+      const intercept = meanY - slope * meanX;
+      coef = [intercept, slope];
+      const residuals = ys.map((y, i) => y - (intercept + slope * xs[i]));
+      const rss = residuals.reduce((sum, r) => sum + r * r, 0);
+      mse = rss / df;
+      R2 = sumYY === 0 ? 0 : 1 - (rss / sumYY);
+      if (R2 < 0) R2 = 0;
+      const seSlope = Math.sqrt(mse / sumXX);
+      const seIntercept = Math.sqrt(mse * (1 / n + (meanX * meanX) / sumXX));
+      se = [seIntercept, seSlope];
+      tStats = [intercept / seIntercept, slope / seSlope];
+      pValues = tStats.map(t => 2 * (1 - jStat.studentt.cdf(Math.abs(t), df)));
     } else {
-      // Calculate independent univariate Theil-Sen slopes for comparison
-      indeps.forEach(idx => {
-        const xs = validRows.map(row => parseNum(row[idx]));
-        const tsResult = calcTheilSen(xs, Y);
-        tsEstimators.push({
-          name: grid.cols[idx].name,
-          slope: tsResult.slope,
-          intercept: tsResult.intercept
-        });
-      });
+      const ols = jStat.models.ols(Y, X);
+      coef = ols.coef;
+      R2 = ols.R2;
+      const rss = ols.resid.reduce((a: number, b: number) => a + b * b, 0);
+      mse = rss / df;
+      const Xt = jStat.transpose(X);
+      const XtX = jStat.multiply(Xt, X);
+      const XtXinv = jStat.inv(XtX);
+      se = coef.map((_: unknown, i: number) => Math.sqrt(mse * XtXinv[i][i]));
+      tStats = coef.map((c: number, i: number) => c / se[i]);
+      pValues = tStats.map(t => 2 * (1 - jStat.studentt.cdf(Math.abs(t), df)));
     }
+  } catch (err) {
+    console.error(err);
+    return { ok: false, reason: 'Regression failed. Please check if variables are collinear or have insufficient variance.' };
+  }
 
-    const coefData = indeps.map((idx, i) => ({
-      name: grid.cols[idx].name,
-      value: coef[i + 1]
-    }));
+  const scatterData = validRows
+    .map(row => ({ x: parseNum(row[indeps[0]]), y: parseNum(row[dep]) }))
+    .filter(d => !isNaN(d.x) && !isNaN(d.y));
 
-    // Calculate bounds and regression line data if simple linear regression
-    let regLineData: { x: number; y: number }[] = [];
-    let xDomain: [number, number] | undefined = undefined;
-    let yDomain: [number, number] | undefined = undefined;
+  let tsSlope = NaN;
+  let tsIntercept = NaN;
+  let tsLineData: { x: number; y: number }[] = [];
 
-    if (indeps.length === 1 && scatterData.length > 0) {
-      const xs = scatterData.map(d => d.x);
-      const ys = scatterData.map(d => d.y);
-      const minX = Math.min(...xs);
-      const maxX = Math.max(...xs);
-      const minY = Math.min(...ys);
-      const maxY = Math.max(...ys);
+  if (k === 1 && scatterData.length > 0) {
+    const xs = scatterData.map(d => d.x);
+    const ys = scatterData.map(d => d.y);
+    const tsResult = calcTheilSen(xs, ys);
+    tsSlope = tsResult.slope;
+    tsIntercept = tsResult.intercept;
+  }
 
-      const yAtMinX = coef[0] + coef[1] * minX;
-      const yAtMaxX = coef[0] + coef[1] * maxX;
+  const fitted = validRows.map((row, index) =>
+    coef[0] + indeps.reduce((sum, idx, position) => sum + coef[position + 1] * parseNum(row[idx]), 0)
+  );
+  const olsResids = Y.map((value, index) => value - fitted[index]);
+  const olsResidStats = boxStats(olsResids);
+  const residualSummary: ChartRow[] = olsResidStats
+    ? [{ category: 'OLS', min: olsResidStats.min, q1: olsResidStats.q1, median: olsResidStats.median, q3: olsResidStats.q3, max: olsResidStats.max, mean: olsResidStats.mean }]
+    : [];
+  const residualPoints: ChartRow[] = olsResids.map(value => ({ category: 'OLS', value }));
+  const residualOutliers: ChartRow[] = (olsResidStats?.outliers ?? []).map(value => ({ category: 'OLS', value }));
 
-      regLineData = [
-        { x: minX, y: yAtMinX },
-        { x: maxX, y: yAtMaxX }
-      ];
-
-      if (useNonParam && !isNaN(tsSlope)) {
-        tsLineData = [
-          { x: minX, y: tsIntercept + tsSlope * minX },
-          { x: maxX, y: tsIntercept + tsSlope * maxX }
-        ];
-      }
-
-      const xRange = maxX - minX || 1;
-      const yMinVal = Math.min(minY, yAtMinX, yAtMaxX, useNonParam && !isNaN(tsSlope) ? tsIntercept + tsSlope * minX : minY);
-      const yMaxVal = Math.max(maxY, yAtMinX, yAtMaxX, useNonParam && !isNaN(tsSlope) ? tsIntercept + tsSlope * maxX : maxY);
-      const yRange = yMaxVal - yMinVal || 1;
-
-      xDomain = [minX - xRange * 0.05, maxX + xRange * 0.05];
-      yDomain = [yMinVal - yRange * 0.05, yMaxVal + yRange * 0.05];
+  if (useNonParam && k === 1 && Number.isFinite(tsSlope)) {
+    const tsResids = scatterData.map(d => d.y - (tsIntercept + tsSlope * d.x));
+    const stats = boxStats(tsResids);
+    if (stats) {
+      residualSummary.push({ category: 'Theil-Sen', min: stats.min, q1: stats.q1, median: stats.median, q3: stats.q3, max: stats.max, mean: stats.mean });
+      tsResids.forEach(value => residualPoints.push({ category: 'Theil-Sen', value }));
+      stats.outliers.forEach(value => residualOutliers.push({ category: 'Theil-Sen', value }));
     }
-
-    const olsResids = indeps.length === 1 
-      ? scatterData.map(d => d.y - (coef[0] + coef[1] * d.x))
-      : Y.map((yVal, rIdx) => yVal - (coef[0] + indeps.reduce((sum, idx, i) => sum + coef[i+1] * parseNum(validRows[rIdx][idx]), 0)));
-
-    const qOls = jStat.quartiles(olsResids);
-    const regResidualsBoxPlotData = [
-      {
-        x: "OLS Residuals",
-        min: jStat.min(olsResids),
-        q1: qOls[0],
-        median: qOls[1],
-        q3: qOls[2],
-        max: jStat.max(olsResids)
-      }
+    tsLineData = [
+      { x: Math.min(...scatterData.map(d => d.x)), y: tsIntercept + tsSlope * Math.min(...scatterData.map(d => d.x)) },
+      { x: Math.max(...scatterData.map(d => d.x)), y: tsIntercept + tsSlope * Math.max(...scatterData.map(d => d.x)) },
     ];
+  }
 
-    const calcResidStats = (resids: number[], name: string) => {
-      const rMin = jStat.min(resids);
-      const rMax = jStat.max(resids);
-      const rMean = jStat.mean(resids);
-      const rMedian = jStat.median(resids);
-      const rStdev = jStat.stdev(resids, true);
-      const rSkew = jStat.skewness(resids);
-      const rKurt = jStat.kurtosis(resids);
-      const rNorm = calcNormalityTests(resids);
-      return {
-        name,
-        min: rMin,
-        max: rMax,
-        mean: rMean,
-        median: rMedian,
-        stdev: rStdev,
-        skew: rSkew,
-        kurt: rKurt,
-        norm: rNorm
-      };
-    };
-
-    const olsResidStats = calcResidStats(olsResids, "OLS Residuals");
-    let tsResidStats: any = null;
-
-    if (useNonParam) {
-      if (indeps.length === 1 && !isNaN(tsSlope)) {
-        const tsResids = scatterData.map(d => d.y - (tsIntercept + tsSlope * d.x));
-        const qTs = jStat.quartiles(tsResids);
-        regResidualsBoxPlotData.push({
-          x: "Theil-Sen Residuals",
-          min: jStat.min(tsResids),
-          q1: qTs[0],
-          median: qTs[1],
-          q3: qTs[2],
-          max: jStat.max(tsResids)
-        });
-        tsResidStats = calcResidStats(tsResids, "Theil-Sen Residuals");
-      } else if (indeps.length > 1) {
-        const firstTS = tsEstimators[0];
-        if (firstTS) {
-          const firstXs = validRows.map(row => parseNum(row[indeps[0]]));
-          const tsResids = Y.map((yVal, rIdx) => yVal - (firstTS.intercept + firstTS.slope * firstXs[rIdx]));
-          const qTs = jStat.quartiles(tsResids);
-          regResidualsBoxPlotData.push({
-            x: `Theil-Sen Resids\n(${grid.cols[indeps[0]].name})`,
-            min: jStat.min(tsResids),
-            q1: qTs[0],
-            median: qTs[1],
-            q3: qTs[2],
-            max: jStat.max(tsResids)
-          });
-          tsResidStats = calcResidStats(tsResids, `Theil-Sen Residuals (${grid.cols[indeps[0]].name})`);
-        }
-      }
+  const minX = scatterData.length ? Math.min(...scatterData.map(d => d.x)) : 0;
+  const maxX = scatterData.length ? Math.max(...scatterData.map(d => d.x)) : 1;
+  const gridRows: ChartRow[] = [];
+  if (k === 1) {
+    const steps = 80;
+    for (let i = 0; i < steps; i++) {
+      const x = minX + ((maxX - minX) * i) / (steps - 1 || 1);
+      const yhat = coef[0] + coef[1] * x;
+      const seMean = Math.sqrt(mse * (1 / n + (x - meanX) ** 2 / sxx));
+      const sePred = Math.sqrt(mse * (1 + 1 / n + (x - meanX) ** 2 / sxx));
+      gridRows.push({ x, yhat, seMean, sePred });
     }
+  }
 
-    const tables = regressionTables({
-      rows: grid.rows,
-      depIdx: dep,
-      indepIdxs: indeps,
-      depName: grid.cols[dep].name,
-      predNames: indeps.map(index => grid.cols[index].name),
-      level: ciLevel,
-      robustSE: regParams.robustSE,
-    });
-    const report = regressionReport({
-      tables,
-      depName: grid.cols[dep].name,
-      predNames: indeps.map(index => grid.cols[index].name),
-      level: ciLevel,
-    });
+  const depName = grid.cols[dep].name;
+  const predNames = indeps.map(index => grid.cols[index].name);
+  const tables = regressionTables({
+    rows: grid.rows,
+    depIdx: dep,
+    indepIdxs: indeps,
+    depName,
+    predNames,
+    level: ciLevel,
+    robustSE: regParams.robustSE,
+  });
+  const report = regressionReport({ tables, depName, predNames, level: ciLevel });
 
-    const output = (
-      <div className="output-block" key={Date.now()}>
-        <div className="output-title">Linear Regression & Robust Estimators: {grid.cols[dep].name}</div>
-        <ResultTables specs={tables} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-          {indeps.length === 1 && (
-            <div className="h-[320px] bg-surface3/30 rounded p-2">
-              <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">
-                Regression Line Comparison {useNonParam && <span className="text-green font-semibold">(Solid = Theil-Sen, Red = OLS)</span>}
-              </p>
-              <VictoryChart
-                theme={VictoryTheme.material}
-                scale={{ x: "linear", y: "linear" }}
-                domain={xDomain && yDomain ? { x: xDomain, y: yDomain } : undefined}
-                padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-              >
-                <VictoryAxis
-                  label={grid.cols[indeps[0]].name}
-                  style={{ 
-                    axis: { stroke: '#333' }, 
-                    axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
-                    tickLabels: { fill: '#888', fontSize: 10 }
-                  }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  label={grid.cols[dep].name}
-                  style={{ 
-                    axis: { stroke: '#333' }, 
-                    axisLabel: { fill: '#888', fontSize: 10, padding: 35 },
-                    tickLabels: { fill: '#888', fontSize: 10 },
-                    grid: { stroke: '#222' }
-                  }}
-                />
-                <VictoryScatter
-                  data={scatterData}
-                  style={{ data: { fill: '#4f9cf9', fillOpacity: 0.7, r: 3 } }}
-                />
-                <VictoryLine
-                  data={regLineData}
-                  style={{ data: { stroke: '#ef4444', strokeWidth: 1.5, strokeDasharray: "4 4" } }}
-                />
-                {useNonParam && tsLineData.length > 0 && (
-                  <VictoryLine
-                    data={tsLineData}
-                    style={{ data: { stroke: '#10b981', strokeWidth: 2 } }}
-                  />
-                )}
-              </VictoryChart>
-            </div>
-          )}
-
-          <div className={`h-[320px] bg-surface3/30 rounded p-2 ${indeps.length > 1 ? 'col-span-1 lg:col-span-2' : ''}`}>
-            <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Residuals Distribution (Model Accuracy Diagnostic Boxplots)</p>
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={40}
-              padding={{ top: 20, bottom: 50, left: 100, right: 20 }}
-            >
-              <VictoryAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' } }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-              />
-              <VictoryBoxPlot
-                data={regResidualsBoxPlotData}
-                style={{
-                  min: { stroke: "#f87171", strokeWidth: 1.5 },
-                  max: { stroke: "#f87171", strokeWidth: 1.5 },
-                  q1: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                  q3: { fill: "#4f9cf9", fillOpacity: 0.4 },
-                  median: { stroke: "#fff", strokeWidth: 2 }
-                }}
-              />
-            </VictoryChart>
-          </div>
-        </div>
-
-              </div>
+  const charts: AnalysisChart[] = [];
+  if (k === 1) {
+    const points = scatterData;
+    const fit = points.length
+      ? [
+          { x: minX, y: coef[0] + coef[1] * minX },
+          { x: maxX, y: coef[0] + coef[1] * maxX },
+        ]
+      : [];
+    charts.push(
+      makeChart({
+        id: 'reg-scatter',
+        kind: 'scatter',
+        title: copy('Regressione lineare: {s1} per {s2}', { s1: depName, s2: predNames[0] }),
+        subtitle: copy('IC {s1}% · N = {s2}', { s1: ciLevel, s2: n }),
+        note: copy('Punti: osservazioni. Linea rossa tratteggiata: OLS. Linea verde: Theil-Sen. La banda, se attiva, è l’intervallo scelto.'),
+        data: { points, fit, robust: tsLineData, grid: gridRows },
+        fields: { xLabel: predNames[0], yLabel: depName },
+        stats: {
+          df,
+          equation: `y = ${coef[0].toFixed(3)} + ${coef[1].toFixed(3)}·x`,
+          r2: Number(R2.toFixed(4)),
+          n,
+        },
+        options: {
+          fit: useNonParam ? 'both' : 'ols',
+          band: 'none',
+        } as never,
+      })
     );
-    return { ok: true, node: output, tables, report };
+  } else {
+    const observedVsFitted = Y.map((value, index) => ({ x: fitted[index], y: value }));
+    const residualVsFitted = fitted.map((value, index) => ({ x: value, y: olsResids[index] }));
+    const all = [...fitted, ...Y];
+    const min = all.length ? Math.min(...all) : 0;
+    const max = all.length ? Math.max(...all) : 1;
+    charts.push(
+      makeChart({
+        id: 'reg-observed-fitted',
+        kind: 'scatter',
+        title: copy('Osservati vs stimati: {s1}', { s1: depName }),
+        subtitle: copy('N = {s1} · R² = {s2}', { s1: n, s2: R2.toFixed(3) }),
+        note: copy('La diagonale rappresenta la corrispondenza perfetta tra valori osservati e stimati.'),
+        data: { points: observedVsFitted, fit: [{ x: min, y: min }, { x: max, y: max }] },
+        fields: { xLabel: copy('Valori stimati'), yLabel: copy('Valori osservati') },
+        options: { fit: 'ols', band: 'none' } as never,
+      }),
+      makeChart({
+        id: 'reg-residual-fitted',
+        kind: 'scatter',
+        title: copy('Residui vs stimati: {s1}', { s1: depName }),
+        subtitle: copy('N = {s1}', { s1: n }),
+        note: copy('Una nuvola senza struttura è coerente con l’ipotesi di residui omoschedastici.'),
+        data: { points: residualVsFitted, rules: [{ y: 0 }] },
+        fields: { xLabel: copy('Valori stimati'), yLabel: copy('Residui') },
+        options: { fit: 'none', band: 'none' } as never,
+      })
+    );
+  }
+
+  charts.push(
+    makeChart({
+      id: 'reg-residual-box',
+      kind: 'box',
+      title: copy('Distribuzione dei residui'),
+      subtitle: copy('Diagnostica di accuratezza del modello'),
+      note: copy('La mediana dei residui dovrebbe essere vicina a zero e le due distribuzioni simili.'),
+      data: { summary: residualSummary, points: residualPoints, outliers: residualOutliers },
+      fields: { xLabel: copy('Modello'), yLabel: copy('Residuo') },
+    })
+  );
+
+  const qqPoints = qqRows(olsResids);
+  if (qqPoints.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'reg-residual-qq',
+        kind: 'qq',
+        title: copy('Q-Q dei residui'),
+        subtitle: copy('N = {s1}', { s1: n }),
+        note: copy('I punti vicini alla diagonale indicano residui compatibili con la normalità.'),
+        data: { points: qqPoints, reference: qqReference(qqPoints) },
+        fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Residui osservati') },
+      })
+    );
+  }
+
+  return {
+    ok: true,
+    title: copy('Regressione lineare e stimatori robusti: {s1}', { s1: depName }),
+    tables,
+    report,
+    charts,
   };
+};

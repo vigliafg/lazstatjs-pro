@@ -229,6 +229,7 @@ export const miStats = (options: MiOptions): MiStats | null => {
     : [];
   const withRegression = options.model === 'linear' && outcomePosition >= 0 && predictorPositions.length > 0;
   if (options.model === 'linear' && !withRegression) return null;
+  let completed: number[][] | null = null;
 
   for (let imputation = 0; imputation < imputations; imputation++) {
     const data = observed.map(row => row.map((value, j) => (value === null ? means[j] : value)));
@@ -246,6 +247,7 @@ export const miStats = (options: MiOptions): MiStats | null => {
       sampleVariances[j].push(variance);
     });
 
+    completed = data.map(row => [...row]);
     if (withRegression) {
       const X = data.map(row => [1, ...predictorPositions.map(position => row[position] as number)]);
       const y = data.map(row => row[outcomePosition] as number);
@@ -273,5 +275,20 @@ export const miStats = (options: MiOptions): MiStats | null => {
       }
     : null;
 
-  return { n: rows.length, imputations, iterations, variables: variableRows, regression };
+  const observedValues = variables.map((_, j) =>
+    observed.map(row => row[j]).filter((value): value is number => value !== null)
+  );
+  const imputedValues = variables.map((_, j) =>
+    (completed ?? observed.map(row => row.map(value => value ?? means[j]))).map(row => row[j])
+  );
+
+  return {
+    n: rows.length,
+    imputations,
+    iterations,
+    variables: variableRows,
+    observedValues,
+    imputedValues,
+    regression,
+  };
 };

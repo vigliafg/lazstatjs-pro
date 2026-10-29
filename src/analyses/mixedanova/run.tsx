@@ -1,7 +1,10 @@
-import { ResultTables } from '../../components/ResultTable';
 import { mixedAnovaStats } from '../../stats/kernels/mixedanova';
 import { mixedAnovaTables } from '../../stats/tables/mixedanova';
 import { mixedAnovaReport } from '../../stats/reports/mixedanova';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
+import { parseNum } from '../../stats/core';
+import type { AnalysisChart, ChartRow } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { MixedAnovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -35,14 +38,58 @@ export const buildMixedAnovaOutput = ({ grid, params, ciLevel }: MixedAnovaInput
   const conditionNames = params.conditions.map(index => grid.cols[index]?.name ?? `C${index + 1}`);
   const groupName = grid.cols[params.group]?.name ?? 'Group';
   const tables = mixedAnovaTables(stats, conditionNames, groupName, ciLevel);
+
+  const interaction: ChartRow[] = stats.groups.flatMap((group, gi) =>
+    conditionNames.map((condition, ci) => ({
+      x: condition,
+      y: stats.cellMeans[gi][ci],
+      series: `${groupName} = ${group}`,
+    }))
+  );
+
+  const subjects: ChartRow[] = [];
+  grid.rows.forEach((row, index) => {
+    if (index >= 40) return;
+    const group = String(row[params.group] ?? '').trim();
+    const values = params.conditions.map(column => parseNum(row[column]));
+    if (group === '' || values.some(value => !Number.isFinite(value))) return;
+    values.forEach((value, ci) => {
+      subjects.push({ x: conditionNames[ci], y: value, series: `${copy('Soggetto')} ${index + 1}` });
+    });
+  });
+
+  const charts: AnalysisChart[] = [
+    makeChart({
+      id: 'mixed-interaction',
+      kind: 'line',
+      title: copy('Interazione gruppo × condizione'),
+      subtitle: `${groupName} × ${conditionNames.join(' / ')}`,
+      note: copy('Linee non parallele indicano un’interazione tra il fattore tra soggetti e la condizione entro soggetti.'),
+      data: { series: interaction },
+      fields: { xType: 'nominal', xLabel: copy('Condizione'), yLabel: copy('Media'), series: groupName },
+      options: { showMarkers: true, showBand: false } as never,
+    }),
+  ];
+  if (subjects.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'mixed-trajectories',
+        kind: 'line',
+        title: copy('Traiettorie dei soggetti'),
+        subtitle: copy('Prime {s1} righe complete', { s1: Math.min(40, grid.rows.length) }),
+        note: copy('Ogni linea è un soggetto attraverso le condizioni; serve a vedere la variabilità individuale.'),
+        data: { series: subjects, markers: subjects },
+        fields: { xType: 'nominal', xLabel: copy('Condizione'), yLabel: copy('Valore'), series: copy('Soggetto') },
+        options: { showMarkers: true, showBand: false, showLegend: false } as never,
+      })
+    );
+  }
+
   return {
     ok: true,
+    title: copy('ANOVA mista: {s1} per {s2}', { s1: conditionNames.join(', '), s2: groupName }),
     tables,
     report: mixedAnovaReport(stats, groupName, ciLevel),
-    node: (
-      <div className="mb-6">
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts,
   };
 };

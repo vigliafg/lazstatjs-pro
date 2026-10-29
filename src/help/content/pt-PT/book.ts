@@ -4,6 +4,8 @@ import { areaTopics } from './areas';
 import { coreTopics } from './procedures-core';
 import { moreTopics } from './procedures-more';
 
+import { chartGuides } from './charts';
+
 const chapters: HelpChapter[] = [
   { id: 'start', title: 'Primeiros passos', blurb: 'Todo o ciclo em três gestos, da grelha ao relatório.' },
   { id: 'data', title: 'Os dados', blurb: 'Importar, editar, limpar e dar nomes legíveis aos grupos.' },
@@ -39,9 +41,17 @@ export const ptPTBook: HelpBook = {
     reading: 'Como ler a saída',
     pitfalls: 'Erros a evitar',
     glossary: 'Termos-chave',
+
+    charts: "Gráficos",
     seeAlso: 'Ver também',
     updated: 'Manual alinhado com as funcionalidades atuais do programa',
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics]),
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics]).map(topic => ({
+    ...topic,
+    advanced: {
+      ...topic.advanced,
+      ...(chartGuides[topic.id] ? { charts: chartGuides[topic.id] } : {}),
+    },
+  })),
 };

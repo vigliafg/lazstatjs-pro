@@ -1,24 +1,16 @@
 import {
-  VictoryAxis,
-  VictoryChart,
-  VictoryLine,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
-import {
   DISTRIBUTION_LABEL,
   distributionFitReport,
   distributionFitTables,
   fitDistributions,
   probabilityPlotData,
 } from '../../stats/distfit';
-import { ResultTables } from '../../components/ResultTable';
+import { copy } from '../../stats/reportCopy';
 import { parseNum } from '../../stats/core';
-import { numericColumnValues } from '../shared/data';
+import { makeChart } from '../../charts/kits/common';
 import type { Dataset } from '../../grid/types';
 import type { DistributionFitParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
-import { t } from '../../i18n';
 
 export interface DistributionFitInput {
   grid: Dataset;
@@ -32,7 +24,9 @@ export const buildDistributionFitOutput = ({
   params,
   ciLevel,
 }: DistributionFitInput): AnalysisRunResult => {
-  const values = numericColumnValues(grid, params.variable);
+  const values = grid.rows
+    .map(row => parseNum(row[params.variable]))
+    .filter(value => Number.isFinite(value));
 
   if (values.length < 3) {
     return { ok: false, reason: 'Select a numeric variable with at least three valid values' };
@@ -58,59 +52,26 @@ export const buildDistributionFitOutput = ({
     { x: min, y: min },
     { x: max, y: max },
   ];
+  const variableName = grid.cols[params.variable]?.name ?? 'Y';
 
   return {
     ok: true,
+    title: copy('Fit della distribuzione: {s1}', { s1: variableName }),
     tables,
     report: distributionFitReport(tables, ciLevel),
-    node: (
-      <div className="mb-6">
-        <ResultTables specs={tables} />
-        <section className="mb-6">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-            <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
-              Probability plot
-            </h3>
-            <span className="text-[10px] text-text3 font-mono">
-              {`${DISTRIBUTION_LABEL[best.name]} · ${grid.cols[params.variable]?.name ?? 'Y'}`}
-            </span>
-          </div>
-          <div className="h-[280px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 50, left: 65, right: 25 }}>
-              <VictoryAxis
-                label={t('chart.theoreticalQuantiles')}
-                style={{
-                  axis: { stroke: '#333' },
-                  axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              <VictoryAxis
-                dependentAxis
-                label={t('chart.observedValues')}
-                style={{
-                  axis: { stroke: '#333' },
-                  axisLabel: { fill: '#888', fontSize: 10, padding: 40 },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              <VictoryLine
-                data={reference}
-                style={{ data: { stroke: '#555', strokeDasharray: '4,4', strokeWidth: 1 } }}
-              />
-              <VictoryScatter
-                data={plot}
-                style={{ data: { fill: '#4f9cf9', size: 3 } }}
-              />
-            </VictoryChart>
-          </div>
-          <p className="text-[10px] text-text3 mt-1">
-            Più i punti stanno sulla diagonale, meglio la distribuzione descrive i dati. Le deviazioni alle estremità indicano code mal descritte.
-          </p>
-        </section>
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'distfit-probability',
+        kind: 'qq',
+        title: copy('Grafico di probabilità'),
+        subtitle: `${DISTRIBUTION_LABEL[best.name]} · ${variableName}`,
+        note: copy('Più i punti stanno sulla diagonale, meglio la distribuzione descrive i dati. Le deviazioni alle estremità indicano code mal descritte.'),
+        data: { points: plot, reference },
+        fields: {
+          xLabel: copy('Quantili teorici'),
+          yLabel: copy('Valori osservati'),
+        },
+      }),
+    ],
   };
 };

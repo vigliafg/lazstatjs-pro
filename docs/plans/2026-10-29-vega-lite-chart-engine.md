@@ -1,5 +1,10 @@
 # Migrazione del motore grafico a Vega-Lite e grafici editabili in due fasi
 
+> **Stato al 29 ottobre 2026**: passi 1–9 implementati. Milestone A e Milestone B
+> complete (Victory e `recharts` rimosse, contratto Vega-Lite, renderer, editor,
+> persistenza v3, export asincroni, worker pulito, nuovi grafici delle procedure
+> senza grafico e default dei grafici nelle impostazioni).
+
 - **Richiesta**: «richiesta di un piano di implementazione di cambio engine per la generazione di grafici da quello attuale al nuovo VEGA-LITE. la generazione dei grafici deve avere due fasi: fase 1: il grafico viene generato con le caratteristiche di default quando di lancia il run statistico e inserito nel report; fase 2: il grafico selezionato da dentro il report puo essere modificato in una viewport popup e al grafico possono essere aggiunte features e modifiche realative allo stile/colori ... richiedi il consenso dei subagenti e concordare al 100%.»
 - **Obiettivo**: sostituire Victory con Vega-Lite, produrre ogni grafico come specifica serializzabile e renderlo modificabile per-card dentro il report, senza appesantire il flusso di analisi.
 - **Criteri di successo**:

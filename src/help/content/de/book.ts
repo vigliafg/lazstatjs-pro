@@ -4,6 +4,8 @@ import { areaTopics } from "./areas";
 import { coreTopics } from "./procedures-core";
 import { moreTopics } from "./procedures-more";
 
+import { chartGuides } from './charts';
+
 const chapters: HelpChapter[] = [
   {
     id: "start",
@@ -62,9 +64,17 @@ export const deBook: HelpBook = {
     reading: "Wie Sie die Ausgabe lesen",
     pitfalls: "Fehler, die Sie vermeiden sollten",
     glossary: "Wichtige Begriffe",
+
+    charts: "Diagramme",
     seeAlso: "Siehe auch",
     updated: "Handbuch abgestimmt auf die aktuellen Funktionen des Programms",
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics]),
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics]).map(topic => ({
+    ...topic,
+    advanced: {
+      ...topic.advanced,
+      ...(chartGuides[topic.id] ? { charts: chartGuides[topic.id] } : {}),
+    },
+  })),
 };

@@ -131,4 +131,5 @@ export const outputMessages: Record<keyof typeof enOutput, string> = {
   'project.loaded': 'Geladen',
   'project.rowsAnd': 'Zeilen und',
   'project.resultBlocks': 'Ergebnisblock/-blöcke',
+  'output.chartsPending': "Diagramme werden noch geladen oder sind nicht verfügbar: Der Export kann unvollständig sein",
 };

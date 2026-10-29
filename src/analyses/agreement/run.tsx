@@ -1,31 +1,19 @@
-import {
-  VictoryAxis,
-  VictoryChart,
-  VictoryLine,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
-import { ResultTables } from '../../components/ResultTable';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
+import { parseNum } from '../../stats/core';
+import type { AnalysisChart } from '../../stats/charts';
 import { blandAltmanStats, iccStats, kappaStats } from '../../stats/kernels/agreement';
 import { blandAltmanTables, iccTables, kappaTables } from '../../stats/tables/agreement';
 import { blandAltmanReport, iccReport, kappaReport } from '../../stats/reports/agreement';
 import type { Dataset } from '../../grid/types';
 import type { AgreementParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
-import { t } from '../../i18n';
 
 export interface AgreementInput {
   grid: Dataset;
   params: AgreementParams;
   ciLevel: number;
 }
-
-const axisStyle = {
-  axis: { stroke: '#333' },
-  axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
-  tickLabels: { fill: '#888', fontSize: 9 },
-  grid: { stroke: '#222' },
-};
 
 /** ICC, Bland–Altman e kappa. */
 export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput): AnalysisRunResult => {
@@ -38,51 +26,32 @@ export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput):
       return { ok: false, reason: 'Bland–Altman needs at least three complete pairs' };
     }
     const tables = blandAltmanTables(stats, ciLevel);
-    const min = Math.min(...stats.points.map(point => point.mean));
-    const max = Math.max(...stats.points.map(point => point.mean));
-    const line = [
-      { x: min, y: stats.bias },
-      { x: max, y: stats.bias },
-    ];
+    const chart: AnalysisChart = makeChart({
+      id: 'agreement-bland',
+      kind: 'bland',
+      title: copy('Bland–Altman: accordo tra le misure'),
+      subtitle: copy('Bias {s1} · limiti {s2} / {s3}', {
+        s1: stats.bias.toFixed(3),
+        s2: stats.loaLower.toFixed(3),
+        s3: stats.loaUpper.toFixed(3),
+      }),
+      note: copy('La linea centrale è il bias medio; le linee tratteggiate sono i limiti di accordo (bias ± 1,96·SD).'),
+      data: {
+        points: stats.points.map(point => ({ x: point.mean, y: point.diff })),
+        rules: [
+          { y: stats.bias },
+          { y: stats.loaUpper },
+          { y: stats.loaLower },
+        ],
+      },
+      fields: { xLabel: copy('Media delle due misure'), yLabel: copy('Differenza') },
+    });
     return {
       ok: true,
+      title: copy('Accordo tra le due misure'),
       tables,
       report: blandAltmanReport(stats, ciLevel),
-      node: (
-        <div className="mb-6">
-          <ResultTables specs={tables} />
-          <section className="mb-6">
-            <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider mb-2">
-              Accordo tra le due misure
-            </h3>
-            <div className="h-[300px] w-full bg-surface3/30 rounded p-2">
-              <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 50, left: 65, right: 25 }}>
-                <VictoryAxis label={t('chart.meanOfBoth')} style={axisStyle} />
-                <VictoryAxis dependentAxis label={t('chart.difference')} style={axisStyle} />
-                <VictoryLine data={line} style={{ data: { stroke: '#4f9cf9', strokeWidth: 2 } }} />
-                <VictoryLine
-                  data={[
-                    { x: min, y: stats.loaUpper },
-                    { x: max, y: stats.loaUpper },
-                  ]}
-                  style={{ data: { stroke: '#f87171', strokeDasharray: '4,4', strokeWidth: 1 } }}
-                />
-                <VictoryLine
-                  data={[
-                    { x: min, y: stats.loaLower },
-                    { x: max, y: stats.loaLower },
-                  ]}
-                  style={{ data: { stroke: '#f87171', strokeDasharray: '4,4', strokeWidth: 1 } }}
-                />
-                <VictoryScatter data={stats.points} style={{ data: { fill: '#34d399', size: 3 } }} />
-              </VictoryChart>
-            </div>
-            <p className="text-[10px] text-text3 mt-1">
-              Blu: bias medio. Tratteggiate: limiti di accordo bias ± 1.96·SD.
-            </p>
-          </section>
-        </div>
-      ),
+      charts: [chart],
     };
   }
 
@@ -95,15 +64,31 @@ export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput):
       };
     }
     const tables = kappaTables(stats, ciLevel);
+    const cells = stats.matrix.flatMap((row, i) =>
+      row.map((value, j) => ({
+        x: stats.categoryLabels[j],
+        y: stats.categoryLabels[i],
+        value,
+        label: String(value),
+      }))
+    );
     return {
       ok: true,
+      title: copy('Kappa: accordo categorico'),
       tables,
       report: kappaReport(stats, ciLevel),
-      node: (
-        <div className="mb-6">
-          <ResultTables specs={tables} />
-        </div>
-      ),
+      charts: [
+        makeChart({
+          id: 'agreement-kappa',
+          kind: 'heatmap',
+          title: copy('Matrice di accordo'),
+          subtitle: copy('κ = {s1} · {s2} valutatori', { s1: stats.kappa.toFixed(3), s2: stats.raters }),
+          note: copy('La diagonale contiene gli accordi; le celle fuori diagonale sono i disaccordi tra categorie.'),
+          data: { cells },
+          fields: { xLabel: copy('Valutatore / categoria'), yLabel: copy('Valutatore / categoria') },
+          options: { showValues: true } as never,
+        }),
+      ],
     };
   }
 
@@ -112,14 +97,34 @@ export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput):
     return { ok: false, reason: 'ICC needs at least two measurements and two complete subjects' };
   }
   const tables = iccTables(stats, ciLevel);
+  const points = grid.rows
+    .map(row => ({ x: parseNum(row[params.columns[0]]), y: parseNum(row[params.columns[1]]) }))
+    .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+  const values = points.flatMap(point => [point.x, point.y]);
+  const min = values.length ? Math.min(...values) : 0;
+  const max = values.length ? Math.max(...values) : 1;
   return {
     ok: true,
+    title: copy('ICC: affidabilità tra misure'),
     tables,
     report: iccReport(tables, stats, ciLevel),
-    node: (
-      <div className="mb-6">
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'agreement-icc',
+        kind: 'scatter',
+        title: copy('Accordo tra le prime due misure'),
+        subtitle: copy('ICC(2,1) = {s1} · N = {s2}', {
+          s1: Number.isFinite(stats.icc21) ? stats.icc21.toFixed(3) : 'n.d.',
+          s2: stats.n,
+        }),
+        note: copy('I punti vicini alla diagonale indicano accordo tra le due misurazioni.'),
+        data: { points, fit: [{ x: min, y: min }, { x: max, y: max }] },
+        fields: {
+          xLabel: grid.cols[params.columns[0]]?.name ?? 'X1',
+          yLabel: grid.cols[params.columns[1]]?.name ?? 'X2',
+        },
+        options: { fit: 'ols', band: 'none' } as never,
+      }),
+    ],
   };
 };

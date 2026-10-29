@@ -52,6 +52,8 @@ interface Prepared {
   X: Matrix;
   y: number[];
   clusters: number[][];
+  clusterLabels: string[];
+  rowClusters: string[];
   n: number;
   p: number;
 }
@@ -79,6 +81,8 @@ const prepare = (options: GeeOptions): Prepared | null => {
     X: complete.map(entry => [1, ...entry.xs]),
     y: complete.map(entry => entry.y),
     clusters,
+    clusterLabels: labels,
+    rowClusters: complete.map(entry => entry.cluster),
     n: complete.length,
     p: indepIdxs.length + 1,
   };
@@ -272,6 +276,11 @@ export const geeStats = (options: GeeOptions): GeeStats | null => {
     phi,
     alpha,
     iterations,
+    clusterLabels: data.clusterLabels,
+    rowClusters: data.rowClusters,
+    observed: data.y,
+    fitted: state.fitted,
+    residuals: data.y.map((value, index) => value - state.fitted[index]),
     coefficients,
   };
 };

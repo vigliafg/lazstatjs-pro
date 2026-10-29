@@ -1,21 +1,15 @@
-import type { ReactNode } from 'react';
-import {
-  VictoryAxis,
-  VictoryBoxPlot,
-  VictoryChart,
-  VictoryLabel,
-  VictoryTheme,
-} from 'victory';
 import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { anovaTables } from '../../stats/anova';
 import { anovaReport } from '../../stats/report';
 import { calcKruskalWallis, calcMannWhitneyU } from '../../stats/kernels';
-import { ResultTables } from '../../components/ResultTable';
 import { analysisRows } from '../../grid/types';
 import type { Dataset } from '../../grid/types';
 import type { AnovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { copy } from '../../stats/reportCopy';
+import { makeChart, boxRows } from '../../charts/kits/common';
+import type { AnalysisChart } from '../../stats/charts';
 
 export interface AnovaRunInput {
   grid: Dataset;
@@ -218,74 +212,62 @@ export interface AnovaRunInput {
       useNonParam,
     });
 
-    const output = (
-      <div className="output-block" key={Date.now()}>
-        <div className="output-title">One-Way ANOVA & Kruskal-Wallis: {grid.cols[dep].name} by {grid.cols[grp].name}</div>
-        
-        <ResultTables specs={tables} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-          <div className="h-[300px] bg-surface3/30 rounded p-2">
-            <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Parametric: Group Boxplots (Values)</p>
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={40}
-              padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-            >
-              <VictoryAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' } }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-              />
-              <VictoryBoxPlot
-                data={anovaBoxPlotData}
-                style={{
-                  min: { stroke: "#f87171", strokeWidth: 1.5 },
-                  max: { stroke: "#f87171", strokeWidth: 1.5 },
-                  q1: { fill: "#34d399", fillOpacity: 0.4 },
-                  q3: { fill: "#34d399", fillOpacity: 0.4 },
-                  median: { stroke: "#fff", strokeWidth: 2 }
-                }}
-              />
-            </VictoryChart>
-          </div>
-
-          {useNonParam && !isNaN(kw.hStat) && (
-            <div className="h-[300px] bg-surface3/30 rounded p-2">
-              <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Non-Parametric: Group Rank Boxplots</p>
-              <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={40}
-                padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-              >
-                <VictoryAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' } }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                  style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-                />
-                <VictoryBoxPlot
-                  data={kwBoxPlotData}
-                  style={{
-                    min: { stroke: "#f87171", strokeWidth: 1.5 },
-                    max: { stroke: "#f87171", strokeWidth: 1.5 },
-                    q1: { fill: "#818cf8", fillOpacity: 0.4 },
-                    q3: { fill: "#818cf8", fillOpacity: 0.4 },
-                    median: { stroke: "#fff", strokeWidth: 2 }
-                  }}
-                />
-              </VictoryChart>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-    return { ok: true, node: output, tables, report };
+    const box = boxRows(groupKeys.map(key => ({ category: key, values: groups[key] })));
+    const critical = dfWithin > 0 ? jStat.studentt.inv(1 - (1 - ciLevel / 100) / 2, dfWithin) : 1.96;
+    const bars = groupKeys.map(key => {
+      const values = groups[key];
+      const mean = jStat.mean(values);
+      const se = Math.sqrt(msWithin / values.length);
+      return { category: key, value: mean, lo: mean - critical * se, hi: mean + critical * se };
+    });
+    const charts: AnalysisChart[] = [
+      makeChart({
+        id: 'anova-box',
+        kind: 'box',
+        title: copy('ANOVA a una via: {s1} per {s2}', { s1: grid.cols[dep].name, s2: grid.cols[grp].name }),
+        subtitle: copy('Confronto delle distribuzioni per gruppo'),
+        note: copy('La linea centrale è la mediana; i baffi arrivano ai valori non outlier.'),
+        data: { summary: box.summary, points: box.points, outliers: box.outliers },
+        fields: { xLabel: grid.cols[grp].name, yLabel: grid.cols[dep].name },
+        options: { showPoints: true } as never,
+      }),
+      makeChart({
+        id: 'anova-means',
+        kind: 'bar',
+        title: copy('Medie per gruppo con IC {s1}%', { s1: ciLevel }),
+        subtitle: `${grid.cols[dep].name} per ${grid.cols[grp].name}`,
+        note: copy('Le barre d’errore sono l’intervallo di confidenza della media entro il modello.'),
+        data: { bars },
+        fields: { xLabel: grid.cols[grp].name, yLabel: grid.cols[dep].name },
+        options: { error: 'ci', valueLabels: true } as never,
+      }),
+    ];
+    if (useNonParam && !isNaN(kw.hStat)) {
+      const rankBox = boxRows(groupKeys.map(key => ({
+        category: key,
+        values: kwCombined.filter(item => item.gKey === key).map(item => item.rank),
+      })));
+      charts.push(
+        makeChart({
+          id: 'anova-rank-box',
+          kind: 'box',
+          title: copy('Kruskal-Wallis: ranghi per gruppo'),
+          subtitle: copy('Alternativa non parametrica all’ANOVA'),
+          note: copy('Il test confronta i ranghi medi dei gruppi.'),
+          data: { summary: rankBox.summary, points: rankBox.points, outliers: rankBox.outliers },
+          fields: { xLabel: grid.cols[grp].name, yLabel: copy('Rango') },
+          options: { showPoints: true } as never,
+        })
+      );
+    }
+    return {
+      ok: true,
+      title: copy('ANOVA a una via e Kruskal-Wallis: {s1} per {s2}', {
+        s1: grid.cols[dep].name,
+        s2: grid.cols[grp].name,
+      }),
+      tables,
+      report,
+      charts,
+    };
   };

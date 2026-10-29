@@ -269,7 +269,8 @@ export const areaTopics: HelpTopic[] = [
       goal: 'Levar os resultados num formato que possa usar.',
       dataset: 'score-groups.csv',
       steps: [
-        'Execute uma análise e veja o cartão: primeiro as tabelas, depois os gráficos, depois o relatório de leitura.',
+        'Execute uma análise e veja o cartão: primeiro as tabelas, depois o relatório de leitura, depois os gráficos editáveis.',
+        'Clique num gráfico para abrir o editor: altere o tema, as cores e as opções do procedimento e prima Concluído.',
         'Abra a Estrutura para saltar para um cartão ou reduzi-lo com a seta.',
         'Prima Relatório para descarregar um ficheiro HTML para impressão, ou Word para um ficheiro editável.',
         'Use XLSX para obter os dados e as tabelas num livro; Gráficos descarrega os ficheiros PNG.',
@@ -283,7 +284,8 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         '«desatualizado» significa que os dados mudaram depois da execução: volte a executar antes de exportar.',
-        'Os cartões restaurados de um projeto são estáticos: copiar e exportar funcionam, recalcular não.',
+        'Os gráficos continuam editáveis após recarregar; os cartões guardados com o motor antigo são estáticos: volte a executá-los para obter um gráfico editável.',
+        'Definições → Gráficos define o estilo predefinido dos gráficos futuros; os cartões existentes não mudam.',
       ],
       pitfalls: [
         'Exportar um cartão desatualizado produz um relatório formalmente correto mas desatualizado.',

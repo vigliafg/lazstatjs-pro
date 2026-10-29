@@ -1,6 +1,8 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { Clock3, FileDown, FilePlus2, FolderOpen, Save, Trash2 } from 'lucide-react';
 import { savePrefs, type IoPreferences } from '../io/prefs';
+import { ChartDefaultsEditor } from '../components/charts/ChartDefaultsEditor';
+import type { ChartDefaults } from '../charts/defaults';
 import {
   ACTIVE_LOCALES,
   LOCALE_LABELS,
@@ -27,6 +29,8 @@ export interface SettingsTabProps {
   setReportLocale: (locale: Locale) => void;
   helpLocale: HelpLocale;
   setHelpLocale: (locale: HelpLocale) => void;
+  chartDefaults: ChartDefaults;
+  setChartDefaults: Dispatch<SetStateAction<ChartDefaults>>;
 }
 
 const sectionTitle =
@@ -48,6 +52,8 @@ export const SettingsTab = ({
   setReportLocale,
   helpLocale,
   setHelpLocale,
+  chartDefaults,
+  setChartDefaults,
 }: SettingsTabProps) => (
   <>
     <div className="flex-1 overflow-auto scrollbar p-8">
@@ -171,6 +177,12 @@ export const SettingsTab = ({
             </p>
             <p className="text-[10px] leading-relaxed text-text3">{t('settings.reportSnapshotNote')}</p>
           </div>
+        </section>
+
+        <section className="rounded-lg border border-border bg-surface p-6">
+          <h2 className={sectionTitle}>{t('settings.charts')}</h2>
+          <p className="mb-4 text-[11px] leading-relaxed text-text3">{t('settings.chartsHint')}</p>
+          <ChartDefaultsEditor defaults={chartDefaults} onChange={setChartDefaults} />
         </section>
 
         <section className="rounded-lg border border-border bg-surface p-6">

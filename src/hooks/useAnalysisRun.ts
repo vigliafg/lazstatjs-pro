@@ -8,6 +8,7 @@ import { isReportLocale, withReportLocale, type ReportLocale } from '../stats/re
 import { isHeavyAnalysis } from '../analyses/worker/heavyIds';
 import { runHeavyAnalysis } from '../analyses/worker/client';
 import type { HeavyProgressPhase } from '../analyses/worker/protocol';
+import { withChartDefaults, type ChartDefaults } from '../charts/defaults';
 
 interface UseAnalysisRunOptions {
   activeAnalysis: string;
@@ -16,6 +17,8 @@ interface UseAnalysisRunOptions {
   ciLevel: number;
   /** Language of the written report, forwarded to the sync runner and the worker. */
   reportLocale: Locale;
+  /** Defaults for charts produced by new runs (not applied to existing cards). */
+  chartDefaults: ChartDefaults;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */
   emit: (
     result: AnalysisRunResult,
@@ -40,6 +43,7 @@ export const useAnalysisRun = ({
   params,
   ciLevel,
   reportLocale,
+  chartDefaults,
   emit,
   warn,
 }: UseAnalysisRunOptions) => {
@@ -63,12 +67,14 @@ export const useAnalysisRun = ({
     level: number,
     locale: ReportLocale
   ): Promise<AnalysisRunResult | null> => {
-    // The runners (and the statistics/victory code they need) load on first
-    // run: the workspace itself stays small.
+    // The runners (and the statistics code they need) load on first run: the
+    // workspace itself stays small.
     const { ANALYSIS_RUNNERS } = await import('../analyses/runners');
     const runner = ANALYSIS_RUNNERS[analysisId];
     return runner
-      ? withReportLocale(locale, () => runner({ grid, params: paramsUsed, ciLevel: level }))
+      ? withChartDefaults(chartDefaults, () =>
+          withReportLocale(locale, () => runner({ grid, params: paramsUsed, ciLevel: level }))
+        )
       : null;
   };
 
@@ -97,6 +103,7 @@ export const useAnalysisRun = ({
       const outcome = await runHeavyAnalysis(analysisId, grid, paramsUsed, level, {
         signal: controller.signal,
         reportLocale: locale,
+        chartDefaults,
         onProgress: nextPhase => setPhase(nextPhase),
       });
       if (outcome.status === 'cancelled') {
@@ -114,10 +121,13 @@ export const useAnalysisRun = ({
         return await emit(
           {
             ok: true,
+            ...(outcome.title ? { title: outcome.title } : {}),
             tables: outcome.tables,
             report: outcome.report,
             charts: outcome.charts,
             ...(outcome.header ? { header: outcome.header } : {}),
+            ...(outcome.warnings ? { warnings: outcome.warnings } : {}),
+            ...(outcome.callout ? { callout: outcome.callout } : {}),
           },
           analysisId,
           paramsUsed,

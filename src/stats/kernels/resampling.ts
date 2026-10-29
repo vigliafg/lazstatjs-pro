@@ -39,6 +39,7 @@ export const resamplingStats = (options: ResamplingOptions): ResamplingStats | n
   const rng = mulberry32(20261028);
 
   const pooled = [...a, ...b];
+  const permutationStatistics: number[] = [];
   let extreme = 0;
   for (let iteration = 0; iteration < permutations; iteration++) {
     for (let index = pooled.length - 1; index > 0; index--) {
@@ -48,6 +49,7 @@ export const resamplingStats = (options: ResamplingOptions): ResamplingStats | n
     const first = pooled.slice(0, a.length);
     const second = pooled.slice(a.length);
     const permuted = statisticOf(second, statistic) - statisticOf(first, statistic);
+    permutationStatistics.push(permuted);
     if (Math.abs(permuted) >= Math.abs(difference) - 1e-12) extreme += 1;
   }
   const pPermutation = (extreme + 1) / (permutations + 1);
@@ -76,5 +78,7 @@ export const resamplingStats = (options: ResamplingOptions): ResamplingStats | n
     permutations,
     bootstrap,
     statistic,
+    permutationStatistics,
+    bootstrapDifferences,
   };
 };

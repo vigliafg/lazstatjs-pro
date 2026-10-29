@@ -24,9 +24,17 @@ export interface OrdinalThreshold {
   hi: number;
 }
 
+export interface OrdinalProfilePoint {
+  x: number;
+  /** Probability of each category at this predictor value (0–1). */
+  probabilities: number[];
+}
+
 export interface OrdinalStats {
   n: number;
   categories: string[];
+  /** 40-point profile of the first predictor, other predictors at their mean. */
+  profile: OrdinalProfilePoint[];
   k: number;
   logLik: number;
   logLikNull: number;

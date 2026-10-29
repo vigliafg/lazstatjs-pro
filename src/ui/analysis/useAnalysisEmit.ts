@@ -1,10 +1,7 @@
-import type { ReactNode } from 'react';
 import type { AnalysisRunResult } from '../../analyses/types';
 import { analysisParamsOf, analysisParamsSignature } from '../../analyses/paramsSnapshot';
 import type { ProjectParams } from '../../io/project';
-import type { ReportSpec } from '../../stats/report';
 import { t } from '../../i18n';
-import { loadAnalysisOutput } from './analysisOutputNode';
 
 export interface OutputMeta {
   dataRevision?: number;
@@ -24,8 +21,7 @@ interface EmitOptions {
   filterSignature: string;
   ciLevel: number;
   pushOutput: (
-    node: ReactNode,
-    report: ReportSpec | null,
+    result: AnalysisRunResult,
     analysisId?: string,
     meta?: OutputMeta
   ) => void;
@@ -35,9 +31,8 @@ interface EmitOptions {
 /**
  * The single point where an analysis result becomes an output card.
  *
- * Kept outside `App` so the shell only composes: the node can come from a
- * synchronous builder or from a worker payload, and the metadata always
- * describes the data revision the result belongs to.
+ * The result crosses the boundary as plain data: tables, report and chart
+ * models. The console renders it and keeps the chart models editable.
  */
 export const useAnalysisEmit =
   ({ activeAnalysis, params, dataRevision, datasetId, filterSignature, ciLevel, pushOutput, showToast }: EmitOptions) =>
@@ -60,8 +55,6 @@ export const useAnalysisEmit =
       ciLevel: options?.ciLevel ?? ciLevel,
       live: options?.live,
     };
-    const node = await loadAnalysisOutput(result);
-    if (!node) return false;
-    pushOutput(node, result.report, analysisId, meta);
+    pushOutput(result, analysisId, meta);
     return true;
   };

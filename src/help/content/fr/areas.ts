@@ -269,7 +269,8 @@ export const areaTopics: HelpTopic[] = [
       goal: 'Sortir les résultats dans un format utilisable.',
       dataset: 'score-groups.csv',
       steps: [
-        'Lancez une analyse et regardez la carte : les tableaux, puis les graphiques, puis le rapport de lecture.',
+        'Lancez une analyse et regardez la carte : les tableaux, puis le rapport de lecture, puis les graphiques modifiables.',
+        'Cliquez sur un graphique pour ouvrir l’éditeur : changez le thème, les couleurs et les options de la procédure, puis appuyez sur Terminé.',
         'Ouvrez le Plan pour sauter à une carte ou la réduire avec le chevron.',
         'Appuyez sur Rapport pour télécharger un fichier HTML imprimable, ou sur Word pour une version modifiable.',
         'Utilisez XLSX pour obtenir données et tableaux dans un classeur ; Graphiques télécharge les fichiers PNG.',
@@ -283,7 +284,8 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         '« obsolète » signifie que les données ont changé après l’exécution : relancez avant d’exporter.',
-        'Les cartes restaurées depuis un projet sont statiques : la copie et l’export fonctionnent, le recalcul non.',
+        'Les graphiques restent modifiables après rechargement ; les cartes enregistrées avec l’ancien moteur restent statiques : relancez-les pour obtenir un graphique modifiable.',
+        'Réglages → Graphiques définit le style par défaut des futurs graphiques ; les cartes existantes ne changent pas.',
       ],
       pitfalls: [
         'Exporter une carte obsolète produit un rapport formellement correct mais dépassé.',

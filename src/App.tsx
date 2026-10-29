@@ -37,6 +37,7 @@ import {
   getLocale,
   setLocale,
   t,
+  translate,
   useLocale,
   type HelpLocale,
   type Locale,
@@ -112,6 +113,7 @@ import {
   type TTestParams,
   type WizardParams,
 } from './io/project';
+import { normalizeChartDefaults, type ChartDefaults } from './charts/defaults';
 
 export default function App() {
   // Restore the last silent autosave before any state is initialised, so the
@@ -182,21 +184,17 @@ export default function App() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [undoGrid, redoGrid]);
-
   const addColumn = () => {
     setGrid((prev) => gridAddColumn(prev));
   };
-
   const addRow = () => {
     setGrid((prev) => gridAddRow(prev));
   };
-
   /** Replacing the dataset cannot be undone, so it always asks first. */
   const newDataset = () => {
     if (!window.confirm(t('data.confirmNew'))) return;
     replaceDataset(gridNewGrid());
   };
-
   function replaceDataset(next: GridData) {
     resetGridHistory(next);
     setParams(defaultParamsForGrid(next.cols.length));
@@ -212,7 +210,6 @@ export default function App() {
     setFilterCol(0);
     showToast(t('toast.dataset'), t('data.replaceDone'), 'ok');
   }
-
   const updateCell = (r: number, c: number, val: string) => {
     setGrid((prev) => gridSetCell(prev, r, c, val), {
       coalesce: true,
@@ -221,18 +218,15 @@ export default function App() {
       changedCol: c,
     });
   };
-
   const updateColType = (c: number, type: ColType) => {
     setGrid((prev) => gridSetColType(prev, c, type));
   };
-
   // Shared by the grid header and every analysis group selector, so levels can
   // be edited from the panel where the user is already choosing groups.
   const updateColumnLevels = (c: number, levels: CategoryLevel[], reference?: string) => {
     setGrid((prev) => gridSetColumnLevels(prev, c, levels, reference));
     setValidation((v) => ({ ...v, ran: false }));
   };
-
   // Rename / merge / clear the group codes of one column; cells, levels,
   // reference and (when needed) the column type move together in one undo step.
   const updateColumnMeta = (
@@ -250,7 +244,6 @@ export default function App() {
       }),
     }));
   };
-
   const updateColumnRecode = (c: number, mapping: Record<string, string>) => {
     const result = gridRecodeColumnValues(grid, c, mapping);
     if (result.grid === grid) return;
@@ -266,7 +259,6 @@ export default function App() {
       'ok'
     );
   };
-
   const {
     csvInputRef,
     pendingImport,
@@ -286,7 +278,6 @@ export default function App() {
     setActiveTab,
     showToast,
   });
-
   const [datasetId, setDatasetId] = useState(
     () => boot?.datasetId ?? `dataset-${Date.now().toString(36)}`
   );
@@ -298,6 +289,9 @@ export default function App() {
   const [uiLocale, setUiLocale] = useState<Locale>(boot?.settings.uiLocale ?? getLocale());
   const [reportLocale, setReportLocale] = useState<Locale>(boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale);
   const [helpLocale, setHelpLocale] = useState<HelpLocale>(boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale);
+  const [chartDefaults, setChartDefaults] = useState<ChartDefaults>(
+    () => boot?.settings.chartDefaults ?? DEFAULT_SETTINGS.chartDefaults
+  );
 
   // The store drives `t()` everywhere; updating it re-renders the shell through
   // the `useLocale()` subscription below.
@@ -307,6 +301,7 @@ export default function App() {
     outputs,
     setOutputs,
     pushOutput,
+    updateOutputChart,
     clearOutput,
     removeOutput,
     copyOutput,
@@ -342,8 +337,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale }),
-    [ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale, chartDefaults }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale, chartDefaults]
   );
 
   const roleErrors = [
@@ -384,6 +379,7 @@ export default function App() {
     setUiLocale(project.settings.uiLocale);
     setReportLocale(project.settings.reportLocale);
     setHelpLocale(project.settings.helpLocale);
+    setChartDefaults(normalizeChartDefaults(project.settings.chartDefaults));
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
         ? project.settings.activeAnalysis
@@ -451,6 +447,7 @@ export default function App() {
     params,
     ciLevel,
     reportLocale,
+    chartDefaults,
     emit,
     warn: (message) => showToast(t('toast.analysis'), message, 'warn'),
   });
@@ -606,6 +603,8 @@ export default function App() {
             onRerunAllOutputs={rerunAllOutputs}
             onApplyOutputParams={applyOutputParams}
             paramsSignatureFor={paramsSignatureFor}
+            limitationsLabel={translate(reportLocale, 'report.limitations')}
+            onUpdateChart={updateOutputChart}
             removeOutput={removeOutput}
             clearOutput={clearOutput}
             copyOutput={copyOutput}
@@ -648,6 +647,8 @@ export default function App() {
             setReportLocale={setReportLocale}
             helpLocale={helpLocale}
             setHelpLocale={setHelpLocale}
+            chartDefaults={chartDefaults}
+            setChartDefaults={setChartDefaults}
           />
         )}
         </ErrorBoundary>

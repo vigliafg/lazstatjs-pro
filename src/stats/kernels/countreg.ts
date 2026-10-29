@@ -234,6 +234,9 @@ export const countRegressionStats = (options: CountOptions): CountStats | null =
     aic: -2 * logLik + 2 * (k + 1) + (theta !== null ? 2 : 0),
     bic: -2 * logLik + Math.log(n) * ((k + 1) + (theta !== null ? 1 : 0)),
     nonInteger: y.filter(value => !Number.isInteger(value)).length,
+    observed: y,
+    fitted: mu,
+    residuals: y.map((value, index) => value - mu[index]),
     coefficients,
   };
 };

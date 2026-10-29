@@ -26,7 +26,12 @@ export default defineConfig(({mode}) => {
           // the main chunk with the application code.
           manualChunks(id) {
             if (!id.includes('node_modules')) return undefined;
-            if (id.includes('victory') || id.includes('d3-')) return 'charts';
+            // Vega-Lite is loaded on demand by the chart renderer; keeping it
+            // in its own chunk prevents the initial bundle and the worker from
+            // carrying the runtime.
+            if (id.includes('vega') || id.includes('d3-')) {
+              return 'vega';
+            }
             if (id.includes('/react-dom/') || id.includes('/react/') || id.includes('scheduler')) {
               return 'react';
             }

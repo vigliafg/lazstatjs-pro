@@ -1,21 +1,14 @@
-import type { ReactNode } from 'react';
-import {
-  VictoryAxis,
-  VictoryBoxPlot,
-  VictoryChart,
-  VictoryLabel,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
 import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { correlationTables } from '../../stats/correlation';
 import { correlationReport } from '../../stats/report';
 import { calcKendallTau } from '../../stats/kernels';
-import { ResultTables } from '../../components/ResultTable';
 import type { Dataset } from '../../grid/types';
 import type { CorrParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { copy } from '../../stats/reportCopy';
+import { makeChart, boxRows } from '../../charts/kits/common';
+import type { AnalysisChart } from '../../stats/charts';
 
 export interface CorrelationRunInput {
   grid: Dataset;
@@ -139,111 +132,57 @@ export interface CorrelationRunInput {
       level: ciLevel,
     });
 
-    const output = (
-      <div className="output-block" key={Date.now()}>
-        <div className="output-title">Correlation Analysis Suite</div>
-
-        <ResultTables specs={tables} />
-
-        {vars.length === 2 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-            <div className="h-[280px] bg-surface3/30 rounded p-2">
-              <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">Parametric: Raw Scatter Plot</p>
-              <VictoryChart
-                theme={VictoryTheme.material}
-                padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-              >
-                <VictoryAxis
-                  label={grid.cols[vars[0]].name}
-                  style={{ 
-                    axis: { stroke: '#333' }, 
-                    axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
-                    tickLabels: { fill: '#888', fontSize: 10 }
-                  }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  label={grid.cols[vars[1]].name}
-                  style={{ 
-                    axis: { stroke: '#333' }, 
-                    axisLabel: { fill: '#888', fontSize: 10, padding: 35 },
-                    tickLabels: { fill: '#888', fontSize: 10 },
-                    grid: { stroke: '#222' }
-                  }}
-                />
-                <VictoryScatter
-                  data={rawScatterData}
-                  style={{ data: { fill: '#fb923c', r: 3 } }}
-                />
-              </VictoryChart>
-            </div>
-
-            {showSpearman && rankScatterData.length > 0 && (
-              <div className="h-[280px] bg-surface3/30 rounded p-2">
-                <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center text-green">Non-Parametric: Spearman Rank Space Scatter Plot</p>
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-                >
-                  <VictoryAxis
-                    label={`Rank: ${grid.cols[vars[0]].name}`}
-                    style={{ 
-                      axis: { stroke: '#333' }, 
-                      axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
-                      tickLabels: { fill: '#888', fontSize: 10 }
-                    }}
-                  />
-                  <VictoryAxis
-                    dependentAxis
-                    label={`Rank: ${grid.cols[vars[1]].name}`}
-                    style={{ 
-                      axis: { stroke: '#333' }, 
-                      axisLabel: { fill: '#888', fontSize: 10, padding: 35 },
-                      tickLabels: { fill: '#888', fontSize: 10 },
-                      grid: { stroke: '#222' }
-                    }}
-                  />
-                  <VictoryScatter
-                    data={rankScatterData}
-                    style={{ data: { fill: '#34d399', r: 3 } }}
-                  />
-                </VictoryChart>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="h-[340px] w-full mt-6 bg-surface3/30 rounded p-2">
-            <p className="text-[10px] text-text3 mb-2 uppercase tracking-tighter text-center">
-              Selected Variables Distribution (Boxplots)
-            </p>
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={40}
-              padding={{ top: 20, bottom: 50, left: 100, right: 20 }}
-            >
-              <VictoryAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' } }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 10 }} />}
-                style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-              />
-              <VictoryBoxPlot
-                data={corrBoxPlotData}
-                style={{
-                  min: { stroke: "#f87171", strokeWidth: 1.5 },
-                  max: { stroke: "#f87171", strokeWidth: 1.5 },
-                  q1: { fill: "#fb923c", fillOpacity: 0.4 },
-                  q3: { fill: "#fb923c", fillOpacity: 0.4 },
-                  median: { stroke: "#fff", strokeWidth: 2 }
-                }}
-              />
-            </VictoryChart>
-          </div>
-        )}
-      </div>
-    );
-    return { ok: true, node: output, tables, report };
+    const names = vars.map(index => grid.cols[index].name);
+    const charts: AnalysisChart[] = [];
+    if (vars.length === 2) {
+      charts.push(
+        makeChart({
+          id: 'corr-raw-scatter',
+          kind: 'scatter',
+          title: copy('Correlazione: dispersione grezza'),
+          subtitle: `${names[0]} × ${names[1]}`,
+          note: copy('Ogni punto è un caso completo; la nuvola mostra direzione e forza dell’associazione.'),
+          data: { points: rawScatterData },
+          fields: { xLabel: names[0], yLabel: names[1] },
+          options: { fit: 'none', band: 'none' } as never,
+        })
+      );
+      if (showSpearman && rankScatterData.length > 0) {
+        charts.push(
+          makeChart({
+            id: 'corr-rank-scatter',
+            kind: 'score',
+            title: copy('Correlazione: ranghi di Spearman'),
+            subtitle: `${names[0]} × ${names[1]}`,
+            note: copy('Lo spazio dei ranghi riduce l’effetto di valori estremi e distribuzioni asimmetriche.'),
+            data: { points: rankScatterData },
+            fields: { xLabel: `${copy('Rango')}: ${names[0]}`, yLabel: `${copy('Rango')}: ${names[1]}` },
+          })
+        );
+      }
+    } else {
+      const box = boxRows(
+        vars.map(index => ({
+          category: grid.cols[index].name,
+          values: grid.rows.map(row => parseNum(row[index])).filter(value => !isNaN(value)),
+        }))
+      );
+      charts.push(
+        makeChart({
+          id: 'corr-box',
+          kind: 'box',
+          title: copy('Distribuzione delle variabili selezionate'),
+          subtitle: copy('Confronto delle scale'),
+          data: { summary: box.summary, points: box.points, outliers: box.outliers },
+          fields: { xLabel: copy('Variabile'), yLabel: copy('Valore') },
+        })
+      );
+    }
+    return {
+      ok: true,
+      title: copy('Analisi delle correlazioni'),
+      tables,
+      report,
+      charts,
+    };
   };

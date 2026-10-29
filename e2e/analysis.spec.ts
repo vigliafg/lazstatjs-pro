@@ -131,6 +131,85 @@ test('restores cards and their saved parameters after reload', async ({ page, is
   await expect(page.getByText('stale', { exact: true })).toHaveCount(1);
 });
 
+test('edits a chart in the popup and keeps the choice after reload', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the chart editor is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  const card = page.locator('article.output-card');
+  await expect(card).toHaveCount(1);
+  const surface = card.locator('[data-chart-surface]').first();
+  await expect(surface).toHaveAttribute('data-chart-state', 'ready', { timeout: 15000 });
+
+  await page.getByRole('button', { name: /Edit chart/ }).first().click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await dialog.getByLabel('Theme').selectOption('light');
+  await dialog.getByRole('button', { name: 'Done' }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(card.locator('[data-chart-surface]').first()).toHaveAttribute('data-chart-background', '#ffffff');
+
+  await page.waitForTimeout(1200);
+  await page.reload();
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(1);
+  await expect(page.locator('article.output-card [data-chart-surface]').first()).toHaveAttribute(
+    'data-chart-background',
+    '#ffffff',
+    { timeout: 15000 }
+  );
+});
+
+test('chart defaults apply to new runs and survive reload', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the settings defaults are exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Charts' })).toBeVisible();
+  await page.getByLabel('Theme').selectOption('light');
+  await page.waitForTimeout(1200);
+  await page.reload();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
+  await expect(page.getByLabel('Theme')).toHaveValue('light');
+
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('[data-chart-surface]').first()).toHaveAttribute(
+    'data-chart-background',
+    '#ffffff',
+    { timeout: 15000 }
+  );
+});
+
+test('exports ready charts as PNG and in the printable report', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the export toolbar is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card [data-chart-surface]').first()).toHaveAttribute(
+    'data-chart-state',
+    'ready',
+    { timeout: 15000 }
+  );
+
+  const png = page.waitForEvent('download', download => download.suggestedFilename().endsWith('.png'));
+  await page.getByRole('button', { name: 'Download every chart as PNG' }).click();
+  await expect(await png).toBeTruthy();
+
+  const report = page.waitForEvent('download', download => download.suggestedFilename().endsWith('.html'));
+  await page.getByRole('button', { name: 'Download a printable HTML report' }).click();
+  const download = await report;
+  const stream = await download.createReadStream();
+  const chunks: Buffer[] = [];
+  for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+  const html = Buffer.concat(chunks).toString('utf8');
+  expect(html).toContain('<svg');
+  expect(html).toContain('data-chart-surface');
+});
+
 test('runs an analysis on the mobile layout', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'mobile-only flow');
 

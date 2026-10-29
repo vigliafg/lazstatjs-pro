@@ -1,20 +1,10 @@
-import type { ReactNode } from 'react';
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryGroup,
-  VictoryLabel,
-  VictoryTheme,
-  VictoryTooltip,
-} from 'victory';
 import { jStat } from '../../stats/jstat';
 import { chiSquareTables } from '../../stats/chisquare';
 import { chiSquareReport } from '../../stats/report';
 import { fmtEst } from '../../stats/format';
-import { ResultTables } from '../../components/ResultTable';
 import { calcFisherExact } from '../../stats/kernels';
-import { AlertCircle } from 'lucide-react';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import type { Dataset } from '../../grid/types';
 import type { ChiSqParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -125,59 +115,31 @@ export interface ChiSquareRunInput {
       col2: col2Label,
     });
 
-    const output = (
-      <div className="output-block" key={Date.now()}>
-        <div className="output-title">Chi-Square (χ²) Test of Independence</div>
-        
-        <ResultTables specs={tables} />
-
-        {showCochranWarning && (
-          <div className="mt-4 p-2 bg-yellow/10 border border-yellow/20 rounded flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-yellow shrink-0 mt-0.5" />
-            <div className="text-[10px] text-yellow leading-normal">
-              <strong>Warning (Cochran's Rule):</strong> One or more expected frequencies is less than 5 (Min expected: {fmtEst(minExpected, 2)}).
-              The standard Chi-Square test may be inaccurate. Yates' Continuity Correction is strongly recommended.
-            </div>
-          </div>
-        )}
-
-        <div className="h-[320px] w-full mt-6 bg-surface3/30 rounded p-2">
-          <p className="text-[10px] text-text3 mb-1 uppercase tracking-tighter text-center">Observed vs. Expected Frequencies (by cell)</p>
-          <div className="flex items-center justify-center gap-4 text-[10px] text-text3 mb-1">
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: '#34d399' }} /> Observed</span>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: '#4f9cf9' }} /> Expected</span>
-          </div>
-          <VictoryChart
-            theme={VictoryTheme.material}
-            domainPadding={{ x: 60 }}
-            padding={{ top: 20, bottom: 50, left: 50, right: 20 }}
-          >
-            <VictoryAxis
-              tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 9 }} />}
-              style={{ axis: { stroke: '#333' } }}
-            />
-            <VictoryAxis
-              dependentAxis
-              tickLabelComponent={<VictoryLabel style={{ fill: '#888', fontSize: 9 }} />}
-              style={{ axis: { stroke: '#333' }, grid: { stroke: '#222' } }}
-            />
-            <VictoryGroup offset={16}>
-              <VictoryBar
-                data={chartDataObs}
-                style={{ data: { fill: '#34d399', width: 14 } }}
-                labels={({ datum }) => `Observed: ${datum.y}`}
-                labelComponent={<VictoryTooltip style={{ fontSize: 9 }} flyoutStyle={{ fill: '#1e1e1e', stroke: '#333' }} />}
-              />
-              <VictoryBar
-                data={chartDataExp}
-                style={{ data: { fill: '#4f9cf9', width: 14 } }}
-                labels={({ datum }) => `Expected: ${fmtEst(datum.y, 2)}`}
-                labelComponent={<VictoryTooltip style={{ fontSize: 9 }} flyoutStyle={{ fill: '#1e1e1e', stroke: '#333' }} />}
-              />
-            </VictoryGroup>
-          </VictoryChart>
-        </div>
-      </div>
-    );
-    return { ok: true, node: output, tables, report };
+    const chart = makeChart({
+      id: 'chisq-observed-expected',
+      kind: 'bar',
+      title: copy('Osservati vs attesi per cella'),
+      subtitle: copy('χ² = {s1} · p = {s2}', { s1: fmtEst(chi2, 3), s2: fmtEst(pValue, 4) }),
+      note: copy('Le barre verdi sono le frequenze osservate, quelle blu le frequenze attese sotto l’ipotesi di indipendenza.'),
+      data: {
+        bars: [
+          ...chartDataObs.map(point => ({ category: point.x, value: point.y, series: copy('Osservato') })),
+          ...chartDataExp.map(point => ({ category: point.x, value: Number(point.y.toFixed(2)), series: copy('Atteso') })),
+        ],
+      },
+      fields: { xLabel: copy('Cella'), yLabel: copy('Frequenza'), series: copy('Tipo') },
+      options: { valueLabels: true } as never,
+    });
+    return {
+      ok: true,
+      title: copy('Test chi-quadro di indipendenza'),
+      tables,
+      report,
+      charts: [chart],
+      warnings: showCochranWarning
+        ? [
+            copy('Regola di Cochran: una o più frequenze attese sono minori di 5 (minimo {s1}). Il test chi-quadro standard può essere impreciso; valuta la correzione di Yates.', { s1: fmtEst(minExpected, 2) }),
+          ]
+        : [],
+    };
   };

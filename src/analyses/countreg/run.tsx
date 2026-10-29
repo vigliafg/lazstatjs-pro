@@ -1,7 +1,8 @@
-import { ResultTables } from '../../components/ResultTable';
 import { countRegressionStats } from '../../stats/kernels/countreg';
 import { countTables } from '../../stats/tables/countreg';
 import { countReport } from '../../stats/reports/countreg';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import type { Dataset } from '../../grid/types';
 import type { CountParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -35,14 +36,37 @@ export const buildCountOutput = ({ grid, params, ciLevel }: CountInput): Analysi
   }
 
   const tables = countTables(stats, ciLevel);
+  const observedFitted = stats.observed.map((value, index) => ({ x: stats.fitted[index], y: value }));
+  const residuals = stats.fitted.map((value, index) => ({ x: value, y: stats.residuals[index] }));
+  const all = [...stats.observed, ...stats.fitted];
+  const min = all.length ? Math.min(...all) : 0;
+  const max = all.length ? Math.max(...all) : 1;
   return {
     ok: true,
+    title: copy('Regressione per conteggi: {s1}', { s1: grid.cols[params.dep]?.name ?? 'Y' }),
     tables,
     report: countReport(tables, stats, ciLevel),
-    node: (
-      <div className="mb-6">
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'count-observed-fitted',
+        kind: 'scatter',
+        title: copy('Osservati vs predetti'),
+        subtitle: copy('N = {s1} · famiglia {s2}', { s1: stats.n, s2: stats.family }),
+        note: copy('La diagonale è la corrispondenza perfetta tra conteggi osservati e predetti.'),
+        data: { points: observedFitted, fit: [{ x: min, y: min }, { x: max, y: max }] },
+        fields: { xLabel: copy('Valori predetti'), yLabel: copy('Valori osservati') },
+        options: { fit: 'ols', band: 'none' } as never,
+      }),
+      makeChart({
+        id: 'count-residual-fitted',
+        kind: 'scatter',
+        title: copy('Residui vs predetti'),
+        subtitle: copy('N = {s1}', { s1: stats.n }),
+        note: copy('Una nuvola senza struttura è coerente con il modello; pattern sistematici suggeriscono un legame mal specificato.'),
+        data: { points: residuals, rules: [{ y: 0 }] },
+        fields: { xLabel: copy('Valori predetti'), yLabel: copy('Residui') },
+        options: { fit: 'none', band: 'none' } as never,
+      }),
+    ],
   };
 };

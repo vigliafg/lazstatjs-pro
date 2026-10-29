@@ -82,7 +82,7 @@ test('a locale without a catalog falls back to English', () => {
 });
 
 /** Keys built at runtime from registry ids (`meta.analysis.<id>.label`). */
-const DYNAMIC_PREFIXES = ['meta.analysis.', 'meta.family.'];
+const DYNAMIC_PREFIXES = ['meta.analysis.', 'meta.family.', 'chart.'];
 
 test('every shell message is referenced by the UI', () => {
   const orphans = MESSAGE_KEYS.filter(

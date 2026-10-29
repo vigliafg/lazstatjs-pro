@@ -46,6 +46,7 @@ const makeSnapshot = () =>
         uiLocale: 'it',
         reportLocale: 'it',
         helpLocale: 'auto',
+        chartDefaults: DEFAULT_SETTINGS.chartDefaults,
       },
       params: DEFAULT_PARAMS,
     },
@@ -59,7 +60,7 @@ describe('project snapshot roundtrip', () => {
     delete raw.datasetId;
     delete raw.dataRevision;
     const migrated = parseProject(JSON.stringify(raw));
-    assert.equal(migrated.version, 2);
+    assert.equal(migrated.version, 3);
     assert.equal(migrated.grid.cols.length, 3);
   });
 
@@ -71,6 +72,7 @@ describe('project snapshot roundtrip', () => {
     assert.equal(restored.settings.activeAnalysis, 'ttest');
     assert.equal(restored.settings.activeTab, 'analysis');
     assert.deepEqual(restored.params, DEFAULT_PARAMS);
+    assert.deepEqual(restored.settings.chartDefaults, DEFAULT_SETTINGS.chartDefaults);
   });
 
   it('rejects non-project payloads', () => {

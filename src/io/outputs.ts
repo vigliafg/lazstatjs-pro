@@ -1,17 +1,18 @@
 /**
  * Serialisable snapshots of the output console.
  *
- * Every run is pushed as React nodes (tables, Victory charts, written report),
- * which cannot be stored in a .lzs file. The console therefore keeps a static
- * HTML snapshot of the same block: it is produced by `renderToStaticMarkup`
- * (the charts become self-contained SVG) and any restored snapshot is passed
- * through `sanitizeOutputHtml` before it is injected into the document.
+ * Every run produces tables, a written report and chart models. The snapshot
+ * stores tables and prose as static HTML; the chart models are saved
+ * separately and rendered live by Vega-Lite after a reload. Restored HTML is
+ * passed through `sanitizeOutputHtml` before injection.
  *
  * Snapshots are deliberately capped: the console is a reading aid, not the
  * project data, and localStorage has a ~5 MB budget shared with the grid.
  */
 
 import { t } from '../i18n';
+import type { AnalysisChart } from '../stats/charts';
+import { parseChartModels } from '../charts/schema';
 
 export const MAX_STORED_OUTPUTS = 20;
 /** Total HTML kept in the project file / autosave (roughly 20 charts-heavy runs). */
@@ -38,6 +39,12 @@ export interface StoredOutput {
   /** Dataset identity that produced the card (persisted for reload). */
   datasetId?: string;
   html: string;
+  /** Editable chart models; absent on legacy static cards. */
+  charts?: AnalysisChart[];
+  /** Charts beyond the interface cap (not stored, shown as a note). */
+  chartOverflow?: number;
+  /** Charts dropped by the character budget (not stored). */
+  chartOmitted?: number;
 }
 
 /** Fields that decide whether a card still matches the current session. */
@@ -103,15 +110,20 @@ export const extractOutputTitle = (html: string): string => {
 };
 
 /** Keep the newest blocks that fit the count and character budget. */
+export const storedOutputChars = (entry: StoredOutput): number =>
+  entry.html.length + (entry.charts ? JSON.stringify(entry.charts).length : 0);
+
+/** Keep the newest blocks that fit the count and character budget. */
 export const capStoredOutputs = <T extends StoredOutput>(outputs: T[]): T[] => {
   const capped = outputs.slice(-MAX_STORED_OUTPUTS);
   const kept: T[] = [];
   let total = 0;
   for (let index = capped.length - 1; index >= 0; index -= 1) {
     const entry = capped[index];
-    if (kept.length > 0 && total + entry.html.length > MAX_STORED_OUTPUT_CHARS) break;
+    const size = storedOutputChars(entry);
+    if (kept.length > 0 && total + size > MAX_STORED_OUTPUT_CHARS) break;
     kept.unshift(entry);
-    total += entry.html.length;
+    total += size;
   }
   return kept;
 };
@@ -124,6 +136,18 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
     if (!isRecord(raw)) return;
     const html = text(raw.html, '');
     if (!html || html.length > MAX_SINGLE_OUTPUT_CHARS) return;
+    let charts = Array.isArray(raw.charts) ? parseChartModels(raw.charts) : [];
+    if (charts.length > 0) {
+      const kept: typeof charts = [];
+      let used = html.length;
+      for (const chart of charts) {
+        const size = JSON.stringify(chart).length;
+        if (used + size > MAX_SINGLE_OUTPUT_CHARS) break;
+        kept.push(chart);
+        used += size;
+      }
+      charts = kept;
+    }
     entries.push({
       id: text(raw.id, `run-${entries.length + 1}`),
       title: text(raw.title, t('output.untitled')),
@@ -148,6 +172,13 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
       ...(typeof raw.datasetId === 'string' && raw.datasetId.length > 0
         ? { datasetId: raw.datasetId.slice(0, 80) }
         : {}),
+      ...(typeof raw.chartOverflow === 'number' && Number.isInteger(raw.chartOverflow) && raw.chartOverflow > 0
+        ? { chartOverflow: raw.chartOverflow }
+        : {}),
+      ...(typeof raw.chartOmitted === 'number' && Number.isInteger(raw.chartOmitted) && raw.chartOmitted > 0
+        ? { chartOmitted: raw.chartOmitted }
+        : {}),
+      ...(charts.length > 0 ? { charts } : {}),
       html,
     });
   });
@@ -179,7 +210,7 @@ const UNSAFE_STYLE = /url\s*\(|expression\s*\(|@import/i;
 
 /**
  * Allow-list of attributes that cannot execute code once the forbidden tags
- * above are gone. Inline styles are kept (Victory uses them) but CSS-based
+ * above are gone. Inline styles are kept (Vega SVG uses them) but CSS-based
  * payloads (`url(...)`, `expression(...)`, `@import`) are dropped.
  */
 const isSafeAttribute = (attribute: Attr): boolean => {

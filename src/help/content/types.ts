@@ -26,6 +26,8 @@ export interface HelpAdvanced {
   assumptions?: string[];
   whenToUse: string[];
   whenNotToUse?: string[];
+  /** Chart types and editable features produced by the procedure. */
+  charts?: string[];
   reading?: string[];
   pitfalls?: string[];
   glossary?: HelpGlossaryEntry[];
@@ -84,6 +86,7 @@ export interface HelpBookUi {
   assumptions: string;
   whenToUse: string;
   whenNotToUse: string;
+  charts: string;
   reading: string;
   pitfalls: string;
   glossary: string;

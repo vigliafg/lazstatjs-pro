@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ChevronDown,
   ChevronRight,
@@ -19,14 +19,37 @@ import {
 import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { isOutputStale, sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
 import { copyText } from '../io/clipboard';
+import { awaitChartsReady } from '../io/chartReady';
+import { AnalysisOutput } from '../components/AnalysisOutput';
+import { AnalysisCharts } from '../components/AnalysisCharts';
+import type { ChartOptions } from '../stats/charts';
+import type { TableSpec } from '../stats/types';
+import type { ReportSpec } from '../stats/report';
 import { t } from '../i18n';
 import { HelpButton } from '../help/HelpButton';
 import { topicForAnalysis } from '../help/book';
 import { analysisIdsOf, isValidFilter, selectOutputs } from './analysis/outputSelection';
 
+export interface SessionOutputBody {
+  title?: string;
+  header?: string;
+  tables: TableSpec[];
+  report: ReportSpec | null;
+  warnings?: string[];
+  /** Complete chart list for the session; persistence keeps the capped one. */
+  charts?: import('../stats/charts').AnalysisChart[];
+  callout?: {
+    title: string;
+    badge?: string;
+    headline: string;
+    bullets?: string[];
+  };
+}
+
 /** Un blocco della console: React live nella sessione, HTML quando ripristinato. */
 export interface OutputEntry extends StoredOutput {
-  node?: ReactNode;
+  /** Serializable result kept in session so charts can be edited. */
+  session?: SessionOutputBody;
   /** In-session revision of the grid that produced the block. */
   dataRevision?: number;
   /** In-session dataset identity. */
@@ -64,6 +87,10 @@ export interface OutputConsoleProps {
   currentDatasetId?: string;
   currentFilterSignature?: string;
   currentCiLevel?: number;
+  /** Localised "Limitations and caveats" label for the report body. */
+  limitationsLabel?: string;
+  /** Done in the chart editor: persist new options without re-running. */
+  onUpdateChart?: (entryId: string, chartId: string, options: ChartOptions) => void;
 }
 
 const formatTime = (iso: string): string => {
@@ -106,6 +133,8 @@ export const OutputConsole = ({
   currentDatasetId,
   currentFilterSignature,
   currentCiLevel,
+  limitationsLabel,
+  onUpdateChart,
 }: OutputConsoleProps) => {
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
   const [pinned, setPinned] = useState<Set<string>>(() => new Set());
@@ -147,6 +176,7 @@ export const OutputConsole = ({
   const copyCard = async (entry: OutputEntry) => {
     const card = document.getElementById(`output-block-${entry.id}`);
     if (!card) return;
+    await awaitChartsReady(card);
     const clone = card.cloneNode(true) as HTMLElement;
     clone.querySelectorAll('button, [data-no-print]').forEach(node => node.remove());
     const ok = await copyText(clone.innerText);
@@ -473,12 +503,45 @@ export const OutputConsole = ({
                     </button>
                   </header>
                   <div className={isCollapsed ? 'hidden' : stale ? 'p-4 opacity-70' : 'p-4'}>
-                    {output.node ?? (
-                      <div
-                        className="restored-output"
-                        dangerouslySetInnerHTML={{ __html: output.html }}
-                      />
-                    )}
+                    {output.session ? (
+                        <AnalysisOutput
+                          title={output.session.title}
+                          header={output.session.header}
+                          tables={output.session.tables}
+                          report={output.session.report}
+                          warnings={output.session.warnings}
+                          callout={output.session.callout}
+                          charts={output.session.charts ?? output.charts}
+                          limitationsLabel={limitationsLabel}
+                          analysisName={output.title}
+                          onChartOptionsChange={(chartId, options) =>
+                            onUpdateChart?.(output.id, chartId, options)
+                          }
+                        />
+                      ) : (
+                        <>
+                          <div
+                            className="restored-output"
+                            dangerouslySetInnerHTML={{ __html: output.html }}
+                          />
+                          {output.charts && output.charts.length > 0 && (
+                            <AnalysisCharts
+                              charts={output.charts}
+                              analysisName={output.title}
+                              onOptionsChange={
+                                onUpdateChart
+                                  ? (chartId, options) => onUpdateChart(output.id, chartId, options)
+                                  : undefined
+                              }
+                            />
+                          )}
+                          {((output.chartOverflow ?? 0) > 0 || (output.chartOmitted ?? 0) > 0) && (
+                            <p className="mt-2 text-[10px] text-yellow">
+                              {t('chart.notStored')}
+                            </p>
+                          )}
+                        </>
+                      )}
                   </div>
                 </article>
               );

@@ -186,6 +186,26 @@ export const ordinalStats = (options: OrdinalOptions): OrdinalStats | null => {
   if (!covariance) return null;
   const se = covariance.map((row, index) => Math.sqrt(Math.max(0, row[index])));
   const { beta, alpha } = unpack(parameters, categories.length, k);
+  const categoryProbability = (eta: number, category: number): number => {
+    const upper = category === categories.length - 1 ? 1 : sigmoid(alpha[category] - eta);
+    const lower = category === 0 ? 0 : sigmoid(alpha[category - 1] - eta);
+    return Math.max(0, upper - lower);
+  };
+  const columnMeans = data.X[0].map((_, column) =>
+    data.X.reduce((sum, row) => sum + row[column], 0) / data.X.length
+  );
+  const firstValues = data.X.map(row => row[0]);
+  const firstMin = Math.min(...firstValues);
+  const firstMax = Math.max(...firstValues);
+  const profile = Array.from({ length: 40 }, (_, index) => {
+    const x = firstMax === firstMin ? firstMin : firstMin + ((firstMax - firstMin) * index) / 39;
+    const row = columnMeans.map((mean, column) => (column === 0 ? x : mean));
+    const eta = row.reduce((sum, value, column) => sum + value * beta[column], 0);
+    return {
+      x,
+      probabilities: categories.map((_, category) => categoryProbability(eta, category)),
+    };
+  });
 
   const nullTau = [cumulative[0], ...cumulative.slice(1).map((value, index) => Math.log(Math.max(0.05, value - cumulative[index])) )];
   const logLikNull = logLik([...new Array<number>(k).fill(0), ...nullTau], data);
@@ -242,5 +262,6 @@ export const ordinalStats = (options: OrdinalOptions): OrdinalStats | null => {
     mcfadden: 1 - current / logLikNull,
     coefficients,
     thresholds: thresholdRows,
+    profile,
   };
 };

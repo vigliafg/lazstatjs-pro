@@ -273,7 +273,8 @@ export const areaTopics: HelpTopic[] = [
       goal: 'Portare fuori i risultati in un formato utilizzabile.',
       dataset: 'score-groups.csv',
       steps: [
-        'Esegui un’analisi e osserva la scheda: tabelle, grafici, poi il Report di lettura.',
+        'Esegui un’analisi e osserva la scheda: tabelle, poi il Report di lettura, poi i grafici modificabili.',
+        'Clicca un grafico per aprire l’editor: cambia tema, colori e opzioni della procedura, poi premi Fatto.',
         'Apri l’Indice per saltare a una scheda o comprimerla con la freccia.',
         'Premi Report per scaricare un HTML stampabile, o Word per un file modificabile.',
         'Usa XLSX per avere dataset e tabelle in una cartella di lavoro; Grafici scarica i PNG.',
@@ -287,7 +288,8 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         '«obsoleto» indica che i dati sono cambiati dopo l’esecuzione: riesegui prima di esportare.',
-        'Le schede ripristinate da un progetto sono statiche: copia ed export funzionano, il ricalcolo no.',
+        'I grafici restano modificabili dopo il reload; le schede salvate con il vecchio motore sono statiche: rilanciale per ottenere un grafico modificabile.',
+        'Impostazioni → Grafici imposta lo stile predefinito dei grafici futuri; le schede esistenti non cambiano.',
       ],
       pitfalls: [
         'Esportare una scheda obsoleta produce un report formalmente corretto ma non aggiornato.',

@@ -5,6 +5,7 @@ import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 import { isActiveLocale, isHelpLocale, isLocale } from '../../i18n/locales';
+import { normalizeChartDefaults } from '../../charts/defaults';
 import {
   DEFAULT_PARAMS, DEFAULT_SETTINGS,
   type ProjectParams, type ProjectSettings,
@@ -533,6 +534,7 @@ export const parseSettings = (value: unknown): ProjectSettings => {
     uiLocale: isActiveLocale(raw.uiLocale) ? raw.uiLocale : DEFAULT_SETTINGS.uiLocale,
     reportLocale: isLocale(raw.reportLocale) ? raw.reportLocale : DEFAULT_SETTINGS.reportLocale,
     helpLocale: isHelpLocale(raw.helpLocale) ? raw.helpLocale : DEFAULT_SETTINGS.helpLocale,
+    chartDefaults: normalizeChartDefaults(raw.chartDefaults),
   };
 };
 

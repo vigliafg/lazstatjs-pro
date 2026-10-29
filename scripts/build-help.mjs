@@ -54,6 +54,7 @@ const advancedBlock = (book, topic) => {
         ${section(book.ui.assumptions, a.assumptions)}
         ${section(book.ui.whenToUse, a.whenToUse)}
         ${section(book.ui.whenNotToUse, a.whenNotToUse, 'warn')}
+        ${section(book.ui.charts, a.charts)}
         ${section(book.ui.reading, a.reading)}
         ${section(book.ui.pitfalls, a.pitfalls, 'warn')}
         ${glossary}
@@ -190,6 +191,7 @@ ${book.topics
   ${list(topic.advanced.assumptions, '', book.ui.assumptions)}
   ${list(topic.advanced.whenToUse, '', book.ui.whenToUse)}
   ${list(topic.advanced.whenNotToUse, 'warn', book.ui.whenNotToUse)}
+  ${list(topic.advanced.charts, '', book.ui.charts)}
   ${list(topic.advanced.reading, '', book.ui.reading)}
   ${list(topic.advanced.pitfalls, 'warn', book.ui.pitfalls)}
 </article>`
@@ -352,6 +354,7 @@ const bookFiles = (book) => {
       ...topic.tutorial.steps,
       ...(topic.advanced.assumptions ?? []),
       ...topic.advanced.whenToUse,
+      ...(topic.advanced.charts ?? []),
       ...(topic.advanced.pitfalls ?? []),
     ].join(' '),
   }));

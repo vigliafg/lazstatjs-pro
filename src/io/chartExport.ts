@@ -1,9 +1,10 @@
-/** Rasterise rendered charts (Victory SVG) to downloadable PNGs. */
+/** Rasterise rendered Vega-Lite SVG charts to downloadable PNGs. */
 
 import { downloadBlob } from './writers';
+import { awaitChartsReady } from './chartReady';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const BACKGROUND = '#0d0f14';
+const FALLBACK_BACKGROUND = '#0d0f14';
 const PADDING = 12;
 const SCALE = 2;
 const MIN_SIZE = 40;
@@ -11,6 +12,7 @@ const MIN_SIZE = 40;
 export interface ChartExportResult {
   exported: number;
   failed: number;
+  pending: number;
 }
 
 const loadImage = (url: string): Promise<HTMLImageElement> =>
@@ -32,7 +34,7 @@ const svgSize = (svg: SVGSVGElement): { width: number; height: number } => {
   return { width: Number.isFinite(width) ? width : 0, height: Number.isFinite(height) ? height : 0 };
 };
 
-const renderPng = async (svg: SVGSVGElement): Promise<Blob> => {
+const renderPng = async (svg: SVGSVGElement, background: string): Promise<Blob> => {
   const { width, height } = svgSize(svg);
   if (width < MIN_SIZE || height < MIN_SIZE) throw new Error('Chart has no drawable area');
 
@@ -53,7 +55,7 @@ const renderPng = async (svg: SVGSVGElement): Promise<Blob> => {
     canvas.height = Math.ceil((height + PADDING * 2) * SCALE);
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Canvas is not available');
-    ctx.fillStyle = BACKGROUND;
+    ctx.fillStyle = background || FALLBACK_BACKGROUND;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.scale(SCALE, SCALE);
     ctx.drawImage(image, PADDING, PADDING, width, height);
@@ -73,18 +75,22 @@ export const exportChartsAsPng = async (
   root: ParentNode,
   baseName = 'lazstats-chart'
 ): Promise<ChartExportResult> => {
-  const charts = Array.from(root.querySelectorAll('svg')).filter((svg) => {
-    if (svg.closest('[data-no-export]')) return false;
-    const svgEl = svg as SVGSVGElement;
-    const { width, height } = svgSize(svgEl);
-    return width >= MIN_SIZE && height >= MIN_SIZE;
-  });
+  const ready = await awaitChartsReady(root);
+  const charts = Array.from(root.querySelectorAll<SVGSVGElement>('[data-chart-surface] svg')).filter(
+    (svg) => {
+      if (svg.closest('[data-no-export]')) return false;
+      const { width, height } = svgSize(svg);
+      return width >= MIN_SIZE && height >= MIN_SIZE;
+    }
+  );
 
   let exported = 0;
-  let failed = 0;
+  let failed = ready.failed;
   for (let i = 0; i < charts.length; i += 1) {
     try {
-      const blob = await renderPng(charts[i] as SVGSVGElement);
+      const surface = charts[i].closest('[data-chart-surface]');
+      const background = surface?.getAttribute('data-chart-background') ?? FALLBACK_BACKGROUND;
+      const blob = await renderPng(charts[i], background);
       const suffix = charts.length > 1 ? `-${i + 1}` : '';
       downloadBlob(blob, `${baseName}${suffix}.png`);
       exported += 1;
@@ -94,5 +100,5 @@ export const exportChartsAsPng = async (
     // Give the download manager a tick between files.
     await new Promise((resolve) => setTimeout(resolve, 0));
   }
-  return { exported, failed };
+  return { exported, failed, pending: ready.pending };
 };

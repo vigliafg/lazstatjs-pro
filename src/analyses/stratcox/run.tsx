@@ -1,10 +1,11 @@
-import { ResultTables } from '../../components/ResultTable';
 import { stratifiedCoxStats } from '../../stats/kernels/stratcox';
 import { stratCoxTables } from '../../stats/tables/stratcox';
 import { stratCoxReport } from '../../stats/reports/stratcox';
 import type { Dataset } from '../../grid/types';
 import type { StratifiedCoxParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 
 export interface StratifiedCoxInput {
   grid: Dataset;
@@ -45,14 +46,21 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
     };
   }
   const tables = stratCoxTables(stats, ciLevel);
+  const forest = makeChart({
+    id: 'stratcox-forest',
+    kind: 'forest',
+    title: copy('Hazard ratio per covariata'),
+    subtitle: copy('IC {s1}% · {s2} strati', { s1: ciLevel, s2: stats.strata }),
+    note: copy('Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1. I coefficienti sono condivisi tra gli strati.'),
+    data: { points: stats.coefficients.map(coefficient => ({ label: coefficient.term, estimate: coefficient.hr, lo: coefficient.lo, hi: coefficient.hi })) },
+    fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
+    stats: { n: stats.n, events: stats.events },
+  });
   return {
     ok: true,
+    title: copy('Cox stratificato'),
     tables,
     report: stratCoxReport(stats, ciLevel),
-    node: (
-      <div className="mb-6">
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts: [forest],
   };
 };

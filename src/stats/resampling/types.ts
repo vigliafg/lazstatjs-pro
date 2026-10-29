@@ -21,4 +21,7 @@ export interface ResamplingStats {
   permutations: number;
   bootstrap: number;
   statistic: 'mean' | 'median';
+  /** Permutation null distribution and bootstrap distribution (for charts). */
+  permutationStatistics: number[];
+  bootstrapDifferences: number[];
 }

@@ -42,6 +42,7 @@ interface Prepared {
   y: number[];
   groupIndex: number[];
   groupSizes: number[];
+  groupLabels: string[];
   n: number;
   p: number;
 }
@@ -63,7 +64,15 @@ const prepare = (options: LmmOptions): Prepared | null => {
   const groupSizes = labels.map((_, index) => groupIndex.filter(value => value === index).length);
   const X: Matrix = complete.map(entry => [1, ...entry.xs]);
   if (complete.length <= X[0].length) return null;
-  return { X, y: complete.map(entry => entry.y), groupIndex, groupSizes, n: complete.length, p: X[0].length };
+  return {
+    X,
+    y: complete.map(entry => entry.y),
+    groupIndex,
+    groupSizes,
+    groupLabels: labels,
+    n: complete.length,
+    p: X[0].length,
+  };
 };
 
 const reml = (prepared: Prepared, lambda: number): { logLik: number; beta: number[]; vcov: Matrix; sigma2: number; rss: number } | null => {
@@ -188,9 +197,21 @@ export const lmmStats = (options: LmmOptions): LmmStats | null => {
     };
   });
 
+  const fitted = prepared.X.map(row => row.reduce((sum, value, index) => sum + value * beta[index], 0));
+  const observed = prepared.y;
+  const groupMeans = prepared.groupLabels.map((_, group) => {
+    const values = observed.filter((__, index) => prepared.groupIndex[index] === group);
+    return values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length);
+  });
+
   return {
     n,
     groups: groupSizes.length,
+    groupLabels: prepared.groupLabels,
+    groupMeans,
+    observed,
+    fitted,
+    residuals: observed.map((value, index) => value - fitted[index]),
     k: p - 1,
     df: n - p,
     sigmaU2,

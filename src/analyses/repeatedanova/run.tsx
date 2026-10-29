@@ -1,15 +1,10 @@
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryTheme,
-} from 'victory';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import {
   repeatedAnovaReport,
   repeatedAnovaTables,
   repeatedMeasuresAnova,
 } from '../../stats/repeatedAnova';
-import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import type { Dataset } from '../../grid/types';
 import type { RepeatedAnovaParams } from '../../io/project';
@@ -59,48 +54,19 @@ export const buildRepeatedAnovaOutput = ({
 
   return {
     ok: true,
+    title: copy('ANOVA per misure ripetute'),
     tables,
     report: repeatedAnovaReport(tables, names, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`Repeated-measures ANOVA · ${result.n} soggetti · ${result.k} condizioni`}
-        </p>
-        <ResultTables specs={tables} />
-        <section className="mb-6">
-          <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider mb-2">
-            Medie per condizione
-          </h3>
-          <div className="h-[260px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={{ x: 30 }}
-              padding={{ top: 15, bottom: 55, left: 55, right: 20 }}
-            >
-              <VictoryAxis
-                style={{
-                  axis: { stroke: '#333' },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              <VictoryAxis
-                dependentAxis
-                style={{
-                  axis: { stroke: '#333' },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              <VictoryBar
-                data={data}
-                style={{ data: { fill: '#4f9cf9' } }}
-                labels={({ datum }) => datum.y.toFixed(2)}
-              />
-            </VictoryChart>
-          </div>
-        </section>
-      </div>
-    ),
+    charts: [
+      makeChart({
+        id: 'repeated-means',
+        kind: 'bar',
+        title: copy('Medie per condizione'),
+        subtitle: copy('{s1} soggetti · {s2} condizioni', { s1: result.n, s2: result.k }),
+        data: { bars: data.map(point => ({ category: point.x, value: point.y })) },
+        fields: { xLabel: copy('Condizione'), yLabel: copy('Media') },
+        options: { valueLabels: true } as never,
+      }),
+    ],
   };
 };

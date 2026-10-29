@@ -1,8 +1,7 @@
 import { coxReport, coxTables, fitCox } from '../../stats/cox';
-import { AnalysisOutput } from '../../components/AnalysisOutput';
-import { t } from '../../i18n';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
-import type { AnalysisChart } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { CoxParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -130,25 +129,26 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     lo: coefficient.lo,
     hi: coefficient.hi,
   }));
-  const forest: AnalysisChart = {
-    kind: 'forest',
+  const forest = makeChart({
     id: 'cox-forest',
-    title: 'Hazard ratio per covariata',
-    subtitle: `IC ${ciLevel}% · scala lineare`,
-    xLabel: t('chart.hazardRatio'),
+    kind: 'forest',
+    title: copy('Hazard ratio per covariata'),
+    subtitle: copy('IC {s1}% · scala lineare', { s1: ciLevel }),
     note:
-      'Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.' +
-      (fit.separation ? ' Con stime instabili gli intervalli non finiti sono omessi dal grafico.' : ''),
-    points: forestPoints,
-  };
+      copy('Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.') +
+      (fit.separation ? copy(' Con stime instabili gli intervalli non finiti sono omessi dal grafico.') : ''),
+    data: { points: forestPoints },
+    fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
+    stats: { n: times.length, events: fit.events },
+  });
   const header = `Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${times.length} observations · ${fit.events} events`;
 
   return {
     ok: true,
+    title: copy('Cox: hazard ratio'),
     tables,
     report: coxReport(tables, ciLevel),
     charts: [forest],
     header,
-    node: <AnalysisOutput tables={tables} charts={[forest]} header={header} />,
   };
 };

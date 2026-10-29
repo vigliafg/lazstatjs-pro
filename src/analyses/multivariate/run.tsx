@@ -1,10 +1,6 @@
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
+import type { AnalysisChart } from '../../stats/charts';
 import {
   alphaReport,
   alphaTables,
@@ -16,7 +12,6 @@ import {
   pcaTables,
   principalComponents,
 } from '../../stats/multivariate';
-import { ResultTables } from '../../components/ResultTable';
 import { parseNum } from '../../stats/core';
 import type { Dataset } from '../../grid/types';
 import type { MultivariateParams } from '../../io/project';
@@ -29,13 +24,6 @@ export interface MultivariateInput {
   params: MultivariateParams;
   ciLevel: number;
 }
-
-const AXIS_STYLE = {
-  axis: { stroke: '#333' },
-  axisLabel: { fill: '#888', fontSize: 10, padding: 38 },
-  tickLabels: { fill: '#888', fontSize: 9 },
-  grid: { stroke: '#222' },
-};
 
 /** PCA o alpha di Cronbach: tabelle, grafici e report. */
 export const buildMultivariateOutput = ({
@@ -86,16 +74,10 @@ export const buildMultivariateOutput = ({
     const tables = efaTables(result, names);
     return {
       ok: true,
+      title: copy('Analisi fattoriale esplorativa'),
       tables,
       report: efaReport(tables, result),
-      node: (
-        <div className="mb-6">
-          <p className="text-[10px] text-text3 font-mono mb-3">
-            {`EFA · ${result.n} casi · ${result.p} variabili · ${result.factors} fattori`}
-          </p>
-          <ResultTables specs={tables} />
-        </div>
-      ),
+      charts: [],
     };
   }
 
@@ -109,73 +91,43 @@ export const buildMultivariateOutput = ({
     }
     const tables = pcaTables(result);
     const scree = result.eigenvalues.map((value, index) => ({
-      x: `PC${index + 1}`,
-      y: result.variancePct[index],
+      category: `PC${index + 1}`,
+      value: result.variancePct[index],
     }));
     const scoreData = result.scores.map((scores, index) => ({
       x: scores[0],
       y: scores[1] ?? 0,
       label: `Riga ${index + 1}`,
     }));
+    const kaiser = 100 / Math.max(1, result.eigenvalues.length);
+    const charts: AnalysisChart[] = [
+      makeChart({
+        id: 'pca-scree',
+        kind: 'scree',
+        title: copy('Scree plot — varianza spiegata'),
+        subtitle: copy('{s1} componenti trattenute', { s1: result.retained }),
+        note: copy('Le barre sono la percentuale di varianza spiegata da ogni componente.'),
+        data: { bars: scree, rules: [{ value: kaiser }] },
+        fields: { xLabel: copy('Componente'), yLabel: copy('Varianza spiegata (%)') },
+        options: { valueLabels: true } as never,
+      }),
+      makeChart({
+        id: 'pca-score',
+        kind: 'score',
+        title: copy('Punteggi dei componenti'),
+        subtitle: 'PC1 × PC2',
+        note: copy('Ogni punto è un caso proiettato sulle due prime componenti.'),
+        data: { points: scoreData },
+        fields: { xLabel: 'PC1', yLabel: 'PC2' },
+      }),
+    ];
 
     return {
       ok: true,
+      title: copy('Analisi delle componenti principali'),
       tables,
       report: pcaReport(tables, result, ciLevel),
-      node: (
-        <div className="mb-6">
-          <p className="text-[10px] text-text3 font-mono mb-3">
-            {`PCA · ${result.n} casi · ${result.variables.length} variabili · ${result.retained} componenti`}
-          </p>
-          <ResultTables specs={tables} />
-          <section className="mb-6">
-            <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider mb-2">
-              Scree plot — varianza spiegata
-            </h3>
-            <div className="h-[240px] w-full bg-surface3/30 rounded p-2">
-              <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={{ x: 20 }}
-                padding={{ top: 15, bottom: 50, left: 55, right: 20 }}
-              >
-                <VictoryAxis style={AXIS_STYLE} />
-                <VictoryAxis
-                  dependentAxis
-                  tickFormat={(value: number) => `${value.toFixed(0)}%`}
-                  style={AXIS_STYLE}
-                />
-                <VictoryBar
-                  data={scree}
-                  style={{ data: { fill: '#4f9cf9' } }}
-                  labels={({ datum }) => `${datum.y.toFixed(1)}%`}
-                />
-              </VictoryChart>
-            </div>
-          </section>
-          <section className="mb-6">
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-              <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
-                Punteggi dei componenti
-              </h3>
-              <span className="text-[10px] text-text3 font-mono">PC1 × PC2</span>
-            </div>
-            <div className="h-[260px] w-full bg-surface3/30 rounded p-2">
-              <VictoryChart
-                theme={VictoryTheme.material}
-                padding={{ top: 15, bottom: 55, left: 60, right: 25 }}
-              >
-                <VictoryAxis label={scoreData.length ? 'PC1' : ''} style={AXIS_STYLE} />
-                <VictoryAxis dependentAxis label="PC2" style={AXIS_STYLE} />
-                <VictoryScatter
-                  data={scoreData}
-                  size={3.5}
-                  style={{ data: { fill: '#34d399', opacity: 0.75 } }}
-                />
-              </VictoryChart>
-            </div>
-          </section>
-        </div>
-      ),
+      charts,
     };
   }
 
@@ -189,15 +141,9 @@ export const buildMultivariateOutput = ({
   const tables = alphaTables(result);
   return {
     ok: true,
+    title: copy('Alpha di Cronbach'),
     tables,
     report: alphaReport(tables, result),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`Cronbach α · ${result.k} item · ${result.n} casi completi`}
-        </p>
-        <ResultTables specs={tables} />
-      </div>
-    ),
+    charts: [],
   };
 };

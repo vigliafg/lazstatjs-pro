@@ -1,12 +1,12 @@
 import { timeSeriesReport, timeSeriesTables } from '../../stats/timeseries';
 import { arimaAnalysis } from '../../stats/arima';
-import { AnalysisOutput } from '../../components/AnalysisOutput';
-import { t } from '../../i18n';
+import { copy } from '../../stats/reportCopy';
+import { makeChart } from '../../charts/kits/common';
 import { numericColumnValues } from '../shared/data';
 import type { Dataset } from '../../grid/types';
 import type { TimeSeriesParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
-import type { AnalysisChart } from '../../stats/charts';
+import type { AnalysisChart, ChartRow } from '../../stats/charts';
 import { isFiniteNumber } from '../shared/numbers';
 
 export interface TimeSeriesInput {
@@ -65,10 +65,6 @@ export const buildTimeSeriesOutput = ({
 
   const simpleForecastRows = baseTables.find(spec => spec.id === 'ts-forecast')?.rows ?? [];
   const seriesData = values.map((value, index) => ({ x: index + 1, y: value }));
-  const simpleForecastData = [
-    { x: values.length, y: values[values.length - 1] },
-    ...simpleForecastRows.map(row => ({ x: Number(row.step), y: Number(row.forecast) })),
-  ];
 
   const arimaForecastRows = tables.find(spec => spec.id === 'ts-arima-forecast')?.rows ?? [];
   const arimaModelLabel = String(
@@ -76,77 +72,83 @@ export const buildTimeSeriesOutput = ({
       .find(spec => spec.id === 'ts-arima-model')
       ?.rows.find(row => String(row.metric) === 'Modello')?.value ?? ''
   );
-  const arimaForecastData = [
-    { x: values.length, y: values[values.length - 1] },
-    ...arimaForecastRows.map(row => ({ x: Number(row.step), y: Number(row.forecast) })),
-  ];
-  const arimaUpper = arimaForecastRows.map(row => ({ x: Number(row.step), y: Number(row.hi) }));
-  const arimaLower = arimaForecastRows.map(row => ({ x: Number(row.step), y: Number(row.lo) }));
 
   const charts: AnalysisChart[] = [
-    {
-      kind: 'bar',
+    makeChart({
       id: 'ts-acf-chart',
-      title: 'Autocorrelazione',
-      subtitle: `banda ±${band.toFixed(3)}`,
-      xLabel: t('chart.lag'),
-      bars: acfRows.map(row => ({ x: Number(row.lag), y: Number(row.acf), label: String(row.lag) })),
-      bands: [
-        { y: band, color: '#f87171' },
-        { y: -band, color: '#f87171' },
-      ],
-      note: 'Le barre oltre le linee tratteggiate indicano autocorrelazione non attribuibile al caso.',
-    },
+      kind: 'acf',
+      title: copy('Autocorrelazione'),
+      subtitle: copy('Banda ±{s1}', { s1: band.toFixed(3) }),
+      note: copy('Le barre oltre le linee tratteggiate indicano autocorrelazione non attribuibile al caso.'),
+      data: {
+        bars: acfRows.map(row => ({ lag: Number(row.lag), value: Number(row.acf) })),
+        band: [{ value: band }, { value: -band }],
+      },
+      fields: { xLabel: copy('Lag'), yLabel: copy('Autocorrelazione') },
+    }),
   ];
 
   if (arimaForecastRows.length > 0) {
-    charts.push({
-      kind: 'line',
-      id: 'ts-arima-chart',
-      title: 'Previsioni ARIMA / SARIMA',
-      subtitle: `${arimaModelLabel} · ${arimaForecastRows.length} passi · IC ${ciLevel}%`,
-      xLabel: 't',
-      series: [
-        { label: 'observed', color: '#4f9cf9', points: seriesData },
-        { label: 'upper', color: '#94a3b8', points: arimaUpper, dash: '3,3' },
-        { label: 'lower', color: '#94a3b8', points: arimaLower, dash: '3,3' },
-        { label: 'forecast', color: '#fbbf24', points: arimaForecastData, dash: '5,4' },
-      ],
-      markers: [
-        { label: 'observed-points', color: '#4f9cf9', points: seriesData, size: 2 },
-        { label: 'forecast-points', color: '#fbbf24', points: arimaForecastData.slice(1), size: 2.5 },
-      ],
-      note: `Blu: valori osservati. Giallo tratteggiato: previsione ARIMA. Grigio tratteggiato: limiti dell’intervallo di previsione al ${ciLevel}%.`,
-    });
+    const arimaRows: ChartRow[] = [
+      ...seriesData.map(point => ({ x: point.x, y: point.y, series: copy('Osservato') })),
+      ...arimaForecastRows.map(row => ({
+        x: values.length + Number(row.step),
+        y: Number(row.forecast),
+        lo: Number(row.lo),
+        hi: Number(row.hi),
+        series: copy('Previsione'),
+      })),
+    ];
+    charts.push(
+      makeChart({
+        id: 'ts-arima-chart',
+        kind: 'line',
+        title: copy('Previsioni ARIMA / SARIMA'),
+        subtitle: `${arimaModelLabel} · ${arimaForecastRows.length} ${copy('passi')} · IC ${ciLevel}%`,
+        note: copy('Blu: valori osservati. Giallo tratteggiato: previsione ARIMA. Grigio: intervallo di previsione.'),
+        data: {
+          series: arimaRows,
+          markers: [
+            ...seriesData.map(point => ({ x: point.x, y: point.y, series: copy('Osservato') })),
+            ...arimaForecastRows.map(row => ({ x: values.length + Number(row.step), y: Number(row.forecast), series: copy('Previsione') })),
+          ],
+        },
+        fields: { xLabel: 't', yLabel: copy('Valore'), series: copy('Serie') },
+        options: { showMarkers: true, showBand: true } as never,
+      })
+    );
   }
 
   if (simpleForecastRows.length > 0) {
-    charts.push({
-      kind: 'line',
-      id: 'ts-simple-chart',
-      title: 'Serie e previsioni (modello semplice)',
-      subtitle: `${simpleForecastRows.length} passi previsti`,
-      xLabel: 't',
-      series: [
-        { label: 'observed', color: '#4f9cf9', points: seriesData },
-        { label: 'simple-forecast', color: '#fbbf24', points: simpleForecastData, dash: '5,4' },
-      ],
-      markers: [
-        { label: 'observed-points', color: '#4f9cf9', points: seriesData, size: 2 },
-        { label: 'simple-points', color: '#fbbf24', points: simpleForecastData.slice(1), size: 2.5 },
-      ],
-      note: 'Blu: valori osservati. Giallo tratteggiato: previsioni del modello semplice con l’RMSE più basso.',
-    });
+    const simpleRows: ChartRow[] = [
+      ...seriesData.map(point => ({ x: point.x, y: point.y, series: copy('Osservato') })),
+      ...simpleForecastRows.map(row => ({ x: values.length + Number(row.step), y: Number(row.forecast), series: copy('Previsione') })),
+    ];
+    charts.push(
+      makeChart({
+        id: 'ts-simple-chart',
+        kind: 'line',
+        title: copy('Serie e previsioni (modello semplice)'),
+        subtitle: copy('{s1} passi previsti', { s1: simpleForecastRows.length }),
+        note: copy('Blu: valori osservati. Giallo: previsioni del modello semplice con l’RMSE più basso.'),
+        data: {
+          series: simpleRows,
+          markers: seriesData.map(point => ({ x: point.x, y: point.y, series: copy('Osservato') })),
+        },
+        fields: { xLabel: 't', yLabel: copy('Valore'), series: copy('Serie') },
+        options: { showMarkers: true, showBand: false } as never,
+      })
+    );
   }
 
   const header = `Series: ${grid.cols[variable]?.name ?? 'Y'} · ${values.length} observations · period ${period >= 2 ? period : 'none'}`;
 
   return {
     ok: true,
+    title: copy('Serie temporale: {s1}', { s1: grid.cols[variable]?.name ?? 'Y' }),
     tables,
     report: timeSeriesReport(tables, ciLevel),
     charts,
     header,
-    node: <AnalysisOutput tables={tables} charts={charts} header={header} />,
   };
 };
