@@ -1,4 +1,5 @@
 import { fmtEst, fmtP } from '../format';
+import { copy } from '../reportCopy';
 import type { TableSpec } from '../types';
 import { kaplanMeier, lifeTable, logRankTest } from '../kernels/survival';
 import type { SurvivalGroup } from '../survival/types';
@@ -38,17 +39,17 @@ export const survivalTables = (options: SurvivalTablesOptions): TableSpec[] => {
 
   tables.push({
     id: 'surv-summary',
-    title: 'Sintesi di sopravvivenza',
-    subtitle: `N = ${overall.n} · eventi = ${overall.events} · censurati = ${overall.censored}`,
+    title: copy('Sintesi di sopravvivenza'),
+    subtitle: copy('N = {s1} · eventi = {s2} · censurati = {s3}', { s1: overall.n, s2: overall.events, s3: overall.censored }),
     columns: [
-      { key: 'group', label: 'Gruppo', format: 'text' },
-      { key: 'n', label: 'N', format: 'int' },
-      { key: 'events', label: 'Eventi', format: 'int' },
-      { key: 'censored', label: 'Censurati', format: 'int' },
-      { key: 'median', label: 'Mediana', format: 'dec2' },
-      { key: 'medianLo', label: 'CI low', format: 'dec2' },
-      { key: 'medianHi', label: 'CI high', format: 'dec2' },
-      { key: 'rmst', label: 'RMST', format: 'dec2' },
+      { key: 'group', label: copy('Gruppo'), format: 'text' },
+      { key: 'n', label: copy('N'), format: 'int' },
+      { key: 'events', label: copy('Eventi'), format: 'int' },
+      { key: 'censored', label: copy('Censurati'), format: 'int' },
+      { key: 'median', label: copy('Mediana'), format: 'dec2' },
+      { key: 'medianLo', label: copy('CI low'), format: 'dec2' },
+      { key: 'medianHi', label: copy('CI high'), format: 'dec2' },
+      { key: 'rmst', label: copy('RMST'), format: 'dec2' },
     ],
     rows: summaries.map(({ name, km }) => ({
       group: name,
@@ -61,8 +62,8 @@ export const survivalTables = (options: SurvivalTablesOptions): TableSpec[] => {
       rmst: km.rmst,
     })),
     notes: [
-      'La mediana è il tempo in cui la curva scende a 0,50: se non viene raggiunta resta non calcolabile.',
-      'Il CI della mediana deriva dagli intervalli log-log della curva; RMST è l’area sotto la curva fino all’ultimo tempo osservato.',
+      copy('La mediana è il tempo in cui la curva scende a 0,50: se non viene raggiunta resta non calcolabile.'),
+      copy('Il CI della mediana deriva dagli intervalli log-log della curva; RMST è l’area sotto la curva fino all’ultimo tempo osservato.'),
     ],
   });
 
@@ -81,22 +82,22 @@ export const survivalTables = (options: SurvivalTablesOptions): TableSpec[] => {
 
   tables.push({
     id: 'surv-km',
-    title: 'Curva di Kaplan–Meier',
-    subtitle: `CI ${level}% log-log · stima prodotto-limite`,
+    title: copy('Curva di Kaplan–Meier'),
+    subtitle: copy('CI {s1}% log-log · stima prodotto-limite', { s1: level }),
     columns: [
-      { key: 'group', label: 'Gruppo', format: 'text' },
-      { key: 'time', label: 'Tempo', format: 'dec2' },
-      { key: 'nRisk', label: 'A rischio', format: 'int' },
-      { key: 'events', label: 'Eventi', format: 'int' },
-      { key: 'censored', label: 'Censurati', format: 'int' },
-      { key: 'survival', label: 'S(t)', format: 'dec3' },
-      { key: 'lo', label: 'CI low', format: 'dec3' },
-      { key: 'hi', label: 'CI high', format: 'dec3' },
+      { key: 'group', label: copy('Gruppo'), format: 'text' },
+      { key: 'time', label: copy('Tempo'), format: 'dec2' },
+      { key: 'nRisk', label: copy('A rischio'), format: 'int' },
+      { key: 'events', label: copy('Eventi'), format: 'int' },
+      { key: 'censored', label: copy('Censurati'), format: 'int' },
+      { key: 'survival', label: copy('S(t)'), format: 'dec3' },
+      { key: 'lo', label: copy('CI low'), format: 'dec3' },
+      { key: 'hi', label: copy('CI high'), format: 'dec3' },
     ],
     rows: kmRows,
     notes: [
-      'S(t) è la probabilità stimata di essere ancora “in vita” (senza evento) al tempo t.',
-      'I censurati escono dal rischio senza far scendere la curva: è il motivo per cui serve un’analisi di sopravvivenza invece di una media.',
+      copy('S(t) è la probabilità stimata di essere ancora “in vita” (senza evento) al tempo t.'),
+      copy('I censurati escono dal rischio senza far scendere la curva: è il motivo per cui serve un’analisi di sopravvivenza invece di una media.'),
     ],
   });
 
@@ -109,31 +110,31 @@ export const survivalTables = (options: SurvivalTablesOptions): TableSpec[] => {
 
     tables.push({
       id: 'surv-logrank',
-      title: 'Log-rank test',
+      title: copy('Log-rank test'),
       subtitle: groups.map(group => group.name).join(' vs '),
       columns: [
-        { key: 'metric', label: 'Voce', format: 'text' },
-        { key: 'value', label: 'Valore', format: 'text' },
+        { key: 'metric', label: copy('Voce'), format: 'text' },
+        { key: 'value', label: copy('Valore'), format: 'text' },
       ],
       rows: [
-        { metric: 'χ²', value: fmtEst(result.chi2, 3), chiValue: result.chi2 },
-        { metric: 'df', value: String(result.df) },
-        { metric: 'p', value: fmtP(result.p), pValue: result.p },
+        { metric: copy('χ²'), value: fmtEst(result.chi2, 3), chiValue: result.chi2 },
+        { metric: copy('df'), value: String(result.df) },
+        { metric: copy('p'), value: fmtP(result.p), pValue: result.p },
         ...(Number.isFinite(result.hazardRatio)
           ? [
               {
-                metric: 'Hazard ratio (Mantel–Haenszel)',
+                metric: copy('Hazard ratio (Mantel–Haenszel)'),
                 value: fmtEst(result.hazardRatio, 3),
                 hrValue: result.hazardRatio,
               },
-              { metric: 'HR CI low', value: fmtEst(result.hrLo, 3) },
-              { metric: 'HR CI high', value: fmtEst(result.hrHi, 3) },
+              { metric: copy('HR CI low'), value: fmtEst(result.hrLo, 3) },
+              { metric: copy('HR CI high'), value: fmtEst(result.hrHi, 3) },
             ]
           : []),
       ],
       notes: [
-        'Il log-rank confronta il numero di eventi osservati in ogni gruppo con quelli attesi se le curve fossero uguali.',
-        'L’hazard ratio è stimato con l’approccio Mantel–Haenszel: HR > 1 indica rischio maggiore nel primo gruppo.',
+        copy('Il log-rank confronta il numero di eventi osservati in ogni gruppo con quelli attesi se le curve fossero uguali.'),
+        copy('L’hazard ratio è stimato con l’approccio Mantel–Haenszel: HR > 1 indica rischio maggiore nel primo gruppo.'),
       ],
     });
   }
@@ -142,18 +143,18 @@ export const survivalTables = (options: SurvivalTablesOptions): TableSpec[] => {
   if (overallLife.length > 0) {
     tables.push({
       id: 'surv-life',
-      title: 'Life table (tutta la coorte)',
-      subtitle: `${overallLife.length} intervalli di uguale ampiezza`,
+      title: copy('Life table (tutta la coorte)'),
+      subtitle: copy('{s1} intervalli di uguale ampiezza', { s1: overallLife.length }),
       columns: [
-        { key: 'start', label: 'Da', format: 'dec2' },
-        { key: 'end', label: 'A', format: 'dec2' },
-        { key: 'atRisk', label: 'A rischio', format: 'int' },
-        { key: 'events', label: 'Eventi', format: 'int' },
-        { key: 'censored', label: 'Censurati', format: 'int' },
-        { key: 'survival', label: 'S(t)', format: 'dec3' },
+        { key: 'start', label: copy('Da'), format: 'dec2' },
+        { key: 'end', label: copy('A'), format: 'dec2' },
+        { key: 'atRisk', label: copy('A rischio'), format: 'int' },
+        { key: 'events', label: copy('Eventi'), format: 'int' },
+        { key: 'censored', label: copy('Censurati'), format: 'int' },
+        { key: 'survival', label: copy('S(t)'), format: 'dec3' },
       ],
       rows: overallLife.map(row => ({ ...row })),
-      notes: ['Nella life table i censurati nell’intervallo contribuiscono per metà al tempo a rischio.'],
+      notes: [copy('Nella life table i censurati nell’intervallo contribuiscono per metà al tempo a rischio.')],
     });
   }
 

@@ -1,6 +1,16 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { LogisticParams } from '../../io/project';
+import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
+import {
+  CheckboxField,
+  Field,
+  VariableList,
+  NumberField,
+  VariableSelect,
+  variableOptions,
+} from '../../components/FormFields';
 
 export interface LogisticFormProps {
   grid: GridData;
@@ -8,84 +18,46 @@ export interface LogisticFormProps {
   setLogisticParams: Dispatch<SetStateAction<LogisticParams>>;
 }
 
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[110px]';
-
 export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: LogisticFormProps) => {
   const { outcome, predictors, cutoff, penalized } = logisticParams;
-
-  const toggle = (index: number) => {
-    setLogisticParams(prev => ({
-      ...prev,
-      predictors: prev.predictors.includes(index)
-        ? prev.predictors.filter(item => item !== index)
-        : [...prev.predictors, index],
-    }));
-  };
-
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Outcome (0/1)</label>
-        <select
-          className={inputClass}
-          value={outcome}
-          onChange={e => setLogisticParams(prev => ({ ...prev, outcome: parseInt(e.target.value, 10) }))}
-        >
-          {grid.cols.map((column, index) => (
-            <option key={index} value={index}>
-              {column.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Predictors (X)</label>
-        <div className="bg-surface3 border border-border2 rounded p-2 min-w-[200px] max-h-[100px] overflow-auto scrollbar">
-          {grid.cols.map((column, index) => (
-            <label
-              key={index}
-              className="flex items-center gap-2 text-[11px] text-text2 hover:text-text cursor-pointer py-0.5"
-            >
-              <input
-                type="checkbox"
-                className="accent-accent"
-                checked={predictors.includes(index)}
-                disabled={index === outcome}
-                onChange={() => toggle(index)}
-              />
-              {column.name}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Penalization</label>
-        <label className="flex items-center gap-1.5 text-[11px] text-text2 cursor-pointer pt-1.5">
-          <input
-            type="checkbox"
-            className="accent-accent"
-            checked={penalized}
-            onChange={e => setLogisticParams(prev => ({ ...prev, penalized: e.target.checked }))}
-          />
-          Firth (penalized)
-        </label>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Cut-off</label>
-        <input
-          type="number"
-          min="0.05"
-          max="0.95"
-          step="0.05"
-          className={`${inputClass} w-20`}
-          value={cutoff}
-          onChange={e => setLogisticParams(prev => ({ ...prev, cutoff: parseFloat(e.target.value) }))}
+    <div className="flex flex-col gap-3">
+      <VariableSelect
+        label={t('form.outcomeBinary')}
+        value={outcome}
+        options={variableOptions(grid.cols)}
+        onChange={value => setLogisticParams(prev => ({ ...prev, outcome: value }))}
+      />
+      <VariableList
+        label={t('form.predictorsX')}
+        cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
+        selected={predictors}
+        disabled={[outcome]}
+        onToggle={(index, checked) =>
+          setLogisticParams(prev => ({
+            ...prev,
+            predictors: checked
+              ? [...prev.predictors, index]
+              : prev.predictors.filter(item => item !== index),
+          }))
+        }
+      />
+      <Field label={t('form.penalization')}>
+        <CheckboxField
+          label={t('form.firth')}
+          checked={penalized}
+          onChange={checked => setLogisticParams(prev => ({ ...prev, penalized: checked }))}
         />
-      </div>
+      </Field>
+      <NumberField
+        label={t('form.cutoff')}
+        value={cutoff}
+        min="0.05"
+        max="0.95"
+        step="0.05"
+        onChange={value => setLogisticParams(prev => ({ ...prev, cutoff: value }))}
+      />
     </div>
   );
 };

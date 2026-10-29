@@ -11,11 +11,15 @@
  * project data, and localStorage has a ~5 MB budget shared with the grid.
  */
 
+import { t } from '../i18n';
+
 export const MAX_STORED_OUTPUTS = 20;
 /** Total HTML kept in the project file / autosave (roughly 20 charts-heavy runs). */
 export const MAX_STORED_OUTPUT_CHARS = 1_500_000;
 /** A single block above this size is not stored (defensive on file load). */
 export const MAX_SINGLE_OUTPUT_CHARS = 600_000;
+/** Parameter snapshots are small; anything larger is not trusted. */
+export const MAX_PARAMS_CHARS = 20_000;
 
 export interface StoredOutput {
   id: string;
@@ -23,8 +27,51 @@ export interface StoredOutput {
   createdAt: string;
   /** Analysis that produced the block, when the run knows it. */
   analysisId?: string;
+  /** Snapshot of the analysis parameters used by the run (re-run/apply). */
+  params?: unknown;
+  /** Signature of those parameters, used for the params-stale badge. */
+  paramsSignature?: string;
+  /** Confidence level used by the run (global setting at that moment). */
+  ciLevel?: number;
+  /** In-session grid revision that produced the card (persisted for reload). */
+  dataRevision?: number;
+  /** Dataset identity that produced the card (persisted for reload). */
+  datasetId?: string;
   html: string;
 }
+
+/** Fields that decide whether a card still matches the current session. */
+export interface OutputFreshness {
+  dataRevision?: number;
+  datasetId?: string;
+  filterSignature?: string;
+  paramsSignature?: string;
+  ciLevel?: number;
+}
+
+/**
+ * A card is stale when any setting that produced it changed. Optional fields
+ * are skipped on both sides so old projects (without the metadata) stay valid.
+ */
+export const isOutputStale = (
+  output: OutputFreshness,
+  current: OutputFreshness
+): boolean =>
+  (output.dataRevision !== undefined &&
+    current.dataRevision !== undefined &&
+    output.dataRevision !== current.dataRevision) ||
+  (output.datasetId !== undefined &&
+    current.datasetId !== undefined &&
+    output.datasetId !== current.datasetId) ||
+  (output.filterSignature !== undefined &&
+    current.filterSignature !== undefined &&
+    output.filterSignature !== current.filterSignature) ||
+  (output.paramsSignature !== undefined &&
+    current.paramsSignature !== undefined &&
+    output.paramsSignature !== current.paramsSignature) ||
+  (output.ciLevel !== undefined &&
+    current.ciLevel !== undefined &&
+    output.ciLevel !== current.ciLevel);
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -52,7 +99,7 @@ export const extractOutputTitle = (html: string): string => {
   );
   const raw = match ? match[1].replace(/<[^>]*>/g, ' ') : '';
   const title = decodeEntities(raw).replace(/\s+/g, ' ').trim();
-  return title || 'Analysis output';
+  return title || t('output.untitled');
 };
 
 /** Keep the newest blocks that fit the count and character budget. */
@@ -79,10 +126,27 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
     if (!html || html.length > MAX_SINGLE_OUTPUT_CHARS) return;
     entries.push({
       id: text(raw.id, `run-${entries.length + 1}`),
-      title: text(raw.title, 'Analysis output'),
+      title: text(raw.title, t('output.untitled')),
       createdAt: text(raw.createdAt, ''),
       ...(typeof raw.analysisId === 'string' && raw.analysisId.length > 0
         ? { analysisId: raw.analysisId.slice(0, 64) }
+        : {}),
+      ...(isRecord(raw.params) || Array.isArray(raw.params)
+        ? JSON.stringify(raw.params).length <= MAX_PARAMS_CHARS
+          ? { params: raw.params }
+          : {}
+        : {}),
+      ...(typeof raw.paramsSignature === 'string' && raw.paramsSignature.length <= 2048
+        ? { paramsSignature: raw.paramsSignature }
+        : {}),
+      ...(typeof raw.ciLevel === 'number' && Number.isFinite(raw.ciLevel) && raw.ciLevel > 0 && raw.ciLevel < 100
+        ? { ciLevel: raw.ciLevel }
+        : {}),
+      ...(typeof raw.dataRevision === 'number' && Number.isInteger(raw.dataRevision) && raw.dataRevision >= 0
+        ? { dataRevision: raw.dataRevision }
+        : {}),
+      ...(typeof raw.datasetId === 'string' && raw.datasetId.length > 0
+        ? { datasetId: raw.datasetId.slice(0, 80) }
         : {}),
       html,
     });

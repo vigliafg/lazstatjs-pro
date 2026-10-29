@@ -1,0 +1,89 @@
+/** pt-PT: report and table prose (normalised). */
+export const countregCopy: Record<string, string> = {
+  '{s1} predittore/i risultano significativi al livello scelto.':
+    '{s1} preditor(es) revelam-se significativos ao nível escolhido.',
+  'AIC':
+    'AIC',
+  'BIC':
+    'BIC',
+  'Coefficienti':
+    'Coeficientes',
+  'Con molti zeri può servire un modello zero-inflated, non disponibile.':
+    'Com muitos zeros pode ser necessário um modelo inflacionado de zeros, não disponível.',
+  'Conteggi non interi':
+    'Contagens não inteiras',
+  'Deviance':
+    'Deviance',
+  'df residui':
+    'df residuais',
+  'Dispersione (Pearson/df)':
+    'Dispersão (Pearson/df)',
+  'Il primo predittore ha IRR = {s1} (CI {s2}%: {s3} – {s4}).':
+    'O primeiro preditor tem IRR = {s1} (CI {s2}%: {s3} – {s4}).',
+  'Il test LR confronta il modello con l’intercetta sola.':
+    'O teste LR compara o modelo com o intercepto apenas.',
+  'IRR':
+    'IRR',
+  'IRR = exp(β): moltiplicatore del tasso atteso per un’unità in più del predittore.':
+    'IRR = exp(β): multiplicador da taxa esperada por mais uma unidade do preditor.',
+  'IRR > 1 indica un tasso atteso più alto per un’unità in più del predittore; IRR < 1 un tasso più basso.':
+    'IRR > 1 indica uma taxa esperada mais alta por mais uma unidade do preditor; IRR < 1 uma taxa mais baixa.',
+  'IRR e CI {s1}%':
+    'IRR e CI {s1}%',
+  'IRR high':
+    'IRR superior',
+  'IRR low':
+    'IRR inferior',
+  'La dispersione è chiaramente sopra 1: il Poisson sottostima l’errore. Usa la negative binomiale.':
+    'A dispersão está claramente acima de 1: o Poisson subestima o erro. Use a binomial negativa.',
+  'La dispersione è compatibile con il modello scelto.':
+    'A dispersão é compatível com o modelo escolhido.',
+  'La regressione per conteggi assume osservazioni indipendenti e una relazione log-lineare.':
+    'A regressão de contagens assume observações independentes e uma relação log-linear.',
+  'Log-verosimiglianza':
+    'Log-verosimilhança',
+  'LR vs modello nullo: χ² = {s1}, p = {s2}.':
+    'LR vs. modelo nulo: χ² = {s1}, p = {s2}.',
+  'LR vs nullo':
+    'LR vs. nulo',
+  'Metrica':
+    'Métrica',
+  'Modello binomiale negativo su {s1} osservazioni (θ = {s2}).':
+    'Modelo binomial negativo com {s1} observações (θ = {s2}).',
+  'Modello di Poisson su {s1} osservazioni; dispersione {s2}.':
+    'Modelo de Poisson com {s1} observações; dispersão {s2}.',
+  'Modello stimato':
+    'Modelo estimado',
+  'N':
+    'N',
+  'Negative binomial (θ = {s1})':
+    'Binomial negativa (θ = {s1})',
+  'Nessun predittore risulta significativo al livello scelto.':
+    'Nenhum preditor se revela significativo ao nível escolhido.',
+  'Overdispersion da valutare':
+    'Sobredispersão a avaliar',
+  'p':
+    'p',
+  'p da z normale; con dispersione stimata i test sono approssimati.':
+    'p por z normal; com dispersão estimada os testes são aproximados.',
+  'p LR':
+    'p do LR',
+  'Poisson assume varianza = media. Dispersione > 1 indica overdispersion: meglio negative binomial.':
+    'Poisson assume variância = média. Dispersão > 1 indica sobredispersão: melhor a binomial negativa.',
+  'Predittori':
+    'Preditores',
+  'Report di regressione per conteggi':
+    'Relatório de regressão de contagens',
+  'SE':
+    'SE',
+  'Sintesi del modello':
+    'Síntese do modelo',
+  'Termine':
+    'Termo',
+  'Valore':
+    'Valor',
+  'z':
+    'z',
+  'β':
+    'β',
+};

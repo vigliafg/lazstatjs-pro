@@ -1,4 +1,5 @@
 import type { TableSpec } from '../types';
+import { copy } from '../reportCopy';
 import { fmtEst, interpretD, interpretR } from '../format';
 import {
   ttestStats,
@@ -30,7 +31,7 @@ const jarqueBeraRow = (label: string, stats: JarqueBeraStats) => {
     df1,
     df2,
     p,
-    note: `JB su N = ${stats.n}`,
+    note: copy('JB su N = {s1}', { s1: stats.n }),
   };
 };
 
@@ -47,29 +48,29 @@ export const ttestTables = (options: TTestTablesOptions): TableSpec[] => {
 
   tables.push({
     id: 'ttest-sample',
-    title: 'Campione e statistiche descrittive',
-    subtitle: `CI ${level}%`,
+    title: copy('Campione e statistiche descrittive'),
+    subtitle: copy('CI {s1}%', { s1: level }),
     columns: [
-      { key: 'group', label: 'Gruppo', format: 'text' },
-      { key: 'n', label: 'N', format: 'int' },
-      { key: 'missing', label: 'Missing', format: 'int' },
-      { key: 'mean', label: 'Mean', format: 'dec4' },
-      { key: 'sd', label: 'SD', format: 'dec4' },
-      { key: 'se', label: 'SE', format: 'dec4' },
-      { key: 'median', label: 'Median', format: 'dec4' },
-      { key: 'min', label: 'Min', format: 'dec4' },
-      { key: 'max', label: 'Max', format: 'dec4' },
-      { key: 'ciLo', label: 'CI low', format: 'dec4' },
-      { key: 'ciHi', label: 'CI high', format: 'dec4' },
+      { key: 'group', label: copy('Gruppo'), format: 'text' },
+      { key: 'n', label: copy('N'), format: 'int' },
+      { key: 'missing', label: copy('Missing'), format: 'int' },
+      { key: 'mean', label: copy('Mean'), format: 'dec4' },
+      { key: 'sd', label: copy('SD'), format: 'dec4' },
+      { key: 'se', label: copy('SE'), format: 'dec4' },
+      { key: 'median', label: copy('Median'), format: 'dec4' },
+      { key: 'min', label: copy('Min'), format: 'dec4' },
+      { key: 'max', label: copy('Max'), format: 'dec4' },
+      { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+      { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
     ],
     rows: sampleRows(stats.samples, name1, name2),
     notes:
       stats.type === 'dep'
         ? [
-            `Solo righe con entrambe le colonne numeriche: ${stats.completePairs} coppie complete, ${stats.excludedPairs} coppie escluse.`,
-            'Le statistiche descrittive dei gruppi sono calcolate sulle sole coppie complete, per coerenza con il test.',
+            copy('Solo righe con entrambe le colonne numeriche: {s1} coppie complete, {s2} coppie escluse.', { s1: stats.completePairs, s2: stats.excludedPairs }),
+            copy('Le statistiche descrittive dei gruppi sono calcolate sulle sole coppie complete, per coerenza con il test.'),
           ]
-        : ['Missing = celle vuote o non numeriche escluse dal calcolo.'],
+        : [copy('Missing = celle vuote o non numeriche escluse dal calcolo.')],
   });
 
   // -------------------------------------------------------------------------
@@ -80,105 +81,105 @@ export const ttestTables = (options: TTestTablesOptions): TableSpec[] => {
 
     tables.push({
       id: 'ttest-main',
-      title: 'Test t per un campione',
-      subtitle: `H₀: μ = ${mu} · due code · α = ${(1 - level / 100).toFixed(2)}`,
+      title: copy('Test t per un campione'),
+      subtitle: copy('H₀: μ = {s1} · due code · α = {s2}', { s1: mu, s2: (1 - level / 100).toFixed(2) }),
       columns: [
-        { key: 'comparison', label: 'Confronto', format: 'text' },
-        { key: 'diff', label: 'Mean − μ₀', format: 'dec4' },
-        { key: 'se', label: 'SE diff', format: 'dec4' },
-        { key: 't', label: 't', format: 'dec3' },
-        { key: 'df', label: 'df', format: 'dec2' },
-        { key: 'p', label: 'p (2 code)', format: 'p' },
-        { key: 'pOne', label: 'p (1 coda)', format: 'p' },
-        { key: 'ciLo', label: 'CI low', format: 'dec4' },
-        { key: 'ciHi', label: 'CI high', format: 'dec4' },
+        { key: 'comparison', label: copy('Confronto'), format: 'text' },
+        { key: 'diff', label: copy('Mean − μ₀'), format: 'dec4' },
+        { key: 'se', label: copy('SE diff'), format: 'dec4' },
+        { key: 't', label: copy('t'), format: 'dec3' },
+        { key: 'df', label: copy('df'), format: 'dec2' },
+        { key: 'p', label: copy('p (2 code)'), format: 'p' },
+        { key: 'pOne', label: copy('p (1 coda)'), format: 'p' },
+        { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+        { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
       ],
       rows: [
         {
-          comparison: `${name1} vs μ₀`,
+          comparison: copy('{s1} vs μ₀', { s1: name1 }),
           ...main,
         },
       ],
       notes: [
-        `CI della differenza: (M − μ₀) ± t(${level}%, df = ${main.df}) · SE.`,
-        'p a una coda riferito alla direzione osservata (metà del p a due code).',
+        copy('CI della differenza: (M − μ₀) ± t({s1}%, df = {s2}) · SE.', { s1: level, s2: main.df }),
+        copy('p a una coda riferito alla direzione osservata (metà del p a due code).'),
       ],
     });
 
     tables.push({
       id: 'ttest-effects',
-      title: 'Effect size',
+      title: copy('Effect size'),
       columns: [
-        { key: 'measure', label: 'Misura', format: 'text' },
-        { key: 'estimate', label: 'Stima', format: 'dec3' },
-        { key: 'ciLo', label: 'CI low', format: 'dec3' },
-        { key: 'ciHi', label: 'CI high', format: 'dec3' },
-        { key: 'note', label: 'Interpretazione', format: 'text' },
+        { key: 'measure', label: copy('Misura'), format: 'text' },
+        { key: 'estimate', label: copy('Stima'), format: 'dec3' },
+        { key: 'ciLo', label: copy('CI low'), format: 'dec3' },
+        { key: 'ciHi', label: copy('CI high'), format: 'dec3' },
+        { key: 'note', label: copy('Interpretazione'), format: 'text' },
       ],
       rows: [
-        { measure: "Cohen's d (one-sample)", estimate: effects.d.estimate, ciLo: effects.d.ciLo, ciHi: effects.d.ciHi, note: interpretD(effects.d.estimate) },
-        { measure: 'Hedges g', estimate: effects.hedgesG.estimate, ciLo: effects.hedgesG.ciLo, ciHi: effects.hedgesG.ciHi, note: interpretD(effects.hedgesG.estimate) },
-        { measure: 'r punto-biseriale', estimate: effects.r.estimate, ciLo: NaN, ciHi: NaN, note: interpretR(effects.r.estimate) },
-        { measure: 'r²', estimate: effects.rSquared.estimate, ciLo: NaN, ciHi: NaN, note: 'quota di varianza spiegata' },
+        { measure: copy("Cohen's d (one-sample)"), estimate: effects.d.estimate, ciLo: effects.d.ciLo, ciHi: effects.d.ciHi, note: interpretD(effects.d.estimate) },
+        { measure: copy('Hedges g'), estimate: effects.hedgesG.estimate, ciLo: effects.hedgesG.ciLo, ciHi: effects.hedgesG.ciHi, note: interpretD(effects.hedgesG.estimate) },
+        { measure: copy('r punto-biseriale'), estimate: effects.r.estimate, ciLo: NaN, ciHi: NaN, note: interpretR(effects.r.estimate) },
+        { measure: copy('r²'), estimate: effects.rSquared.estimate, ciLo: NaN, ciHi: NaN, note: copy('quota di varianza spiegata') },
       ],
       notes: [
-        "d = (M − μ₀) / SD; SE(d) ≈ √(1/N + d²/(2N)); CI normale approssimato.",
-        'Hedges g applica il fattore di correzione per campioni piccoli J = 1 − 3/(4N − 5).',
+        copy("d = (M − μ₀) / SD; SE(d) ≈ √(1/N + d²/(2N)); CI normale approssimato."),
+        copy('Hedges g applica il fattore di correzione per campioni piccoli J = 1 − 3/(4N − 5).'),
       ],
     });
 
     tables.push({
       id: 'ttest-assumptions',
-      title: 'Assunzioni',
+      title: copy('Assunzioni'),
       columns: [
-        { key: 'check', label: 'Controllo', format: 'text' },
-        { key: 'statistic', label: 'Statistica', format: 'dec4' },
-        { key: 'df1', label: 'df1', format: 'dec2' },
-        { key: 'df2', label: 'df2', format: 'dec2' },
-        { key: 'p', label: 'p', format: 'p' },
-        { key: 'note', label: 'Nota', format: 'text' },
+        { key: 'check', label: copy('Controllo'), format: 'text' },
+        { key: 'statistic', label: copy('Statistica'), format: 'dec4' },
+        { key: 'df1', label: copy('df1'), format: 'dec2' },
+        { key: 'df2', label: copy('df2'), format: 'dec2' },
+        { key: 'p', label: copy('p'), format: 'p' },
+        { key: 'note', label: copy('Nota'), format: 'text' },
       ],
       rows: [
         jarqueBeraRow('Jarque–Bera', assumptions.jarqueBera),
-        lillieforsRow('Lilliefors (KS)', assumptions.lilliefors, 'normalità con parametri stimati'),
+        lillieforsRow(copy('Lilliefors (KS)'), assumptions.lilliefors, copy('normalità con parametri stimati')),
       ],
-      notes: ['Con N piccolo i test di normalità hanno potenza limitata: valutare anche il Q-Q plot.'],
+      notes: [copy('Con N piccolo i test di normalità hanno potenza limitata: valutare anche il Q-Q plot.')],
     });
 
     if (nonParam) {
       tables.push({
         id: 'ttest-wilcoxon',
-        title: 'Wilcoxon signed-rank (non parametrico)',
-        subtitle: `H₀: mediana = ${mu}`,
+        title: copy('Wilcoxon signed-rank (non parametrico)'),
+        subtitle: copy('H₀: mediana = {s1}', { s1: mu }),
         columns: [
-          { key: 'nEff', label: 'N effettivo', format: 'int' },
-          { key: 'wPlus', label: 'W⁺', format: 'dec2' },
-          { key: 'wMinus', label: 'W⁻', format: 'dec2' },
-          { key: 'w', label: 'W', format: 'dec2' },
-          { key: 'z', label: 'z', format: 'dec3' },
-          { key: 'p', label: 'p', format: 'p' },
-          { key: 'r', label: 'r = z/√N', format: 'dec3' },
-          { key: 'rb', label: 'Rank-biserial', format: 'dec3' },
+          { key: 'nEff', label: copy('N effettivo'), format: 'int' },
+          { key: 'wPlus', label: copy('W⁺'), format: 'dec2' },
+          { key: 'wMinus', label: copy('W⁻'), format: 'dec2' },
+          { key: 'w', label: copy('W'), format: 'dec2' },
+          { key: 'z', label: copy('z'), format: 'dec3' },
+          { key: 'p', label: copy('p'), format: 'p' },
+          { key: 'r', label: copy('r = z/√N'), format: 'dec3' },
+          { key: 'rb', label: copy('Rank-biserial'), format: 'dec3' },
         ],
         rows: [
           { ...nonParam.wilcoxon },
         ],
         notes: [
-          'Approssimazione normale con correzione di continuità e correzione per i ranghi pari; differenze nulle escluse.',
-          'W riportato = min(W⁺, W⁻); r = z/√N è la dimensione dell’effetto; rank-biserial = (W⁺ − W⁻)/(W⁺ + W⁻).',
+          copy('Approssimazione normale con correzione di continuità e correzione per i ranghi pari; differenze nulle escluse.'),
+          copy('W riportato = min(W⁺, W⁻); r = z/√N è la dimensione dell’effetto; rank-biserial = (W⁺ − W⁻)/(W⁺ + W⁻).'),
         ],
       });
       tables.push({
         id: 'ttest-hl',
-        title: 'Hodges–Lehmann',
+        title: copy('Hodges–Lehmann'),
         columns: [
-          { key: 'estimate', label: 'Stima', format: 'dec4' },
-          { key: 'ciLo', label: 'CI low', format: 'dec4' },
-          { key: 'ciHi', label: 'CI high', format: 'dec4' },
-          { key: 'method', label: 'Metodo', format: 'text' },
+          { key: 'estimate', label: copy('Stima'), format: 'dec4' },
+          { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+          { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
+          { key: 'method', label: copy('Metodo'), format: 'text' },
         ],
-        rows: [{ ...nonParam.hodgesLehmann, method: 'mediana delle differenze; CI bootstrap percentile' }],
-        notes: ['CI bootstrap con 500 repliche e seed fisso; può differire leggermente da software che usa il metodo esatto.'],
+        rows: [{ ...nonParam.hodgesLehmann, method: copy('mediana delle differenze; CI bootstrap percentile') }],
+        notes: [copy('CI bootstrap con 500 repliche e seed fisso; può differire leggermente da software che usa il metodo esatto.')],
       });
     }
   } else if (stats.type === 'ind') {
@@ -186,77 +187,77 @@ export const ttestTables = (options: TTestTablesOptions): TableSpec[] => {
 
     tables.push({
       id: 'ttest-main',
-      title: options.equalVar ? 'Test t per campioni indipendenti (varianze uguali)' : 'Test t di Welch (varianze diseguali)',
-      subtitle: `H₀: μ₁ = μ₂ · due code · α = ${(1 - level / 100).toFixed(2)}`,
+      title: options.equalVar ? copy('Test t per campioni indipendenti (varianze uguali)') : copy('Test t di Welch (varianze diseguali)'),
+      subtitle: copy('H₀: μ₁ = μ₂ · due code · α = {s1}', { s1: (1 - level / 100).toFixed(2) }),
       columns: [
-        { key: 'comparison', label: 'Confronto', format: 'text' },
-        { key: 'diff', label: 'Mean diff (A − B)', format: 'dec4' },
-        { key: 'se', label: 'SE diff', format: 'dec4' },
-        { key: 't', label: 't', format: 'dec3' },
-        { key: 'df', label: 'df', format: 'dec2' },
-        { key: 'p', label: 'p (2 code)', format: 'p' },
-        { key: 'pOne', label: 'p (1 coda)', format: 'p' },
-        { key: 'ciLo', label: 'CI low', format: 'dec4' },
-        { key: 'ciHi', label: 'CI high', format: 'dec4' },
+        { key: 'comparison', label: copy('Confronto'), format: 'text' },
+        { key: 'diff', label: copy('Mean diff (A − B)'), format: 'dec4' },
+        { key: 'se', label: copy('SE diff'), format: 'dec4' },
+        { key: 't', label: copy('t'), format: 'dec3' },
+        { key: 'df', label: copy('df'), format: 'dec2' },
+        { key: 'p', label: copy('p (2 code)'), format: 'p' },
+        { key: 'pOne', label: copy('p (1 coda)'), format: 'p' },
+        { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+        { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
       ],
       rows: [
         {
-          comparison: `${name1} − ${name2}`,
+          comparison: copy('{s1} − {s2}', { s1: name1, s2: name2 }),
           ...main,
         },
       ],
       notes: [
         options.equalVar
-          ? `Varianza pooled: sp² = ((n₁−1)s₁² + (n₂−1)s₂²)/(n₁+n₂−2); df = ${main.df}.`
-          : `Welch–Satterthwaite: SE = √(s₁²/n₁ + s₂²/n₂); df = ${fmtEst(main.df, 2)}.`,
-        `CI della differenza: diff ± t(${level}%, df) · SE.`,
+          ? copy('Varianza pooled: sp² = ((n₁−1)s₁² + (n₂−1)s₂²)/(n₁+n₂−2); df = {s1}.', { s1: main.df })
+          : copy('Welch–Satterthwaite: SE = √(s₁²/n₁ + s₂²/n₂); df = {s1}.', { s1: fmtEst(main.df, 2) }),
+        copy('CI della differenza: diff ± t({s1}%, df) · SE.', { s1: level }),
       ],
     });
 
     tables.push({
       id: 'ttest-effects',
-      title: 'Effect size',
+      title: copy('Effect size'),
       columns: [
-        { key: 'measure', label: 'Misura', format: 'text' },
-        { key: 'estimate', label: 'Stima', format: 'dec3' },
-        { key: 'ciLo', label: 'CI low', format: 'dec3' },
-        { key: 'ciHi', label: 'CI high', format: 'dec3' },
-        { key: 'note', label: 'Interpretazione', format: 'text' },
+        { key: 'measure', label: copy('Misura'), format: 'text' },
+        { key: 'estimate', label: copy('Stima'), format: 'dec3' },
+        { key: 'ciLo', label: copy('CI low'), format: 'dec3' },
+        { key: 'ciHi', label: copy('CI high'), format: 'dec3' },
+        { key: 'note', label: copy('Interpretazione'), format: 'text' },
       ],
       rows: [
-        { measure: "Cohen's d (pooled)", estimate: effects.d.estimate, ciLo: effects.d.ciLo, ciHi: effects.d.ciHi, note: interpretD(effects.d.estimate) },
-        { measure: 'Hedges g', estimate: effects.hedgesG.estimate, ciLo: effects.hedgesG.ciLo, ciHi: effects.hedgesG.ciHi, note: interpretD(effects.hedgesG.estimate) },
-        { measure: 'Glass Δ (SD gruppo A)', estimate: effects.glass.estimate, ciLo: NaN, ciHi: NaN, note: interpretD(effects.glass.estimate) },
-        { measure: 'r punto-biseriale', estimate: effects.r.estimate, ciLo: NaN, ciHi: NaN, note: interpretR(effects.r.estimate) },
-        { measure: 'r²', estimate: effects.rSquared.estimate, ciLo: NaN, ciHi: NaN, note: 'quota di varianza spiegata' },
+        { measure: copy("Cohen's d (pooled)"), estimate: effects.d.estimate, ciLo: effects.d.ciLo, ciHi: effects.d.ciHi, note: interpretD(effects.d.estimate) },
+        { measure: copy('Hedges g'), estimate: effects.hedgesG.estimate, ciLo: effects.hedgesG.ciLo, ciHi: effects.hedgesG.ciHi, note: interpretD(effects.hedgesG.estimate) },
+        { measure: copy('Glass Δ (SD gruppo A)'), estimate: effects.glass.estimate, ciLo: NaN, ciHi: NaN, note: interpretD(effects.glass.estimate) },
+        { measure: copy('r punto-biseriale'), estimate: effects.r.estimate, ciLo: NaN, ciHi: NaN, note: interpretR(effects.r.estimate) },
+        { measure: copy('r²'), estimate: effects.rSquared.estimate, ciLo: NaN, ciHi: NaN, note: copy('quota di varianza spiegata') },
       ],
       notes: [
-        'd = (M₁ − M₂)/sp; SE(d) ≈ √((n₁+n₂)/(n₁n₂) + d²/(2(n₁+n₂))).',
-        'Hedges g = d · J, J = 1 − 3/(4(n₁+n₂) − 9). Glass usa la SD del gruppo A come riferimento.',
+        copy('d = (M₁ − M₂)/sp; SE(d) ≈ √((n₁+n₂)/(n₁n₂) + d²/(2(n₁+n₂))).'),
+        copy('Hedges g = d · J, J = 1 − 3/(4(n₁+n₂) − 9). Glass usa la SD del gruppo A come riferimento.'),
       ],
     });
 
     tables.push({
       id: 'ttest-assumptions',
-      title: 'Assunzioni',
+      title: copy('Assunzioni'),
       columns: [
-        { key: 'check', label: 'Controllo', format: 'text' },
-        { key: 'statistic', label: 'Statistica', format: 'dec4' },
-        { key: 'df1', label: 'df1', format: 'dec2' },
-        { key: 'df2', label: 'df2', format: 'dec2' },
-        { key: 'p', label: 'p', format: 'p' },
-        { key: 'note', label: 'Nota', format: 'text' },
+        { key: 'check', label: copy('Controllo'), format: 'text' },
+        { key: 'statistic', label: copy('Statistica'), format: 'dec4' },
+        { key: 'df1', label: copy('df1'), format: 'dec2' },
+        { key: 'df2', label: copy('df2'), format: 'dec2' },
+        { key: 'p', label: copy('p'), format: 'p' },
+        { key: 'note', label: copy('Nota'), format: 'text' },
       ],
       rows: [
-        { check: 'Levene (media)', ...assumptions.levene, note: 'omoschedasticità' },
-        { check: 'Brown–Forsythe (mediana)', ...assumptions.brownForsythe, note: 'robusto agli outlier' },
-        jarqueBeraRow(`Jarque–Bera ${name1}`, assumptions.jarqueBeraA),
-        jarqueBeraRow(`Jarque–Bera ${name2}`, assumptions.jarqueBeraB),
+        { check: copy('Levene (media)'), ...assumptions.levene, note: copy('omoschedasticità') },
+        { check: copy('Brown–Forsythe (mediana)'), ...assumptions.brownForsythe, note: copy('robusto agli outlier') },
+        jarqueBeraRow(copy('Jarque–Bera {s1}', { s1: name1 }), assumptions.jarqueBeraA),
+        jarqueBeraRow(copy('Jarque–Bera {s1}', { s1: name2 }), assumptions.jarqueBeraB),
       ],
       notes: [
         assumptions.levene.p < 0.05
-          ? 'Levene significativo: l’assunzione di varianze uguali è dubbia, preferire Welch.'
-          : 'Nessuna evidenza di eteroschedasticità a questo livello.',
+          ? copy('Levene significativo: l’assunzione di varianze uguali è dubbia, preferire Welch.')
+          : copy('Nessuna evidenza di eteroschedasticità a questo livello.'),
       ],
     });
 
@@ -265,39 +266,39 @@ export const ttestTables = (options: TTestTablesOptions): TableSpec[] => {
 
       tables.push({
         id: 'ttest-mannwhitney',
-        title: 'Mann–Whitney U (non parametrico)',
+        title: copy('Mann–Whitney U (non parametrico)'),
         columns: [
-          { key: 'group', label: 'Gruppo', format: 'text' },
-          { key: 'n', label: 'N', format: 'int' },
-          { key: 'rankSum', label: 'Rank sum', format: 'dec2' },
-          { key: 'meanRank', label: 'Mean rank', format: 'dec2' },
-          { key: 'u', label: 'U', format: 'dec2' },
-          { key: 'z', label: 'z', format: 'dec3' },
-          { key: 'p', label: 'p', format: 'p' },
-          { key: 'cles', label: 'CLES', format: 'dec3' },
-          { key: 'rb', label: 'Rank-biserial', format: 'dec3' },
+          { key: 'group', label: copy('Gruppo'), format: 'text' },
+          { key: 'n', label: copy('N'), format: 'int' },
+          { key: 'rankSum', label: copy('Rank sum'), format: 'dec2' },
+          { key: 'meanRank', label: copy('Mean rank'), format: 'dec2' },
+          { key: 'u', label: copy('U'), format: 'dec2' },
+          { key: 'z', label: copy('z'), format: 'dec3' },
+          { key: 'p', label: copy('p'), format: 'p' },
+          { key: 'cles', label: copy('CLES'), format: 'dec3' },
+          { key: 'rb', label: copy('Rank-biserial'), format: 'dec3' },
         ],
         rows: [
           { group: name1, ...groupA },
           { group: name2, ...groupB },
         ],
         notes: [
-          'U riportato per ciascun gruppo (U₁ + U₂ = n₁·n₂); la significatività usa U = min(U₁, U₂) con approssimazione normale, correzione di continuità e correzione dei ranghi pari.',
-          'CLES = U₁/(n₁n₂) = probabilità che un valore del gruppo A superi uno del gruppo B; rank-biserial = 2·CLES − 1.',
+          copy('U riportato per ciascun gruppo (U₁ + U₂ = n₁·n₂); la significatività usa U = min(U₁, U₂) con approssimazione normale, correzione di continuità e correzione dei ranghi pari.'),
+          copy('CLES = U₁/(n₁n₂) = probabilità che un valore del gruppo A superi uno del gruppo B; rank-biserial = 2·CLES − 1.'),
         ],
       });
 
       tables.push({
         id: 'ttest-hl',
-        title: 'Hodges–Lehmann',
+        title: copy('Hodges–Lehmann'),
         columns: [
-          { key: 'estimate', label: 'Stima (A − B)', format: 'dec4' },
-          { key: 'ciLo', label: 'CI low', format: 'dec4' },
-          { key: 'ciHi', label: 'CI high', format: 'dec4' },
-          { key: 'method', label: 'Metodo', format: 'text' },
+          { key: 'estimate', label: copy('Stima (A − B)'), format: 'dec4' },
+          { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+          { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
+          { key: 'method', label: copy('Metodo'), format: 'text' },
         ],
-        rows: [{ ...nonParam.hodgesLehmann, method: 'mediana di tutte le differenze A − B; CI bootstrap percentile' }],
-        notes: ['CI bootstrap con 400 repliche e seed fisso.'],
+        rows: [{ ...nonParam.hodgesLehmann, method: copy('mediana di tutte le differenze A − B; CI bootstrap percentile') }],
+        notes: [copy('CI bootstrap con 400 repliche e seed fisso.')],
       });
     }
   } else {
@@ -305,103 +306,103 @@ export const ttestTables = (options: TTestTablesOptions): TableSpec[] => {
 
     tables.push({
       id: 'ttest-main',
-      title: 'Test t per campioni appaiati',
-      subtitle: `H₀: μ_diff = 0 · due code · α = ${(1 - level / 100).toFixed(2)}`,
+      title: copy('Test t per campioni appaiati'),
+      subtitle: copy('H₀: μ_diff = 0 · due code · α = {s1}', { s1: (1 - level / 100).toFixed(2) }),
       columns: [
-        { key: 'comparison', label: 'Confronto', format: 'text' },
-        { key: 'diff', label: 'Mean diff (A − B)', format: 'dec4' },
-        { key: 'se', label: 'SE diff', format: 'dec4' },
-        { key: 't', label: 't', format: 'dec3' },
-        { key: 'df', label: 'df', format: 'dec2' },
-        { key: 'p', label: 'p (2 code)', format: 'p' },
-        { key: 'pOne', label: 'p (1 coda)', format: 'p' },
-        { key: 'ciLo', label: 'CI low', format: 'dec4' },
-        { key: 'ciHi', label: 'CI high', format: 'dec4' },
+        { key: 'comparison', label: copy('Confronto'), format: 'text' },
+        { key: 'diff', label: copy('Mean diff (A − B)'), format: 'dec4' },
+        { key: 'se', label: copy('SE diff'), format: 'dec4' },
+        { key: 't', label: copy('t'), format: 'dec3' },
+        { key: 'df', label: copy('df'), format: 'dec2' },
+        { key: 'p', label: copy('p (2 code)'), format: 'p' },
+        { key: 'pOne', label: copy('p (1 coda)'), format: 'p' },
+        { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+        { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
       ],
       rows: [
         {
-          comparison: `${name1} − ${name2}`,
+          comparison: copy('{s1} − {s2}', { s1: name1, s2: name2 }),
           ...main,
         },
       ],
       notes: [
-        `Differenze calcolate riga per riga su ${completePairs} coppie complete; le righe con una cella mancante sono escluse dall’intero test.`,
-        `CI: diff ± t(${level}%, df = ${main.df}) · SE.`,
+        copy('Differenze calcolate riga per riga su {s1} coppie complete; le righe con una cella mancante sono escluse dall’intero test.', { s1: completePairs }),
+        copy('CI: diff ± t({s1}%, df = {s2}) · SE.', { s1: level, s2: main.df }),
       ],
     });
 
     tables.push({
       id: 'ttest-effects',
-      title: 'Effect size',
+      title: copy('Effect size'),
       columns: [
-        { key: 'measure', label: 'Misura', format: 'text' },
-        { key: 'estimate', label: 'Stima', format: 'dec3' },
-        { key: 'ciLo', label: 'CI low', format: 'dec3' },
-        { key: 'ciHi', label: 'CI high', format: 'dec3' },
-        { key: 'note', label: 'Interpretazione', format: 'text' },
+        { key: 'measure', label: copy('Misura'), format: 'text' },
+        { key: 'estimate', label: copy('Stima'), format: 'dec3' },
+        { key: 'ciLo', label: copy('CI low'), format: 'dec3' },
+        { key: 'ciHi', label: copy('CI high'), format: 'dec3' },
+        { key: 'note', label: copy('Interpretazione'), format: 'text' },
       ],
       rows: [
-        { measure: "Cohen's d_z", estimate: effects.d.estimate, ciLo: effects.d.ciLo, ciHi: effects.d.ciHi, note: interpretD(effects.d.estimate) },
-        { measure: 'Hedges g_z', estimate: effects.hedgesG.estimate, ciLo: effects.hedgesG.ciLo, ciHi: effects.hedgesG.ciHi, note: interpretD(effects.hedgesG.estimate) },
-        { measure: 'r tra le coppie', estimate: effects.r.estimate, ciLo: NaN, ciHi: NaN, note: interpretR(effects.r.estimate) },
-        { measure: 'r²', estimate: effects.rSquared.estimate, ciLo: NaN, ciHi: NaN, note: 'quota di varianza condivisa' },
+        { measure: copy("Cohen's d_z"), estimate: effects.d.estimate, ciLo: effects.d.ciLo, ciHi: effects.d.ciHi, note: interpretD(effects.d.estimate) },
+        { measure: copy('Hedges g_z'), estimate: effects.hedgesG.estimate, ciLo: effects.hedgesG.ciLo, ciHi: effects.hedgesG.ciHi, note: interpretD(effects.hedgesG.estimate) },
+        { measure: copy('r tra le coppie'), estimate: effects.r.estimate, ciLo: NaN, ciHi: NaN, note: interpretR(effects.r.estimate) },
+        { measure: copy('r²'), estimate: effects.rSquared.estimate, ciLo: NaN, ciHi: NaN, note: copy('quota di varianza condivisa') },
       ],
       notes: [
-        'd_z = media delle differenze / SD delle differenze; SE(d_z) ≈ √(1/n + d_z²/(2n)).',
-        'La correlazione tra le coppie descrive l’accoppiamento, non l’effetto del trattamento.',
+        copy('d_z = media delle differenze / SD delle differenze; SE(d_z) ≈ √(1/n + d_z²/(2n)).'),
+        copy('La correlazione tra le coppie descrive l’accoppiamento, non l’effetto del trattamento.'),
       ],
     });
 
     tables.push({
       id: 'ttest-assumptions',
-      title: 'Assunzioni',
+      title: copy('Assunzioni'),
       columns: [
-        { key: 'check', label: 'Controllo', format: 'text' },
-        { key: 'statistic', label: 'Statistica', format: 'dec4' },
-        { key: 'df1', label: 'df1', format: 'dec2' },
-        { key: 'df2', label: 'df2', format: 'dec2' },
-        { key: 'p', label: 'p', format: 'p' },
-        { key: 'note', label: 'Nota', format: 'text' },
+        { key: 'check', label: copy('Controllo'), format: 'text' },
+        { key: 'statistic', label: copy('Statistica'), format: 'dec4' },
+        { key: 'df1', label: copy('df1'), format: 'dec2' },
+        { key: 'df2', label: copy('df2'), format: 'dec2' },
+        { key: 'p', label: copy('p'), format: 'p' },
+        { key: 'note', label: copy('Nota'), format: 'text' },
       ],
       rows: [
-        jarqueBeraRow('Jarque–Bera differenze', assumptions.jarqueBera),
-        lillieforsRow('Lilliefors differenze', assumptions.lilliefors, 'normalità delle differenze'),
+        jarqueBeraRow(copy('Jarque–Bera differenze'), assumptions.jarqueBera),
+        lillieforsRow(copy('Lilliefors differenze'), assumptions.lilliefors, copy('normalità delle differenze')),
       ],
-      notes: ['Il test t appaiato assume normalità delle differenze, non delle due variabili separatamente.'],
+      notes: [copy('Il test t appaiato assume normalità delle differenze, non delle due variabili separatamente.')],
     });
 
     if (nonParam) {
       tables.push({
         id: 'ttest-wilcoxon',
-        title: 'Wilcoxon signed-rank (non parametrico)',
-        subtitle: 'H₀: mediana delle differenze = 0',
+        title: copy('Wilcoxon signed-rank (non parametrico)'),
+        subtitle: copy('H₀: mediana delle differenze = 0'),
         columns: [
-          { key: 'nEff', label: 'N effettivo', format: 'int' },
-          { key: 'wPlus', label: 'W⁺', format: 'dec2' },
-          { key: 'wMinus', label: 'W⁻', format: 'dec2' },
-          { key: 'w', label: 'W', format: 'dec2' },
-          { key: 'z', label: 'z', format: 'dec3' },
-          { key: 'p', label: 'p', format: 'p' },
-          { key: 'r', label: 'r = z/√N', format: 'dec3' },
-          { key: 'rb', label: 'Rank-biserial', format: 'dec3' },
+          { key: 'nEff', label: copy('N effettivo'), format: 'int' },
+          { key: 'wPlus', label: copy('W⁺'), format: 'dec2' },
+          { key: 'wMinus', label: copy('W⁻'), format: 'dec2' },
+          { key: 'w', label: copy('W'), format: 'dec2' },
+          { key: 'z', label: copy('z'), format: 'dec3' },
+          { key: 'p', label: copy('p'), format: 'p' },
+          { key: 'r', label: copy('r = z/√N'), format: 'dec3' },
+          { key: 'rb', label: copy('Rank-biserial'), format: 'dec3' },
         ],
         rows: [
           { ...nonParam.wilcoxon },
         ],
-        notes: ['Approssimazione normale con correzione di continuità e dei ranghi pari; differenze nulle escluse.'],
+        notes: [copy('Approssimazione normale con correzione di continuità e dei ranghi pari; differenze nulle escluse.')],
       });
 
       tables.push({
         id: 'ttest-hl',
-        title: 'Hodges–Lehmann',
+        title: copy('Hodges–Lehmann'),
         columns: [
-          { key: 'estimate', label: 'Stima', format: 'dec4' },
-          { key: 'ciLo', label: 'CI low', format: 'dec4' },
-          { key: 'ciHi', label: 'CI high', format: 'dec4' },
-          { key: 'method', label: 'Metodo', format: 'text' },
+          { key: 'estimate', label: copy('Stima'), format: 'dec4' },
+          { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+          { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
+          { key: 'method', label: copy('Metodo'), format: 'text' },
         ],
-        rows: [{ ...nonParam.hodgesLehmann, method: 'mediana delle differenze; CI bootstrap percentile' }],
-        notes: ['CI bootstrap con 500 repliche e seed fisso.'],
+        rows: [{ ...nonParam.hodgesLehmann, method: copy('mediana delle differenze; CI bootstrap percentile') }],
+        notes: [copy('CI bootstrap con 500 repliche e seed fisso.')],
       });
     }
   }

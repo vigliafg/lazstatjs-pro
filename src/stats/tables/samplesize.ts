@@ -1,4 +1,5 @@
 import { fmtEst } from '../format';
+import { copy } from '../reportCopy';
 import { showInt } from '../reportKit';
 import type { TableSpec } from '../types';
 import type { SampleSizeDesign, SampleSizeOptions, SampleSizeResult } from '../samplesize/types';
@@ -82,90 +83,90 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
   }
 
   const designLabel: Record<SampleSizeDesign, string> = {
-    twoMeans: 'Due medie indipendenti',
-    oneMean: 'Una media',
-    paired: 'Due medie appaiate',
-    twoProportions: 'Due proporzioni',
+    twoMeans: copy('Due medie indipendenti'),
+    oneMean: copy('Una media'),
+    paired: copy('Due medie appaiate'),
+    twoProportions: copy('Due proporzioni'),
     correlation: 'Correlazione',
-    anova: 'ANOVA a una via',
-    tost: 'TOST (equivalenza)',
-    survival: 'Sopravvivenza (log-rank)',
+    anova: copy('ANOVA a una via'),
+    tost: copy('TOST (equivalenza)'),
+    survival: copy('Sopravvivenza (log-rank)'),
   };
 
   const inputRows = [
     { parameter: 'Disegno', value: designLabel[options.design] },
     { parameter: 'α', value: options.alpha.toFixed(3) },
-    { parameter: 'Potenza target', value: `${fmtEst(options.power * 100, 1)}%` },
+    { parameter: copy('Potenza target'), value: copy('{s1}%', { s1: fmtEst(options.power * 100, 1) }) },
     { parameter: 'Code', value: options.tails === 2 ? 'due' : 'una' },
   ];
   if (options.design === 'tost') {
-    inputRows.push({ parameter: 'Differenza attesa', value: fmtEst(options.delta ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Differenza attesa'), value: fmtEst(options.delta ?? NaN, 4) });
     inputRows.push({ parameter: 'SD', value: fmtEst(options.sd ?? NaN, 4) });
-    inputRows.push({ parameter: 'Margine di equivalenza', value: fmtEst(options.margin ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Margine di equivalenza'), value: fmtEst(options.margin ?? NaN, 4) });
   } else if (options.design === 'survival') {
-    inputRows.push({ parameter: 'Hazard ratio', value: fmtEst(options.hazardRatio ?? NaN, 4) });
-    inputRows.push({ parameter: 'Tasso di eventi', value: fmtEst(options.eventRate ?? NaN, 3) });
+    inputRows.push({ parameter: copy('Hazard ratio'), value: fmtEst(options.hazardRatio ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Tasso di eventi'), value: fmtEst(options.eventRate ?? NaN, 3) });
   } else if (options.design === 'twoMeans' || options.design === 'oneMean' || options.design === 'paired') {
-    inputRows.push({ parameter: 'Differenza da rilevare', value: fmtEst(options.delta ?? NaN, 4) });
-    inputRows.push({ parameter: 'SD (dei differenziali se appaiato)', value: fmtEst(options.sd ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Differenza da rilevare'), value: fmtEst(options.delta ?? NaN, 4) });
+    inputRows.push({ parameter: copy('SD (dei differenziali se appaiato)'), value: fmtEst(options.sd ?? NaN, 4) });
   }
   if (options.design === 'twoProportions') {
-    inputRows.push({ parameter: 'Proporzione gruppo 1', value: fmtEst(options.p1 ?? NaN, 4) });
-    inputRows.push({ parameter: 'Proporzione gruppo 2', value: fmtEst(options.p2 ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Proporzione gruppo 1'), value: fmtEst(options.p1 ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Proporzione gruppo 2'), value: fmtEst(options.p2 ?? NaN, 4) });
   }
   if (options.design === 'correlation') {
-    inputRows.push({ parameter: 'r da rilevare', value: fmtEst(options.r ?? NaN, 4) });
+    inputRows.push({ parameter: copy('r da rilevare'), value: fmtEst(options.r ?? NaN, 4) });
   }
   if (options.design === 'anova') {
-    inputRows.push({ parameter: 'Numero di gruppi', value: showInt(options.groups ?? NaN) });
-    inputRows.push({ parameter: "Cohen's f", value: fmtEst(options.f ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Numero di gruppi'), value: showInt(options.groups ?? NaN) });
+    inputRows.push({ parameter: copy("Cohen's f"), value: fmtEst(options.f ?? NaN, 4) });
   }
 
   const tables: TableSpec[] = [];
 
   tables.push({
     id: 'ss-input',
-    title: 'Parametri del piano',
+    title: copy('Parametri del piano'),
     columns: [
-      { key: 'parameter', label: 'Parametro', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'text' },
+      { key: 'parameter', label: copy('Parametro'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'text' },
     ],
     rows: inputRows,
   });
 
   tables.push({
     id: 'ss-result',
-    title: 'Numerosità richiesta',
+    title: copy('Numerosità richiesta'),
     subtitle: result.method,
     columns: [
-      { key: 'metric', label: 'Voce', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'text' },
+      { key: 'metric', label: copy('Voce'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'text' },
     ],
     rows: [
-      { metric: 'n per gruppo', value: showInt(result.nPerGroup) },
-      { metric: 'N totale', value: showInt(result.total) },
-      { metric: 'Effect size', value: fmtEst(result.effectSize, 4) },
-      { metric: 'Potenza raggiunta', value: `${fmtEst(result.achievedPower * 100, 1)}%` },
+      { metric: copy('n per gruppo'), value: showInt(result.nPerGroup) },
+      { metric: copy('N totale'), value: showInt(result.total) },
+      { metric: copy('Effect size'), value: fmtEst(result.effectSize, 4) },
+      { metric: copy('Potenza raggiunta'), value: copy('{s1}%', { s1: fmtEst(result.achievedPower * 100, 1) }) },
       ...(Number.isFinite(precision)
-        ? [{ metric: 'n per un margine di errore richiesto', value: showInt(precision) }]
+        ? [{ metric: copy('n per un margine di errore richiesto'), value: showInt(precision) }]
         : []),
     ],
     notes: [
-      'Il calcolo è iterativo: la numerosità viene aumentata finché la potenza raggiunge quella richiesta.',
-      'La potenza riportata è quella approssimata del disegno, non il target: arrotondando a n intero può superarlo di poco.',
+      copy('Il calcolo è iterativo: la numerosità viene aumentata finché la potenza raggiunge quella richiesta.'),
+      copy('La potenza riportata è quella approssimata del disegno, non il target: arrotondando a n intero può superarlo di poco.'),
     ],
   });
 
   tables.push({
     id: 'ss-curve',
-    title: 'Potenza al variare di n',
-    subtitle: 'per gruppo',
+    title: copy('Potenza al variare di n'),
+    subtitle: copy('per gruppo'),
     columns: [
-      { key: 'n', label: 'n', format: 'int' },
-      { key: 'power', label: 'Potenza', format: 'pct' },
+      { key: 'n', label: copy('n'), format: 'int' },
+      { key: 'power', label: copy('Potenza'), format: 'pct' },
     ],
     rows: curve.map(point => ({ n: point.n, power: Number((point.power * 100).toFixed(1)) })),
-    notes: ['La curva si appiattisce: oltre il punto calcolato ogni osservazione in più compra sempre meno potenza.'],
+    notes: [copy('La curva si appiattisce: oltre il punto calcolato ogni osservazione in più compra sempre meno potenza.')],
   });
 
   return { tables, result };

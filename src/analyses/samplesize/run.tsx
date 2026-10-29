@@ -9,6 +9,7 @@ import { sampleSizeReport, sampleSizeTables } from '../../stats/samplesize';
 import { ResultTables } from '../../components/ResultTable';
 import type { AnalysisRunResult } from '../types';
 import type { SampleSizeParams } from '../../io/project';
+import { t } from '../../i18n';
 
 /**
  * Calcolo, grafico e tabelle della numerosità campionaria.
@@ -56,7 +57,7 @@ export const buildSampleSizeOutput = (params: SampleSizeParams): AnalysisRunResu
               domain={{ y: [0, 100] }}
             >
               <VictoryAxis
-                label="n per gruppo"
+                label={t('chart.nPerGroup')}
                 style={{
                   axis: { stroke: '#333' },
                   axisLabel: { fill: '#888', fontSize: 10, padding: 30 },

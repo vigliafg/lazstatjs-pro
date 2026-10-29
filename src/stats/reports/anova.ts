@@ -1,4 +1,5 @@
 import type { ReportSection, ReportSpec, TableRow, TableSpec } from './shared';
+import { copy } from '../reportCopy';
 import {
   P_SENTENCE, alphaOf, alphaText, ciSentence, describeP, fmtCI, fmtEst, fmtP,
   interpretD, interpretEta, interpretPhi, interpretR, isDecided, num, rowBy,
@@ -35,7 +36,7 @@ export const anovaReport = (input: AnovaReportInput): ReportSpec => {
   const assumptions = rowsOf(tables, 'anova-assumptions');
   const leveneP = num(rowLike(assumptions, 'check', 'levene'), 'p');
   const brownP = num(rowLike(assumptions, 'check', 'brown'), 'p');
-  const sdRatio = num(rowLike(assumptions, 'check', 'rapporto sd'), 'statistic');
+  const sdRatio = num(rowLike(assumptions, 'check', copy('rapporto sd')), 'statistic');
   const welchP = num(rowLike(assumptions, 'check', 'welch'), 'p');
 
   const posthocRows = rowsOf(tables, 'anova-posthoc');
@@ -44,106 +45,106 @@ export const anovaReport = (input: AnovaReportInput): ReportSpec => {
   const kruskalEta = num(kruskal, 'etaH');
 
   const headline = !Number.isFinite(pValue)
-    ? 'L’ANOVA non è calcolabile con i dati disponibili.'
+    ? copy('L’ANOVA non è calcolabile con i dati disponibili.')
     : significant
-      ? `Le medie di ${depName} differiscono tra i gruppi di ${grpName}: F = ${show(f, 3)}, ${describeP(pValue)} (soglia α = ${alpha})${Number.isFinite(eta2) ? `, η² = ${show(eta2, 3)} (effetto ${interpretEta(eta2)})` : ''}.`
-      : `Non emerge una differenza tra le medie di ${depName} nei gruppi di ${grpName}: F = ${show(f, 3)}, ${describeP(pValue)} (soglia α = ${alpha}).`;
+      ? copy('Le medie di {s1} differiscono tra i gruppi di {s2}: F = {s3}, {s4} (soglia α = {s5}){s6}.', { s1: depName, s2: grpName, s3: show(f, 3), s4: describeP(pValue), s5: alpha, s6: Number.isFinite(eta2) ? copy(', η² = {s1} (effetto {s2})', { s1: show(eta2, 3), s2: interpretEta(eta2) }) : '' })
+      : copy('Non emerge una differenza tra le medie di {s1} nei gruppi di {s2}: F = {s3}, {s4} (soglia α = {s5}).', { s1: depName, s2: grpName, s3: show(f, 3), s4: describeP(pValue), s5: alpha });
 
   const groupBullets = groups.map(group => {
     const label = text(group, 'group');
-    return `${label}: n = ${showInt(num(group, 'n'))}, media ${show(num(group, 'mean'), 2)} (CI ${level}% ${showCI(num(group, 'ciLo'), num(group, 'ciHi'), 2)}), mediana ${show(num(group, 'median'), 2)}, SD ${show(num(group, 'sd'), 2)}.`;
+    return copy('{s1}: n = {s2}, media {s3} (CI {s4}% {s5}), mediana {s6}, SD {s7}.', { s1: label, s2: showInt(num(group, 'n')), s3: show(num(group, 'mean'), 2), s4: level, s5: showCI(num(group, 'ciLo'), num(group, 'ciHi'), 2), s6: show(num(group, 'median'), 2), s7: show(num(group, 'sd'), 2) });
   });
 
   const posthocBullets = posthocRows.map(row => {
     const comparison = text(row, 'comparison');
     const pAdj = num(row, 'pAdj');
     const d = num(row, 'd');
-    return `${comparison}: differenza ${show(num(row, 'diff'), 3)}, ${describeP(pAdj, 'p corretto')} → ${isDecided(pAdj, level) ? 'differenza significativa' : 'nessuna differenza affidabile'}${Number.isFinite(d) ? `; Cohen’s d = ${show(d, 2)} (${interpretD(d)})` : ''}.`;
+    return copy('{s1}: differenza {s2}, {s3} → {s4}{s5}.', { s1: comparison, s2: show(num(row, 'diff'), 3), s3: describeP(pAdj, copy('p corretto')), s4: isDecided(pAdj, level) ? copy('differenza significativa') : copy('nessuna differenza affidabile'), s5: Number.isFinite(d) ? copy('; Cohen’s d = {s1} ({s2})', { s1: show(d, 2), s2: interpretD(d) }) : '' });
   });
 
   const sections: ReportSection[] = [
-    { heading: 'Medie dei gruppi', bullets: groupBullets },
+    { heading: copy('Medie dei gruppi'), bullets: groupBullets },
     {
-      heading: 'Il test principale',
+      heading: copy('Il test principale'),
       bullets: [
-        `Statistica F = ${show(f, 3)} con df = (${show(dfBetween, 0)}, ${showInt(dfWithin)}).`,
-        `${describeP(pValue, 'p-value')} (soglia α = ${alpha}).`,
+        copy('Statistica F = {s1} con df = ({s2}, {s3}).', { s1: show(f, 3), s2: show(dfBetween, 0), s3: showInt(dfWithin) }),
+        copy('{s1} (soglia α = {s2}).', { s1: describeP(pValue, 'p-value'), s2: alpha }),
         significant
-          ? 'Almeno una media di gruppo è diversa dalle altre: l’ipotesi nulla di medie tutte uguali viene rifiutata.'
-          : 'L’ipotesi nulla di medie tutte uguali non viene rifiutata: i dati non mostrano differenze affidabili tra i gruppi.',
-        `Varianza spiegata dai gruppi: η² = ${show(eta2, 3)}, cioè circa il ${show(eta2 * 100, 1)}% della variabilità totale di ${depName}.`,
-        Number.isFinite(omega2) ? `ω² = ${show(omega2, 3)}: stima meno distorta della quota di varianza spiegata nella popolazione.` : '',
+          ? copy('Almeno una media di gruppo è diversa dalle altre: l’ipotesi nulla di medie tutte uguali viene rifiutata.')
+          : copy('L’ipotesi nulla di medie tutte uguali non viene rifiutata: i dati non mostrano differenze affidabili tra i gruppi.'),
+        copy('Varianza spiegata dai gruppi: η² = {s1}, cioè circa il {s2}% della variabilità totale di {s3}.', { s1: show(eta2, 3), s2: show(eta2 * 100, 1), s3: depName }),
+        Number.isFinite(omega2) ? copy('ω² = {s1}: stima meno distorta della quota di varianza spiegata nella popolazione.', { s1: show(omega2, 3) }) : '',
       ].filter(Boolean),
     },
   ];
 
   if (posthocRows.length > 0) {
     sections.push({
-      heading: `Confronti post-hoc (${postHoc})`,
+      heading: copy('Confronti post-hoc ({s1})', { s1: postHoc }),
       body: [
-        'L’ANOVA dice solo che i gruppi non sono tutti uguali: per sapere quali coppie differiscono servono i confronti a coppie, con p già corretti per il numero di confronti.',
+        copy('L’ANOVA dice solo che i gruppi non sono tutti uguali: per sapere quali coppie differiscono servono i confronti a coppie, con p già corretti per il numero di confronti.'),
       ],
       bullets: posthocBullets,
     });
   }
 
   sections.push({
-    heading: 'Assunzioni e robustezza',
+    heading: copy('Assunzioni e robustezza'),
     bullets: [
       Number.isFinite(leveneP)
-        ? `Omoschedasticità: Levene ${describeP(leveneP)}${Number.isFinite(brownP) ? `, Brown–Forsythe ${describeP(brownP)}` : ''} → ${leveneP < alphaOf(level) ? 'varianze non omogenee, quindi l’ANOVA classica è a rischio e conviene usare Welch o Kruskal–Wallis' : 'assunzione di varianze uguali plausibile'}.`
-        : 'Omoschedasticità non verificabile con questi dati.',
-      Number.isFinite(sdRatio) ? `Rapporto tra SD massima e minima: ${show(sdRatio, 2)} (valori molto sopra 2 indicano gruppi con dispersione diversa).` : '',
-      Number.isFinite(welchP) ? `Welch ANOVA: ${describeP(welchP)} → ${isDecided(welchP, level) ? 'conferma la differenza tra le medie anche senza assumere varianze uguali' : 'non conferma la differenza quando le varianze sono libere di differire'}.` : '',
-      'I gruppi dovrebbero provenire da osservazioni indipendenti: la stessa unità non deve comparire in due gruppi.',
+        ? copy('Omoschedasticità: Levene {s1}{s2} → {s3}.', { s1: describeP(leveneP), s2: Number.isFinite(brownP) ? copy(', Brown–Forsythe {s1}', { s1: describeP(brownP) }) : '', s3: leveneP < alphaOf(level) ? copy('varianze non omogenee, quindi l’ANOVA classica è a rischio e conviene usare Welch o Kruskal–Wallis') : copy('assunzione di varianze uguali plausibile') })
+        : copy('Omoschedasticità non verificabile con questi dati.'),
+      Number.isFinite(sdRatio) ? copy('Rapporto tra SD massima e minima: {s1} (valori molto sopra 2 indicano gruppi con dispersione diversa).', { s1: show(sdRatio, 2) }) : '',
+      Number.isFinite(welchP) ? copy('Welch ANOVA: {s1} → {s2}.', { s1: describeP(welchP), s2: isDecided(welchP, level) ? copy('conferma la differenza tra le medie anche senza assumere varianze uguali') : copy('non conferma la differenza quando le varianze sono libere di differire') }) : '',
+      copy('I gruppi dovrebbero provenire da osservazioni indipendenti: la stessa unità non deve comparire in due gruppi.'),
     ].filter(Boolean),
   });
 
   if (useNonParam && kruskal) {
     sections.push({
-      heading: 'Alternativa non parametrica',
+      heading: copy('Alternativa non parametrica'),
       bullets: [
-        `Kruskal–Wallis: H = ${show(num(kruskal, 'h'), 3)} con df = ${showInt(num(kruskal, 'df'))}, ${describeP(kruskalP)} → ${isDecided(kruskalP, level) ? 'conferma che almeno un gruppo si distribuisce diversamente' : 'non conferma differenze tra i gruppi'}.`,
-        Number.isFinite(kruskalEta) ? `η²_H = ${show(kruskalEta, 3)}: dimensione dell’effetto stimata sui ranghi.` : '',
-        'Confronta i due esiti: se divergono, il risultato parametrico dipende dall’assunzione di normalità e va presentato con maggiore prudenza.',
+        copy('Kruskal–Wallis: H = {s1} con df = {s2}, {s3} → {s4}.', { s1: show(num(kruskal, 'h'), 3), s2: showInt(num(kruskal, 'df')), s3: describeP(kruskalP), s4: isDecided(kruskalP, level) ? copy('conferma che almeno un gruppo si distribuisce diversamente') : copy('non conferma differenze tra i gruppi') }),
+        Number.isFinite(kruskalEta) ? copy('η²_H = {s1}: dimensione dell’effetto stimata sui ranghi.', { s1: show(kruskalEta, 3) }) : '',
+        copy('Confronta i due esiti: se divergono, il risultato parametrico dipende dall’assunzione di normalità e va presentato con maggiore prudenza.'),
       ].filter(Boolean),
     });
   }
 
   sections.push({
-    heading: 'Come leggere i numeri',
+    heading: copy('Come leggere i numeri'),
     bullets: [
       P_SENTENCE,
-      'F confronta la variabilità tra i gruppi con quella dentro i gruppi: valori vicini a 1 indicano che i gruppi non si distinguono.',
-      'η² (eta quadro) è la quota di variabilità spiegata dal fattore: 0.01 piccolo, 0.06 medio, 0.14 grande.',
-      'I p post-hoc sono già corretti: usali al posto dei p dei singoli t-test, che sarebbero troppo ottimisti.',
+      copy('F confronta la variabilità tra i gruppi con quella dentro i gruppi: valori vicini a 1 indicano che i gruppi non si distinguono.'),
+      copy('η² (eta quadro) è la quota di variabilità spiegata dal fattore: 0.01 piccolo, 0.06 medio, 0.14 grande.'),
+      copy('I p post-hoc sono già corretti: usali al posto dei p dei singoli t-test, che sarebbero troppo ottimisti.'),
     ],
   });
 
   sections.push({
-    heading: 'In pratica',
+    heading: copy('In pratica'),
     body: [
       significant
-        ? `Il fattore ${grpName} spiega una parte ${Number.isFinite(eta2) ? interpretEta(eta2) : 'non quantificabile'} della variabilità di ${depName}. Per capire quali gruppi si distinguono, leggi i confronti post-hoc qui sopra.`
-        : `Non ci sono prove sufficienti che ${grpName} sposti ${depName}. Con gruppi piccoli l’ANOVA ha poca potenza: l’assenza di significatività non equivale all’assenza di effetto.`,
+        ? copy('Il fattore {s1} spiega una parte {s2} della variabilità di {s3}. Per capire quali gruppi si distinguono, leggi i confronti post-hoc qui sopra.', { s1: grpName, s2: Number.isFinite(eta2) ? interpretEta(eta2) : copy('non quantificabile'), s3: depName })
+        : copy('Non ci sono prove sufficienti che {s1} sposti {s2}. Con gruppi piccoli l’ANOVA ha poca potenza: l’assenza di significatività non equivale all’assenza di effetto.', { s1: grpName, s2: depName }),
     ],
   });
 
   return {
     id: 'report-anova',
-    title: 'Report di lettura — ANOVA a una via',
+    title: copy('Report di lettura — ANOVA a una via'),
     headline,
-    badge: significant ? 'Gruppi diversi' : 'Nessuna differenza',
+    badge: significant ? copy('Gruppi diversi') : copy('Nessuna differenza'),
     tone: significant ? 'caution' : 'neutral',
     intro: [
-      `Verifica se la media di ${depName} cambia tra i livelli del fattore ${grpName}. L’ipotesi nulla è che tutte le medie dei gruppi siano uguali.`,
-      'L’ANOVA confronta la variabilità tra i gruppi con quella interna ai gruppi: se i gruppi differiscono davvero, la prima è grande rispetto alla seconda.',
+      copy('Verifica se la media di {s1} cambia tra i livelli del fattore {s2}. L’ipotesi nulla è che tutte le medie dei gruppi siano uguali.', { s1: depName, s2: grpName }),
+      copy('L’ANOVA confronta la variabilità tra i gruppi con quella interna ai gruppi: se i gruppi differiscono davvero, la prima è grande rispetto alla seconda.'),
     ],
     sections,
     limitations: [
-      'L’ANOVA richiede osservazioni indipendenti: misure ripetute sulla stessa unità richiedono un modello per dati appaiati.',
-      'Con gruppi molto sbilanciati o varianze molto diverse il test classico può dare p inaffidabili: usa Welch ANOVA o Kruskal–Wallis.',
-      'La significatività globale non dice quali gruppi differiscono: servono sempre i confronti post-hoc.',
+      copy('L’ANOVA richiede osservazioni indipendenti: misure ripetute sulla stessa unità richiedono un modello per dati appaiati.'),
+      copy('Con gruppi molto sbilanciati o varianze molto diverse il test classico può dare p inaffidabili: usa Welch ANOVA o Kruskal–Wallis.'),
+      copy('La significatività globale non dice quali gruppi differiscono: servono sempre i confronti post-hoc.'),
     ],
   };
 };

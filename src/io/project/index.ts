@@ -15,6 +15,8 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
   app: PROJECT_APP,
   version: PROJECT_VERSION,
   savedAt,
+  ...(input.datasetId ? { datasetId: input.datasetId } : {}),
+  ...(input.dataRevision !== undefined ? { dataRevision: input.dataRevision } : {}),
   grid: {
     cols: input.grid.cols.map((col) => ({
       ...col,
@@ -33,6 +35,11 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
         title: entry.title,
         createdAt: entry.createdAt,
         ...(entry.analysisId ? { analysisId: entry.analysisId } : {}),
+        ...(entry.params !== undefined ? { params: entry.params } : {}),
+        ...(entry.paramsSignature ? { paramsSignature: entry.paramsSignature } : {}),
+        ...(entry.ciLevel !== undefined ? { ciLevel: entry.ciLevel } : {}),
+        ...(entry.dataRevision !== undefined ? { dataRevision: entry.dataRevision } : {}),
+        ...(entry.datasetId ? { datasetId: entry.datasetId } : {}),
         html: entry.html,
       }))
   ),
@@ -50,7 +57,7 @@ export const parseProject = (text: string): ProjectSnapshot => {
   }
   if (!isRecord(raw)) throw new Error('Not a valid .lzs project');
   if (raw.app !== PROJECT_APP) throw new Error('Not a LazStats project file');
-  if (raw.version !== PROJECT_VERSION) {
+  if (raw.version !== 1 && raw.version !== PROJECT_VERSION) {
     throw new Error(
       typeof raw.version === 'number'
         ? `Unsupported project version ${raw.version} (expected ${PROJECT_VERSION})`
@@ -66,6 +73,14 @@ export const parseProject = (text: string): ProjectSnapshot => {
       typeof raw.savedAt === 'string' && Number.isFinite(Date.parse(raw.savedAt))
         ? raw.savedAt
         : new Date().toISOString(),
+    ...(typeof raw.datasetId === 'string' && raw.datasetId.length > 0
+      ? { datasetId: raw.datasetId.slice(0, 80) }
+      : {}),
+    ...(typeof raw.dataRevision === 'number' &&
+    Number.isInteger(raw.dataRevision) &&
+    raw.dataRevision >= 0
+      ? { dataRevision: raw.dataRevision }
+      : {}),
     grid,
     prefs: normalizePrefs(isRecord(raw.prefs) ? (raw.prefs as Partial<IoPreferences>) : {}),
     settings: parseSettings(raw.settings),

@@ -4,6 +4,7 @@ import { MAX_COLS, MAX_ROWS } from '../readers';
 import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
+import { isActiveLocale, isHelpLocale, isLocale } from '../../i18n/locales';
 import {
   DEFAULT_PARAMS, DEFAULT_SETTINGS,
   type ProjectParams, type ProjectSettings,
@@ -204,6 +205,16 @@ export const parseGrid = (value: unknown): GridData => {
       levels && typeof record.reference === 'string' && levels.some((level) => level.value === record.reference)
         ? record.reference
         : undefined;
+    const missing = Array.isArray(record.missing)
+      ? Array.from(
+          new Set(
+            record.missing
+              .filter((value): value is string => typeof value === 'string')
+              .map(value => value.trim().slice(0, 40))
+              .filter(Boolean)
+          )
+        ).slice(0, 20)
+      : [];
     return {
       id:
         typeof record.id === 'string' && record.id.trim()
@@ -219,6 +230,10 @@ export const parseGrid = (value: unknown): GridData => {
         : {}),
       ...(levels ? { levels } : {}),
       ...(reference ? { reference } : {}),
+      ...(missing.length ? { missing } : {}),
+      ...(typeof record.formula === 'string' && record.formula.trim()
+        ? { formula: record.formula.trim().slice(0, 500) }
+        : {}),
     };
   });
 
@@ -513,6 +528,11 @@ export const parseSettings = (value: unknown): ProjectSettings => {
       activeTab === 'analysis' || activeTab === 'settings' || activeTab === 'data' || activeTab === 'help'
         ? activeTab
         : DEFAULT_SETTINGS.activeTab,
+    uiMode: raw.uiMode === 'expert' ? 'expert' : 'guided',
+    // Locales are optional: projects saved before multilingual support keep working.
+    uiLocale: isActiveLocale(raw.uiLocale) ? raw.uiLocale : DEFAULT_SETTINGS.uiLocale,
+    reportLocale: isLocale(raw.reportLocale) ? raw.reportLocale : DEFAULT_SETTINGS.reportLocale,
+    helpLocale: isHelpLocale(raw.helpLocale) ? raw.helpLocale : DEFAULT_SETTINGS.helpLocale,
   };
 };
 

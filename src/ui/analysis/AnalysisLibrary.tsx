@@ -12,6 +12,7 @@ import {
   Layers,
   LineChart,
   Search,
+  Star,
   Table2,
   TrendingUp,
   X,
@@ -20,12 +21,18 @@ import {
 import {
   ANALYSIS_FAMILIES,
   ANALYSIS_TABS,
+  alphabeticalAnalyses,
   analysisMeta,
   filterAnalyses,
   groupByFamily,
   type AnalysisFamilyId,
   type AnalysisMeta,
+  analysisDescription,
+  analysisLabel,
+  familyLabel,
 } from '../../analyses/registry';
+import { loadFavorites, saveFavorites } from './favorites';
+import { t } from '../../i18n';
 
 const FAMILY_ICONS: Record<AnalysisFamilyId, LucideIcon> = {
   guided: Compass,
@@ -41,6 +48,7 @@ const FAMILY_ICONS: Record<AnalysisFamilyId, LucideIcon> = {
 };
 
 export interface AnalysisLibraryProps {
+  id?: string;
   activeAnalysis: string;
   recent: readonly string[];
   onSelect: (id: string) => void;
@@ -50,49 +58,99 @@ export interface AnalysisLibraryProps {
 const AnalysisItem = ({
   meta,
   active,
+  favorite,
   onSelect,
+  onToggleFavorite,
 }: {
   key?: string;
   meta: AnalysisMeta;
   active: boolean;
+  favorite: boolean;
   onSelect: (id: string) => void;
+  onToggleFavorite: (id: string) => void;
 }) => (
+  <div className="group relative">
   <button
     type="button"
+    data-analysis-item={meta.id}
     onClick={() => onSelect(meta.id)}
-    title={meta.description}
+    title={analysisDescription(meta)}
     aria-current={active ? 'true' : undefined}
-    className={`group w-full rounded border-l-2 px-2 py-1.5 text-left transition-colors ${
+    className={`w-full rounded border-l-2 px-2 py-1.5 pr-7 text-left transition-colors ${
       active
         ? 'border-accent bg-accent/10 text-text'
         : 'border-transparent text-text2 hover:bg-surface3 hover:text-text'
     }`}
   >
     <span className="flex items-center gap-1.5">
-      <span className="truncate text-[11px] font-medium">{meta.label}</span>
+      <span className="truncate text-[11px] font-medium">{analysisLabel(meta.id)}</span>
       {meta.cost === 'heavy' && (
         <span
           className="ml-auto shrink-0 rounded border border-yellow/25 bg-yellow/5 px-1 font-mono text-[8px] uppercase tracking-wider text-yellow/80"
-          title="Heavy computation: run explicitly"
+          title={t('analysis.heavyHint')}
         >
-          heavy
+          {t('analysis.heavy')}
         </span>
       )}
     </span>
     <span className="mt-0.5 block truncate text-[9px] leading-tight text-text3">
-      {meta.description}
+      {analysisDescription(meta)}
     </span>
   </button>
+  <button
+    type="button"
+    onClick={() => onToggleFavorite(meta.id)}
+    aria-label={favorite ? `${t('analysis.favoriteRemove')} ${analysisLabel(meta.id)} ${t('analysis.favoriteRemoveSuffix')}` : `${t('analysis.favoriteAdd')} ${analysisLabel(meta.id)} ${t('analysis.favoriteSuffix')}`}
+    aria-pressed={favorite}
+    className={`absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded ${
+      favorite ? 'text-yellow' : 'text-text3/60 opacity-0 group-hover:opacity-100 focus:opacity-100'
+    }`}
+  >
+    <Star className="h-3 w-3" fill={favorite ? 'currentColor' : 'none'} />
+  </button>
+  </div>
 );
 
 /** Searchable, family-grouped analysis chooser. */
 export const AnalysisLibrary = ({
+  id,
   activeAnalysis,
   recent,
   onSelect,
   onClose,
 }: AnalysisLibraryProps) => {
   const [query, setQuery] = useState('');
+  const [favorites, setFavorites] = useState<string[]>(() =>
+    loadFavorites(ANALYSIS_TABS.map(meta => meta.id))
+  );
+  const [alphabetical, setAlphabetical] = useState(false);
+  const [welcome, setWelcome] = useState(() => {
+    try {
+      return typeof localStorage === 'undefined' || localStorage.getItem('lazstats.onboarded') !== '1';
+    } catch {
+      return false;
+    }
+  });
+
+  const dismissWelcome = () => {
+    try {
+      localStorage.setItem('lazstats.onboarded', '1');
+    } catch {
+      // Storage disabled: dismiss for this session only.
+    }
+    setWelcome(false);
+  };
+
+  const toggleFavorite = (id: string) => {
+    setFavorites(previous => {
+      const next = previous.includes(id)
+        ? previous.filter(item => item !== id)
+        : [...previous, id];
+      saveFavorites(next);
+      return next;
+    });
+  };
+
   const activeFamily = analysisMeta(activeAnalysis)?.family;
   const [collapsed, setCollapsed] = useState<Set<AnalysisFamilyId>>(
     () =>
@@ -111,7 +169,15 @@ export const AnalysisLibrary = ({
     });
   }, [activeFamily]);
 
-  const groups = useMemo(() => groupByFamily(filterAnalyses(query)), [query]);
+  const results = useMemo(() => filterAnalyses(query), [query]);
+  const groups = useMemo(() => groupByFamily(results), [results]);
+  const flat = useMemo(
+    () => (alphabetical ? alphabeticalAnalyses(results) : null),
+    [alphabetical, results]
+  );
+  const favoriteItems = favorites
+    .map(id => analysisMeta(id))
+    .filter((meta): meta is AnalysisMeta => Boolean(meta));
   const normalizedQuery = query.trim();
   const recentItems = normalizedQuery
     ? []
@@ -133,17 +199,36 @@ export const AnalysisLibrary = ({
   const count = groups.reduce((sum, group) => sum + group.analyses.length, 0);
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface">
+    <div
+      id={id}
+      tabIndex={-1}
+      aria-label={t('analysis.libraryTitle')}
+      className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
+    >
       <div className="shrink-0 border-b border-border p-3">
         <div className="mb-2 flex items-center justify-between gap-2">
           <div>
             <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-text3">
-              Analysis library
+              {t('analysis.libraryTitle')}
             </p>
-            <p className="mt-0.5 text-[10px] text-text3">
-              {normalizedQuery
-                ? `${count} match${count === 1 ? '' : 'es'}`
-                : `${ANALYSIS_TABS.length} procedures · ${ANALYSIS_FAMILIES.length} families`}
+            <p className="mt-0.5 flex items-center gap-2 text-[10px] text-text3">
+              <span>
+                {normalizedQuery
+                  ? `${count} ${count === 1 ? t('analysis.matchOne') : t('analysis.matchMany')}`
+                  : `${ANALYSIS_TABS.length} ${t('analysis.procedures')} · ${ANALYSIS_FAMILIES.length} ${t('analysis.families')}`}
+              </span>
+              <button
+                type="button"
+                onClick={() => setAlphabetical(value => !value)}
+                aria-pressed={alphabetical}
+                aria-label={t('analysis.sortAz')}
+                title={t('analysis.flatAz')}
+                className={`rounded border px-1 font-mono text-[8px] ${
+                  alphabetical ? 'border-accent text-accent' : 'border-border2 text-text3'
+                }`}
+              >
+                {t('analysis.az')}
+              </button>
             </p>
           </div>
           {onClose && (
@@ -151,7 +236,7 @@ export const AnalysisLibrary = ({
               type="button"
               onClick={onClose}
               className="tb-btn flex h-6 w-6 items-center justify-center px-0 lg:hidden"
-              aria-label="Close analysis library"
+              aria-label={t('analysis.closeLibrary')}
             >
               <X className="h-3 w-3" />
             </button>
@@ -174,8 +259,8 @@ export const AnalysisLibrary = ({
               }
               if (event.key === 'Escape') setQuery('');
             }}
-            placeholder="Search analyses…"
-            aria-label="Search analyses"
+            placeholder={t('analysis.searchPlaceholder')}
+            aria-label={t('analysis.searchAria')}
             className="w-full rounded border border-border2 bg-surface3 py-1.5 pl-7 pr-7 text-[11px] text-text placeholder:text-text3 focus:border-accent focus:outline-none"
           />
           {query && (
@@ -183,7 +268,7 @@ export const AnalysisLibrary = ({
               type="button"
               onClick={() => setQuery('')}
               className="absolute right-1.5 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
-              aria-label="Clear search"
+              aria-label={t('analysis.clearSearch')}
             >
               <X className="h-3 w-3" />
             </button>
@@ -191,13 +276,94 @@ export const AnalysisLibrary = ({
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto scrollbar p-2">
+      <div
+        className="min-h-0 flex-1 overflow-auto scrollbar p-2"
+        onKeyDown={event => {
+          if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+          const items = Array.from(
+            document.querySelectorAll<HTMLButtonElement>('[data-analysis-item]')
+          );
+          if (items.length === 0) return;
+          const current = items.indexOf(document.activeElement as HTMLButtonElement);
+          let next = current;
+          if (event.key === 'ArrowDown') next = current < 0 ? 0 : Math.min(items.length - 1, current + 1);
+          if (event.key === 'ArrowUp') next = current < 0 ? 0 : Math.max(0, current - 1);
+          if (event.key === 'Home') next = 0;
+          if (event.key === 'End') next = items.length - 1;
+          event.preventDefault();
+          items[next]?.focus();
+        }}
+      >
+        {normalizedQuery.length === 0 && welcome && (
+          <section className="mb-3 rounded border border-accent/30 bg-accent/5 p-2">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="font-mono text-[9px] uppercase tracking-widest text-accent2">
+                  {t('analysis.welcome')}
+                </p>
+                <p className="mt-0.5 text-[10px] leading-relaxed text-text3">
+                  {t('analysis.welcomeHint')}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={dismissWelcome}
+                className="text-[9px] text-text3 hover:text-text"
+              >
+                {t('analysis.welcomeDismiss')}
+              </button>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-1">
+              {[
+                ['descriptive', t('analysis.welcomeDescribe')],
+                ['ttest', t('analysis.welcomeCompare')],
+                ['regression', t('analysis.welcomePredict')],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className="tb-btn px-1.5 py-0.5 text-[9px]"
+                  onClick={() => {
+                    dismissWelcome();
+                    onSelect(id);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {normalizedQuery.length === 0 && favoriteItems.length > 0 && (
+          <section className="mb-3">
+            <div className="flex items-center gap-1.5 px-2 py-1">
+              <Star className="h-3 w-3 text-yellow" fill="currentColor" />
+              <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
+                {t('analysis.favorites')}
+              </span>
+            </div>
+            <div className="space-y-0.5">
+              {favoriteItems.map(meta => (
+                <AnalysisItem
+                  key={`favorite-${meta.id}`}
+                  meta={meta}
+                  active={meta.id === activeAnalysis}
+                  favorite={favorites.includes(meta.id)}
+                  onSelect={onSelect}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {recentItems.length > 0 && (
           <section className="mb-3">
             <div className="flex items-center gap-1.5 px-2 py-1">
               <Clock3 className="h-3 w-3 text-text3" />
               <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
-                Recent
+                {t('analysis.recent')}
               </span>
             </div>
             <div className="space-y-0.5">
@@ -206,14 +372,36 @@ export const AnalysisLibrary = ({
                   key={`recent-${meta.id}`}
                   meta={meta}
                   active={meta.id === activeAnalysis}
+                  favorite={favorites.includes(meta.id)}
                   onSelect={onSelect}
+                  onToggleFavorite={toggleFavorite}
                 />
               ))}
             </div>
           </section>
         )}
 
-        {groups.map(group => {
+        {flat && (
+          <section>
+            <div className="mb-1 px-2 font-mono text-[9px] uppercase tracking-widest text-text3">
+              {t('analysis.az')}
+            </div>
+            <div className="space-y-0.5">
+              {flat.map(meta => (
+                <AnalysisItem
+                  key={`az-${meta.id}`}
+                  meta={meta}
+                  active={meta.id === activeAnalysis}
+                  favorite={favorites.includes(meta.id)}
+                  onSelect={onSelect}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {!flat && groups.map(group => {
           const Icon = FAMILY_ICONS[group.family.id];
           const open = normalizedQuery.length > 0 || !collapsed.has(group.family.id);
           return (
@@ -226,7 +414,7 @@ export const AnalysisLibrary = ({
               >
                 <Icon className="h-3 w-3 shrink-0 text-text3" />
                 <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
-                  {group.family.label}
+                  {familyLabel(group.family)}
                 </span>
                 <span className="ml-auto font-mono text-[9px] text-text3/70">
                   {group.analyses.length}
@@ -244,7 +432,9 @@ export const AnalysisLibrary = ({
                       key={meta.id}
                       meta={meta}
                       active={meta.id === activeAnalysis}
+                      favorite={favorites.includes(meta.id)}
                       onSelect={onSelect}
+                      onToggleFavorite={toggleFavorite}
                     />
                   ))}
                 </div>
@@ -255,9 +445,9 @@ export const AnalysisLibrary = ({
 
         {count === 0 && (
           <div className="px-3 py-8 text-center">
-            <p className="text-[11px] text-text2">No analysis found.</p>
+            <p className="text-[11px] text-text2">{t('analysis.noResults')}</p>
             <p className="mt-1 text-[10px] text-text3">
-              Try a model name, a data problem or a keyword.
+              {t('analysis.noResultsHint')}
             </p>
           </div>
         )}
@@ -265,9 +455,9 @@ export const AnalysisLibrary = ({
 
       <div
         className="shrink-0 border-t border-border px-3 py-2 font-mono text-[9px] uppercase tracking-wider text-text3"
-        title="Ctrl/Cmd+K: search · Ctrl/Cmd+Enter: run"
+        title={t('analysis.shortcutTitle')}
       >
-        Ctrl/⌘K search
+        {t('analysis.shortcutSearch')}
       </div>
     </div>
   );

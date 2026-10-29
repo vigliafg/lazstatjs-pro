@@ -8,6 +8,7 @@ import {
   familyOf,
   filterAnalyses,
   groupByFamily,
+  alphabeticalAnalyses,
 } from './registry';
 
 test('analysis registry has unique ids and valid families', () => {
@@ -36,6 +37,20 @@ test('filterAnalyses matches labels, descriptions, keywords and families', () =>
   assert.ok(filterAnalyses('random intercept').some(meta => meta.id === 'lmm'));
   assert.deepEqual(filterAnalyses('definitely-not-an-analysis'), []);
   assert.equal(filterAnalyses('').length, ANALYSIS_TABS.length);
+});
+
+test('search ranks label matches above descriptions and keeps ties stable', () => {
+  assert.equal(filterAnalyses('anova').some(meta => meta.id === 'anova'), true);
+  assert.equal(filterAnalyses('anova').some(meta => meta.id === 'factorial'), true);
+  assert.equal(filterAnalyses('descript')[0].id, 'descriptive');
+  assert.deepEqual(
+    filterAnalyses('cox').map(meta => meta.id),
+    ['cox', 'stratcox', 'tdcox']
+  );
+
+  const alphabet = alphabeticalAnalyses(filterAnalyses(''));
+  const labels = alphabet.map(meta => meta.label.toLowerCase());
+  assert.deepEqual(labels, [...labels].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })));
 });
 
 test('groupByFamily keeps every analysis exactly once', () => {

@@ -9,6 +9,7 @@ import {
   moveColumn as moveGridColumn,
 } from '../grid/ops';
 import type { ProjectParams } from '../io/project';
+import { t } from '../i18n';
 
 interface Options {
   grid: GridData;
@@ -34,8 +35,8 @@ export const useColumnOperations = ({
     if (result.invalidated.length > 0) {
       const count = result.invalidated.length;
       showToast(
-        'Columns',
-        `${count} analysis role${count === 1 ? '' : 's'} need reselection`,
+        t('toast.columns'),
+        `${count} ${count === 1 ? t('columns.roleNeed') : t('columns.rolesNeed')} ${t('columns.needReselection')}`,
         'warn'
       );
     }

@@ -11,13 +11,13 @@ export const GOAL_LABELS: Record<WizardGoal, string> = {
 };
 
 export const WIZARD_GOALS: { id: WizardGoal; label: string; hint: string }[] = [
-  { id: 'describe', label: 'Descrivere i dati', hint: 'Centro, dispersione, forma' },
-  { id: 'compare', label: 'Confrontare gruppi', hint: 'Differenze tra medie o distribuzioni' },
-  { id: 'associate', label: 'Studiare un’associazione', hint: 'Due variabili si muovono insieme?' },
-  { id: 'predict', label: 'Prevedere un esito', hint: 'Regressione, logistica o Cox' },
-  { id: 'survive', label: 'Tempo fino a un evento', hint: 'Sopravvivenza e censura' },
-  { id: 'forecast', label: 'Prevedere una serie', hint: 'Trend, stagionalità, ARIMA' },
-  { id: 'plan', label: 'Pianificare lo studio', hint: 'Numerosità e potenza' },
+  { id: 'describe', label: 'Describe the data', hint: 'Centre, spread, shape' },
+  { id: 'compare', label: 'Compare groups', hint: 'Differences between means or distributions' },
+  { id: 'associate', label: 'Study an association', hint: 'Do two variables move together?' },
+  { id: 'predict', label: 'Predict an outcome', hint: 'Regression, logistic or Cox' },
+  { id: 'survive', label: 'Time to an event', hint: 'Survival and censoring' },
+  { id: 'forecast', label: 'Forecast a series', hint: 'Trend, seasonality, ARIMA' },
+  { id: 'plan', label: 'Plan the study', hint: 'Sample size and power' },
 ];
 
 export const goalLabel = (goal: WizardGoal): string => GOAL_LABELS[goal];

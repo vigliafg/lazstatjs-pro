@@ -1,6 +1,7 @@
 # UI — stato attuale e backlog
 
-> Aggiornato al commit `79c099c` (`main`, allineato a `origin/main`).
+> Aggiornato dopo la chiusura del backlog UI (UI-01…UI-11); griglia in
+> [`GRID-STATE.md`](GRID-STATE.md).
 > Checkpoint griglia: [`GRID-STATE.md`](GRID-STATE.md).
 > Questo documento fotografa la UI dopo il workbench a tre zone e fissa il
 > lavoro rimanente prima della fase dedicata a inserimento ed editing dei dati.
@@ -14,12 +15,13 @@ workbench in tre zone:
 2. **Setup** — parametri della procedura attiva e Run.
 3. **Output** — documento a schede con outline, collapse e salto al Setup.
 
-La scoperta delle procedure e la configurazione sono ora allineate al flusso
-mentale dell'utente. L'iterazione non lo è ancora: manca il ciclo completo
-*rileggi la card → applica i suoi parametri → cambia i dati → rilancia*.
+La scoperta, la configurazione e l'iterazione sono ora allineate al flusso
+mentale dell'utente: *rileggi la card → applica i suoi parametri → cambia i
+dati → rilancia* è chiuso da UI-01.
 
-**Valutazione sintetica: 8/10 come primo blocco di ricostruzione.**
-Architettura giusta, esecuzione solida, iterazione incompleta.
+**Valutazione sintetica: 8.5/10.** Architettura giusta, esecuzione solida,
+iterazione chiusa; restano debiti di accessibilità, performance full-grid e
+messaggi di dominio.
 
 ## 2. Com'è fatta la UI oggi
 
@@ -27,7 +29,7 @@ Architettura giusta, esecuzione solida, iterazione incompleta.
 
 | Area | Stato | Note |
 |---|---|---|
-| **Data** | invariata nella sostanza | Griglia, tipi, livelli, clean, transform, validazione, filtro, import/export, progetti |
+| **Data** | evoluta | Griglia, tipi, livelli, missing code, formule persistenti, virtualizzazione, inspector, clean, transform, validazione, filtro, import/export, progetti |
 | **Analysis** | ricostruita | Workbench a tre zone |
 | **Settings** | invariata | Alcuni controlli generali restano non collegati |
 | **Help** | aggiornata ai nuovi flussi | Contenuto ancora in parte ereditato dalla vecchia UI |
@@ -101,21 +103,21 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 
 | File | Ruolo | Righe |
 |---|---|---|
-| `src/ui/AnalysisTab.tsx` | Shell del workbench, pane, focus, scorciatoie | ~220 |
-| `src/ui/analysis/AnalysisLibrary.tsx` | Libreria, ricerca, famiglie, recenti, badge | ~274 |
-| `src/ui/analysis/AnalysisOptions.tsx` | Setup, CI, switch sui 31 form, Run | ~417 |
-| `src/ui/analysis/types.ts` | Contratto `AnalysisTabProps` | ~123 |
+| `src/ui/AnalysisTab.tsx` | Shell del workbench, pane, focus, scorciatoie | 246 |
+| `src/ui/analysis/AnalysisLibrary.tsx` | Libreria, ricerca, famiglie, recenti, badge | 404 |
+| `src/ui/analysis/AnalysisOptions.tsx` | Setup, CI, switch sui 31 form, Run | 645 |
+| `src/ui/analysis/types.ts` | Contratto `AnalysisTabProps` | 49 |
 | `src/ui/analysis/useRecentAnalyses.ts` | Recenti in `localStorage` | ~39 |
-| `src/ui/OutputConsole.tsx` | Documento output, card, outline, azioni | ~298 |
-| `src/analyses/registry.ts` | Metadati UI + registro analisi | ~354 |
+| `src/ui/OutputConsole.tsx` | Documento output, card, outline, azioni | 448 |
+| `src/analyses/registry.ts` | Metadati UI + registro analisi | 380 |
 | `src/io/outputs.ts` | Snapshot + `analysisId` | invariato nella sostanza |
 | `src/io/project/index.ts` | Persistenza `analysisId` | invariato nella sostanza |
 | `src/index.css` | Card output, Run, focus ring, header | modificato |
 | `src/help/helpContent.ts` | Help allineato al workbench | aggiornato |
 
-I 31 form non sono stati riscritti: sono il contenuto del pannello Setup. Questo
-ha tenuto basso il rischio, ma significa che la struttura interna dei form è
-ancora quella di prima.
+I 31 form sono stati migrati alle primitive condivise, senza riscrivere i
+kernel: il pannello Setup resta lo stesso contenitore e il rischio è rimasto
+basso.
 
 ## 4. Cosa è completo
 
@@ -133,6 +135,19 @@ ancora quella di prima.
 - [x] Chi-Square e Contingency compatti per il pannello stretto.
 - [x] Help, README e ARCHITECTURE aggiornati.
 - [x] Test del registro e della persistenza di `analysisId`.
+- [x] Snapshot dei parametri nella card, **Re-run** e **Apply** dal risultato.
+- [x] Stale anche quando cambiano i parametri dell'analisi.
+- [x] **Live-run** per le procedure `instant`, con debounce e card unica.
+- [x] Output workspace: filtro per analisi, pin, copia card, conferma Clear.
+- [x] Store context/reducer e riduzione di `AnalysisTabProps` da 88 a 38 props.
+- [x] Form system condiviso (`Field`, `VariableSelect`, `Advanced`, …).
+- [x] Ricerca con ranking, preferiti e indice A–Z, navigazione da tastiera.
+- [x] Settings onesta: azioni di sessione e progetti recenti.
+- [x] Shell i18n centralizzata e footer/aria-live responsive.
+- [x] Bundle senza warning: pannelli, help, IO e runners lazy.
+- [x] Suite Playwright per il workspace analisi (desktop + mobile).
+- [x] Potenziamento per ricercatore/studente: Guided/Expert, onboarding, preset, NumberField, re-run all, report Word, export codice, backup IndexedDB, schema v2, error boundary.
+- [x] Rilievi UI R8–R18 chiusi: stato vuoto, live token, a11y, ruoli, resize, vista, performance, freschezza, toolbar/categoria (`docs/plans/2026-10-29-chiusura-rilievi-ui.md`).
 
 ## 5. Valutazione
 
@@ -147,34 +162,35 @@ ancora quella di prima.
 - **La tastiera è di prima classe.** Ricerca, selezione e run hanno una via
   completa senza mouse.
 
-### 5.2 Limiti
+### 5.2 Limiti residui
 
-1. **Iterazione parziale.** Il badge `stale` ora copre dati e filtro, ma non ci
-   sono ancora re-run con i parametri storici, “apply parameters” o live-run.
-   La card è un risultato da leggere, non ancora un'analisi da riaprire e
-   rilanciare.
-2. **Store unico, contratto ancora largo.** `App.tsx` ha ora un solo stato
-   `params` con setter tipizzati, ma `AnalysisTab` riceve ancora oltre 70 props.
-   Manca un context/reducer per `AnalysisId` e la riduzione del contratto.
-3. **Form non strutturati internamente.** Le sezioni sono generiche; alcuni
-   hint sono in italiano, la shell in inglese.
-4. **Nessun test UI automatico.** Lo smoke test con Playwright è stato manuale.
-5. **Ricerca semplice.** Prefisso, nessun ranking, nessuna fuzzy, nessun
-   preferito.
-6. **Settings parzialmente dimostrative.** Separatore decimale e cifre
-   significative non sono collegati.
-7. **Tablet stretto.** A 1024 px tre pannelli sono al limite; le tabelle larghe
-   scorrono.
-8. **Bundle grande.** Il warning Vite >500 kB resta.
+1. **Live-run solo su richiesta.** Le procedure `instant` si aggiornano con il
+   toggle *Live* e 500 ms di debounce; non è il default e le `heavy` restano
+   esplicite.
+2. **Contratto del workspace ancora ampio.** `AnalysisTabProps` è sceso da 88 a
+   38 props e le slice passano dal reducer, ma griglia, output e ruoli restano
+   props esplicite.
+3. **Form system completo.** Tutti i 31 pannelli usano le primitive condivise
+   (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`,
+   `CheckboxField`).
+4. **i18n della chrome statica.** Shell, form, editor dati, dialoghi e
+   messaggi di toast passano da `src/i18n.ts`. Restano fuori perimetro: il
+   catalogo delle analisi (label/descrizioni), help e report (prosa italiana),
+   i messaggi di dominio dei kernel e i sentinel dei titoli output.
+5. **Preferiti locali.** Il ranking è per parole (non fuzzy) e i preferiti
+   vivono in `localStorage`.
+6. **Settings senza recent cliccabili.** I progetti recenti sono un elenco di
+   nomi: senza File System Access non possono essere riaperti con un click.
+7. **Filtro analysis non persistito.** Revision, dataset e CI sopravvivono al
+   reload; la firma del filtro no, quindi una card con filtro analysis non viene
+   confrontata dopo reload (limite documentato in `GRID-STATE`).
 
 ### 5.3 Debito tecnico
 
-- `AnalysisTabProps` è un contratto unico ma enorme.
-- I form hanno classi e layout duplicati; mancano primitive condivise.
-- `outputs` contiene HTML + nodo React, ma non i parametri che hanno prodotto il
-  run: il re-run richiede un'estensione dello snapshot.
-- La UI non ha un livello di test DOM; l'unica verifica è manuale.
-- La lingua non è decisa: shell inglese, report e hint italiani.
+- `AnalysisTabProps` è ancora un contratto unico ampio.
+- I nomi dei metodi statistici restano non tradotti (sono nomi propri).
+- I preferiti non sono persistiti nel progetto `.lzs` (solo browser).
+- Help e report sono contenuto italiano, non stringhe di chrome.
 
 ## 6. Backlog
 
@@ -185,28 +201,25 @@ Priorità:
 - **P2** — qualità e produttività.
 - **P3** — rifinitura e scala.
 
-| ID | Pri | Intervento | Risultato atteso | Dipendenze | Rischio |
-|---|---|---|---|---|---|
-| **UI-01** | P0 | Iteration loop: salvare i parametri nella card, re-run, apply parameters | La card diventa un'analisi riapribile e rilanciabile; lo stale su dati/filtro è già fatto | UI-02 | Medio |
-| **UI-02** | P0 | Completare lo store: context/reducer per `AnalysisId` e riduzione delle props | Store unico già presente in App; mancano context/reducer e un contratto più stretto | — | Alto |
-| **UI-03** | P1 | Suite Playwright: ricerca, selezione, run, collapse, outline, Setup, mobile, reload | Regressioni UI intercettate in CI | — | Basso/medio |
-| **UI-04** | P2 | Live-run per le analisi `instant`, debounce, stato `running`/`idle` | Feedback immediato in stile JASP; heavy restano esplicite | UI-02, UI-01 | Medio |
-| **UI-05** | P2 | Output workspace: filtro per analisi, pin/confronto, copia card, conferma Clear | Più controllo su sessioni lunghe | UI-01 | Basso |
-| **UI-06** | P2 | Form system: `Field`, `Section`, `VariableSlot`, `Advanced`, validazione inline | Form coerenti e sezioni reali, non un blocco unico | UI-02 | Medio |
-| **UI-07** | P2 | Responsive/a11y: due pannelli a 1024, footer mobile, focus management, `aria-live` | Uso solido su tablet e tastiera | — | Basso |
-| **UI-08** | P3 | Ricerca con ranking/fuzzy, preferiti, indice alfabetico, navigazione da tastiera | Libreria che regge 50+ procedure | — | Basso |
-| **UI-09** | P3 | Settings e progetto: collegare o rimuovere i controlli demo; File menu e recenti | UI onesta e sessione più gestibile | — | Basso/medio |
-| **UI-10** | P3 | i18n: decidere lingua e centralizzare le stringhe | Shell, help, report e hint coerenti | Decisione | Medio |
-| **UI-11** | P3 | Code splitting di stats/charts e pannelli lazy | Bundle sotto il warning; first load più rapido | — | Basso/medio |
+| ID | Pri | Intervento | Stato | Note |
+|---|---|---|---|---|
+| **UI-01** | P0 | Iteration loop: parametri nella card, re-run, apply | **Fatto** | `params`/`paramsSignature` nello snapshot; Re-run e Apply nella card; stale anche sui parametri |
+| **UI-02** | P0 | Store context/reducer e riduzione props | **Fatto** | `ui/analysis/store.tsx`; 88 → 38 props; `applyAnalysisAction` testato |
+| **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 17 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria, CI/stale, filtro rimosso, live off, label form, predittori categorici, breakpoint |
+| **UI-04** | P2 | Live-run `instant` con debounce e stato | **Fatto** | Toggle Live, 500 ms, card unica sostituita, indicatore “syncing” |
+| **UI-05** | P2 | Output workspace: filtro, pin, copia, conferma Clear | **Fatto** | Filtro per analisi, pin in cima, copia card, conferma su Clear |
+| **UI-06** | P2 | Form system condiviso | **Fatto** | `Field`, `Section`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`; **tutti i 31 form** migrati |
+| **UI-07** | P2 | Responsive/a11y | **Fatto** | Footer mobile, focus dei pannelli, `aria-live`, libreria nascosta sotto 1280 px |
+| **UI-08** | P3 | Ricerca con ranking, preferiti, A–Z, tastiera | **Fatto** | Punteggio per label/keyword/descrizione, preferiti, indice piatto, frecce/Home/End |
+| **UI-09** | P3 | Settings e progetto | **Fatto** | Rimossi i controlli demo; azioni di sessione; elenco progetti recenti |
+| **UI-10** | P3 | i18n | **Fatto (chrome statica)** | Lingua UI = inglese; chrome statica di shell, form, editor dati, dialoghi e toast in `src/i18n.ts`; catalogo, help/report e messaggi di dominio restano contenuto, per scelta esplicita |
+| **UI-11** | P3 | Code splitting | **Fatto** | `AnalysisTab`, help, import/export e runners lazy; chunk vendor separati; nessun warning >500 kB |
 
-### Ordine consigliato
+### Esito
 
-1. **UI-01** — iteration loop (params snapshot, re-run, apply).
-2. **UI-02** — completare context/reducer e ridurre le props.
-3. **UI-03** — test UI.
-4. **UI-04 / UI-05** — live-run e output workspace.
-5. **UI-06 / UI-07** — coerenza dei form e rifinitura responsive.
-6. **UI-08 / UI-09 / UI-10 / UI-11** — scala e rifinitura.
+Tutti i blocchi sono chiusi, inclusi i rilievi R8–R18. Restano fuori perimetro
+il catalogo delle analisi, help/report e i messaggi di dominio; i preferiti
+restano locali al browser per scelta.
 
 ## 7. Criteri di accettazione
 
@@ -231,8 +244,8 @@ Priorità:
 - **Il live-run può bloccare il thread** perché i kernel sono sincroni. Senza
   worker, va limitato alle analisi davvero economiche e con debounce.
 - **I test UI richiedono Playwright e un browser in CI.** È una dipendenza nuova.
-- **La UI può sembrare una vetrina senza il loop di iterazione.** UI-01 è il
-  confine tra "bella navigazione" e "flusso di lavoro completo".
+- **Il costo full-grid va tenuto sotto controllo.** Footer, validazione e
+  scansioni delle righe non devono tornare a bloccare il typing a 50k righe.
 
 ## 9. Prossima fase: inserimento ed editing dei dati
 
@@ -318,26 +331,19 @@ La scheda Data ha già:
 
 ### 9.6 Esito dell'analisi
 
-La relazione attuale griglia↔analisi è di tipo **snapshot, non linked**:
+La relazione griglia↔analisi è **snapshot con identità stabile**:
 
-- l'analisi legge la griglia al Run;
-- i parametri sono indici di colonna, non identità stabili;
-- il filtro è view-only;
-- le modifiche ai dati non invalidano l'output;
-- la selezione della griglia non arriva all'analisi.
+- l'analisi legge la griglia al Run, con i codici missing già azzerati;
+- i parametri sono indici rimappati tramite `Column.id`;
+- il filtro è view-only per default, con modalità analysis-filter esplicita;
+- ogni modifica incrementa `dataRevision` e marca `stale` le card dipendenti;
+- la colonna focalizzata può essere assegnata a qualsiasi ruolo dal Setup;
+- un cambio tipo incompatibile con il ruolo blocca il Run e chiede di
+  riselezionare la variabile.
 
-Il difetto più grave è il **remap mancante**: inserire, eliminare o spostare una
-colonna può far puntare i parametri a un'altra variabile senza avviso. Lo stesso
-vale per split, merge, duplicate e per il cambio di dataset con New/Import. Va
-corretto prima di ogni altra evoluzione (DE-0, matrice completa in
-`docs/DATA-EDITING-ANALYSIS.md` §3.6).
-
-Raccomandazione: una sola griglia + Variable Inspector a drawer + ponte
-dati↔analisi esplicito. Multi-tabella solo se diventa un requisito di prodotto.
-
-Implementazione: DE-0, DE-1 e parte di DE-2/DE-3/DE-4 sono stati realizzati;
-checkpoint operativo in [`GRID-STATE.md`](GRID-STATE.md), stato dettagliato e
-blocchi deferred in `docs/DATA-EDITING-ANALYSIS.md` §12.
+DE-0..DE-7 sono completati. Checkpoint operativo in
+[`GRID-STATE.md`](GRID-STATE.md), stato dettagliato e blocchi deferred in
+`docs/DATA-EDITING-ANALYSIS.md` §12.
 
 ## 10. Decisioni aperte
 

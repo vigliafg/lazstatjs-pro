@@ -5,6 +5,7 @@ import { miReport } from '../../stats/reports/mi';
 import type { Dataset } from '../../grid/types';
 import type { MiParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { isFiniteNumber } from '../shared/numbers';
 
 export interface MiInput {
   grid: Dataset;
@@ -16,6 +17,12 @@ export interface MiInput {
 export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunResult => {
   if (params.variables.length === 0) {
     return { ok: false, reason: 'Select at least one variable' };
+  }
+  if (!isFiniteNumber(params.imputations) || params.imputations < 2) {
+    return { ok: false, reason: 'Imputations must be a finite number of at least 2' };
+  }
+  if (!isFiniteNumber(params.iterations) || params.iterations < 1) {
+    return { ok: false, reason: 'Iterations must be a finite number of at least 1' };
   }
   const stats = miStats({
     rows: grid.rows,

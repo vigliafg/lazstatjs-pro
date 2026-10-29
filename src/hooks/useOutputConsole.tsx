@@ -4,7 +4,7 @@ import { AnalysisReport } from '../components/AnalysisReport';
 import { copyText } from '../io/clipboard';
 import { exportChartsAsPng } from '../io/chartExport';
 import { buildReportFromElement } from '../io/reportExport';
-import { buildResultsWorkbookFromElement, XLSX_MIME } from '../io/xlsx';
+
 import { downloadBytes, downloadText } from '../io/writers';
 import { capStoredOutputs, extractOutputTitle, type StoredOutput } from '../io/outputs';
 import { nonEmptyRowCount } from '../grid/types';
@@ -12,12 +12,15 @@ import type { GridData } from '../grid/types';
 import type { ReportSpec } from '../stats/report';
 import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
 import type { Toast } from './useToasts';
+import { t, translate, type Locale } from '../i18n';
 
 interface UseOutputConsoleOptions {
   /** Blocchi ripristinati dal progetto/autosave. */
   initial?: StoredOutput[];
   grid: GridData;
   ciLevel: number;
+  /** Language of the exported document; the console chrome follows the UI. */
+  reportLocale: Locale;
   showToast: (title: string, msg: string, type?: Toast['type']) => void;
 }
 
@@ -28,7 +31,8 @@ interface UseOutputConsoleOptions {
  * snapshot HTML statico, così la console sopravvive a reload e file `.lzs`.
  * Gli export lavorano sul DOM già renderizzato: nessun ricalcolo.
  */
-export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutputConsoleOptions) => {
+export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToast }: UseOutputConsoleOptions) => {
+  const reportText = (key: Parameters<typeof translate>[1]): string => translate(reportLocale, key);
   const [outputs, setOutputs] = useState<OutputEntry[]>(() => restoredOutputs(initial));
   const runSeq = useRef(0);
 
@@ -56,12 +60,22 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     node: ReactNode,
     report: ReportSpec | null,
     analysisId?: string,
-    meta?: { dataRevision?: number; datasetId?: string; filterSignature?: string }
+    meta?: {
+      dataRevision?: number;
+      datasetId?: string;
+      filterSignature?: string;
+      params?: unknown;
+      paramsSignature?: string;
+      ciLevel?: number;
+      live?: boolean;
+    }
   ) => {
     const block = (
       <>
         {node}
-        {report && <AnalysisReport spec={report} />}
+        {report && (
+          <AnalysisReport spec={report} limitationsLabel={reportText('report.limitations')} />
+        )}
       </>
     );
     let html = '';
@@ -79,20 +93,31 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       ...(meta?.dataRevision !== undefined ? { dataRevision: meta.dataRevision } : {}),
       ...(meta?.datasetId ? { datasetId: meta.datasetId } : {}),
       ...(meta?.filterSignature ? { filterSignature: meta.filterSignature } : {}),
+      ...(meta?.params !== undefined ? { params: meta.params } : {}),
+      ...(meta?.paramsSignature ? { paramsSignature: meta.paramsSignature } : {}),
+      ...(meta?.ciLevel !== undefined ? { ciLevel: meta.ciLevel } : {}),
+      ...(meta?.live ? { live: true } : {}),
       html,
       node: block,
     };
-    setOutputs(prev => capStoredOutputs([...prev, entry]));
+    setOutputs(prev => {
+      // A live run owns one card per analysis: replace it instead of stacking
+      // a new result on every keystroke.
+      const base = meta?.live
+        ? prev.filter(item => !(item.live && item.analysisId === analysisId))
+        : prev;
+      return capStoredOutputs([...base, entry]);
+    });
   };
 
   const clearOutput = () => {
     setOutputs([]);
-    showToast('Output', 'Output console cleared', 'ok');
+    showToast(t('toast.output'), t('output.cleared'), 'ok');
   };
 
   const removeOutput = (index: number) => {
     setOutputs(prev => prev.filter((_, i) => i !== index));
-    showToast('Output', 'Result block removed', 'ok');
+    showToast(t('toast.output'), t('output.removed'), 'ok');
   };
 
   const copyOutput = async () => {
@@ -109,7 +134,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     const text = clone.innerText;
     clone.remove();
     const ok = await copyText(text);
-    showToast('Output', ok ? 'Output copied to clipboard' : 'Could not copy the output', ok ? 'ok' : 'error');
+    showToast(t('toast.output'), ok ? t('output.copied') : t('output.copyFailed'), ok ? 'ok' : 'error');
   };
 
   const exportChartPngs = async () => {
@@ -117,36 +142,49 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     if (!el) return;
     const result = await exportChartsAsPng(el, 'lazstats-chart');
     if (result.exported === 0 && result.failed === 0) {
-      showToast('Charts', 'No charts in the output console yet', 'warn');
+      showToast(t('toast.charts'), t('output.noCharts'), 'warn');
     } else if (result.failed > 0) {
-      showToast('Charts', `${result.exported} chart(s) exported, ${result.failed} failed`, 'warn');
+      showToast(t('toast.charts'), `${result.exported} ${t('output.chartsPartial')} ${result.failed} ${t('output.failed')}`, 'warn');
     } else {
-      showToast('Charts', `${result.exported} chart(s) exported as PNG`, 'ok');
+      showToast(t('toast.charts'), `${result.exported} ${t('output.chartsExported')}`, 'ok');
     }
   };
 
-  const exportResultsXlsx = () => {
+  const exportResultsXlsx = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
     try {
+      const { buildResultsWorkbookFromElement, XLSX_MIME } = await import('../io/xlsx');
       const bytes = buildResultsWorkbookFromElement(el, grid);
       downloadBytes(bytes, 'lazstats-risultati.xlsx', XLSX_MIME);
-      showToast('Export', 'Workbook .xlsx con il dataset e le tabelle dei risultati', 'ok');
+      showToast(t('toast.export'), t('output.xlsxReady'), 'ok');
     } catch (error) {
-      showToast('Export', error instanceof Error ? error.message : 'Could not build the workbook', 'error');
+      showToast(t('toast.export'), error instanceof Error ? error.message : t('output.xlsxError'), 'error');
     }
+  };
+
+  const exportReportWord = () => {
+    const el = document.getElementById('output-content');
+    if (!el) return;
+    const html = buildReportFromElement(el, {
+      title: reportText('output.reportTitle'),
+      generatedAt: new Date().toLocaleString(reportLocale),
+      details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
+    });
+    downloadText(html, 'lazstats-report.doc', 'application/msword;charset=utf-8');
+    showToast(t('toast.report'), t('output.reportReady'), 'ok');
   };
 
   const exportReportHtml = () => {
     const el = document.getElementById('output-content');
     if (!el) return;
     const html = buildReportFromElement(el, {
-      title: 'LazStats JS — Analysis Report',
-      generatedAt: new Date().toLocaleString(),
-      details: [`${nonEmptyRowCount(grid.rows)} rows`, `${grid.cols.length} columns`, `CI ${ciLevel}%`],
+      title: reportText('output.reportTitle'),
+      generatedAt: new Date().toLocaleString(reportLocale),
+      details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.html', 'text/html;charset=utf-8');
-    showToast('Report', 'Printable report downloaded — open it and print to PDF', 'ok');
+    showToast(t('toast.report'), t('output.reportReady'), 'ok');
   };
 
   return {
@@ -159,5 +197,6 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     exportChartPngs,
     exportResultsXlsx,
     exportReportHtml,
+    exportReportWord,
   };
 };

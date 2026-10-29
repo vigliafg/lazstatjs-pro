@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import {
   ChevronDown,
   ChevronRight,
@@ -7,12 +7,22 @@ import {
   FileCode2,
   FileText,
   Image,
+  Check,
+  ClipboardCheck,
+  Pin,
+  PinOff,
+  RotateCcw,
   SlidersHorizontal,
   Table2,
   Trash2,
 } from 'lucide-react';
 import { analysisLabel, analysisMeta } from '../analyses/registry';
-import { sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
+import { isOutputStale, sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
+import { copyText } from '../io/clipboard';
+import { t } from '../i18n';
+import { HelpButton } from '../help/HelpButton';
+import { topicForAnalysis } from '../help/book';
+import { analysisIdsOf, isValidFilter, selectOutputs } from './analysis/outputSelection';
 
 /** Un blocco della console: React live nella sessione, HTML quando ripristinato. */
 export interface OutputEntry extends StoredOutput {
@@ -23,6 +33,8 @@ export interface OutputEntry extends StoredOutput {
   datasetId?: string;
   /** Signature of the analysis row filter used for the run. */
   filterSignature?: string;
+  /** Session-only live-run card: replaced on the next live run. */
+  live?: boolean;
 }
 
 /** I blocchi ripristinati sono statici: sanificati una volta e iniettati. */
@@ -32,18 +44,26 @@ export const restoredOutputs = (stored: StoredOutput[] | undefined): OutputEntry
     .filter((entry) => entry.html.length > 0);
 
 export interface OutputConsoleProps {
+  id?: string;
   outputs: OutputEntry[];
   onRemove: (index: number) => void;
   onClear: () => void;
   onCopy: () => void;
   onExportCharts: () => void;
   onExportReport: () => void;
+  onExportWord: () => void;
   onExportXlsx: () => void;
   onBackToData: () => void;
   onOpenAnalysis?: (analysisId: string) => void;
+  onRerun?: (entry: OutputEntry) => void;
+  onRerunAll?: () => void;
+  onApplyParams?: (entry: OutputEntry) => void;
+  /** Current signature of an analysis' parameters, for the params-stale badge. */
+  paramsSignatureFor?: (analysisId: string) => string;
   currentRevision?: number;
   currentDatasetId?: string;
   currentFilterSignature?: string;
+  currentCiLevel?: number;
 }
 
 const formatTime = (iso: string): string => {
@@ -56,7 +76,7 @@ const formatTime = (iso: string): string => {
 const outlineLabel = (entry: OutputEntry, index: number): string => {
   if (entry.title && entry.title !== 'Analysis output') return entry.title;
   if (entry.analysisId) return analysisLabel(entry.analysisId);
-  return `Result ${index + 1}`;
+  return `${t('output.result')} ${index + 1}`;
 };
 
 const actionClass =
@@ -67,26 +87,44 @@ const actionClass =
  * the user reads, collapses or removes blocks.
  */
 export const OutputConsole = ({
+  id,
   outputs,
   onRemove,
   onClear,
   onCopy,
   onExportCharts,
   onExportReport,
+  onExportWord,
   onExportXlsx,
   onBackToData,
   onOpenAnalysis,
+  onRerun,
+  onRerunAll,
+  onApplyParams,
+  paramsSignatureFor,
   currentRevision,
   currentDatasetId,
   currentFilterSignature,
+  currentCiLevel,
 }: OutputConsoleProps) => {
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
+  const [pinned, setPinned] = useState<Set<string>>(() => new Set());
+  const [filterId, setFilterId] = useState('all');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const analysisIds = useMemo(() => analysisIdsOf(outputs), [outputs]);
+  const visibleOutputs = useMemo(() => selectOutputs(outputs, filterId), [outputs, filterId]);
   const lastId = outputs.length > 0 ? outputs[outputs.length - 1].id : null;
   const [activeId, setActiveId] = useState<string | null>(lastId);
 
   useEffect(() => {
     setActiveId(lastId);
   }, [lastId]);
+
+  // Removing the last card of the filtered analysis leaves a filter that no
+  // longer exists: return to "all" instead of showing a dead select value.
+  useEffect(() => {
+    if (!isValidFilter(filterId, analysisIds)) setFilterId('all');
+  }, [filterId, analysisIds]);
 
   const toggle = (id: string) => {
     setCollapsed(previous => {
@@ -95,6 +133,31 @@ export const OutputConsole = ({
       else next.add(id);
       return next;
     });
+  };
+
+  const togglePin = (id: string) => {
+    setPinned(previous => {
+      const next = new Set(previous);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const copyCard = async (entry: OutputEntry) => {
+    const card = document.getElementById(`output-block-${entry.id}`);
+    if (!card) return;
+    const clone = card.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('button, [data-no-print]').forEach(node => node.remove());
+    const ok = await copyText(clone.innerText);
+    if (ok) {
+      setCopiedId(entry.id);
+      setTimeout(() => setCopiedId(current => (current === entry.id ? null : current)), 1500);
+    }
+  };
+
+  const confirmClear = () => {
+    if (window.confirm(t('output.confirmClear'))) onClear();
   };
 
   const jumpTo = (id: string) => {
@@ -110,82 +173,124 @@ export const OutputConsole = ({
   };
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col bg-bg">
+    <div
+      id={id}
+      tabIndex={-1}
+      aria-label={t('output.aria')}
+      className="flex h-full min-h-0 w-full flex-col bg-bg outline-none"
+    >
       <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border bg-surface px-3 py-1.5">
         <div className="flex min-w-0 items-center gap-2">
           <FileText className="h-3.5 w-3.5 shrink-0 text-accent2" />
           <span className="font-mono text-[10px] uppercase tracking-widest text-text3">
-            Output
+            {t('output.title')}
           </span>
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
-            {outputs.length} run{outputs.length === 1 ? '' : 's'}
+            {outputs.length} {outputs.length === 1 ? t('output.runOne') : t('output.runMany')}
           </span>
+          {analysisIds.length > 1 && (
+            <select
+              aria-label={t('output.filterBy')}
+              value={filterId}
+              onChange={event => setFilterId(event.target.value)}
+              className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 text-[10px] text-text2"
+            >
+              <option value="all">{t('output.allAnalyses')}</option>
+              {analysisIds.map(id => (
+                <option key={id} value={id}>
+                  {analysisLabel(id)}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-1">
           <button
             type="button"
             className={actionClass}
-            onClick={onBackToData}
-            title="Open the data editor"
-            aria-label="Open the data editor"
+            onClick={onRerunAll}
+            disabled={outputs.length === 0}
+            title={t('output.rerunAllHint')}
+            aria-label={t('output.rerunAllHint')}
           >
-            <Database className="h-3 w-3" />
-            <span className="hidden xl:inline">Data</span>
+            <RotateCcw className="h-3 w-3" />
+            <span className="hidden 2xl:inline">{t('output.rerunAll')}</span>
           </button>
           <button
             type="button"
             className={actionClass}
-            onClick={onClear}
+            onClick={onBackToData}
+            title={t('output.openDataTitle')}
+            aria-label={t('output.openDataTitle')}
+          >
+            <Database className="h-3 w-3" />
+            <span className="hidden xl:inline">{t('output.data')}</span>
+          </button>
+          <button
+            type="button"
+            className={actionClass}
+            onClick={confirmClear}
             disabled={outputs.length === 0}
-            title="Clear every result block"
-            aria-label="Clear every result block"
+            title={t('output.clearAll')}
+            aria-label={t('output.clearAll')}
           >
             <Trash2 className="h-3 w-3" />
-            <span className="hidden xl:inline">Clear</span>
+            <span className="hidden xl:inline">{t('output.clear')}</span>
           </button>
           <button
             type="button"
             className={actionClass}
             onClick={onCopy}
             disabled={outputs.length === 0}
-            title="Copy the output as text"
-            aria-label="Copy the output as text"
+            title={t('output.copyText')}
+            aria-label={t('output.copyText')}
           >
             <Copy className="h-3 w-3" />
-            <span className="hidden xl:inline">Copy</span>
+            <span className="hidden xl:inline">{t('output.copy')}</span>
           </button>
           <button
             type="button"
             className={actionClass}
             onClick={onExportCharts}
             disabled={outputs.length === 0}
-            title="Download every chart as PNG"
-            aria-label="Download every chart as PNG"
+            title={t('output.chartsHint')}
+            aria-label={t('output.chartsHint')}
           >
             <Image className="h-3 w-3" />
-            <span className="hidden xl:inline">Charts</span>
+            <span className="hidden xl:inline">{t('output.charts')}</span>
           </button>
           <button
             type="button"
             className={actionClass}
             onClick={onExportReport}
             disabled={outputs.length === 0}
-            title="Download a printable HTML report"
-            aria-label="Download a printable HTML report"
+            title={t('output.reportHint')}
+            aria-label={t('output.reportHint')}
           >
             <FileCode2 className="h-3 w-3" />
-            <span className="hidden xl:inline">Report</span>
+            <span className="hidden xl:inline">{t('output.report')}</span>
+          </button>
+          <button
+            type="button"
+            className={actionClass}
+            onClick={onExportWord}
+            disabled={outputs.length === 0}
+            title={t('output.wordHint')}
+            aria-label={t('output.wordHint')}
+          >
+            <FileText className="h-3 w-3" />
+            <span className="hidden xl:inline">{t('output.word')}</span>
           </button>
           <button
             type="button"
             className={actionClass}
             onClick={onExportXlsx}
             disabled={outputs.length === 0}
-            title="Download the dataset and result tables as Excel"
-            aria-label="Download the dataset and result tables as Excel"
+            title={t('output.xlsxHint')}
+            aria-label={t('output.xlsxHint')}
           >
             <Table2 className="h-3 w-3" />
-            <span className="hidden xl:inline">XLSX</span>
+            <span className="hidden xl:inline">{t('output.xlsx')}</span>
           </button>
         </div>
       </div>
@@ -196,7 +301,7 @@ export const OutputConsole = ({
           data-no-print
         >
           <span className="shrink-0 pr-1 font-mono text-[8px] uppercase tracking-[0.18em] text-text3">
-            Outline
+            {t('output.outline')}
           </span>
           {outputs.map((entry, index) => (
             <button
@@ -223,28 +328,41 @@ export const OutputConsole = ({
         {outputs.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-3 text-text3 opacity-70">
             <FileText className="h-10 w-10" />
-            <p className="font-mono text-[11px] uppercase tracking-widest">No analysis output yet</p>
+            <p className="font-mono text-[11px] uppercase tracking-widest">{t('output.empty')}</p>
             <p className="max-w-xs text-center text-[10px] leading-relaxed">
-              Choose a procedure from the library, set the variables, then run it.
+              {t('output.emptyHint')}
             </p>
+          </div>
+        ) : visibleOutputs.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center gap-3 text-text3">
+            <p className="text-[11px]">{t('output.emptyFilter')}</p>
+            <button type="button" className="tb-btn px-2 py-1 text-[10px]" onClick={() => setFilterId('all')}>
+              {t('output.showAll')}
+            </button>
           </div>
         ) : (
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-            {outputs.map((output, index) => {
+            {visibleOutputs
+              .slice()
+              .sort(
+                (a, b) =>
+                  Number(pinned.has(b.output.id)) - Number(pinned.has(a.output.id))
+              )
+              .map(({ output, index }) => {
               const isCollapsed = collapsed.has(output.id);
               const title = output.analysisId
                 ? analysisLabel(output.analysisId)
-                : `Result ${index + 1}`;
-              const stale =
-                (output.dataRevision !== undefined &&
-                  currentRevision !== undefined &&
-                  output.dataRevision !== currentRevision) ||
-                (output.datasetId !== undefined &&
-                  currentDatasetId !== undefined &&
-                  output.datasetId !== currentDatasetId) ||
-                (output.filterSignature !== undefined &&
-                  currentFilterSignature !== undefined &&
-                  output.filterSignature !== currentFilterSignature);
+                : `${t('output.result')} ${index + 1}`;
+              const stale = isOutputStale(output, {
+                dataRevision: currentRevision,
+                datasetId: currentDatasetId,
+                filterSignature: currentFilterSignature,
+                paramsSignature:
+                  output.analysisId && paramsSignatureFor
+                    ? paramsSignatureFor(output.analysisId)
+                    : undefined,
+                ciLevel: currentCiLevel,
+              });
               return (
                 <article
                   key={output.id}
@@ -259,7 +377,7 @@ export const OutputConsole = ({
                       type="button"
                       onClick={() => toggle(output.id)}
                       aria-expanded={!isCollapsed}
-                      aria-label={isCollapsed ? 'Expand result' : 'Collapse result'}
+                      aria-label={isCollapsed ? t('output.expand') : t('output.collapse')}
                       className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
                     >
                       {isCollapsed ? (
@@ -271,15 +389,18 @@ export const OutputConsole = ({
                     <span className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-accent2">
                       {title}
                     </span>
+                    {output.analysisId && (
+                      <HelpButton topicId={topicForAnalysis(output.analysisId)} level="advanced" />
+                    )}
                     <span className="shrink-0 font-mono text-[9px] text-text3">
                       {formatTime(output.createdAt)}
                     </span>
                     {stale && (
                       <span
                         className="shrink-0 rounded border border-yellow/30 bg-yellow/10 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-yellow"
-                        title="The grid changed after this result was produced"
+                        title={t('output.staleTitle')}
                       >
-                        stale
+                        {t('output.stale')}
                       </span>
                     )}
                     {output.title !== 'Analysis output' && (
@@ -287,24 +408,66 @@ export const OutputConsole = ({
                         {output.title}
                       </span>
                     )}
+                    <button
+                      type="button"
+                      onClick={() => togglePin(output.id)}
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
+                      title={pinned.has(output.id) ? t('output.unpinTitle') : t('output.pinTitle')}
+                      aria-label={pinned.has(output.id) ? t('output.unpin') : t('output.pin')}
+                    >
+                      {pinned.has(output.id) ? <PinOff className="h-3 w-3" /> : <Pin className="h-3 w-3" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void copyCard(output)}
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
+                      title={t('output.copyCardTitle')}
+                      aria-label={t('output.copyCard')}
+                    >
+                      {copiedId === output.id ? <Check className="h-3 w-3 text-green" /> : <Copy className="h-3 w-3" />}
+                    </button>
+                    {output.analysisId && output.params !== undefined && onRerun && (
+                      <button
+                        type="button"
+                        onClick={() => onRerun(output)}
+                        className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
+                        title={t('output.rerunTitle')}
+                        aria-label={t('output.rerunAria')}
+                      >
+                        <RotateCcw className="h-3 w-3" />
+                        <span className="hidden xl:inline">{t('output.rerun')}</span>
+                      </button>
+                    )}
+                    {output.analysisId && output.params !== undefined && onApplyParams && (
+                      <button
+                        type="button"
+                        onClick={() => onApplyParams(output)}
+                        className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
+                        title={t('output.applyTitle')}
+                        aria-label={t('output.applyAria')}
+                      >
+                        <ClipboardCheck className="h-3 w-3" />
+                        <span className="hidden xl:inline">{t('output.apply')}</span>
+                      </button>
+                    )}
                     {output.analysisId && analysisMeta(output.analysisId) && onOpenAnalysis && (
                       <button
                         type="button"
                         onClick={() => onOpenAnalysis(output.analysisId as string)}
                         className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
-                        title="Open the setup of this analysis"
-                        aria-label="Open the setup of this analysis"
+                        title={t('output.setupTitle')}
+                        aria-label={t('output.setupAria')}
                       >
                         <SlidersHorizontal className="h-3 w-3" />
-                        <span className="hidden xl:inline">Setup</span>
+                        <span className="hidden xl:inline">{t('output.setup')}</span>
                       </button>
                     )}
                     <button
                       type="button"
                       onClick={() => onRemove(index)}
                       className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-red hover:text-white"
-                      title="Remove this result"
-                      aria-label="Remove this result block"
+                      title={t('output.remove')}
+                      aria-label={t('output.removeAria')}
                     >
                       <Trash2 className="h-3 w-3" />
                     </button>

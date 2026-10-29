@@ -2,6 +2,10 @@ import type { Dispatch, SetStateAction } from 'react';
 import { DISTRIBUTION_LABEL, type DistributionName } from '../../stats/distfit';
 import type { GridData } from '../../grid/types';
 import type { DistributionFitParams } from '../../io/project';
+import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
+import { CheckboxList, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface DistributionFitFormProps {
   grid: GridData;
@@ -16,51 +20,34 @@ export const DistributionFitForm = ({
   distfitParams,
   setDistfitParams,
 }: DistributionFitFormProps) => {
-  const toggle = (name: DistributionName) => {
+  const toggle = (name: DistributionName, checked: boolean) => {
     setDistfitParams(prev => ({
       ...prev,
-      selected: prev.selected.includes(name)
-        ? prev.selected.filter(item => item !== name)
-        : [...prev.selected, name],
+      selected: checked
+        ? [...prev.selected, name]
+        : prev.selected.filter(item => item !== name),
     }));
   };
 
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Variable</label>
-        <select
-          className="bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[140px]"
-          value={distfitParams.variable}
-          onChange={e => setDistfitParams(prev => ({ ...prev, variable: parseInt(e.target.value, 10) }))}
-        >
-          {grid.cols.map((column, index) => (
-            <option key={index} value={index}>
-              {column.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-text3 font-mono uppercase tracking-widest">Distributions</label>
-        <div className="bg-surface3 border border-border2 rounded p-2 flex flex-wrap gap-x-3 gap-y-1 max-w-[360px]">
-          {ALL.map(name => (
-            <label
-              key={name}
-              className="flex items-center gap-1.5 text-[11px] text-text2 hover:text-text cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                className="accent-accent"
-                checked={distfitParams.selected.includes(name)}
-                onChange={() => toggle(name)}
-              />
-              {DISTRIBUTION_LABEL[name]}
-            </label>
-          ))}
-        </div>
-      </div>
+    <div className="flex flex-col gap-3">
+      <VariableSelect
+        label={t('form.variable')}
+        value={distfitParams.variable}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
+        onChange={value => setDistfitParams(prev => ({ ...prev, variable: value }))}
+      />
+      <CheckboxList
+        label={t('form.distributions')}
+        columns
+        hint={t('hint.distfit')}
+        items={ALL.map(name => ({
+          value: name,
+          label: DISTRIBUTION_LABEL[name],
+          checked: distfitParams.selected.includes(name),
+          onChange: checked => toggle(name, checked),
+        }))}
+      />
     </div>
   );
 };

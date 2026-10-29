@@ -3,16 +3,18 @@ import type { GridData } from '../../grid/types';
 import type { MultivariateMode, MultivariateParams } from '../../io/project';
 import { defaultMultivariateParams } from './defaults';
 import { numericColumnIndexes } from '../shared/columns';
+import { t } from '../../i18n';
+import {
+  CheckboxField,
+  Field,
+  VariableList,
+} from '../../components/FormFields';
 
 export interface MultivariateFormProps {
   grid: GridData;
   multivariateParams: MultivariateParams;
   setMultivariateParams: Dispatch<SetStateAction<MultivariateParams>>;
 }
-
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[150px]';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
 
 export const MultivariateForm = ({
   grid,
@@ -22,117 +24,114 @@ export const MultivariateForm = ({
   const { mode, standardize, selected, factors, rotation } = multivariateParams;
   const numericColumns = numericColumnIndexes(grid);
 
-  // Keep the old behaviour: a change in the number of columns re-picks the
-  // default variables. The first mount must not overwrite restored params.
+  // A change in the number of columns re-picks the default variables. The
+  // first mount must not overwrite restored params.
   const previousCols = useRef(grid.cols.length);
   useEffect(() => {
     if (previousCols.current === grid.cols.length) return;
     previousCols.current = grid.cols.length;
-    setMultivariateParams(prev => ({ ...prev, selected: defaultMultivariateParams(grid).selected }));
+    setMultivariateParams(prev => ({
+      ...prev,
+      selected: defaultMultivariateParams(grid).selected,
+    }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grid.cols.length]);
 
-  const toggle = (index: number) => {
-    setMultivariateParams(prev => ({
-      ...prev,
-      selected: prev.selected.includes(index)
-        ? prev.selected.filter(item => item !== index)
-        : [...prev.selected, index],
-    }));
-  };
+  const hint = mode === 'pca' ? t('hint.pca') : mode === 'efa' ? t('hint.efa') : t('hint.alpha');
 
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Analysis</label>
+    <div className="flex flex-col gap-3">
+      <Field label={t('form.analysis')}>
         <select
-          className={inputClass}
+          aria-label={t('form.analysis')}
+          className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
           value={mode}
           onChange={event =>
-            setMultivariateParams(prev => ({ ...prev, mode: event.target.value as MultivariateMode }))
+            setMultivariateParams(prev => ({
+              ...prev,
+              mode: event.target.value as MultivariateMode,
+            }))
           }
         >
-          <option value="pca">PCA (componenti)</option>
-          <option value="alpha">Cronbach α (affidabilità)</option>
-          <option value="efa">EFA (analisi fattoriale)</option>
+          <option value="pca">{t('multivariate.pca')}</option>
+          <option value="alpha">{t('multivariate.alpha')}</option>
+          <option value="efa">{t('multivariate.efa')}</option>
         </select>
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>
-          {mode === 'pca' ? 'Variables (≥ 2)' : mode === 'efa' ? 'Variables (≥ 3)' : 'Items of the scale (≥ 2)'}
-        </label>
-        <div className="bg-surface3 border border-border2 rounded p-2 min-w-[240px] max-h-[120px] overflow-auto scrollbar">
-          {numericColumns.length === 0 && (
-            <p className="text-[10px] text-text3 italic">No numeric columns</p>
-          )}
-          {numericColumns.map(index => (
-            <label key={index} className="flex items-center gap-2 px-1 py-0.5 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-accent"
-                checked={selected.includes(index)}
-                onChange={() => toggle(index)}
-              />
-              <span className="text-[11px] text-text2">{grid.cols[index]?.name}</span>
-              <span className="text-[9px] text-text3 font-mono">{grid.cols[index]?.type}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+      <VariableList
+        label={
+          mode === 'pca'
+            ? t('form.variables2')
+            : mode === 'efa'
+              ? t('form.variables3')
+              : t('form.scaleItems')
+        }
+        cols={grid.cols}
+        only={numericColumns}
+        selected={selected}
+        showType
+        emptyText={t('form.noNumericColumns')}
+        hint={hint}
+        onToggle={(index, checked) =>
+          setMultivariateParams(prev => ({
+            ...prev,
+            selected: checked
+              ? [...prev.selected, index]
+              : prev.selected.filter(item => item !== index),
+          }))
+        }
+      />
 
       {mode === 'efa' && (
         <>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Factors (0 = auto)</label>
+          <Field label={t('form.factorsAuto')}>
             <input
               type="number"
               min="0"
               max="10"
               step="1"
-              className={`${inputClass} w-24`}
+              aria-label={t('form.factorsAuto')}
+              className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
               value={factors}
-              onChange={event => setMultivariateParams(prev => ({ ...prev, factors: parseInt(event.target.value, 10) }))}
+              onChange={event =>
+                setMultivariateParams(prev => ({
+                  ...prev,
+                  factors: parseInt(event.target.value, 10),
+                }))
+              }
             />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Rotation</label>
+          </Field>
+          <Field label={t('form.rotation')}>
             <select
-              className={inputClass}
+              aria-label={t('form.rotation')}
+              className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
               value={rotation}
-              onChange={event => setMultivariateParams(prev => ({ ...prev, rotation: event.target.value as 'none' | 'varimax' }))}
+              onChange={event =>
+                setMultivariateParams(prev => ({
+                  ...prev,
+                  rotation: event.target.value as 'none' | 'varimax',
+                }))
+              }
             >
-              <option value="varimax">Varimax</option>
-              <option value="none">None</option>
+              <option value="varimax">{t('form.varimax')}</option>
+              <option value="none">{t('form.none')}</option>
             </select>
-          </div>
+          </Field>
         </>
       )}
 
       {mode === 'pca' && (
-        <div className="flex flex-col gap-1">
-          <label className={labelClass}>Matrix</label>
-          <label className="flex items-center gap-1.5 text-[11px] text-text2 hover:text-text cursor-pointer pt-1.5">
-            <input
-              type="checkbox"
-              className="accent-accent"
-              checked={standardize}
-              onChange={event =>
-                setMultivariateParams(prev => ({ ...prev, standardize: event.target.checked }))
-              }
-            />
-            Correlation (standardized)
-          </label>
-        </div>
+        <Field label={t('form.matrix')}>
+          <CheckboxField
+            label={t('form.correlationStandardized')}
+            checked={standardize}
+            onChange={checked =>
+              setMultivariateParams(prev => ({ ...prev, standardize: checked }))
+            }
+          />
+        </Field>
       )}
-
-      <p className="text-[10px] text-text3 max-w-[380px] self-end pb-1">
-        {mode === 'pca'
-          ? 'La PCA riassume le variabili in componenti non correlati. La matrice di correlazione è consigliata quando le scale differiscono; Kaiser, Bartlett e KMO sono calcolati automaticamente.'
-          : mode === 'efa'
-            ? 'L’EFA stima fattori latenti con principal-axis factoring. La parallel analysis sceglie il numero di fattori quando lasci 0; varimax ruota la soluzione.'
-            : 'L’α di Cronbach stima la coerenza interna della scala. Servono item nella stessa direzione (ricodifica i reverse) e casi completi.'}
-      </p>
     </div>
   );
 };

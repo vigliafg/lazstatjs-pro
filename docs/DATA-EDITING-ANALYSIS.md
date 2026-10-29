@@ -53,13 +53,16 @@ dati↔analisi, non costruire subito un modello multi-tabella.
 - Nessuna **vista variabili** dedicata: i metadati stanno nell'header e nel
   modale dei livelli.
 - Nessuna **label/descrizione** di variabile oltre al nome.
-- Nessun **codice di missing** esplicito: la cella vuota è l'unico missing.
-- Nessuna **formula persistente**: `Compute` è un'operazione one-shot.
-- Nessun **fill handle** o editing multi-cella in stile Excel.
-- Nessuna **virtualizzazione**: la griglia renderizza tutte le righe visibili
-  del filtro.
-- Nessun **remap dei parametri** quando si inserisce/elimina/sposta una colonna.
-- Nessun **collegamento visivo** tra una colonna e le analisi che la usano.
+- I **codici di missing** sono ora dichiarabili per colonna e vengono esclusi
+  da tutte le analisi.
+- Le **formule persistenti** (`Column.formula`) ricalcolano la colonna a ogni
+  edit; `Compute` senza formula resta one-shot.
+- **Fill handle**, `Ctrl+D` / `Ctrl+R` ed editing multi-cella sono disponibili.
+- **Virtualizzazione** attiva sopra 80 righe visibili.
+- Il **remap dei parametri** e la **validazione tipo/ruolo** coprono tutte le
+  operazioni della matrice 3.6.
+- Il **collegamento colonna↔analisi** è visibile nel Data peek (mappa ruoli) e
+  assegnabile a qualsiasi ruolo.
 - Il filtro è view-only e non persistito.
 - La selezione è locale a `DataGrid` e non è leggibile dall'esterno.
 
@@ -437,44 +440,45 @@ Solo dopo: Variable Inspector e ponte dati↔analisi.
 
 ## 12. Stato implementazione
 
-> Aggiornato dopo il blocco di implementazione DE-0..DE-4.
+> Aggiornato dopo la chiusura del backlog P0–P3.
 
 ### Completato
 
 | Blocco | Stato | Note |
 |---|---|---|
 | **DE-0a — Remap** | Fatto | Insert, delete, move, duplicate, split, merge; gli indici sono rimappati. |
-| **DE-0b — Invalidazione** | Fatto | Delete, split e merge marcano il ruolo `-1`; banner nel Setup e Run disabilitato finché non si riseleziona. Il cambio tipo marca i dati `stale` ma non invalida ancora automaticamente il ruolo. |
+| **DE-0b — Invalidazione** | Fatto | Delete, split e merge marcano il ruolo `-1`; anche un cambio tipo incompatibile con il ruolo produce errore, banner e Run disabilitato (`validateRoleTypes`). |
 | **DE-0c — Dataset identity** | Fatto | New/Import overwrite resettano i parametri, cambiano `datasetId` e svuotano l'output. |
 | **DE-0d — Revisione dati** | Fatto | Ogni modifica della griglia incrementa `dataRevision`; le card diventano `stale`. Anche il filtro ha una firma e invalida le card quando cambia. |
-| **DE-0e — Test matrix** | Parziale | Test unitari per remap, invalidazione, reset, filtro, `map` per undo/redo; manca una suite UI automatica. |
+| **DE-0e — Test matrix** | Fatto | Test unitari per remap, invalidazione, reset, filtro, `map` per undo/redo, formule e missing; suite Playwright dedicata. |
 | **DE-1 — Variable Inspector** | Fatto | Drawer con nome, tipo, label, descrizione, ruolo, righe, missing, unici, invalidi, livelli/reference, duplicate e delete. |
-| **DE-2 — Ponte dati↔analisi** | Parziale | Context bar (righe, variabili, missing, filtro), Data peek, colonna focalizzata e assegnazione al **ruolo primario**. Manca l'assegnazione a tutti i ruoli. |
-| **DE-3 — Filtro e missing** | Parziale | Filtro view-only o analysis-filter con conteggio; missing count nel contesto. Mancano i codici missing per colonna e il report esclusioni. |
-| **DE-4 — Editing UX** | Parziale | Aggiunto Fill right; paste/fill down/clear/undo esistevano. Mancano fill handle, editing multi-cella e scorciatoie avanzate. |
-| **DE-7 — Test** | Parziale | 399 test verdi, inclusi i nuovi test su ID, remap, reset e ruoli. Manca Playwright in CI. |
+| **DE-2 — Ponte dati↔analisi** | Fatto | Context bar, Data peek, mappa ruoli, colonna focalizzata e assegnazione a **qualsiasi ruolo** tramite `roles.ts`. |
+| **DE-3 — Filtro e missing** | Fatto | Filtro view-only/analysis-filter, conteggio missing con codici e badge `Codes N`; i codici sono per colonna e opzionali nel `.lzs`. |
+| **DE-4 — Editing UX** | Fatto | Fill right, fill handle, `Ctrl+D`/`Ctrl+R`, editing multi-cella, paste/fill/clear/undo. |
+| **DE-5 — Computed columns** | Fatto | `Column.formula` persistente, ricalcolo su edit, rewrite dei riferimenti al rename, valori conservati se la formula non compila. |
+| **DE-6 — Grandi dati** | Fatto | Virtualizzazione con finestra + righe-spacer, overscan e focus programmatico; paste di 500 righe coperto da test. |
+| **DE-7 — Test** | Fatto | 419 test unitari + 9 smoke Playwright su desktop/mobile, eseguiti in CI. |
 
 ### Deferred
 
 | Blocco | Motivo | Prossimo passo |
 |---|---|---|
-| **DE-5 — Computed columns** | Richiede formula persistente, dipendenze e refresh: è un motore a sé. | Progettare `Column.formula`, dependency graph e ricalcolo su edit. |
-| **DE-6 — Grandi dati** | La virtualizzazione cambia DataGrid e la selezione; il mobile è già coperto dal drawer. | Virtualizzare le righe visibili e testare paste massivi. |
-| **DE-2 — Tutti i ruoli** | Oggi “Use in analysis” assegna solo il ruolo primario. | Estrarre una mappa `analysisRoles(id)` con getter/setter per ogni ruolo e mostrarla nel Data peek. |
-| **DE-7 — UI test** | Playwright non è ancora una dipendenza del progetto. | Aggiungere `@playwright/test`, smoke desktop/mobile e scenario column-edit→reselect. |
+| **Stale persistente** | Revision, dataset e firma del filtro vivono solo in sessione. | Salvarli nella card `.lzs` e riconfrontarli al load. |
+| **Recupero ruoli dall'undo** | Undo riporta la colonna ma non il ruolo invalidato. | Riconciliare i ruoli per `Column.id` nell'undo. |
+| **Report esclusioni** | I missing code sono per colonna; manca un report esportabile per variabile. | Tabella "esclusi per variabile" nel Data peek e nel report. |
 
 ### Limiti noti
 
-- Label e descrizione sono salvate e mostrate nell'inspector e nel Data peek, ma i picker delle analisi usano ancora il nome della colonna.
 - Dopo un undo, un ruolo invalidato resta `-1`: la colonna torna, ma la selezione va rifatta.
+- Le formule vengono ricalcolate solo sugli edit: un progetto caricato mostra i valori salvati finché la griglia non cambia.
+- La virtualizzazione assume righe da 23 px (`ROW_HEIGHT`).
 - Lo stato `stale` è in-session: gli output ripristinati da `.lzs` non hanno la revisione e non vengono marcati.
 - Cambiare i parametri non marca la card come stale; cambia solo dati, filtro e dataset.
 - La modalità “analysis filter” non è persistita nel progetto e viene disattivata su New/Import.
-- Il calcolo delle colonne resta one-shot.
-- Un cambio tipo (es. gruppo → continuo) non viene ancora validato contro il ruolo: i dati sono `stale`, ma il ruolo resta selezionato finché il runner o l'utente non intervengono.
+- I codici missing non hanno un report esportabile delle esclusioni per variabile.
 
 ### Verifica
 
-- `npm run check`: 399 test verdi, dependency-cruiser, madge e file-size guard ok.
+- `npm run check`: 419 test verdi, dependency-cruiser, madge e file-size guard ok.
 - `npm run build`: ok.
-- Smoke manuale Playwright: delete/split/merge con banner, undo con remap, inspector desktop/mobile, data peek, analysis filter, New/Import reset, stale badge.
+- `npm run test:e2e`: 9 smoke Playwright (desktop + mobile) in CI: caricamento, edit/undo, missing code, assegnazione ruolo, banner reselect, paste 500 righe con virtualizzazione, formula persistente, fill down, editing multi-cella.

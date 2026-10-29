@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { columnStrings, distinctValues, isNumericColumn, numericColumnIndexes } from './columns';
+import {
+  columnStrings,
+  continuousColumnIndexes,
+  distinctValues,
+  isNumericColumn,
+  numericColumnIndexes,
+} from './columns';
 
 const grid = {
   cols: [
@@ -30,4 +36,14 @@ test('isNumericColumn requires at least two parsable values', () => {
 
 test('numericColumnIndexes lists only fully numeric columns', () => {
   assert.deepEqual(numericColumnIndexes(grid), [0]);
+});
+
+test('continuous columns follow the type rule, not the cell values', () => {
+  assert.deepEqual(continuousColumnIndexes(grid), [0, 3]);
+  const numericCat = {
+    cols: [{ name: 'Code', type: 'cat' as const }],
+    rows: [['1'], ['2']],
+  };
+  assert.equal(isNumericColumn(numericCat, 0), false);
+  assert.deepEqual(continuousColumnIndexes(numericCat), []);
 });

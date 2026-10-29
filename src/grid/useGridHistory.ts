@@ -1,12 +1,23 @@
 import { useCallback, useRef, useState } from 'react';
 import type { CategoryLevel, GridData } from './types';
+import { recalculateFormulas } from './formulas';
 
 const CAP = 50;
 
 const clone = (g: GridData): GridData => ({
-  cols: g.cols.map((c) => ({ ...c, levels: c.levels?.map((level) => ({ ...level })) })),
+  cols: g.cols.map((c) => ({
+    ...c,
+    levels: c.levels?.map((level) => ({ ...level })),
+    missing: c.missing ? [...c.missing] : undefined,
+  })),
   rows: g.rows.map((r) => [...r]),
 });
+
+const sameStrings = (a?: string[], b?: string[]): boolean => {
+  const left = a ?? [];
+  const right = b ?? [];
+  return left.length === right.length && left.every((value, i) => value === right[i]);
+};
 
 const sameLevels = (a?: CategoryLevel[], b?: CategoryLevel[]): boolean => {
   const left = a ?? [];
@@ -27,7 +38,8 @@ const sameGrid = (a: GridData, b: GridData): boolean =>
       c.label === b.cols[i]?.label &&
       c.description === b.cols[i]?.description &&
       c.reference === b.cols[i]?.reference &&
-      sameLevels(c.levels, b.cols[i]?.levels)
+      sameLevels(c.levels, b.cols[i]?.levels) &&
+      sameStrings(c.missing, b.cols[i]?.missing)
   ) &&
   a.rows.every((r, i) => {
     const other = b.rows[i] ?? [];
@@ -40,9 +52,9 @@ const sameGrid = (a: GridData, b: GridData): boolean =>
   });
 
 /** Undo/redo stack for the data grid. Call `commit(next)` instead of setState. */
-export function useGridHistory(initial: GridData) {
+export function useGridHistory(initial: GridData, initialRevision = 0) {
   const [grid, setGridState] = useState<GridData>(initial);
-  const [revision, setRevision] = useState(0);
+  const [revision, setRevision] = useState(initialRevision);
   const gridRef = useRef<GridData>(initial);
   const past = useRef<GridData[]>([]);
   const future = useRef<GridData[]>([]);
@@ -55,10 +67,32 @@ export function useGridHistory(initial: GridData) {
   // Coalesce rapid cell edits (typing) into a single history entry so one
   // Undo restores the pre-typing value instead of one char at a time.
   const commit = useCallback(
-    (next: GridData | ((prev: GridData) => GridData), opts?: { coalesce?: boolean; kind?: string }) => {
+    (
+      next: GridData | ((prev: GridData) => GridData),
+      opts?: {
+        coalesce?: boolean;
+        kind?: string;
+        changedCell?: { r: number; c: number };
+        changedCol?: number;
+      }
+    ) => {
       const prev = gridRef.current;
-      const value = typeof next === 'function' ? (next as (p: GridData) => GridData)(prev) : next;
-      if (sameGrid(prev, value)) return;
+      const raw = typeof next === 'function' ? (next as (p: GridData) => GridData)(prev) : next;
+      // A cell edit that did not change the value must not touch history,
+      // formulas or validation.
+      if (
+        opts?.changedCell &&
+        (prev.rows[opts.changedCell.r]?.[opts.changedCell.c] ?? '') ===
+          (raw.rows[opts.changedCell.r]?.[opts.changedCell.c] ?? '')
+      ) {
+        return;
+      }
+      // Persistent formulas are the source of truth for their column: any
+      // edit re-derives them before the commit is recorded.
+      const value = recalculateFormulas(raw, opts?.changedCol);
+      // When the edited column is not referenced by any formula, only that
+      // cell can differ; skip the full-grid comparison.
+      if (!(opts?.changedCell && value === raw) && sameGrid(prev, value)) return;
       const now = Date.now();
       const canCoalesce =
         opts?.coalesce &&
@@ -81,13 +115,13 @@ export function useGridHistory(initial: GridData) {
     []
   );
 
-  const setWithoutHistory = useCallback((next: GridData) => {
+  const setWithoutHistory = useCallback((next: GridData, nextRevision = 0) => {
     future.current = [];
     past.current = [];
     lastCommitKind.current = '';
     gridRef.current = next;
     setGridState(next);
-    setRevision((value) => value + 1);
+    setRevision(nextRevision);
     bump();
   }, []);
 

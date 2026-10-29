@@ -38,13 +38,31 @@ const makeSnapshot = () =>
     {
       grid,
       prefs: DEFAULT_PREFS,
-      settings: { ciLevel: 99, activeAnalysis: 'ttest', activeTab: 'analysis' },
+      settings: {
+        ciLevel: 99,
+        activeAnalysis: 'ttest',
+        activeTab: 'analysis',
+        uiMode: 'guided',
+        uiLocale: 'it',
+        reportLocale: 'it',
+        helpLocale: 'auto',
+      },
       params: DEFAULT_PARAMS,
     },
     '2026-10-19T10:00:00.000Z'
   );
 
 describe('project snapshot roundtrip', () => {
+  it('migrates a version 1 project to the current schema', () => {
+    const raw = JSON.parse(serializeProject(makeSnapshot()));
+    raw.version = 1;
+    delete raw.datasetId;
+    delete raw.dataRevision;
+    const migrated = parseProject(JSON.stringify(raw));
+    assert.equal(migrated.version, 2);
+    assert.equal(migrated.grid.cols.length, 3);
+  });
+
   it('serialises and restores grid, settings and params', () => {
     const restored = parseProject(serializeProject(makeSnapshot()));
     assert.deepEqual(withoutIds(restored.grid), grid);
@@ -168,6 +186,37 @@ describe('project sanitisation', () => {
       { value: '2', label: 'a 2' },
     ]);
     assert.equal(parsed.cols[0].reference, undefined);
+  });
+
+  it('round-trips missing codes and sanitises them', () => {
+    const withMissing = createProjectSnapshot({
+      grid: {
+        cols: [{ name: 'Score', type: 'num', missing: ['-9', 'NA'] }],
+        rows: [['-9'], ['NA'], ['12']],
+      },
+      prefs: DEFAULT_PREFS,
+      settings: DEFAULT_SETTINGS,
+      params: DEFAULT_PARAMS,
+    });
+    const restored = parseProject(serializeProject(withMissing));
+    assert.deepEqual(restored.grid.cols[0].missing, ['-9', 'NA']);
+
+    const parsed = parseGrid({
+      cols: [{ name: 'S', type: 'num', missing: [' -9 ', '-9', '', 7, 'NA'] }],
+      rows: [['-9']],
+    });
+    assert.deepEqual(parsed.cols[0].missing, ['-9', 'NA']);
+  });
+
+  it('round-trips a persistent formula and trims it', () => {
+    const parsed = parseGrid({
+      cols: [{ name: 'Diff', type: 'num', formula: '  Post - Pre  ' }],
+      rows: [['1']],
+    });
+    assert.equal(parsed.cols[0].formula, 'Post - Pre');
+
+    const blank = parseGrid({ cols: [{ name: 'Plain', type: 'num', formula: '   ' }], rows: [['1']] });
+    assert.equal(blank.cols[0].formula, undefined);
   });
 
   it('falls back on invalid settings and params without losing valid ones', () => {

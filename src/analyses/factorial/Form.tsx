@@ -2,6 +2,15 @@ import type { Dispatch, SetStateAction } from 'react';
 import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
 import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
 import type { FactorialParams } from '../../io/project';
+import { t } from '../../i18n';
+import { continuousColumnIndexes } from '../shared/columns';
+import {
+  CheckboxField,
+  Field,
+  VariableSelect,
+  variableOptions,
+  variableOptionsFrom,
+} from '../../components/FormFields';
 
 export interface FactorialFormProps {
   grid: GridData;
@@ -10,10 +19,6 @@ export interface FactorialFormProps {
   factorialParams: FactorialParams;
   setFactorialParams: Dispatch<SetStateAction<FactorialParams>>;
 }
-
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[120px]';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
 
 export const FactorialForm = ({
   grid,
@@ -24,86 +29,55 @@ export const FactorialForm = ({
 }: FactorialFormProps) => {
   const { response, factorA, factorB, interaction } = factorialParams;
   const factors = groupColumnIndexes(grid);
+  const factorOptions = variableOptionsFrom(grid.cols, factors);
 
   return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Response (Y)</label>
-        <select
-          className={inputClass}
-          value={response}
-          onChange={e => setFactorialParams(prev => ({ ...prev, response: parseInt(e.target.value, 10) }))}
-        >
-          {grid.cols.map((column, index) => (
-            <option key={index} value={index}>
-              {column.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Factor A</label>
-        <div className="flex items-center gap-1">
-          <select
-            className={inputClass}
-            value={factorA}
-            onChange={e => setFactorialParams(prev => ({ ...prev, factorA: parseInt(e.target.value, 10) }))}
-          >
-            {factors.map(index => (
-              <option key={index} value={index}>
-                {grid.cols[index]?.name}
-              </option>
-            ))}
-          </select>
+    <div className="flex flex-col gap-3">
+      <VariableSelect
+        label={t('form.responseY')}
+        value={response}
+        options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
+        onChange={value => setFactorialParams(prev => ({ ...prev, response: value }))}
+      />
+      <VariableSelect
+        label={t('form.factorA')}
+        value={factorA}
+        options={factorOptions}
+        onChange={value => setFactorialParams(prev => ({ ...prev, factorA: value }))}
+        trailing={
           <LevelsEditor
             grid={grid}
             column={factorA}
             onLevels={onLevels}
             onRecode={onRecode}
-            label="Modifica livelli"
+            label={t('action.levels')}
             className={LEVELS_BUTTON_CLASS}
           />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Factor B</label>
-        <div className="flex items-center gap-1">
-          <select
-            className={inputClass}
-            value={factorB}
-            onChange={e => setFactorialParams(prev => ({ ...prev, factorB: parseInt(e.target.value, 10) }))}
-          >
-            {factors.map(index => (
-              <option key={index} value={index}>
-                {grid.cols[index]?.name}
-              </option>
-            ))}
-          </select>
+        }
+      />
+      <VariableSelect
+        label={t('form.factorB')}
+        value={factorB}
+        options={factorOptions}
+        onChange={value => setFactorialParams(prev => ({ ...prev, factorB: value }))}
+        trailing={
           <LevelsEditor
             grid={grid}
             column={factorB}
             onLevels={onLevels}
             onRecode={onRecode}
-            label="Modifica livelli"
+            label={t('action.levels')}
             className={LEVELS_BUTTON_CLASS}
           />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Model</label>
-        <label className="flex items-center gap-1.5 text-[11px] text-text2 hover:text-text cursor-pointer pt-1.5">
-          <input
-            type="checkbox"
-            className="accent-accent"
-            checked={interaction}
-            onChange={e => setFactorialParams(prev => ({ ...prev, interaction: e.target.checked }))}
-          />
-          Include A × B interaction
-        </label>
-      </div>
+        }
+      />
+      <Field label={t('form.model')}>
+        <CheckboxField
+          label={t('form.interaction')}
+          checked={interaction}
+          onChange={checked => setFactorialParams(prev => ({ ...prev, interaction: checked }))}
+        />
+      </Field>
     </div>
   );
 };

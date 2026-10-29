@@ -2,7 +2,9 @@ import type { Dispatch, RefObject, SetStateAction } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { CleanPanel } from '../grid/CleanPanel';
 import { VariableInspector } from '../grid/VariableInspector';
+import { t } from '../i18n';
 import { fillRightRange as gridFillRight } from '../grid/fillRight';
+import { setRangeValue as gridSetRangeValue } from '../grid/ops';
 import { DataGrid } from '../grid/DataGrid';
 import { TransformPanel } from '../grid/TransformPanel';
 import {
@@ -25,7 +27,9 @@ import {
   pasteTsvAt as gridPasteTsv,
   rangeToTsv as gridRangeToTsv,
   renameColumn as gridRenameColumn,
+  rowMatches,
   sortByColumn as gridSortByColumn,
+  trimTrailingEmptyLines as gridTrimTrailingEmptyLines,
   type RowFilter,
   type RowFilterOp,
 } from '../grid/ops';
@@ -34,6 +38,7 @@ import type { ColumnOperation } from '../grid/columnOps';
 
 export interface DataTabProps {
   grid: GridData;
+  datasetId: string;
   setGrid: Dispatch<SetStateAction<GridData>>;
   onNewDataset: () => void;
   onInsertColumn: (at: number) => void;
@@ -71,7 +76,7 @@ export interface DataTabProps {
   setFilterAffectsAnalysis: Dispatch<SetStateAction<boolean>>;
   inspectorCol: number;
   setInspectorCol: Dispatch<SetStateAction<number>>;
-  onColumnMeta: (column: number, patch: { label?: string; description?: string }) => void;
+  onColumnMeta: (column: number, patch: { label?: string; description?: string; missing?: string[]; formula?: string }) => void;
   filterCol: number;
   setFilterCol: Dispatch<SetStateAction<number>>;
   filterOp: RowFilterOp;
@@ -96,6 +101,7 @@ export interface DataTabProps {
 
 export const DataTab = ({
   grid,
+  datasetId,
   setGrid,
   onNewDataset,
   onInsertColumn,
@@ -157,25 +163,26 @@ export const DataTab = ({
 }: DataTabProps) => (
   <>
 <div className="flex-1 flex flex-col overflow-hidden">
-  <div className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
-    <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">File:</span>
-    <button className="tb-btn" onClick={onNewDataset}>New</button>
-    <button className="tb-btn" onClick={() => csvInputRef.current?.click()}>Import</button>
-    <button className="tb-btn" onClick={exportCsv}>Export</button>
+  <div role="toolbar" aria-label={t('data.toolbar')} className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
+    <div role="group" aria-label={t('data.groupFile')} className="flex flex-wrap items-center gap-2">
+    <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">{t('data.file')}:</span>
+    <button className="tb-btn" onClick={onNewDataset}>{t('data.new')}</button>
+    <button className="tb-btn" onClick={() => csvInputRef.current?.click()}>{t('data.import')}</button>
+    <button className="tb-btn" onClick={exportCsv}>{t('data.export')}</button>
     <div className="h-4 w-px bg-border mx-1" />
     <button
       className="tb-btn"
       onClick={saveProjectFile}
-      title="Save grid, settings and analysis parameters as a .lzs project"
+      title={t('data.saveHint')}
     >
-      Save project
+      {t('data.saveProject')}
     </button>
     <button
       className="tb-btn"
       onClick={() => projectInputRef.current?.click()}
-      title="Open a .lzs project and replace the current session"
+      title={t('data.openHint')}
     >
-      Open project
+      {t('data.openProject')}
     </button>
     <input
       ref={projectInputRef}
@@ -191,18 +198,21 @@ export const DataTab = ({
     {lastAutosave && (
       <span
         className="font-mono text-[9px] text-text3 uppercase tracking-wider"
-        title="Grid, settings and parameters are autosaved in this browser"
+        title={t('data.autosaveHint')}
       >
-        Autosave {lastAutosave}
+        {t('data.autosave')} {lastAutosave}
       </span>
     )}
+    </div>
     <div className="h-4 w-px bg-border mx-1" />
-    <button className="tb-btn" disabled={!canUndoGrid} onClick={undoGrid} title="Undo (Ctrl+Z)">
-      Undo
+    <div role="group" aria-label={t('data.groupEdit')} className="flex flex-wrap items-center gap-2">
+    <button className="tb-btn" disabled={!canUndoGrid} onClick={undoGrid} title={`${t('data.undo')} (Ctrl+Z)`}>
+      {t('data.undo')}
     </button>
-    <button className="tb-btn" disabled={!canRedoGrid} onClick={redoGrid} title="Redo (Ctrl+Y)">
-      Redo
+    <button className="tb-btn" disabled={!canRedoGrid} onClick={redoGrid} title={`${t('data.redo')} (Ctrl+Y)`}>
+      {t('data.redo')}
     </button>
+    </div>
     <input
       ref={csvInputRef}
       type="file"
@@ -215,65 +225,69 @@ export const DataTab = ({
       }}
     />
     <div className="h-4 w-px bg-border mx-2" />
+    <div role="group" aria-label={t('data.groupTools')} className="flex flex-wrap items-center gap-2">
     <button
       className="tb-btn text-yellow"
       onClick={() => {
         const issues = gridFindInvalid(grid);
         setValidation({ ran: true, issues });
-        if (issues.length === 0) showToast('Validation', 'All cells validated successfully', 'ok');
-        else showToast('Validation', `${issues.length} invalid cells found`, 'warn');
+        if (issues.length === 0) showToast(t('toast.validation'), t('data.validOk'), 'ok');
+        else showToast(t('toast.validation'), `${issues.length} ${t('data.invalidFound')}`, 'warn');
       }}
     >
-      Validate
+      {t('data.validate')}
     </button>
     <button
       className="tb-btn"
       onClick={() => {
         const { grid: next, changed } = gridCoerce(grid);
         if (changed === 0) {
-          showToast('Auto-fix', 'Nothing to coerce', 'ok');
+          showToast(t('toast.autoFix'), t('data.nothingToCoerce'), 'ok');
           return;
         }
         setGrid(next);
         setValidation({ ran: false, issues: [] });
-        showToast('Auto-fix', `${changed} cells coerced`, 'ok');
+        showToast(t('toast.autoFix'), `${changed} ${t('data.cellsCoerced')}`, 'ok');
       }}
     >
-      Auto-fix
+      {t('data.autoFix')}
     </button>
     <button className={`tb-btn ${showClean ? 'bg-accent text-white border-accent' : ''}`} onClick={() => setShowClean((v) => !v)}>
-      Clean
+      {t('data.clean')}
     </button>
     <button className={`tb-btn ${showTransform ? 'bg-accent text-white border-accent' : ''}`} onClick={() => setShowTransform((v) => !v)}>
-      Transform
+      {t('data.transform')}
     </button>
+    </div>
     <div className="h-4 w-px bg-border mx-1" />
+    <div role="group" aria-label={t('data.groupView')} className="flex flex-wrap items-center gap-2">
     <button
       className={`tb-btn ${freezeFirstCol ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setFreezeFirstCol((v) => !v)}
-      title="Keep the row numbers and the first column visible while scrolling"
+      title={t('data.freezeHint')}
     >
-      Freeze col
+      {t('data.freezeCol')}
     </button>
     <button
       className={`tb-btn ${showInspector ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setShowInspector((value) => !value)}
-      title="Open the variable inspector"
+      title={t('data.variablesHint')}
     >
-      Variables
+      {t('data.variables')}
     </button>
     <button
       className={`tb-btn ${showFilter ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setShowFilter((v) => !v)}
-      title="Filter the rows shown in the grid (view only, data unchanged)"
+      title={t('data.filterHint')}
     >
-      Filter
+      {t('data.filter')}
     </button>
+    </div>
   </div>
 
   {showFilter && (
     <div className="bg-surface border-b border-border px-3 py-1.5 flex flex-wrap items-center gap-2 text-[11px] shrink-0">
-      <span className="font-mono text-[9px] text-text3 uppercase tracking-widest">Row filter</span>
+      <span className="font-mono text-[9px] text-text3 uppercase tracking-widest">{t('data.rowFilter')}</span>
       <select
         className="bg-surface3 border border-border2 rounded px-1 py-1 text-text"
         value={filterCol}
@@ -288,26 +302,26 @@ export const DataTab = ({
         value={filterOp}
         onChange={(e) => setFilterOp(e.target.value as RowFilterOp)}
       >
-        <option value="contains">contains</option>
+        <option value="contains">{t('data.contains')}</option>
         <option value="equals">=</option>
         <option value="notEquals">≠</option>
         <option value="gt">&gt;</option>
         <option value="gte">≥</option>
         <option value="lt">&lt;</option>
         <option value="lte">≤</option>
-        <option value="empty">is empty</option>
-        <option value="notEmpty">is not empty</option>
+        <option value="empty">{t('data.isEmpty')}</option>
+        <option value="notEmpty">{t('data.isNotEmpty')}</option>
       </select>
       {filterNeedsValue && (
         <input
           className="bg-surface3 border border-border2 rounded px-2 py-1 w-40 text-text"
-          placeholder="Value"
+          placeholder={t('data.value')}
           value={filterValue}
           onChange={(e) => setFilterValue(e.target.value)}
         />
       )}
       <span className="text-text3 font-mono text-[10px]">
-        {visibleRowCount} / {grid.rows.length} rows
+        {visibleRowCount} / {grid.rows.length} {t('data.rowsUnit')}
       </span>
       <button
         className="tb-btn"
@@ -316,20 +330,20 @@ export const DataTab = ({
           setFilterOp('contains');
         }}
       >
-        Clear filter
+        {t('data.clearFilter')}
       </button>
       <button
         type="button"
         className={`tb-btn ${filterAffectsAnalysis ? 'bg-accent text-white border-accent' : ''}`}
         onClick={() => setFilterAffectsAnalysis(value => !value)}
-        title="Choose whether the row filter also limits the rows used by analyses"
+        title={t('data.affectsHint')}
       >
-        {filterAffectsAnalysis ? 'Also filter analyses' : 'View only'}
+        {filterAffectsAnalysis ? t('data.alsoFilter') : t('data.viewOnly')}
       </button>
       <span className="text-text3 text-[10px] italic">
         {filterAffectsAnalysis
-          ? `analyses use ${visibleRowCount} of ${grid.rows.length} rows`
-          : 'view only — analyses still use all rows'}
+          ? `${t('data.analysesUse')} ${visibleRowCount} ${t('data.of')} ${grid.rows.length} ${t('data.rowsUnit')}`
+          : t('data.viewOnlyHint')}
       </span>
     </div>
   )}
@@ -343,7 +357,7 @@ export const DataTab = ({
           else setGrid(next);
           setValidation({ ran: false, issues: [] });
         }
-        showToast('Transform', msg, kind);
+        showToast(t('toast.transform'), msg, kind);
       }}
     />
   )}
@@ -354,7 +368,7 @@ export const DataTab = ({
       onApply={(next, msg) => {
         setGrid(next);
         setValidation({ ran: false, issues: [] });
-        showToast('Clean', msg, 'ok');
+        showToast(t('toast.clean'), msg, 'ok');
       }}
     />
   )}
@@ -362,10 +376,10 @@ export const DataTab = ({
   {validation.ran && (
     <div className="bg-surface border-b border-border px-3 py-1.5 flex flex-wrap items-center gap-2 text-[10px] font-mono shrink-0">
       {validation.issues.length === 0 ? (
-        <span className="text-green">VALID: 0 invalid cells</span>
+        <span className="text-green">{t('data.validNone')}</span>
       ) : (
         <>
-          <span className="text-yellow font-bold">{validation.issues.length} INVALID</span>
+          <span className="text-yellow font-bold">{validation.issues.length} {t('data.invalid')}</span>
           <span className="text-text3">|</span>
           {gridInvalidByColumn(grid)
             .filter((c) => c.count > 0)
@@ -376,6 +390,15 @@ export const DataTab = ({
                 onClick={() => {
                   const first = validation.issues.find((i) => i.c === c.col);
                   if (first) {
+                    // A view filter can hide the invalid row: clear it so the
+                    // jump actually lands on the cell that needs fixing.
+                    if (
+                      activeRowFilter &&
+                      !rowMatches(grid, grid.rows[first.r] ?? [], activeRowFilter)
+                    ) {
+                      setFilterValue('');
+                      setShowFilter(false);
+                    }
                     setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
                     setActiveTab('data');
                   }
@@ -388,13 +411,21 @@ export const DataTab = ({
             className="tb-btn"
             onClick={() => {
               const first = validation.issues[0];
-              if (first) setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
+              if (!first) return;
+              if (
+                activeRowFilter &&
+                !rowMatches(grid, grid.rows[first.r] ?? [], activeRowFilter)
+              ) {
+                setFilterValue('');
+                setShowFilter(false);
+              }
+              setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
             }}
           >
-            Jump to first
+            {t('data.jumpFirst')}
           </button>
           <button className="tb-btn" onClick={() => setValidation({ ran: false, issues: [] })}>
-            Dismiss
+            {t('data.dismiss')}
           </button>
         </>
       )}
@@ -405,11 +436,12 @@ export const DataTab = ({
     <div className={`${showInspector ? 'hidden lg:flex' : 'flex'} min-h-0 min-w-0 flex-1 flex-col`}>
       <div className="panel-header">
         <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-        Grid View
+        {t('data.gridView')}
       </div>
 
   <DataGrid
     grid={grid}
+    resetKey={datasetId}
     focusCell={focusCell}
     onCell={updateCell}
     onRenameCol={(c, name) => {
@@ -424,41 +456,43 @@ export const DataTab = ({
     onMoveCol={onMoveColumn}
     onDeleteCol={(c) => {
       if (grid.cols.length <= 1) {
-        showToast('Columns', 'At least one column is required', 'warn');
+        showToast(t('toast.columns'), t('data.columnRequired'), 'warn');
         return;
       }
-      if (!window.confirm(`Delete column "${grid.cols[c]?.name}"? You can undo.`)) return;
+      if (!window.confirm(`${t('data.deleteColumnPrefix')} "${grid.cols[c]?.name}"${t('data.deleteColumnSuffix')}`)) return;
       onDeleteColumn(c);
     }}
     onInsertRow={(at) => setGrid((prev) => gridInsertRow(prev, at))}
     onDeleteRow={(r) => {
       if (grid.rows.length <= 1) {
-        showToast('Rows', 'At least one row is required', 'warn');
+        showToast(t('toast.rows'), t('data.rowRequired'), 'warn');
         return;
       }
-      if (!window.confirm(`Delete row ${r + 1}? You can undo.`)) return;
+      if (!window.confirm(`${t('data.deleteRowPrefix')} ${r + 1}${t('data.deleteRowSuffix')}`)) return;
       setGrid((prev) => gridDeleteRow(prev, r));
     }}
     onPaste={(r, c, text) => {
-      const block = parseTsvBlock(text).filter((line) => line.some((v) => String(v ?? '').trim() !== ''));
+      const block = gridTrimTrailingEmptyLines(parseTsvBlock(text));
       if (block.length === 0) return;
       setGrid((prev) => gridPasteTsv(prev, r, c, block));
-      showToast('Paste', `${block.length}x${Math.max(...block.map((l) => l.length))} cells pasted`, 'ok');
+      showToast(t('toast.paste'), `${block.length}x${Math.max(...block.map((l) => l.length))} ${t('data.cellsPasted')}`, 'ok');
     }}
     onCopyRange={(range) => {
       setSelRange(range);
       const tsv = gridRangeToTsv(grid, range);
       navigator.clipboard?.writeText(tsv).catch(() => undefined);
-      showToast('Copy', 'Range copied to clipboard', 'ok');
+      showToast(t('toast.copy'), t('data.rangeCopied'), 'ok');
     }}
     onClearRange={(range) => setGrid((prev) => gridClearRange(prev, range))}
     onFillDown={(range) => setGrid((prev) => gridFillDown(prev, range))}
+    onFillRight={(range) => setGrid((prev) => gridFillRight(prev, range))}
+    onSetRange={(range, value) => setGrid((prev) => gridSetRangeValue(prev, range, value))}
     freezeFirstCol={freezeFirstCol}
     rowFilter={activeRowFilter}
     onSortCol={(col, dir) => {
       setGrid((prev) => gridSortByColumn(prev, col, dir));
       setValidation({ ran: false, issues: [] });
-      showToast('Sort', `Sorted by ${grid.cols[col]?.name ?? `column ${col + 1}`} (${dir})`, 'ok');
+      showToast(t('toast.sort'), `${t('data.sortedBy')} ${grid.cols[col]?.name ?? `${t('data.column').toLowerCase()} ${col + 1}`} (${dir})`, 'ok');
     }}
     onFocusCol={onFocusColumn}
     onInspectCol={(col) => {
@@ -469,26 +503,26 @@ export const DataTab = ({
   {selRange && (
     <div className="bg-surface border-t border-border px-3 py-1 flex items-center gap-2 text-[10px] font-mono text-text3 shrink-0">
       <span>
-        SEL: R{Math.min(selRange.r0, selRange.r1) + 1}-{Math.max(selRange.r0, selRange.r1) + 1} C
+        {t('data.selection')}: R{Math.min(selRange.r0, selRange.r1) + 1}-{Math.max(selRange.r0, selRange.r1) + 1} C
         {Math.min(selRange.c0, selRange.c1) + 1}-{Math.max(selRange.c0, selRange.c1) + 1}
       </span>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridFillDown(prev, selRange))}>
-        Fill down
+        {t('data.fillDown')}
       </button>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridFillRight(prev, selRange))}>
-        Fill right
+        {t('data.fillRight')}
       </button>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridClearRange(prev, selRange))}>
-        Clear selection
+        {t('data.clearSelection')}
       </button>
       <button
         className="tb-btn"
         onClick={() => {
           navigator.clipboard?.writeText(gridRangeToTsv(grid, selRange)).catch(() => undefined);
-          showToast('Copy', 'Range copied to clipboard', 'ok');
+          showToast(t('toast.copy'), t('data.rangeCopied'), 'ok');
         }}
       >
-        Copy
+        {t('data.copy')}
       </button>
     </div>
   )}
@@ -511,10 +545,10 @@ export const DataTab = ({
           onDuplicate={onDuplicateColumn}
           onDelete={(c) => {
             if (grid.cols.length <= 1) {
-              showToast('Columns', 'At least one column is required', 'warn');
+              showToast(t('toast.columns'), t('data.columnRequired'), 'warn');
               return;
             }
-            if (!window.confirm(`Delete column "${grid.cols[c]?.name}"? You can undo.`)) return;
+            if (!window.confirm(`${t('data.deleteColumnPrefix')} "${grid.cols[c]?.name}"${t('data.deleteColumnSuffix')}`)) return;
             onDeleteColumn(c);
             setShowInspector(false);
           }}
@@ -525,16 +559,16 @@ export const DataTab = ({
   </div>
 
   <div className="bg-surface border-t border-border p-2 flex gap-2 shrink-0">
-    <button className="tb-btn" onClick={addColumn}><Plus className="w-3 h-3 inline mr-1" /> Column</button>
-    <button className="tb-btn" onClick={addRow}><Plus className="w-3 h-3 inline mr-1" /> Row</button>
+    <button className="tb-btn" onClick={addColumn}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addColumn')}</button>
+    <button className="tb-btn" onClick={addRow}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addRow')}</button>
     <button
       className="tb-btn text-red/80 hover:bg-red hover:text-white"
       onClick={() => {
-        if (!window.confirm('Clear all cells? You can undo.')) return;
+        if (!window.confirm(t('data.confirmClear'))) return;
         setGrid((prev) => gridClear(prev));
       }}
     >
-      <Trash2 className="w-3 h-3 inline mr-1" /> Clear
+      <Trash2 className="w-3 h-3 inline mr-1" /> {t('data.clear')}
     </button>
   </div>
 </div>

@@ -10,6 +10,7 @@ import { parseNum } from '../../stats/core';
 import { analysisRows, type Dataset } from '../../grid/types';
 import type { SurvivalParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { t } from '../../i18n';
 
 export interface SurvivalInput {
   grid: Dataset;
@@ -107,7 +108,7 @@ export const buildSurvivalOutput = ({
           <div className="h-[300px] w-full bg-surface3/30 rounded p-2">
             <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 50, left: 65, right: 25 }} domain={{ y: [0, 100] }}>
               <VictoryAxis
-                label="Tempo"
+                label={t('chart.time')}
                 style={{
                   axis: { stroke: '#333' },
                   axisLabel: { fill: '#888', fontSize: 10, padding: 30 },

@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown, Pencil } from 'lucide-react';
 import type { CategoryLevel, ColType, GridData } from './types';
-import { COL_TYPES, columnLevels, isGroupColumn, levelLabel, validateValue } from './types';
+import { COL_TYPES, columnLabel, columnLevels, isGroupColumn, levelLabel, validateValue } from './types';
 import { rowMatches, type RowFilter } from './ops';
+import { ROW_HEIGHT, visibleWindow } from './virtual';
+import { t } from '../i18n';
 import { LevelsEditor } from './LevelsEditor';
 
 interface Props {
@@ -22,25 +24,67 @@ interface Props {
   onCopyRange: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
   onClearRange: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
   onFillDown: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
+  onFillRight: (range: { r0: number; c0: number; r1: number; c1: number }) => void;
+  onSetRange: (range: { r0: number; c0: number; r1: number; c1: number }, value: string) => void;
   onSortCol?: (col: number, dir: 'asc' | 'desc') => void;
   onInspectCol?: (col: number) => void;
   onFocusCol?: (col: number) => void;
   rowFilter?: RowFilter | null;
   freezeFirstCol?: boolean;
   focusCell?: { r: number; c: number; stamp: number } | null;
+  /** Change this key to clear the selection after a dataset replacement. */
+  resetKey?: string;
 }
 
 export function DataGrid(props: Props) {
   const { grid, freezeFirstCol } = props;
-  const visibleRows = grid.rows
-    .map((row, index) => ({ row, index }))
-    .filter(({ row }) => rowMatches(grid, row, props.rowFilter ?? null));
+  const visibleRows = useMemo(
+    () =>
+      grid.rows
+        .map((row, index) => ({ row, index }))
+        .filter(({ row }) => rowMatches(grid, row, props.rowFilter ?? null)),
+    [grid, props.rowFilter]
+  );
   const [editingCol, setEditingCol] = useState<number | null>(null);
   const [draftName, setDraftName] = useState('');
   const [menu, setMenu] = useState<{ kind: 'col' | 'row'; index: number; x: number; y: number } | null>(null);
   const [anchor, setAnchor] = useState<{ r: number; c: number } | null>(null);
   const [sel, setSel] = useState<{ r0: number; c0: number; r1: number; c1: number } | null>(null);
+  const [fillDrag, setFillDrag] = useState<{
+    start: { r0: number; c0: number; r1: number; c1: number };
+    target: { r: number; c: number };
+  } | null>(null);
+  const [levelEditorCell, setLevelEditorCell] = useState<{ r: number; c: number } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [viewportH, setViewportH] = useState(600);
+  // Only visible rows are mounted: with 5000 rows the previous table created
+  // 5000 inputs per column and every keystroke re-rendered all of them.
+  const win = visibleWindow(visibleRows.length, scrollTop, viewportH);
+  const windowRows = visibleRows.slice(win.start, win.end);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Drag the small handle at the bottom-right corner of a selection to copy
+  // the top/left edge across the rows/columns it covers.
+  useEffect(() => {
+    if (!fillDrag) return;
+    const finish = () => {
+      const { start, target } = fillDrag;
+      const down = target.r - start.r1;
+      const right = target.c - start.c1;
+      if (down > 0 || (down >= 0 && right > 0)) {
+        if (down >= right) {
+          props.onFillDown({ r0: start.r0, c0: start.c0, r1: target.r, c1: start.c1 });
+        } else {
+          props.onFillRight({ r0: start.r0, c0: start.c0, r1: start.r1, c1: target.c });
+        }
+      }
+      setFillDrag(null);
+    };
+    window.addEventListener('mouseup', finish);
+    return () => window.removeEventListener('mouseup', finish);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fillDrag]);
 
   const inSel = (r: number, c: number): boolean => {
     if (!sel) return false;
@@ -50,6 +94,15 @@ export function DataGrid(props: Props) {
     const c1 = Math.max(sel.c0, sel.c1);
     return r >= r0 && r <= r1 && c >= c0 && c <= c1;
   };
+
+  useEffect(() => {
+    setAnchor(null);
+    setSel(null);
+    setFillDrag(null);
+    setEditingCol(null);
+    setMenu(null);
+    setLevelEditorCell(null);
+  }, [props.resetKey]);
 
   useEffect(() => {
     if (!menu) return;
@@ -68,11 +121,72 @@ export function DataGrid(props: Props) {
   }, [menu]);
 
   useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const update = () => setViewportH(el.clientHeight);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Keep the focused cell mounted before focusing it (validation jumps and
+  // "Jump to first" can target a row outside the current window).
+  useEffect(() => {
     if (!props.focusCell) return;
-    const el = document.querySelector<HTMLElement>(`[data-cell="${props.focusCell.r}-${props.focusCell.c}"]`);
-    el?.focus();
-    el?.scrollIntoView({ block: 'nearest' });
+    const position = visibleRows.findIndex(item => item.index === props.focusCell?.r);
+    const el = scrollRef.current;
+    if (position >= 0 && el) {
+      const top = position * ROW_HEIGHT;
+      if (top < el.scrollTop || top + ROW_HEIGHT > el.scrollTop + el.clientHeight) {
+        el.scrollTop = top;
+        setScrollTop(top);
+      }
+    }
+    const frame = requestAnimationFrame(() => {
+      const cell = document.querySelector<HTMLElement>(
+        `[data-cell="${props.focusCell?.r}-${props.focusCell?.c}"]`
+      );
+      cell?.focus();
+      cell?.scrollIntoView({ block: 'nearest' });
+    });
+    return () => cancelAnimationFrame(frame);
+    // `visibleRows` is derived from the grid and the filter.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.focusCell]);
+
+  // Deleting rows or applying a filter can leave the scroll position past the
+  // new end; pull it back so the table never shows a blank viewport.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const max = Math.max(0, visibleRows.length * ROW_HEIGHT - el.clientHeight);
+    if (el.scrollTop > max) {
+      el.scrollTop = max;
+      setScrollTop(max);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleRows.length]);
+
+  /**
+   * When a multi-cell selection is active, Tab from its bottom-right cell
+   * moves focus to the fill handle instead of skipping it. The handle is the
+   * next focusable element and keeps the normal Tab order afterwards.
+   */
+  const focusFillHandle = (
+    event: React.KeyboardEvent<HTMLElement>,
+    row: number,
+    column: number
+  ): boolean => {
+    if (!sel || (sel.r0 === sel.r1 && sel.c0 === sel.c1)) return false;
+    if (Math.max(sel.r0, sel.r1) !== row || Math.max(sel.c0, sel.c1) !== column) return false;
+    const handle = event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(
+      '[data-fill-handle]'
+    );
+    if (!handle) return false;
+    handle.focus();
+    return true;
+  };
 
   const commitRename = (c: number) => {
     if (draftName.trim() && draftName.trim() !== grid.cols[c].name) props.onRenameCol(c, draftName);
@@ -106,18 +220,23 @@ export function DataGrid(props: Props) {
 
   return (
     <>
-      <div className="flex-1 overflow-auto scrollbar">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-auto scrollbar"
+        onScroll={event => setScrollTop(event.currentTarget.scrollTop)}
+      >
         <table className="w-full border-collapse font-mono text-[11px]">
           <thead className="sticky top-0 z-20">
             <tr className="bg-surface2">
-              <th className={`w-10 border border-border p-1 text-text3 ${freezeFirstCol ? 'sticky left-0 z-30 bg-surface2' : ''}`}>#</th>
+              <th scope="col" className={`w-10 border border-border p-1 text-text3 ${freezeFirstCol ? 'sticky left-0 z-30 bg-surface2' : ''}`}>#</th>
               {grid.cols.map((col, i) => (
                 <th
                   key={i}
+                  scope="col"
                   className={`group border border-border p-1 text-accent2 min-w-[100px] cursor-context-menu select-none ${
                     freezeFirstCol && i === 0 ? 'sticky left-10 z-20 bg-surface2' : ''
                   }`}
-                  title={`Double-click to rename "${col.name}" (duplicate names get a _2 suffix), right-click for the column menu`}
+                  title={`${t('grid.menuRename')}: ${col.name}`}
                   onDoubleClick={() => {
                     setEditingCol(i);
                     setDraftName(col.name);
@@ -127,7 +246,7 @@ export function DataGrid(props: Props) {
                   {editingCol === i ? (
                     <input
                       autoFocus
-                      aria-label={`Column name for ${col.name}`}
+                      aria-label={`${t('grid.menuRename')}: ${col.name}`}
                       maxLength={64}
                       className="w-full bg-surface3 border border-accent rounded px-1 py-0.5 text-text outline-none text-center"
                       value={draftName}
@@ -146,8 +265,8 @@ export function DataGrid(props: Props) {
                       <button
                         type="button"
                         className="opacity-0 group-hover:opacity-100 focus:opacity-100 text-text3 hover:text-accent transition-opacity"
-                        title={`Rename "${col.name}"`}
-                        aria-label={`Rename column ${col.name}`}
+                        title={`${t('grid.renameTitle')} "${col.name}"`}
+                        aria-label={`${t('grid.renameAria')} ${col.name}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           setEditingCol(i);
@@ -163,24 +282,26 @@ export function DataGrid(props: Props) {
             </tr>
             <tr className="bg-surface2/80 backdrop-blur">
               <th
+                scope="col"
                 className={`border border-border text-[8px] text-text3 uppercase p-1 ${freezeFirstCol ? 'sticky left-0 z-30 bg-surface2' : ''}`}
                 title={
-                  'Column type — drives cell validation, Auto-fix coercion and the Excel export. Analyses still infer numbers from the values.\n' +
-                  COL_TYPES.map((t) => `${t.label} = ${t.full}`).join('\n')
+                  t('grid.typeHint') + '\n' +
+                  COL_TYPES.map((item) => `${item.label} = ${item.full}`).join('\n')
                 }
               >
-                Type
+                {t('inspector.type')}
               </th>
               {grid.cols.map((col, i) => (
                 <th
                   key={i}
+                  scope="col"
                   className={`border border-border p-0 ${
                     freezeFirstCol && i === 0 ? 'sticky left-10 z-20 bg-surface2' : ''
                   }`}
                 >
                   <div className="relative">
                     <select
-                      aria-label={`Data type for ${col.name}`}
+                      aria-label={`${t('inspector.type')}: ${col.name}`}
                       title={COL_TYPES.find((t) => t.id === col.type)?.full ?? col.type}
                       className="w-full bg-transparent border-none text-accent2 text-[10px] font-semibold py-1 pl-1 pr-5 outline-none appearance-none text-center cursor-pointer hover:bg-white/5"
                       value={col.type}
@@ -213,21 +334,27 @@ export function DataGrid(props: Props) {
                   colSpan={grid.cols.length + 1}
                   className="border border-border p-4 text-center text-text3 italic"
                 >
-                  No rows match the active filter
+                  {t('data.noRowsMatch')}
                 </td>
               </tr>
             )}
-            {visibleRows.map(({ row, index: rIdx }) => (
-              <tr key={rIdx} className="hover:bg-white/5 transition-colors">
-                <td
-                  className={`border border-border text-center text-text3 bg-surface2/30 cursor-context-menu select-none ${
+            {win.padTop > 0 && (
+              <tr aria-hidden="true" style={{ height: win.padTop }}>
+                <td colSpan={grid.cols.length + 1} className="p-0 border-0" />
+              </tr>
+            )}
+            {windowRows.map(({ row, index: rIdx }) => (
+              <tr key={rIdx} style={{ height: ROW_HEIGHT }} className="hover:bg-white/5 transition-colors">
+                <th
+                  scope="row"
+                  className={`border border-border text-center font-normal text-text3 bg-surface2/30 cursor-context-menu select-none ${
                     freezeFirstCol ? 'sticky left-0 z-10 bg-surface2' : ''
                   }`}
-                  title="Right-click for row menu"
+                  title={t('grid.rowMenu')}
                   onContextMenu={(e) => openMenu(e, 'row', rIdx)}
                 >
                   {rIdx + 1}
-                </td>
+                </th>
                 {row.map((cell, cIdx) => {
                   const col = grid.cols[cIdx];
                   const isValid = validateValue(cell, col?.type ?? 'str');
@@ -239,6 +366,10 @@ export function DataGrid(props: Props) {
                   return (
                     <td
                       key={cIdx}
+                      data-selected={selected || undefined}
+                      onMouseEnter={() => {
+                        if (fillDrag) setFillDrag({ ...fillDrag, target: { r: rIdx, c: cIdx } });
+                      }}
                       className={`border border-border p-0 relative ${
                         selected ? 'outline outline-1 outline-accent' : ''
                       } ${
@@ -246,10 +377,11 @@ export function DataGrid(props: Props) {
                       }`}
                     >
                       {isCat ? (
+                        <div className="relative h-full">
                         <select
                           data-cell={`${rIdx}-${cIdx}`}
-                          aria-label={`${col?.name ?? 'Group'} value`}
-                          title={extraLevel ? `${rawCell} is not in the declared levels` : undefined}
+                          aria-label={`${col ? columnLabel(col) : t('form.group')} ${t('grid.rowLabel')} ${rIdx + 1}`}
+                          title={extraLevel ? `${rawCell} ${t('grid.notInLevels')}` : undefined}
                           className={`w-full h-full bg-transparent border-none pl-2 pr-6 py-1 text-text outline-none focus:bg-accent/10 transition-colors cursor-pointer ${extraLevel ? 'italic text-yellow' : ''} ${selected ? 'bg-accent/10' : ''}`}
                           value={rawCell}
                           onFocus={(e) => {
@@ -267,10 +399,18 @@ export function DataGrid(props: Props) {
                               setSel({ r0: rIdx, c0: cIdx, r1: rIdx, c1: cIdx });
                             }
                           }}
-                          onChange={(e) => props.onCell(rIdx, cIdx, e.target.value)}
+                          onChange={(e) => {
+                            const multi = sel && (sel.r0 !== sel.r1 || sel.c0 !== sel.c1);
+                            if (multi && inSel(rIdx, cIdx)) props.onSetRange(sel, e.target.value);
+                            else props.onCell(rIdx, cIdx, e.target.value);
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') { e.preventDefault(); moveTo(rIdx, cIdx, e.shiftKey ? -1 : 1, 0, e.shiftKey); }
-                            else if (e.key === 'Tab') { e.preventDefault(); moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey); }
+                            else if (e.key === 'Tab') {
+                              e.preventDefault();
+                              if (!e.shiftKey && focusFillHandle(e, rIdx, cIdx)) return;
+                              moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey);
+                            }
                             else if (e.key === 'Escape') { e.currentTarget.blur(); }
                           }}
                           onPaste={(e) => {
@@ -290,12 +430,47 @@ export function DataGrid(props: Props) {
                               {level.label}
                             </option>
                           ))}
-                          {extraLevel && <option value={rawCell}>{rawCell} (not in list)</option>}
+                          {extraLevel && <option value={rawCell}>{rawCell} {t('grid.notInList')}</option>}
                         </select>
+                        <button
+                          type="button"
+                          data-add-level={cIdx}
+                          aria-label={`${t('grid.addLevel')}: ${col ? columnLabel(col) : t('form.group')}`}
+                          title={t('grid.addLevel')}
+                          className="absolute right-1 top-1/2 -translate-y-1/2 rounded px-1 text-[10px] text-text3 hover:bg-border hover:text-accent"
+                          onMouseDown={event => event.stopPropagation()}
+                          onClick={event => {
+                            event.stopPropagation();
+                            setLevelEditorCell({ r: rIdx, c: cIdx });
+                          }}
+                        >
+                          +
+                        </button>
+                        {levelEditorCell?.r === rIdx && levelEditorCell.c === cIdx && (
+                          <LevelsEditor
+                            grid={grid}
+                            column={cIdx}
+                            onLevels={props.onLevels}
+                            onRecode={props.onRecode}
+                            controlledOpen
+                            showTrigger={false}
+                            onOpenChange={open => {
+                              if (open) return;
+                              setLevelEditorCell(null);
+                              requestAnimationFrame(() => {
+                                document
+                                  .querySelector<HTMLElement>(`[data-cell="${rIdx}-${cIdx}"]`)
+                                  ?.focus();
+                              });
+                            }}
+                          />
+                        )}
+                        </div>
                       ) : (
                         <input
                           type="text"
                           data-cell={`${rIdx}-${cIdx}`}
+                          aria-label={`${col ? columnLabel(col) : t('form.group')} ${t('grid.rowLabel')} ${rIdx + 1}`}
                           className={`w-full h-full bg-transparent border-none px-2 py-1 text-text outline-none focus:bg-accent/10 transition-colors ${!isValid ? 'cell-invalid' : ''} ${selected ? 'bg-accent/10' : ''}`}
                           value={cell}
                           onFocus={(e) => {
@@ -315,20 +490,34 @@ export function DataGrid(props: Props) {
                               setSel({ r0: rIdx, c0: cIdx, r1: rIdx, c1: cIdx });
                             }
                           }}
-                          onChange={(e) => props.onCell(rIdx, cIdx, e.target.value)}
+                          onChange={(e) => {
+                            const multi = sel && (sel.r0 !== sel.r1 || sel.c0 !== sel.c1);
+                            if (multi && inSel(rIdx, cIdx)) props.onSetRange(sel, e.target.value);
+                            else props.onCell(rIdx, cIdx, e.target.value);
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'ArrowDown') { e.preventDefault(); moveTo(rIdx, cIdx, 1, 0, e.shiftKey); }
                             else if (e.key === 'ArrowUp') { e.preventDefault(); moveTo(rIdx, cIdx, -1, 0, e.shiftKey); }
                             else if (e.key === 'ArrowLeft') { e.preventDefault(); moveTo(rIdx, cIdx, 0, -1, e.shiftKey); }
                             else if (e.key === 'ArrowRight') { e.preventDefault(); moveTo(rIdx, cIdx, 0, 1, e.shiftKey); }
                             else if (e.key === 'Enter') { e.preventDefault(); moveTo(rIdx, cIdx, e.shiftKey ? -1 : 1, 0, e.shiftKey); }
-                            else if (e.key === 'Tab') { e.preventDefault(); moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey); }
+                            else if (e.key === 'Tab') {
+                              e.preventDefault();
+                              if (!e.shiftKey && focusFillHandle(e, rIdx, cIdx)) return;
+                              moveTo(rIdx, cIdx, 0, e.shiftKey ? -1 : 1, e.shiftKey);
+                            }
                             else if ((e.key === 'Delete' || e.key === 'Backspace') && e.ctrlKey && sel) {
                               e.preventDefault();
                               props.onClearRange(sel);
                             } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c' && sel) {
                               e.preventDefault();
                               props.onCopyRange(sel);
+                            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd' && sel) {
+                              e.preventDefault();
+                              props.onFillDown(sel);
+                            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r' && sel) {
+                              e.preventDefault();
+                              props.onFillRight(sel);
                             }
                           }}
                           onPaste={(e) => {
@@ -340,12 +529,55 @@ export function DataGrid(props: Props) {
                           }}
                         />
                       )}
-                      {!isCat && cell === '' && <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] text-text3 pointer-events-none italic opacity-50">null</span>}
+                      {sel &&
+                        Math.max(sel.r0, sel.r1) === rIdx &&
+                        Math.max(sel.c0, sel.c1) === cIdx && (
+                          <button
+                            type="button"
+                            data-fill-handle
+                            aria-label={t('grid.fillHandle')}
+                            aria-keyshortcuts="Enter Shift+Enter"
+                            title={t('grid.fillHandleTitle')}
+                            className="absolute bottom-0 right-0 z-10 h-2 w-2 cursor-crosshair border border-white/70 bg-accent focus:outline focus:outline-2 focus:outline-accent"
+                            onMouseDown={event => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              setFillDrag({
+                                start: {
+                                  r0: Math.min(sel.r0, sel.r1),
+                                  c0: Math.min(sel.c0, sel.c1),
+                                  r1: Math.max(sel.r0, sel.r1),
+                                  c1: Math.max(sel.c0, sel.c1),
+                                },
+                                target: { r: rIdx, c: cIdx },
+                              });
+                            }}
+                            onKeyDown={event => {
+                              if (event.key !== 'Enter') return;
+                              event.preventDefault();
+                              event.stopPropagation();
+                              const range = {
+                                r0: Math.min(sel.r0, sel.r1),
+                                c0: Math.min(sel.c0, sel.c1),
+                                r1: Math.max(sel.r0, sel.r1),
+                                c1: Math.max(sel.c0, sel.c1),
+                              };
+                              if (event.shiftKey) props.onFillRight(range);
+                              else props.onFillDown(range);
+                            }}
+                          />
+                        )}
+                      {!isCat && cell === '' && <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] text-text3 pointer-events-none italic opacity-50">{t('grid.null')}</span>}
                     </td>
                   );
                 })}
               </tr>
             ))}
+            {win.padBottom > 0 && (
+              <tr aria-hidden="true" style={{ height: win.padBottom }}>
+                <td colSpan={grid.cols.length + 1} className="p-0 border-0" />
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -360,14 +592,14 @@ export function DataGrid(props: Props) {
           {menu.kind === 'col' ? (
             <>
               <MenuItem
-                label="Variable details"
+                label={t('grid.menuDetails')}
                 onClick={() => {
                   props.onInspectCol?.(menu.index);
                   setMenu(null);
                 }}
               />
               <MenuItem
-                label="Rename column"
+                label={t('grid.menuRename')}
                 onClick={() => {
                   setEditingCol(menu.index);
                   setDraftName(grid.cols[menu.index]?.name ?? '');
@@ -376,34 +608,34 @@ export function DataGrid(props: Props) {
               />
               <div className="h-px bg-border my-1" />
               <MenuItem
-                label="Sort ascending"
+                label={t('grid.menuSortAsc')}
                 onClick={() => {
                   props.onSortCol?.(menu.index, 'asc');
                   setMenu(null);
                 }}
               />
               <MenuItem
-                label="Sort descending"
+                label={t('grid.menuSortDesc')}
                 onClick={() => {
                   props.onSortCol?.(menu.index, 'desc');
                   setMenu(null);
                 }}
               />
               <div className="h-px bg-border my-1" />
-              <MenuItem label="Insert column left" onClick={() => { setMenu(null); props.onInsertCol(menu.index); }} />
-              <MenuItem label="Insert column right" onClick={() => { setMenu(null); props.onInsertCol(menu.index + 1); }} />
-              <MenuItem label="Duplicate column" onClick={() => { setMenu(null); props.onDuplicateCol(menu.index); }} />
-              <MenuItem label="Move left" onClick={() => { setMenu(null); props.onMoveCol(menu.index, -1); }} />
-              <MenuItem label="Move right" onClick={() => { setMenu(null); props.onMoveCol(menu.index, 1); }} />
+              <MenuItem label={t('grid.menuInsertLeft')} onClick={() => { setMenu(null); props.onInsertCol(menu.index); }} />
+              <MenuItem label={t('grid.menuInsertRight')} onClick={() => { setMenu(null); props.onInsertCol(menu.index + 1); }} />
+              <MenuItem label={t('grid.menuDuplicate')} onClick={() => { setMenu(null); props.onDuplicateCol(menu.index); }} />
+              <MenuItem label={t('grid.menuMoveLeft')} onClick={() => { setMenu(null); props.onMoveCol(menu.index, -1); }} />
+              <MenuItem label={t('grid.menuMoveRight')} onClick={() => { setMenu(null); props.onMoveCol(menu.index, 1); }} />
               <div className="h-px bg-border my-1" />
-              <MenuItem danger label="Delete column" onClick={() => { setMenu(null); props.onDeleteCol(menu.index); }} />
+              <MenuItem danger label={t('grid.menuDeleteColumn')} onClick={() => { setMenu(null); props.onDeleteCol(menu.index); }} />
             </>
           ) : (
             <>
-              <MenuItem label="Insert row above" onClick={() => { setMenu(null); props.onInsertRow(menu.index); }} />
-              <MenuItem label="Insert row below" onClick={() => { setMenu(null); props.onInsertRow(menu.index + 1); }} />
+              <MenuItem label={t('grid.menuInsertAbove')} onClick={() => { setMenu(null); props.onInsertRow(menu.index); }} />
+              <MenuItem label={t('grid.menuInsertBelow')} onClick={() => { setMenu(null); props.onInsertRow(menu.index + 1); }} />
               <div className="h-px bg-border my-1" />
-              <MenuItem danger label="Delete row" onClick={() => { setMenu(null); props.onDeleteRow(menu.index); }} />
+              <MenuItem danger label={t('grid.menuDeleteRow')} onClick={() => { setMenu(null); props.onDeleteRow(menu.index); }} />
             </>
           )}
         </div>

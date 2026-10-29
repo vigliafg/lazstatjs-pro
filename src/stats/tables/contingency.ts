@@ -1,4 +1,5 @@
 import { chi2SF } from '../distributions';
+import { copy } from '../reportCopy';
 import { calcFisherExact } from '../kernels';
 import type { TableSpec } from '../types';
 import type { ContingencyOptions } from '../contingency/types';
@@ -83,22 +84,22 @@ export const contingencyTables = (options: ContingencyOptions): TableSpec[] => {
 
   const observedRows = observed.map((row, i) => {
     const entry: Record<string, number | string> = {
-      label: rowLabels[i] ?? `Row ${i + 1}`,
+      label: rowLabels[i] ?? copy('Row {s1}', { s1: i + 1 }),
       total: rowTotals[i],
     };
     row.forEach((value, j) => {
-      entry[`c${j}`] = value;
+      entry[copy('c{s1}', { s1: j })] = value;
     });
     return entry;
   });
 
   const expectedRows = expected.map((row, i) => {
     const entry: Record<string, number | string> = {
-      label: rowLabels[i] ?? `Row ${i + 1}`,
+      label: rowLabels[i] ?? copy('Row {s1}', { s1: i + 1 }),
       total: rowTotals[i],
     };
     row.forEach((value, j) => {
-      entry[`c${j}`] = value;
+      entry[copy('c{s1}', { s1: j })] = value;
     });
     return entry;
   });
@@ -112,7 +113,7 @@ export const contingencyTables = (options: ContingencyOptions): TableSpec[] => {
       const colShare = colTotals[j] / n;
       const denom = Math.sqrt(Math.max(EPS, (1 - rowShare) * (1 - colShare)));
       residualRows.push({
-        cell: `${rowLabels[i] ?? `Row ${i + 1}`} · ${colLabels[j] ?? `Col ${j + 1}`}`,
+        cell: copy('{s1} · {s2}', { s1: rowLabels[i] ?? copy('Row {s1}', { s1: i + 1 }), s2: colLabels[j] ?? copy('Col {s1}', { s1: j + 1 }) }),
         observed: value,
         expected: expectancy,
         residual: std,
@@ -126,65 +127,65 @@ export const contingencyTables = (options: ContingencyOptions): TableSpec[] => {
 
   tables.push({
     id: 'cont-observed',
-    title: 'Tabella di contingenza (frequenze osservate)',
-    subtitle: `${rowCount} × ${colCount} · N = ${n}`,
+    title: copy('Tabella di contingenza (frequenze osservate)'),
+    subtitle: copy('{s1} × {s2} · N = {s3}', { s1: rowCount, s2: colCount, s3: n }),
     columns: [
-      { key: 'label', label: 'Riga', format: 'text' },
-      ...colLabels.map((label, j) => ({ key: `c${j}`, label, format: 'int' as const })),
-      { key: 'total', label: 'Totale', format: 'int' },
+      { key: 'label', label: copy('Riga'), format: 'text' },
+      ...colLabels.map((label, j) => ({ key: copy('c{s1}', { s1: j }), label, format: 'int' as const })),
+      { key: 'total', label: copy('Totale'), format: 'int' },
     ],
     rows: observedRows,
-    notes: ['Ogni cella contiene il numero di osservazioni con quella combinazione di categorie.'],
+    notes: [copy('Ogni cella contiene il numero di osservazioni con quella combinazione di categorie.')],
   });
 
   tables.push({
     id: 'cont-expected',
-    title: 'Frequenze attese sotto indipendenza',
-    subtitle: 'E = (totale riga × totale colonna) / N',
+    title: copy('Frequenze attese sotto indipendenza'),
+    subtitle: copy('E = (totale riga × totale colonna) / N'),
     columns: [
-      { key: 'label', label: 'Riga', format: 'text' },
-      ...colLabels.map((label, j) => ({ key: `c${j}`, label, format: 'dec2' as const })),
-      { key: 'total', label: 'Totale', format: 'int' },
+      { key: 'label', label: copy('Riga'), format: 'text' },
+      ...colLabels.map((label, j) => ({ key: copy('c{s1}', { s1: j }), label, format: 'dec2' as const })),
+      { key: 'total', label: copy('Totale'), format: 'int' },
     ],
     rows: expectedRows,
     notes: [
-      'Le attese sono le frequenze che si vedrebbero se le due variabili fossero indipendenti.',
+      copy('Le attese sono le frequenze che si vedrebbero se le due variabili fossero indipendenti.'),
       cochranFails
-        ? `${lowCells} cella/e su ${rowCount * colCount} hanno attesa < 5: l'approssimazione χ² è fragile (regola di Cochran).`
-        : 'Tutte le attese sono ≥ 5: l’approssimazione χ² è adeguata.',
+        ? copy('{s1} cella/e su {s2} hanno attesa < 5: l\'approssimazione χ² è fragile (regola di Cochran).', { s1: lowCells, s2: rowCount * colCount })
+        : copy('Tutte le attese sono ≥ 5: l’approssimazione χ² è adeguata.'),
     ],
   });
 
   tables.push({
     id: 'cont-residuals',
-    title: 'Residui e contributi al χ²',
-    subtitle: 'Residuo standardizzato = (O − E)/√E',
+    title: copy('Residui e contributi al χ²'),
+    subtitle: copy('Residuo standardizzato = (O − E)/√E'),
     columns: [
-      { key: 'cell', label: 'Cella', format: 'text' },
-      { key: 'observed', label: 'O', format: 'int' },
-      { key: 'expected', label: 'E', format: 'dec2' },
-      { key: 'residual', label: 'Residuo std.', format: 'dec2' },
-      { key: 'adjusted', label: 'Residuo aggiustato', format: 'dec2' },
-      { key: 'contribution', label: 'Contributo χ²', format: 'dec3' },
+      { key: 'cell', label: copy('Cella'), format: 'text' },
+      { key: 'observed', label: copy('O'), format: 'int' },
+      { key: 'expected', label: copy('E'), format: 'dec2' },
+      { key: 'residual', label: copy('Residuo std.'), format: 'dec2' },
+      { key: 'adjusted', label: copy('Residuo aggiustato'), format: 'dec2' },
+      { key: 'contribution', label: copy('Contributo χ²'), format: 'dec3' },
     ],
     rows: residualRows,
     notes: [
-      'Un residuo aggiustato oltre ±2 segnala la cella che si discosta di più dall’indipendenza.',
-      'Il contributo è quanto quella cella pesa nel χ² totale: le prime posizioni spiegano l’associazione.',
+      copy('Un residuo aggiustato oltre ±2 segnala la cella che si discosta di più dall’indipendenza.'),
+      copy('Il contributo è quanto quella cella pesa nel χ² totale: le prime posizioni spiegano l’associazione.'),
     ],
   });
 
   const testRows: Record<string, number | string>[] = [
-    { test: 'Pearson χ²', statistic: chi2, df, p: pPearson },
-    { test: 'Likelihood ratio G²', statistic: g2, df, p: pG2 },
+    { test: copy('Pearson χ²'), statistic: chi2, df, p: pPearson },
+    { test: copy('Likelihood ratio G²'), statistic: g2, df, p: pG2 },
   ];
-  if (yates) testRows.push({ test: 'Yates (correzione di continuità)', statistic: chi2Yates, df: 1, p: pYates });
+  if (yates) testRows.push({ test: copy('Yates (correzione di continuità)'), statistic: chi2Yates, df: 1, p: pYates });
   if (yates && Number.isFinite(pFisher)) {
-    testRows.push({ test: "Fisher's exact (two-sided)", statistic: NaN, df: NaN, p: pFisher });
+    testRows.push({ test: copy("Fisher's exact (two-sided)"), statistic: NaN, df: NaN, p: pFisher });
   }
   if (Number.isFinite(pMonteCarlo)) {
     testRows.push({
-      test: `Monte Carlo (${simulations.toLocaleString('it-IT')} tavole, margini fissi)`,
+      test: copy('Monte Carlo ({s1} tavole, margini fissi)', { s1: simulations.toLocaleString('it-IT') }),
       statistic: chi2,
       df,
       p: pMonteCarlo,
@@ -193,48 +194,48 @@ export const contingencyTables = (options: ContingencyOptions): TableSpec[] => {
 
   tables.push({
     id: 'cont-tests',
-    title: 'Test di indipendenza',
-    subtitle: `α = ${(1 - level / 100).toFixed(2)}`,
+    title: copy('Test di indipendenza'),
+    subtitle: copy('α = {s1}', { s1: (1 - level / 100).toFixed(2) }),
     columns: [
-      { key: 'test', label: 'Test', format: 'text' },
-      { key: 'statistic', label: 'Statistica', format: 'dec4' },
-      { key: 'df', label: 'df', format: 'int' },
-      { key: 'p', label: 'p', format: 'p' },
+      { key: 'test', label: copy('Test'), format: 'text' },
+      { key: 'statistic', label: copy('Statistica'), format: 'dec4' },
+      { key: 'df', label: copy('df'), format: 'int' },
+      { key: 'p', label: copy('p'), format: 'p' },
     ],
     rows: testRows,
     notes: [
-      `df = (righe − 1)(colonne − 1) = ${df}.`,
-      'χ² e G² condividono le stesse assunzioni: osservazioni indipendenti, categorie esaustive, attese sufficientemente grandi.',
-      'Il test dice che esiste un’associazione, non quanto sia forte né in quale direzione: per quello servono residui e misure di associazione.',
+      copy('df = (righe − 1)(colonne − 1) = {s1}.', { s1: df }),
+      copy('χ² e G² condividono le stesse assunzioni: osservazioni indipendenti, categorie esaustive, attese sufficientemente grandi.'),
+      copy('Il test dice che esiste un’associazione, non quanto sia forte né in quale direzione: per quello servono residui e misure di associazione.'),
     ],
   });
 
   const associationRows: Record<string, string | number>[] = [
-    { measure: 'Cramér’s V', value: cramersV, note: '0 = nessuna associazione, 1 = associazione perfetta' },
+    { measure: copy('Cramér’s V'), value: cramersV, note: copy('0 = nessuna associazione, 1 = associazione perfetta') },
     {
-      measure: 'Coefficiente di contingenza C',
+      measure: copy('Coefficiente di contingenza C'),
       value: contingencyCoefficient,
-      note: 'Dipende dal numero di categorie: confrontabile solo tra tabelle di stessa forma',
+      note: copy('Dipende dal numero di categorie: confrontabile solo tra tabelle di stessa forma'),
     },
   ];
   if (yates) {
     associationRows.unshift({
-      measure: 'φ (phi)',
+      measure: copy('φ (phi)'),
       value: phi,
-      note: 'Per tabelle 2×2 coincide con la correlazione tra le due variabili binarie',
+      note: copy('Per tabelle 2×2 coincide con la correlazione tra le due variabili binarie'),
     });
   }
 
   tables.push({
     id: 'cont-association',
-    title: 'Ampiezza dell’associazione',
+    title: copy('Ampiezza dell’associazione'),
     columns: [
-      { key: 'measure', label: 'Misura', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'dec3' },
-      { key: 'note', label: 'Lettura', format: 'text' },
+      { key: 'measure', label: copy('Misura'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'dec3' },
+      { key: 'note', label: copy('Lettura'), format: 'text' },
     ],
     rows: associationRows,
-    notes: ['Il p-value dipende da N; queste misure no, ed è per questo che vanno riportate insieme.'],
+    notes: [copy('Il p-value dipende da N; queste misure no, ed è per questo che vanno riportate insieme.')],
   });
 
   return tables;

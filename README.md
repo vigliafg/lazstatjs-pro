@@ -20,8 +20,11 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - Row/column count displayed in status bar
 - **Freeze first column** (plus row numbers) while scrolling wide sheets; the header row is always sticky
 - **Row filter** with type-aware operators (contains, =, ≠, >, ≥, <, ≤, empty/non-empty) and a live `visible / total` count; choose **View only** or **Also filter analyses**
-- **Variable inspector** drawer: name, type, label, description, role, rows, missing, unique/invalid counts, levels/reference, duplicate and delete
-- **Stable column ids** and parameter remapping: insert, delete, move, duplicate, split and merge never silently point an analysis at another variable
+- **Variable inspector** drawer: name, type, label, description, formula, missing codes, role, rows, missing, unique/invalid counts, levels/reference, duplicate and delete
+- **Declared missing codes** per column (e.g. `-9`, `NA`): cells carrying a code are excluded from every analysis, counted in the context bar and marked in the inspector
+- **Computed columns with persistent formulas** (`Column.formula`): the column is recalculated on every edit, references follow renames and a broken formula keeps its last values
+- **Virtualised rows** above 80 visible rows, with fill handle, `Ctrl+D` / `Ctrl+R`, multi-cell typing and 500-row paste smoke-tested
+- **Stable column ids** and parameter remapping: insert, delete, move, duplicate, split and merge never silently point an analysis at another variable; a type incompatible with the role blocks the run until the variable is reselected
 - **Sort ascending/descending per column** from the column context menu (undoable)
 - **Find & replace** with regex, case sensitivity and single-column scope; whitespace trim, duplicates/empty-row cleanup and mean/median/mode imputation live in the Clean panel
 
@@ -32,14 +35,19 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Output document**: one collapsible card per run with an outline, timestamp, analysis label and a *Setup* shortcut back to the parameters that produced it; Copy, Charts PNG, Report HTML and Results XLSX keep working
 - **Responsive panes**: below `lg` a segmented control switches between Library, Setup and Output; *Focus output* hides the library and setup on wide screens
 - **Data context** in Setup: rows, variables, missing cells, active filter, **Data peek** and a shortcut to the data editor
-- **Focused column bridge**: focus a cell in the grid, then assign that column to the primary role of the active analysis with one click
-- **Stale badges**: a result whose grid revision, dataset or filter changed is marked stale
+- **Focused column bridge**: focus a cell in the grid, pick any role of the active analysis and assign the column in two actions; the Data peek shows the role → column map
+- **Stale badges**: a result whose grid revision, dataset, filter or analysis parameters changed is marked stale
+- **Iteration loop**: every card stores the parameters that produced it, with **Re-run** and **Apply parameters** shortcuts
+- **Live-run** for instant procedures: a debounced toggle that replaces the same card instead of stacking results
+- **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear
+- **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
+- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with static UI chrome centralised in `src/i18n/` (six complete catalogs: English, Italian, French, Spanish, German and European Portuguese); catalogue metadata, help book and report prose are content modules
 
-### Help
-- **In-app HELP tab** (next to Settings) with eight inner tabs: Overview, Data Editor, Data prep, Groups & levels, Analyses, Output & reports, Recipes and Shortcuts & settings
-- Every block is written as a numbered sequence of the buttons and selectors the user actually sees, with a worked example, tables for reference and highlighted tips
-- The Analyses tab documents every analysis panel (steps + example each); the Recipes tab walks through twelve end-to-end questions
-- Content lives in `src/help/helpContent.ts` as plain data and is guarded by `src/help/helpContent.test.ts` (structure, coverage of every analysis panel, presence of the main tool labels)
+### Help handbook
+- **HELP tab** hosts the generated handbook (plain HTML + CSS + JS) in an iframe: cover, contents, search, previous/next navigation and a printable edition of the whole book
+- Every page has **two levels**: a tutorial with a worked example on a real dataset (`score-groups.csv`) and an advanced reading in plain language (assumptions, when to use/avoid the procedure, how to read the output, pitfalls, key terms)
+- The same page can be opened as a **popup from the analysis panel and from every output card** (`?` button), deep-linked to the tutorial or the advanced section
+- Content is authored as structured data in `src/help/content/<locale>/` (40 pages in each of the six languages) and rendered by `scripts/build-help.mjs` into `public/help/<locale>/` on `predev`/`prebuild`; `src/help/content.test.ts` checks that every registry procedure has both levels, that locales stay aligned and that datasets exist
 
 ### Project persistence
 - **Silent autosave** of the grid, CI level, analysis parameters, IO preferences and the output console to `localStorage` (debounced), restored automatically on the next visit
@@ -87,6 +95,8 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 ### Written reports
 - Every run of an analysis closes with a **Report di lettura** card: plain-language headline of the outcome, what the test actually does, the reading of each result (difference, effect size, assumptions, non-parametric counterpart), a glossary of the statistics shown and the caveats that apply
 - The text is generated from the computed tables, so it always matches the numbers on screen and follows the selected confidence level (90/95/99%)
+- Report prose and table labels follow the **report language** chosen in Settings (Italian, English, French, Spanish, German, European Portuguese); the text is generated from message ids with an Italian source and a per-language catalog, so a missing translation falls back visibly instead of breaking the card
+- Cards already in the console keep the language they were produced in; **Re-run all** regenerates them with the current language
 
 ## Tech Stack
 
@@ -94,7 +104,7 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 - **Build:** Vite 6
 - **Styling:** Tailwind CSS 4, dark theme
 - **Charts:** Victory 37
-- **Statistics:** jStat, custom implementations in `statsHelpers.ts`
+- **Statistics:** jStat, custom modules under `src/stats/`
 - **Icons:** Lucide React
 - **Animations:** Motion (Framer Motion)
 
@@ -149,9 +159,8 @@ lazstatjs/
 ├── .env.example
 └── src/
     ├── main.tsx            # React entry point
-    ├── App.tsx             # Main application component (monolithic)
+    ├── App.tsx             # Shell, state and analysis orchestration
     ├── csv.ts              # CSV parsing, serialisation and type inference
-    ├── statsHelpers.ts     # Legacy custom statistical functions
     ├── stats/              # Testable statistical modules (descriptive, ttest, anova, factorial,
     │                       #   regression, logistic, correlation, chisquare, contingency,
     │                       #   repeated, repeatedAnova, ancova, multivariate, distfit,
@@ -167,17 +176,17 @@ lazstatjs/
 
 ### Key Source Files
 
-- **`src/App.tsx`** (~3650 lines) — Application UI, chart wiring and analysis orchestration.
+- **`src/App.tsx`** (~620 lines) — Shell, shared state, persistence wiring and analysis orchestration.
 - **`src/stats/`** — Pure statistic builders returning typed `TableSpec` objects. Every builder has reference tests against SciPy/NumPy values (mean CIs, Levene, Welch ANOVA, effect sizes, regression, correlations, odds ratios).
 - **`src/stats/report.ts`** — Builds the plain-language `ReportSpec` for each analysis by reading the already computed tables (headline, effect size, assumptions, glossary, limits). Because it never recomputes statistics, the prose cannot disagree with the numbers and follows the selected CI level. The newer modules (`contingency`, `factorial`, `logistic`, `distfit`, `samplesize`) keep their report builder next to the computation.
-- **`src/analyses/`** — Self-contained tabs for Contingency (R×C), Sample Size / Power, Distribution Fit, Factorial ANOVA, Logistic Regression, Time Series, Survival, Cox and the Wizard: they own their parameters, run through an imperative `run()` handle and append tables, charts and the written report to the output console. The Wizard does not re-implement tests: it opens the real panel with `onOpenAnalysis`.
+- **`src/analyses/`** — One form + one pure builder per procedure, wired through the registry and the controlled analysis store. Forms only edit their parameter slice; runners return tables, charts and the written report. The Wizard does not re-implement tests: it opens the real panel with `onOpenAnalysis`.
 - **`src/components/AnalysisReport.tsx`** — Renders that report as a card closing every run of an analysis, after all tables and charts.
 - **`src/help/helpContent.ts`** — The whole in-app guide as plain data (tabs, sections, blocks, steps, examples, tables, tips) so the wording can be reviewed and tested without a DOM; `src/help/HelpPanel.tsx` renders it with a tab bar and numbered steps.
 - **`src/grid/types.ts`** — Column types plus the categorical-level model (`levels`, `reference`), group-column detection and the label substitution used by the analyses.
 - **`src/grid/LevelsEditor.tsx`** — Reusable group modal with a trigger button and two modes: *Levels* (code, label, order, reference, per-code row count, "Read data", add/remove) and *Recode values* (rename, merge, clear the group codes with a live preview). Shared by the data-grid header and the analysis group selectors, so one Apply is one undo step wherever it is opened.
 - **`recodeColumnValues`** in `src/grid/ops.ts` — Pure recoding of one column: cells are matched against their original value (so `1→2` / `2→1` swaps work), declared levels follow the mapping keeping their labels, merged codes keep the first label, the reference follows its code or is dropped, and the column becomes `cat` when the new codes no longer satisfy its type.
 - **`src/io/outputs.ts`** — Static snapshots of the output console: title extraction, count/character caps, validation on load and a DOMParser-based sanitiser for restored HTML.
-- **`src/statsHelpers.ts`** — Legacy hand-implemented tests: Fisher's Exact Test, Wilcoxon Signed-Rank, Mann-Whitney U, Kruskal-Wallis H, Theil-Sen regression, Kendall's Tau-b, Jarque-Bera and Kolmogorov-Smirnov normality tests.
+- **`src/analyses/runners.ts`** — Pure builder registry: every analysis id maps to a function that receives grid, parameters and CI, and returns the output contract. The workspace lazy-loads this registry on the first run.
 
 ## Scripts
 
@@ -189,6 +198,9 @@ lazstatjs/
 | `npm run clean` | Remove `dist/` directory |
 | `npm run lint` | TypeScript type-check |
 | `npm test` | Run the statistics reference tests with `node:test` + `tsx` |
+| `npm run test:e2e` | Run the Playwright suite (grid + analysis, desktop + mobile) |
+| `npm run check` | Type-check, unit tests, dependency-cruiser, madge and file-size guard |
+| `npm run guard` | Architecture and size guards only |
 
 ## Notes
 
@@ -196,7 +208,7 @@ lazstatjs/
 - `recharts` and `express` appear in dependencies but are not currently used
 - `@google/genai` SDK is installed for potential future AI integration
 - CI level (90/95/99%) is selectable in the analysis toolbar and applies to every table.
-- Projects (`.lzs`) and the silent autosave cover data, settings and analysis parameters. The output console is intentionally excluded: results are recomputed by running the analysis again on the restored grid.
+- Projects (`.lzs`) and the silent autosave cover data, settings, analysis parameters and static output snapshots. Results are restored as read-only cards and are recomputed by running the analysis again on the current grid.
 - The newer analyses follow the same contract as the original ones: a pure builder returning typed `TableSpec` objects, a written report generated from those tables, and reference tests (`node:test`) for the numerical results.
 - Known limitations are stated inside each report: sequential SS for unbalanced factorial designs, asymptotic KS p-values for fitted distributions, Wald tests and separation warnings for logistic regression, additive-only seasonal decomposition, conditional (CSS) ARIMA estimation with a bounded order search, Breslow ties and asymptotic proportional-hazards checks for Cox, screening-only assumptions in the Wizard.
 - The Cox model uses a time-interaction likelihood-ratio test for proportional hazards; the baseline cumulative hazard is the Breslow estimator and the concordance index is Harrell's C.

@@ -18,6 +18,7 @@ import { numericColumnValues } from '../shared/data';
 import type { Dataset } from '../../grid/types';
 import type { DistributionFitParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { t } from '../../i18n';
 
 export interface DistributionFitInput {
   grid: Dataset;
@@ -77,7 +78,7 @@ export const buildDistributionFitOutput = ({
           <div className="h-[280px] w-full bg-surface3/30 rounded p-2">
             <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 50, left: 65, right: 25 }}>
               <VictoryAxis
-                label="Quantili teorici"
+                label={t('chart.theoreticalQuantiles')}
                 style={{
                   axis: { stroke: '#333' },
                   axisLabel: { fill: '#888', fontSize: 10, padding: 30 },
@@ -87,7 +88,7 @@ export const buildDistributionFitOutput = ({
               />
               <VictoryAxis
                 dependentAxis
-                label="Valori osservati"
+                label={t('chart.observedValues')}
                 style={{
                   axis: { stroke: '#333' },
                   axisLabel: { fill: '#888', fontSize: 10, padding: 40 },

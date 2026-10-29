@@ -10,6 +10,7 @@ import {
   type ExportOptions,
 } from './writers';
 import type { Delimiter } from './detect';
+import { t } from '../i18n';
 import { loadPrefs, savePrefs } from './prefs';
 import { buildDataWorkbook, XLSX_MIME } from './xlsx';
 
@@ -78,59 +79,59 @@ export function ExportDialog({ grid, onClose, onExport }: Props) {
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
       <div className="bg-surface border border-border2 rounded-lg shadow-2xl w-full max-w-xl flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-          <h2 className="text-accent2 font-mono text-[12px] font-bold uppercase tracking-widest">Export data</h2>
-          <button className="tb-btn" onClick={onClose}>Close</button>
+          <h2 className="text-accent2 font-mono text-[12px] font-bold uppercase tracking-widest">{t('io.exportTitle')}</h2>
+          <button className="tb-btn" onClick={onClose}>{t('io.close')}</button>
         </div>
         <div className="px-4 py-3 flex flex-wrap gap-4 items-end text-[11px]">
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] text-text3 font-mono uppercase">Format</span>
+            <span className="text-[10px] text-text3 font-mono uppercase">{t('io.format')}</span>
             <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={format} onChange={(e) => setFormat(e.target.value as ExportFormat)}>
-              <option value="csv">CSV (Excel, R)</option>
-              <option value="tsv">TSV (tab)</option>
-              <option value="pipe">Pipe TXT</option>
-              <option value="json">JSON (records)</option>
-              <option value="spss">SPSS: CSV + .sps syntax</option>
-              <option value="xlsx">Excel workbook (.xlsx)</option>
+              <option value="csv">{t('io.csv')}</option>
+              <option value="tsv">{t('io.tsv')}</option>
+              <option value="pipe">{t('io.pipe')}</option>
+              <option value="json">{t('io.json')}</option>
+              <option value="spss">{t('io.spss')}</option>
+              <option value="xlsx">{t('io.xlsx')}</option>
             </select>
           </label>
           {(format === 'csv' || format === 'spss') && (
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] text-text3 font-mono uppercase">Delimiter</span>
+              <span className="text-[10px] text-text3 font-mono uppercase">{t('io.delimiter')}</span>
               <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={delimiter} onChange={(e) => setDelimiter(e.target.value as Delimiter)}>
-                <option value=",">Comma (,)</option>
-                <option value=";">Semicolon (;)</option>
-                <option value="	">Tab</option>
-                <option value="|">Pipe (|)</option>
+                <option value=",">{t('io.commaSep')}</option>
+                <option value=";">{t('io.semicolon')}</option>
+                <option value="	">{t('io.tab')}</option>
+                <option value="|">{t('io.pipeSep')}</option>
               </select>
             </label>
           )}
           {format !== 'json' && format !== 'xlsx' && (
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] text-text3 font-mono uppercase">Decimals</span>
+              <span className="text-[10px] text-text3 font-mono uppercase">{t('io.decimals')}</span>
               <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={decimalSeparator} onChange={(e) => setDecimalSeparator(e.target.value as '.' | ',')}>
-                <option value=".">Dot (12.5)</option>
-                <option value=",">Comma (12,5)</option>
+                <option value=".">{t('io.dot')}</option>
+                <option value=",">{t('io.comma')}</option>
               </select>
             </label>
           )}
           <label className="flex items-center gap-1.5 text-text2">
             <input type="checkbox" className="accent-accent" checked={includeHeader} onChange={(e) => setIncludeHeader(e.target.checked)} />
-            Header row
+            {t('io.headerRow')}
           </label>
           <label className="flex items-center gap-1.5 text-text2">
             <input type="checkbox" className="accent-accent" checked={dropEmptyRows} onChange={(e) => setDropEmptyRows(e.target.checked)} />
-            Drop empty rows
+            {t('io.dropEmptyRows')}
           </label>
         </div>
         <div className="px-4 py-2 text-[10px] font-mono text-text3 border-t border-border">
-          {rows.length} rows ({nonEmptyRowCount(grid.rows)} non-empty) x {grid.cols.length} cols → {main?.fileName ?? 'lazstats.xlsx'}
+          {rows.length} {t('output.rows')} ({nonEmptyRowCount(grid.rows)} {t('io.nonEmpty')}) x {grid.cols.length} {t('output.columns')} → {main?.fileName ?? 'lazstats.xlsx'}
           {format === 'spss' && <span> + lazstats.sps</span>}
         </div>
         <pre className="mx-4 mb-2 p-2 bg-surface3/40 border border-border rounded text-[10px] font-mono text-text2 overflow-auto max-h-40 scrollbar whitespace-pre-wrap">{preview}</pre>
         <div className="px-4 py-3 border-t border-border flex justify-end gap-2">
-          <button className="tb-btn" onClick={onClose}>Cancel</button>
+          <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
           <button className="tb-btn bg-accent text-white border-accent" onClick={doExport} disabled={rows.length === 0}>
-            Download
+            {t('io.download')}
           </button>
         </div>
       </div>

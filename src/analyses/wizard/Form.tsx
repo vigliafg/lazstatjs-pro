@@ -1,7 +1,10 @@
+import { columnLabel } from '../../grid/types';
 import { useMemo, type Dispatch, type SetStateAction } from 'react';
 import { ArrowRight, Compass } from 'lucide-react';
 import { analysisRows, groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
 import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
+import { t } from '../../i18n';
+import { Field } from '../../components/FormFields';
 import type { WizardParams } from '../../io/project';
 import {
   WIZARD_GOALS,
@@ -22,7 +25,7 @@ export interface WizardFormProps {
 }
 
 const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[150px]';
+  'min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text';
 const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
 
 export const WizardForm = ({
@@ -62,7 +65,7 @@ export const WizardForm = ({
   return (
     <div className="flex flex-col gap-3 w-full">
       <div className="flex flex-col gap-2">
-        <span className={labelClass}>1 · Che domanda vuoi rispondere?</span>
+        <span className={labelClass}>{t('wizard.step1')}</span>
         <div className="flex flex-wrap gap-2">
           {WIZARD_GOALS.map(option => (
             <button
@@ -84,38 +87,36 @@ export const WizardForm = ({
 
       <div className="flex flex-wrap gap-4 items-start">
         {needsOutcome && (
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>2 · Variabile di esito</label>
+          <Field label={t('wizard.outcome')}>
             <select
+              aria-label={t('wizard.outcome')}
               className={inputClass}
               value={outcome}
               onChange={e => setWizardParams(prev => ({ ...prev, outcome: parseInt(e.target.value, 10) }))}
             >
-              <option value={-1}>— seleziona —</option>
+              <option value={-1}>{t('wizard.select')}</option>
               {grid.cols.map((column, index) => (
                 <option key={index} value={index}>
-                  {column.name} ({profiles[index]?.kind ?? 'vuota'})
+                  {columnLabel(column)} ({profiles[index]?.kind ?? t('wizard.empty')})
                 </option>
               ))}
             </select>
-          </div>
+          </Field>
         )}
 
         {needsGroup && (
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>
-              Gruppi {goal === 'survive' ? '(opzionale)' : ''}
-            </label>
+          <Field label={goal === 'survive' ? t('wizard.groupsOptional') : t('wizard.groups')}>
             <div className="flex items-center gap-1">
               <select
+                aria-label={t('wizard.groups')}
                 className={inputClass}
                 value={group}
                 onChange={e => setWizardParams(prev => ({ ...prev, group: parseInt(e.target.value, 10) }))}
               >
-                <option value={-1}>— nessun gruppo —</option>
+                <option value={-1}>{t('wizard.noGroup')}</option>
                 {groupColumnIndexes(grid).map(index => (
                   <option key={index} value={index}>
-                    {grid.cols[index]?.name} ({profiles[index]?.unique ?? 0} livelli)
+                    {columnLabel(grid.cols[index])} ({profiles[index]?.unique ?? 0} {t('wizard.levels')})
                   </option>
                 ))}
               </select>
@@ -124,45 +125,45 @@ export const WizardForm = ({
                 column={group}
                 onLevels={onLevels}
                 onRecode={onRecode}
-                label="Modifica livelli"
+                label={t('action.levels')}
                 className={LEVELS_BUTTON_CLASS}
               />
             </div>
-          </div>
+          </Field>
         )}
 
         {needsSecond && (
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>
-              Seconda variabile {goal === 'predict' ? '(predittore)' : ''}
-            </label>
+          <Field
+            label={`${t('wizard.second')} ${goal === 'predict' ? t('wizard.predictor') : ''}`.trim()}
+          >
             <select
+              aria-label={t('wizard.second')}
               className={inputClass}
               value={second}
               onChange={e => setWizardParams(prev => ({ ...prev, second: parseInt(e.target.value, 10) }))}
             >
-              <option value={-1}>— nessuna —</option>
+              <option value={-1}>{t('form.none')}</option>
               {grid.cols.map((column, index) => (
                 <option key={index} value={index}>
-                  {column.name} ({profiles[index]?.kind ?? 'vuota'})
+                  {columnLabel(column)} ({profiles[index]?.kind ?? t('wizard.empty')})
                 </option>
               ))}
             </select>
-          </div>
+          </Field>
         )}
 
         {goal === 'compare' && (
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Disegno</label>
+          <Field label={t('wizard.design')}>
             <select
+              aria-label={t('wizard.design')}
               className={inputClass}
               value={paired ? 'paired' : 'independent'}
               onChange={e => setWizardParams(prev => ({ ...prev, paired: e.target.value === 'paired' }))}
             >
-              <option value="independent">Gruppi indipendenti</option>
-              <option value="paired">Misure appaiate</option>
+              <option value="independent">{t('wizard.independent')}</option>
+              <option value="paired">{t('wizard.paired')}</option>
             </select>
-          </div>
+          </Field>
         )}
       </div>
 
@@ -170,7 +171,7 @@ export const WizardForm = ({
         <div className="flex flex-wrap items-center gap-2 mb-1">
           <Compass className="w-3.5 h-3.5 text-accent2" />
           <span className="text-[10px] font-mono uppercase tracking-widest text-text3">
-            Raccomandazione
+            {t('wizard.recommendation')}
           </span>
           <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border border-accent2/40 bg-accent2/10 text-accent2">
             {recommendation.tabLabel}
@@ -192,10 +193,10 @@ export const WizardForm = ({
             className="tb-btn flex items-center gap-1"
             onClick={() => onOpenAnalysis(recommendation.analysis)}
           >
-            Apri {recommendation.tabLabel} <ArrowRight className="w-3 h-3" />
+            {t('wizard.open')} {recommendation.tabLabel} <ArrowRight className="w-3 h-3" />
           </button>
           <span className="text-[10px] text-text3 font-mono">
-            Poi premi Run Analysis per eseguire l’analisi sulla scheda.
+            {t('wizard.runHint')}
           </span>
         </div>
       </section>

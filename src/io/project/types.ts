@@ -1,12 +1,18 @@
 import type { GridData } from '../../grid/types';
 import type { IoPreferences } from '../prefs';
+import {
+  DEFAULT_LOCALE,
+  DEFAULT_REPORT_LOCALE,
+  type HelpLocale,
+  type Locale,
+} from '../../i18n/locales';
 import type { StoredOutput } from '../outputs';
 import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 
 export const PROJECT_APP = 'lazstats';
-export const PROJECT_VERSION = 1;
+export const PROJECT_VERSION = 2;
 export const PROJECT_STORAGE_KEY = 'lazstats.project.v1';
 /** Keep autosave comfortably below the ~5 MB localStorage budget. */
 export const MAX_AUTOSAVE_CHARS = 4_000_000;
@@ -316,12 +322,24 @@ export interface ProjectSettings {
   ciLevel: number;
   activeAnalysis: string;
   activeTab: ProjectTab;
+  /** Guided hides the advanced form sections; Expert shows everything. */
+  uiMode: 'guided' | 'expert';
+  /** Interface language. */
+  uiLocale: Locale;
+  /** Language of the written report of every new run. */
+  reportLocale: Locale;
+  /** Language of the help book; `auto` follows the interface. */
+  helpLocale: HelpLocale;
 }
 
 export interface ProjectSnapshot {
   app: typeof PROJECT_APP;
   version: number;
   savedAt: string;
+  /** Stable identity of the dataset; optional for legacy projects. */
+  datasetId?: string;
+  /** Grid revision at save time; optional for legacy projects. */
+  dataRevision?: number;
   grid: GridData;
   prefs: IoPreferences;
   settings: ProjectSettings;
@@ -331,6 +349,8 @@ export interface ProjectSnapshot {
 }
 
 export interface ProjectInput {
+  datasetId?: string;
+  dataRevision?: number;
   grid: GridData;
   prefs: IoPreferences;
   settings: ProjectSettings;
@@ -520,4 +540,8 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   ciLevel: 95,
   activeAnalysis: 'wizard',
   activeTab: 'data',
+  uiMode: 'guided',
+  uiLocale: DEFAULT_LOCALE,
+  reportLocale: DEFAULT_REPORT_LOCALE,
+  helpLocale: 'auto',
 };

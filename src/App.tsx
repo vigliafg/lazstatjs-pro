@@ -1,17 +1,20 @@
-import { useState, useEffect, useMemo, type SetStateAction } from 'react';
+import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
-import { DataTab } from './ui/DataTab';
+import { DataWorkspace } from './ui/DataWorkspace';
 import { Header } from './ui/Header';
 import { Footer } from './ui/Footer';
 import { Toasts } from './ui/Toasts';
+import { ErrorBoundary } from './ui/ErrorBoundary';
+import { UiModeProvider, type UiMode } from './components/UiMode';
 import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
 import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { useColumnOperations } from './hooks/useColumnOperations';
+import { useProjectParams } from './hooks/useProjectParams';
 import {
   defaultParamsForGrid,
   remapParams,
@@ -19,24 +22,40 @@ import {
   setPrimaryColumn,
   validateAnalysisColumnRefs,
 } from './analyses/params';
-import { defaultLogisticParams } from './analyses/logistic/defaults';
-import { defaultCoxParams } from './analyses/cox/defaults';
-import { defaultSurvivalParams } from './analyses/survival/defaults';
-import { defaultAncovaParams } from './analyses/ancova/defaults';
-import { defaultFactorialParams } from './analyses/factorial/defaults';
-import { defaultRepeatedAnovaParams } from './analyses/repeatedanova/defaults';
-import { defaultMultivariateParams } from './analyses/multivariate/defaults';
-import { defaultNonParamParams } from './analyses/nonparamrm/defaults';
-import { defaultWizardParams } from './analyses/wizard/defaults';
-import { AnalysisTab } from './ui/AnalysisTab';
+import { assignRole, roleStates, validateRoleTypes } from './analyses/roles';
+import {
+  analysisParamsKey,
+  analysisParamsOf,
+  analysisParamsSignature,
+  withAnalysisParams,
+} from './analyses/paramsSnapshot';
+const AnalysisTab = lazy(() =>
+  import('./ui/AnalysisTab').then(module => ({ default: module.AnalysisTab }))
+);
 import { ANALYSIS_TABS } from './analyses/registry';
+import {
+  activeLocaleOf,
+  getLocale,
+  setLocale,
+  t,
+  useLocale,
+  type HelpLocale,
+  type Locale,
+} from './i18n';
+import { maskMissingCodes } from './grid/types';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import { createDefaultGrid } from './grid/defaults';
 import {
   findInvalid as gridFindInvalid,
 } from './grid/ops';
 import { useGridHistory } from './grid/useGridHistory';
-import { HelpPanel } from './help/HelpPanel';
+const HelpPanel = lazy(() =>
+  import('./help/HelpPanel').then(module => ({ default: module.HelpPanel }))
+);
+const HelpDialog = lazy(() =>
+  import('./help/HelpDialog').then(module => ({ default: module.HelpDialog }))
+);
+import { bookLocaleFor } from './help/book';
 import {
   setCell as gridSetCell,
   addColumnEnd as gridAddColumn,
@@ -49,13 +68,17 @@ import {
   type RowFilter,
   type RowFilterOp,
 } from './grid/ops';
-import { ImportWizard } from './io/ImportWizard';
-import { ExportDialog } from './io/ExportDialog';
+const ImportWizard = lazy(() =>
+  import('./io/ImportWizard').then(module => ({ default: module.ImportWizard }))
+);
+const ExportDialog = lazy(() =>
+  import('./io/ExportDialog').then(module => ({ default: module.ExportDialog }))
+);
 import { downloadExportFile } from './io/writers';
 import {
-  DEFAULT_PARAMS,
   DEFAULT_SETTINGS,
   loadAutosaveProject,
+  parseParams,
   type AnovaParams,
   type AncovaParams,
   type ChiSqParams,
@@ -104,7 +127,7 @@ export default function App() {
       ? boot.settings.activeAnalysis
       : DEFAULT_SETTINGS.activeAnalysis
   );
-  const gridHistory = useGridHistory(boot?.grid ?? createDefaultGrid());
+  const gridHistory = useGridHistory(boot?.grid ?? createDefaultGrid(), boot?.dataRevision ?? 0);
   const grid = gridHistory.grid;
   const dataRevision = gridHistory.revision;
   const setGrid = gridHistory.commit;
@@ -123,15 +146,8 @@ export default function App() {
   const canUndoGrid = gridHistory.canUndo;
   const canRedoGrid = gridHistory.canRedo;
   const resetGridHistory = gridHistory.setWithoutHistory;
-  const [focusCell, setFocusCell] = useState<{ r: number; c: number; stamp: number } | null>(null);
-  const [selRange, setSelRange] = useState<{ r0: number; c0: number; r1: number; c1: number } | null>(null);
-  const [showClean, setShowClean] = useState(false);
-  const [showTransform, setShowTransform] = useState(false);
-  const [freezeFirstCol, setFreezeFirstCol] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [showInspector, setShowInspector] = useState(false);
   const [filterAffectsAnalysis, setFilterAffectsAnalysis] = useState(false);
-  const [inspectorCol, setInspectorCol] = useState(0);
   const [focusedColumn, setFocusedColumn] = useState<number | null>(null);
   const [filterCol, setFilterCol] = useState(0);
   const [filterOp, setFilterOp] = useState<RowFilterOp>('contains');
@@ -140,38 +156,14 @@ export default function App() {
   // fixes cells instead of showing stale indexes.
   useEffect(() => {
     if (!validation.ran) return;
-    setValidation({ ran: true, issues: gridFindInvalid(grid) });
+    // Recompute after the user pauses: a full scan on every keystroke makes
+    // large grids unusable while the validation bar stays open.
+    const timer = setTimeout(() => {
+      setValidation({ ran: true, issues: gridFindInvalid(grid) });
+    }, 250);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grid]);
-  // Selection bar holds raw indexes: clamp them after delete/merge/paste so
-  // Fill/Copy/Clear never address rows/cols that no longer exist.
-  // Column indexes in the filter bar go stale after delete/merge.
-  useEffect(() => {
-    const max = Math.max(0, grid.cols.length - 1);
-    if (filterCol > max) setFilterCol(max);
-  }, [grid.cols.length, filterCol]);
-
-  useEffect(() => {
-    if (inspectorCol >= grid.cols.length) {
-      setInspectorCol(Math.max(0, grid.cols.length - 1));
-    }
-  }, [grid.cols.length, inspectorCol]);
-
-  useEffect(() => {
-    if (!selRange) return;
-    const maxR = Math.max(0, grid.rows.length - 1);
-    const maxC = Math.max(0, grid.cols.length - 1);
-    const clamp = (v: number, m: number) => Math.max(0, Math.min(m, v));
-    const next = {
-      r0: clamp(selRange.r0, maxR),
-      c0: clamp(selRange.c0, maxC),
-      r1: clamp(selRange.r1, maxR),
-      c1: clamp(selRange.c1, maxC),
-    };
-    if (next.r0 !== selRange.r0 || next.c0 !== selRange.c0 || next.r1 !== selRange.r1 || next.c1 !== selRange.c1) {
-      setSelRange(next);
-    }
-  }, [grid.rows.length, grid.cols.length, selRange]);
   const [validation, setValidation] = useState<{ ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] }>({
     ran: false,
     issues: [],
@@ -201,6 +193,12 @@ export default function App() {
     setGrid((prev) => gridAddRow(prev));
   };
 
+  /** Replacing the dataset cannot be undone, so it always asks first. */
+  const newDataset = () => {
+    if (!window.confirm(t('data.confirmNew'))) return;
+    replaceDataset(gridNewGrid());
+  };
+
 
   function replaceDataset(next: GridData) {
     resetGridHistory(next);
@@ -208,16 +206,23 @@ export default function App() {
     setDatasetId(`dataset-${Date.now().toString(36)}`);
     setOutputs([]);
     setValidation({ ran: false, issues: [] });
-    setSelRange(null);
-    setFocusCell(null);
     setFocusedColumn(null);
-    setShowInspector(false);
     setFilterAffectsAnalysis(false);
-    showToast('Dataset', 'Parameters reset and previous results cleared', 'ok');
+    // A view filter from the previous dataset would hide the new rows.
+    setShowFilter(false);
+    setFilterValue('');
+    setFilterOp('contains');
+    setFilterCol(0);
+    showToast(t('toast.dataset'), t('data.replaceDone'), 'ok');
   }
 
   const updateCell = (r: number, c: number, val: string) => {
-    setGrid((prev) => gridSetCell(prev, r, c, val), { coalesce: true, kind: `cell-${r}-${c}` });
+    setGrid((prev) => gridSetCell(prev, r, c, val), {
+      coalesce: true,
+      kind: `cell-${r}-${c}`,
+      changedCell: { r, c },
+      changedCol: c,
+    });
   };
 
   const updateColType = (c: number, type: ColType) => {
@@ -235,13 +240,17 @@ export default function App() {
   // reference and (when needed) the column type move together in one undo step.
   const updateColumnMeta = (
     c: number,
-    patch: { label?: string; description?: string }
+    patch: { label?: string; description?: string; missing?: string[]; formula?: string }
   ) => {
     setGrid(prev => ({
       ...prev,
-      cols: prev.cols.map((col, index) =>
-        index === c ? { ...col, ...patch } : col
-      ),
+      cols: prev.cols.map((col, index) => {
+        if (index !== c) return col;
+        const next = { ...col, ...patch };
+        // An empty formula removes the computed-column behaviour.
+        if (patch.formula !== undefined && !patch.formula.trim()) delete next.formula;
+        return next;
+      }),
     }));
   };
 
@@ -251,12 +260,12 @@ export default function App() {
     setGrid(result.grid);
     setValidation((v) => ({ ...v, ran: false }));
     showToast(
-      'Recode',
-      `${result.changed} cells recoded${
-        result.merged > 0 ? `, ${result.merged} group${result.merged === 1 ? '' : 's'} merged` : ''
+      t('recode.title'),
+      `${result.changed} ${t('recode.cells')}${
+        result.merged > 0 ? `, ${result.merged} ${t('recode.merged')}` : ''
       }${
-        result.cleared > 0 ? `, ${result.cleared} cells cleared` : ''
-      }${result.typeChangedTo ? ` · column type → ${result.typeChangedTo}` : ''}`,
+        result.cleared > 0 ? `, ${result.cleared} ${t('recode.cleared')}` : ''
+      }${result.typeChangedTo ? ` · ${t('recode.typeChanged')} → ${result.typeChangedTo}` : ''}`,
       'ok'
     );
   };
@@ -282,26 +291,21 @@ export default function App() {
   });
 
   const [datasetId, setDatasetId] = useState(
-    () => `dataset-${Date.now().toString(36)}`
+    () => boot?.datasetId ?? `dataset-${Date.now().toString(36)}`
   );
 
-  const [params, setParams] = useState<ProjectParams>(() => {
-    if (boot) return boot.params;
-    return {
-      ...DEFAULT_PARAMS,
-      logistic: defaultLogisticParams(grid),
-      cox: defaultCoxParams(grid),
-      survival: defaultSurvivalParams(grid),
-      ancova: defaultAncovaParams(grid),
-      factorial: defaultFactorialParams(grid),
-      repeatedanova: defaultRepeatedAnovaParams(grid),
-      multivariate: defaultMultivariateParams(grid),
-      nonparamrm: defaultNonParamParams(grid),
-      wizard: defaultWizardParams(grid),
-    };
-  });
+  const { params, setParams } = useProjectParams(boot, grid);
 
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
+  const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
+  const [uiLocale, setUiLocale] = useState<Locale>(boot?.settings.uiLocale ?? getLocale());
+  const [reportLocale, setReportLocale] = useState<Locale>(boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale);
+  const [helpLocale, setHelpLocale] = useState<HelpLocale>(boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale);
+
+  // The store drives `t()` everywhere; updating it re-renders the shell through
+  // the `useLocale()` subscription below.
+  useEffect(() => setLocale(activeLocaleOf(uiLocale)), [uiLocale]);
+  useLocale();
   const {
     outputs,
     setOutputs,
@@ -312,91 +316,8 @@ export default function App() {
     exportChartPngs,
     exportResultsXlsx,
     exportReportHtml,
-  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
-
-  function updateParams<K extends keyof ProjectParams>(
-    key: K,
-    updater: SetStateAction<ProjectParams[K]>
-  ) {
-    setParams(previous => {
-      const current = previous[key];
-      const next =
-        typeof updater === 'function'
-          ? (updater as (value: ProjectParams[K]) => ProjectParams[K])(current)
-          : updater;
-      return next === current ? previous : { ...previous, [key]: next };
-    });
-  }
-
-  function bindParam<K extends keyof ProjectParams>(key: K) {
-    return (updater: SetStateAction<ProjectParams[K]>) => updateParams(key, updater);
-  }
-
-  const {
-    descVars,
-    ttest: ttestParams,
-    anova: anovaParams,
-    reg: regParams,
-    corr: corrParams,
-    chisq: chisqParams,
-    samplesize: samplesizeParams,
-    distfit: distfitParams,
-    logistic: logisticParams,
-    cox: coxParams,
-    survival: survivalParams,
-    timeseries: timeseriesParams,
-    contingency: contingencyParams,
-    ancova: ancovaParams,
-    factorial: factorialParams,
-    repeatedanova: repeatedAnovaParams,
-    multivariate: multivariateParams,
-    nonparamrm: nonParamParams,
-    wizard: wizardParams,
-    tost: tostParams,
-    agreement: agreementParams,
-    countreg: countParams,
-    lmm: lmmParams,
-    ordinal: ordinalParams,
-    mi: miParams,
-    mixedanova: mixedAnovaParams,
-    parametric: parametricParams,
-    resampling: resamplingParams,
-    gee: geeParams,
-    stratcox: stratCoxParams,
-    tdcox: tdCoxParams,
-  } = params;
-
-  const setDescVars = bindParam('descVars');
-  const setTTestParams = bindParam('ttest');
-  const setAnovaParams = bindParam('anova');
-  const setRegParams = bindParam('reg');
-  const setCorrParams = bindParam('corr');
-  const setChisqParams = bindParam('chisq');
-  const setSamplesizeParams = bindParam('samplesize');
-  const setDistfitParams = bindParam('distfit');
-  const setLogisticParams = bindParam('logistic');
-  const setCoxParams = bindParam('cox');
-  const setSurvivalParams = bindParam('survival');
-  const setTimeseriesParams = bindParam('timeseries');
-  const setContingencyParams = bindParam('contingency');
-  const setAncovaParams = bindParam('ancova');
-  const setFactorialParams = bindParam('factorial');
-  const setRepeatedAnovaParams = bindParam('repeatedanova');
-  const setMultivariateParams = bindParam('multivariate');
-  const setNonParamParams = bindParam('nonparamrm');
-  const setWizardParams = bindParam('wizard');
-  const setTostParams = bindParam('tost');
-  const setAgreementParams = bindParam('agreement');
-  const setCountParams = bindParam('countreg');
-  const setLmmParams = bindParam('lmm');
-  const setOrdinalParams = bindParam('ordinal');
-  const setMiParams = bindParam('mi');
-  const setMixedAnovaParams = bindParam('mixedanova');
-  const setParametricParams = bindParam('parametric');
-  const setResamplingParams = bindParam('resampling');
-  const setGeeParams = bindParam('gee');
-  const setStratCoxParams = bindParam('stratcox');
-  const setTdCoxParams = bindParam('tdcox');
+    exportReportWord,
+  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast });
 
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
     useColumnOperations({ grid, params, setParams, setGrid, showToast });
@@ -404,20 +325,35 @@ export default function App() {
   const assignPrimary = (column: number) => {
     const result = setPrimaryColumn(activeAnalysis, params, column);
     if (!result) {
-      showToast('Analysis', 'This procedure has no primary column role', 'warn');
+      showToast(t('toast.analysis'), t('analysis.noPrimaryRole'), 'warn');
       return;
     }
     setParams(result.params);
-    showToast('Analysis', `Assigned to ${result.role}`, 'ok');
+    showToast(t('toast.analysis'), `${t('analysis.roleAssigned')} ${result.role}`, 'ok');
+  };
+
+  const assignRoleTo = (column: number, roleKey: string) => {
+    const next = assignRole(activeAnalysis, params, roleKey, column);
+    if (!next) {
+      showToast(t('toast.analysis'), t('analysis.roleRejects'), 'warn');
+      return;
+    }
+    setParams(next);
+    const role = roleStates(activeAnalysis, params).find(item => item.key === roleKey);
+    showToast(t('toast.analysis'), `${t('analysis.roleAssigned')} ${role?.label ?? roleKey}`, 'ok');
   };
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab }),
-    [ciLevel, activeAnalysis, activeTab]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale]
   );
 
-  const roleErrors = validateAnalysisColumnRefs(activeAnalysis, params, grid.cols.length);
+  const roleErrors = [
+    ...validateAnalysisColumnRefs(activeAnalysis, params, grid.cols.length),
+    ...validateRoleTypes(activeAnalysis, params, grid),
+  ];
+  const roles = roleStates(activeAnalysis, params);
 
   const filterNeedsValue = filterOp !== 'empty' && filterOp !== 'notEmpty';
   const activeRowFilter: RowFilter | null =
@@ -431,18 +367,26 @@ export default function App() {
     mode: filterAffectsAnalysis ? 'analysis' : 'view',
     filter: activeRowFilter,
   });
+  // Declared missing codes are blanked before every runner sees the data, so
+  // the analysis N excludes them without changing any kernel.
+  const maskedGrid = useMemo<GridData>(() => maskMissingCodes(grid), [grid]);
   const analysisGrid = useMemo<GridData>(() => {
-    if (!filterAffectsAnalysis || !activeRowFilter) return grid;
+    if (!filterAffectsAnalysis || !activeRowFilter) return maskedGrid;
     return {
-      cols: grid.cols,
-      rows: gridFilterIndexes(grid, activeRowFilter).map(index => grid.rows[index]),
+      cols: maskedGrid.cols,
+      rows: gridFilterIndexes(grid, activeRowFilter).map(index => maskedGrid.rows[index]),
     };
-  }, [grid, filterAffectsAnalysis, activeRowFilter]);
+  }, [grid, maskedGrid, filterAffectsAnalysis, activeRowFilter]);
 
   const restoreProject = (project: ProjectSnapshot) => {
-    resetGridHistory(project.grid);
+    resetGridHistory(project.grid, project.dataRevision ?? 0);
+    setDatasetId(project.datasetId ?? `dataset-${Date.now().toString(36)}`);
     setParams(project.params);
     setCiLevel(project.settings.ciLevel);
+    setUiMode(project.settings.uiMode);
+    setUiLocale(project.settings.uiLocale);
+    setReportLocale(project.settings.reportLocale);
+    setHelpLocale(project.settings.helpLocale);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
         ? project.settings.activeAnalysis
@@ -454,16 +398,28 @@ export default function App() {
     // from, so the console and the grid always belong to the same session.
     setOutputs(restoredOutputs(project.outputs));
     setValidation({ ran: false, issues: [] });
-    setSelRange(null);
-    setFocusCell(null);
     setFocusedColumn(null);
     setFilterAffectsAnalysis(false);
+    setShowFilter(false);
+    setFilterValue('');
+    setFilterOp('contains');
+    setFilterCol(0);
   };
 
   // --- Project persistence (.lzs + silent autosave) ---
-  const { projectInputRef, lastAutosave, saveProjectFile, openProjectFile } = useProjectSession({
+  const {
+    projectInputRef,
+    lastAutosave,
+    saveProjectFile,
+    openProjectFile,
+    restoreBackup,
+    recentProjects,
+    clearRecentProjects,
+  } = useProjectSession({
     boot,
     grid,
+    datasetId,
+    dataRevision,
     prefs: ioPrefs,
     settings,
     params,
@@ -475,40 +431,111 @@ export default function App() {
 
   // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
   // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
-  const emit = (result: AnalysisRunResult): boolean => {
+  const emit = (
+    result: AnalysisRunResult,
+    analysisId: string = activeAnalysis,
+    paramsUsed = params,
+    options?: { live?: boolean; ciLevel?: number }
+  ): boolean => {
     if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
+      showToast(t('toast.error'), result.reason, 'error');
       return false;
     }
-    pushOutput(result.node, result.report, activeAnalysis, {
+    pushOutput(result.node, result.report, analysisId, {
       dataRevision,
       datasetId,
       filterSignature,
+      params: analysisParamsOf(analysisId, paramsUsed),
+      paramsSignature: analysisParamsSignature(analysisId, paramsUsed),
+      ciLevel: options?.ciLevel ?? ciLevel,
+      live: options?.live,
     });
     return true;
   };
 
-  const { runAnalysis } = useAnalysisRun({
+  const { runAnalysis, runAnalysisWith, runAnalysisLive } = useAnalysisRun({
     activeAnalysis,
     grid: analysisGrid,
     params,
     ciLevel,
+    reportLocale,
     emit,
-    warn: (message) => showToast('Analysis', message, 'warn'),
+    warn: (message) => showToast(t('toast.analysis'), message, 'warn'),
   });
 
+  const paramsSignatureFor = (analysisId: string) =>
+    analysisParamsSignature(analysisId, params);
+
+  /** Restore a card's saved parameters into the live project parameters. */
+  const restoreOutputParams = (entry: OutputEntry): ProjectParams | null => {
+    if (!entry.analysisId || entry.params === undefined) return null;
+    if (!analysisParamsKey(entry.analysisId)) return null;
+    const next = parseParams(
+      withAnalysisParams(params, entry.analysisId, entry.params),
+      grid.cols.length
+    );
+    setParams(next);
+    if (entry.ciLevel !== undefined) setCiLevel(entry.ciLevel);
+    setActiveAnalysis(entry.analysisId);
+    setActiveTab('analysis');
+    return next;
+  };
+
+  const applyOutputParams = (entry: OutputEntry) => {
+    const next = restoreOutputParams(entry);
+    if (!next) {
+      showToast(t('toast.output'), t('analysis.noSavedParams'), 'warn');
+      return;
+    }
+    showToast(t('toast.output'), t('analysis.paramsRestored'), 'ok');
+  };
+
+  const rerunAllOutputs = () => {
+    const runnable = outputs.filter(
+      entry => entry.analysisId && entry.params !== undefined && analysisParamsKey(entry.analysisId)
+    );
+    void (async () => {
+      let done = 0;
+      for (const entry of runnable) {
+        if (!entry.analysisId) continue;
+        const next = parseParams(
+          withAnalysisParams(params, entry.analysisId, entry.params),
+          grid.cols.length
+        );
+        if (await runAnalysisWith(entry.analysisId, next, entry.ciLevel)) done += 1;
+      }
+      if (done > 0) {
+        showToast(t('toast.output'), `${done} ${t('output.rerunAll')}`, 'ok');
+      }
+    })();
+  };
+
+  const rerunOutput = (entry: OutputEntry) => {
+    const next = restoreOutputParams(entry);
+    if (!next || !entry.analysisId) {
+      showToast(t('toast.output'), t('analysis.noSavedParams'), 'warn');
+      return;
+    }
+    void runAnalysisWith(entry.analysisId, next, entry.ciLevel).then(ok => {
+      if (ok) showToast(t('toast.output'), t('analysis.reran'), 'ok');
+    });
+  };
+
   return (
+    <UiModeProvider mode={uiMode}>
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
-        {activeTab === 'data' && (
-          <DataTab
+        <ErrorBoundary resetKey={activeTab} label={activeTab}>
+        <div className={activeTab === 'data' ? 'flex min-h-0 flex-1 flex-col' : 'hidden'}>
+          <DataWorkspace
             grid={grid}
+            datasetId={datasetId}
             setGrid={setGrid}
-            onNewDataset={() => replaceDataset(gridNewGrid())}
+            onNewDataset={newDataset}
             onInsertColumn={insertColumn}
             onDuplicateColumn={duplicateColumn}
             onMoveColumn={moveColumn}
@@ -528,23 +555,12 @@ export default function App() {
             showToast={showToast}
             validation={validation}
             setValidation={setValidation}
-            focusCell={focusCell}
-            setFocusCell={setFocusCell}
-            selRange={selRange}
-            setSelRange={setSelRange}
-            freezeFirstCol={freezeFirstCol}
-            setFreezeFirstCol={setFreezeFirstCol}
-            showFilter={showFilter}
-            setShowFilter={setShowFilter}
-            showInspector={showInspector}
-            setShowInspector={setShowInspector}
             focusedColumn={focusedColumn}
             onFocusColumn={setFocusedColumn}
             filterAffectsAnalysis={filterAffectsAnalysis}
             setFilterAffectsAnalysis={setFilterAffectsAnalysis}
-            inspectorCol={inspectorCol}
-            setInspectorCol={setInspectorCol}
-            onColumnMeta={updateColumnMeta}
+            showFilter={showFilter}
+            setShowFilter={setShowFilter}
             filterCol={filterCol}
             setFilterCol={setFilterCol}
             filterOp={filterOp}
@@ -554,10 +570,7 @@ export default function App() {
             filterNeedsValue={filterNeedsValue}
             activeRowFilter={activeRowFilter}
             visibleRowCount={visibleRowCount}
-            showClean={showClean}
-            setShowClean={setShowClean}
-            showTransform={showTransform}
-            setShowTransform={setShowTransform}
+            onColumnMeta={updateColumnMeta}
             updateCell={updateCell}
             updateColType={updateColType}
             updateColumnLevels={updateColumnLevels}
@@ -566,76 +579,17 @@ export default function App() {
             addColumn={addColumn}
             addRow={addRow}
           />
-        )}
+        </div>
 
         {activeTab === 'analysis' && (
+          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingAnalysis')}</div>}>
           <AnalysisTab
             activeAnalysis={activeAnalysis}
             setActiveAnalysis={setActiveAnalysis}
             ciLevel={ciLevel}
             setCiLevel={setCiLevel}
-            descVars={descVars}
-            setDescVars={setDescVars}
-            ttestParams={ttestParams}
-            setTTestParams={setTTestParams}
-            anovaParams={anovaParams}
-            setAnovaParams={setAnovaParams}
-            regParams={regParams}
-            setRegParams={setRegParams}
-            corrParams={corrParams}
-            setCorrParams={setCorrParams}
-            chisqParams={chisqParams}
-            setChisqParams={setChisqParams}
-            samplesizeParams={samplesizeParams}
-            setSamplesizeParams={setSamplesizeParams}
-            distfitParams={distfitParams}
-            setDistfitParams={setDistfitParams}
-            logisticParams={logisticParams}
-            setLogisticParams={setLogisticParams}
-            coxParams={coxParams}
-            setCoxParams={setCoxParams}
-            survivalParams={survivalParams}
-            setSurvivalParams={setSurvivalParams}
-            timeseriesParams={timeseriesParams}
-            setTimeseriesParams={setTimeseriesParams}
-            contingencyParams={contingencyParams}
-            setContingencyParams={setContingencyParams}
-            ancovaParams={ancovaParams}
-            setAncovaParams={setAncovaParams}
-            factorialParams={factorialParams}
-            setFactorialParams={setFactorialParams}
-            repeatedAnovaParams={repeatedAnovaParams}
-            setRepeatedAnovaParams={setRepeatedAnovaParams}
-            multivariateParams={multivariateParams}
-            setMultivariateParams={setMultivariateParams}
-            nonParamParams={nonParamParams}
-            setNonParamParams={setNonParamParams}
-            wizardParams={wizardParams}
-            setWizardParams={setWizardParams}
-            tostParams={tostParams}
-            setTostParams={setTostParams}
-            agreementParams={agreementParams}
-            setAgreementParams={setAgreementParams}
-            countParams={countParams}
-            setCountParams={setCountParams}
-            lmmParams={lmmParams}
-            setLmmParams={setLmmParams}
-            ordinalParams={ordinalParams}
-            setOrdinalParams={setOrdinalParams}
-            miParams={miParams}
-            setMiParams={setMiParams}
-            mixedAnovaParams={mixedAnovaParams}
-            setMixedAnovaParams={setMixedAnovaParams}
-            parametricParams={parametricParams}
-            setParametricParams={setParametricParams}
-            resamplingParams={resamplingParams}
-            setResamplingParams={setResamplingParams}
-            geeParams={geeParams}
-            setGeeParams={setGeeParams}
-            stratCoxParams={stratCoxParams}
-            setStratCoxParams={setStratCoxParams}
-            tdCoxParams={tdCoxParams}
-            setTdCoxParams={setTdCoxParams}
+            params={params}
+            setParams={setParams}
             grid={grid}
             outputs={outputs}
             dataRevision={dataRevision}
@@ -647,27 +601,58 @@ export default function App() {
             filterSignature={filterSignature}
             focusedColumn={focusedColumn}
             onAssignPrimary={assignPrimary}
+            roles={roles}
+            onAssignRole={assignRoleTo}
+            onRerunOutput={rerunOutput}
+            onRerunAllOutputs={rerunAllOutputs}
+            onApplyOutputParams={applyOutputParams}
+            paramsSignatureFor={paramsSignatureFor}
             removeOutput={removeOutput}
             clearOutput={clearOutput}
             copyOutput={copyOutput}
             exportChartPngs={exportChartPngs}
             exportReportHtml={exportReportHtml}
+            exportReportWord={exportReportWord}
             exportResultsXlsx={exportResultsXlsx}
             setActiveTab={setActiveTab}
             runAnalysis={runAnalysis}
+            runAnalysisLive={runAnalysisLive}
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
           />
+          </Suspense>
         )}
 
-        {activeTab === 'help' && <HelpPanel />}
+        {activeTab === 'help' && (
+          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingHelp')}</div>}>
+            <HelpPanel locale={bookLocaleFor(helpLocale, uiLocale)} />
+          </Suspense>
+        )}
 
         {activeTab === 'settings' && (
-          <SettingsTab ioPrefs={ioPrefs} setIoPrefs={setIoPrefs} />
+          <SettingsTab
+            ioPrefs={ioPrefs}
+            setIoPrefs={setIoPrefs}
+            onNewDataset={newDataset}
+            onSaveProject={saveProjectFile}
+            onOpenProject={() => projectInputRef.current?.click()}
+            onExport={() => setShowExport(true)}
+            onRestoreBackup={() => void restoreBackup()}
+            recentProjects={recentProjects}
+            onClearRecent={clearRecentProjects}
+            uiLocale={uiLocale}
+            setUiLocale={setUiLocale}
+            reportLocale={reportLocale}
+            setReportLocale={setReportLocale}
+            helpLocale={helpLocale}
+            setHelpLocale={setHelpLocale}
+          />
         )}
+        </ErrorBoundary>
       </main>
 
       {pendingImport && (
+        <Suspense fallback={null}>
         <ImportWizard
           fileName={pendingImport.fileName}
           text={pendingImport.text}
@@ -676,24 +661,36 @@ export default function App() {
           onClose={() => setPendingImport(null)}
           onApply={applyImportTable}
         />
+        </Suspense>
       )}
       {showExport && (
+        <Suspense fallback={null}>
         <ExportDialog
           grid={grid}
           onClose={() => setShowExport(false)}
           onExport={(files) => {
             files.forEach((f) => downloadExportFile(f));
             setShowExport(false);
-            showToast('Export', files.map((f) => f.fileName).join(' + '), 'ok');
+            showToast(t('toast.export'), files.map((f) => f.fileName).join(' + '), 'ok');
           }}
         />
+        </Suspense>
       )}
+
+      <div role="status" aria-live="polite" className="sr-only">
+        {outputs.length > 0 ? `${outputs[outputs.length - 1].title} ready` : ''}
+      </div>
 
       {/* Footer / Statusbar */}
       <Footer grid={grid} />
 
       {/* Toasts */}
+      <Suspense fallback={null}>
+        <HelpDialog locale={bookLocaleFor(helpLocale, uiLocale)} />
+      </Suspense>
+
       <Toasts toasts={toasts} />
     </div>
+    </UiModeProvider>
   );
 }

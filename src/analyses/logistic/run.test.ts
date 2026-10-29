@@ -31,6 +31,14 @@ test('logistic builder returns tables, report and the probability curve', () => 
   assert.ok(result.report);
 });
 
+test('logistic builder rejects a non-finite or out-of-range cut-off', () => {
+  for (const cutoff of [Number.NaN, 0, 1, 1.5]) {
+    const result = buildLogisticOutput({ ...base, params: { ...base.params, cutoff } });
+    assert.ok('reason' in result);
+    if ('reason' in result) assert.match(result.reason, /Cut-off/);
+  }
+});
+
 test('logistic builder validates predictors and outcome', () => {
   const noPredictors = buildLogisticOutput({ ...base, params: { ...base.params, predictors: [] } });
   assert.ok('reason' in noPredictors);

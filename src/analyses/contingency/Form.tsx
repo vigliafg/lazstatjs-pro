@@ -1,5 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { ContingencyParams } from '../../io/project';
+import { t } from '../../i18n';
+import { CheckboxField, Field } from '../../components/FormFields';
 
 export interface ContingencyFormProps {
   contingencyParams: ContingencyParams;
@@ -27,10 +29,9 @@ const PRESETS = {
 };
 
 const cellInput =
-  'bg-surface border border-border2 text-text text-[11px] p-1 rounded text-center w-14 font-mono';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
+  'w-14 rounded border border-border2 bg-surface p-1 text-center font-mono text-[11px] text-text';
 const smallButton =
-  'text-[10px] bg-surface hover:bg-border px-2 py-0.5 rounded font-mono text-text3 hover:text-text border border-border cursor-pointer';
+  'rounded border border-border bg-surface px-2 py-0.5 font-mono text-[10px] text-text3 hover:bg-border hover:text-text';
 
 export const ContingencyForm = ({
   contingencyParams,
@@ -38,40 +39,37 @@ export const ContingencyForm = ({
 }: ContingencyFormProps) => {
   const { rows, cols, values, exact, monteCarlo } = contingencyParams;
 
-  const setCell = (i: number, j: number, value: string) => {
+  const setCell = (row: number, column: number, value: string) => {
     setContingencyParams(prev => ({
       ...prev,
-      values: prev.values.map((row, ri) =>
-        ri === i ? row.map((cell, ci) => (ci === j ? value : cell)) : row
+      values: prev.values.map((cells, ri) =>
+        ri === row ? cells.map((cell, ci) => (ci === column ? value : cell)) : cells
       ),
     }));
   };
 
-  const addRow = () => {
+  const addRow = () =>
     setContingencyParams(prev => ({
       ...prev,
-      rows: [...prev.rows, `Row ${prev.rows.length + 1}`],
+      rows: [...prev.rows, `${t('contingency.row')} ${prev.rows.length + 1}`],
       values: [...prev.values, prev.cols.map(() => '0')],
     }));
-  };
 
-  const removeRow = () => {
+  const removeRow = () =>
     setContingencyParams(prev =>
       prev.rows.length <= 2
         ? prev
         : { ...prev, rows: prev.rows.slice(0, -1), values: prev.values.slice(0, -1) }
     );
-  };
 
-  const addCol = () => {
+  const addCol = () =>
     setContingencyParams(prev => ({
       ...prev,
-      cols: [...prev.cols, `Col ${prev.cols.length + 1}`],
+      cols: [...prev.cols, `${t('contingency.col')} ${prev.cols.length + 1}`],
       values: prev.values.map(row => [...row, '0']),
     }));
-  };
 
-  const removeCol = () => {
+  const removeCol = () =>
     setContingencyParams(prev =>
       prev.cols.length <= 2
         ? prev
@@ -81,7 +79,6 @@ export const ContingencyForm = ({
             values: prev.values.map(row => row.slice(0, -1)),
           }
     );
-  };
 
   const applyPreset = (preset: keyof typeof PRESETS) => {
     const next = PRESETS[preset];
@@ -94,106 +91,106 @@ export const ContingencyForm = ({
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between gap-2">
-        <label className={labelClass}>Contingency Table (R x C)</label>
-        <div className="flex gap-1.5">
-          <button className={smallButton} onClick={() => applyPreset('trial')}>
-            Preset: trial
-          </button>
-          <button className={smallButton} onClick={() => applyPreset('survey')}>
-            Preset: survey
-          </button>
+    <Field label={t('contingency.title')}>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex gap-1.5">
+            <button type="button" className={smallButton} onClick={() => applyPreset('trial')}>
+              {t('contingency.presetTrial')}
+            </button>
+            <button type="button" className={smallButton} onClick={() => applyPreset('survey')}>
+              {t('contingency.presetSurvey')}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="bg-surface3 border border-border2 rounded p-2 overflow-x-auto scrollbar">
-        <table className="text-[10px] text-text2">
-          <thead>
-            <tr>
-              <th />
-              {cols.map((col, j) => (
-                <th key={j} className="p-1">
-                  <input
-                    className="bg-surface border border-border2 text-text text-[9px] p-1 rounded text-center w-14 font-semibold"
-                    value={col}
-                    onChange={e =>
-                      setContingencyParams(prev => ({
-                        ...prev,
-                        cols: prev.cols.map((label, index) => (index === j ? e.target.value : label)),
-                      }))
-                    }
-                  />
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {values.map((row, i) => (
-              <tr key={i}>
-                <td className="p-1">
-                  <input
-                    className="bg-surface border border-border2 text-text text-[10px] p-1 rounded font-semibold w-16"
-                    value={rows[i] ?? ''}
-                    onChange={e =>
-                      setContingencyParams(prev => ({
-                        ...prev,
-                        rows: prev.rows.map((label, index) => (index === i ? e.target.value : label)),
-                      }))
-                    }
-                  />
-                </td>
-                {row.map((cell, j) => (
-                  <td key={j} className="p-1">
+        <div className="overflow-x-auto rounded border border-border2 bg-surface3 p-2 scrollbar">
+          <table className="text-[10px] text-text2">
+            <thead>
+              <tr>
+                <th />
+                {cols.map((col, column) => (
+                  <th key={column} className="p-1">
                     <input
-                      type="number"
-                      min="0"
-                      className={cellInput}
-                      value={cell}
-                      onChange={e => setCell(i, j, e.target.value)}
+                      aria-label={`${t('contingency.col')} ${column + 1}`}
+                      className="w-14 rounded border border-border2 bg-surface p-1 text-center text-[9px] font-semibold text-text"
+                      value={col}
+                      onChange={e =>
+                        setContingencyParams(prev => ({
+                          ...prev,
+                          cols: prev.cols.map((label, index) =>
+                            index === column ? e.target.value : label
+                          ),
+                        }))
+                      }
                     />
-                  </td>
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-        <div className="flex gap-1">
-          <button className={smallButton} onClick={addRow}>
-            + Row
-          </button>
-          <button className={smallButton} onClick={removeRow}>
-            − Row
-          </button>
-          <button className={smallButton} onClick={addCol}>
-            + Col
-          </button>
-          <button className={smallButton} onClick={removeCol}>
-            − Col
-          </button>
+            </thead>
+            <tbody>
+              {values.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td className="p-1">
+                    <input
+                      aria-label={`${t('contingency.row')} ${rowIndex + 1}`}
+                      className="w-16 rounded border border-border2 bg-surface p-1 text-[10px] font-semibold text-text"
+                      value={rows[rowIndex] ?? ''}
+                      onChange={e =>
+                        setContingencyParams(prev => ({
+                          ...prev,
+                          rows: prev.rows.map((label, index) =>
+                            index === rowIndex ? e.target.value : label
+                          ),
+                        }))
+                      }
+                    />
+                  </td>
+                  {row.map((cell, column) => (
+                    <td key={column} className="p-1">
+                      <input
+                        aria-label={`${t('contingency.row')} ${rowIndex + 1} ${t('contingency.col')} ${column + 1}`}
+                        type="number"
+                        min="0"
+                        className={cellInput}
+                        value={cell}
+                        onChange={e => setCell(rowIndex, column, e.target.value)}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <label className="flex items-center gap-1.5 text-[11px] text-text2 hover:text-text cursor-pointer">
-          <input
-            type="checkbox"
-            className="accent-accent"
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <div className="flex gap-1">
+            <button type="button" className={smallButton} onClick={addRow}>
+              {t('contingency.addRow')}
+            </button>
+            <button type="button" className={smallButton} onClick={removeRow}>
+              {t('contingency.removeRow')}
+            </button>
+            <button type="button" className={smallButton} onClick={addCol}>
+              {t('contingency.addCol')}
+            </button>
+            <button type="button" className={smallButton} onClick={removeCol}>
+              {t('contingency.removeCol')}
+            </button>
+          </div>
+          <CheckboxField
+            label={t('contingency.fisher')}
             checked={exact}
-            onChange={e => setContingencyParams(prev => ({ ...prev, exact: e.target.checked }))}
+            onChange={checked => setContingencyParams(prev => ({ ...prev, exact: checked }))}
           />
-          Fisher (2x2)
-        </label>
-        <label className="flex items-center gap-1.5 text-[11px] text-text2 hover:text-text cursor-pointer">
-          <input
-            type="checkbox"
-            className="accent-accent"
+          <CheckboxField
+            label={t('contingency.monteCarlo')}
             checked={monteCarlo}
-            onChange={e => setContingencyParams(prev => ({ ...prev, monteCarlo: e.target.checked }))}
+            onChange={checked => setContingencyParams(prev => ({ ...prev, monteCarlo: checked }))}
           />
-          Monte Carlo if E &lt; 5
-        </label>
+        </div>
       </div>
-    </div>
+    </Field>
   );
 };

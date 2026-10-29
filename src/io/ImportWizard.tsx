@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { detectFormat, detectHeader, looksLikeJson, type Delimiter, type Detection } from './detect';
 import { readDelimitedTable, readJsonTable, type ImportTable } from './readers';
 import { COL_TYPES, type ColType } from '../grid/types';
+import { t } from '../i18n';
 import { loadPrefs, savePrefs } from './prefs';
 import { xlsxSheetToTable, type XlsxSheet } from './xlsx';
 
@@ -19,11 +20,11 @@ interface Props {
 }
 
 const DELIMS: { id: string; label: string; char: Delimiter }[] = [
-  { id: 'auto', label: 'Auto', char: ',' },
-  { id: ',', label: 'Comma (,)', char: ',' },
-  { id: ';', label: 'Semicolon (;)', char: ';' },
-  { id: 'tab', label: 'Tab', char: '\t' },
-  { id: '|', label: 'Pipe (|)', char: '|' },
+  { id: 'auto', label: t('io.delimiterAuto'), char: ',' },
+  { id: ',', label: t('io.commaSep'), char: ',' },
+  { id: ';', label: t('io.semicolon'), char: ';' },
+  { id: 'tab', label: t('io.tab'), char: '\t' },
+  { id: '|', label: t('io.pipeSep'), char: '|' },
 ];
 
 export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, onClose }: Props) {
@@ -90,7 +91,7 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
       if (isJson) return { table: readJsonTable(text, { decimalComma, typeOverrides: overrides }), error: null };
       return { table: readDelimitedTable(text, { delimiter: effDelim, hasHeader, decimalComma, typeOverrides: overrides }), error: null };
     } catch (e) {
-      return { table: null, error: e instanceof Error ? e.message : 'Cannot parse file' };
+      return { table: null, error: e instanceof Error ? e.message : t('io.cannotParse') };
     }
   }, [sheet, isJson, text, effDelim, hasHeader, decimalComma, overrides]);
   const { table, error } = parsed;
@@ -102,19 +103,19 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
       <div className="bg-surface border border-border2 rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
           <div>
-            <h2 className="text-accent2 font-mono text-[12px] font-bold uppercase tracking-widest">Smart Import</h2>
+            <h2 className="text-accent2 font-mono text-[12px] font-bold uppercase tracking-widest">{t('io.importTitle')}</h2>
             <p className="text-[11px] text-text3 font-mono truncate max-w-[500px]">
               {fileName}
               {isWorkbook && <span> · {sheets?.length} sheet{sheets && sheets.length > 1 ? 's' : ''}</span>}
             </p>
           </div>
-          <button className="tb-btn" onClick={onClose}>Close</button>
+          <button className="tb-btn" onClick={onClose}>{t('io.close')}</button>
         </div>
 
         <div className="px-4 py-3 border-b border-border flex flex-wrap gap-4 items-end text-[11px]">
           {isWorkbook && (
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] text-text3 font-mono uppercase">Worksheet</span>
+              <span className="text-[10px] text-text3 font-mono uppercase">{t('io.worksheet')}</span>
               <select
                 className="bg-surface3 border border-border2 rounded px-2 py-1 text-text"
                 value={sheetIndex}
@@ -122,7 +123,7 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
               >
                 {sheets?.map((item, index) => (
                   <option key={`${item.name}-${index}`} value={index}>
-                    {item.name} ({item.rows.length} rows)
+                    {item.name} ({item.rows.length} {t('data.rowsUnit')})
                   </option>
                 ))}
               </select>
@@ -131,7 +132,7 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
           {!isJson && !isWorkbook && (
             <>
               <label className="flex flex-col gap-1">
-                <span className="text-[10px] text-text3 font-mono uppercase">Delimiter {delimId === 'auto' && <span className="text-accent">(detected: {detection.delimiter === '\t' ? 'TAB' : detection.delimiter})</span>}</span>
+                <span className="text-[10px] text-text3 font-mono uppercase">{t('io.delimiter')} {delimId === 'auto' && <span className="text-accent">({t('io.detected')}: {detection.delimiter === '\t' ? t('io.tab') : detection.delimiter})</span>}</span>
                 <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={delimId} onChange={(e) => setDelimId(e.target.value)}>
                   {DELIMS.map((d) => (
                     <option key={d.id} value={d.id}>{d.label}</option>
@@ -139,36 +140,36 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
                 </select>
               </label>
               <label className="flex flex-col gap-1">
-                <span className="text-[10px] text-text3 font-mono uppercase">Header</span>
+                <span className="text-[10px] text-text3 font-mono uppercase">{t('io.header')}</span>
                 <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={hasHeader ? 'yes' : 'no'} onChange={(e) => setHasHeader(e.target.value === 'yes')}>
-                  <option value="yes">First row is header ({Math.round(detection.headerConfidence * 100)}%)</option>
-                  <option value="no">No header</option>
+                  <option value="yes">{t('io.firstRowHeader')} ({Math.round(detection.headerConfidence * 100)}%)</option>
+                  <option value="no">{t('io.noHeader')}</option>
                 </select>
               </label>
             </>
           )}
           {isWorkbook && (
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] text-text3 font-mono uppercase">Header</span>
+              <span className="text-[10px] text-text3 font-mono uppercase">{t('io.header')}</span>
               <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={hasHeader ? 'yes' : 'no'} onChange={(e) => setHasHeader(e.target.value === 'yes')}>
-                <option value="yes">First row is header</option>
-                <option value="no">No header</option>
+                <option value="yes">{t('io.firstRowHeader')}</option>
+                <option value="no">{t('io.noHeader')}</option>
               </select>
             </label>
           )}
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] text-text3 font-mono uppercase">Decimals</span>
+            <span className="text-[10px] text-text3 font-mono uppercase">{t('io.decimals')}</span>
             <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={decimalComma ? 'comma' : 'dot'} onChange={(e) => setDecimalComma(e.target.value === 'comma')}>
-              <option value="dot">Dot (12.5)</option>
-              <option value="comma">Comma (12,5)</option>
+              <option value="dot">{t('io.dot')}</option>
+              <option value="comma">{t('io.comma')}</option>
             </select>
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] text-text3 font-mono uppercase">Apply as</span>
+            <span className="text-[10px] text-text3 font-mono uppercase">{t('io.applyAs')}</span>
             <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={mode} onChange={(e) => setMode(e.target.value as ImportMode)}>
-              <option value="overwrite">Overwrite grid</option>
-              <option value="append-rows">Append rows ({gridCols.length} cols in grid)</option>
-              <option value="append-cols">Merge columns (match by name)</option>
+              <option value="overwrite">{t('io.overwrite')}</option>
+              <option value="append-rows">{t('io.appendRows')} ({gridCols.length} {t('data.column').toLowerCase()})</option>
+              <option value="append-cols">{t('io.mergeCols')}</option>
             </select>
           </label>
         </div>
@@ -179,10 +180,10 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
           <>
             <div className="px-4 py-2 text-[10px] font-mono text-text3 border-b border-border">
               {sheet && <span className="text-accent2">{sheet.name} · </span>}
-              {table.rows.length} rows x {table.names.length} cols
-              {table.skippedEmpty > 0 && <span> · {table.skippedEmpty} empty skipped</span>}
-              {table.renamedDupes > 0 && <span> · {table.renamedDupes} dup headers renamed</span>}
-              {detection.hadBOM && <span> · BOM stripped</span>}
+              {table.rows.length} {t('output.rows')} x {table.names.length} {t('output.columns')}
+              {table.skippedEmpty > 0 && <span> · {table.skippedEmpty} {t('io.emptySkipped')}</span>}
+              {table.renamedDupes > 0 && <span> · {table.renamedDupes} {t('io.dupHeaders')}</span>}
+              {detection.hadBOM && <span> · {t('io.bomStripped')}</span>}
             </div>
             <div className="flex-1 overflow-auto scrollbar px-4 py-2">
               <table className="w-full border-collapse font-mono text-[11px]">
@@ -216,13 +217,13 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
                   ))}
                 </tbody>
               </table>
-              {table.rows.length > 10 && <p className="text-[10px] text-text3 font-mono py-1">…showing first 10 of {table.rows.length}</p>}
+              {table.rows.length > 10 && <p className="text-[10px] text-text3 font-mono py-1">…{t('io.showingFirst')} {table.rows.length}</p>}
             </div>
           </>
         ) : null}
 
         <div className="px-4 py-3 border-t border-border flex justify-end gap-2">
-          <button className="tb-btn" onClick={onClose}>Cancel</button>
+          <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
           <button
             className="tb-btn bg-accent text-white border-accent disabled:opacity-40"
             disabled={!table}
@@ -238,7 +239,7 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
               onApply({ ...table, types: table.names.map((_, i) => overrides[i] ?? table.types[i]) }, mode);
             }}
           >
-            Import {table ? `${table.rows.length} rows` : ''}
+            {t('io.importAction')} {table ? `${table.rows.length} ${t('data.rowsUnit')}` : ''}
           </button>
         </div>
       </div>

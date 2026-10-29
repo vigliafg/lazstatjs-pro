@@ -1,6 +1,16 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { MiParams } from '../../io/project';
+import { t } from '../../i18n';
+import { variableOptionsFrom } from '../../components/FormFields';
+import { continuousColumnIndexes } from '../shared/columns';
+import {
+  Field,
+  NumberField,
+  VariableList,
+  VariableSelect,
+  variableOptions,
+} from '../../components/FormFields';
 
 export interface MiFormProps {
   grid: GridData;
@@ -8,120 +18,81 @@ export interface MiFormProps {
   setMiParams: Dispatch<SetStateAction<MiParams>>;
 }
 
-const inputClass =
-  'bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded min-w-[110px]';
-const labelClass = 'text-[10px] text-text3 font-mono uppercase tracking-widest';
-
-export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => {
-  const toggle = (index: number) => {
-    setMiParams(prev => ({
-      ...prev,
-      variables: prev.variables.includes(index)
-        ? prev.variables.filter(item => item !== index)
-        : [...prev.variables, index],
-    }));
-  };
-
-  return (
-    <div className="flex flex-wrap gap-4 items-start">
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Variables</label>
-        <div className="bg-surface3 border border-border2 rounded p-2 min-w-[240px] max-h-[140px] overflow-auto scrollbar">
-          {grid.cols.map((column, index) => (
-            <label key={index} className="flex items-center gap-2 px-1 py-0.5 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-accent"
-                checked={miParams.variables.includes(index)}
-                onChange={() => toggle(index)}
-              />
-              <span className="text-[11px] text-text2">{column.name}</span>
-              <span className="text-[9px] text-text3 font-mono">{column.type}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Pooled analysis</label>
-        <select
-          className={inputClass}
-          value={miParams.model}
-          onChange={e => setMiParams(prev => ({ ...prev, model: e.target.value as MiParams['model'] }))}
-        >
-          <option value="descriptives">Descriptives</option>
-          <option value="linear">Linear regression</option>
-        </select>
-      </div>
-
-      {miParams.model === 'linear' && (
-        <>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Outcome</label>
-            <select
-              className={inputClass}
-              value={miParams.outcome}
-              onChange={e => setMiParams(prev => ({ ...prev, outcome: parseInt(e.target.value, 10) }))}
-            >
-              {grid.cols.map((column, index) => (
-                <option key={index} value={index}>{column.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className={labelClass}>Predictors</label>
-            <div className="bg-surface3 border border-border2 rounded p-2 min-w-[200px] max-h-[100px] overflow-auto scrollbar">
-              {grid.cols.map((column, index) => (
-                <label key={index} className="flex items-center gap-2 px-1 py-0.5 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="accent-accent"
-                    checked={miParams.predictors.includes(index)}
-                    disabled={index === miParams.outcome}
-                    onChange={() => setMiParams(prev => ({
-                      ...prev,
-                      predictors: prev.predictors.includes(index)
-                        ? prev.predictors.filter(item => item !== index)
-                        : [...prev.predictors, index],
-                    }))}
-                  />
-                  <span className="text-[11px] text-text2">{column.name}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Imputations (m)</label>
-        <input
-          type="number"
-          min="2"
-          max="50"
-          step="1"
-          className={`${inputClass} w-24`}
-          value={miParams.imputations}
-          onChange={e => setMiParams(prev => ({ ...prev, imputations: parseInt(e.target.value, 10) }))}
+export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
+  <div className="flex flex-col gap-3">
+    <VariableList
+      label={t('form.variables')}
+      cols={grid.cols}
+      only={continuousColumnIndexes(grid)}
+      selected={miParams.variables}
+      showType
+      hint={t('hint.mi')}
+      onToggle={(index, checked) =>
+        setMiParams(prev => ({
+          ...prev,
+          variables: checked
+            ? [...prev.variables, index]
+            : prev.variables.filter(item => item !== index),
+        }))
+      }
+    />
+    <Field label={t('form.pooledAnalysis')}>
+      <select
+        aria-label={t('form.pooledAnalysis')}
+        className="min-w-[130px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+        value={miParams.model}
+        onChange={e =>
+          setMiParams(prev => ({ ...prev, model: e.target.value as MiParams['model'] }))
+        }
+      >
+        <option value="descriptives">{t('form.descriptives')}</option>
+        <option value="linear">{t('form.linearRegression')}</option>
+      </select>
+    </Field>
+    {miParams.model === 'linear' && (
+      <>
+        <VariableSelect
+          label={t('form.outcome')}
+          value={miParams.outcome}
+          options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
+          onChange={value => setMiParams(prev => ({ ...prev, outcome: value }))}
         />
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Iterations</label>
-        <input
-          type="number"
-          min="1"
-          max="50"
-          step="1"
-          className={`${inputClass} w-24`}
-          value={miParams.iterations}
-          onChange={e => setMiParams(prev => ({ ...prev, iterations: parseInt(e.target.value, 10) }))}
+        <VariableList
+          label={t('form.predictorsX')}
+          cols={grid.cols}
+          only={continuousColumnIndexes(grid)}
+          selected={miParams.predictors}
+          disabled={[miParams.outcome]}
+          onToggle={(index, checked) =>
+            setMiParams(prev => ({
+              ...prev,
+              predictors: checked
+                ? [...prev.predictors, index]
+                : prev.predictors.filter(item => item !== index),
+            }))
+          }
         />
-      </div>
-
-      <p className="text-[10px] text-text3 max-w-[340px] self-end pb-1">
-        Imputazione numerica a catene (MICE) e pooling di Rubin per media e SD. Assume MAR.
-      </p>
+      </>
+    )}
+    <div className="flex gap-2">
+      <NumberField
+        label={t('form.imputations')}
+        value={miParams.imputations}
+        min="2"
+        max="50"
+        step="1"
+        integer
+        onChange={value => setMiParams(prev => ({ ...prev, imputations: value }))}
+      />
+      <NumberField
+        label={t('form.iterations')}
+        value={miParams.iterations}
+        min="1"
+        max="50"
+        step="1"
+        integer
+        onChange={value => setMiParams(prev => ({ ...prev, iterations: value }))}
+      />
     </div>
-  );
-};
+  </div>
+);

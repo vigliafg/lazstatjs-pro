@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+test-results/
+playwright-report/
+
+# Generated help book (npm run help:build)
+public/help/
