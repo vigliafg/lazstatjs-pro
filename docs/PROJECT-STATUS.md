@@ -2,8 +2,8 @@
 
 **Data:** 29 ottobre 2026  
 **Branch:** `grid-roadmap`  
-**HEAD:** `0b30056` — base della quarta tranche (worker + import SPSS/Stata, non ancora committata)  
-**Stato git:** working tree con la quarta tranche; branch `grid-roadmap`  
+**HEAD:** `2b6e190` — `Qualità: worker per kernel pesanti e import SPSS/Stata`  
+**Stato git:** working tree pulito, branch allineato a `origin/grid-roadmap`  
 **Verifica:** `npm run check` → 475 test, 0 fail; Playwright → 42 passed / 34 skipped; build ok, nessun chunk >500 kB; file-size guard ok (340 file, 3 eccezioni).
 
 ---
