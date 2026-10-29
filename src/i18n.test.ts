@@ -15,6 +15,9 @@ const DYNAMIC_KEYS = new Set([
   'samplesize.anova',
   'samplesize.tost',
   'samplesize.survival',
+  'analysis.phase.starting',
+  'analysis.phase.computing',
+  'analysis.phase.finishing',
 ]);
 
 const walk = (directory: string): string[] =>

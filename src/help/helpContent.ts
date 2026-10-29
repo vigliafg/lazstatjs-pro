@@ -445,9 +445,9 @@ export const HELP_TABS: HelpTab[] = [
           {
             title: 'Smart Import',
             steps: [
-              'Press Import: CSV, TSV, TXT, PSV, JSON and Excel (.xlsx/.xls/.xlsm) are all accepted.',
+              'Press Import: CSV, TSV, TXT, PSV, JSON, Excel (.xlsx/.xls/.xlsm) and SPSS/Stata (.sav/.dta) are all accepted.',
               'The Smart Import dialog shows what was detected and a preview with a type dropdown per column.',
-              'Adjust Worksheet (for workbooks), Delimiter, Header, Decimals and the per-column types if the guess is wrong.',
+              'Adjust Worksheet (for workbooks), Delimiter, Header, Decimals and the per-column types if the guess is wrong; SPSS/Stata files skip the text options.',
               'Choose Apply as: Overwrite grid, Append rows or Merge columns (match by name).',
               'Press Import to apply; the dialog reports skipped empty lines, renamed duplicate headers and a stripped BOM.',
             ],
@@ -460,7 +460,7 @@ export const HELP_TABS: HelpTab[] = [
                 'Apply as Overwrite grid → Import.',
               ],
             },
-            tip: 'Dates and times are recognised as dat/dtm/tim; identifiers can be set to id so they stay out of the statistics.',
+            tip: 'Dates and times are recognised as dat/dtm/tim; identifiers can be set to id so they stay out of the statistics. SPSS/Stata variable labels, value labels and missing values are preserved.',
           },
           {
             title: 'Export',

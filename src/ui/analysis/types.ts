@@ -46,6 +46,10 @@ export interface AnalysisTabProps {
   setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
   runAnalysis: () => Promise<boolean>;
   runAnalysisLive: (isCurrent?: () => boolean) => Promise<boolean>;
+  /** Heavy procedures run in a worker; the setup shows progress and cancel. */
+  analysisRunning: boolean;
+  analysisPhase: 'starting' | 'computing' | 'finishing';
+  cancelAnalysis: () => void;
   updateColumnLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
   updateColumnRecode: (column: number, mapping: Record<string, string>) => void;
 }

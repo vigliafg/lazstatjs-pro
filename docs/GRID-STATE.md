@@ -200,10 +200,10 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 
 ## 5. Verifica
 
-- `npm run check`: **467 test verdi**, dependency-cruiser, madge e file-size
+- `npm run check`: **475 test verdi**, dependency-cruiser, madge e file-size
   guard ok (3 eccezioni statiche: help, arima, dizionario i18n).
 - `npm run build`: ok, nessun warning >500 kB.
-- `npm run test:e2e`: **38 passed, 30 skipped**, 2 progetti (desktop esegue
+- `npm run test:e2e`: **42 passed, 34 skipped**, 2 progetti (desktop esegue
   tutti i flussi, mobile quelli compatibili). Coprono:
   - caricamento della griglia seed, edit + undo;
   - missing code dall'inspector;

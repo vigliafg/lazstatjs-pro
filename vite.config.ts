@@ -13,6 +13,10 @@ export default defineConfig(({mode}) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        // The statistical file reader only needs zlib for compressed .zsav
+        // files, which LazStats does not accept. Keep the browser bundle free
+        // of a Node builtin without pulling a full zlib polyfill.
+        'node:zlib': path.resolve(__dirname, 'src/io/statfmt/zlib-shim.ts'),
       },
     },
     build: {
@@ -27,6 +31,7 @@ export default defineConfig(({mode}) => {
               return 'react';
             }
             if (id.includes('xlsx')) return 'xlsx';
+            if (id.includes('@irbisadm/statfmt')) return 'statfiles-vendor';
             if (id.includes('jstat')) return 'stats-vendor';
             if (id.includes('motion')) return 'motion';
             if (id.includes('lucide-react')) return 'icons';

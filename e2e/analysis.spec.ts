@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import path from 'node:path';
 
 const openAnova = async (page: Page) => {
   await page.getByRole('button', { name: 'Analysis', exact: true }).click();
@@ -288,4 +289,66 @@ test('favorites, A–Z index and keyboard navigation in the library', async ({ p
     (document.activeElement as HTMLElement | null)?.dataset.analysisItem ?? null
   );
   expect(second).not.toBeNull();
+});
+
+test('runs a heavy analysis in a worker without blocking the setup', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the worker path is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('Mixed Model');
+  await page.locator('button[title="Linear mixed model with a random intercept."]').click();
+  const worker = page.waitForEvent('worker', { timeout: 10000 });
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  expect((await worker).url()).toContain('heavy.worker');
+
+  await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 20000 });
+  await expect(page.getByRole('button', { name: 'Run analysis' })).toBeVisible();
+});
+
+test('renders chart-heavy worker output for a time series', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the worker charts are exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('ARIMA');
+  await page.locator('button[title="ARIMA/SARIMA, trend and forecasting."]').click();
+  const worker = page.waitForEvent('worker', { timeout: 10000 });
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  expect((await worker).url()).toContain('heavy.worker');
+
+  await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 20000 });
+  await expect(page.getByRole('heading', { name: 'Autocorrelazione', exact: true }).first()).toBeVisible();
+});
+
+test('imports an SPSS .sav file and keeps its values', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'binary import is exercised on the desktop layout');
+
+  await page.goto('/');
+  const input = page.locator('input[type="file"][accept*=".sav"]');
+  await input.setInputFiles(path.resolve('src/io/fixtures/sample.sav'));
+  const dialog = page.getByRole('dialog', { name: 'Smart Import' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByText('SPSS .sav')).toBeVisible();
+  await expect(dialog.getByText('6 rows x 6 columns')).toBeVisible();
+  await dialog.getByRole('button', { name: /^Import/ }).click();
+
+  await expect(page.locator('input[data-cell="0-1"]')).toHaveValue('12.5');
+  await expect(page.locator('input[data-cell="2-1"]')).toHaveValue('');
+  await expect(page.locator('input[data-cell="4-4"]')).toHaveValue('2024-01-05');
+});
+
+test('imports a Stata .dta file and keeps its values', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'binary import is exercised on the desktop layout');
+
+  await page.goto('/');
+  const input = page.locator('input[type="file"][accept*=".dta"]');
+  await input.setInputFiles(path.resolve('src/io/fixtures/sample.dta'));
+  const dialog = page.getByRole('dialog', { name: 'Smart Import' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByText('Stata .dta')).toBeVisible();
+  await dialog.getByRole('button', { name: /^Import/ }).click();
+
+  await expect(page.locator('input[data-cell="0-4"]')).toHaveValue('2024-01-01');
+  await expect(page.locator('input[data-cell="3-3"]')).toHaveValue('');
 });

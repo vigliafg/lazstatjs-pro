@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
+import { lazy, Suspense, useState, useEffect, useMemo, useRef } from 'react';
 import type { AnalysisRunResult } from './analyses/types';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
@@ -7,6 +7,7 @@ import { Header } from './ui/Header';
 import { Footer } from './ui/Footer';
 import { Toasts } from './ui/Toasts';
 import { ErrorBoundary } from './ui/ErrorBoundary';
+import { loadAnalysisOutput } from './ui/analysis/analysisOutputNode';
 import { UiModeProvider, type UiMode } from './components/UiMode';
 import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
@@ -408,17 +409,17 @@ export default function App() {
 
   // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
   // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
-  const emit = (
+  const emit = async (
     result: AnalysisRunResult,
     analysisId: string = activeAnalysis,
     paramsUsed = params,
     options?: { live?: boolean; ciLevel?: number }
-  ): boolean => {
+  ): Promise<boolean> => {
     if ('reason' in result) {
       showToast(t('toast.error'), result.reason, 'error');
       return false;
     }
-    pushOutput(result.node, result.report, analysisId, {
+    const meta = {
       dataRevision,
       datasetId,
       filterSignature,
@@ -426,11 +427,21 @@ export default function App() {
       paramsSignature: analysisParamsSignature(analysisId, paramsUsed),
       ciLevel: options?.ciLevel ?? ciLevel,
       live: options?.live,
-    });
+    };
+    const node = await loadAnalysisOutput(result);
+    if (!node) return false;
+    pushOutput(node, result.report, analysisId, meta);
     return true;
   };
 
-  const { runAnalysis, runAnalysisWith, runAnalysisLive } = useAnalysisRun({
+  const {
+    runAnalysis,
+    runAnalysisWith,
+    runAnalysisLive,
+    cancelAnalysis,
+    analysisRunning,
+    analysisPhase,
+  } = useAnalysisRun({
     activeAnalysis,
     grid: analysisGrid,
     params,
@@ -466,13 +477,20 @@ export default function App() {
     showToast(t('toast.output'), t('analysis.paramsRestored'), 'ok');
   };
 
+  const rerunAborted = useRef(false);
+  const cancelAnalysisAndStop = () => {
+    rerunAborted.current = true;
+    cancelAnalysis();
+  };
   const rerunAllOutputs = () => {
     const runnable = outputs.filter(
       entry => entry.analysisId && entry.params !== undefined && analysisParamsKey(entry.analysisId)
     );
+    rerunAborted.current = false;
     void (async () => {
       let done = 0;
       for (const entry of runnable) {
+        if (rerunAborted.current) break;
         if (!entry.analysisId) continue;
         const next = parseParams(
           withAnalysisParams(params, entry.analysisId, entry.params),
@@ -593,6 +611,9 @@ export default function App() {
             setActiveTab={setActiveTab}
             runAnalysis={runAnalysis}
             runAnalysisLive={runAnalysisLive}
+            analysisRunning={analysisRunning}
+            analysisPhase={analysisPhase}
+            cancelAnalysis={cancelAnalysisAndStop}
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
           />
@@ -627,6 +648,7 @@ export default function App() {
           fileName={pendingImport.fileName}
           text={pendingImport.text}
           sheets={pendingImport.sheets}
+          binaryTable={pendingImport.table}
           gridCols={grid.cols.map((c) => c.name)}
           onClose={() => setPendingImport(null)}
           onApply={applyImportTable}

@@ -5,7 +5,7 @@ import { readDelimitedTable } from '../io/readers';
 import type { XlsxSheet } from '../io/xlsx';
 import type { ImportMode } from '../io/ImportWizard';
 import type { ImportTable } from '../io/readers';
-import type { GridData } from '../grid/types';
+import type { Column, GridData } from '../grid/types';
 import { createColumnId } from '../grid/types';
 import type { Toast } from './useToasts';
 import { t } from '../i18n';
@@ -14,6 +14,8 @@ export interface PendingImport {
   fileName: string;
   text?: string;
   sheets?: XlsxSheet[];
+  /** Pre-parsed table for binary formats (SPSS .sav, Stata .dta). */
+  table?: ImportTable;
 }
 
 interface UseImportExportOptions {
@@ -45,9 +47,21 @@ export const useImportExport = ({
   const [ioPrefs, setIoPrefs] = useState(() => initialPrefs ?? loadPrefs());
 
   const applyImportTable = (table: ImportTable, mode: ImportMode) => {
+    const makeColumn = (index: number): Column => {
+      const meta = table.meta?.[index];
+      return {
+        id: createColumnId(),
+        name: table.names[index],
+        type: table.types[index] ?? 'str',
+        ...(meta?.label ? { label: meta.label } : {}),
+        ...(meta?.levels && meta.levels.length > 0 ? { levels: meta.levels } : {}),
+        ...(meta?.reference ? { reference: meta.reference } : {}),
+        ...(meta?.missing && meta.missing.length > 0 ? { missing: meta.missing } : {}),
+      };
+    };
     if (mode === 'overwrite') {
       replaceDataset({
-        cols: table.names.map((name, i) => ({ id: createColumnId(), name, type: table.types[i] ?? 'str' })),
+        cols: table.names.map((_, i) => makeColumn(i)),
         rows: table.rows.map((row) => [...row]),
       } as GridData);
       showToast(t('toast.import'), `${table.rows.length} ${t('import.done')} ${table.names.length} ${t('import.columns')}`, 'ok');
@@ -81,7 +95,7 @@ export const useImportExport = ({
             colMap[ti] = at;
           } else {
             colMap[ti] = cols.length;
-            cols.push({ id: createColumnId(), name: n, type: table.types[ti] ?? 'str' });
+            cols.push(makeColumn(ti));
           }
         });
         const rows = prev.rows.map((r, ri) => {
@@ -118,6 +132,15 @@ export const useImportExport = ({
   const importCsv = async (file: File) => {
     try {
       const lower = file.name.toLowerCase();
+      // SPSS and Stata files are binary: parse them behind the lazy import
+      // boundary, then reuse the same wizard and grid pipeline.
+      if (lower.endsWith('.sav') || lower.endsWith('.dta') || lower.endsWith('.zsav')) {
+        if (file.size > 25_000_000) throw new Error('The statistical file is too large (max 25 MB)');
+        const { readStatFile } = await import('../io/statfiles');
+        const table = await readStatFile(file.name, await file.arrayBuffer());
+        setPendingImport({ fileName: file.name, table });
+        return;
+      }
       // Excel workbooks are binary: parse every sheet, then reuse the wizard
       // and the CSV type-inference pipeline on the chosen sheet.
       if (lower.endsWith('.xlsx') || lower.endsWith('.xls') || lower.endsWith('.xlsm')) {

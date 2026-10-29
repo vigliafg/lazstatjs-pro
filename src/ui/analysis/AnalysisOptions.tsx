@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode, type SetStateAction } from 'react';
-import { Play } from 'lucide-react';
 import { analysisMeta, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
 import { isMissingCell, missingCodeCount } from '../../grid/types';
@@ -42,6 +41,7 @@ import { analysisParamsSignature } from '../../analyses/paramsSnapshot';
 import { createRunGate } from './liveGate';
 import { CodeExport } from './CodeExport';
 import { presetsFor } from './presets';
+import { RunControl } from './RunControl';
 import { t } from '../../i18n';
 
 const inputClass =
@@ -674,26 +674,15 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
         </div>
       </div>
 
-      <div className="shrink-0 border-t border-border bg-surface2/60 p-3">
-        <button
-          type="button"
-          onClick={() => void p.runAnalysis()}
-          disabled={p.roleErrors.length > 0}
-          title={t('analysis.runTitle')}
-          className="run-btn flex h-10 w-full items-center justify-center gap-2"
-        >
-          <Play className="h-3.5 w-3.5" />
-          {t('analysis.run')}
-        </button>
-        <div className="mt-1.5 flex items-center justify-between gap-2 font-mono text-[9px] uppercase tracking-wider text-text3">
-          <span className="truncate" title={`${p.grid.rows.length} ${t('data.rowsUnit')} · ${p.grid.cols.length} ${t('analysis.variablesLower')}`}>
-            {p.grid.rows.length} × {p.grid.cols.length}
-          </span>
-          <span className="shrink-0 text-text3/80" title={t('analysis.shortcut')}>
-            {t('analysis.shortcut')}
-          </span>
-        </div>
-      </div>
+      <RunControl
+        running={p.analysisRunning}
+        phase={p.analysisPhase}
+        disabled={p.roleErrors.length > 0}
+        rowCount={p.grid.rows.length}
+        columnCount={p.grid.cols.length}
+        onRun={() => void p.runAnalysis()}
+        onCancel={p.cancelAnalysis}
+      />
     </aside>
   );
 };

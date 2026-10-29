@@ -1,13 +1,7 @@
-import {
-  VictoryAxis,
-  VictoryChart,
-  VictoryLine,
-  VictoryScatter,
-  VictoryTheme,
-} from 'victory';
 import { coxReport, coxTables, fitCox } from '../../stats/cox';
-import { ResultTables } from '../../components/ResultTable';
+import { AnalysisOutput } from '../../components/AnalysisOutput';
 import { parseNum } from '../../stats/core';
+import type { AnalysisChart } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { CoxParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -129,107 +123,31 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
 
   const tables = coxTables(fit, ciLevel);
 
-  const usable = fit.coefficients.filter(
-    coefficient =>
-      Number.isFinite(coefficient.hr) &&
-      Number.isFinite(coefficient.lo) &&
-      Number.isFinite(coefficient.hi)
-  );
-  const low = usable.length > 0 ? Math.min(1, ...usable.map(coefficient => coefficient.lo)) : 0.5;
-  const high = usable.length > 0 ? Math.max(1, ...usable.map(coefficient => coefficient.hi)) : 2;
-  const span = high > low ? high - low : Math.max(0.5, Math.abs(high) * 0.2);
-  const forestData = fit.coefficients.map((coefficient, index) => ({
-    term: coefficient.term,
-    y: fit.coefficients.length - 1 - index,
-    hr: coefficient.hr,
+  const forestPoints = fit.coefficients.map(coefficient => ({
+    label: coefficient.term,
+    estimate: coefficient.hr,
     lo: coefficient.lo,
     hi: coefficient.hi,
-    usable:
-      Number.isFinite(coefficient.hr) &&
-      Number.isFinite(coefficient.lo) &&
-      Number.isFinite(coefficient.hi),
   }));
+  const forest: AnalysisChart = {
+    kind: 'forest',
+    id: 'cox-forest',
+    title: 'Hazard ratio per covariata',
+    subtitle: `IC ${ciLevel}% · scala lineare`,
+    xLabel: 'Hazard ratio',
+    note:
+      'Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.' +
+      (fit.separation ? ' Con stime instabili gli intervalli non finiti sono omessi dal grafico.' : ''),
+    points: forestPoints,
+  };
+  const header = `Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${times.length} observations · ${fit.events} events`;
 
   return {
     ok: true,
     tables,
     report: coxReport(tables, ciLevel),
-    node: (
-      <div className="mb-6">
-        <p className="text-[10px] text-text3 font-mono mb-3">
-          {`Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${times.length} observations · ${fit.events} events`}
-        </p>
-        <ResultTables specs={tables} />
-
-        <section className="mb-6">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-            <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
-              Hazard ratio per covariata
-            </h3>
-            <span className="text-[10px] text-text3 font-mono">{`IC ${ciLevel}% · scala lineare`}</span>
-          </div>
-          <div className="h-[260px] w-full bg-surface3/30 rounded p-2">
-            <VictoryChart
-              theme={VictoryTheme.material}
-              padding={{ top: 15, bottom: 55, left: 120, right: 30 }}
-              domain={{ x: [low - span * 0.08, high + span * 0.08], y: [-0.5, fit.coefficients.length - 0.5] }}
-            >
-              <VictoryAxis
-                label="Hazard ratio"
-                style={{
-                  axis: { stroke: '#333' },
-                  axisLabel: { fill: '#888', fontSize: 10, padding: 32 },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: '#222' },
-                }}
-              />
-              <VictoryAxis
-                dependentAxis
-                tickValues={forestData.map(point => point.y)}
-                tickFormat={value => {
-                  const point = forestData.find(item => item.y === value);
-                  return point ? point.term : '';
-                }}
-                style={{
-                  axis: { stroke: '#333' },
-                  tickLabels: { fill: '#888', fontSize: 9 },
-                  grid: { stroke: 'transparent' },
-                }}
-              />
-              <VictoryLine
-                data={[
-                  { x: 1, y: -0.5 },
-                  { x: 1, y: fit.coefficients.length - 0.5 },
-                ]}
-                style={{ data: { stroke: '#f87171', strokeDasharray: '4,4', strokeWidth: 1 } }}
-              />
-              {forestData.filter(point => point.usable).map(point => (
-                <VictoryLine
-                  key={`ci-${point.term}`}
-                  data={[
-                    { x: point.lo, y: point.y },
-                    { x: point.hi, y: point.y },
-                  ]}
-                  style={{ data: { stroke: '#4f9cf9', strokeWidth: 2 } }}
-                />
-              ))}
-              <VictoryScatter
-                data={forestData
-                  .filter(point => point.usable)
-                  .map(point => ({ x: point.hr, y: point.y }))}
-                style={{ data: { fill: '#fbbf24', size: 4 } }}
-              />
-            </VictoryChart>
-          </div>
-          <p className="text-[10px] text-text3 mt-1">
-            Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun
-            effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.
-            {fit.separation
-              ? ' Con stime instabili gli intervalli non finiti sono omessi dal grafico.'
-              : ''}
-          </p>
-        </section>
-      </div>
-    ),
+    charts: [forest],
+    header,
+    node: <AnalysisOutput tables={tables} charts={[forest]} header={header} />,
   };
 };

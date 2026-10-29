@@ -216,7 +216,7 @@ export const DataTab = ({
     <input
       ref={csvInputRef}
       type="file"
-      accept=".csv,.tsv,.tab,.txt,.json,.psv,.xlsx,.xls,.xlsm,text/csv,text/plain,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+      accept=".csv,.tsv,.tab,.txt,.json,.psv,.xlsx,.xls,.xlsm,.sav,.dta,text/csv,text/plain,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
       className="hidden"
       onChange={(event) => {
         const file = event.target.files?.[0];

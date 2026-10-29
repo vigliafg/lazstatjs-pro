@@ -34,6 +34,18 @@ test('cox builder returns tables, report and the hazard-ratio plot', () => {
   if (!('ok' in result) || !result.ok) return;
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
+  const chart = result.charts?.[0];
+  assert.equal(chart?.kind, 'forest');
+  assert.match(result.header ?? '', /events/);
+  // The worker sends this payload across structured clone.
+  assert.doesNotThrow(() =>
+    structuredClone({
+      tables: result.tables,
+      report: result.report,
+      charts: result.charts,
+      header: result.header,
+    })
+  );
 });
 
 test('cox builder validates covariates and the event column', () => {

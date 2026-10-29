@@ -17,6 +17,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Group levels editor** (toolbar under the type selector, `src/grid/LevelsEditor.tsx`): code + label, display order, reference level for model-based analyses and the count of rows per code; cells become dropdowns of the declared levels, while the stored value stays the code. "Read data" imports the values already present. It appears for `cat` columns and for every column offered as a grouping variable (integer codes with 2–12 levels, `bol`, small text/date columns), and the same modal is reachable with **Modifica livelli** next to the group selector in the Wizard, ANOVA, ANCOVA, Factorial ANOVA, Survival and Non-parametric RM panels, so labels and reference can be edited without leaving the analysis
 - Per-cell regex validation
 - **CSV import/export** with quoted fields, comma or semicolon delimiters, decimal-comma normalisation and automatic column-type inference
+- **SPSS `.sav` and Stata `.dta` import**: variable labels, value labels, SPSS/Stata dates and user-missing values are preserved and mapped to the typed grid
 - Row/column count displayed in status bar
 - **Freeze first column** (plus row numbers) while scrolling wide sheets; the header row is always sticky
 - **Row filter** with type-aware operators (contains, =, ≠, >, ≥, <, ≤, empty/non-empty) and a live `visible / total` count; choose **View only** or **Also filter analyses**
@@ -39,6 +40,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Stale badges**: a result whose grid revision, dataset, filter or analysis parameters changed is marked stale
 - **Iteration loop**: every card stores the parameters that produced it, with **Re-run** and **Apply parameters** shortcuts
 - **Live-run** for instant procedures: a debounced toggle that replaces the same card instead of stacking results
+- **Heavy procedures run in a Web Worker**: LMM, GEE, Cox (all variants), parametric survival, time series, multiple imputation and resampling keep the UI responsive, show phase/elapsed time and can be cancelled; the synchronous runner remains the fallback
 - **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear
 - **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
 - **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with static UI chrome centralised in `src/i18n.ts`; catalogue, help/report prose and domain messages stay content
@@ -103,6 +105,7 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 - **Styling:** Tailwind CSS 4, dark theme
 - **Charts:** Victory 37
 - **Statistics:** jStat, custom modules under `src/stats/`
+- **Statistical files:** `@irbisadm/statfmt` (TypeScript port of ReadStat) for SPSS/Stata import
 - **Icons:** Lucide React
 - **Animations:** Motion (Framer Motion)
 

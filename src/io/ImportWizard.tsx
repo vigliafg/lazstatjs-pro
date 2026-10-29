@@ -14,6 +14,8 @@ interface Props {
   text?: string;
   /** Worksheets parsed from an .xlsx/.xls file (same pipeline as CSV). */
   sheets?: XlsxSheet[];
+  /** Pre-parsed SPSS/Stata table; skips text detection and parsing. */
+  binaryTable?: ImportTable;
   gridCols: string[];
   onApply: (table: ImportTable, mode: ImportMode) => void;
   onClose: () => void;
@@ -27,13 +29,25 @@ const DELIMS: { id: string; label: string; char: Delimiter }[] = [
   { id: '|', label: t('io.pipeSep'), char: '|' },
 ];
 
-export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, onClose }: Props) {
+export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCols, onApply, onClose }: Props) {
   const isWorkbook = (sheets?.length ?? 0) > 0;
+  const isBinary = Boolean(binaryTable);
   const prefs = useMemo(() => loadPrefs(), []);
   const [sheetIndex, setSheetIndex] = useState(0);
   const sheet = isWorkbook ? sheets?.[Math.min(sheetIndex, (sheets?.length ?? 1) - 1)] : undefined;
 
   const detection: Detection = useMemo(() => {
+    if (binaryTable) {
+      return {
+        delimiter: ',',
+        delimiterScores: { ',': 0, ';': 0, '\t': 0, '|': 0 },
+        hasHeader: true,
+        headerConfidence: 1,
+        hadBOM: false,
+        decimalComma: false,
+        previewRows: Math.min(binaryTable.rows.length, 10),
+      };
+    }
     if (sheet) {
       const header = detectHeader(sheet.rows.slice(0, 10));
       return {
@@ -47,10 +61,10 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
       };
     }
     return detectFormat(fileName, text);
-  }, [sheet, fileName, text]);
+  }, [binaryTable, sheet, fileName, text]);
   const isJson = useMemo(
-    () => !isWorkbook && (looksLikeJson(text) || fileName.toLowerCase().endsWith('.json')),
-    [isWorkbook, text, fileName]
+    () => !isWorkbook && !isBinary && (looksLikeJson(text) || fileName.toLowerCase().endsWith('.json')),
+    [isWorkbook, isBinary, text, fileName]
   );
   const [delimId, setDelimId] = useState<string>(() =>
     prefs.delimiter === '\t' ? 'tab' : ['auto', ',', ';', 'tab', '|'].includes(prefs.delimiter) ? prefs.delimiter : 'auto'
@@ -85,6 +99,15 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
 
   const parsed: { table: ImportTable | null; error: string | null } = useMemo(() => {
     try {
+      if (binaryTable) {
+        return {
+          table: {
+            ...binaryTable,
+            types: binaryTable.names.map((_, i) => overrides[i] ?? binaryTable.types[i]),
+          },
+          error: null,
+        };
+      }
       if (sheet) {
         return { table: xlsxSheetToTable(sheet, { hasHeader, decimalComma, typeOverrides: overrides }), error: null };
       }
@@ -93,20 +116,21 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
     } catch (e) {
       return { table: null, error: e instanceof Error ? e.message : t('io.cannotParse') };
     }
-  }, [sheet, isJson, text, effDelim, hasHeader, decimalComma, overrides]);
+  }, [binaryTable, sheet, isJson, text, effDelim, hasHeader, decimalComma, overrides]);
   const { table, error } = parsed;
 
   const preview = table ? table.rows.slice(0, 10) : [];
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
-      <div className="bg-surface border border-border2 rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-surface border border-border2 rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('io.importTitle')}>
         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
           <div>
             <h2 className="text-accent2 font-mono text-[12px] font-bold uppercase tracking-widest">{t('io.importTitle')}</h2>
             <p className="text-[11px] text-text3 font-mono truncate max-w-[500px]">
               {fileName}
               {isWorkbook && <span> · {sheets?.length} sheet{sheets && sheets.length > 1 ? 's' : ''}</span>}
+              {isBinary && <span> · {binaryTable?.source === 'spss' ? 'SPSS .sav' : 'Stata .dta'}</span>}
             </p>
           </div>
           <button className="tb-btn" onClick={onClose}>{t('io.close')}</button>
@@ -129,7 +153,7 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
               </select>
             </label>
           )}
-          {!isJson && !isWorkbook && (
+          {!isJson && !isWorkbook && !isBinary && (
             <>
               <label className="flex flex-col gap-1">
                 <span className="text-[10px] text-text3 font-mono uppercase">{t('io.delimiter')} {delimId === 'auto' && <span className="text-accent">({t('io.detected')}: {detection.delimiter === '\t' ? t('io.tab') : detection.delimiter})</span>}</span>
@@ -157,6 +181,7 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
               </select>
             </label>
           )}
+          {!isBinary && (
           <label className="flex flex-col gap-1">
             <span className="text-[10px] text-text3 font-mono uppercase">{t('io.decimals')}</span>
             <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={decimalComma ? 'comma' : 'dot'} onChange={(e) => setDecimalComma(e.target.value === 'comma')}>
@@ -164,6 +189,7 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
               <option value="comma">{t('io.comma')}</option>
             </select>
           </label>
+          )}
           <label className="flex flex-col gap-1">
             <span className="text-[10px] text-text3 font-mono uppercase">{t('io.applyAs')}</span>
             <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={mode} onChange={(e) => setMode(e.target.value as ImportMode)}>
@@ -173,6 +199,12 @@ export function ImportWizard({ fileName, text = '', sheets, gridCols, onApply, o
             </select>
           </label>
         </div>
+
+        {isBinary && (
+          <div className="border-b border-border bg-accent/5 px-4 py-2 text-[10px] leading-relaxed text-text3">
+            {t('io.binaryPreserved')}
+          </div>
+        )}
 
         {error ? (
           <div className="px-4 py-6 text-center text-red text-[12px] font-mono">{error}</div>

@@ -337,3 +337,29 @@ Restano esplicitamente fuori, e non vanno considerati fatti:
 - Model comparison e diagnostics dashboard.
 - Seed modificabile dall'utente (i kernel usano già seed fissi deterministici).
 - Desktop wrapper / File System Access e dataset oltre i limiti attuali.
+
+## Quarta tranche — soglia di qualità: worker e import SPSS/Stata (2026-10-29)
+
+Implementati i due interventi che il documento di stato indicava come soglia:
+
+### Web Worker per i kernel pesanti
+
+- `AnalysisRunResult` espone `tables`, `report`, `charts` e `header` serializzabili; `node` resta opzionale per il percorso sincrono.
+- `src/analyses/worker/` contiene protocollo, registry dei soli 9 runner heavy (`lmm`, `gee`, `cox`, `stratcox`, `tdcox`, `parametric`, `timeseries`, `mi`, `resampling`), worker e client.
+- Il setup mostra **Running**, fase, tempo trascorso, barra indeterminata e **Cancel**. Cancel termina il worker: i kernel sono sincroni, quindi non esiste un punto interno sicuro per interromperli.
+- Se `Worker` non è disponibile o il bundle del worker non parte, il runner sincrono resta il fallback; un rifiuto di dominio (parametri/dati) non viene rieseguito.
+- I grafici di Cox e Time Series sono diventati `AnalysisChart` serializzabili e sono renderizzati dallo stesso componente nel worker e nel main thread.
+
+### Import SPSS `.sav` e Stata `.dta`
+
+- `src/io/statfiles.ts` usa `@irbisadm/statfmt` (port TypeScript di ReadStat, MIT) in import dinamico.
+- Conserva nomi, etichette variabile, value labels, date SPSS/Stata e user-missing; produce lo stesso `ImportTable` del wizard CSV/XLSX.
+- `ImportTable.meta` porta label/livelli nella griglia; il wizard mostra il tipo di file, salta delimitatore/header/decimals e mantiene l'override dei tipi.
+- `.zsav` è rifiutato con un messaggio esplicito (richiede zlib nel browser).
+- Fixture reali generate con R/haven per `.sav` e `.dta`; test unitari e due scenari Playwright.
+
+### Verifica
+
+- `npm run check`: **475 test**, 0 fail; dependency-cruiser, madge e file-size guard ok (340 file, 3 eccezioni).
+- `npm run test:e2e`: **42 passed, 34 skipped**, inclusi worker, grafico time-series e import `.sav`/`.dta`.
+- `npm run build`: ok; worker 444 kB, `statfiles-vendor` 89 kB lazy, nessun chunk >500 kB.

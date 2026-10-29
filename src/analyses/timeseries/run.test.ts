@@ -26,6 +26,8 @@ test('time-series builder returns tables, report and forecast content', () => {
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
   assert.ok(result.tables.some(spec => spec.id === 'ts-acf'));
+  assert.ok(result.charts?.some(chart => chart.id === 'ts-acf-chart'));
+  assert.doesNotThrow(() => structuredClone({ tables: result.tables, charts: result.charts }));
 });
 
 test('time-series builder validates the series length and period', () => {

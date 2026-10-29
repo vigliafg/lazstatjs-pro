@@ -2,12 +2,24 @@ import { parseCsv, inferColumnType, type InferredType } from '../csv';
 import type { ColType } from '../grid/types';
 import type { Delimiter } from './detect';
 
+/** Metadata preserved by binary formats such as SPSS and Stata. */
+export interface ImportColumnMeta {
+  label?: string;
+  levels?: { value: string; label: string }[];
+  reference?: string;
+  missing?: string[];
+}
+
 export interface ImportTable {
   names: string[];
   types: ColType[];
   rows: string[][];
   skippedEmpty: number;
   renamedDupes: number;
+  /** Per-column metadata aligned with `names`. */
+  meta?: ImportColumnMeta[];
+  /** Binary source, used by the wizard to explain what was preserved. */
+  source?: 'spss' | 'stata';
 }
 
 export const MAX_ROWS = 50000;
