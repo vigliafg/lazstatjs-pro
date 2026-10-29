@@ -1,0 +1,422 @@
+[
+  {
+    "Subject": 1,
+    "Rater_A": 5,
+    "Rater_B": 4,
+    "Method_A": 65.5,
+    "Method_B": 69.1
+  },
+  {
+    "Subject": 2,
+    "Rater_A": 3,
+    "Rater_B": 3,
+    "Method_A": 65,
+    "Method_B": 66
+  },
+  {
+    "Subject": 3,
+    "Rater_A": 3,
+    "Rater_B": 4,
+    "Method_A": 73.2,
+    "Method_B": 75
+  },
+  {
+    "Subject": 4,
+    "Rater_A": 3,
+    "Rater_B": 4,
+    "Method_A": 33.5,
+    "Method_B": 39
+  },
+  {
+    "Subject": 5,
+    "Rater_A": 4,
+    "Rater_B": 4,
+    "Method_A": 69.9,
+    "Method_B": 73.4
+  },
+  {
+    "Subject": 6,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 58.3,
+    "Method_B": 56.9
+  },
+  {
+    "Subject": 7,
+    "Rater_A": 3,
+    "Rater_B": 2,
+    "Method_A": 66.1,
+    "Method_B": 72.5
+  },
+  {
+    "Subject": 8,
+    "Rater_A": 2,
+    "Rater_B": 3,
+    "Method_A": 57.7,
+    "Method_B": 53.4
+  },
+  {
+    "Subject": 9,
+    "Rater_A": 2,
+    "Rater_B": 2,
+    "Method_A": 58.3,
+    "Method_B": 67.2
+  },
+  {
+    "Subject": 10,
+    "Rater_A": 2,
+    "Rater_B": 3,
+    "Method_A": 60.4,
+    "Method_B": 65
+  },
+  {
+    "Subject": 11,
+    "Rater_A": 5,
+    "Rater_B": 4,
+    "Method_A": 41.2,
+    "Method_B": 42.6
+  },
+  {
+    "Subject": 12,
+    "Rater_A": 4,
+    "Rater_B": 5,
+    "Method_A": 65.4,
+    "Method_B": 67.4
+  },
+  {
+    "Subject": 13,
+    "Rater_A": 3,
+    "Rater_B": 3,
+    "Method_A": 59.9,
+    "Method_B": 65.1
+  },
+  {
+    "Subject": 14,
+    "Rater_A": 1,
+    "Rater_B": 1,
+    "Method_A": 50.7,
+    "Method_B": 52.1
+  },
+  {
+    "Subject": 15,
+    "Rater_A": 2,
+    "Rater_B": 2,
+    "Method_A": 77.8,
+    "Method_B": 73.5
+  },
+  {
+    "Subject": 16,
+    "Rater_A": 2,
+    "Rater_B": 1,
+    "Method_A": 45.7,
+    "Method_B": 45.1
+  },
+  {
+    "Subject": 17,
+    "Rater_A": 4,
+    "Rater_B": 4,
+    "Method_A": 26.2,
+    "Method_B": 20.7
+  },
+  {
+    "Subject": 18,
+    "Rater_A": 2,
+    "Rater_B": 2,
+    "Method_A": 42.3,
+    "Method_B": 46.8
+  },
+  {
+    "Subject": 19,
+    "Rater_A": 1,
+    "Rater_B": 1,
+    "Method_A": 57.6,
+    "Method_B": 58
+  },
+  {
+    "Subject": 20,
+    "Rater_A": 1,
+    "Rater_B": 1,
+    "Method_A": 66,
+    "Method_B": 67.7
+  },
+  {
+    "Subject": 21,
+    "Rater_A": 1,
+    "Rater_B": 1,
+    "Method_A": 47.7,
+    "Method_B": 49.8
+  },
+  {
+    "Subject": 22,
+    "Rater_A": 2,
+    "Rater_B": 3,
+    "Method_A": 37.1,
+    "Method_B": 44
+  },
+  {
+    "Subject": 23,
+    "Rater_A": 5,
+    "Rater_B": 4,
+    "Method_A": 54.4,
+    "Method_B": 56.7
+  },
+  {
+    "Subject": 24,
+    "Rater_A": 1,
+    "Rater_B": 1,
+    "Method_A": 42.2,
+    "Method_B": 45.1
+  },
+  {
+    "Subject": 25,
+    "Rater_A": 4,
+    "Rater_B": 5,
+    "Method_A": 51.7,
+    "Method_B": 55.4
+  },
+  {
+    "Subject": 26,
+    "Rater_A": 3,
+    "Rater_B": 4,
+    "Method_A": 61.6,
+    "Method_B": 59.8
+  },
+  {
+    "Subject": 27,
+    "Rater_A": 4,
+    "Rater_B": 4,
+    "Method_A": 38,
+    "Method_B": 47.8
+  },
+  {
+    "Subject": 28,
+    "Rater_A": 5,
+    "Rater_B": 3,
+    "Method_A": 65.8,
+    "Method_B": 74.7
+  },
+  {
+    "Subject": 29,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 68.7,
+    "Method_B": 71.4
+  },
+  {
+    "Subject": 30,
+    "Rater_A": 1,
+    "Rater_B": 2,
+    "Method_A": 47.9,
+    "Method_B": 53.6
+  },
+  {
+    "Subject": 31,
+    "Rater_A": 1,
+    "Rater_B": 1,
+    "Method_A": 46,
+    "Method_B": 47.9
+  },
+  {
+    "Subject": 32,
+    "Rater_A": 4,
+    "Rater_B": 4,
+    "Method_A": 23.7,
+    "Method_B": 27.4
+  },
+  {
+    "Subject": 33,
+    "Rater_A": 2,
+    "Rater_B": 1,
+    "Method_A": 54.8,
+    "Method_B": 59.8
+  },
+  {
+    "Subject": 34,
+    "Rater_A": 5,
+    "Rater_B": 4,
+    "Method_A": 69,
+    "Method_B": 69.8
+  },
+  {
+    "Subject": 35,
+    "Rater_A": 2,
+    "Rater_B": 2,
+    "Method_A": 29.3,
+    "Method_B": 38.2
+  },
+  {
+    "Subject": 36,
+    "Rater_A": 4,
+    "Rater_B": 3,
+    "Method_A": 35.7,
+    "Method_B": 35.6
+  },
+  {
+    "Subject": 37,
+    "Rater_A": 3,
+    "Rater_B": 1,
+    "Method_A": 41.3,
+    "Method_B": 40
+  },
+  {
+    "Subject": 38,
+    "Rater_A": 4,
+    "Rater_B": 5,
+    "Method_A": 47.5,
+    "Method_B": 56
+  },
+  {
+    "Subject": 39,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 43,
+    "Method_B": 54.6
+  },
+  {
+    "Subject": 40,
+    "Rater_A": 3,
+    "Rater_B": 1,
+    "Method_A": 57.4,
+    "Method_B": 67.6
+  },
+  {
+    "Subject": 41,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 56.3,
+    "Method_B": 57.1
+  },
+  {
+    "Subject": 42,
+    "Rater_A": 4,
+    "Rater_B": 5,
+    "Method_A": 50.3,
+    "Method_B": 49.3
+  },
+  {
+    "Subject": 43,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 37.2,
+    "Method_B": 39.8
+  },
+  {
+    "Subject": 44,
+    "Rater_A": 3,
+    "Rater_B": 5,
+    "Method_A": 36.3,
+    "Method_B": 44.1
+  },
+  {
+    "Subject": 45,
+    "Rater_A": 5,
+    "Rater_B": 4,
+    "Method_A": 47.7,
+    "Method_B": 45.2
+  },
+  {
+    "Subject": 46,
+    "Rater_A": 1,
+    "Rater_B": 3,
+    "Method_A": 56.2,
+    "Method_B": 62.2
+  },
+  {
+    "Subject": 47,
+    "Rater_A": 3,
+    "Rater_B": 4,
+    "Method_A": 53.5,
+    "Method_B": 58
+  },
+  {
+    "Subject": 48,
+    "Rater_A": 1,
+    "Rater_B": 2,
+    "Method_A": 66.2,
+    "Method_B": 66.9
+  },
+  {
+    "Subject": 49,
+    "Rater_A": 2,
+    "Rater_B": 1,
+    "Method_A": 46.3,
+    "Method_B": 49.4
+  },
+  {
+    "Subject": 50,
+    "Rater_A": 2,
+    "Rater_B": 2,
+    "Method_A": 54.9,
+    "Method_B": 55.4
+  },
+  {
+    "Subject": 51,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 49.9,
+    "Method_B": 56.6
+  },
+  {
+    "Subject": 52,
+    "Rater_A": 2,
+    "Rater_B": 1,
+    "Method_A": 60.9,
+    "Method_B": 58.1
+  },
+  {
+    "Subject": 53,
+    "Rater_A": 3,
+    "Rater_B": 4,
+    "Method_A": 57.8,
+    "Method_B": 57.6
+  },
+  {
+    "Subject": 54,
+    "Rater_A": 4,
+    "Rater_B": 4,
+    "Method_A": 46,
+    "Method_B": 51.6
+  },
+  {
+    "Subject": 55,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 53.7,
+    "Method_B": 64.4
+  },
+  {
+    "Subject": 56,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 59.8,
+    "Method_B": 57.9
+  },
+  {
+    "Subject": 57,
+    "Rater_A": 4,
+    "Rater_B": 5,
+    "Method_A": 71.8,
+    "Method_B": 75.3
+  },
+  {
+    "Subject": 58,
+    "Rater_A": 5,
+    "Rater_B": 5,
+    "Method_A": 66.2,
+    "Method_B": 68.9
+  },
+  {
+    "Subject": 59,
+    "Rater_A": 4,
+    "Rater_B": 4,
+    "Method_A": 63.5,
+    "Method_B": 75.2
+  },
+  {
+    "Subject": 60,
+    "Rater_A": 4,
+    "Rater_B": 3,
+    "Method_A": 50.7,
+    "Method_B": 51
+  }
+]

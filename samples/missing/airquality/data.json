@@ -1,0 +1,1226 @@
+[
+  {
+    "Ozone": 41,
+    "Solar_R": 190,
+    "Wind": 7.4,
+    "Temp": 67,
+    "Month": 5,
+    "Day": 1
+  },
+  {
+    "Ozone": 36,
+    "Solar_R": 118,
+    "Wind": 8,
+    "Temp": 72,
+    "Month": 5,
+    "Day": 2
+  },
+  {
+    "Ozone": 12,
+    "Solar_R": 149,
+    "Wind": 12.6,
+    "Temp": 74,
+    "Month": 5,
+    "Day": 3
+  },
+  {
+    "Ozone": 18,
+    "Solar_R": 313,
+    "Wind": 11.5,
+    "Temp": 62,
+    "Month": 5,
+    "Day": 4
+  },
+  {
+    "Ozone": null,
+    "Solar_R": null,
+    "Wind": 14.3,
+    "Temp": 56,
+    "Month": 5,
+    "Day": 5
+  },
+  {
+    "Ozone": 28,
+    "Solar_R": null,
+    "Wind": 14.9,
+    "Temp": 66,
+    "Month": 5,
+    "Day": 6
+  },
+  {
+    "Ozone": 23,
+    "Solar_R": 299,
+    "Wind": 8.6,
+    "Temp": 65,
+    "Month": 5,
+    "Day": 7
+  },
+  {
+    "Ozone": 19,
+    "Solar_R": 99,
+    "Wind": 13.8,
+    "Temp": 59,
+    "Month": 5,
+    "Day": 8
+  },
+  {
+    "Ozone": 8,
+    "Solar_R": 19,
+    "Wind": 20.1,
+    "Temp": 61,
+    "Month": 5,
+    "Day": 9
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 194,
+    "Wind": 8.6,
+    "Temp": 69,
+    "Month": 5,
+    "Day": 10
+  },
+  {
+    "Ozone": 7,
+    "Solar_R": null,
+    "Wind": 6.9,
+    "Temp": 74,
+    "Month": 5,
+    "Day": 11
+  },
+  {
+    "Ozone": 16,
+    "Solar_R": 256,
+    "Wind": 9.7,
+    "Temp": 69,
+    "Month": 5,
+    "Day": 12
+  },
+  {
+    "Ozone": 11,
+    "Solar_R": 290,
+    "Wind": 9.2,
+    "Temp": 66,
+    "Month": 5,
+    "Day": 13
+  },
+  {
+    "Ozone": 14,
+    "Solar_R": 274,
+    "Wind": 10.9,
+    "Temp": 68,
+    "Month": 5,
+    "Day": 14
+  },
+  {
+    "Ozone": 18,
+    "Solar_R": 65,
+    "Wind": 13.2,
+    "Temp": 58,
+    "Month": 5,
+    "Day": 15
+  },
+  {
+    "Ozone": 14,
+    "Solar_R": 334,
+    "Wind": 11.5,
+    "Temp": 64,
+    "Month": 5,
+    "Day": 16
+  },
+  {
+    "Ozone": 34,
+    "Solar_R": 307,
+    "Wind": 12,
+    "Temp": 66,
+    "Month": 5,
+    "Day": 17
+  },
+  {
+    "Ozone": 6,
+    "Solar_R": 78,
+    "Wind": 18.4,
+    "Temp": 57,
+    "Month": 5,
+    "Day": 18
+  },
+  {
+    "Ozone": 30,
+    "Solar_R": 322,
+    "Wind": 11.5,
+    "Temp": 68,
+    "Month": 5,
+    "Day": 19
+  },
+  {
+    "Ozone": 11,
+    "Solar_R": 44,
+    "Wind": 9.7,
+    "Temp": 62,
+    "Month": 5,
+    "Day": 20
+  },
+  {
+    "Ozone": 1,
+    "Solar_R": 8,
+    "Wind": 9.7,
+    "Temp": 59,
+    "Month": 5,
+    "Day": 21
+  },
+  {
+    "Ozone": 11,
+    "Solar_R": 320,
+    "Wind": 16.6,
+    "Temp": 73,
+    "Month": 5,
+    "Day": 22
+  },
+  {
+    "Ozone": 4,
+    "Solar_R": 25,
+    "Wind": 9.7,
+    "Temp": 61,
+    "Month": 5,
+    "Day": 23
+  },
+  {
+    "Ozone": 32,
+    "Solar_R": 92,
+    "Wind": 12,
+    "Temp": 61,
+    "Month": 5,
+    "Day": 24
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 66,
+    "Wind": 16.6,
+    "Temp": 57,
+    "Month": 5,
+    "Day": 25
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 266,
+    "Wind": 14.9,
+    "Temp": 58,
+    "Month": 5,
+    "Day": 26
+  },
+  {
+    "Ozone": null,
+    "Solar_R": null,
+    "Wind": 8,
+    "Temp": 57,
+    "Month": 5,
+    "Day": 27
+  },
+  {
+    "Ozone": 23,
+    "Solar_R": 13,
+    "Wind": 12,
+    "Temp": 67,
+    "Month": 5,
+    "Day": 28
+  },
+  {
+    "Ozone": 45,
+    "Solar_R": 252,
+    "Wind": 14.9,
+    "Temp": 81,
+    "Month": 5,
+    "Day": 29
+  },
+  {
+    "Ozone": 115,
+    "Solar_R": 223,
+    "Wind": 5.7,
+    "Temp": 79,
+    "Month": 5,
+    "Day": 30
+  },
+  {
+    "Ozone": 37,
+    "Solar_R": 279,
+    "Wind": 7.4,
+    "Temp": 76,
+    "Month": 5,
+    "Day": 31
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 286,
+    "Wind": 8.6,
+    "Temp": 78,
+    "Month": 6,
+    "Day": 1
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 287,
+    "Wind": 9.7,
+    "Temp": 74,
+    "Month": 6,
+    "Day": 2
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 242,
+    "Wind": 16.1,
+    "Temp": 67,
+    "Month": 6,
+    "Day": 3
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 186,
+    "Wind": 9.2,
+    "Temp": 84,
+    "Month": 6,
+    "Day": 4
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 220,
+    "Wind": 8.6,
+    "Temp": 85,
+    "Month": 6,
+    "Day": 5
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 264,
+    "Wind": 14.3,
+    "Temp": 79,
+    "Month": 6,
+    "Day": 6
+  },
+  {
+    "Ozone": 29,
+    "Solar_R": 127,
+    "Wind": 9.7,
+    "Temp": 82,
+    "Month": 6,
+    "Day": 7
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 273,
+    "Wind": 6.9,
+    "Temp": 87,
+    "Month": 6,
+    "Day": 8
+  },
+  {
+    "Ozone": 71,
+    "Solar_R": 291,
+    "Wind": 13.8,
+    "Temp": 90,
+    "Month": 6,
+    "Day": 9
+  },
+  {
+    "Ozone": 39,
+    "Solar_R": 323,
+    "Wind": 11.5,
+    "Temp": 87,
+    "Month": 6,
+    "Day": 10
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 259,
+    "Wind": 10.9,
+    "Temp": 93,
+    "Month": 6,
+    "Day": 11
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 250,
+    "Wind": 9.2,
+    "Temp": 92,
+    "Month": 6,
+    "Day": 12
+  },
+  {
+    "Ozone": 23,
+    "Solar_R": 148,
+    "Wind": 8,
+    "Temp": 82,
+    "Month": 6,
+    "Day": 13
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 332,
+    "Wind": 13.8,
+    "Temp": 80,
+    "Month": 6,
+    "Day": 14
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 322,
+    "Wind": 11.5,
+    "Temp": 79,
+    "Month": 6,
+    "Day": 15
+  },
+  {
+    "Ozone": 21,
+    "Solar_R": 191,
+    "Wind": 14.9,
+    "Temp": 77,
+    "Month": 6,
+    "Day": 16
+  },
+  {
+    "Ozone": 37,
+    "Solar_R": 284,
+    "Wind": 20.7,
+    "Temp": 72,
+    "Month": 6,
+    "Day": 17
+  },
+  {
+    "Ozone": 20,
+    "Solar_R": 37,
+    "Wind": 9.2,
+    "Temp": 65,
+    "Month": 6,
+    "Day": 18
+  },
+  {
+    "Ozone": 12,
+    "Solar_R": 120,
+    "Wind": 11.5,
+    "Temp": 73,
+    "Month": 6,
+    "Day": 19
+  },
+  {
+    "Ozone": 13,
+    "Solar_R": 137,
+    "Wind": 10.3,
+    "Temp": 76,
+    "Month": 6,
+    "Day": 20
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 150,
+    "Wind": 6.3,
+    "Temp": 77,
+    "Month": 6,
+    "Day": 21
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 59,
+    "Wind": 1.7,
+    "Temp": 76,
+    "Month": 6,
+    "Day": 22
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 91,
+    "Wind": 4.6,
+    "Temp": 76,
+    "Month": 6,
+    "Day": 23
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 250,
+    "Wind": 6.3,
+    "Temp": 76,
+    "Month": 6,
+    "Day": 24
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 135,
+    "Wind": 8,
+    "Temp": 75,
+    "Month": 6,
+    "Day": 25
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 127,
+    "Wind": 8,
+    "Temp": 78,
+    "Month": 6,
+    "Day": 26
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 47,
+    "Wind": 10.3,
+    "Temp": 73,
+    "Month": 6,
+    "Day": 27
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 98,
+    "Wind": 11.5,
+    "Temp": 80,
+    "Month": 6,
+    "Day": 28
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 31,
+    "Wind": 14.9,
+    "Temp": 77,
+    "Month": 6,
+    "Day": 29
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 138,
+    "Wind": 8,
+    "Temp": 83,
+    "Month": 6,
+    "Day": 30
+  },
+  {
+    "Ozone": 135,
+    "Solar_R": 269,
+    "Wind": 4.1,
+    "Temp": 84,
+    "Month": 7,
+    "Day": 1
+  },
+  {
+    "Ozone": 49,
+    "Solar_R": 248,
+    "Wind": 9.2,
+    "Temp": 85,
+    "Month": 7,
+    "Day": 2
+  },
+  {
+    "Ozone": 32,
+    "Solar_R": 236,
+    "Wind": 9.2,
+    "Temp": 81,
+    "Month": 7,
+    "Day": 3
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 101,
+    "Wind": 10.9,
+    "Temp": 84,
+    "Month": 7,
+    "Day": 4
+  },
+  {
+    "Ozone": 64,
+    "Solar_R": 175,
+    "Wind": 4.6,
+    "Temp": 83,
+    "Month": 7,
+    "Day": 5
+  },
+  {
+    "Ozone": 40,
+    "Solar_R": 314,
+    "Wind": 10.9,
+    "Temp": 83,
+    "Month": 7,
+    "Day": 6
+  },
+  {
+    "Ozone": 77,
+    "Solar_R": 276,
+    "Wind": 5.1,
+    "Temp": 88,
+    "Month": 7,
+    "Day": 7
+  },
+  {
+    "Ozone": 97,
+    "Solar_R": 267,
+    "Wind": 6.3,
+    "Temp": 92,
+    "Month": 7,
+    "Day": 8
+  },
+  {
+    "Ozone": 97,
+    "Solar_R": 272,
+    "Wind": 5.7,
+    "Temp": 92,
+    "Month": 7,
+    "Day": 9
+  },
+  {
+    "Ozone": 85,
+    "Solar_R": 175,
+    "Wind": 7.4,
+    "Temp": 89,
+    "Month": 7,
+    "Day": 10
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 139,
+    "Wind": 8.6,
+    "Temp": 82,
+    "Month": 7,
+    "Day": 11
+  },
+  {
+    "Ozone": 10,
+    "Solar_R": 264,
+    "Wind": 14.3,
+    "Temp": 73,
+    "Month": 7,
+    "Day": 12
+  },
+  {
+    "Ozone": 27,
+    "Solar_R": 175,
+    "Wind": 14.9,
+    "Temp": 81,
+    "Month": 7,
+    "Day": 13
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 291,
+    "Wind": 14.9,
+    "Temp": 91,
+    "Month": 7,
+    "Day": 14
+  },
+  {
+    "Ozone": 7,
+    "Solar_R": 48,
+    "Wind": 14.3,
+    "Temp": 80,
+    "Month": 7,
+    "Day": 15
+  },
+  {
+    "Ozone": 48,
+    "Solar_R": 260,
+    "Wind": 6.9,
+    "Temp": 81,
+    "Month": 7,
+    "Day": 16
+  },
+  {
+    "Ozone": 35,
+    "Solar_R": 274,
+    "Wind": 10.3,
+    "Temp": 82,
+    "Month": 7,
+    "Day": 17
+  },
+  {
+    "Ozone": 61,
+    "Solar_R": 285,
+    "Wind": 6.3,
+    "Temp": 84,
+    "Month": 7,
+    "Day": 18
+  },
+  {
+    "Ozone": 79,
+    "Solar_R": 187,
+    "Wind": 5.1,
+    "Temp": 87,
+    "Month": 7,
+    "Day": 19
+  },
+  {
+    "Ozone": 63,
+    "Solar_R": 220,
+    "Wind": 11.5,
+    "Temp": 85,
+    "Month": 7,
+    "Day": 20
+  },
+  {
+    "Ozone": 16,
+    "Solar_R": 7,
+    "Wind": 6.9,
+    "Temp": 74,
+    "Month": 7,
+    "Day": 21
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 258,
+    "Wind": 9.7,
+    "Temp": 81,
+    "Month": 7,
+    "Day": 22
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 295,
+    "Wind": 11.5,
+    "Temp": 82,
+    "Month": 7,
+    "Day": 23
+  },
+  {
+    "Ozone": 80,
+    "Solar_R": 294,
+    "Wind": 8.6,
+    "Temp": 86,
+    "Month": 7,
+    "Day": 24
+  },
+  {
+    "Ozone": 108,
+    "Solar_R": 223,
+    "Wind": 8,
+    "Temp": 85,
+    "Month": 7,
+    "Day": 25
+  },
+  {
+    "Ozone": 20,
+    "Solar_R": 81,
+    "Wind": 8.6,
+    "Temp": 82,
+    "Month": 7,
+    "Day": 26
+  },
+  {
+    "Ozone": 52,
+    "Solar_R": 82,
+    "Wind": 12,
+    "Temp": 86,
+    "Month": 7,
+    "Day": 27
+  },
+  {
+    "Ozone": 82,
+    "Solar_R": 213,
+    "Wind": 7.4,
+    "Temp": 88,
+    "Month": 7,
+    "Day": 28
+  },
+  {
+    "Ozone": 50,
+    "Solar_R": 275,
+    "Wind": 7.4,
+    "Temp": 86,
+    "Month": 7,
+    "Day": 29
+  },
+  {
+    "Ozone": 64,
+    "Solar_R": 253,
+    "Wind": 7.4,
+    "Temp": 83,
+    "Month": 7,
+    "Day": 30
+  },
+  {
+    "Ozone": 59,
+    "Solar_R": 254,
+    "Wind": 9.2,
+    "Temp": 81,
+    "Month": 7,
+    "Day": 31
+  },
+  {
+    "Ozone": 39,
+    "Solar_R": 83,
+    "Wind": 6.9,
+    "Temp": 81,
+    "Month": 8,
+    "Day": 1
+  },
+  {
+    "Ozone": 9,
+    "Solar_R": 24,
+    "Wind": 13.8,
+    "Temp": 81,
+    "Month": 8,
+    "Day": 2
+  },
+  {
+    "Ozone": 16,
+    "Solar_R": 77,
+    "Wind": 7.4,
+    "Temp": 82,
+    "Month": 8,
+    "Day": 3
+  },
+  {
+    "Ozone": 78,
+    "Solar_R": null,
+    "Wind": 6.9,
+    "Temp": 86,
+    "Month": 8,
+    "Day": 4
+  },
+  {
+    "Ozone": 35,
+    "Solar_R": null,
+    "Wind": 7.4,
+    "Temp": 85,
+    "Month": 8,
+    "Day": 5
+  },
+  {
+    "Ozone": 66,
+    "Solar_R": null,
+    "Wind": 4.6,
+    "Temp": 87,
+    "Month": 8,
+    "Day": 6
+  },
+  {
+    "Ozone": 122,
+    "Solar_R": 255,
+    "Wind": 4,
+    "Temp": 89,
+    "Month": 8,
+    "Day": 7
+  },
+  {
+    "Ozone": 89,
+    "Solar_R": 229,
+    "Wind": 10.3,
+    "Temp": 90,
+    "Month": 8,
+    "Day": 8
+  },
+  {
+    "Ozone": 110,
+    "Solar_R": 207,
+    "Wind": 8,
+    "Temp": 90,
+    "Month": 8,
+    "Day": 9
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 222,
+    "Wind": 8.6,
+    "Temp": 92,
+    "Month": 8,
+    "Day": 10
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 137,
+    "Wind": 11.5,
+    "Temp": 86,
+    "Month": 8,
+    "Day": 11
+  },
+  {
+    "Ozone": 44,
+    "Solar_R": 192,
+    "Wind": 11.5,
+    "Temp": 86,
+    "Month": 8,
+    "Day": 12
+  },
+  {
+    "Ozone": 28,
+    "Solar_R": 273,
+    "Wind": 11.5,
+    "Temp": 82,
+    "Month": 8,
+    "Day": 13
+  },
+  {
+    "Ozone": 65,
+    "Solar_R": 157,
+    "Wind": 9.7,
+    "Temp": 80,
+    "Month": 8,
+    "Day": 14
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 64,
+    "Wind": 11.5,
+    "Temp": 79,
+    "Month": 8,
+    "Day": 15
+  },
+  {
+    "Ozone": 22,
+    "Solar_R": 71,
+    "Wind": 10.3,
+    "Temp": 77,
+    "Month": 8,
+    "Day": 16
+  },
+  {
+    "Ozone": 59,
+    "Solar_R": 51,
+    "Wind": 6.3,
+    "Temp": 79,
+    "Month": 8,
+    "Day": 17
+  },
+  {
+    "Ozone": 23,
+    "Solar_R": 115,
+    "Wind": 7.4,
+    "Temp": 76,
+    "Month": 8,
+    "Day": 18
+  },
+  {
+    "Ozone": 31,
+    "Solar_R": 244,
+    "Wind": 10.9,
+    "Temp": 78,
+    "Month": 8,
+    "Day": 19
+  },
+  {
+    "Ozone": 44,
+    "Solar_R": 190,
+    "Wind": 10.3,
+    "Temp": 78,
+    "Month": 8,
+    "Day": 20
+  },
+  {
+    "Ozone": 21,
+    "Solar_R": 259,
+    "Wind": 15.5,
+    "Temp": 77,
+    "Month": 8,
+    "Day": 21
+  },
+  {
+    "Ozone": 9,
+    "Solar_R": 36,
+    "Wind": 14.3,
+    "Temp": 72,
+    "Month": 8,
+    "Day": 22
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 255,
+    "Wind": 12.6,
+    "Temp": 75,
+    "Month": 8,
+    "Day": 23
+  },
+  {
+    "Ozone": 45,
+    "Solar_R": 212,
+    "Wind": 9.7,
+    "Temp": 79,
+    "Month": 8,
+    "Day": 24
+  },
+  {
+    "Ozone": 168,
+    "Solar_R": 238,
+    "Wind": 3.4,
+    "Temp": 81,
+    "Month": 8,
+    "Day": 25
+  },
+  {
+    "Ozone": 73,
+    "Solar_R": 215,
+    "Wind": 8,
+    "Temp": 86,
+    "Month": 8,
+    "Day": 26
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 153,
+    "Wind": 5.7,
+    "Temp": 88,
+    "Month": 8,
+    "Day": 27
+  },
+  {
+    "Ozone": 76,
+    "Solar_R": 203,
+    "Wind": 9.7,
+    "Temp": 97,
+    "Month": 8,
+    "Day": 28
+  },
+  {
+    "Ozone": 118,
+    "Solar_R": 225,
+    "Wind": 2.3,
+    "Temp": 94,
+    "Month": 8,
+    "Day": 29
+  },
+  {
+    "Ozone": 84,
+    "Solar_R": 237,
+    "Wind": 6.3,
+    "Temp": 96,
+    "Month": 8,
+    "Day": 30
+  },
+  {
+    "Ozone": 85,
+    "Solar_R": 188,
+    "Wind": 6.3,
+    "Temp": 94,
+    "Month": 8,
+    "Day": 31
+  },
+  {
+    "Ozone": 96,
+    "Solar_R": 167,
+    "Wind": 6.9,
+    "Temp": 91,
+    "Month": 9,
+    "Day": 1
+  },
+  {
+    "Ozone": 78,
+    "Solar_R": 197,
+    "Wind": 5.1,
+    "Temp": 92,
+    "Month": 9,
+    "Day": 2
+  },
+  {
+    "Ozone": 73,
+    "Solar_R": 183,
+    "Wind": 2.8,
+    "Temp": 93,
+    "Month": 9,
+    "Day": 3
+  },
+  {
+    "Ozone": 91,
+    "Solar_R": 189,
+    "Wind": 4.6,
+    "Temp": 93,
+    "Month": 9,
+    "Day": 4
+  },
+  {
+    "Ozone": 47,
+    "Solar_R": 95,
+    "Wind": 7.4,
+    "Temp": 87,
+    "Month": 9,
+    "Day": 5
+  },
+  {
+    "Ozone": 32,
+    "Solar_R": 92,
+    "Wind": 15.5,
+    "Temp": 84,
+    "Month": 9,
+    "Day": 6
+  },
+  {
+    "Ozone": 20,
+    "Solar_R": 252,
+    "Wind": 10.9,
+    "Temp": 80,
+    "Month": 9,
+    "Day": 7
+  },
+  {
+    "Ozone": 23,
+    "Solar_R": 220,
+    "Wind": 10.3,
+    "Temp": 78,
+    "Month": 9,
+    "Day": 8
+  },
+  {
+    "Ozone": 21,
+    "Solar_R": 230,
+    "Wind": 10.9,
+    "Temp": 75,
+    "Month": 9,
+    "Day": 9
+  },
+  {
+    "Ozone": 24,
+    "Solar_R": 259,
+    "Wind": 9.7,
+    "Temp": 73,
+    "Month": 9,
+    "Day": 10
+  },
+  {
+    "Ozone": 44,
+    "Solar_R": 236,
+    "Wind": 14.9,
+    "Temp": 81,
+    "Month": 9,
+    "Day": 11
+  },
+  {
+    "Ozone": 21,
+    "Solar_R": 259,
+    "Wind": 15.5,
+    "Temp": 76,
+    "Month": 9,
+    "Day": 12
+  },
+  {
+    "Ozone": 28,
+    "Solar_R": 238,
+    "Wind": 6.3,
+    "Temp": 77,
+    "Month": 9,
+    "Day": 13
+  },
+  {
+    "Ozone": 9,
+    "Solar_R": 24,
+    "Wind": 10.9,
+    "Temp": 71,
+    "Month": 9,
+    "Day": 14
+  },
+  {
+    "Ozone": 13,
+    "Solar_R": 112,
+    "Wind": 11.5,
+    "Temp": 71,
+    "Month": 9,
+    "Day": 15
+  },
+  {
+    "Ozone": 46,
+    "Solar_R": 237,
+    "Wind": 6.9,
+    "Temp": 78,
+    "Month": 9,
+    "Day": 16
+  },
+  {
+    "Ozone": 18,
+    "Solar_R": 224,
+    "Wind": 13.8,
+    "Temp": 67,
+    "Month": 9,
+    "Day": 17
+  },
+  {
+    "Ozone": 13,
+    "Solar_R": 27,
+    "Wind": 10.3,
+    "Temp": 76,
+    "Month": 9,
+    "Day": 18
+  },
+  {
+    "Ozone": 24,
+    "Solar_R": 238,
+    "Wind": 10.3,
+    "Temp": 68,
+    "Month": 9,
+    "Day": 19
+  },
+  {
+    "Ozone": 16,
+    "Solar_R": 201,
+    "Wind": 8,
+    "Temp": 82,
+    "Month": 9,
+    "Day": 20
+  },
+  {
+    "Ozone": 13,
+    "Solar_R": 238,
+    "Wind": 12.6,
+    "Temp": 64,
+    "Month": 9,
+    "Day": 21
+  },
+  {
+    "Ozone": 23,
+    "Solar_R": 14,
+    "Wind": 9.2,
+    "Temp": 71,
+    "Month": 9,
+    "Day": 22
+  },
+  {
+    "Ozone": 36,
+    "Solar_R": 139,
+    "Wind": 10.3,
+    "Temp": 81,
+    "Month": 9,
+    "Day": 23
+  },
+  {
+    "Ozone": 7,
+    "Solar_R": 49,
+    "Wind": 10.3,
+    "Temp": 69,
+    "Month": 9,
+    "Day": 24
+  },
+  {
+    "Ozone": 14,
+    "Solar_R": 20,
+    "Wind": 16.6,
+    "Temp": 63,
+    "Month": 9,
+    "Day": 25
+  },
+  {
+    "Ozone": 30,
+    "Solar_R": 193,
+    "Wind": 6.9,
+    "Temp": 70,
+    "Month": 9,
+    "Day": 26
+  },
+  {
+    "Ozone": null,
+    "Solar_R": 145,
+    "Wind": 13.2,
+    "Temp": 77,
+    "Month": 9,
+    "Day": 27
+  },
+  {
+    "Ozone": 14,
+    "Solar_R": 191,
+    "Wind": 14.3,
+    "Temp": 75,
+    "Month": 9,
+    "Day": 28
+  },
+  {
+    "Ozone": 18,
+    "Solar_R": 131,
+    "Wind": 8,
+    "Temp": 76,
+    "Month": 9,
+    "Day": 29
+  },
+  {
+    "Ozone": 20,
+    "Solar_R": 223,
+    "Wind": 11.5,
+    "Temp": 68,
+    "Month": 9,
+    "Day": 30
+  }
+]

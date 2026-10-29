@@ -18,6 +18,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - Per-cell regex validation
 - **CSV import/export** with quoted fields, comma or semicolon delimiters, decimal-comma normalisation and automatic column-type inference
 - **SPSS `.sav` and Stata `.dta` import**: variable labels, value labels, SPSS/Stata dates and user-missing values are preserved and mapped to the typed grid
+- **Committed sample datasets** in `samples/`: 21 classic R datasets grouped by analysis family, each in CSV, SPSS `.sav`, Stata `.dta`, Excel `.xlsx` and JSON, with a machine-readable manifest and a regeneration script. See [`samples/README.md`](samples/README.md)
 - Row/column count displayed in status bar
 - **Freeze first column** (plus row numbers) while scrolling wide sheets; the header row is always sticky
 - **Row filter** with type-aware operators (contains, =, ≠, >, ≥, <, ≤, empty/non-empty) and a live `visible / total` count; choose **View only** or **Also filter analyses**
@@ -158,6 +159,7 @@ lazstatjs/
 ├── vite.config.ts          # Vite config with Tailwind + React + env injection
 ├── metadata.json           # Google AI Studio metadata
 ├── .env.example
+├── samples/                # Committed test datasets by analysis family, manifest and generator
 └── src/
     ├── main.tsx            # React entry point
     ├── App.tsx             # Shell, state and analysis orchestration
@@ -199,6 +201,8 @@ lazstatjs/
 | `npm run clean` | Remove `dist/` directory |
 | `npm run lint` | TypeScript type-check |
 | `npm test` | Run the statistics reference tests with `node:test` + `tsx` |
+| `npm run test:samples` | Validate every committed sample in all five formats |
+| `npm run samples:generate` | Regenerate the sample files from R (requires `Rscript` + `haven`) |
 | `npm run test:e2e` | Run the Playwright suite (grid + analysis, desktop + mobile) |
 | `npm run check` | Type-check, unit tests, dependency-cruiser, madge and file-size guard |
 | `npm run guard` | Architecture and size guards only |

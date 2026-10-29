@@ -2,9 +2,9 @@
 
 **Data:** 29 ottobre 2026  
 **Branch:** `grid-roadmap`  
-**HEAD:** `2b6e190` — `Qualità: worker per kernel pesanti e import SPSS/Stata`  
-**Stato git:** working tree pulito, branch allineato a `origin/grid-roadmap`  
-**Verifica:** `npm run check` → 475 test, 0 fail; Playwright → 42 passed / 34 skipped; build ok, nessun chunk >500 kB; file-size guard ok (340 file, 3 eccezioni).
+**HEAD:** `7032a73` — base della quinta tranche (dataset di prova, non ancora committata)
+**Stato git:** working tree con la quinta tranche; branch `grid-roadmap`
+**Verifica:** `npm run check` → 480 test, 0 fail; Playwright → 43 passed / 35 skipped; build ok, nessun chunk >500 kB; file-size guard ok (340 file, 3 eccezioni).
 
 ---
 
@@ -24,6 +24,7 @@ La struttura è matura: 31 procedure, 31 form, 31 runner, store dei parametri, s
 - Missing code per colonna, formule persistenti, colonne calcolate.
 - Undo/redo con coalescing, validazione, auto-fix, clean, transform, sort, filtro.
 - Import CSV/TSV/JSON/XLSX e **SPSS `.sav` / Stata `.dta`** (etichette variabile, value labels, date e missing); export CSV/TSV/JSON/SPSS syntax/XLSX.
+- **21 dataset di prova** in `samples/`, divisi per famiglia di analisi e ciascuno in CSV, `.sav`, `.dta`, `.xlsx` e JSON, con `manifest.json` e generatore R; usati dai test unitari/e2e e disponibili per verifiche manuali.
 - Variable Inspector, ricerca/filtro righe, virtualizzazione, fill handle e multi-cell editing.
 - Limiti: 50.000 righe, 500 colonne; autosave localStorage ~4 MB; 20 card output; 1,5 MB HTML.
 
@@ -59,7 +60,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 ### Qualità e architettura
 - `stats/` puro, `analyses/` form + runner, `grid/` modello dati, `ui/` composizione.
 - dependency-cruiser, madge, file-size guard, sanitizer output HTML, cap di import/progetto.
-- 475 test unitari, 42 e2e passati, 34 skipped (mobile/desktop non applicabili).
+- 480 test unitari, 43 e2e passati, 35 skipped (mobile/desktop non applicabili).
 - i18n: 744 chiavi, UI inglese, help/report in italiano.
 
 ---
@@ -124,11 +125,13 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 ## 8. Come eseguire
 
 ```bash
-npm run dev        # sviluppo
-npm run check      # lint + unit + guardrail
-npm run test:e2e   # Playwright desktop + mobile
-npm run build      # produzione
-npm run bench:grid # benchmark griglia/formule
+npm run dev              # sviluppo
+npm run check            # lint + unit + guardrail
+npm run test:samples     # verifica i dataset di prova in tutti i formati
+npm run samples:generate # rigenera samples/ da R
+npm run test:e2e         # Playwright desktop + mobile
+npm run build            # produzione
+npm run bench:grid       # benchmark griglia/formule
 ```
 
 ---
@@ -147,6 +150,9 @@ npm run bench:grid # benchmark griglia/formule
 | `src/grid/DataGrid.tsx` | Griglia, editing, tastiera |
 | `src/io/project/index.ts` | `.lzs`, autosave, migrazione |
 | `src/io/backup.ts` | Backup IndexedDB |
+| `src/io/statfiles.ts` | Import SPSS `.sav` / Stata `.dta` |
+| `samples/` | 21 dataset di prova per famiglia, 5 formati, manifest e generatore R |
+| `src/io/samples.test.ts` | Verifica manifest, formati e copertura delle procedure |
 | `src/io/codeExport.ts` | Export R/Python |
 | `src/io/statfiles.ts` | Import SPSS `.sav` / Stata `.dta` |
 | `src/analyses/worker/` | Worker, protocollo, registry heavy e client |

@@ -148,6 +148,7 @@ basso.
 - [x] Suite Playwright per il workspace analisi (desktop + mobile).
 - [x] Potenziamento per ricercatore/studente: Guided/Expert, onboarding, preset, NumberField, re-run all, report Word, export codice, backup IndexedDB, schema v2, error boundary.
 - [x] Soglia di qualità: worker per le 9 procedure heavy con fase/elapsed/Cancel e import SPSS `.sav` / Stata `.dta` con etichette e date.
+- [x] Dataset di prova in `samples/`: 21 dataset per famiglia, cinque formati, manifest e generatore R per test e2e e verifiche manuali.
 - [x] Rilievi UI R8–R18 chiusi: stato vuoto, live token, a11y, ruoli, resize, vista, performance, freschezza, toolbar/categoria (`docs/plans/2026-10-29-chiusura-rilievi-ui.md`).
 
 ## 5. Valutazione

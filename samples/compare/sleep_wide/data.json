@@ -1,0 +1,52 @@
+[
+  {
+    "Subject": "1",
+    "Extra_1": 0.7,
+    "Extra_2": 1.9
+  },
+  {
+    "Subject": "2",
+    "Extra_1": -1.6,
+    "Extra_2": 0.8
+  },
+  {
+    "Subject": "3",
+    "Extra_1": -0.2,
+    "Extra_2": 1.1
+  },
+  {
+    "Subject": "4",
+    "Extra_1": -1.2,
+    "Extra_2": 0.1
+  },
+  {
+    "Subject": "5",
+    "Extra_1": -0.1,
+    "Extra_2": -0.1
+  },
+  {
+    "Subject": "6",
+    "Extra_1": 3.4,
+    "Extra_2": 4.4
+  },
+  {
+    "Subject": "7",
+    "Extra_1": 3.7,
+    "Extra_2": 5.5
+  },
+  {
+    "Subject": "8",
+    "Extra_1": 0.8,
+    "Extra_2": 1.6
+  },
+  {
+    "Subject": "9",
+    "Extra_1": 0,
+    "Extra_2": 4.6
+  },
+  {
+    "Subject": "10",
+    "Extra_1": 2,
+    "Extra_2": 3.4
+  }
+]

@@ -1,0 +1,1462 @@
+[
+  {
+    "Days": 2,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 11,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 14,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 5,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 5,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 13,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 20,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 22,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 6,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 6,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 15,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 7,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 14,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 6,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 32,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 53,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 57,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 14,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 16,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 16,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 17,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 40,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 43,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 46,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 8,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 23,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 23,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 28,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 34,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 36,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 38,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 3,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 5,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 11,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 24,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 45,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 6,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 6,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 9,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 13,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 23,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 25,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 32,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 53,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 54,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 11,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 17,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 19,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 8,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 13,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 14,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 20,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 47,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 48,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 60,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 81,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "A"
+  },
+  {
+    "Days": 2,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 0,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 2,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 3,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 5,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 10,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 14,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 21,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 36,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 40,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "A"
+  },
+  {
+    "Days": 6,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 17,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 67,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 2,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 7,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 11,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 12,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 11,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 17,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 3,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 4,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 22,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 30,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 36,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 8,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 1,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 7,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 16,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 27,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 30,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 10,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 14,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 27,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 41,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 69,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "M",
+    "Sex_male": 1,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 25,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 10,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 11,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 20,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 33,
+    "Age": "F0",
+    "Age_num": 0,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 7,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 1,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 7,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 11,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 15,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 14,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 6,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 6,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 7,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 28,
+    "Age": "F1",
+    "Age_num": 1,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 0,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 14,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 2,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 2,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 3,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 8,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 10,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 12,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "SL",
+    "Lrn_SL": 1,
+    "Eth": "N"
+  },
+  {
+    "Days": 1,
+    "Age": "F2",
+    "Age_num": 2,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 1,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 9,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 22,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 3,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 3,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 5,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 15,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 18,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 22,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  },
+  {
+    "Days": 37,
+    "Age": "F3",
+    "Age_num": 3,
+    "Sex": "F",
+    "Sex_male": 0,
+    "Lrn": "AL",
+    "Lrn_SL": 0,
+    "Eth": "N"
+  }
+]

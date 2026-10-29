@@ -360,6 +360,29 @@ Implementati i due interventi che il documento di stato indicava come soglia:
 
 ### Verifica
 
-- `npm run check`: **475 test**, 0 fail; dependency-cruiser, madge e file-size guard ok (340 file, 3 eccezioni).
-- `npm run test:e2e`: **42 passed, 34 skipped**, inclusi worker, grafico time-series e import `.sav`/`.dta`.
+- `npm run check`: **480 test**, 0 fail; dependency-cruiser, madge e file-size guard ok (340 file, 3 eccezioni).
+- `npm run test:e2e`: **43 passed, 35 skipped**, inclusi worker, grafico time-series e import `.sav`/`.dta`.
 - `npm run build`: ok; worker 444 kB, `statfiles-vendor` 89 kB lazy, nessun chunk >500 kB.
+
+
+## Quinta tranche — dataset di prova per test e verifica manuale (2026-10-29)
+
+- Nuova cartella `samples/` nel codebase, divisa per famiglia di analisi
+  (`descriptive`, `compare`, `regression`, `multivariate`, `categorical`,
+  `survival`, `timeseries`, `missing`, `design`).
+- 19 dataset derivati da R (`iris`, `mtcars`, `PlantGrowth`, `ToothGrowth`,
+  `ChickWeight`, `lung`, `heart`, `AirPassengers`, `airquality`, `birthwt`,
+  `quine`, `housing`, `USArrests`, `attitude`, `sleep`, `faithful`) più due
+  dataset sintetici per l'accordo fra rater e per le misure binarie appaiate.
+- Ogni dataset è scritto in cinque formati: CSV, SPSS `.sav`, Stata `.dta`,
+  Excel `.xlsx` e JSON; `manifest.json` contiene righe, colonne, procedure e
+  mappature colonna-pronte.
+- `samples/generate.R` rigenera tutto in modo riproducibile; `src/io/samples.test.ts`
+  verifica che manifest, file e parser restino allineati.
+- Nuovo e2e che importa `samples/compare/plantgrowth/data.csv` e lancia ANOVA.
+
+### Verifica
+
+- `npm run check`: **480 test**, 0 fail; dependency-cruiser, madge e file-size guard ok (340 file, 3 eccezioni).
+- `npm run test:e2e`: **43 passed, 35 skipped**.
+- `samples/` occupa circa 1,5 MB; nessun file entra nel bundle dell'app.

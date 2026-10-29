@@ -1,0 +1,82 @@
+[
+  {
+    "Weight": 4.17,
+    "Group": "Control"
+  },
+  {
+    "Weight": 5.58,
+    "Group": "Control"
+  },
+  {
+    "Weight": 5.18,
+    "Group": "Control"
+  },
+  {
+    "Weight": 6.11,
+    "Group": "Control"
+  },
+  {
+    "Weight": 4.5,
+    "Group": "Control"
+  },
+  {
+    "Weight": 4.61,
+    "Group": "Control"
+  },
+  {
+    "Weight": 5.17,
+    "Group": "Control"
+  },
+  {
+    "Weight": 4.53,
+    "Group": "Control"
+  },
+  {
+    "Weight": 5.33,
+    "Group": "Control"
+  },
+  {
+    "Weight": 5.14,
+    "Group": "Control"
+  },
+  {
+    "Weight": 4.81,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 4.17,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 4.41,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 3.59,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 5.87,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 3.83,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 6.03,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 4.89,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 4.32,
+    "Group": "Treatment"
+  },
+  {
+    "Weight": 4.69,
+    "Group": "Treatment"
+  }
+]

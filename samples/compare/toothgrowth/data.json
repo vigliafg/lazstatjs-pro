@@ -1,0 +1,362 @@
+[
+  {
+    "Length": 4.2,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 11.5,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 7.3,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 5.8,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 6.4,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 10,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 11.2,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 11.2,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 5.2,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 7,
+    "Supplement": "VC",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 16.5,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 16.5,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 15.2,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 17.3,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 22.5,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 17.3,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 13.6,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 14.5,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 18.8,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 15.5,
+    "Supplement": "VC",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 23.6,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 18.5,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 33.9,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 25.5,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 26.4,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 32.5,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 26.7,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 21.5,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 23.3,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 29.5,
+    "Supplement": "VC",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 15.2,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 21.5,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 17.6,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 9.7,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 14.5,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 10,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 8.2,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 9.4,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 16.5,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 9.7,
+    "Supplement": "OJ",
+    "Dose": "Low",
+    "Dose_num": 0.5
+  },
+  {
+    "Length": 19.7,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 23.3,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 23.6,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 26.4,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 20,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 25.2,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 25.8,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 21.2,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 14.5,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 27.3,
+    "Supplement": "OJ",
+    "Dose": "Medium",
+    "Dose_num": 1
+  },
+  {
+    "Length": 25.5,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 26.4,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 22.4,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 24.5,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 24.8,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 30.9,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 26.4,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 27.3,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 29.4,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  },
+  {
+    "Length": 23,
+    "Supplement": "OJ",
+    "Dose": "High",
+    "Dose_num": 2
+  }
+]

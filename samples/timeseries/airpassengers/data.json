@@ -1,0 +1,866 @@
+[
+  {
+    "Year": 1949,
+    "Month": 1,
+    "Time": 1,
+    "Passengers": 112
+  },
+  {
+    "Year": 1949,
+    "Month": 2,
+    "Time": 2,
+    "Passengers": 118
+  },
+  {
+    "Year": 1949,
+    "Month": 3,
+    "Time": 3,
+    "Passengers": 132
+  },
+  {
+    "Year": 1949,
+    "Month": 4,
+    "Time": 4,
+    "Passengers": 129
+  },
+  {
+    "Year": 1949,
+    "Month": 5,
+    "Time": 5,
+    "Passengers": 121
+  },
+  {
+    "Year": 1949,
+    "Month": 6,
+    "Time": 6,
+    "Passengers": 135
+  },
+  {
+    "Year": 1949,
+    "Month": 7,
+    "Time": 7,
+    "Passengers": 148
+  },
+  {
+    "Year": 1949,
+    "Month": 8,
+    "Time": 8,
+    "Passengers": 148
+  },
+  {
+    "Year": 1949,
+    "Month": 9,
+    "Time": 9,
+    "Passengers": 136
+  },
+  {
+    "Year": 1949,
+    "Month": 10,
+    "Time": 10,
+    "Passengers": 119
+  },
+  {
+    "Year": 1949,
+    "Month": 11,
+    "Time": 11,
+    "Passengers": 104
+  },
+  {
+    "Year": 1949,
+    "Month": 12,
+    "Time": 12,
+    "Passengers": 118
+  },
+  {
+    "Year": 1950,
+    "Month": 1,
+    "Time": 13,
+    "Passengers": 115
+  },
+  {
+    "Year": 1950,
+    "Month": 2,
+    "Time": 14,
+    "Passengers": 126
+  },
+  {
+    "Year": 1950,
+    "Month": 3,
+    "Time": 15,
+    "Passengers": 141
+  },
+  {
+    "Year": 1950,
+    "Month": 4,
+    "Time": 16,
+    "Passengers": 135
+  },
+  {
+    "Year": 1950,
+    "Month": 5,
+    "Time": 17,
+    "Passengers": 125
+  },
+  {
+    "Year": 1950,
+    "Month": 6,
+    "Time": 18,
+    "Passengers": 149
+  },
+  {
+    "Year": 1950,
+    "Month": 7,
+    "Time": 19,
+    "Passengers": 170
+  },
+  {
+    "Year": 1950,
+    "Month": 8,
+    "Time": 20,
+    "Passengers": 170
+  },
+  {
+    "Year": 1950,
+    "Month": 9,
+    "Time": 21,
+    "Passengers": 158
+  },
+  {
+    "Year": 1950,
+    "Month": 10,
+    "Time": 22,
+    "Passengers": 133
+  },
+  {
+    "Year": 1950,
+    "Month": 11,
+    "Time": 23,
+    "Passengers": 114
+  },
+  {
+    "Year": 1950,
+    "Month": 12,
+    "Time": 24,
+    "Passengers": 140
+  },
+  {
+    "Year": 1951,
+    "Month": 1,
+    "Time": 25,
+    "Passengers": 145
+  },
+  {
+    "Year": 1951,
+    "Month": 2,
+    "Time": 26,
+    "Passengers": 150
+  },
+  {
+    "Year": 1951,
+    "Month": 3,
+    "Time": 27,
+    "Passengers": 178
+  },
+  {
+    "Year": 1951,
+    "Month": 4,
+    "Time": 28,
+    "Passengers": 163
+  },
+  {
+    "Year": 1951,
+    "Month": 5,
+    "Time": 29,
+    "Passengers": 172
+  },
+  {
+    "Year": 1951,
+    "Month": 6,
+    "Time": 30,
+    "Passengers": 178
+  },
+  {
+    "Year": 1951,
+    "Month": 7,
+    "Time": 31,
+    "Passengers": 199
+  },
+  {
+    "Year": 1951,
+    "Month": 8,
+    "Time": 32,
+    "Passengers": 199
+  },
+  {
+    "Year": 1951,
+    "Month": 9,
+    "Time": 33,
+    "Passengers": 184
+  },
+  {
+    "Year": 1951,
+    "Month": 10,
+    "Time": 34,
+    "Passengers": 162
+  },
+  {
+    "Year": 1951,
+    "Month": 11,
+    "Time": 35,
+    "Passengers": 146
+  },
+  {
+    "Year": 1951,
+    "Month": 12,
+    "Time": 36,
+    "Passengers": 166
+  },
+  {
+    "Year": 1952,
+    "Month": 1,
+    "Time": 37,
+    "Passengers": 171
+  },
+  {
+    "Year": 1952,
+    "Month": 2,
+    "Time": 38,
+    "Passengers": 180
+  },
+  {
+    "Year": 1952,
+    "Month": 3,
+    "Time": 39,
+    "Passengers": 193
+  },
+  {
+    "Year": 1952,
+    "Month": 4,
+    "Time": 40,
+    "Passengers": 181
+  },
+  {
+    "Year": 1952,
+    "Month": 5,
+    "Time": 41,
+    "Passengers": 183
+  },
+  {
+    "Year": 1952,
+    "Month": 6,
+    "Time": 42,
+    "Passengers": 218
+  },
+  {
+    "Year": 1952,
+    "Month": 7,
+    "Time": 43,
+    "Passengers": 230
+  },
+  {
+    "Year": 1952,
+    "Month": 8,
+    "Time": 44,
+    "Passengers": 242
+  },
+  {
+    "Year": 1952,
+    "Month": 9,
+    "Time": 45,
+    "Passengers": 209
+  },
+  {
+    "Year": 1952,
+    "Month": 10,
+    "Time": 46,
+    "Passengers": 191
+  },
+  {
+    "Year": 1952,
+    "Month": 11,
+    "Time": 47,
+    "Passengers": 172
+  },
+  {
+    "Year": 1952,
+    "Month": 12,
+    "Time": 48,
+    "Passengers": 194
+  },
+  {
+    "Year": 1953,
+    "Month": 1,
+    "Time": 49,
+    "Passengers": 196
+  },
+  {
+    "Year": 1953,
+    "Month": 2,
+    "Time": 50,
+    "Passengers": 196
+  },
+  {
+    "Year": 1953,
+    "Month": 3,
+    "Time": 51,
+    "Passengers": 236
+  },
+  {
+    "Year": 1953,
+    "Month": 4,
+    "Time": 52,
+    "Passengers": 235
+  },
+  {
+    "Year": 1953,
+    "Month": 5,
+    "Time": 53,
+    "Passengers": 229
+  },
+  {
+    "Year": 1953,
+    "Month": 6,
+    "Time": 54,
+    "Passengers": 243
+  },
+  {
+    "Year": 1953,
+    "Month": 7,
+    "Time": 55,
+    "Passengers": 264
+  },
+  {
+    "Year": 1953,
+    "Month": 8,
+    "Time": 56,
+    "Passengers": 272
+  },
+  {
+    "Year": 1953,
+    "Month": 9,
+    "Time": 57,
+    "Passengers": 237
+  },
+  {
+    "Year": 1953,
+    "Month": 10,
+    "Time": 58,
+    "Passengers": 211
+  },
+  {
+    "Year": 1953,
+    "Month": 11,
+    "Time": 59,
+    "Passengers": 180
+  },
+  {
+    "Year": 1953,
+    "Month": 12,
+    "Time": 60,
+    "Passengers": 201
+  },
+  {
+    "Year": 1954,
+    "Month": 1,
+    "Time": 61,
+    "Passengers": 204
+  },
+  {
+    "Year": 1954,
+    "Month": 2,
+    "Time": 62,
+    "Passengers": 188
+  },
+  {
+    "Year": 1954,
+    "Month": 3,
+    "Time": 63,
+    "Passengers": 235
+  },
+  {
+    "Year": 1954,
+    "Month": 4,
+    "Time": 64,
+    "Passengers": 227
+  },
+  {
+    "Year": 1954,
+    "Month": 5,
+    "Time": 65,
+    "Passengers": 234
+  },
+  {
+    "Year": 1954,
+    "Month": 6,
+    "Time": 66,
+    "Passengers": 264
+  },
+  {
+    "Year": 1954,
+    "Month": 7,
+    "Time": 67,
+    "Passengers": 302
+  },
+  {
+    "Year": 1954,
+    "Month": 8,
+    "Time": 68,
+    "Passengers": 293
+  },
+  {
+    "Year": 1954,
+    "Month": 9,
+    "Time": 69,
+    "Passengers": 259
+  },
+  {
+    "Year": 1954,
+    "Month": 10,
+    "Time": 70,
+    "Passengers": 229
+  },
+  {
+    "Year": 1954,
+    "Month": 11,
+    "Time": 71,
+    "Passengers": 203
+  },
+  {
+    "Year": 1954,
+    "Month": 12,
+    "Time": 72,
+    "Passengers": 229
+  },
+  {
+    "Year": 1955,
+    "Month": 1,
+    "Time": 73,
+    "Passengers": 242
+  },
+  {
+    "Year": 1955,
+    "Month": 2,
+    "Time": 74,
+    "Passengers": 233
+  },
+  {
+    "Year": 1955,
+    "Month": 3,
+    "Time": 75,
+    "Passengers": 267
+  },
+  {
+    "Year": 1955,
+    "Month": 4,
+    "Time": 76,
+    "Passengers": 269
+  },
+  {
+    "Year": 1955,
+    "Month": 5,
+    "Time": 77,
+    "Passengers": 270
+  },
+  {
+    "Year": 1955,
+    "Month": 6,
+    "Time": 78,
+    "Passengers": 315
+  },
+  {
+    "Year": 1955,
+    "Month": 7,
+    "Time": 79,
+    "Passengers": 364
+  },
+  {
+    "Year": 1955,
+    "Month": 8,
+    "Time": 80,
+    "Passengers": 347
+  },
+  {
+    "Year": 1955,
+    "Month": 9,
+    "Time": 81,
+    "Passengers": 312
+  },
+  {
+    "Year": 1955,
+    "Month": 10,
+    "Time": 82,
+    "Passengers": 274
+  },
+  {
+    "Year": 1955,
+    "Month": 11,
+    "Time": 83,
+    "Passengers": 237
+  },
+  {
+    "Year": 1955,
+    "Month": 12,
+    "Time": 84,
+    "Passengers": 278
+  },
+  {
+    "Year": 1956,
+    "Month": 1,
+    "Time": 85,
+    "Passengers": 284
+  },
+  {
+    "Year": 1956,
+    "Month": 2,
+    "Time": 86,
+    "Passengers": 277
+  },
+  {
+    "Year": 1956,
+    "Month": 3,
+    "Time": 87,
+    "Passengers": 317
+  },
+  {
+    "Year": 1956,
+    "Month": 4,
+    "Time": 88,
+    "Passengers": 313
+  },
+  {
+    "Year": 1956,
+    "Month": 5,
+    "Time": 89,
+    "Passengers": 318
+  },
+  {
+    "Year": 1956,
+    "Month": 6,
+    "Time": 90,
+    "Passengers": 374
+  },
+  {
+    "Year": 1956,
+    "Month": 7,
+    "Time": 91,
+    "Passengers": 413
+  },
+  {
+    "Year": 1956,
+    "Month": 8,
+    "Time": 92,
+    "Passengers": 405
+  },
+  {
+    "Year": 1956,
+    "Month": 9,
+    "Time": 93,
+    "Passengers": 355
+  },
+  {
+    "Year": 1956,
+    "Month": 10,
+    "Time": 94,
+    "Passengers": 306
+  },
+  {
+    "Year": 1956,
+    "Month": 11,
+    "Time": 95,
+    "Passengers": 271
+  },
+  {
+    "Year": 1956,
+    "Month": 12,
+    "Time": 96,
+    "Passengers": 306
+  },
+  {
+    "Year": 1957,
+    "Month": 1,
+    "Time": 97,
+    "Passengers": 315
+  },
+  {
+    "Year": 1957,
+    "Month": 2,
+    "Time": 98,
+    "Passengers": 301
+  },
+  {
+    "Year": 1957,
+    "Month": 3,
+    "Time": 99,
+    "Passengers": 356
+  },
+  {
+    "Year": 1957,
+    "Month": 4,
+    "Time": 100,
+    "Passengers": 348
+  },
+  {
+    "Year": 1957,
+    "Month": 5,
+    "Time": 101,
+    "Passengers": 355
+  },
+  {
+    "Year": 1957,
+    "Month": 6,
+    "Time": 102,
+    "Passengers": 422
+  },
+  {
+    "Year": 1957,
+    "Month": 7,
+    "Time": 103,
+    "Passengers": 465
+  },
+  {
+    "Year": 1957,
+    "Month": 8,
+    "Time": 104,
+    "Passengers": 467
+  },
+  {
+    "Year": 1957,
+    "Month": 9,
+    "Time": 105,
+    "Passengers": 404
+  },
+  {
+    "Year": 1957,
+    "Month": 10,
+    "Time": 106,
+    "Passengers": 347
+  },
+  {
+    "Year": 1957,
+    "Month": 11,
+    "Time": 107,
+    "Passengers": 305
+  },
+  {
+    "Year": 1957,
+    "Month": 12,
+    "Time": 108,
+    "Passengers": 336
+  },
+  {
+    "Year": 1958,
+    "Month": 1,
+    "Time": 109,
+    "Passengers": 340
+  },
+  {
+    "Year": 1958,
+    "Month": 2,
+    "Time": 110,
+    "Passengers": 318
+  },
+  {
+    "Year": 1958,
+    "Month": 3,
+    "Time": 111,
+    "Passengers": 362
+  },
+  {
+    "Year": 1958,
+    "Month": 4,
+    "Time": 112,
+    "Passengers": 348
+  },
+  {
+    "Year": 1958,
+    "Month": 5,
+    "Time": 113,
+    "Passengers": 363
+  },
+  {
+    "Year": 1958,
+    "Month": 6,
+    "Time": 114,
+    "Passengers": 435
+  },
+  {
+    "Year": 1958,
+    "Month": 7,
+    "Time": 115,
+    "Passengers": 491
+  },
+  {
+    "Year": 1958,
+    "Month": 8,
+    "Time": 116,
+    "Passengers": 505
+  },
+  {
+    "Year": 1958,
+    "Month": 9,
+    "Time": 117,
+    "Passengers": 404
+  },
+  {
+    "Year": 1958,
+    "Month": 10,
+    "Time": 118,
+    "Passengers": 359
+  },
+  {
+    "Year": 1958,
+    "Month": 11,
+    "Time": 119,
+    "Passengers": 310
+  },
+  {
+    "Year": 1958,
+    "Month": 12,
+    "Time": 120,
+    "Passengers": 337
+  },
+  {
+    "Year": 1959,
+    "Month": 1,
+    "Time": 121,
+    "Passengers": 360
+  },
+  {
+    "Year": 1959,
+    "Month": 2,
+    "Time": 122,
+    "Passengers": 342
+  },
+  {
+    "Year": 1959,
+    "Month": 3,
+    "Time": 123,
+    "Passengers": 406
+  },
+  {
+    "Year": 1959,
+    "Month": 4,
+    "Time": 124,
+    "Passengers": 396
+  },
+  {
+    "Year": 1959,
+    "Month": 5,
+    "Time": 125,
+    "Passengers": 420
+  },
+  {
+    "Year": 1959,
+    "Month": 6,
+    "Time": 126,
+    "Passengers": 472
+  },
+  {
+    "Year": 1959,
+    "Month": 7,
+    "Time": 127,
+    "Passengers": 548
+  },
+  {
+    "Year": 1959,
+    "Month": 8,
+    "Time": 128,
+    "Passengers": 559
+  },
+  {
+    "Year": 1959,
+    "Month": 9,
+    "Time": 129,
+    "Passengers": 463
+  },
+  {
+    "Year": 1959,
+    "Month": 10,
+    "Time": 130,
+    "Passengers": 407
+  },
+  {
+    "Year": 1959,
+    "Month": 11,
+    "Time": 131,
+    "Passengers": 362
+  },
+  {
+    "Year": 1959,
+    "Month": 12,
+    "Time": 132,
+    "Passengers": 405
+  },
+  {
+    "Year": 1960,
+    "Month": 1,
+    "Time": 133,
+    "Passengers": 417
+  },
+  {
+    "Year": 1960,
+    "Month": 2,
+    "Time": 134,
+    "Passengers": 391
+  },
+  {
+    "Year": 1960,
+    "Month": 3,
+    "Time": 135,
+    "Passengers": 419
+  },
+  {
+    "Year": 1960,
+    "Month": 4,
+    "Time": 136,
+    "Passengers": 461
+  },
+  {
+    "Year": 1960,
+    "Month": 5,
+    "Time": 137,
+    "Passengers": 472
+  },
+  {
+    "Year": 1960,
+    "Month": 6,
+    "Time": 138,
+    "Passengers": 535
+  },
+  {
+    "Year": 1960,
+    "Month": 7,
+    "Time": 139,
+    "Passengers": 622
+  },
+  {
+    "Year": 1960,
+    "Month": 8,
+    "Time": 140,
+    "Passengers": 606
+  },
+  {
+    "Year": 1960,
+    "Month": 9,
+    "Time": 141,
+    "Passengers": 508
+  },
+  {
+    "Year": 1960,
+    "Month": 10,
+    "Time": 142,
+    "Passengers": 461
+  },
+  {
+    "Year": 1960,
+    "Month": 11,
+    "Time": 143,
+    "Passengers": 390
+  },
+  {
+    "Year": 1960,
+    "Month": 12,
+    "Time": 144,
+    "Passengers": 432
+  }
+]

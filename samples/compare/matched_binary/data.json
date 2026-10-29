@@ -1,0 +1,362 @@
+[
+  {
+    "Subject": 1,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 2,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 3,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 4,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 5,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 6,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 7,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 8,
+    "Before": 1,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 9,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 10,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 11,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 12,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 13,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 14,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 15,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 16,
+    "Before": 1,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 17,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 18,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 19,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 20,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 21,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 22,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 23,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 24,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 25,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 26,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 27,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 28,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 29,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 30,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 31,
+    "Before": 1,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 32,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 33,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 34,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 35,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 36,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 37,
+    "Before": 1,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 38,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 39,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 40,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 41,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 42,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 43,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 44,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 45,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 46,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 47,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 48,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 49,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 50,
+    "Before": 1,
+    "After": 0,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 51,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 52,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 53,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 54,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 55,
+    "Before": 1,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 56,
+    "Before": 1,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 57,
+    "Before": 0,
+    "After": 1,
+    "Follow_up": 1
+  },
+  {
+    "Subject": 58,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 59,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  },
+  {
+    "Subject": 60,
+    "Before": 0,
+    "After": 0,
+    "Follow_up": 0
+  }
+]

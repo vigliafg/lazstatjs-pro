@@ -321,6 +321,25 @@ test('renders chart-heavy worker output for a time series', async ({ page, isMob
   await expect(page.getByRole('heading', { name: 'Autocorrelazione', exact: true }).first()).toBeVisible();
 });
 
+test('imports a sample dataset and runs an analysis end to end', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'sample import is exercised on the desktop layout');
+
+  await page.goto('/');
+  // A small plain CSV takes the fast path and lands directly in the grid.
+  const input = page.locator('input[type="file"][accept*=".csv"]');
+  await input.setInputFiles(path.resolve('samples/compare/plantgrowth/data.csv'));
+
+  await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('4.17');
+  await expect(page.locator('input[data-cell="0-1"]')).toHaveValue('ctrl');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('ANOVA');
+  await page.locator('button[title="Compare means across groups with post-hoc tests."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+
+  await expect(page.locator('article.output-card')).toHaveCount(1);
+  await expect(page.getByText('Outline')).toBeVisible();
+});
+
 test('imports an SPSS .sav file and keeps its values', async ({ page, isMobile }) => {
   test.skip(isMobile, 'binary import is exercised on the desktop layout');
 

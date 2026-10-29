@@ -1,0 +1,452 @@
+[
+  {
+    "Chick": "1",
+    "Diet": "Diet 1",
+    "Weight_0": 42,
+    "Weight_4": 59,
+    "Weight_8": 76,
+    "Weight_12": 106,
+    "Weight_16": 149,
+    "Weight_20": 199
+  },
+  {
+    "Chick": "2",
+    "Diet": "Diet 1",
+    "Weight_0": 40,
+    "Weight_4": 58,
+    "Weight_8": 84,
+    "Weight_12": 122,
+    "Weight_16": 162,
+    "Weight_20": 209
+  },
+  {
+    "Chick": "3",
+    "Diet": "Diet 1",
+    "Weight_0": 43,
+    "Weight_4": 55,
+    "Weight_8": 84,
+    "Weight_12": 115,
+    "Weight_16": 163,
+    "Weight_20": 198
+  },
+  {
+    "Chick": "4",
+    "Diet": "Diet 1",
+    "Weight_0": 42,
+    "Weight_4": 56,
+    "Weight_8": 74,
+    "Weight_12": 102,
+    "Weight_16": 136,
+    "Weight_20": 160
+  },
+  {
+    "Chick": "5",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 48,
+    "Weight_8": 79,
+    "Weight_12": 141,
+    "Weight_16": 197,
+    "Weight_20": 220
+  },
+  {
+    "Chick": "6",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 59,
+    "Weight_8": 97,
+    "Weight_12": 141,
+    "Weight_16": 155,
+    "Weight_20": 160
+  },
+  {
+    "Chick": "7",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 57,
+    "Weight_8": 89,
+    "Weight_12": 146,
+    "Weight_16": 218,
+    "Weight_20": 288
+  },
+  {
+    "Chick": "9",
+    "Diet": "Diet 1",
+    "Weight_0": 42,
+    "Weight_4": 59,
+    "Weight_8": 85,
+    "Weight_12": 90,
+    "Weight_16": 93,
+    "Weight_20": 100
+  },
+  {
+    "Chick": "10",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 52,
+    "Weight_8": 74,
+    "Weight_12": 89,
+    "Weight_16": 101,
+    "Weight_20": 120
+  },
+  {
+    "Chick": "11",
+    "Diet": "Diet 1",
+    "Weight_0": 43,
+    "Weight_4": 63,
+    "Weight_8": 112,
+    "Weight_12": 168,
+    "Weight_16": 182,
+    "Weight_20": 181
+  },
+  {
+    "Chick": "12",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 56,
+    "Weight_8": 72,
+    "Weight_12": 119,
+    "Weight_16": 162,
+    "Weight_20": 195
+  },
+  {
+    "Chick": "13",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 53,
+    "Weight_8": 65,
+    "Weight_12": 71,
+    "Weight_16": 71,
+    "Weight_20": 91
+  },
+  {
+    "Chick": "14",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 62,
+    "Weight_8": 101,
+    "Weight_12": 164,
+    "Weight_16": 227,
+    "Weight_20": 259
+  },
+  {
+    "Chick": "17",
+    "Diet": "Diet 1",
+    "Weight_0": 42,
+    "Weight_4": 61,
+    "Weight_8": 83,
+    "Weight_12": 98,
+    "Weight_16": 113,
+    "Weight_20": 133
+  },
+  {
+    "Chick": "19",
+    "Diet": "Diet 1",
+    "Weight_0": 43,
+    "Weight_4": 55,
+    "Weight_8": 65,
+    "Weight_12": 82,
+    "Weight_16": 106,
+    "Weight_20": 144
+  },
+  {
+    "Chick": "20",
+    "Diet": "Diet 1",
+    "Weight_0": 41,
+    "Weight_4": 54,
+    "Weight_8": 65,
+    "Weight_12": 77,
+    "Weight_16": 98,
+    "Weight_20": 115
+  },
+  {
+    "Chick": "21",
+    "Diet": "Diet 2",
+    "Weight_0": 40,
+    "Weight_4": 62,
+    "Weight_8": 125,
+    "Weight_12": 217,
+    "Weight_16": 275,
+    "Weight_20": 318
+  },
+  {
+    "Chick": "22",
+    "Diet": "Diet 2",
+    "Weight_0": 41,
+    "Weight_4": 64,
+    "Weight_8": 90,
+    "Weight_12": 108,
+    "Weight_16": 131,
+    "Weight_20": 164
+  },
+  {
+    "Chick": "23",
+    "Diet": "Diet 2",
+    "Weight_0": 43,
+    "Weight_4": 61,
+    "Weight_8": 90,
+    "Weight_12": 127,
+    "Weight_16": 145,
+    "Weight_20": 170
+  },
+  {
+    "Chick": "24",
+    "Diet": "Diet 2",
+    "Weight_0": 42,
+    "Weight_4": 58,
+    "Weight_8": 66,
+    "Weight_12": 70,
+    "Weight_16": 72,
+    "Weight_20": 76
+  },
+  {
+    "Chick": "25",
+    "Diet": "Diet 2",
+    "Weight_0": 40,
+    "Weight_4": 62,
+    "Weight_8": 102,
+    "Weight_12": 146,
+    "Weight_16": 197,
+    "Weight_20": 259
+  },
+  {
+    "Chick": "26",
+    "Diet": "Diet 2",
+    "Weight_0": 42,
+    "Weight_4": 57,
+    "Weight_8": 93,
+    "Weight_12": 136,
+    "Weight_16": 169,
+    "Weight_20": 236
+  },
+  {
+    "Chick": "27",
+    "Diet": "Diet 2",
+    "Weight_0": 39,
+    "Weight_4": 58,
+    "Weight_8": 87,
+    "Weight_12": 115,
+    "Weight_16": 144,
+    "Weight_20": 185
+  },
+  {
+    "Chick": "28",
+    "Diet": "Diet 2",
+    "Weight_0": 39,
+    "Weight_4": 58,
+    "Weight_8": 92,
+    "Weight_12": 145,
+    "Weight_16": 184,
+    "Weight_20": 212
+  },
+  {
+    "Chick": "29",
+    "Diet": "Diet 2",
+    "Weight_0": 39,
+    "Weight_4": 59,
+    "Weight_8": 87,
+    "Weight_12": 134,
+    "Weight_16": 187,
+    "Weight_20": 279
+  },
+  {
+    "Chick": "30",
+    "Diet": "Diet 2",
+    "Weight_0": 42,
+    "Weight_4": 59,
+    "Weight_8": 85,
+    "Weight_12": 115,
+    "Weight_16": 143,
+    "Weight_20": 157
+  },
+  {
+    "Chick": "31",
+    "Diet": "Diet 3",
+    "Weight_0": 42,
+    "Weight_4": 62,
+    "Weight_8": 85,
+    "Weight_12": 123,
+    "Weight_16": 170,
+    "Weight_20": 235
+  },
+  {
+    "Chick": "32",
+    "Diet": "Diet 3",
+    "Weight_0": 41,
+    "Weight_4": 65,
+    "Weight_8": 107,
+    "Weight_12": 159,
+    "Weight_16": 221,
+    "Weight_20": 291
+  },
+  {
+    "Chick": "33",
+    "Diet": "Diet 3",
+    "Weight_0": 39,
+    "Weight_4": 63,
+    "Weight_8": 96,
+    "Weight_12": 137,
+    "Weight_16": 151,
+    "Weight_20": 156
+  },
+  {
+    "Chick": "34",
+    "Diet": "Diet 3",
+    "Weight_0": 41,
+    "Weight_4": 63,
+    "Weight_8": 107,
+    "Weight_12": 164,
+    "Weight_16": 235,
+    "Weight_20": 327
+  },
+  {
+    "Chick": "35",
+    "Diet": "Diet 3",
+    "Weight_0": 41,
+    "Weight_4": 64,
+    "Weight_8": 123,
+    "Weight_12": 201,
+    "Weight_16": 287,
+    "Weight_20": 361
+  },
+  {
+    "Chick": "36",
+    "Diet": "Diet 3",
+    "Weight_0": 39,
+    "Weight_4": 61,
+    "Weight_8": 98,
+    "Weight_12": 145,
+    "Weight_16": 198,
+    "Weight_20": 225
+  },
+  {
+    "Chick": "37",
+    "Diet": "Diet 3",
+    "Weight_0": 41,
+    "Weight_4": 56,
+    "Weight_8": 80,
+    "Weight_12": 103,
+    "Weight_16": 135,
+    "Weight_20": 169
+  },
+  {
+    "Chick": "38",
+    "Diet": "Diet 3",
+    "Weight_0": 41,
+    "Weight_4": 61,
+    "Weight_8": 98,
+    "Weight_12": 128,
+    "Weight_16": 192,
+    "Weight_20": 280
+  },
+  {
+    "Chick": "39",
+    "Diet": "Diet 3",
+    "Weight_0": 42,
+    "Weight_4": 61,
+    "Weight_8": 89,
+    "Weight_12": 130,
+    "Weight_16": 170,
+    "Weight_20": 250
+  },
+  {
+    "Chick": "40",
+    "Diet": "Diet 3",
+    "Weight_0": 41,
+    "Weight_4": 66,
+    "Weight_8": 101,
+    "Weight_12": 154,
+    "Weight_16": 215,
+    "Weight_20": 295
+  },
+  {
+    "Chick": "41",
+    "Diet": "Diet 4",
+    "Weight_0": 42,
+    "Weight_4": 66,
+    "Weight_8": 103,
+    "Weight_12": 155,
+    "Weight_16": 175,
+    "Weight_20": 199
+  },
+  {
+    "Chick": "42",
+    "Diet": "Diet 4",
+    "Weight_0": 42,
+    "Weight_4": 63,
+    "Weight_8": 103,
+    "Weight_12": 160,
+    "Weight_16": 204,
+    "Weight_20": 269
+  },
+  {
+    "Chick": "43",
+    "Diet": "Diet 4",
+    "Weight_0": 42,
+    "Weight_4": 69,
+    "Weight_8": 131,
+    "Weight_12": 184,
+    "Weight_16": 197,
+    "Weight_20": 199
+  },
+  {
+    "Chick": "45",
+    "Diet": "Diet 4",
+    "Weight_0": 41,
+    "Weight_4": 61,
+    "Weight_8": 98,
+    "Weight_12": 135,
+    "Weight_16": 147,
+    "Weight_20": 197
+  },
+  {
+    "Chick": "46",
+    "Diet": "Diet 4",
+    "Weight_0": 40,
+    "Weight_4": 62,
+    "Weight_8": 101,
+    "Weight_12": 144,
+    "Weight_16": 173,
+    "Weight_20": 231
+  },
+  {
+    "Chick": "47",
+    "Diet": "Diet 4",
+    "Weight_0": 41,
+    "Weight_4": 66,
+    "Weight_8": 100,
+    "Weight_12": 148,
+    "Weight_16": 168,
+    "Weight_20": 210
+  },
+  {
+    "Chick": "48",
+    "Diet": "Diet 4",
+    "Weight_0": 39,
+    "Weight_4": 62,
+    "Weight_8": 104,
+    "Weight_12": 154,
+    "Weight_16": 222,
+    "Weight_20": 303
+  },
+  {
+    "Chick": "49",
+    "Diet": "Diet 4",
+    "Weight_0": 40,
+    "Weight_4": 64,
+    "Weight_8": 108,
+    "Weight_12": 152,
+    "Weight_16": 184,
+    "Weight_20": 233
+  },
+  {
+    "Chick": "50",
+    "Diet": "Diet 4",
+    "Weight_0": 41,
+    "Weight_4": 67,
+    "Weight_8": 105,
+    "Weight_12": 155,
+    "Weight_16": 205,
+    "Weight_20": 264
+  }
+]

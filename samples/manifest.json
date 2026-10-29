@@ -1,0 +1,1046 @@
+{
+  "version": 1,
+  "generatedBy": "samples/generate.R",
+  "formats": ["csv", "sav", "dta", "xlsx", "json"],
+  "datasets": [
+    {
+      "id": "iris",
+      "title": "Iris measurements",
+      "family": "descriptive",
+      "dir": "descriptive/iris",
+      "source": "datasets::iris (R)",
+      "rows": 150,
+      "columns": [
+        "Sepal_Length",
+        "Sepal_Width",
+        "Petal_Length",
+        "Petal_Width",
+        "Species"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "descriptive",
+        "distfit",
+        "correlation",
+        "multivariate",
+        "wizard"
+      ],
+      "examples": [
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+          }
+        },
+        {
+          "analysis": "distfit",
+          "columns": {
+            "variable": "Sepal_Length"
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+          }
+        },
+        {
+          "analysis": "multivariate",
+          "columns": {
+            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+          }
+        },
+        {
+          "analysis": "wizard",
+          "columns": {
+            "outcome": "Sepal_Length",
+            "group": "Species"
+          }
+        }
+      ],
+      "notes": "The canonical classification dataset: four continuous flower measurements and a three-level species label."
+    },
+    {
+      "id": "faithful",
+      "title": "Old Faithful eruption lengths",
+      "family": "descriptive",
+      "dir": "descriptive/faithful",
+      "source": "datasets::faithful (R)",
+      "rows": 272,
+      "columns": [
+        "Eruptions",
+        "Waiting"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "descriptive",
+        "distfit"
+      ],
+      "examples": [
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Eruptions", "Waiting"]
+          }
+        },
+        {
+          "analysis": "distfit",
+          "columns": {
+            "variable": "Eruptions"
+          }
+        }
+      ],
+      "notes": "Two continuous measurements from 272 eruptions, useful for distribution fitting and summary statistics."
+    },
+    {
+      "id": "plantgrowth",
+      "title": "Plant growth by treatment",
+      "family": "compare",
+      "dir": "compare/plantgrowth",
+      "source": "datasets::PlantGrowth (R)",
+      "rows": 30,
+      "columns": [
+        "weight",
+        "group"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "anova",
+        "descriptive",
+        "wizard"
+      ],
+      "examples": [
+        {
+          "analysis": "anova",
+          "columns": {
+            "dependent": "weight",
+            "group": "group"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "weight"
+          }
+        },
+        {
+          "analysis": "wizard",
+          "columns": {
+            "outcome": "weight",
+            "group": "group"
+          }
+        }
+      ],
+      "notes": "One factor with three levels (ctrl, trt1, trt2) and a continuous weight outcome."
+    },
+    {
+      "id": "plantgrowth_wide",
+      "title": "Plant growth, two groups wide",
+      "family": "compare",
+      "dir": "compare/plantgrowth_wide",
+      "source": "datasets::PlantGrowth (R), ctrl and trt1 subset",
+      "rows": 10,
+      "columns": [
+        "Control",
+        "Treatment"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "ttest",
+        "tost"
+      ],
+      "examples": [
+        {
+          "analysis": "ttest",
+          "columns": {
+            "var1": "Control",
+            "var2": "Treatment"
+          },
+          "options": {
+            "type": "ind"
+          }
+        },
+        {
+          "analysis": "tost",
+          "columns": {
+            "var1": "Control",
+            "var2": "Treatment"
+          }
+        }
+      ],
+      "notes": "Ten control and ten treated plants in two columns, the shape expected by the independent T-Test and TOST."
+    },
+    {
+      "id": "toothgrowth",
+      "title": "Tooth growth by supplement and dose",
+      "family": "compare",
+      "dir": "compare/toothgrowth",
+      "source": "datasets::ToothGrowth (R)",
+      "rows": 60,
+      "columns": [
+        "Length",
+        "Supplement",
+        "Dose",
+        "Dose_num"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "factorial",
+        "anova",
+        "ancova"
+      ],
+      "examples": [
+        {
+          "analysis": "factorial",
+          "columns": {
+            "response": "Length",
+            "factorA": "Supplement",
+            "factorB": "Dose"
+          }
+        },
+        {
+          "analysis": "anova",
+          "columns": {
+            "dependent": "Length",
+            "group": "Supplement"
+          }
+        },
+        {
+          "analysis": "ancova",
+          "columns": {
+            "response": "Length",
+            "factor": "Supplement",
+            "covariates": "Dose_num"
+          }
+        }
+      ],
+      "notes": "A two-factor design (supplement x dose) with the numeric dose kept as a covariate in Dose_num."
+    },
+    {
+      "id": "sleep_wide",
+      "title": "Sleep gain, paired measurements",
+      "family": "compare",
+      "dir": "compare/sleep_wide",
+      "source": "datasets::sleep (R)",
+      "rows": 10,
+      "columns": [
+        "Subject",
+        "Extra_1",
+        "Extra_2"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "ttest",
+        "tost",
+        "nonparamrm"
+      ],
+      "examples": [
+        {
+          "analysis": "ttest",
+          "columns": {
+            "var1": "Extra_1",
+            "var2": "Extra_2"
+          },
+          "options": {
+            "type": "dep"
+          }
+        },
+        {
+          "analysis": "tost",
+          "columns": {
+            "var1": "Extra_1",
+            "var2": "Extra_2"
+          }
+        },
+        {
+          "analysis": "nonparamrm",
+          "columns": {
+            "left": "Extra_1",
+            "right": "Extra_2"
+          }
+        }
+      ],
+      "notes": "Ten subjects measured under two conditions, reshaped wide so paired tests compare Extra_1 with Extra_2."
+    },
+    {
+      "id": "matched_binary",
+      "title": "Matched binary outcomes",
+      "family": "compare",
+      "dir": "compare/matched_binary",
+      "source": "Synthetic, seeded with set.seed(20261030)",
+      "rows": 60,
+      "columns": [
+        "Subject",
+        "Before",
+        "After",
+        "Follow_up"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "nonparamrm"
+      ],
+      "examples": [
+        {
+          "analysis": "nonparamrm",
+          "columns": {
+            "left": "Before",
+            "right": "After"
+          },
+          "options": {
+            "mode": "mcnemar"
+          }
+        },
+        {
+          "analysis": "nonparamrm",
+          "columns": {
+            "selected": ["Before", "After", "Follow_up"]
+          },
+          "options": {
+            "mode": "cochran"
+          }
+        }
+      ],
+      "notes": "Three paired 0/1 measurements on 60 subjects, for McNemar and Cochran Q."
+    },
+    {
+      "id": "chickweight_wide",
+      "title": "Chick weight over time, wide",
+      "family": "compare",
+      "dir": "compare/chickweight_wide",
+      "source": "datasets::ChickWeight (R), complete cases and six time points",
+      "rows": 45,
+      "columns": [
+        "Chick",
+        "Diet",
+        "Weight_0",
+        "Weight_4",
+        "Weight_8",
+        "Weight_12",
+        "Weight_16",
+        "Weight_20"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "repeatedanova",
+        "mixedanova",
+        "nonparamrm"
+      ],
+      "examples": [
+        {
+          "analysis": "repeatedanova",
+          "columns": {
+            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+          }
+        },
+        {
+          "analysis": "mixedanova",
+          "columns": {
+            "group": "Diet",
+            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+          }
+        },
+        {
+          "analysis": "nonparamrm",
+          "columns": {
+            "selected": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+          }
+        }
+      ],
+      "notes": "45 chicks with complete follow-up at six time points, split across four diets."
+    },
+    {
+      "id": "mtcars",
+      "title": "Motor Trend car road tests",
+      "family": "regression",
+      "dir": "regression/mtcars",
+      "source": "datasets::mtcars (R)",
+      "rows": 32,
+      "columns": [
+        "Car",
+        "mpg",
+        "cyl",
+        "disp",
+        "hp",
+        "drat",
+        "wt",
+        "qsec",
+        "vs",
+        "am",
+        "gear",
+        "carb"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "regression",
+        "correlation",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "mpg",
+            "predictors": ["wt", "hp", "disp"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["mpg", "wt", "hp", "disp"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["mpg", "wt", "hp"]
+          }
+        }
+      ],
+      "notes": "The classic 32-car dataset: continuous performance and design measures plus binary and count codes."
+    },
+    {
+      "id": "birthwt",
+      "title": "Low birth weight risk factors",
+      "family": "regression",
+      "dir": "regression/birthwt",
+      "source": "MASS::birthwt (R)",
+      "rows": 189,
+      "columns": [
+        "Low",
+        "Age",
+        "Lwt",
+        "Race",
+        "Smoke",
+        "Ptl",
+        "Ht",
+        "Ui",
+        "Ftv",
+        "Bwt"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "logistic",
+        "regression",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "logistic",
+          "columns": {
+            "outcome": "Low",
+            "predictors": ["Age", "Lwt", "Smoke", "Ptl", "Ht", "Ui", "Bwt"]
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Bwt",
+            "predictors": ["Age", "Lwt", "Smoke"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Age", "Lwt", "Bwt"]
+          }
+        }
+      ],
+      "notes": "189 births with a binary low-weight outcome and a mix of continuous and binary risk factors."
+    },
+    {
+      "id": "quine",
+      "title": "School absence counts",
+      "family": "regression",
+      "dir": "regression/quine",
+      "source": "MASS::quine (R)",
+      "rows": 146,
+      "columns": [
+        "Days",
+        "Age",
+        "Age_num",
+        "Sex",
+        "Sex_male",
+        "Lrn",
+        "Lrn_SL",
+        "Eth"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "countreg",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "countreg",
+          "columns": {
+            "dependent": "Days",
+            "predictors": ["Age_num", "Sex_male", "Lrn_SL"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Days", "Age_num"]
+          }
+        }
+      ],
+      "notes": "146 children with school absence counts; the factor versions are kept next to numeric dummy codes for count models."
+    },
+    {
+      "id": "housing",
+      "title": "Housing satisfaction, expanded",
+      "family": "regression",
+      "dir": "regression/housing",
+      "source": "MASS::housing (R), rows expanded by Freq",
+      "rows": 1681,
+      "columns": [
+        "Sat",
+        "Sat_num",
+        "Infl",
+        "Infl_num",
+        "Type",
+        "Cont",
+        "Cont_num"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "ordinal",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "ordinal",
+          "columns": {
+            "outcome": "Sat_num",
+            "predictors": ["Infl_num", "Cont_num"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Sat_num", "Infl_num"]
+          }
+        }
+      ],
+      "notes": "Satisfaction (Low/Medium/High) with numeric ordered codes; the original Freq weights are expanded to one row per response."
+    },
+    {
+      "id": "chickweight_long",
+      "title": "Chick weight, longitudinal",
+      "family": "regression",
+      "dir": "regression/chickweight_long",
+      "source": "datasets::ChickWeight (R), two chicks per diet",
+      "rows": 96,
+      "columns": [
+        "Weight",
+        "Time",
+        "Chick",
+        "Diet"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "lmm",
+        "gee",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "lmm",
+          "columns": {
+            "dependent": "Weight",
+            "predictors": "Time",
+            "group": "Chick"
+          }
+        },
+        {
+          "analysis": "gee",
+          "columns": {
+            "dependent": "Weight",
+            "predictors": "Time",
+            "cluster": "Chick"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Weight", "Time"]
+          }
+        }
+      ],
+      "notes": "96 repeated observations on eight chicks (two per diet), with a small enough Chick code to be a grouping variable."
+    },
+    {
+      "id": "usarrests",
+      "title": "US arrests by state",
+      "family": "multivariate",
+      "dir": "multivariate/usarrests",
+      "source": "datasets::USArrests (R)",
+      "rows": 50,
+      "columns": [
+        "State",
+        "Murder",
+        "Assault",
+        "UrbanPop",
+        "Rape"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "multivariate",
+        "correlation",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "multivariate",
+          "columns": {
+            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+          }
+        }
+      ],
+      "notes": "Four standardised crime measures on 50 states, commonly used for PCA and factor analysis."
+    },
+    {
+      "id": "attitude",
+      "title": "Employee attitude survey",
+      "family": "multivariate",
+      "dir": "multivariate/attitude",
+      "source": "datasets::attitude (R)",
+      "rows": 30,
+      "columns": [
+        "rating",
+        "complaints",
+        "privileges",
+        "learning",
+        "raises",
+        "critical",
+        "advance"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "multivariate",
+        "correlation",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "multivariate",
+          "columns": {
+            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
+          }
+        }
+      ],
+      "notes": "Seven survey items on 30 departments, useful for Cronbach's alpha and exploratory factor analysis."
+    },
+    {
+      "id": "agreement_ratings",
+      "title": "Agreement between raters and methods",
+      "family": "categorical",
+      "dir": "categorical/agreement_ratings",
+      "source": "Synthetic, seeded with set.seed(20261029)",
+      "rows": 60,
+      "columns": [
+        "Subject",
+        "Rater_A",
+        "Rater_B",
+        "Method_A",
+        "Method_B"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "agreement"
+      ],
+      "examples": [
+        {
+          "analysis": "agreement",
+          "columns": {
+            "columns": ["Method_A", "Method_B"]
+          },
+          "options": {
+            "mode": "icc"
+          }
+        },
+        {
+          "analysis": "agreement",
+          "columns": {
+            "columns": ["Method_A", "Method_B"]
+          },
+          "options": {
+            "mode": "bland"
+          }
+        },
+        {
+          "analysis": "agreement",
+          "columns": {
+            "columns": ["Rater_A", "Rater_B"]
+          },
+          "options": {
+            "mode": "kappa",
+            "weight": "none"
+          }
+        }
+      ],
+      "notes": "Synthetic paired ratings on a five-point scale plus two continuous methods; covers ICC, Bland-Altman and kappa."
+    },
+    {
+      "id": "lung",
+      "title": "Lung cancer survival",
+      "family": "survival",
+      "dir": "survival/lung",
+      "source": "survival::lung (R)",
+      "rows": 228,
+      "columns": [
+        "Time",
+        "Event",
+        "Status",
+        "Age",
+        "Sex",
+        "Sex_male",
+        "Ph_ecog",
+        "Ph_karno",
+        "Pat_karno",
+        "Meal_cal",
+        "Wt_loss"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "survival",
+        "cox",
+        "stratcox",
+        "parametric",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "survival",
+          "columns": {
+            "time": "Time",
+            "event": "Event",
+            "group": "Sex"
+          }
+        },
+        {
+          "analysis": "cox",
+          "columns": {
+            "time": "Time",
+            "event": "Event",
+            "covariates": ["Age", "Sex_male", "Ph_ecog"]
+          }
+        },
+        {
+          "analysis": "stratcox",
+          "columns": {
+            "time": "Time",
+            "event": "Event",
+            "covariates": ["Age", "Ph_ecog"],
+            "stratum": "Sex"
+          }
+        },
+        {
+          "analysis": "parametric",
+          "columns": {
+            "time": "Time",
+            "event": "Event",
+            "predictors": ["Age", "Sex_male", "Ph_ecog"]
+          }
+        }
+      ],
+      "notes": "228 patients with censoring, a 0/1 Event column and complete-case covariates for Cox models."
+    },
+    {
+      "id": "heart",
+      "title": "Heart transplant, start-stop",
+      "family": "survival",
+      "dir": "survival/heart",
+      "source": "survival::heart (R), age recentred on 48 years",
+      "rows": 172,
+      "columns": [
+        "Id",
+        "Start",
+        "Stop",
+        "Event",
+        "Age",
+        "Year",
+        "Surgery",
+        "Transplant"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "tdcox",
+        "survival"
+      ],
+      "examples": [
+        {
+          "analysis": "tdcox",
+          "columns": {
+            "start": "Start",
+            "stop": "Stop",
+            "event": "Event",
+            "covariates": ["Age", "Surgery", "Transplant"]
+          }
+        },
+        {
+          "analysis": "survival",
+          "columns": {
+            "time": "Stop",
+            "event": "Event",
+            "group": "Surgery"
+          }
+        }
+      ],
+      "notes": "172 patients in start-stop format, the shape required by time-dependent Cox; Age is the original centred value plus 48."
+    },
+    {
+      "id": "airpassengers",
+      "title": "Air passengers, monthly",
+      "family": "timeseries",
+      "dir": "timeseries/airpassengers",
+      "source": "datasets::AirPassengers (R)",
+      "rows": 144,
+      "columns": [
+        "Year",
+        "Month",
+        "Time",
+        "Passengers"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "timeseries",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "timeseries",
+          "columns": {
+            "variable": "Passengers"
+          },
+          "options": {
+            "period": 12
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Passengers"
+          }
+        }
+      ],
+      "notes": "144 monthly observations from 1949 to 1960 with a stable 12-month seasonal pattern."
+    },
+    {
+      "id": "airquality",
+      "title": "New York air quality",
+      "family": "missing",
+      "dir": "missing/airquality",
+      "source": "datasets::airquality (R)",
+      "rows": 153,
+      "columns": [
+        "Ozone",
+        "Solar_R",
+        "Wind",
+        "Temp",
+        "Month",
+        "Day"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "mi",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "mi",
+          "columns": {
+            "variables": ["Ozone", "Solar_R", "Wind", "Temp"],
+            "outcome": "Ozone",
+            "predictors": ["Solar_R", "Wind", "Temp"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
+          }
+        }
+      ],
+      "notes": "153 daily observations with genuine missing values in Ozone (37) and Solar_R (7)."
+    },
+    {
+      "id": "resampling_two_groups",
+      "title": "Two-group resampling sample",
+      "family": "design",
+      "dir": "design/resampling_two_groups",
+      "source": "datasets::PlantGrowth (R), ctrl and trt1 subset in long form",
+      "rows": 20,
+      "columns": [
+        "Weight",
+        "Group"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "resampling",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "resampling",
+          "columns": {
+            "outcome": "Weight",
+            "group": "Group"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Weight"
+          }
+        }
+      ],
+      "notes": "The same ten control and ten treated plants as plantgrowth_wide, in long form for permutation and bootstrap inference."
+    }
+  ]
+}
