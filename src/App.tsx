@@ -51,6 +51,10 @@ import { useGridHistory } from './grid/useGridHistory';
 const HelpPanel = lazy(() =>
   import('./help/HelpPanel').then(module => ({ default: module.HelpPanel }))
 );
+const HelpDialog = lazy(() =>
+  import('./help/HelpDialog').then(module => ({ default: module.HelpDialog }))
+);
+import { bookLocaleFor } from './help/book';
 import {
   setCell as gridSetCell,
   addColumnEnd as gridAddColumn,
@@ -633,7 +637,7 @@ export default function App() {
 
         {activeTab === 'help' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingHelp')}</div>}>
-            <HelpPanel />
+            <HelpPanel locale={bookLocaleFor(helpLocale, uiLocale)} />
           </Suspense>
         )}
 
@@ -693,6 +697,10 @@ export default function App() {
       <Footer grid={grid} />
 
       {/* Toasts */}
+      <Suspense fallback={null}>
+        <HelpDialog locale={bookLocaleFor(helpLocale, uiLocale)} />
+      </Suspense>
+
       <Toasts toasts={toasts} />
     </div>
     </UiModeProvider>

@@ -43,6 +43,8 @@ import { createRunGate } from './liveGate';
 import { CodeExport } from './CodeExport';
 import { presetsFor } from './presets';
 import { t } from '../../i18n';
+import { HelpButton } from '../../help/HelpButton';
+import { topicForAnalysis } from '../../help/book';
 
 const inputClass =
   'w-full bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded focus:border-accent focus:outline-none';
@@ -440,7 +442,10 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
             </span>
           )}
         </div>
-        <h2 className="text-[15px] font-semibold text-text">{meta ? analysisLabel(meta.id) : p.activeAnalysis}</h2>
+        <div className="flex items-center gap-1">
+          <h2 className="text-[15px] font-semibold text-text">{meta ? analysisLabel(meta.id) : p.activeAnalysis}</h2>
+          {meta && <HelpButton topicId={topicForAnalysis(meta.id)} />}
+        </div>
         <p className="mt-1 text-[10px] leading-relaxed text-text3">
           {meta ? analysisDescription(meta) : t('analysis.descriptionFallback')}
         </p>

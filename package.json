@@ -17,7 +17,11 @@
     "guard": "npm run depcruise && npm run madge && npm run filesize",
     "check": "npm run lint && npm test && npm run guard",
     "test:e2e": "playwright test",
-    "bench:grid": "node --import tsx scripts/bench-grid.mjs"
+    "bench:grid": "node --import tsx scripts/bench-grid.mjs",
+    "help:build": "node --import tsx scripts/build-help.mjs",
+    "predev": "npm run help:build",
+    "prebuild": "npm run help:build",
+    "pretest": "npm run help:build"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
