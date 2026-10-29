@@ -9,6 +9,7 @@ import {
   VariableSelect,
   variableOptions,
 } from '../../components/FormFields';
+import { t } from '../../i18n';
 
 export interface RegressionFormProps {
   grid: GridData;
@@ -19,13 +20,13 @@ export interface RegressionFormProps {
 export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionFormProps) => (
   <>
     <VariableSelect
-      label="Dependent (Y)"
+      label={t('form.dependentY')}
       value={regParams.dep}
       options={variableOptions(grid.cols)}
       onChange={value => setRegParams(previous => ({ ...previous, dep: value }))}
     />
     <VariableList
-      label="Independents (X)"
+      label={t('form.independentsX')}
       cols={grid.cols}
       selected={regParams.indeps}
       onToggle={(column, checked) =>
@@ -38,9 +39,9 @@ export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionForm
       }
     />
     <Advanced>
-      <Field label="Robust SE" hint="Heteroskedasticity-consistent standard errors.">
+      <Field label={t('form.robustSE')}>
         <select
-          aria-label="Regression robust standard errors"
+          aria-label={t('form.robustSE')}
           className="min-w-[110px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
           value={regParams.robustSE}
           onChange={event =>
@@ -50,16 +51,16 @@ export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionForm
             }))
           }
         >
-          <option value="none">None (OLS)</option>
+          <option value="none">{t('form.ols')}</option>
           <option value="HC1">HC1</option>
           <option value="HC3">HC3</option>
         </select>
       </Field>
       <CheckboxField
-        label="Theil-Sen robust line"
+        label={t('form.theilSen')}
         checked={regParams.useNonParam}
         onChange={checked => setRegParams(previous => ({ ...previous, useNonParam: checked }))}
-        hint="Median-slope estimate with bootstrap CI."
+        hint={t('hint.regression')}
       />
     </Advanced>
   </>

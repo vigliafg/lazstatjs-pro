@@ -7,6 +7,7 @@ import {
   Field,
   VariableList,
 } from '../../components/FormFields';
+import { t } from '../../i18n';
 
 export interface CorrelationFormProps {
   grid: GridData;
@@ -17,7 +18,7 @@ export interface CorrelationFormProps {
 export const CorrelationForm = ({ grid, corrParams, setCorrParams }: CorrelationFormProps) => (
   <>
     <VariableList
-      label="Variables"
+      label={t('form.variables')}
       cols={grid.cols}
       selected={corrParams.vars}
       onToggle={(column, checked) =>
@@ -29,27 +30,27 @@ export const CorrelationForm = ({ grid, corrParams, setCorrParams }: Correlation
         }))
       }
     />
-    <Field label="Primary Method">
+    <Field label={t('form.primaryMethod')}>
       <select
-        aria-label="Correlation method"
+        aria-label={t('form.primaryMethod')}
         className="min-w-[120px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
         value={corrParams.method}
         onChange={event =>
           setCorrParams(previous => ({ ...previous, method: event.target.value }))
         }
       >
-        <option value="pearson">Pearson</option>
-        <option value="spearman">Spearman</option>
+        <option value="pearson">{t('correlation.pearson')}</option>
+        <option value="spearman">{t('correlation.spearman')}</option>
       </select>
     </Field>
-    <Advanced title="Non-parametric">
+    <Advanced title={t('form.nonParametric')}>
       <CheckboxField
-        label="Spearman (ρ)"
+        label={t('correlation.spearmanShort')}
         checked={corrParams.showSpearman}
         onChange={checked => setCorrParams(previous => ({ ...previous, showSpearman: checked }))}
       />
       <CheckboxField
-        label="Kendall's Tau (τ)"
+        label={t('correlation.kendall')}
         checked={corrParams.showKendall}
         onChange={checked => setCorrParams(previous => ({ ...previous, showKendall: checked }))}
       />

@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TTestParams } from '../../io/project';
 import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
+import { t } from '../../i18n';
 
 export interface TTestFormProps {
   grid: GridData;
@@ -13,9 +14,9 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
   const options = variableOptions(grid.cols);
   return (
     <>
-      <Field label="Test Type">
+      <Field label={t('form.testType')}>
         <select
-          aria-label="T-Test type"
+          aria-label={t('form.testType')}
           className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
           value={ttestParams.type}
           onChange={event =>
@@ -25,29 +26,29 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
             }))
           }
         >
-          <option value="ind">Independent Samples</option>
-          <option value="dep">Paired Samples</option>
-          <option value="one">One-Sample</option>
+          <option value="ind">{t('form.independentSamples')}</option>
+          <option value="dep">{t('form.pairedSamples')}</option>
+          <option value="one">{t('form.oneSample')}</option>
         </select>
       </Field>
       <VariableSelect
-        label="Variable 1"
+        label={t('form.variable1')}
         value={ttestParams.var1}
         options={options}
         onChange={value => setTTestParams(previous => ({ ...previous, var1: value }))}
       />
       {ttestParams.type !== 'one' ? (
         <VariableSelect
-          label="Variable 2"
+          label={t('form.variable2')}
           value={ttestParams.var2}
           options={options}
           onChange={value => setTTestParams(previous => ({ ...previous, var2: value }))}
         />
       ) : (
-        <Field label="Test Mean (μ₀)">
+        <Field label={t('form.testMean')}>
           <input
             type="number"
-            aria-label="Test mean"
+            aria-label={t('form.testMean')}
             className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
             value={ttestParams.mu}
             onChange={event =>
@@ -57,9 +58,9 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
         </Field>
       )}
       {ttestParams.type === 'ind' && (
-        <Field label="Variances">
+        <Field label={t('form.variances')}>
           <select
-            aria-label="T-Test variances"
+            aria-label={t('form.variances')}
             className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
             value={ttestParams.equalVar ? 'equal' : 'welch'}
             onChange={event =>
@@ -69,8 +70,8 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
               }))
             }
           >
-            <option value="equal">Equal (pooled)</option>
-            <option value="welch">Unequal (Welch)</option>
+            <option value="equal">{t('form.equalPooled')}</option>
+            <option value="welch">{t('form.unequalWelch')}</option>
           </select>
         </Field>
       )}

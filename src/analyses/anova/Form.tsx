@@ -30,14 +30,14 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
   return (
     <>
       <VariableSelect
-        label="Dependent Var"
+        label={t('form.dependentVar')}
         ariaLabel="ANOVA dependent variable"
         value={anovaParams.dep}
         options={variableOptions(grid.cols)}
         onChange={value => setAnovaParams(previous => ({ ...previous, dep: value }))}
       />
       <VariableSelect
-        label="Group Var"
+        label={t('form.groupVar')}
         ariaLabel="ANOVA group variable"
         value={anovaParams.grp}
         options={groupOptions}
@@ -53,33 +53,33 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
           />
         }
       />
-      <Field label="Post-Hoc">
+      <Field label={t('form.postHoc')}>
         <select
-          aria-label="ANOVA post-hoc"
+          aria-label={t('form.postHoc')}
           className="min-w-[120px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
           value={anovaParams.posthoc}
           onChange={event =>
             setAnovaParams(previous => ({ ...previous, posthoc: event.target.value }))
           }
         >
-          <option value="none">None</option>
-          <option value="tukey">Tukey–Kramer (approx.)</option>
-          <option value="bonferroni">Bonferroni</option>
-          <option value="holm">Holm</option>
-          <option value="gameshowell">Games–Howell</option>
+          <option value="none">{t('posthoc.none')}</option>
+          <option value="tukey">{t('posthoc.tukey')}</option>
+          <option value="bonferroni">{t('posthoc.bonferroni')}</option>
+          <option value="holm">{t('posthoc.holm')}</option>
+          <option value="gameshowell">{t('posthoc.gameshowell')}</option>
         </select>
       </Field>
       <Advanced>
         <CheckboxField
-          label="Kruskal-Wallis H"
+          label={t('form.kruskalWallis')}
           checked={anovaParams.useNonParam}
           onChange={checked => setAnovaParams(previous => ({ ...previous, useNonParam: checked }))}
-          hint="Non-parametric alternative to the one-way ANOVA."
+          hint={t('hint.anova')}
         />
         {anovaParams.useNonParam && (
-          <Field label="K-W Post-Hoc">
+          <Field label={t('form.kwPostHoc')}>
             <select
-              aria-label="Kruskal-Wallis post-hoc"
+              aria-label={t('form.kwPostHoc')}
               className="min-w-[120px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
               value={anovaParams.kwPosthoc}
               onChange={event =>
@@ -89,10 +89,10 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
                 }))
               }
             >
-              <option value="none">None</option>
-              <option value="bonferroni">Bonferroni</option>
-              <option value="holm">Holm</option>
-              <option value="fdr">FDR (BH)</option>
+              <option value="none">{t('posthoc.none')}</option>
+              <option value="bonferroni">{t('posthoc.bonferroni')}</option>
+              <option value="holm">{t('posthoc.holm')}</option>
+              <option value="fdr">{t('posthoc.fdr')}</option>
             </select>
           </Field>
         )}
