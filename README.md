@@ -41,7 +41,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Live-run** for instant procedures: a debounced toggle that replaces the same card instead of stacking results
 - **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear
 - **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
-- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `Advanced`) used by the core procedures
+- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with UI chrome strings centralised in `src/i18n.ts`
 
 ### Help
 - **In-app HELP tab** (next to Settings) with eight inner tabs: Overview, Data Editor, Data prep, Groups & levels, Analyses, Output & reports, Recipes and Shortcuts & settings

@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { columnLabel, type Column } from '../grid/types';
+import { t } from '../i18n';
 
 /** Card-style section used by the setup panel and by the forms. */
 export const Section = ({
@@ -198,7 +199,7 @@ export const CheckboxList = <T extends string>({
 
 /** Progressive disclosure for options that most runs do not need. */
 export const Advanced = ({
-  title = 'Advanced',
+  title = t('form.advanced'),
   children,
   open = false,
 }: {

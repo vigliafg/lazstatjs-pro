@@ -76,7 +76,7 @@ test('blocks the run after a type change makes a role incompatible', async ({ pa
   test.skip(isMobile, 'the desktop layout keeps the setup panel visible');
 
   await page.goto('/');
-  await page.getByLabel('Data type for Score_Pre').selectOption('cat');
+  await page.getByLabel(/Type.*Score_Pre/).selectOption('cat');
   await page.getByRole('button', { name: 'Analysis' }).click();
 
   await page.getByLabel('Search analyses').fill('ANOVA');

@@ -167,11 +167,13 @@ ancora quella di prima.
 2. **Contratto del workspace ancora ampio.** `AnalysisTabProps` è sceso da 88 a
    38 props e le slice passano dal reducer, ma griglia, output e ruoli restano
    props esplicite.
-3. **Form system adottato dai form core.** ANOVA, T-test, Descriptive,
-   Regression e Correlation usano `Field`/`VariableSelect`/`Advanced`; gli altri
-   pannelli mantengono il markup precedente.
-4. **i18n della shell.** Header, footer, settings e toolbar passano da
-   `src/i18n.ts`; le etichette interne dei form restano inglesi e locali.
+3. **Form system completo.** Tutti i 31 pannelli usano le primitive condivise
+   (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`,
+   `CheckboxField`).
+4. **i18n del chrome.** Shell, form, editor dati e dialoghi passano da
+   `src/i18n.ts`. Restano fuori solo i nomi propri dei metodi statistici
+   (Tukey, Bonferroni, …) e il contenuto di help/report, che è prosa italiana
+   per scelta editoriale.
 5. **Preferiti locali.** Il ranking è per parole (non fuzzy) e i preferiti
    vivono in `localStorage`.
 6. **Settings senza recent cliccabili.** I progetti recenti sono un elenco di
@@ -180,9 +182,9 @@ ancora quella di prima.
 ### 5.3 Debito tecnico
 
 - `AnalysisTabProps` è ancora un contratto unico ampio.
-- I form non migrati ripetono classi e layout.
+- I nomi dei metodi statistici restano non tradotti (sono nomi propri).
 - I preferiti non sono persistiti nel progetto `.lzs` (solo browser).
-- La lingua delle etichette dei form non è centralizzata.
+- Help e report sono contenuto italiano, non stringhe di chrome.
 
 ## 6. Backlog
 
@@ -200,11 +202,11 @@ Priorità:
 | **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 7 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria |
 | **UI-04** | P2 | Live-run `instant` con debounce e stato | **Fatto** | Toggle Live, 500 ms, card unica sostituita, indicatore “syncing” |
 | **UI-05** | P2 | Output workspace: filtro, pin, copia, conferma Clear | **Fatto** | Filtro per analisi, pin in cima, copia card, conferma su Clear |
-| **UI-06** | P2 | Form system condiviso | **Parziale** | `Field`, `Section`, `VariableSelect`, `VariableList`, `Advanced`, `CheckboxField`; adottati dai 5 form core |
+| **UI-06** | P2 | Form system condiviso | **Fatto** | `Field`, `Section`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`; **tutti i 31 form** migrati |
 | **UI-07** | P2 | Responsive/a11y | **Fatto** | Footer mobile, focus dei pannelli, `aria-live`, libreria nascosta sotto 1280 px |
 | **UI-08** | P3 | Ricerca con ranking, preferiti, A–Z, tastiera | **Fatto** | Punteggio per label/keyword/descrizione, preferiti, indice piatto, frecce/Home/End |
 | **UI-09** | P3 | Settings e progetto | **Fatto** | Rimossi i controlli demo; azioni di sessione; elenco progetti recenti |
-| **UI-10** | P3 | i18n | **Parziale** | Lingua UI = inglese; shell centralizzata in `src/i18n.ts`, form locali |
+| **UI-10** | P3 | i18n | **Fatto** | Lingua UI = inglese; tutte le stringhe di chrome (shell, form, editor dati, dialoghi) in `src/i18n.ts`; help e report restano contenuto italiano |
 | **UI-11** | P3 | Code splitting | **Fatto** | `AnalysisTab`, help, import/export e runners lazy; chunk vendor separati; nessun warning >500 kB |
 
 ### Esito

@@ -4,6 +4,7 @@ import type { CategoryLevel, ColType, GridData } from './types';
 import { COL_TYPES, columnLevels, isGroupColumn, levelLabel, validateValue } from './types';
 import { rowMatches, type RowFilter } from './ops';
 import { ROW_HEIGHT, visibleWindow } from './virtual';
+import { t } from '../i18n';
 import { LevelsEditor } from './LevelsEditor';
 
 interface Props {
@@ -198,7 +199,7 @@ export function DataGrid(props: Props) {
                   className={`group border border-border p-1 text-accent2 min-w-[100px] cursor-context-menu select-none ${
                     freezeFirstCol && i === 0 ? 'sticky left-10 z-20 bg-surface2' : ''
                   }`}
-                  title={`Double-click to rename "${col.name}" (duplicate names get a _2 suffix), right-click for the column menu`}
+                  title={`${t('grid.menuRename')}: ${col.name}`}
                   onDoubleClick={() => {
                     setEditingCol(i);
                     setDraftName(col.name);
@@ -208,7 +209,7 @@ export function DataGrid(props: Props) {
                   {editingCol === i ? (
                     <input
                       autoFocus
-                      aria-label={`Column name for ${col.name}`}
+                      aria-label={`${t('grid.menuRename')}: ${col.name}`}
                       maxLength={64}
                       className="w-full bg-surface3 border border-accent rounded px-1 py-0.5 text-text outline-none text-center"
                       value={draftName}
@@ -261,7 +262,7 @@ export function DataGrid(props: Props) {
                 >
                   <div className="relative">
                     <select
-                      aria-label={`Data type for ${col.name}`}
+                      aria-label={`${t('inspector.type')}: ${col.name}`}
                       title={COL_TYPES.find((t) => t.id === col.type)?.full ?? col.type}
                       className="w-full bg-transparent border-none text-accent2 text-[10px] font-semibold py-1 pl-1 pr-5 outline-none appearance-none text-center cursor-pointer hover:bg-white/5"
                       value={col.type}
@@ -294,7 +295,7 @@ export function DataGrid(props: Props) {
                   colSpan={grid.cols.length + 1}
                   className="border border-border p-4 text-center text-text3 italic"
                 >
-                  No rows match the active filter
+                  {t('data.noRowsMatch')}
                 </td>
               </tr>
             )}
@@ -309,7 +310,7 @@ export function DataGrid(props: Props) {
                   className={`border border-border text-center text-text3 bg-surface2/30 cursor-context-menu select-none ${
                     freezeFirstCol ? 'sticky left-0 z-10 bg-surface2' : ''
                   }`}
-                  title="Right-click for row menu"
+                  title={t('grid.rowMenu')}
                   onContextMenu={(e) => openMenu(e, 'row', rIdx)}
                 >
                   {rIdx + 1}
@@ -466,7 +467,7 @@ export function DataGrid(props: Props) {
                             }}
                           />
                         )}
-                      {!isCat && cell === '' && <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] text-text3 pointer-events-none italic opacity-50">null</span>}
+                      {!isCat && cell === '' && <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] text-text3 pointer-events-none italic opacity-50">{t('grid.null')}</span>}
                     </td>
                   );
                 })}
@@ -491,14 +492,14 @@ export function DataGrid(props: Props) {
           {menu.kind === 'col' ? (
             <>
               <MenuItem
-                label="Variable details"
+                label={t('grid.menuDetails')}
                 onClick={() => {
                   props.onInspectCol?.(menu.index);
                   setMenu(null);
                 }}
               />
               <MenuItem
-                label="Rename column"
+                label={t('grid.menuRename')}
                 onClick={() => {
                   setEditingCol(menu.index);
                   setDraftName(grid.cols[menu.index]?.name ?? '');
@@ -507,34 +508,34 @@ export function DataGrid(props: Props) {
               />
               <div className="h-px bg-border my-1" />
               <MenuItem
-                label="Sort ascending"
+                label={t('grid.menuSortAsc')}
                 onClick={() => {
                   props.onSortCol?.(menu.index, 'asc');
                   setMenu(null);
                 }}
               />
               <MenuItem
-                label="Sort descending"
+                label={t('grid.menuSortDesc')}
                 onClick={() => {
                   props.onSortCol?.(menu.index, 'desc');
                   setMenu(null);
                 }}
               />
               <div className="h-px bg-border my-1" />
-              <MenuItem label="Insert column left" onClick={() => { setMenu(null); props.onInsertCol(menu.index); }} />
-              <MenuItem label="Insert column right" onClick={() => { setMenu(null); props.onInsertCol(menu.index + 1); }} />
-              <MenuItem label="Duplicate column" onClick={() => { setMenu(null); props.onDuplicateCol(menu.index); }} />
-              <MenuItem label="Move left" onClick={() => { setMenu(null); props.onMoveCol(menu.index, -1); }} />
-              <MenuItem label="Move right" onClick={() => { setMenu(null); props.onMoveCol(menu.index, 1); }} />
+              <MenuItem label={t('grid.menuInsertLeft')} onClick={() => { setMenu(null); props.onInsertCol(menu.index); }} />
+              <MenuItem label={t('grid.menuInsertRight')} onClick={() => { setMenu(null); props.onInsertCol(menu.index + 1); }} />
+              <MenuItem label={t('grid.menuDuplicate')} onClick={() => { setMenu(null); props.onDuplicateCol(menu.index); }} />
+              <MenuItem label={t('grid.menuMoveLeft')} onClick={() => { setMenu(null); props.onMoveCol(menu.index, -1); }} />
+              <MenuItem label={t('grid.menuMoveRight')} onClick={() => { setMenu(null); props.onMoveCol(menu.index, 1); }} />
               <div className="h-px bg-border my-1" />
-              <MenuItem danger label="Delete column" onClick={() => { setMenu(null); props.onDeleteCol(menu.index); }} />
+              <MenuItem danger label={t('grid.menuDeleteColumn')} onClick={() => { setMenu(null); props.onDeleteCol(menu.index); }} />
             </>
           ) : (
             <>
-              <MenuItem label="Insert row above" onClick={() => { setMenu(null); props.onInsertRow(menu.index); }} />
-              <MenuItem label="Insert row below" onClick={() => { setMenu(null); props.onInsertRow(menu.index + 1); }} />
+              <MenuItem label={t('grid.menuInsertAbove')} onClick={() => { setMenu(null); props.onInsertRow(menu.index); }} />
+              <MenuItem label={t('grid.menuInsertBelow')} onClick={() => { setMenu(null); props.onInsertRow(menu.index + 1); }} />
               <div className="h-px bg-border my-1" />
-              <MenuItem danger label="Delete row" onClick={() => { setMenu(null); props.onDeleteRow(menu.index); }} />
+              <MenuItem danger label={t('grid.menuDeleteRow')} onClick={() => { setMenu(null); props.onDeleteRow(menu.index); }} />
             </>
           )}
         </div>

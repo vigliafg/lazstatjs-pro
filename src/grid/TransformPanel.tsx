@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { GridData } from './types';
 import { sortByColumn, recodeColumn, splitColumn, mergeColumns, computeColumn } from './ops';
 import type { ColumnOperation } from './columnOps';
+import { t } from '../i18n';
 
 interface Props {
   grid: GridData;
@@ -50,7 +51,7 @@ export function TransformPanel({ grid, onApply }: Props) {
   return (
     <div className="bg-surface border-b border-border px-3 py-2 flex flex-wrap gap-4 items-end text-[11px] shrink-0">
       <div className="flex flex-col gap-1">
-        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">Sort</span>
+        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.sort')}</span>
         <div className="flex gap-1.5 items-center">
           <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={sortCol} onChange={(e) => setSortCol(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
@@ -58,15 +59,15 @@ export function TransformPanel({ grid, onApply }: Props) {
             ))}
           </select>
           <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={sortDir} onChange={(e) => setSortDir(e.target.value as 'asc' | 'desc')}>
-            <option value="asc">Asc</option>
-            <option value="desc">Desc</option>
+            <option value="asc">{t('data.transform.asc')}</option>
+            <option value="desc">{t('data.transform.desc')}</option>
           </select>
-          <button className="tb-btn" onClick={() => onApply(sortByColumn(grid, sortCol, sortDir), `Sorted by ${grid.cols[sortCol]?.name}`)}>Sort</button>
+          <button className="tb-btn" onClick={() => onApply(sortByColumn(grid, sortCol, sortDir), `Sorted by ${grid.cols[sortCol]?.name}`)}>{t('data.transform.sort')}</button>
         </div>
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">Recode (old=new per line)</span>
+        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.recode')}</span>
         <div className="flex gap-1.5 items-start">
           <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={recodeCol} onChange={(e) => setRecodeCol(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
@@ -81,21 +82,21 @@ export function TransformPanel({ grid, onApply }: Props) {
               onApply(next, changed === 0 ? 'No values recoded' : `${changed} cells recoded`);
             }}
           >
-            Recode
+            {t('data.transform.recodeAction')}
           </button>
         </div>
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">Split / Merge</span>
+        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.splitMerge')}</span>
         <div className="flex gap-1.5 items-center">
           <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={splitCol} onChange={(e) => setSplitCol(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
               <option key={i} value={i}>{c.name}</option>
             ))}
           </select>
-          <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={splitSep} onChange={(e) => setSplitSep(e.target.value)} title="Separator" />
-          <button className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), 'Column split', 'ok', { kind: 'split', at: splitCol })}>Split</button>
+          <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={splitSep} onChange={(e) => setSplitSep(e.target.value)} title={t('data.transform.separator')} />
+          <button className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), 'Column split', 'ok', { kind: 'split', at: splitCol })}>{t('data.transform.split')}</button>
           <span className="text-text3">|</span>
           <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={mergeA} onChange={(e) => setMergeA(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
@@ -107,13 +108,13 @@ export function TransformPanel({ grid, onApply }: Props) {
               <option key={i} value={i}>{c.name}</option>
             ))}
           </select>
-          <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={mergeSep} onChange={(e) => setMergeSep(e.target.value)} title="Separator" />
-          <button className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), 'Columns merged', 'ok', { kind: 'merge', a: mergeA, b: mergeB })}>Merge</button>
+          <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={mergeSep} onChange={(e) => setMergeSep(e.target.value)} title={t('data.transform.separator')} />
+          <button className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), 'Columns merged', 'ok', { kind: 'merge', a: mergeA, b: mergeB })}>{t('data.transform.merge')}</button>
         </div>
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">Compute (e.g. A - B)</span>
+        <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.compute')}</span>
         <div className="flex gap-1.5 items-center">
           <input
             aria-label="Formula expression"
@@ -126,7 +127,7 @@ export function TransformPanel({ grid, onApply }: Props) {
             className="bg-surface3 border border-border2 rounded px-2 py-1 w-20 text-text"
             value={exprName}
             onChange={(e) => setExprName(e.target.value)}
-            placeholder="Name"
+            placeholder={t('data.transform.name')}
           />
           <label className="flex items-center gap-1 text-text2" title="Recalculate the column whenever the data changes">
             <input
@@ -135,7 +136,7 @@ export function TransformPanel({ grid, onApply }: Props) {
               checked={persistent}
               onChange={(e) => setPersistent(e.target.checked)}
             />
-            formula
+            {t('data.transform.formula')}
           </label>
           <button
             className="tb-btn"
@@ -155,7 +156,7 @@ export function TransformPanel({ grid, onApply }: Props) {
               else onApply(next, `Computed ${exprName}${persistent ? ' (formula)' : ''}`, 'ok');
             }}
           >
-            Compute
+            {t('data.transform.computeAction')}
           </button>
         </div>
       </div>

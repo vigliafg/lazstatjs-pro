@@ -2,6 +2,7 @@ import type { Dispatch, RefObject, SetStateAction } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { CleanPanel } from '../grid/CleanPanel';
 import { VariableInspector } from '../grid/VariableInspector';
+import { t } from '../i18n';
 import { fillRightRange as gridFillRight } from '../grid/fillRight';
 import { setRangeValue as gridSetRangeValue } from '../grid/ops';
 import { DataGrid } from '../grid/DataGrid';
@@ -159,24 +160,24 @@ export const DataTab = ({
   <>
 <div className="flex-1 flex flex-col overflow-hidden">
   <div className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
-    <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">File:</span>
-    <button className="tb-btn" onClick={onNewDataset}>New</button>
-    <button className="tb-btn" onClick={() => csvInputRef.current?.click()}>Import</button>
-    <button className="tb-btn" onClick={exportCsv}>Export</button>
+    <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">{t('data.file')}:</span>
+    <button className="tb-btn" onClick={onNewDataset}>{t('data.new')}</button>
+    <button className="tb-btn" onClick={() => csvInputRef.current?.click()}>{t('data.import')}</button>
+    <button className="tb-btn" onClick={exportCsv}>{t('data.export')}</button>
     <div className="h-4 w-px bg-border mx-1" />
     <button
       className="tb-btn"
       onClick={saveProjectFile}
-      title="Save grid, settings and analysis parameters as a .lzs project"
+      title={t('data.saveHint')}
     >
-      Save project
+      {t('data.saveProject')}
     </button>
     <button
       className="tb-btn"
       onClick={() => projectInputRef.current?.click()}
-      title="Open a .lzs project and replace the current session"
+      title={t('data.openHint')}
     >
-      Open project
+      {t('data.openProject')}
     </button>
     <input
       ref={projectInputRef}
@@ -192,17 +193,17 @@ export const DataTab = ({
     {lastAutosave && (
       <span
         className="font-mono text-[9px] text-text3 uppercase tracking-wider"
-        title="Grid, settings and parameters are autosaved in this browser"
+        title={t('data.autosaveHint')}
       >
-        Autosave {lastAutosave}
+        {t('data.autosave')} {lastAutosave}
       </span>
     )}
     <div className="h-4 w-px bg-border mx-1" />
-    <button className="tb-btn" disabled={!canUndoGrid} onClick={undoGrid} title="Undo (Ctrl+Z)">
-      Undo
+    <button className="tb-btn" disabled={!canUndoGrid} onClick={undoGrid} title={`${t('data.undo')} (Ctrl+Z)`}>
+      {t('data.undo')}
     </button>
-    <button className="tb-btn" disabled={!canRedoGrid} onClick={redoGrid} title="Redo (Ctrl+Y)">
-      Redo
+    <button className="tb-btn" disabled={!canRedoGrid} onClick={redoGrid} title={`${t('data.redo')} (Ctrl+Y)`}>
+      {t('data.redo')}
     </button>
     <input
       ref={csvInputRef}
@@ -225,7 +226,7 @@ export const DataTab = ({
         else showToast('Validation', `${issues.length} invalid cells found`, 'warn');
       }}
     >
-      Validate
+      {t('data.validate')}
     </button>
     <button
       className="tb-btn"
@@ -240,41 +241,41 @@ export const DataTab = ({
         showToast('Auto-fix', `${changed} cells coerced`, 'ok');
       }}
     >
-      Auto-fix
+      {t('data.autoFix')}
     </button>
     <button className={`tb-btn ${showClean ? 'bg-accent text-white border-accent' : ''}`} onClick={() => setShowClean((v) => !v)}>
-      Clean
+      {t('data.clean')}
     </button>
     <button className={`tb-btn ${showTransform ? 'bg-accent text-white border-accent' : ''}`} onClick={() => setShowTransform((v) => !v)}>
-      Transform
+      {t('data.transform')}
     </button>
     <div className="h-4 w-px bg-border mx-1" />
     <button
       className={`tb-btn ${freezeFirstCol ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setFreezeFirstCol((v) => !v)}
-      title="Keep the row numbers and the first column visible while scrolling"
+      title={t('data.freezeHint')}
     >
-      Freeze col
+      {t('data.freezeCol')}
     </button>
     <button
       className={`tb-btn ${showInspector ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setShowInspector((value) => !value)}
-      title="Open the variable inspector"
+      title={t('data.variablesHint')}
     >
-      Variables
+      {t('data.variables')}
     </button>
     <button
       className={`tb-btn ${showFilter ? 'bg-accent text-white border-accent' : ''}`}
       onClick={() => setShowFilter((v) => !v)}
-      title="Filter the rows shown in the grid (view only, data unchanged)"
+      title={t('data.filterHint')}
     >
-      Filter
+      {t('data.filter')}
     </button>
   </div>
 
   {showFilter && (
     <div className="bg-surface border-b border-border px-3 py-1.5 flex flex-wrap items-center gap-2 text-[11px] shrink-0">
-      <span className="font-mono text-[9px] text-text3 uppercase tracking-widest">Row filter</span>
+      <span className="font-mono text-[9px] text-text3 uppercase tracking-widest">{t('data.rowFilter')}</span>
       <select
         className="bg-surface3 border border-border2 rounded px-1 py-1 text-text"
         value={filterCol}
@@ -289,26 +290,26 @@ export const DataTab = ({
         value={filterOp}
         onChange={(e) => setFilterOp(e.target.value as RowFilterOp)}
       >
-        <option value="contains">contains</option>
+        <option value="contains">{t('data.contains')}</option>
         <option value="equals">=</option>
         <option value="notEquals">≠</option>
         <option value="gt">&gt;</option>
         <option value="gte">≥</option>
         <option value="lt">&lt;</option>
         <option value="lte">≤</option>
-        <option value="empty">is empty</option>
-        <option value="notEmpty">is not empty</option>
+        <option value="empty">{t('data.isEmpty')}</option>
+        <option value="notEmpty">{t('data.isNotEmpty')}</option>
       </select>
       {filterNeedsValue && (
         <input
           className="bg-surface3 border border-border2 rounded px-2 py-1 w-40 text-text"
-          placeholder="Value"
+          placeholder={t('data.value')}
           value={filterValue}
           onChange={(e) => setFilterValue(e.target.value)}
         />
       )}
       <span className="text-text3 font-mono text-[10px]">
-        {visibleRowCount} / {grid.rows.length} rows
+        {visibleRowCount} / {grid.rows.length} {t('data.rowsUnit')}
       </span>
       <button
         className="tb-btn"
@@ -317,20 +318,20 @@ export const DataTab = ({
           setFilterOp('contains');
         }}
       >
-        Clear filter
+        {t('data.clearFilter')}
       </button>
       <button
         type="button"
         className={`tb-btn ${filterAffectsAnalysis ? 'bg-accent text-white border-accent' : ''}`}
         onClick={() => setFilterAffectsAnalysis(value => !value)}
-        title="Choose whether the row filter also limits the rows used by analyses"
+        title={t('data.affectsHint')}
       >
-        {filterAffectsAnalysis ? 'Also filter analyses' : 'View only'}
+        {filterAffectsAnalysis ? t('data.alsoFilter') : t('data.viewOnly')}
       </button>
       <span className="text-text3 text-[10px] italic">
         {filterAffectsAnalysis
-          ? `analyses use ${visibleRowCount} of ${grid.rows.length} rows`
-          : 'view only — analyses still use all rows'}
+          ? `${t('data.analysesUse')} ${visibleRowCount} ${t('data.of')} ${grid.rows.length} ${t('data.rowsUnit')}`
+          : t('data.viewOnlyHint')}
       </span>
     </div>
   )}
@@ -363,10 +364,10 @@ export const DataTab = ({
   {validation.ran && (
     <div className="bg-surface border-b border-border px-3 py-1.5 flex flex-wrap items-center gap-2 text-[10px] font-mono shrink-0">
       {validation.issues.length === 0 ? (
-        <span className="text-green">VALID: 0 invalid cells</span>
+        <span className="text-green">{t('data.validNone')}</span>
       ) : (
         <>
-          <span className="text-yellow font-bold">{validation.issues.length} INVALID</span>
+          <span className="text-yellow font-bold">{validation.issues.length} {t('data.invalid')}</span>
           <span className="text-text3">|</span>
           {gridInvalidByColumn(grid)
             .filter((c) => c.count > 0)
@@ -392,10 +393,10 @@ export const DataTab = ({
               if (first) setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
             }}
           >
-            Jump to first
+            {t('data.jumpFirst')}
           </button>
           <button className="tb-btn" onClick={() => setValidation({ ran: false, issues: [] })}>
-            Dismiss
+            {t('data.dismiss')}
           </button>
         </>
       )}
@@ -406,7 +407,7 @@ export const DataTab = ({
     <div className={`${showInspector ? 'hidden lg:flex' : 'flex'} min-h-0 min-w-0 flex-1 flex-col`}>
       <div className="panel-header">
         <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-        Grid View
+        {t('data.gridView')}
       </div>
 
   <DataGrid
@@ -472,14 +473,14 @@ export const DataTab = ({
   {selRange && (
     <div className="bg-surface border-t border-border px-3 py-1 flex items-center gap-2 text-[10px] font-mono text-text3 shrink-0">
       <span>
-        SEL: R{Math.min(selRange.r0, selRange.r1) + 1}-{Math.max(selRange.r0, selRange.r1) + 1} C
+        {t('data.selection')}: R{Math.min(selRange.r0, selRange.r1) + 1}-{Math.max(selRange.r0, selRange.r1) + 1} C
         {Math.min(selRange.c0, selRange.c1) + 1}-{Math.max(selRange.c0, selRange.c1) + 1}
       </span>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridFillDown(prev, selRange))}>
-        Fill down
+        {t('data.fillDown')}
       </button>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridFillRight(prev, selRange))}>
-        Fill right
+        {t('data.fillRight')}
       </button>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridClearRange(prev, selRange))}>
         Clear selection
@@ -491,7 +492,7 @@ export const DataTab = ({
           showToast('Copy', 'Range copied to clipboard', 'ok');
         }}
       >
-        Copy
+        {t('data.copy')}
       </button>
     </div>
   )}
@@ -528,16 +529,16 @@ export const DataTab = ({
   </div>
 
   <div className="bg-surface border-t border-border p-2 flex gap-2 shrink-0">
-    <button className="tb-btn" onClick={addColumn}><Plus className="w-3 h-3 inline mr-1" /> Column</button>
-    <button className="tb-btn" onClick={addRow}><Plus className="w-3 h-3 inline mr-1" /> Row</button>
+    <button className="tb-btn" onClick={addColumn}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addColumn')}</button>
+    <button className="tb-btn" onClick={addRow}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addRow')}</button>
     <button
       className="tb-btn text-red/80 hover:bg-red hover:text-white"
       onClick={() => {
-        if (!window.confirm('Clear all cells? You can undo.')) return;
+        if (!window.confirm(t('data.confirmClear'))) return;
         setGrid((prev) => gridClear(prev));
       }}
     >
-      <Trash2 className="w-3 h-3 inline mr-1" /> Clear
+      <Trash2 className="w-3 h-3 inline mr-1" /> {t('data.clear')}
     </button>
   </div>
 </div>

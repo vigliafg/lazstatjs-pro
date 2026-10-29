@@ -13,6 +13,7 @@ import {
   type GridData,
 } from './types';
 import { LevelsEditor } from './LevelsEditor';
+import { t } from '../i18n';
 
 interface Props {
   grid: GridData;
@@ -86,10 +87,10 @@ export const VariableInspector = ({
     row => !isMissingCode(col, row[column]) && !validateValue(row[column], col.type)
   ).length;
   const role = grouping
-    ? 'Grouping'
+    ? t('inspector.roleGrouping')
     : col.type === 'id'
-      ? 'Identifier'
-      : 'Continuous / text';
+      ? t('inspector.roleId')
+      : t('inspector.roleContinuous');
 
   const commitName = () => {
     const next = name.trim();
@@ -128,13 +129,13 @@ export const VariableInspector = ({
       <div className="flex shrink-0 items-center gap-2 border-b border-border px-3 py-2">
         <Layers className="h-3.5 w-3.5 text-accent2" />
         <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
-          Variable
+          {t('inspector.title')}
         </span>
         <button
           type="button"
           onClick={onClose}
           className="ml-auto flex h-5 w-5 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
-          aria-label="Close variable inspector"
+          aria-label={t('inspector.close')}
         >
           <X className="h-3.5 w-3.5" />
         </button>
@@ -142,7 +143,7 @@ export const VariableInspector = ({
 
       <div className="min-h-0 flex-1 overflow-auto scrollbar p-3">
         <label className="block font-mono text-[8px] uppercase tracking-widest text-text3">
-          Column
+          {t('inspector.column')}
           <select
             value={column}
             onChange={event => onSelectColumn(Number(event.target.value))}
@@ -157,19 +158,19 @@ export const VariableInspector = ({
         </label>
 
         <div className="mt-3 grid grid-cols-2 gap-1.5">
-          <Stat label="Rows" value={grid.rows.length} />
-          <Stat label="Missing" value={missing} />
-          <Stat label="Unique" value={values.length} />
-          <Stat label="Invalid" value={invalid} />
+          <Stat label={t('inspector.rows')} value={grid.rows.length} />
+          <Stat label={t('inspector.missing')} value={missing} />
+          <Stat label={t('inspector.unique')} value={values.length} />
+          <Stat label={t('inspector.invalid')} value={invalid} />
         </div>
 
         <div className="mt-3 rounded border border-accent/20 bg-accent/5 px-2 py-1.5">
-          <p className="font-mono text-[8px] uppercase tracking-wider text-text3">Role</p>
+          <p className="font-mono text-[8px] uppercase tracking-wider text-text3">{t('inspector.role')}</p>
           <p className="text-[11px] text-text2">{role}</p>
         </div>
 
         <label className="mt-3 block font-mono text-[8px] uppercase tracking-widest text-text3">
-          Name
+          {t('inspector.name')}
           <input
             value={name}
             onChange={event => setName(event.target.value)}
@@ -183,7 +184,7 @@ export const VariableInspector = ({
         </label>
 
         <label className="mt-2 block font-mono text-[8px] uppercase tracking-widest text-text3">
-          Type
+          {t('inspector.type')}
           <select
             value={col.type}
             onChange={event => onType(column, event.target.value as ColType)}
@@ -198,7 +199,7 @@ export const VariableInspector = ({
         </label>
 
         <label className="mt-2 block font-mono text-[8px] uppercase tracking-widest text-text3">
-          Label
+          {t('inspector.label')}
           <input
             value={label}
             onChange={event => setLabel(event.target.value)}
@@ -206,26 +207,26 @@ export const VariableInspector = ({
             onKeyDown={event => {
               if (event.key === 'Enter') event.currentTarget.blur();
             }}
-            placeholder="Shown in tables and pickers"
+            placeholder={t('inspector.labelPlaceholder')}
             className={`${inputClass} mt-1`}
           />
         </label>
 
         <label className="mt-2 block font-mono text-[8px] uppercase tracking-widest text-text3">
-          Description
+          {t('inspector.description')}
           <textarea
             value={description}
             onChange={event => setDescription(event.target.value)}
             onBlur={commitMeta}
             rows={2}
-            placeholder="Optional note"
+            placeholder={t('inspector.descriptionPlaceholder')}
             className={`${inputClass} mt-1 resize-y`}
           />
         </label>
 
         <div className="mt-3">
           <span className="font-mono text-[8px] uppercase tracking-widest text-text3">
-            Formula
+            {t('inspector.formula')}
           </span>
           <div className="mt-1 flex gap-1">
             <input
@@ -236,25 +237,23 @@ export const VariableInspector = ({
                 if (event.key === 'Enter') event.currentTarget.blur();
               }}
               placeholder="e.g. Score_Post - Score_Pre"
-              aria-label="Column formula"
+              aria-label={t('inspector.formula')}
               className={inputClass}
             />
           </div>
           <p className="mt-1 text-[9px] leading-relaxed text-text3">
-            {col.formula
-              ? 'Computed column: recalculated on every edit, references follow renames.'
-              : 'Leave empty for a plain data column.'}
+            {col.formula ? t('inspector.formulaHint') : t('inspector.noFormula')}
           </p>
         </div>
 
         <div className="mt-3">
           <span className="font-mono text-[8px] uppercase tracking-widest text-text3">
-            Missing codes
+            {t('inspector.missingCodes')}
           </span>
           <div className="mt-1.5 flex flex-wrap gap-1">
             {missingCodes.length === 0 ? (
               <p className="text-[10px] leading-relaxed text-text3">
-                No declared codes. Blank cells are always missing.
+                {t('inspector.noMissing')}
               </p>
             ) : (
               missingCodes.map(code => (
@@ -266,7 +265,7 @@ export const VariableInspector = ({
                   <button
                     type="button"
                     onClick={() => removeMissingCode(code)}
-                    aria-label={`Remove missing code ${code}`}
+                    aria-label={`${t('levels.remove')} ${code}`}
                     className="text-text3 hover:text-red"
                   >
                     <X className="h-2.5 w-2.5" />
@@ -283,7 +282,7 @@ export const VariableInspector = ({
                 if (event.key === 'Enter') addMissingCode();
               }}
               placeholder="e.g. -9 or NA"
-              aria-label="Add a missing code"
+              aria-label={t('inspector.addMissing')}
               className={inputClass}
             />
             <button
@@ -291,12 +290,12 @@ export const VariableInspector = ({
               onClick={addMissingCode}
               className="tb-btn shrink-0 px-2 py-1 text-[10px]"
             >
-              Add
+              {t('inspector.add')}
             </button>
           </div>
           {codeExcluded > 0 && (
             <p className="mt-1 text-[9px] text-text3">
-              {codeExcluded} cell{codeExcluded === 1 ? '' : 's'} excluded from analyses.
+              {codeExcluded} {t('inspector.excluded')}
             </p>
           )}
         </div>
@@ -304,20 +303,20 @@ export const VariableInspector = ({
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
             <span className="font-mono text-[8px] uppercase tracking-widest text-text3">
-              Levels
+              {t('inspector.levels')}
             </span>
             <LevelsEditor
               grid={grid}
               column={column}
               onLevels={onLevels}
               onRecode={onRecode}
-              label="Edit levels"
+              label={t('inspector.editLevels')}
               className="tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px]"
             />
           </div>
           {levels.length === 0 ? (
             <p className="mt-1 text-[10px] leading-relaxed text-text3">
-              No declared levels. Open the editor to add labels or a reference.
+              {t('inspector.noLevels')}
             </p>
           ) : (
             <ul className="mt-1.5 max-h-40 space-y-0.5 overflow-auto scrollbar">
@@ -343,8 +342,7 @@ export const VariableInspector = ({
         <div className="mt-3 flex items-start gap-2 rounded border border-border bg-surface3/40 p-2">
           <Info className="mt-0.5 h-3 w-3 shrink-0 text-text3" />
           <p className="text-[9px] leading-relaxed text-text3">
-            The label is stored with the project. Analyses still use the column name in
-            their pickers; this inspector is the single place to review the variable.
+            {t('inspector.info')}
           </p>
         </div>
       </div>
@@ -356,7 +354,7 @@ export const VariableInspector = ({
           className="tb-btn flex flex-1 items-center justify-center gap-1 px-2 py-1 text-[10px]"
         >
           <Copy className="h-3 w-3" />
-          Duplicate
+          {t('inspector.duplicate')}
         </button>
         <button
           type="button"
@@ -364,7 +362,7 @@ export const VariableInspector = ({
           className="tb-btn flex flex-1 items-center justify-center gap-1 px-2 py-1 text-[10px] text-red/90 hover:bg-red hover:text-white"
         >
           <Trash2 className="h-3 w-3" />
-          Delete
+          {t('inspector.delete')}
         </button>
       </div>
     </aside>
