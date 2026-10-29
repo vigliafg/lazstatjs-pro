@@ -35,6 +35,7 @@ import { tdcoxCopy } from './en/tdcox';
 import { timeseriesCopy } from './en/timeseries';
 import { tostCopy } from './en/tost';
 import { ttestCopy } from './en/ttest';
+import { deReportCopy } from './de';
 import { wizardCopy } from './en/wizard';
 
 export const enReportCopy: Record<string, string> = {
@@ -74,6 +75,7 @@ export const enReportCopy: Record<string, string> = {
 
 const CATALOGS: Partial<Record<ReportLocale, Record<string, string>>> = {
   en: enReportCopy,
+  de: deReportCopy,
 };
 
 /** Empty for the source language: `copy()` returns the Italian sentence as-is. */

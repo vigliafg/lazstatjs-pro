@@ -84,12 +84,12 @@ src/ui/analysis/AnalysisHeader.tsx
 | 0 | Censimento e glossario | inventario stringhe, decisioni di prodotto | — | ✅ (censimento eseguito; glossario non ancora come documento) |
 | 1 | Core i18n reattivo | store, `t` con parametri, cataloghi per area, fallback | parità chiavi/placeholder, orfani | ✅ |
 | 2 | UI EN+IT | 738 chiavi, registry, assi dei grafici, export shell | `npm run check` | ✅ |
-| 3 | Report locale-aware | prosa e tabelle per procedura in EN/IT | golden doppi per lingua | ⚠️ infrastruttura e shell fatte, prosa IT-only |
+| 3 | Report locale-aware | prosa e tabelle per procedura in EN/IT | golden doppi per lingua | ✅ meccanismo `reportCopy`, catalogo EN completo (2002 msgid), `REPORT_LOCALES = it, en` |
 | 4 | Menu lingue | sezione Impostazioni + selettore header, persistenza | e2e cambio/persistenza | ✅ |
 | 5 | Infrastruttura manuale | schema, generatore, ricerca, stampa | build del libro | ✅ |
 | 6 | Contenuti manuale | 40 schede × 2 livelli × IT/EN | copertura registry | ✅ |
 | 7 | Integrazione manuale | scheda HELP, popup, deep-link | e2e tab + popup | ✅ |
-| 8 | Ondate di traduzione | FR, ES, DE, PT-PT (UI, report, manuale) | parità + revisione | ⬜ |
+| 8 | Ondate di traduzione | FR, ES, DE, PT-PT (UI, report, manuale) | parità + revisione | ⏳ in corso con un subagente per lingua |
 
 ## Stato di avanzamento (verificato)
 

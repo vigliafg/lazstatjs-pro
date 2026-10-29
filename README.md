@@ -95,7 +95,8 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 ### Written reports
 - Every run of an analysis closes with a **Report di lettura** card: plain-language headline of the outcome, what the test actually does, the reading of each result (difference, effect size, assumptions, non-parametric counterpart), a glossary of the statistics shown and the caveats that apply
 - The text is generated from the computed tables, so it always matches the numbers on screen and follows the selected confidence level (90/95/99%)
-- Report prose is currently written in Italian; the interface, the handbook and the export shells are already multilingual (English + Italian) and the remaining report languages are the next translation wave
+- Report prose and table labels follow the **report language** chosen in Settings (Italian and English today, other languages in later waves); the text is generated from message ids with an Italian source and a per-language catalog, so a missing translation falls back visibly instead of breaking the card
+- Cards already in the console keep the language they were produced in; **Re-run all** regenerates them with the current language
 
 ## Tech Stack
 

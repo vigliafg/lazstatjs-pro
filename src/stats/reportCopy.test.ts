@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { enReportCopy } from './reportCopy/catalog';
+import { catalogFor, enReportCopy } from './reportCopy/catalog';
 import { copy, getReportLocale, withReportLocale } from './reportCopy';
+import { TRANSLATED_REPORT_LOCALES } from './reportCopy/types';
 import { placeholdersOf } from '../i18n/format';
 
 /**
@@ -56,6 +57,22 @@ test('the translation catalog covers every sentence of reports and tables', () =
   assert.deepEqual(missing, [], `missing English copy:\n${missing.join('\n')}`);
 });
 
+test('every translated locale covers the same sentences with the same placeholders', () => {
+  for (const locale of TRANSLATED_REPORT_LOCALES) {
+    if (locale === 'it') continue;
+    const catalog = catalogFor(locale);
+    const missing = SOURCE_IDS.filter(id => !catalog[id]);
+    assert.deepEqual(missing, [], `${locale}: missing copy:\n${missing.join('\n')}`);
+    for (const id of SOURCE_IDS) {
+      assert.deepEqual(
+        placeholdersOf(catalog[id]).sort(),
+        placeholdersOf(id).sort(),
+        `${locale}: placeholders differ for ${id}`
+      );
+    }
+  }
+});
+
 test('the catalog has no extra entry and keeps the placeholders aligned', () => {
   const source = new Set(SOURCE_IDS);
   const orphans = Object.keys(enReportCopy).filter(id => !source.has(id));
@@ -96,7 +113,6 @@ test('an unknown sentence falls back to the Italian source instead of breaking',
 
 test('settings offer exactly the report languages with a complete catalog', async () => {
   const { REPORT_LOCALES } = await import('../i18n/locales');
-  const { TRANSLATED_REPORT_LOCALES } = await import('./reportCopy/types');
   for (const locale of REPORT_LOCALES) {
     assert.ok(
       (TRANSLATED_REPORT_LOCALES as readonly string[]).includes(locale),
