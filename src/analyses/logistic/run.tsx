@@ -11,6 +11,7 @@ import { parseNum } from '../../stats/core';
 import type { Dataset } from '../../grid/types';
 import type { LogisticParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { isFiniteNumber } from '../shared/numbers';
 
 export interface LogisticInput {
   grid: Dataset;
@@ -26,6 +27,9 @@ export const buildLogisticOutput = ({
 }: LogisticInput): AnalysisRunResult => {
   const { outcome, predictors, cutoff, penalized } = params;
 
+  if (!isFiniteNumber(cutoff) || cutoff <= 0 || cutoff >= 1) {
+    return { ok: false, reason: 'Cut-off must be a number between 0 and 1' };
+  }
   if (predictors.length === 0) {
     return { ok: false, reason: 'Select at least one predictor' };
   }

@@ -62,7 +62,7 @@ export function TransformPanel({ grid, onApply }: Props) {
             <option value="asc">{t('data.transform.asc')}</option>
             <option value="desc">{t('data.transform.desc')}</option>
           </select>
-          <button className="tb-btn" onClick={() => onApply(sortByColumn(grid, sortCol, sortDir), `Sorted by ${grid.cols[sortCol]?.name}`)}>{t('data.transform.sort')}</button>
+          <button className="tb-btn" onClick={() => onApply(sortByColumn(grid, sortCol, sortDir), `${t('data.sortedBy')} ${grid.cols[sortCol]?.name}`)}>{t('data.transform.sort')}</button>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export function TransformPanel({ grid, onApply }: Props) {
             className="tb-btn"
             onClick={() => {
               const { grid: next, changed } = recodeColumn(grid, recodeCol, parseMapping());
-              onApply(next, changed === 0 ? 'No values recoded' : `${changed} cells recoded`);
+              onApply(next, changed === 0 ? t('data.transform.noRecoded') : `${changed} ${t('data.transform.cellsRecoded')}`);
             }}
           >
             {t('data.transform.recodeAction')}
@@ -96,7 +96,7 @@ export function TransformPanel({ grid, onApply }: Props) {
             ))}
           </select>
           <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={splitSep} onChange={(e) => setSplitSep(e.target.value)} title={t('data.transform.separator')} />
-          <button className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), 'Column split', 'ok', { kind: 'split', at: splitCol })}>{t('data.transform.split')}</button>
+          <button className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), t('data.transform.columnSplit'), 'ok', { kind: 'split', at: splitCol })}>{t('data.transform.split')}</button>
           <span className="text-text3">|</span>
           <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={mergeA} onChange={(e) => setMergeA(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
@@ -109,7 +109,7 @@ export function TransformPanel({ grid, onApply }: Props) {
             ))}
           </select>
           <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={mergeSep} onChange={(e) => setMergeSep(e.target.value)} title={t('data.transform.separator')} />
-          <button className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), 'Columns merged', 'ok', { kind: 'merge', a: mergeA, b: mergeB })}>{t('data.transform.merge')}</button>
+          <button className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), t('data.transform.columnsMerged'), 'ok', { kind: 'merge', a: mergeA, b: mergeB })}>{t('data.transform.merge')}</button>
         </div>
       </div>
 
@@ -117,19 +117,19 @@ export function TransformPanel({ grid, onApply }: Props) {
         <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.compute')}</span>
         <div className="flex gap-1.5 items-center">
           <input
-            aria-label="Formula expression"
+            aria-label={t('data.formulaExpression')}
             className="bg-surface3 border border-border2 rounded px-2 py-1 w-40 text-text font-mono"
             value={expr}
             onChange={(e) => setExpr(e.target.value)}
           />
           <input
-            aria-label="New column name"
+            aria-label={t('data.newColumnName')}
             className="bg-surface3 border border-border2 rounded px-2 py-1 w-20 text-text"
             value={exprName}
             onChange={(e) => setExprName(e.target.value)}
             placeholder={t('data.transform.name')}
           />
-          <label className="flex items-center gap-1 text-text2" title="Recalculate the column whenever the data changes">
+          <label className="flex items-center gap-1 text-text2" title={t('data.recalcHint')}>
             <input
               type="checkbox"
               className="accent-accent"
@@ -153,7 +153,7 @@ export function TransformPanel({ grid, onApply }: Props) {
                 persistent ? expr : undefined
               );
               if (error) onApply(grid, error, 'error');
-              else onApply(next, `Computed ${exprName}${persistent ? ' (formula)' : ''}`, 'ok');
+              else onApply(next, `${t('data.transform.computed')} ${exprName}${persistent ? ` ${t('data.transform.formulaSuffix')}` : ''}`, 'ok');
             }}
           >
             {t('data.transform.computeAction')}

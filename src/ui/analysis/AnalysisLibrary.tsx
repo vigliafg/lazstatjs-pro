@@ -29,6 +29,7 @@ import {
   type AnalysisMeta,
 } from '../../analyses/registry';
 import { loadFavorites, saveFavorites } from './favorites';
+import { t } from '../../i18n';
 
 const FAMILY_ICONS: Record<AnalysisFamilyId, LucideIcon> = {
   guided: Compass,
@@ -83,9 +84,9 @@ const AnalysisItem = ({
       {meta.cost === 'heavy' && (
         <span
           className="ml-auto shrink-0 rounded border border-yellow/25 bg-yellow/5 px-1 font-mono text-[8px] uppercase tracking-wider text-yellow/80"
-          title="Heavy computation: run explicitly"
+          title={t('analysis.heavyHint')}
         >
-          heavy
+          {t('analysis.heavy')}
         </span>
       )}
     </span>
@@ -96,7 +97,7 @@ const AnalysisItem = ({
   <button
     type="button"
     onClick={() => onToggleFavorite(meta.id)}
-    aria-label={favorite ? `Remove ${meta.label} from favorites` : `Add ${meta.label} to favorites`}
+    aria-label={favorite ? `${t('analysis.favoriteRemove')} ${meta.label} ${t('analysis.favoriteRemoveSuffix')}` : `${t('analysis.favoriteAdd')} ${meta.label} ${t('analysis.favoriteSuffix')}`}
     aria-pressed={favorite}
     className={`absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded ${
       favorite ? 'text-yellow' : 'text-text3/60 opacity-0 group-hover:opacity-100 focus:opacity-100'
@@ -182,32 +183,32 @@ export const AnalysisLibrary = ({
     <div
       id={id}
       tabIndex={-1}
-      aria-label="Analysis library"
+      aria-label={t('analysis.libraryTitle')}
       className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
     >
       <div className="shrink-0 border-b border-border p-3">
         <div className="mb-2 flex items-center justify-between gap-2">
           <div>
             <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-text3">
-              Analysis library
+              {t('analysis.libraryTitle')}
             </p>
             <p className="mt-0.5 flex items-center gap-2 text-[10px] text-text3">
               <span>
                 {normalizedQuery
-                  ? `${count} match${count === 1 ? '' : 'es'}`
-                  : `${ANALYSIS_TABS.length} procedures · ${ANALYSIS_FAMILIES.length} families`}
+                  ? `${count} ${count === 1 ? t('analysis.matchOne') : t('analysis.matchMany')}`
+                  : `${ANALYSIS_TABS.length} ${t('analysis.procedures')} · ${ANALYSIS_FAMILIES.length} ${t('analysis.families')}`}
               </span>
               <button
                 type="button"
                 onClick={() => setAlphabetical(value => !value)}
                 aria-pressed={alphabetical}
-                aria-label="Sort alphabetically"
-                title="Flat A–Z index"
+                aria-label={t('analysis.sortAz')}
+                title={t('analysis.flatAz')}
                 className={`rounded border px-1 font-mono text-[8px] ${
                   alphabetical ? 'border-accent text-accent' : 'border-border2 text-text3'
                 }`}
               >
-                A–Z
+                {t('analysis.az')}
               </button>
             </p>
           </div>
@@ -216,7 +217,7 @@ export const AnalysisLibrary = ({
               type="button"
               onClick={onClose}
               className="tb-btn flex h-6 w-6 items-center justify-center px-0 lg:hidden"
-              aria-label="Close analysis library"
+              aria-label={t('analysis.closeLibrary')}
             >
               <X className="h-3 w-3" />
             </button>
@@ -239,8 +240,8 @@ export const AnalysisLibrary = ({
               }
               if (event.key === 'Escape') setQuery('');
             }}
-            placeholder="Search analyses…"
-            aria-label="Search analyses"
+            placeholder={t('analysis.searchPlaceholder')}
+            aria-label={t('analysis.searchAria')}
             className="w-full rounded border border-border2 bg-surface3 py-1.5 pl-7 pr-7 text-[11px] text-text placeholder:text-text3 focus:border-accent focus:outline-none"
           />
           {query && (
@@ -248,7 +249,7 @@ export const AnalysisLibrary = ({
               type="button"
               onClick={() => setQuery('')}
               className="absolute right-1.5 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
-              aria-label="Clear search"
+              aria-label={t('analysis.clearSearch')}
             >
               <X className="h-3 w-3" />
             </button>
@@ -279,7 +280,7 @@ export const AnalysisLibrary = ({
             <div className="flex items-center gap-1.5 px-2 py-1">
               <Star className="h-3 w-3 text-yellow" fill="currentColor" />
               <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
-                Favorites
+                {t('analysis.favorites')}
               </span>
             </div>
             <div className="space-y-0.5">
@@ -302,7 +303,7 @@ export const AnalysisLibrary = ({
             <div className="flex items-center gap-1.5 px-2 py-1">
               <Clock3 className="h-3 w-3 text-text3" />
               <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
-                Recent
+                {t('analysis.recent')}
               </span>
             </div>
             <div className="space-y-0.5">
@@ -323,7 +324,7 @@ export const AnalysisLibrary = ({
         {flat && (
           <section>
             <div className="mb-1 px-2 font-mono text-[9px] uppercase tracking-widest text-text3">
-              A–Z
+              {t('analysis.az')}
             </div>
             <div className="space-y-0.5">
               {flat.map(meta => (
@@ -384,9 +385,9 @@ export const AnalysisLibrary = ({
 
         {count === 0 && (
           <div className="px-3 py-8 text-center">
-            <p className="text-[11px] text-text2">No analysis found.</p>
+            <p className="text-[11px] text-text2">{t('analysis.noResults')}</p>
             <p className="mt-1 text-[10px] text-text3">
-              Try a model name, a data problem or a keyword.
+              {t('analysis.noResultsHint')}
             </p>
           </div>
         )}
@@ -394,9 +395,9 @@ export const AnalysisLibrary = ({
 
       <div
         className="shrink-0 border-t border-border px-3 py-2 font-mono text-[9px] uppercase tracking-wider text-text3"
-        title="Ctrl/Cmd+K: search · Ctrl/Cmd+Enter: run"
+        title={t('analysis.shortcutTitle')}
       >
-        Ctrl/⌘K search
+        {t('analysis.shortcutSearch')}
       </div>
     </div>
   );

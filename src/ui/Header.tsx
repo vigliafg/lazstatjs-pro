@@ -20,7 +20,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
     <button
       onClick={() => setActiveTab('data')}
       className={`main-tab ${activeTab === 'data' ? 'active' : ''}`}
-      title="Data editor"
+      title={t('header.dataTitle')}
     >
       <Database className="mr-2 inline h-3 w-3" />
       {t('nav.data')}
@@ -28,7 +28,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
     <button
       onClick={() => setActiveTab('analysis')}
       className={`main-tab ${activeTab === 'analysis' ? 'active' : ''}`}
-      title="Analysis workbench"
+      title={t('header.analysisTitle')}
     >
       <BarChart3 className="mr-2 inline h-3 w-3" />
       {t('nav.analysis')}
@@ -36,7 +36,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
     <button
       onClick={() => setActiveTab('settings')}
       className={`main-tab ${activeTab === 'settings' ? 'active' : ''}`}
-      title="Settings"
+      title={t('header.settingsTitle')}
     >
       <Settings className="mr-2 inline h-3 w-3" />
       {t('nav.settings')}
@@ -44,7 +44,7 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
     <button
       onClick={() => setActiveTab('help')}
       className={`main-tab ${activeTab === 'help' ? 'active' : ''}`}
-      title="Help and examples"
+      title={t('header.helpTitle')}
     >
       <HelpCircle className="mr-2 inline h-3 w-3" />
       {t('nav.help')}

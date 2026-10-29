@@ -15,12 +15,13 @@ workbench in tre zone:
 2. **Setup** — parametri della procedura attiva e Run.
 3. **Output** — documento a schede con outline, collapse e salto al Setup.
 
-La scoperta delle procedure e la configurazione sono ora allineate al flusso
-mentale dell'utente. L'iterazione non lo è ancora: manca il ciclo completo
-*rileggi la card → applica i suoi parametri → cambia i dati → rilancia*.
+La scoperta, la configurazione e l'iterazione sono ora allineate al flusso
+mentale dell'utente: *rileggi la card → applica i suoi parametri → cambia i
+dati → rilancia* è chiuso da UI-01.
 
-**Valutazione sintetica: 8/10 come primo blocco di ricostruzione.**
-Architettura giusta, esecuzione solida, iterazione incompleta.
+**Valutazione sintetica: 8.5/10.** Architettura giusta, esecuzione solida,
+iterazione chiusa; restano debiti di accessibilità, performance full-grid e
+messaggi di dominio.
 
 ## 2. Com'è fatta la UI oggi
 
@@ -102,21 +103,21 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 
 | File | Ruolo | Righe |
 |---|---|---|
-| `src/ui/AnalysisTab.tsx` | Shell del workbench, pane, focus, scorciatoie | ~220 |
-| `src/ui/analysis/AnalysisLibrary.tsx` | Libreria, ricerca, famiglie, recenti, badge | ~274 |
-| `src/ui/analysis/AnalysisOptions.tsx` | Setup, CI, switch sui 31 form, Run | ~417 |
-| `src/ui/analysis/types.ts` | Contratto `AnalysisTabProps` | ~123 |
+| `src/ui/AnalysisTab.tsx` | Shell del workbench, pane, focus, scorciatoie | 246 |
+| `src/ui/analysis/AnalysisLibrary.tsx` | Libreria, ricerca, famiglie, recenti, badge | 404 |
+| `src/ui/analysis/AnalysisOptions.tsx` | Setup, CI, switch sui 31 form, Run | 645 |
+| `src/ui/analysis/types.ts` | Contratto `AnalysisTabProps` | 49 |
 | `src/ui/analysis/useRecentAnalyses.ts` | Recenti in `localStorage` | ~39 |
-| `src/ui/OutputConsole.tsx` | Documento output, card, outline, azioni | ~298 |
-| `src/analyses/registry.ts` | Metadati UI + registro analisi | ~354 |
+| `src/ui/OutputConsole.tsx` | Documento output, card, outline, azioni | 448 |
+| `src/analyses/registry.ts` | Metadati UI + registro analisi | 380 |
 | `src/io/outputs.ts` | Snapshot + `analysisId` | invariato nella sostanza |
 | `src/io/project/index.ts` | Persistenza `analysisId` | invariato nella sostanza |
 | `src/index.css` | Card output, Run, focus ring, header | modificato |
 | `src/help/helpContent.ts` | Help allineato al workbench | aggiornato |
 
-I 31 form non sono stati riscritti: sono il contenuto del pannello Setup. Questo
-ha tenuto basso il rischio, ma significa che la struttura interna dei form è
-ancora quella di prima.
+I 31 form sono stati migrati alle primitive condivise, senza riscrivere i
+kernel: il pannello Setup resta lo stesso contenitore e il rischio è rimasto
+basso.
 
 ## 4. Cosa è completo
 
@@ -170,10 +171,10 @@ ancora quella di prima.
 3. **Form system completo.** Tutti i 31 pannelli usano le primitive condivise
    (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`,
    `CheckboxField`).
-4. **i18n del chrome.** Shell, form, editor dati e dialoghi passano da
-   `src/i18n.ts`. Restano fuori solo i nomi propri dei metodi statistici
-   (Tukey, Bonferroni, …) e il contenuto di help/report, che è prosa italiana
-   per scelta editoriale.
+4. **i18n della chrome statica.** Shell, form, editor dati, dialoghi e
+   messaggi di toast passano da `src/i18n.ts`. Restano fuori perimetro: il
+   catalogo delle analisi (label/descrizioni), help e report (prosa italiana),
+   i messaggi di dominio dei kernel e i sentinel dei titoli output.
 5. **Preferiti locali.** Il ranking è per parole (non fuzzy) e i preferiti
    vivono in `localStorage`.
 6. **Settings senza recent cliccabili.** I progetti recenti sono un elenco di
@@ -199,21 +200,21 @@ Priorità:
 |---|---|---|---|---|
 | **UI-01** | P0 | Iteration loop: parametri nella card, re-run, apply | **Fatto** | `params`/`paramsSignature` nello snapshot; Re-run e Apply nella card; stale anche sui parametri |
 | **UI-02** | P0 | Store context/reducer e riduzione props | **Fatto** | `ui/analysis/store.tsx`; 88 → 38 props; `applyAnalysisAction` testato |
-| **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 7 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria |
+| **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 8 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria, CI/stale |
 | **UI-04** | P2 | Live-run `instant` con debounce e stato | **Fatto** | Toggle Live, 500 ms, card unica sostituita, indicatore “syncing” |
 | **UI-05** | P2 | Output workspace: filtro, pin, copia, conferma Clear | **Fatto** | Filtro per analisi, pin in cima, copia card, conferma su Clear |
 | **UI-06** | P2 | Form system condiviso | **Fatto** | `Field`, `Section`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`; **tutti i 31 form** migrati |
 | **UI-07** | P2 | Responsive/a11y | **Fatto** | Footer mobile, focus dei pannelli, `aria-live`, libreria nascosta sotto 1280 px |
 | **UI-08** | P3 | Ricerca con ranking, preferiti, A–Z, tastiera | **Fatto** | Punteggio per label/keyword/descrizione, preferiti, indice piatto, frecce/Home/End |
 | **UI-09** | P3 | Settings e progetto | **Fatto** | Rimossi i controlli demo; azioni di sessione; elenco progetti recenti |
-| **UI-10** | P3 | i18n | **Fatto** | Lingua UI = inglese; tutte le stringhe di chrome (shell, form, editor dati, dialoghi) in `src/i18n.ts`; help e report restano contenuto italiano |
+| **UI-10** | P3 | i18n | **Fatto (chrome statica)** | Lingua UI = inglese; chrome statica di shell, form, editor dati, dialoghi e toast in `src/i18n.ts`; catalogo, help/report e messaggi di dominio restano contenuto, per scelta esplicita |
 | **UI-11** | P3 | Code splitting | **Fatto** | `AnalysisTab`, help, import/export e runners lazy; chunk vendor separati; nessun warning >500 kB |
 
 ### Esito
 
-Tutti i blocchi sono chiusi o parziali come indicato. I residui (form non
-migrati, i18n dei form, preferiti locali) sono miglioramenti incrementali, non
-prerequisiti.
+Tutti i blocchi sono chiusi. Restano fuori perimetro il catalogo delle
+analisi, help/report e i messaggi di dominio; i preferiti restano locali al
+browser per scelta.
 
 ## 7. Criteri di accettazione
 
@@ -238,8 +239,8 @@ prerequisiti.
 - **Il live-run può bloccare il thread** perché i kernel sono sincroni. Senza
   worker, va limitato alle analisi davvero economiche e con debounce.
 - **I test UI richiedono Playwright e un browser in CI.** È una dipendenza nuova.
-- **La UI può sembrare una vetrina senza il loop di iterazione.** UI-01 è il
-  confine tra "bella navigazione" e "flusso di lavoro completo".
+- **Il costo full-grid va tenuto sotto controllo.** Footer, validazione e
+  scansioni delle righe non devono tornare a bloccare il typing a 50k righe.
 
 ## 9. Prossima fase: inserimento ed editing dei dati
 

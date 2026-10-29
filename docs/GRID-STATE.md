@@ -103,10 +103,12 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 - `useGridHistory` espone `revision`, incrementata su commit/undo/redo/reset.
 - Ogni run salva `dataRevision`, `datasetId` e `filterSignature` nella card
   (solo in sessione).
-- Una card è `stale` se revision, dataset o firma del filtro non coincidono.
-- Gli output ripristinati da `.lzs` non hanno questi campi e non vengono
-  marcati stale.
-- Cambiare i parametri non marca la card stale.
+- Una card è `stale` se revision, dataset, firma del filtro, firma dei
+  parametri o livello di confidenza non coincidono.
+- Gli output ripristinati da `.lzs` non hanno revision/dataset/filtro e non
+  vengono marcati stale; il CI e i parametri salvati vengono comunque usati dal
+  re-run.
+- Cambiare i parametri o il CI marca la card stale.
 
 ### 3.5 Ruoli invalidi
 
@@ -196,11 +198,11 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 
 ## 5. Verifica
 
-- `npm run check`: **419 test verdi**, dependency-cruiser, madge e file-size
-  guard ok.
-- `npm run build`: ok (resta il warning Vite >500 kB).
-- `npm run test:e2e`: 9 test, 2 progetti (desktop esegue tutti i flussi, mobile
-  esegue caricamento e undo). Coprono:
+- `npm run check`: **446 test verdi**, dependency-cruiser, madge e file-size
+  guard ok (3 eccezioni statiche: help, arima, dizionario i18n).
+- `npm run build`: ok, nessun warning >500 kB.
+- `npm run test:e2e`: **24 passed, 18 skipped**, 2 progetti (desktop esegue
+  tutti i flussi, mobile quelli compatibili). Coprono:
   - caricamento della griglia seed, edit + undo;
   - missing code dall'inspector;
   - assegnazione a un ruolo non primario;
@@ -208,24 +210,26 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
   - paste di 500 righe, virtualizzazione e scroll all'ultima riga;
   - formula persistente ricalcolata dopo un edit;
   - fill down da tastiera + undo;
-  - overwrite multi-cella.
+  - overwrite multi-cella;
+  - New confermato + reset del filtro;
+  - paste con riga vuota interna;
+  - jump a una cella nascosta dal filtro.
 
 ## 6. Limiti noti
 
 1. **Stale solo in sessione.** Dopo reload le card ripristinate non hanno
-   revision/dataset/filter e non vengono marcate.
-2. **Parametri non contano per lo stale.** Cambiare un parametro non invalida
-   la card; cambia solo dati, dataset o filtro.
-3. **Invalidati non recuperati dall'undo.** Undo riporta la colonna, ma il
+   revision/dataset/filtro e non vengono marcate stale, anche se il CI e i
+   parametri salvati sono usati dal re-run.
+2. **Invalidati non recuperati dall'undo.** Undo riporta la colonna, ma il
    ruolo resta `-1` e va riselezionato.
-4. **Formule ricalcolate solo sugli edit.** Un progetto caricato mostra i
+3. **Formule ricalcolate solo sugli edit.** Un progetto caricato mostra i
    valori salvati finché non si modifica la griglia; nessun ricalcolo
    automatico al load.
-5. **Missing code per colonna, non per dataset.** Non esiste un elenco
+4. **Missing code per colonna, non per dataset.** Non esiste un elenco
    globale di codici né un report esportabile delle esclusioni per variabile.
-6. **Virtualizzazione a altezza fissa.** Cambiare il padding delle righe
+5. **Virtualizzazione a altezza fissa.** Cambiare il padding delle righe
    richiede di aggiornare `ROW_HEIGHT` in `src/grid/virtual.ts`.
-7. **Smoke automatici, non suite completa.** I flussi con modali (import,
+6. **Smoke automatici, non suite completa.** I flussi con modali (import,
    export, livelli, ricodifica) restano a verifica manuale.
 
 ## 7. Prossimi passi

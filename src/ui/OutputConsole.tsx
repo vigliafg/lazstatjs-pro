@@ -17,7 +17,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { analysisLabel, analysisMeta } from '../analyses/registry';
-import { sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
+import { isOutputStale, sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
 import { copyText } from '../io/clipboard';
 import { t } from '../i18n';
 
@@ -58,6 +58,7 @@ export interface OutputConsoleProps {
   currentRevision?: number;
   currentDatasetId?: string;
   currentFilterSignature?: string;
+  currentCiLevel?: number;
 }
 
 const formatTime = (iso: string): string => {
@@ -70,7 +71,7 @@ const formatTime = (iso: string): string => {
 const outlineLabel = (entry: OutputEntry, index: number): string => {
   if (entry.title && entry.title !== 'Analysis output') return entry.title;
   if (entry.analysisId) return analysisLabel(entry.analysisId);
-  return `Result ${index + 1}`;
+  return `${t('output.result')} ${index + 1}`;
 };
 
 const actionClass =
@@ -97,6 +98,7 @@ export const OutputConsole = ({
   currentRevision,
   currentDatasetId,
   currentFilterSignature,
+  currentCiLevel,
 }: OutputConsoleProps) => {
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
   const [pinned, setPinned] = useState<Set<string>>(() => new Set());
@@ -143,7 +145,7 @@ export const OutputConsole = ({
   };
 
   const confirmClear = () => {
-    if (window.confirm('Clear every result block?')) onClear();
+    if (window.confirm(t('output.confirmClear'))) onClear();
   };
 
   const jumpTo = (id: string) => {
@@ -162,7 +164,7 @@ export const OutputConsole = ({
     <div
       id={id}
       tabIndex={-1}
-      aria-label="Analysis output"
+      aria-label={t('output.aria')}
       className="flex h-full min-h-0 w-full flex-col bg-bg outline-none"
     >
       <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border bg-surface px-3 py-1.5">
@@ -172,16 +174,16 @@ export const OutputConsole = ({
             {t('output.title')}
           </span>
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
-            {outputs.length} run{outputs.length === 1 ? '' : 's'}
+            {outputs.length} {outputs.length === 1 ? t('output.runOne') : t('output.runMany')}
           </span>
           {analysisIds.length > 1 && (
             <select
-              aria-label="Filter results by analysis"
+              aria-label={t('output.filterBy')}
               value={filterId}
               onChange={event => setFilterId(event.target.value)}
               className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 text-[10px] text-text2"
             >
-              <option value="all">All analyses</option>
+              <option value="all">{t('output.allAnalyses')}</option>
               {analysisIds.map(id => (
                 <option key={id} value={id}>
                   {analysisLabel(id)}
@@ -195,8 +197,8 @@ export const OutputConsole = ({
             type="button"
             className={actionClass}
             onClick={onBackToData}
-            title="Open the data editor"
-            aria-label="Open the data editor"
+            title={t('output.openDataTitle')}
+            aria-label={t('output.openDataTitle')}
           >
             <Database className="h-3 w-3" />
             <span className="hidden xl:inline">{t('output.data')}</span>
@@ -206,8 +208,8 @@ export const OutputConsole = ({
             className={actionClass}
             onClick={confirmClear}
             disabled={outputs.length === 0}
-            title="Clear every result block"
-            aria-label="Clear every result block"
+            title={t('output.clearAll')}
+            aria-label={t('output.clearAll')}
           >
             <Trash2 className="h-3 w-3" />
             <span className="hidden xl:inline">{t('output.clear')}</span>
@@ -217,8 +219,8 @@ export const OutputConsole = ({
             className={actionClass}
             onClick={onCopy}
             disabled={outputs.length === 0}
-            title="Copy the output as text"
-            aria-label="Copy the output as text"
+            title={t('output.copyText')}
+            aria-label={t('output.copyText')}
           >
             <Copy className="h-3 w-3" />
             <span className="hidden xl:inline">{t('output.copy')}</span>
@@ -228,8 +230,8 @@ export const OutputConsole = ({
             className={actionClass}
             onClick={onExportCharts}
             disabled={outputs.length === 0}
-            title="Download every chart as PNG"
-            aria-label="Download every chart as PNG"
+            title={t('output.chartsHint')}
+            aria-label={t('output.chartsHint')}
           >
             <Image className="h-3 w-3" />
             <span className="hidden xl:inline">{t('output.charts')}</span>
@@ -239,8 +241,8 @@ export const OutputConsole = ({
             className={actionClass}
             onClick={onExportReport}
             disabled={outputs.length === 0}
-            title="Download a printable HTML report"
-            aria-label="Download a printable HTML report"
+            title={t('output.reportHint')}
+            aria-label={t('output.reportHint')}
           >
             <FileCode2 className="h-3 w-3" />
             <span className="hidden xl:inline">{t('output.report')}</span>
@@ -250,8 +252,8 @@ export const OutputConsole = ({
             className={actionClass}
             onClick={onExportXlsx}
             disabled={outputs.length === 0}
-            title="Download the dataset and result tables as Excel"
-            aria-label="Download the dataset and result tables as Excel"
+            title={t('output.xlsxHint')}
+            aria-label={t('output.xlsxHint')}
           >
             <Table2 className="h-3 w-3" />
             <span className="hidden xl:inline">{t('output.xlsx')}</span>
@@ -265,7 +267,7 @@ export const OutputConsole = ({
           data-no-print
         >
           <span className="shrink-0 pr-1 font-mono text-[8px] uppercase tracking-[0.18em] text-text3">
-            Outline
+            {t('output.outline')}
           </span>
           {outputs.map((entry, index) => (
             <button
@@ -294,7 +296,7 @@ export const OutputConsole = ({
             <FileText className="h-10 w-10" />
             <p className="font-mono text-[11px] uppercase tracking-widest">{t('output.empty')}</p>
             <p className="max-w-xs text-center text-[10px] leading-relaxed">
-              Choose a procedure from the library, set the variables, then run it.
+              {t('output.emptyHint')}
             </p>
           </div>
         ) : (
@@ -310,21 +312,17 @@ export const OutputConsole = ({
               const isCollapsed = collapsed.has(output.id);
               const title = output.analysisId
                 ? analysisLabel(output.analysisId)
-                : `Result ${index + 1}`;
-              const stale =
-                (output.dataRevision !== undefined &&
-                  currentRevision !== undefined &&
-                  output.dataRevision !== currentRevision) ||
-                (output.datasetId !== undefined &&
-                  currentDatasetId !== undefined &&
-                  output.datasetId !== currentDatasetId) ||
-                (output.filterSignature !== undefined &&
-                  currentFilterSignature !== undefined &&
-                  output.filterSignature !== currentFilterSignature) ||
-                (output.paramsSignature !== undefined &&
-                  output.analysisId !== undefined &&
-                  paramsSignatureFor !== undefined &&
-                  output.paramsSignature !== paramsSignatureFor(output.analysisId));
+                : `${t('output.result')} ${index + 1}`;
+              const stale = isOutputStale(output, {
+                dataRevision: currentRevision,
+                datasetId: currentDatasetId,
+                filterSignature: currentFilterSignature,
+                paramsSignature:
+                  output.analysisId && paramsSignatureFor
+                    ? paramsSignatureFor(output.analysisId)
+                    : undefined,
+                ciLevel: currentCiLevel,
+              });
               return (
                 <article
                   key={output.id}
@@ -339,7 +337,7 @@ export const OutputConsole = ({
                       type="button"
                       onClick={() => toggle(output.id)}
                       aria-expanded={!isCollapsed}
-                      aria-label={isCollapsed ? 'Expand result' : 'Collapse result'}
+                      aria-label={isCollapsed ? t('output.expand') : t('output.collapse')}
                       className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
                     >
                       {isCollapsed ? (
@@ -357,9 +355,9 @@ export const OutputConsole = ({
                     {stale && (
                       <span
                         className="shrink-0 rounded border border-yellow/30 bg-yellow/10 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-yellow"
-                        title="The grid changed after this result was produced"
+                        title={t('output.staleTitle')}
                       >
-                        stale
+                        {t('output.stale')}
                       </span>
                     )}
                     {output.title !== 'Analysis output' && (
@@ -371,8 +369,8 @@ export const OutputConsole = ({
                       type="button"
                       onClick={() => togglePin(output.id)}
                       className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
-                      title={pinned.has(output.id) ? 'Unpin this result' : 'Pin this result to the top'}
-                      aria-label={pinned.has(output.id) ? 'Unpin result' : 'Pin result'}
+                      title={pinned.has(output.id) ? t('output.unpinTitle') : t('output.pinTitle')}
+                      aria-label={pinned.has(output.id) ? t('output.unpin') : t('output.pin')}
                     >
                       {pinned.has(output.id) ? <PinOff className="h-3 w-3" /> : <Pin className="h-3 w-3" />}
                     </button>
@@ -380,8 +378,8 @@ export const OutputConsole = ({
                       type="button"
                       onClick={() => void copyCard(output)}
                       className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
-                      title="Copy this result card"
-                      aria-label="Copy result card"
+                      title={t('output.copyCardTitle')}
+                      aria-label={t('output.copyCard')}
                     >
                       {copiedId === output.id ? <Check className="h-3 w-3 text-green" /> : <Copy className="h-3 w-3" />}
                     </button>
@@ -390,11 +388,11 @@ export const OutputConsole = ({
                         type="button"
                         onClick={() => onRerun(output)}
                         className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
-                        title="Run this analysis again with the parameters saved in this card"
-                        aria-label="Re-run with saved parameters"
+                        title={t('output.rerunTitle')}
+                        aria-label={t('output.rerunAria')}
                       >
                         <RotateCcw className="h-3 w-3" />
-                        <span className="hidden xl:inline">Re-run</span>
+                        <span className="hidden xl:inline">{t('output.rerun')}</span>
                       </button>
                     )}
                     {output.analysisId && output.params !== undefined && onApplyParams && (
@@ -402,11 +400,11 @@ export const OutputConsole = ({
                         type="button"
                         onClick={() => onApplyParams(output)}
                         className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
-                        title="Load this card's parameters into the setup panel"
-                        aria-label="Apply parameters to setup"
+                        title={t('output.applyTitle')}
+                        aria-label={t('output.applyAria')}
                       >
                         <ClipboardCheck className="h-3 w-3" />
-                        <span className="hidden xl:inline">Apply</span>
+                        <span className="hidden xl:inline">{t('output.apply')}</span>
                       </button>
                     )}
                     {output.analysisId && analysisMeta(output.analysisId) && onOpenAnalysis && (
@@ -414,19 +412,19 @@ export const OutputConsole = ({
                         type="button"
                         onClick={() => onOpenAnalysis(output.analysisId as string)}
                         className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
-                        title="Open the setup of this analysis"
-                        aria-label="Open the setup of this analysis"
+                        title={t('output.setupTitle')}
+                        aria-label={t('output.setupAria')}
                       >
                         <SlidersHorizontal className="h-3 w-3" />
-                        <span className="hidden xl:inline">Setup</span>
+                        <span className="hidden xl:inline">{t('output.setup')}</span>
                       </button>
                     )}
                     <button
                       type="button"
                       onClick={() => onRemove(index)}
                       className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-text3 hover:bg-red hover:text-white"
-                      title="Remove this result"
-                      aria-label="Remove this result block"
+                      title={t('output.remove')}
+                      aria-label={t('output.removeAria')}
                     >
                       <Trash2 className="h-3 w-3" />
                     </button>

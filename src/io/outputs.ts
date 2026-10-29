@@ -29,8 +29,43 @@ export interface StoredOutput {
   params?: unknown;
   /** Signature of those parameters, used for the params-stale badge. */
   paramsSignature?: string;
+  /** Confidence level used by the run (global setting at that moment). */
+  ciLevel?: number;
   html: string;
 }
+
+/** Fields that decide whether a card still matches the current session. */
+export interface OutputFreshness {
+  dataRevision?: number;
+  datasetId?: string;
+  filterSignature?: string;
+  paramsSignature?: string;
+  ciLevel?: number;
+}
+
+/**
+ * A card is stale when any setting that produced it changed. Optional fields
+ * are skipped on both sides so old projects (without the metadata) stay valid.
+ */
+export const isOutputStale = (
+  output: OutputFreshness,
+  current: OutputFreshness
+): boolean =>
+  (output.dataRevision !== undefined &&
+    current.dataRevision !== undefined &&
+    output.dataRevision !== current.dataRevision) ||
+  (output.datasetId !== undefined &&
+    current.datasetId !== undefined &&
+    output.datasetId !== current.datasetId) ||
+  (output.filterSignature !== undefined &&
+    current.filterSignature !== undefined &&
+    output.filterSignature !== current.filterSignature) ||
+  (output.paramsSignature !== undefined &&
+    current.paramsSignature !== undefined &&
+    output.paramsSignature !== current.paramsSignature) ||
+  (output.ciLevel !== undefined &&
+    current.ciLevel !== undefined &&
+    output.ciLevel !== current.ciLevel);
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -97,6 +132,9 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
         : {}),
       ...(typeof raw.paramsSignature === 'string' && raw.paramsSignature.length <= 2048
         ? { paramsSignature: raw.paramsSignature }
+        : {}),
+      ...(typeof raw.ciLevel === 'number' && Number.isFinite(raw.ciLevel) && raw.ciLevel > 0 && raw.ciLevel < 100
+        ? { ciLevel: raw.ciLevel }
         : {}),
       html,
     });

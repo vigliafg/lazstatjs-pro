@@ -124,7 +124,7 @@ export function ExportDialog({ grid, onClose, onExport }: Props) {
           </label>
         </div>
         <div className="px-4 py-2 text-[10px] font-mono text-text3 border-t border-border">
-          {rows.length} rows ({nonEmptyRowCount(grid.rows)} non-empty) x {grid.cols.length} cols → {main?.fileName ?? 'lazstats.xlsx'}
+          {rows.length} {t('output.rows')} ({nonEmptyRowCount(grid.rows)} {t('io.nonEmpty')}) x {grid.cols.length} {t('output.columns')} → {main?.fileName ?? 'lazstats.xlsx'}
           {format === 'spss' && <span> + lazstats.sps</span>}
         </div>
         <pre className="mx-4 mb-2 p-2 bg-surface3/40 border border-border rounded text-[10px] font-mono text-text2 overflow-auto max-h-40 scrollbar whitespace-pre-wrap">{preview}</pre>

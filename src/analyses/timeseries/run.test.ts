@@ -44,3 +44,16 @@ test('time-series builder validates the series length and period', () => {
   assert.ok('reason' in invalidHorizon);
   if ('reason' in invalidHorizon) assert.match(invalidHorizon.reason, /forecast horizon/);
 });
+
+test('time-series builder rejects non-finite period and horizon', () => {
+  for (const period of [Number.NaN, Number.POSITIVE_INFINITY]) {
+    const result = buildTimeSeriesOutput({ ...base, params: { ...base.params, period } });
+    assert.ok('reason' in result);
+    if ('reason' in result) assert.match(result.reason, /seasonal period/);
+  }
+  for (const horizon of [Number.NaN, Number.POSITIVE_INFINITY]) {
+    const result = buildTimeSeriesOutput({ ...base, params: { ...base.params, horizon } });
+    assert.ok('reason' in result);
+    if ('reason' in result) assert.match(result.reason, /forecast horizon/);
+  }
+});

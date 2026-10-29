@@ -12,6 +12,7 @@ import type { GridData } from '../grid/types';
 import type { ReportSpec } from '../stats/report';
 import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
 import type { Toast } from './useToasts';
+import { t } from '../i18n';
 
 interface UseOutputConsoleOptions {
   /** Blocchi ripristinati dal progetto/autosave. */
@@ -62,6 +63,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       filterSignature?: string;
       params?: unknown;
       paramsSignature?: string;
+      ciLevel?: number;
       live?: boolean;
     }
   ) => {
@@ -88,6 +90,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       ...(meta?.filterSignature ? { filterSignature: meta.filterSignature } : {}),
       ...(meta?.params !== undefined ? { params: meta.params } : {}),
       ...(meta?.paramsSignature ? { paramsSignature: meta.paramsSignature } : {}),
+      ...(meta?.ciLevel !== undefined ? { ciLevel: meta.ciLevel } : {}),
       ...(meta?.live ? { live: true } : {}),
       html,
       node: block,
@@ -104,12 +107,12 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
 
   const clearOutput = () => {
     setOutputs([]);
-    showToast('Output', 'Output console cleared', 'ok');
+    showToast(t('toast.output'), t('output.cleared'), 'ok');
   };
 
   const removeOutput = (index: number) => {
     setOutputs(prev => prev.filter((_, i) => i !== index));
-    showToast('Output', 'Result block removed', 'ok');
+    showToast(t('toast.output'), t('output.removed'), 'ok');
   };
 
   const copyOutput = async () => {
@@ -126,7 +129,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     const text = clone.innerText;
     clone.remove();
     const ok = await copyText(text);
-    showToast('Output', ok ? 'Output copied to clipboard' : 'Could not copy the output', ok ? 'ok' : 'error');
+    showToast(t('toast.output'), ok ? t('output.copied') : t('output.copyFailed'), ok ? 'ok' : 'error');
   };
 
   const exportChartPngs = async () => {
@@ -134,11 +137,11 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     if (!el) return;
     const result = await exportChartsAsPng(el, 'lazstats-chart');
     if (result.exported === 0 && result.failed === 0) {
-      showToast('Charts', 'No charts in the output console yet', 'warn');
+      showToast(t('toast.charts'), t('output.noCharts'), 'warn');
     } else if (result.failed > 0) {
-      showToast('Charts', `${result.exported} chart(s) exported, ${result.failed} failed`, 'warn');
+      showToast(t('toast.charts'), `${result.exported} ${t('output.chartsPartial')} ${result.failed} ${t('output.failed')}`, 'warn');
     } else {
-      showToast('Charts', `${result.exported} chart(s) exported as PNG`, 'ok');
+      showToast(t('toast.charts'), `${result.exported} ${t('output.chartsExported')}`, 'ok');
     }
   };
 
@@ -149,9 +152,9 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
       const { buildResultsWorkbookFromElement, XLSX_MIME } = await import('../io/xlsx');
       const bytes = buildResultsWorkbookFromElement(el, grid);
       downloadBytes(bytes, 'lazstats-risultati.xlsx', XLSX_MIME);
-      showToast('Export', 'Workbook .xlsx con il dataset e le tabelle dei risultati', 'ok');
+      showToast(t('toast.export'), t('output.xlsxReady'), 'ok');
     } catch (error) {
-      showToast('Export', error instanceof Error ? error.message : 'Could not build the workbook', 'error');
+      showToast(t('toast.export'), error instanceof Error ? error.message : t('output.xlsxError'), 'error');
     }
   };
 
@@ -159,12 +162,12 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     const el = document.getElementById('output-content');
     if (!el) return;
     const html = buildReportFromElement(el, {
-      title: 'LazStats JS — Analysis Report',
+      title: t('output.reportTitle'),
       generatedAt: new Date().toLocaleString(),
-      details: [`${nonEmptyRowCount(grid.rows)} rows`, `${grid.cols.length} columns`, `CI ${ciLevel}%`],
+      details: [`${nonEmptyRowCount(grid.rows)} ${t('output.rows')}`, `${grid.cols.length} ${t('output.columns')}`, `${t('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.html', 'text/html;charset=utf-8');
-    showToast('Report', 'Printable report downloaded — open it and print to PDF', 'ok');
+    showToast(t('toast.report'), t('output.reportReady'), 'ok');
   };
 
   return {

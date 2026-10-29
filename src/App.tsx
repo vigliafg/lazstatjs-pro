@@ -31,6 +31,7 @@ const AnalysisTab = lazy(() =>
   import('./ui/AnalysisTab').then(module => ({ default: module.AnalysisTab }))
 );
 import { ANALYSIS_TABS } from './analyses/registry';
+import { t } from './i18n';
 import { maskMissingCodes } from './grid/types';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import { createDefaultGrid } from './grid/defaults';
@@ -141,7 +142,12 @@ export default function App() {
   // fixes cells instead of showing stale indexes.
   useEffect(() => {
     if (!validation.ran) return;
-    setValidation({ ran: true, issues: gridFindInvalid(grid) });
+    // Recompute after the user pauses: a full scan on every keystroke makes
+    // large grids unusable while the validation bar stays open.
+    const timer = setTimeout(() => {
+      setValidation({ ran: true, issues: gridFindInvalid(grid) });
+    }, 250);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grid]);
   const [validation, setValidation] = useState<{ ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] }>({
@@ -173,6 +179,12 @@ export default function App() {
     setGrid((prev) => gridAddRow(prev));
   };
 
+  /** Replacing the dataset cannot be undone, so it always asks first. */
+  const newDataset = () => {
+    if (!window.confirm(t('data.confirmNew'))) return;
+    replaceDataset(gridNewGrid());
+  };
+
 
   function replaceDataset(next: GridData) {
     resetGridHistory(next);
@@ -182,7 +194,12 @@ export default function App() {
     setValidation({ ran: false, issues: [] });
     setFocusedColumn(null);
     setFilterAffectsAnalysis(false);
-    showToast('Dataset', 'Parameters reset and previous results cleared', 'ok');
+    // A view filter from the previous dataset would hide the new rows.
+    setShowFilter(false);
+    setFilterValue('');
+    setFilterOp('contains');
+    setFilterCol(0);
+    showToast(t('toast.dataset'), t('data.replaceDone'), 'ok');
   }
 
   const updateCell = (r: number, c: number, val: string) => {
@@ -224,12 +241,12 @@ export default function App() {
     setGrid(result.grid);
     setValidation((v) => ({ ...v, ran: false }));
     showToast(
-      'Recode',
-      `${result.changed} cells recoded${
-        result.merged > 0 ? `, ${result.merged} group${result.merged === 1 ? '' : 's'} merged` : ''
+      t('recode.title'),
+      `${result.changed} ${t('recode.cells')}${
+        result.merged > 0 ? `, ${result.merged} ${t('recode.merged')}` : ''
       }${
-        result.cleared > 0 ? `, ${result.cleared} cells cleared` : ''
-      }${result.typeChangedTo ? ` · column type → ${result.typeChangedTo}` : ''}`,
+        result.cleared > 0 ? `, ${result.cleared} ${t('recode.cleared')}` : ''
+      }${result.typeChangedTo ? ` · ${t('recode.typeChanged')} → ${result.typeChangedTo}` : ''}`,
       'ok'
     );
   };
@@ -279,22 +296,22 @@ export default function App() {
   const assignPrimary = (column: number) => {
     const result = setPrimaryColumn(activeAnalysis, params, column);
     if (!result) {
-      showToast('Analysis', 'This procedure has no primary column role', 'warn');
+      showToast(t('toast.analysis'), t('analysis.noPrimaryRole'), 'warn');
       return;
     }
     setParams(result.params);
-    showToast('Analysis', `Assigned to ${result.role}`, 'ok');
+    showToast(t('toast.analysis'), `${t('analysis.roleAssigned')} ${result.role}`, 'ok');
   };
 
   const assignRoleTo = (column: number, roleKey: string) => {
     const next = assignRole(activeAnalysis, params, roleKey, column);
     if (!next) {
-      showToast('Analysis', 'This role does not accept columns', 'warn');
+      showToast(t('toast.analysis'), t('analysis.roleRejects'), 'warn');
       return;
     }
     setParams(next);
     const role = roleStates(activeAnalysis, params).find(item => item.key === roleKey);
-    showToast('Analysis', `Assigned to ${role?.label ?? roleKey}`, 'ok');
+    showToast(t('toast.analysis'), `${t('analysis.roleAssigned')} ${role?.label ?? roleKey}`, 'ok');
   };
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
@@ -349,6 +366,10 @@ export default function App() {
     setValidation({ ran: false, issues: [] });
     setFocusedColumn(null);
     setFilterAffectsAnalysis(false);
+    setShowFilter(false);
+    setFilterValue('');
+    setFilterOp('contains');
+    setFilterCol(0);
   };
 
   // --- Project persistence (.lzs + silent autosave) ---
@@ -377,10 +398,10 @@ export default function App() {
     result: AnalysisRunResult,
     analysisId: string = activeAnalysis,
     paramsUsed = params,
-    options?: { live?: boolean }
+    options?: { live?: boolean; ciLevel?: number }
   ): boolean => {
     if ('reason' in result) {
-      showToast('Error', result.reason, 'error');
+      showToast(t('toast.error'), result.reason, 'error');
       return false;
     }
     pushOutput(result.node, result.report, analysisId, {
@@ -389,6 +410,7 @@ export default function App() {
       filterSignature,
       params: analysisParamsOf(analysisId, paramsUsed),
       paramsSignature: analysisParamsSignature(analysisId, paramsUsed),
+      ciLevel: options?.ciLevel ?? ciLevel,
       live: options?.live,
     });
     return true;
@@ -400,7 +422,7 @@ export default function App() {
     params,
     ciLevel,
     emit,
-    warn: (message) => showToast('Analysis', message, 'warn'),
+    warn: (message) => showToast(t('toast.analysis'), message, 'warn'),
   });
 
   const paramsSignatureFor = (analysisId: string) =>
@@ -415,6 +437,7 @@ export default function App() {
       grid.cols.length
     );
     setParams(next);
+    if (entry.ciLevel !== undefined) setCiLevel(entry.ciLevel);
     setActiveAnalysis(entry.analysisId);
     setActiveTab('analysis');
     return next;
@@ -423,20 +446,20 @@ export default function App() {
   const applyOutputParams = (entry: OutputEntry) => {
     const next = restoreOutputParams(entry);
     if (!next) {
-      showToast('Output', 'This card has no saved parameters', 'warn');
+      showToast(t('toast.output'), t('analysis.noSavedParams'), 'warn');
       return;
     }
-    showToast('Output', 'Parameters restored in the setup panel', 'ok');
+    showToast(t('toast.output'), t('analysis.paramsRestored'), 'ok');
   };
 
   const rerunOutput = (entry: OutputEntry) => {
     const next = restoreOutputParams(entry);
     if (!next || !entry.analysisId) {
-      showToast('Output', 'This card has no saved parameters', 'warn');
+      showToast(t('toast.output'), t('analysis.noSavedParams'), 'warn');
       return;
     }
-    void runAnalysisWith(entry.analysisId, next).then(ok => {
-      if (ok) showToast('Output', 'Re-ran with the saved parameters', 'ok');
+    void runAnalysisWith(entry.analysisId, next, entry.ciLevel).then(ok => {
+      if (ok) showToast(t('toast.output'), t('analysis.reran'), 'ok');
     });
   };
 
@@ -451,7 +474,7 @@ export default function App() {
           <DataWorkspace
             grid={grid}
             setGrid={setGrid}
-            onNewDataset={() => replaceDataset(gridNewGrid())}
+            onNewDataset={newDataset}
             onInsertColumn={insertColumn}
             onDuplicateColumn={duplicateColumn}
             onMoveColumn={moveColumn}
@@ -498,7 +521,7 @@ export default function App() {
         )}
 
         {activeTab === 'analysis' && (
-          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">Loading analysis workspace…</div>}>
+          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingAnalysis')}</div>}>
           <AnalysisTab
             activeAnalysis={activeAnalysis}
             setActiveAnalysis={setActiveAnalysis}
@@ -538,7 +561,7 @@ export default function App() {
         )}
 
         {activeTab === 'help' && (
-          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">Loading help…</div>}>
+          <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingHelp')}</div>}>
             <HelpPanel />
           </Suspense>
         )}
@@ -547,7 +570,7 @@ export default function App() {
           <SettingsTab
             ioPrefs={ioPrefs}
             setIoPrefs={setIoPrefs}
-            onNewDataset={() => replaceDataset(gridNewGrid())}
+            onNewDataset={newDataset}
             onSaveProject={saveProjectFile}
             onOpenProject={() => projectInputRef.current?.click()}
             onExport={() => setShowExport(true)}
@@ -577,7 +600,7 @@ export default function App() {
           onExport={(files) => {
             files.forEach((f) => downloadExportFile(f));
             setShowExport(false);
-            showToast('Export', files.map((f) => f.fileName).join(' + '), 'ok');
+            showToast(t('toast.export'), files.map((f) => f.fileName).join(' + '), 'ok');
           }}
         />
         </Suspense>

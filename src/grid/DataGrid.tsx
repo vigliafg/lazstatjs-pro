@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown, Pencil } from 'lucide-react';
 import type { CategoryLevel, ColType, GridData } from './types';
 import { COL_TYPES, columnLevels, isGroupColumn, levelLabel, validateValue } from './types';
@@ -36,9 +36,13 @@ interface Props {
 
 export function DataGrid(props: Props) {
   const { grid, freezeFirstCol } = props;
-  const visibleRows = grid.rows
-    .map((row, index) => ({ row, index }))
-    .filter(({ row }) => rowMatches(grid, row, props.rowFilter ?? null));
+  const visibleRows = useMemo(
+    () =>
+      grid.rows
+        .map((row, index) => ({ row, index }))
+        .filter(({ row }) => rowMatches(grid, row, props.rowFilter ?? null)),
+    [grid, props.rowFilter]
+  );
   const [editingCol, setEditingCol] = useState<number | null>(null);
   const [draftName, setDraftName] = useState('');
   const [menu, setMenu] = useState<{ kind: 'col' | 'row'; index: number; x: number; y: number } | null>(null);
@@ -228,8 +232,8 @@ export function DataGrid(props: Props) {
                       <button
                         type="button"
                         className="opacity-0 group-hover:opacity-100 focus:opacity-100 text-text3 hover:text-accent transition-opacity"
-                        title={`Rename "${col.name}"`}
-                        aria-label={`Rename column ${col.name}`}
+                        title={`${t('grid.renameTitle')} "${col.name}"`}
+                        aria-label={`${t('grid.renameAria')} ${col.name}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           setEditingCol(i);
@@ -247,11 +251,11 @@ export function DataGrid(props: Props) {
               <th
                 className={`border border-border text-[8px] text-text3 uppercase p-1 ${freezeFirstCol ? 'sticky left-0 z-30 bg-surface2' : ''}`}
                 title={
-                  'Column type — drives cell validation, Auto-fix coercion and the Excel export. Analyses still infer numbers from the values.\n' +
-                  COL_TYPES.map((t) => `${t.label} = ${t.full}`).join('\n')
+                  t('grid.typeHint') + '\n' +
+                  COL_TYPES.map((item) => `${item.label} = ${item.full}`).join('\n')
                 }
               >
-                Type
+                {t('inspector.type')}
               </th>
               {grid.cols.map((col, i) => (
                 <th
@@ -338,8 +342,8 @@ export function DataGrid(props: Props) {
                       {isCat ? (
                         <select
                           data-cell={`${rIdx}-${cIdx}`}
-                          aria-label={`${col?.name ?? 'Group'} value`}
-                          title={extraLevel ? `${rawCell} is not in the declared levels` : undefined}
+                          aria-label={`${col?.name ?? t('form.group')} ${t('grid.valueAria')}`}
+                          title={extraLevel ? `${rawCell} ${t('grid.notInLevels')}` : undefined}
                           className={`w-full h-full bg-transparent border-none pl-2 pr-6 py-1 text-text outline-none focus:bg-accent/10 transition-colors cursor-pointer ${extraLevel ? 'italic text-yellow' : ''} ${selected ? 'bg-accent/10' : ''}`}
                           value={rawCell}
                           onFocus={(e) => {
@@ -384,7 +388,7 @@ export function DataGrid(props: Props) {
                               {level.label}
                             </option>
                           ))}
-                          {extraLevel && <option value={rawCell}>{rawCell} (not in list)</option>}
+                          {extraLevel && <option value={rawCell}>{rawCell} {t('grid.notInList')}</option>}
                         </select>
                       ) : (
                         <input
@@ -449,8 +453,8 @@ export function DataGrid(props: Props) {
                         Math.max(sel.c0, sel.c1) === cIdx && (
                           <span
                             role="button"
-                            aria-label="Fill handle"
-                            title="Drag to fill down or right (Ctrl+D / Ctrl+R)"
+                            aria-label={t('grid.fillHandle')}
+                            title={t('grid.fillHandleTitle')}
                             className="absolute bottom-0 right-0 z-10 h-2 w-2 cursor-crosshair border border-white/70 bg-accent"
                             onMouseDown={event => {
                               event.preventDefault();

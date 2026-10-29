@@ -33,7 +33,7 @@ export function CleanPanel({ grid, onApply }: Props) {
       matchCase,
       col: scopeCol === 'all' ? null : scopeCol,
     });
-    onApply(next, count === 0 ? 'No matches found' : `${count} replacements made`);
+    onApply(next, count === 0 ? t('clean.noMatches') : `${count} ${t('clean.replacements')}`);
   };
 
   return (
@@ -77,7 +77,7 @@ export function CleanPanel({ grid, onApply }: Props) {
             onClick={() => {
               const strategy = fillStrategy === 'value' ? { value: fillValue } : fillStrategy;
               const { grid: next, filled, fillWith } = fillMissing(grid, fillCol, strategy);
-              onApply(next, filled === 0 ? 'No missing cells filled' : `${filled} cells filled with ${fillWith}`);
+              onApply(next, filled === 0 ? t('clean.noFill') : `${filled} ${t('clean.filled')} ${fillWith}`);
             }}
           >
             {t('data.clean.fill')}
@@ -92,7 +92,7 @@ export function CleanPanel({ grid, onApply }: Props) {
             className="tb-btn"
             onClick={() => {
               const { grid: next, changed } = trimGrid(grid);
-              onApply(next, changed === 0 ? 'No whitespace to trim' : `${changed} cells trimmed`);
+              onApply(next, changed === 0 ? t('clean.noTrim') : `${changed} ${t('clean.trimmed')}`);
             }}
           >
             {t('data.clean.trim')}
@@ -101,7 +101,7 @@ export function CleanPanel({ grid, onApply }: Props) {
             className="tb-btn"
             onClick={() => {
               const { grid: next, removed } = removeEmptyRows(grid);
-              onApply(next, removed === 0 ? 'No empty rows' : `${removed} empty rows removed`);
+              onApply(next, removed === 0 ? t('clean.noEmpty') : `${removed} ${t('clean.emptyRemoved')}`);
             }}
           >
             {t('data.clean.dropEmpty')}
@@ -110,7 +110,7 @@ export function CleanPanel({ grid, onApply }: Props) {
             className="tb-btn"
             onClick={() => {
               const { grid: next, removed } = removeDuplicateRows(grid);
-              onApply(next, removed === 0 ? 'No duplicates' : `${removed} duplicate rows removed`);
+              onApply(next, removed === 0 ? t('clean.noDuplicates') : `${removed} ${t('clean.duplicatesRemoved')}`);
             }}
           >
             {t('data.clean.dropDuplicates')}

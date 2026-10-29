@@ -8,6 +8,7 @@ import type { ImportTable } from '../io/readers';
 import type { GridData } from '../grid/types';
 import { createColumnId } from '../grid/types';
 import type { Toast } from './useToasts';
+import { t } from '../i18n';
 
 export interface PendingImport {
   fileName: string;
@@ -49,7 +50,7 @@ export const useImportExport = ({
         cols: table.names.map((name, i) => ({ id: createColumnId(), name, type: table.types[i] ?? 'str' })),
         rows: table.rows.map((row) => [...row]),
       } as GridData);
-      showToast('Import', `${table.rows.length} rows and ${table.names.length} columns imported`, 'ok');
+      showToast(t('toast.import'), `${table.rows.length} ${t('import.done')} ${table.names.length} ${t('import.columns')}`, 'ok');
     } else if (mode === 'append-rows') {
       // Compute inside the updater: the wizard may have been open while
       // the grid changed, so the render-closure `grid` can be stale.
@@ -65,7 +66,7 @@ export const useImportExport = ({
         });
         return { cols: prev.cols, rows: [...prev.rows, ...mapped] };
       });
-      showToast('Import', `${table.rows.length} rows appended`, 'ok');
+      showToast(t('toast.import'), `${table.rows.length} ${t('import.appended')}`, 'ok');
     } else {
       // Merge columns: add missing names, fill matched columns row-wise.
       setGrid((prev) => {
@@ -107,7 +108,7 @@ export const useImportExport = ({
         }
         return { cols, rows };
       });
-      showToast('Import', `${table.names.length} columns merged`, 'ok');
+      showToast(t('toast.import'), `${table.names.length} ${t('import.merged')}`, 'ok');
     }
     setPendingImport(null);
     setValidation({ ran: false, issues: [] });
@@ -128,7 +129,7 @@ export const useImportExport = ({
       }
       const text = await file.text();
       if (!text.trim()) {
-        showToast('Import', 'The file is empty', 'warn');
+        showToast(t('toast.import'), t('import.empty'), 'warn');
         return;
       }
       // Fast path: small plain CSV goes straight in; anything ambiguous
@@ -151,7 +152,7 @@ export const useImportExport = ({
       setPendingImport({ fileName: file.name, text: text.slice(0, 2000000) });
     } catch (error) {
       console.error(error);
-      showToast('Import', error instanceof Error ? error.message : 'Could not read the file', 'error');
+      showToast(t('toast.import'), error instanceof Error ? error.message : t('import.readError'), 'error');
     }
   };
 

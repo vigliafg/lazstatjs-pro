@@ -36,6 +36,23 @@ test('collapses a result and reopens it from the setup shortcut', async ({ page,
   await expect(page.locator('article.output-card')).toHaveCount(2);
 });
 
+test('marks cards stale when the CI changes and re-runs with the saved level', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the CI selector is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.getByText('stale', { exact: true })).toHaveCount(0);
+
+  await page.getByLabel('Confidence level').selectOption('99');
+  await expect(page.getByText('stale', { exact: true })).toHaveCount(1);
+
+  await page.getByRole('button', { name: 'Re-run with saved parameters' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(2);
+  // Re-run restores the card's CI in the setup, so neither card is stale.
+  await expect(page.getByText('stale', { exact: true })).toHaveCount(0);
+});
+
 test('restores cards and their saved parameters after reload', async ({ page, isMobile }) => {
   test.skip(isMobile, 'reload persistence is covered on desktop');
 

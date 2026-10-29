@@ -27,7 +27,9 @@ import {
   pasteTsvAt as gridPasteTsv,
   rangeToTsv as gridRangeToTsv,
   renameColumn as gridRenameColumn,
+  rowMatches,
   sortByColumn as gridSortByColumn,
+  trimTrailingEmptyLines as gridTrimTrailingEmptyLines,
   type RowFilter,
   type RowFilterOp,
 } from '../grid/ops';
@@ -222,8 +224,8 @@ export const DataTab = ({
       onClick={() => {
         const issues = gridFindInvalid(grid);
         setValidation({ ran: true, issues });
-        if (issues.length === 0) showToast('Validation', 'All cells validated successfully', 'ok');
-        else showToast('Validation', `${issues.length} invalid cells found`, 'warn');
+        if (issues.length === 0) showToast(t('toast.validation'), t('data.validOk'), 'ok');
+        else showToast(t('toast.validation'), `${issues.length} ${t('data.invalidFound')}`, 'warn');
       }}
     >
       {t('data.validate')}
@@ -233,12 +235,12 @@ export const DataTab = ({
       onClick={() => {
         const { grid: next, changed } = gridCoerce(grid);
         if (changed === 0) {
-          showToast('Auto-fix', 'Nothing to coerce', 'ok');
+          showToast(t('toast.autoFix'), t('data.nothingToCoerce'), 'ok');
           return;
         }
         setGrid(next);
         setValidation({ ran: false, issues: [] });
-        showToast('Auto-fix', `${changed} cells coerced`, 'ok');
+        showToast(t('toast.autoFix'), `${changed} ${t('data.cellsCoerced')}`, 'ok');
       }}
     >
       {t('data.autoFix')}
@@ -345,7 +347,7 @@ export const DataTab = ({
           else setGrid(next);
           setValidation({ ran: false, issues: [] });
         }
-        showToast('Transform', msg, kind);
+        showToast(t('toast.transform'), msg, kind);
       }}
     />
   )}
@@ -356,7 +358,7 @@ export const DataTab = ({
       onApply={(next, msg) => {
         setGrid(next);
         setValidation({ ran: false, issues: [] });
-        showToast('Clean', msg, 'ok');
+        showToast(t('toast.clean'), msg, 'ok');
       }}
     />
   )}
@@ -378,6 +380,15 @@ export const DataTab = ({
                 onClick={() => {
                   const first = validation.issues.find((i) => i.c === c.col);
                   if (first) {
+                    // A view filter can hide the invalid row: clear it so the
+                    // jump actually lands on the cell that needs fixing.
+                    if (
+                      activeRowFilter &&
+                      !rowMatches(grid, grid.rows[first.r] ?? [], activeRowFilter)
+                    ) {
+                      setFilterValue('');
+                      setShowFilter(false);
+                    }
                     setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
                     setActiveTab('data');
                   }
@@ -390,7 +401,15 @@ export const DataTab = ({
             className="tb-btn"
             onClick={() => {
               const first = validation.issues[0];
-              if (first) setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
+              if (!first) return;
+              if (
+                activeRowFilter &&
+                !rowMatches(grid, grid.rows[first.r] ?? [], activeRowFilter)
+              ) {
+                setFilterValue('');
+                setShowFilter(false);
+              }
+              setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
             }}
           >
             {t('data.jumpFirst')}
@@ -426,32 +445,32 @@ export const DataTab = ({
     onMoveCol={onMoveColumn}
     onDeleteCol={(c) => {
       if (grid.cols.length <= 1) {
-        showToast('Columns', 'At least one column is required', 'warn');
+        showToast(t('toast.columns'), t('data.columnRequired'), 'warn');
         return;
       }
-      if (!window.confirm(`Delete column "${grid.cols[c]?.name}"? You can undo.`)) return;
+      if (!window.confirm(`${t('data.deleteColumnPrefix')} "${grid.cols[c]?.name}"${t('data.deleteColumnSuffix')}`)) return;
       onDeleteColumn(c);
     }}
     onInsertRow={(at) => setGrid((prev) => gridInsertRow(prev, at))}
     onDeleteRow={(r) => {
       if (grid.rows.length <= 1) {
-        showToast('Rows', 'At least one row is required', 'warn');
+        showToast(t('toast.rows'), t('data.rowRequired'), 'warn');
         return;
       }
-      if (!window.confirm(`Delete row ${r + 1}? You can undo.`)) return;
+      if (!window.confirm(`${t('data.deleteRowPrefix')} ${r + 1}${t('data.deleteRowSuffix')}`)) return;
       setGrid((prev) => gridDeleteRow(prev, r));
     }}
     onPaste={(r, c, text) => {
-      const block = parseTsvBlock(text).filter((line) => line.some((v) => String(v ?? '').trim() !== ''));
+      const block = gridTrimTrailingEmptyLines(parseTsvBlock(text));
       if (block.length === 0) return;
       setGrid((prev) => gridPasteTsv(prev, r, c, block));
-      showToast('Paste', `${block.length}x${Math.max(...block.map((l) => l.length))} cells pasted`, 'ok');
+      showToast(t('toast.paste'), `${block.length}x${Math.max(...block.map((l) => l.length))} ${t('data.cellsPasted')}`, 'ok');
     }}
     onCopyRange={(range) => {
       setSelRange(range);
       const tsv = gridRangeToTsv(grid, range);
       navigator.clipboard?.writeText(tsv).catch(() => undefined);
-      showToast('Copy', 'Range copied to clipboard', 'ok');
+      showToast(t('toast.copy'), t('data.rangeCopied'), 'ok');
     }}
     onClearRange={(range) => setGrid((prev) => gridClearRange(prev, range))}
     onFillDown={(range) => setGrid((prev) => gridFillDown(prev, range))}
@@ -462,7 +481,7 @@ export const DataTab = ({
     onSortCol={(col, dir) => {
       setGrid((prev) => gridSortByColumn(prev, col, dir));
       setValidation({ ran: false, issues: [] });
-      showToast('Sort', `Sorted by ${grid.cols[col]?.name ?? `column ${col + 1}`} (${dir})`, 'ok');
+      showToast(t('toast.sort'), `${t('data.sortedBy')} ${grid.cols[col]?.name ?? `${t('data.column').toLowerCase()} ${col + 1}`} (${dir})`, 'ok');
     }}
     onFocusCol={onFocusColumn}
     onInspectCol={(col) => {
@@ -483,13 +502,13 @@ export const DataTab = ({
         {t('data.fillRight')}
       </button>
       <button className="tb-btn" onClick={() => setGrid((prev) => gridClearRange(prev, selRange))}>
-        Clear selection
+        {t('data.clearSelection')}
       </button>
       <button
         className="tb-btn"
         onClick={() => {
           navigator.clipboard?.writeText(gridRangeToTsv(grid, selRange)).catch(() => undefined);
-          showToast('Copy', 'Range copied to clipboard', 'ok');
+          showToast(t('toast.copy'), t('data.rangeCopied'), 'ok');
         }}
       >
         {t('data.copy')}
@@ -515,10 +534,10 @@ export const DataTab = ({
           onDuplicate={onDuplicateColumn}
           onDelete={(c) => {
             if (grid.cols.length <= 1) {
-              showToast('Columns', 'At least one column is required', 'warn');
+              showToast(t('toast.columns'), t('data.columnRequired'), 'warn');
               return;
             }
-            if (!window.confirm(`Delete column "${grid.cols[c]?.name}"? You can undo.`)) return;
+            if (!window.confirm(`${t('data.deleteColumnPrefix')} "${grid.cols[c]?.name}"${t('data.deleteColumnSuffix')}`)) return;
             onDeleteColumn(c);
             setShowInspector(false);
           }}

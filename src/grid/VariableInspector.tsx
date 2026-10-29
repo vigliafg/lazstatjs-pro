@@ -236,7 +236,7 @@ export const VariableInspector = ({
               onKeyDown={event => {
                 if (event.key === 'Enter') event.currentTarget.blur();
               }}
-              placeholder="e.g. Score_Post - Score_Pre"
+              placeholder={t('inspector.formulaPlaceholder')}
               aria-label={t('inspector.formula')}
               className={inputClass}
             />
@@ -281,7 +281,7 @@ export const VariableInspector = ({
               onKeyDown={event => {
                 if (event.key === 'Enter') addMissingCode();
               }}
-              placeholder="e.g. -9 or NA"
+              placeholder={t('inspector.missingPlaceholder')}
               aria-label={t('inspector.addMissing')}
               className={inputClass}
             />

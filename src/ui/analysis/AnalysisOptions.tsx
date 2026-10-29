@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode, type SetStateAction } from 'react';
+import { useEffect, useMemo, useState, type ReactNode, type SetStateAction } from 'react';
 import { Play } from 'lucide-react';
 import { analysisMeta, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
@@ -38,6 +38,7 @@ import type { ProjectParams } from '../../io/project';
 import type { AnalysisTabProps } from './types';
 import { useAnalysisStore } from './store';
 import { Section } from '../../components/FormFields';
+import { t } from '../../i18n';
 
 const inputClass =
   'w-full bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded focus:border-accent focus:outline-none';
@@ -90,43 +91,51 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
     p.filterAffectsAnalysis,
   ]);
 
-  const rowsForAnalysis =
-    p.filterAffectsAnalysis && p.activeRowFilter
-      ? p.grid.rows.filter(row => rowMatches(p.grid, row, p.activeRowFilter))
-      : p.grid.rows;
-  const missingCells = p.grid.rows.reduce(
-    (count, row) =>
-      count + row.filter((cell, column) => isMissingCell(p.grid.cols[column], cell)).length,
-    0
+  const rowFilter = p.activeRowFilter;
+  const rowsForAnalysis = useMemo(
+    () =>
+      p.filterAffectsAnalysis && rowFilter
+        ? p.grid.rows.filter(row => rowMatches(p.grid, row, rowFilter))
+        : p.grid.rows,
+    [p.filterAffectsAnalysis, rowFilter, p.grid]
   );
-  const codeCells = missingCodeCount(p.grid);
-  const previewCols = p.grid.cols.slice(0, 6);
+  const missingCells = useMemo(
+    () =>
+      p.grid.rows.reduce(
+        (count, row) =>
+          count + row.filter((cell, column) => isMissingCell(p.grid.cols[column], cell)).length,
+        0
+      ),
+    [p.grid]
+  );
+  const codeCells = useMemo(() => missingCodeCount(p.grid), [p.grid]);
+  const previewCols = useMemo(() => p.grid.cols.slice(0, 6), [p.grid.cols]);
 
   const sectionTitle = (() => {
     switch (p.activeAnalysis) {
       case 'wizard':
-        return 'Goal & data';
+        return t('analysis.section.goal');
       case 'samplesize':
-        return 'Design & precision';
+        return t('analysis.section.design');
       case 'contingency':
       case 'chisquare':
-        return 'Table & options';
+        return t('analysis.section.table');
       case 'distfit':
-        return 'Variable & distributions';
+        return t('analysis.section.variable');
       case 'timeseries':
-        return 'Series & model';
+        return t('analysis.section.series');
       case 'mi':
-        return 'Missing data & pooling';
+        return t('analysis.section.missing');
       case 'multivariate':
-        return 'Variables & extraction';
+        return t('analysis.section.extraction');
       case 'tost':
-        return 'Equivalence margin';
+        return t('analysis.section.margin');
       case 'agreement':
-        return 'Measurements & method';
+        return t('analysis.section.measurements');
       case 'resampling':
-        return 'Resampling plan';
+        return t('analysis.section.resampling');
       default:
-        return 'Variables & model';
+        return t('analysis.section.model');
     }
   })();
 
@@ -381,7 +390,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
       default:
         return (
           <div className="rounded border border-dashed border-border2 p-4 text-center">
-            <p className="text-[11px] text-text2">This analysis has no setup form yet.</p>
+            <p className="text-[11px] text-text2">{t('analysis.noForm')}</p>
           </div>
         );
     }
@@ -391,57 +400,57 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
     <aside
       id={p.paneId}
       tabIndex={-1}
-      aria-label="Analysis setup"
+      aria-label={t('analysis.setupAria')}
       className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
     >
       <div className="shrink-0 border-b border-border p-4">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-accent2">
-            {family?.label ?? 'Analysis'}
+            {family?.label ?? t('analysis.familyFallback')}
           </span>
           {meta?.cost === 'heavy' && (
             <span className="rounded border border-yellow/25 bg-yellow/5 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-yellow/80">
-              heavy computation
+              {t('analysis.heavyBadge')}
             </span>
           )}
         </div>
         <h2 className="text-[15px] font-semibold text-text">{meta?.label ?? p.activeAnalysis}</h2>
         <p className="mt-1 text-[10px] leading-relaxed text-text3">
-          {meta?.description ?? 'Configure the analysis and run it on the current dataset.'}
+          {meta?.description ?? t('analysis.descriptionFallback')}
         </p>
         <div className="mt-2 flex flex-wrap gap-1">
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
-            Rows {p.filterAffectsAnalysis ? `${p.visibleRowCount}/${p.grid.rows.length}` : p.grid.rows.length}
+            {t('analysis.rows')} {p.filterAffectsAnalysis ? `${p.visibleRowCount}/${p.grid.rows.length}` : p.grid.rows.length}
           </span>
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
-            Variables {p.grid.cols.length}
+            {t('analysis.variables')} {p.grid.cols.length}
           </span>
           <span
             className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3"
-            title={codeCells > 0 ? `${codeCells} cells carry declared missing codes` : 'Blank cells only'}
+            title={codeCells > 0 ? `${codeCells} ${t('analysis.missingCodesTitle')}` : t('analysis.blankOnly')}
           >
-            Missing {missingCells}
+            {t('analysis.missing')} {missingCells}
           </span>
           {codeCells > 0 && (
             <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
-              Codes {codeCells}
+              {t('analysis.codes')} {codeCells}
             </span>
           )}
           {p.filterAffectsAnalysis && (
             <span className="rounded border border-accent/30 bg-accent/10 px-1.5 py-0.5 font-mono text-[9px] text-accent">
-              analysis filter
+              {t('analysis.analysisFilter')}
             </span>
           )}
         </div>
         {p.focusedColumn !== null && p.grid.cols[p.focusedColumn] && (
           <div className="mt-2 flex flex-col gap-1 rounded border border-border bg-surface3/50 px-2 py-1">
             <span className="min-w-0 truncate font-mono text-[9px] uppercase tracking-wider text-text3">
-              Focused: <span className="text-text2">{p.grid.cols[p.focusedColumn]?.label?.trim() || p.grid.cols[p.focusedColumn]?.name}</span>
+              {t('analysis.focused')}: <span className="text-text2">{p.grid.cols[p.focusedColumn]?.label?.trim() || p.grid.cols[p.focusedColumn]?.name}</span>
             </span>
             {p.roles.length > 1 ? (
               <div className="flex items-center gap-1">
                 <select
-                  aria-label="Role to assign the focused column to"
+                  aria-label={t('analysis.assignRole')}
                   className="min-w-0 flex-1 rounded border border-border2 bg-surface3 p-1 text-[10px] text-text"
                   value={activeRoleKey}
                   onChange={event => setRoleKey(event.target.value)}
@@ -456,9 +465,9 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
                   type="button"
                   onClick={() => p.onAssignRole(p.focusedColumn as number, activeRoleKey)}
                   className="tb-btn shrink-0 px-2 py-0.5 text-[10px]"
-                  title="Assign the focused column to the selected role"
+                  title={t('analysis.assignRoleTitle')}
                 >
-                  Assign
+                  {t('analysis.assign')}
                 </button>
               </div>
             ) : (
@@ -466,9 +475,9 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
                 type="button"
                 onClick={() => p.onAssignPrimary(p.focusedColumn as number)}
                 className="tb-btn px-2 py-0.5 text-[10px]"
-                title="Assign the focused grid column to the primary role of this analysis"
+                title={t('analysis.assignPrimaryTitle')}
               >
-                Use in analysis
+                {t('analysis.useInAnalysis')}
               </button>
             )}
           </div>
@@ -479,18 +488,18 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
             onClick={() => setPeek(value => !value)}
             className={`tb-btn px-2 py-0.5 text-[10px] ${peek ? 'border-accent bg-accent/10 text-text' : ''}`}
           >
-            {peek ? 'Hide data peek' : 'Data peek'}
+            {peek ? t('analysis.hideDataPeek') : t('analysis.dataPeek')}
           </button>
           {meta?.cost === 'instant' && (
             <button
               type="button"
               onClick={() => setLive(value => !value)}
               aria-pressed={live}
-              aria-label="Live run"
-              title="Re-run this analysis automatically when the data or its parameters change"
+              aria-label={t('analysis.liveAria')}
+              title={t('analysis.liveTitle')}
               className={`tb-btn px-2 py-0.5 text-[10px] ${live ? 'border-accent bg-accent/10 text-text' : ''}`}
             >
-              {live ? (livePending ? 'Live · syncing…' : 'Live · on') : 'Live'}
+              {live ? (livePending ? t('analysis.liveSyncing') : t('analysis.liveOn')) : t('analysis.live')}
             </button>
           )}
           <button
@@ -498,7 +507,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
             onClick={() => p.setActiveTab('data')}
             className="tb-btn px-2 py-0.5 text-[10px]"
           >
-            Open data
+            {t('analysis.openData')}
           </button>
         </div>
       </div>
@@ -547,8 +556,8 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
                 </table>
               </div>
               <p className="mt-1 text-[9px] text-text3">
-                First {Math.min(5, rowsForAnalysis.length)} of {rowsForAnalysis.length} rows ·{' '}
-                {p.filterAffectsAnalysis ? 'analysis filter active' : 'view filter only'}
+                {t('analysis.peekFirst')} {Math.min(5, rowsForAnalysis.length)} {t('analysis.peekOf')} {rowsForAnalysis.length} {t('data.rowsUnit')} ·{' '}
+                {p.filterAffectsAnalysis ? t('analysis.filterActive') : t('analysis.filterView')}
               </p>
               {p.roles.length > 0 && (
                 <div className="mt-1.5 flex flex-wrap gap-1">
@@ -576,11 +585,10 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
           {p.roleErrors.length > 0 && (
             <div className="rounded border border-yellow/30 bg-yellow/5 p-3">
               <p className="font-mono text-[9px] uppercase tracking-widest text-yellow">
-                Reselect variables
+                {t('analysis.reselectTitle')}
               </p>
               <p className="mt-1 text-[10px] leading-relaxed text-text2">
-                A column edit removed or transformed a variable used by this analysis.
-                Choose the affected fields again before running.
+                {t('analysis.reselectBody')}
               </p>
               <ul className="mt-1.5 list-disc pl-4 text-[10px] text-text3">
                 {p.roleErrors.slice(0, 4).map(label => (
@@ -590,8 +598,9 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
             </div>
           )}
 
-          <Section title="Confidence level" hint="Applies to every estimate">
+          <Section title={t('analysis.confidence')} hint={t('analysis.confidenceHint')}>
             <select
+              aria-label={t('analysis.confidence')}
               className={inputClass}
               value={p.ciLevel}
               onChange={event => p.setCiLevel(parseInt(event.target.value, 10))}
@@ -604,7 +613,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
 
           <Section
             title={sectionTitle}
-            hint={p.activeAnalysis === 'wizard' ? 'Guided' : undefined}
+            hint={p.activeAnalysis === 'wizard' ? t('analysis.guided') : undefined}
           >
             <div className="flex flex-col gap-3">{form}</div>
           </Section>
@@ -616,18 +625,18 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
           type="button"
           onClick={() => void p.runAnalysis()}
           disabled={p.roleErrors.length > 0}
-          title="Run analysis (Ctrl/Cmd + Enter)"
+          title={t('analysis.runTitle')}
           className="run-btn flex h-10 w-full items-center justify-center gap-2"
         >
           <Play className="h-3.5 w-3.5" />
-          Run analysis
+          {t('analysis.run')}
         </button>
         <div className="mt-1.5 flex items-center justify-between gap-2 font-mono text-[9px] uppercase tracking-wider text-text3">
-          <span className="truncate" title={`${p.grid.rows.length} rows · ${p.grid.cols.length} variables`}>
+          <span className="truncate" title={`${p.grid.rows.length} ${t('data.rowsUnit')} · ${p.grid.cols.length} ${t('analysis.variablesLower')}`}>
             {p.grid.rows.length} × {p.grid.cols.length}
           </span>
-          <span className="shrink-0 text-text3/80" title="Ctrl/Cmd+Enter">
-            Ctrl/⌘Enter
+          <span className="shrink-0 text-text3/80" title={t('analysis.shortcut')}>
+            {t('analysis.shortcut')}
           </span>
         </div>
       </div>

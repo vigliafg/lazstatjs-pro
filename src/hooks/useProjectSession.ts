@@ -18,6 +18,7 @@ import {
 import { nonEmptyRowCount, type GridData } from '../grid/types';
 import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
 import type { Toast } from './useToasts';
+import { t } from '../i18n';
 
 interface UseProjectSessionOptions {
   /** Snapshot ripristinato all'avvio (autosave), già letto una volta. */
@@ -90,7 +91,7 @@ export const useProjectSession = ({
         // Quota exceeded or oversized grid: warn once, not on every keystroke.
         autosaveWarned.current = true;
         setLastAutosave(null);
-        showToast('Autosave', 'Autosave unavailable (storage full or data too large) — use Save project', 'warn');
+        showToast(t('toast.autosave'), t('autosave.unavailable'), 'warn');
       }
     }, 800);
     return () => clearTimeout(timer);
@@ -102,7 +103,7 @@ export const useProjectSession = ({
     if (bootNoticeShown.current) return;
     bootNoticeShown.current = true;
     if (boot) {
-      showToast('Session', `Restored ${nonEmptyRowCount(boot.grid.rows)} rows from the last session`, 'ok');
+      showToast(t('toast.session'), `${t('session.restored')} ${nonEmptyRowCount(boot.grid.rows)} ${t('session.rows')}`, 'ok');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -112,8 +113,8 @@ export const useProjectSession = ({
     savePrefs(project.prefs);
     setLastAutosave(new Date().toLocaleTimeString());
     showToast(
-      'Project',
-      `Loaded ${nonEmptyRowCount(project.grid.rows)} rows and ${restoredOutputs(project.outputs).length} result block(s)`,
+      t('toast.project'),
+      `${t('project.loaded')} ${nonEmptyRowCount(project.grid.rows)} ${t('project.rowsAnd')} ${restoredOutputs(project.outputs).length} ${t('project.resultBlocks')}`,
       'ok'
     );
   };
@@ -124,12 +125,12 @@ export const useProjectSession = ({
       'lazstats-project.lzs',
       'application/json;charset=utf-8'
     );
-    showToast('Project', 'Project saved as .lzs', 'ok');
+    showToast(t('toast.project'), t('project.saved'), 'ok');
   };
 
   const openProjectFile = async (file: File) => {
     try {
-      if (file.size > 25_000_000) throw new Error('The project file is too large');
+      if (file.size > 25_000_000) throw new Error(t('project.tooLarge'));
       const project = parseProject(await file.text());
       if (!window.confirm(`Load "${file.name}"? The current grid will be replaced and the output console cleared.`)) {
         return;
@@ -137,7 +138,7 @@ export const useProjectSession = ({
       applyProject(project);
       rememberProject(file.name);
     } catch (error) {
-      showToast('Project', error instanceof Error ? error.message : 'Could not read the project', 'error');
+      showToast(t('toast.project'), error instanceof Error ? error.message : t('project.readError'), 'error');
     }
   };
 

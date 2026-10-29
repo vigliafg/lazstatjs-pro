@@ -153,7 +153,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
               showLibrary ? 'text-text' : 'text-text3'
             }`}
-            title={showLibrary ? 'Hide the analysis library' : 'Show the analysis library'}
+            title={showLibrary ? t('analysis.hideLibrary') : t('analysis.showLibrary')}
           >
             <PanelLeft className="h-3 w-3" />
             {t('analysis.library')}
@@ -165,7 +165,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
               showOptions ? 'text-text' : 'text-text3'
             }`}
-            title={showOptions ? 'Hide the setup panel' : 'Show the setup panel'}
+            title={showOptions ? t('analysis.hideSetup') : t('analysis.showSetup')}
           >
             <SlidersHorizontal className="h-3 w-3" />
             {t('analysis.setup')}
@@ -181,14 +181,14 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             type="button"
             onClick={toggleFocus}
             aria-pressed={focusOutput}
-            aria-label={focusOutput ? 'Show library and setup' : 'Focus output'}
+            aria-label={focusOutput ? t('analysis.showPanels') : t('analysis.focusOutput')}
             className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
               focusOutput ? 'border-accent bg-accent/10 text-text' : ''
             }`}
-            title={focusOutput ? 'Show library and setup again' : 'Give the output the full width'}
+            title={focusOutput ? t('analysis.showPanelsTitle') : t('analysis.focusOutputTitle')}
           >
             {focusOutput ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
-            <span className="hidden xl:inline">{focusOutput ? 'Show setup' : 'Focus output'}</span>
+            <span className="hidden xl:inline">{focusOutput ? t('analysis.showSetup') : t('analysis.focusOutput')}</span>
           </button>
         </div>
       </div>
@@ -231,6 +231,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             currentRevision={props.dataRevision}
             currentDatasetId={props.datasetId}
             currentFilterSignature={props.filterSignature}
+            currentCiLevel={props.ciLevel}
             onOpenAnalysis={analysisId => {
               if (!analysisMeta(analysisId)) return;
               props.setActiveAnalysis(analysisId);

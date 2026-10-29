@@ -29,6 +29,19 @@ export const rangeToTsv = (grid: GridData, range: Range): string => {
 export const parseTsv = (text: string): string[][] =>
   text.replace(/\r\n?/g, '\n').split('\n').map((line) => line.split('\t'));
 
+/**
+ * Drop only the empty lines at the end of a pasted block (the newline that
+ * closes the text). Empty lines in the middle are real rows and must keep
+ * their position, otherwise the paste shifts every following row.
+ */
+export const trimTrailingEmptyLines = (block: string[][]): string[][] => {
+  let end = block.length;
+  while (end > 0 && block[end - 1].every((value) => String(value ?? '').trim() === '')) {
+    end -= 1;
+  }
+  return block.slice(0, end);
+};
+
 /** Paste a TSV block at anchor, expanding rows/cols as needed. */
 export const pasteTsvAt = (grid: GridData, r0: number, c0: number, block: string[][]): GridData => {
   if (!block || block.length === 0) return grid;

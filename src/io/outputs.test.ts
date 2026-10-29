@@ -8,6 +8,7 @@ import {
   MAX_STORED_OUTPUT_CHARS,
   capStoredOutputs,
   extractOutputTitle,
+  isOutputStale,
   parseStoredOutputs,
   type StoredOutput,
 } from './outputs';
@@ -94,6 +95,35 @@ describe('output snapshot validation', () => {
     const parsed = parseStoredOutputs([{ html: 'ok', analysisId: 'anova' }]);
     assert.equal(parsed[0].analysisId, 'anova');
     assert.equal(parseStoredOutputs([{ html: 'ok', analysisId: 42 }])[0].analysisId, undefined);
+  });
+
+  it('keeps a valid confidence level and rejects invalid ones', () => {
+    assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: 95 }])[0].ciLevel, 95);
+    assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: 99.9 }])[0].ciLevel, 99.9);
+    assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: 0 }])[0].ciLevel, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: 100 }])[0].ciLevel, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: Number.NaN }])[0].ciLevel, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: '95' }])[0].ciLevel, undefined);
+  });
+});
+
+describe('output freshness', () => {
+  it('marks a card stale when the confidence level changed', () => {
+    assert.equal(isOutputStale({ ciLevel: 95 }, { ciLevel: 99 }), true);
+    assert.equal(isOutputStale({ ciLevel: 95 }, { ciLevel: 95 }), false);
+  });
+
+  it('never marks legacy cards stale for missing metadata', () => {
+    assert.equal(isOutputStale({}, { ciLevel: 99 }), false);
+    assert.equal(isOutputStale({ ciLevel: 95 }, {}), false);
+  });
+
+  it('still compares revision, dataset, filter and parameters', () => {
+    assert.equal(isOutputStale({ dataRevision: 1 }, { dataRevision: 2 }), true);
+    assert.equal(isOutputStale({ datasetId: 'a' }, { datasetId: 'b' }), true);
+    assert.equal(isOutputStale({ filterSignature: 'a' }, { filterSignature: 'b' }), true);
+    assert.equal(isOutputStale({ paramsSignature: 'a' }, { paramsSignature: 'b' }), true);
+    assert.equal(isOutputStale({ paramsSignature: 'a' }, {}), false);
   });
 
   it('caps a hostile array before it reaches the app', () => {

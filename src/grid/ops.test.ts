@@ -6,7 +6,7 @@ import {
   coerceGrid, coerceValue, findReplace, trimGrid, removeEmptyRows, removeDuplicateRows,
   fillMissing, findInvalid, sortByColumn, recodeColumn, splitColumn,
   mergeColumns, computeColumn, rowMatchesFilter, filterRowIndexes, rowMatches,
-  renameColumn, setColType, setRangeValue,
+  renameColumn, setColType, setRangeValue, trimTrailingEmptyLines,
 } from './ops';
 import { COL_TYPES, validateValue, type ColType, type GridData } from './types';
 import { fillRightRange } from './fillRight';
@@ -21,6 +21,25 @@ const demo = (): GridData => ({
     ['3', 'x'],
     ['', ''],
   ],
+});
+
+describe('TSV paste geometry', () => {
+  it('keeps an internal empty row and removes only the final newline', () => {
+    const block = parseTsv('a\tb\n\nc\td\n');
+    assert.deepEqual(trimTrailingEmptyLines(block), [
+      ['a', 'b'],
+      [''],
+      ['c', 'd'],
+    ]);
+  });
+
+  it('drops a block that is only empty lines', () => {
+    assert.deepEqual(trimTrailingEmptyLines(parseTsv('\n\n')), []);
+  });
+
+  it('keeps leading empty rows', () => {
+    assert.deepEqual(trimTrailingEmptyLines(parseTsv('\na\tb')), [[''], ['a', 'b']]);
+  });
 });
 
 describe('grid ops foundation', () => {

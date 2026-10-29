@@ -86,6 +86,60 @@ test('blocks the run after a type change makes a role incompatible', async ({ pa
   await expect(page.getByRole('button', { name: 'Run analysis' })).toBeDisabled();
 });
 
+test('asks before replacing the dataset and resets the view filter', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the data toolbar is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.locator('input[data-cell="0-0"]').fill('123');
+  await page.getByRole('button', { name: 'Filter' }).click();
+  await page.getByPlaceholder('Value').fill('123');
+
+  page.once('dialog', dialog => dialog.dismiss());
+  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('123');
+
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('');
+  await expect(page.getByPlaceholder('Value')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Undo' })).toBeDisabled();
+});
+
+test('preserves empty rows when pasting a TSV block', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'paste is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.locator('input[data-cell="0-0"]').focus();
+  await page.evaluate(() => {
+    const data = new DataTransfer();
+    data.setData('text/plain', 'x\ty\n\nz\tw');
+    document
+      .querySelector('input[data-cell="0-0"]')
+      ?.dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }));
+  });
+
+  await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('x');
+  await expect(page.locator('input[data-cell="1-0"]')).toHaveValue('');
+  await expect(page.locator('input[data-cell="2-0"]')).toHaveValue('z');
+});
+
+test('clears a view filter when jumping to a hidden invalid cell', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the data toolbar is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.locator('input[data-cell="19-0"]').fill('abc');
+  await page.getByRole('button', { name: 'Filter' }).click();
+  await page.getByPlaceholder('Value').fill('50');
+  await expect(page.locator('input[data-cell="19-0"]')).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Validate' }).click();
+  await expect(page.getByText(/1 INVALID/)).toBeVisible();
+  await page.getByRole('button', { name: 'Jump to first' }).click();
+
+  await expect(page.getByPlaceholder('Value')).toHaveCount(0);
+  await expect(page.locator('input[data-cell="19-0"]')).toBeFocused();
+});
+
 test('keeps a computed column in sync when its source changes', async ({ page, isMobile }) => {
   test.skip(isMobile, 'transform panel is exercised on the desktop layout');
 

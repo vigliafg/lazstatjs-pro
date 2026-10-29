@@ -41,7 +41,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Live-run** for instant procedures: a debounced toggle that replaces the same card instead of stacking results
 - **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear
 - **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
-- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with UI chrome strings centralised in `src/i18n.ts`
+- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with static UI chrome centralised in `src/i18n.ts`; catalogue, help/report prose and domain messages stay content
 
 ### Help
 - **In-app HELP tab** (next to Settings) with eight inner tabs: Overview, Data Editor, Data prep, Groups & levels, Analyses, Output & reports, Recipes and Shortcuts & settings
@@ -102,7 +102,7 @@ Group pickers are type-aware: `cat`, `bol` and small `str`/date/alpha columns ar
 - **Build:** Vite 6
 - **Styling:** Tailwind CSS 4, dark theme
 - **Charts:** Victory 37
-- **Statistics:** jStat, custom implementations in `statsHelpers.ts`
+- **Statistics:** jStat, custom modules under `src/stats/`
 - **Icons:** Lucide React
 - **Animations:** Motion (Framer Motion)
 
@@ -157,9 +157,8 @@ lazstatjs/
 ├── .env.example
 └── src/
     ├── main.tsx            # React entry point
-    ├── App.tsx             # Main application component (monolithic)
+    ├── App.tsx             # Shell, state and analysis orchestration
     ├── csv.ts              # CSV parsing, serialisation and type inference
-    ├── statsHelpers.ts     # Legacy custom statistical functions
     ├── stats/              # Testable statistical modules (descriptive, ttest, anova, factorial,
     │                       #   regression, logistic, correlation, chisquare, contingency,
     │                       #   repeated, repeatedAnova, ancova, multivariate, distfit,
@@ -175,17 +174,17 @@ lazstatjs/
 
 ### Key Source Files
 
-- **`src/App.tsx`** (~3650 lines) — Application UI, chart wiring and analysis orchestration.
+- **`src/App.tsx`** (~620 lines) — Shell, shared state, persistence wiring and analysis orchestration.
 - **`src/stats/`** — Pure statistic builders returning typed `TableSpec` objects. Every builder has reference tests against SciPy/NumPy values (mean CIs, Levene, Welch ANOVA, effect sizes, regression, correlations, odds ratios).
 - **`src/stats/report.ts`** — Builds the plain-language `ReportSpec` for each analysis by reading the already computed tables (headline, effect size, assumptions, glossary, limits). Because it never recomputes statistics, the prose cannot disagree with the numbers and follows the selected CI level. The newer modules (`contingency`, `factorial`, `logistic`, `distfit`, `samplesize`) keep their report builder next to the computation.
-- **`src/analyses/`** — Self-contained tabs for Contingency (R×C), Sample Size / Power, Distribution Fit, Factorial ANOVA, Logistic Regression, Time Series, Survival, Cox and the Wizard: they own their parameters, run through an imperative `run()` handle and append tables, charts and the written report to the output console. The Wizard does not re-implement tests: it opens the real panel with `onOpenAnalysis`.
+- **`src/analyses/`** — One form + one pure builder per procedure, wired through the registry and the controlled analysis store. Forms only edit their parameter slice; runners return tables, charts and the written report. The Wizard does not re-implement tests: it opens the real panel with `onOpenAnalysis`.
 - **`src/components/AnalysisReport.tsx`** — Renders that report as a card closing every run of an analysis, after all tables and charts.
 - **`src/help/helpContent.ts`** — The whole in-app guide as plain data (tabs, sections, blocks, steps, examples, tables, tips) so the wording can be reviewed and tested without a DOM; `src/help/HelpPanel.tsx` renders it with a tab bar and numbered steps.
 - **`src/grid/types.ts`** — Column types plus the categorical-level model (`levels`, `reference`), group-column detection and the label substitution used by the analyses.
 - **`src/grid/LevelsEditor.tsx`** — Reusable group modal with a trigger button and two modes: *Levels* (code, label, order, reference, per-code row count, "Read data", add/remove) and *Recode values* (rename, merge, clear the group codes with a live preview). Shared by the data-grid header and the analysis group selectors, so one Apply is one undo step wherever it is opened.
 - **`recodeColumnValues`** in `src/grid/ops.ts` — Pure recoding of one column: cells are matched against their original value (so `1→2` / `2→1` swaps work), declared levels follow the mapping keeping their labels, merged codes keep the first label, the reference follows its code or is dropped, and the column becomes `cat` when the new codes no longer satisfy its type.
 - **`src/io/outputs.ts`** — Static snapshots of the output console: title extraction, count/character caps, validation on load and a DOMParser-based sanitiser for restored HTML.
-- **`src/statsHelpers.ts`** — Legacy hand-implemented tests: Fisher's Exact Test, Wilcoxon Signed-Rank, Mann-Whitney U, Kruskal-Wallis H, Theil-Sen regression, Kendall's Tau-b, Jarque-Bera and Kolmogorov-Smirnov normality tests.
+- **`src/analyses/runners.ts`** — Pure builder registry: every analysis id maps to a function that receives grid, parameters and CI, and returns the output contract. The workspace lazy-loads this registry on the first run.
 
 ## Scripts
 

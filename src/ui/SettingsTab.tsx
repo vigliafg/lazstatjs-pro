@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { Clock3, FileDown, FilePlus2, FolderOpen, Save, Trash2 } from 'lucide-react';
 import { savePrefs, type IoPreferences } from '../io/prefs';
+import { t } from '../i18n';
 
 export interface SettingsTabProps {
   ioPrefs: IoPreferences;
@@ -30,30 +31,30 @@ export const SettingsTab = ({
     <div className="flex-1 overflow-auto scrollbar p-8">
       <div className="mx-auto max-w-2xl space-y-8">
         <section className="rounded-lg border border-border bg-surface p-6">
-          <h2 className={sectionTitle}>Session</h2>
+          <h2 className={sectionTitle}>{t('settings.session')}</h2>
           <div className="flex flex-wrap gap-2">
             <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onNewDataset}>
               <FilePlus2 className="h-3 w-3" />
-              New dataset
+              {t('settings.newDataset')}
             </button>
             <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onOpenProject}>
               <FolderOpen className="h-3 w-3" />
-              Open project
+              {t('settings.openProject')}
             </button>
             <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onSaveProject}>
               <Save className="h-3 w-3" />
-              Save project
+              {t('settings.saveProject')}
             </button>
             <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onExport}>
               <FileDown className="h-3 w-3" />
-              Export data
+              {t('settings.export')}
             </button>
           </div>
           <div className="mt-5">
             <div className="flex items-center justify-between gap-2">
               <span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-text3">
                 <Clock3 className="h-3 w-3" />
-                Recent projects
+                {t('settings.recent')}
               </span>
               {recentProjects.length > 0 && (
                 <button
@@ -62,14 +63,13 @@ export const SettingsTab = ({
                   className="tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px]"
                 >
                   <Trash2 className="h-3 w-3" />
-                  Clear
+                  {t('settings.clear')}
                 </button>
               )}
             </div>
             {recentProjects.length === 0 ? (
               <p className="mt-1 text-[10px] leading-relaxed text-text3">
-                No opened projects yet. Files you open appear here for reference; use Open project
-                to reload one.
+                {t('settings.recentEmpty')}
               </p>
             ) : (
               <ul className="mt-1.5 space-y-0.5">
@@ -87,12 +87,12 @@ export const SettingsTab = ({
         </section>
 
         <section className="rounded-lg border border-border bg-surface p-6">
-          <h2 className={sectionTitle}>Import / Export</h2>
+          <h2 className={sectionTitle}>{t('settings.io')}</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-text2">Default delimiter</span>
+              <span className="text-[12px] text-text2">{t('settings.defaultDelimiter')}</span>
               <select
-                aria-label="Default delimiter"
+                aria-label={t('settings.defaultDelimiter')}
                 className="min-w-[120px] rounded border border-border2 bg-surface3 p-1 text-[11px] text-text"
                 value={ioPrefs.delimiter}
                 onChange={e => {
@@ -101,17 +101,17 @@ export const SettingsTab = ({
                   savePrefs(next);
                 }}
               >
-                <option value="auto">Auto-detect</option>
-                <option value=",">Comma (,)</option>
-                <option value=";">Semicolon (;)</option>
-                <option value="tab">Tab</option>
-                <option value="|">Pipe (|)</option>
+                <option value="auto">{t('io.delimiterAuto')}</option>
+                <option value=",">{t('io.commaSep')}</option>
+                <option value=";">{t('io.semicolon')}</option>
+                <option value="tab">{t('io.tab')}</option>
+                <option value="|">{t('io.pipeSep')}</option>
               </select>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-text2">Decimal separator</span>
+              <span className="text-[12px] text-text2">{t('settings.decimalSeparator')}</span>
               <select
-                aria-label="Decimal separator"
+                aria-label={t('settings.decimalSeparator')}
                 className="min-w-[120px] rounded border border-border2 bg-surface3 p-1 text-[11px] text-text"
                 value={ioPrefs.decimalSeparator}
                 onChange={e => {
@@ -120,15 +120,15 @@ export const SettingsTab = ({
                   savePrefs(next);
                 }}
               >
-                <option value=".">Period (12.5)</option>
-                <option value=",">Comma (12,5)</option>
+                <option value=".">{t('settings.period')}</option>
+                <option value=",">{t('io.comma')}</option>
               </select>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-text2">Assume first row is header</span>
+              <span className="text-[12px] text-text2">{t('settings.assumeHeader')}</span>
               <input
                 type="checkbox"
-                aria-label="Assume first row is header"
+                aria-label={t('settings.assumeHeader')}
                 className="accent-accent"
                 checked={ioPrefs.hasHeader}
                 onChange={e => {
@@ -139,9 +139,9 @@ export const SettingsTab = ({
               />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-text2">Default export format</span>
+              <span className="text-[12px] text-text2">{t('settings.defaultFormat')}</span>
               <select
-                aria-label="Default export format"
+                aria-label={t('settings.defaultFormat')}
                 className="min-w-[120px] rounded border border-border2 bg-surface3 p-1 text-[11px] text-text"
                 value={ioPrefs.exportFormat}
                 onChange={e => {
@@ -150,12 +150,12 @@ export const SettingsTab = ({
                   savePrefs(next);
                 }}
               >
-                <option value="csv">CSV</option>
-                <option value="tsv">TSV</option>
-                <option value="pipe">Pipe TXT</option>
-                <option value="json">JSON</option>
-                <option value="spss">SPSS (CSV + .sps)</option>
-                <option value="xlsx">Excel (.xlsx)</option>
+                <option value="csv">{t('settings.csv')}</option>
+                <option value="tsv">{t('settings.tsv')}</option>
+                <option value="pipe">{t('io.pipe')}</option>
+                <option value="json">{t('io.json')}</option>
+                <option value="spss">{t('io.spss')}</option>
+                <option value="xlsx">{t('io.xlsx')}</option>
               </select>
             </div>
           </div>

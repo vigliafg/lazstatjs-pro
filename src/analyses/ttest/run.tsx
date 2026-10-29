@@ -18,6 +18,7 @@ import type { ReportSpec } from '../../stats/report';
 import type { Dataset } from '../../grid/types';
 import type { TTestParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { isFiniteNumber } from '../shared/numbers';
 
 export interface TTestRunInput {
   grid: Dataset;
@@ -29,6 +30,9 @@ export interface TTestRunInput {
 export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
   const { grid, ttestParams, ciLevel } = input;
     const { type, var1, var2, mu, useNonParam, equalVar } = ttestParams;
+    if (type === 'one' && !isFiniteNumber(mu)) {
+      return { ok: false, reason: 'Test mean (μ₀) must be a finite number' };
+    }
     const a1 = grid.rows.map(r => parseNum(r[var1])).filter(v => !isNaN(v));
     const a2 = grid.rows.map(r => parseNum(r[var2])).filter(v => !isNaN(v));
 
