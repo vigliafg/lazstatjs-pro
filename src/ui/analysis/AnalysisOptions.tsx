@@ -1,12 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode, type SetStateAction } from 'react';
 import { Play } from 'lucide-react';
-import {
-  analysisDescription,
-  analysisLabel,
-  analysisMeta,
-  familyLabel,
-  familyOf,
-} from '../../analyses/registry';
+import { analysisDescription, analysisLabel, analysisMeta, familyLabel, familyOf } from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
 import { isMissingCell, missingCodeCount } from '../../grid/types';
 import { DescriptiveForm } from '../../analyses/descriptive/Form';
