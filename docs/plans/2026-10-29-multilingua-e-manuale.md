@@ -144,10 +144,11 @@ Verifiche eseguite sullo stato attuale:
   violazioni; nessun ciclo; file-size ok con **una sola eccezione**
   (`src/stats/kernels/arima.ts`).
 - `npm run build`: ok, `dist/help/{it,en,fr,es,de,pt-PT}/*.html` presenti.
-- `npx playwright test --project=desktop`: **41 passati, 1 skipped**
-  (skip preesistente); `e2e/locale.spec.ts` copre cambio e persistenza della
-  lingua, libro nella scheda HELP per ogni ondata, popup con deep-link, card di
-  report nella lingua scelta e ondata tedesca end-to-end.
+- `npx playwright test` (desktop + mobile): **51 passati, 33 saltati** (sono i
+  test di layout/analisi già esclusi sul progetto mobile), 0 falliti.
+  `e2e/locale.spec.ts` copre cambio e persistenza della lingua, libro nella
+  scheda HELP per ogni ondata, popup con deep-link, card di report nella lingua
+  scelta e ondata tedesca end-to-end.
 
 Numeri del contenuto:
 

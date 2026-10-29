@@ -34,7 +34,8 @@ test('the help tab hosts the generated book', async ({ page }) => {
   await expect(book.getByRole('link', { name: 'T-Test' }).first()).toBeVisible();
 });
 
-test('the procedure popup deep-links to the handbook page', async ({ page }) => {
+test('the procedure popup deep-links to the handbook page', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the analysis panel is exercised on the desktop layout');
   await page.goto('/');
   await page.getByRole('button', { name: 'Analysis', exact: true }).click();
   await page.getByPlaceholder('Search analyses…').fill('T-Test');
@@ -49,7 +50,8 @@ test('the procedure popup deep-links to the handbook page', async ({ page }) => 
   await expect(dialog).toBeHidden();
 });
 
-test('the report language switches the written card, not just the interface', async ({ page }) => {
+test('the report language switches the written card, not just the interface', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'analysis runs are exercised on the desktop layout');
   await page.goto('/');
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByRole('main').getByLabel('Report language').selectOption('en');
@@ -64,7 +66,8 @@ test('the report language switches the written card, not just the interface', as
   await expect(page.getByText('Report di lettura — Test t')).toHaveCount(0);
 });
 
-test('the German wave reaches the interface, the handbook and the report', async ({ page }) => {
+test('the German wave reaches the interface, the handbook and the report', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'analysis runs are exercised on the desktop layout');
   await page.goto('/');
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByRole('main').getByLabel('Report language').selectOption('de');
