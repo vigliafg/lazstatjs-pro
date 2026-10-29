@@ -1,4 +1,5 @@
 import { fmtEst, fmtP } from '../format';
+import { copy } from '../reportCopy';
 import { describeP, isDecided } from '../reportKit';
 import type { TableSpec } from '../types';
 import type { TimeSeriesOptions } from '../timeseries/types';
@@ -30,27 +31,27 @@ export const timeSeriesTables = (options: TimeSeriesOptions): TableSpec[] => {
 
   tables.push({
     id: 'ts-summary',
-    title: 'Sintesi della serie',
-    subtitle: `N = ${n}${period >= 2 ? ` · periodo stagionale = ${period}` : ''}`,
+    title: copy('Sintesi della serie'),
+    subtitle: copy('N = {s1}{s2}', { s1: n, s2: period >= 2 ? copy(' · periodo stagionale = {s1}', { s1: period }) : '' }),
     columns: [
-      { key: 'metric', label: 'Metrica', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'text' },
+      { key: 'metric', label: copy('Metrica'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'text' },
     ],
     rows: [
-      { metric: 'Osservazioni', value: String(n) },
-      { metric: 'Media', value: fmtEst(mean(values), 4) },
-      { metric: 'Deviazione standard', value: fmtEst(sd, 4) },
-      { metric: 'Minimo', value: fmtEst(Math.min(...values), 4) },
-      { metric: 'Massimo', value: fmtEst(Math.max(...values), 4) },
-      { metric: 'Primo valore', value: fmtEst(values[0], 4) },
-      { metric: 'Ultimo valore', value: fmtEst(values[n - 1], 4) },
-      { metric: 'Variazione totale', value: fmtEst(values[n - 1] - values[0], 4) },
-      { metric: 'Pendenza di Sen', value: fmtEst(slope, 4) },
+      { metric: copy('Osservazioni'), value: String(n) },
+      { metric: copy('Media'), value: fmtEst(mean(values), 4) },
+      { metric: copy('Deviazione standard'), value: fmtEst(sd, 4) },
+      { metric: copy('Minimo'), value: fmtEst(Math.min(...values), 4) },
+      { metric: copy('Massimo'), value: fmtEst(Math.max(...values), 4) },
+      { metric: copy('Primo valore'), value: fmtEst(values[0], 4) },
+      { metric: copy('Ultimo valore'), value: fmtEst(values[n - 1], 4) },
+      { metric: copy('Variazione totale'), value: fmtEst(values[n - 1] - values[0], 4) },
+      { metric: copy('Pendenza di Sen'), value: fmtEst(slope, 4) },
       ...(decomposition
-        ? [{ metric: 'Forza della stagionalità', value: fmtEst(decomposition.strength, 3) }]
+        ? [{ metric: copy('Forza della stagionalità'), value: fmtEst(decomposition.strength, 3) }]
         : []),
     ],
-    notes: ['La pendenza di Sen è la mediana delle pendenze tra tutte le coppie di punti: è robusta agli outlier.'],
+    notes: [copy('La pendenza di Sen è la mediana delle pendenze tra tutte le coppie di punti: è robusta agli outlier.')],
   });
 
   const acfRows = acf.map(point => ({
@@ -63,85 +64,85 @@ export const timeSeriesTables = (options: TimeSeriesOptions): TableSpec[] => {
 
   tables.push({
     id: 'ts-acf',
-    title: 'Autocorrelazione e autocorrelazione parziale',
-    subtitle: `banda di confidenza ±1,96/√N = ±${fmtEst(1.96 / Math.sqrt(n), 3)}`,
+    title: copy('Autocorrelazione e autocorrelazione parziale'),
+    subtitle: copy('banda di confidenza ±1,96/√N = ±{s1}', { s1: fmtEst(1.96 / Math.sqrt(n), 3) }),
     columns: [
-      { key: 'lag', label: 'Lag', format: 'int' },
-      { key: 'acf', label: 'ACF', format: 'dec3' },
-      { key: 'pacf', label: 'PACF', format: 'dec3' },
-      { key: 'lo', label: 'Limite basso', format: 'dec3' },
-      { key: 'hi', label: 'Limite alto', format: 'dec3' },
+      { key: 'lag', label: copy('Lag'), format: 'int' },
+      { key: 'acf', label: copy('ACF'), format: 'dec3' },
+      { key: 'pacf', label: copy('PACF'), format: 'dec3' },
+      { key: 'lo', label: copy('Limite basso'), format: 'dec3' },
+      { key: 'hi', label: copy('Limite alto'), format: 'dec3' },
     ],
     rows: acfRows,
     notes: [
-      'Barre oltre la banda indicano autocorrelazione non spiegata dal caso.',
-      'La PACF isola la correlazione al lag k al netto dei lag intermedi: un taglio netto dopo il lag 1 suggerisce un processo AR(1).',
+      copy('Barre oltre la banda indicano autocorrelazione non spiegata dal caso.'),
+      copy('La PACF isola la correlazione al lag k al netto dei lag intermedi: un taglio netto dopo il lag 1 suggerisce un processo AR(1).'),
     ],
   });
 
-  const mkDecision = isDecided(trend.p, level) ? (trend.s > 0 ? 'trend crescente' : 'trend decrescente') : 'nessun trend monotono';
+  const mkDecision = isDecided(trend.p, level) ? (trend.s > 0 ? copy('trend crescente') : copy('trend decrescente')) : copy('nessun trend monotono');
   tables.push({
     id: 'ts-tests',
-    title: 'Test di casualità e trend',
+    title: copy('Test di casualità e trend'),
     columns: [
-      { key: 'test', label: 'Test', format: 'text' },
-      { key: 'statistic', label: 'Statistica', format: 'dec3' },
-      { key: 'p', label: 'p', format: 'p' },
-      { key: 'decision', label: 'Lettura', format: 'text' },
+      { key: 'test', label: copy('Test'), format: 'text' },
+      { key: 'statistic', label: copy('Statistica'), format: 'dec3' },
+      { key: 'p', label: copy('p'), format: 'p' },
+      { key: 'decision', label: copy('Lettura'), format: 'text' },
     ],
     rows: [
       {
-        test: 'Mann–Kendall (trend)',
+        test: copy('Mann–Kendall (trend)'),
         statistic: trend.z,
         p: trend.p,
-        decision: Number.isFinite(trend.p) ? mkDecision : 'non calcolabile',
+        decision: Number.isFinite(trend.p) ? mkDecision : copy('non calcolabile'),
       },
       {
-        test: 'Wald–Wolfowitz (runs)',
+        test: copy('Wald–Wolfowitz (runs)'),
         statistic: runs.z,
         p: runs.p,
-        decision: Number.isFinite(runs.p) ? (isDecided(runs.p, level) ? 'serie non casuale' : 'compatibile con il caso') : 'non calcolabile',
+        decision: Number.isFinite(runs.p) ? (isDecided(runs.p, level) ? copy('serie non casuale') : copy('compatibile con il caso')) : copy('non calcolabile'),
       },
       {
-        test: `Ljung–Box (lag 1–${maxLag})`,
+        test: copy('Ljung–Box (lag 1–{s1})', { s1: maxLag }),
         statistic: ljung.q,
         p: ljung.p,
-        decision: Number.isFinite(ljung.p) ? (isDecided(ljung.p, level) ? 'autocorrelazione presente' : 'nessuna autocorrelazione rilevante') : 'non calcolabile',
+        decision: Number.isFinite(ljung.p) ? (isDecided(ljung.p, level) ? copy('autocorrelazione presente') : copy('nessuna autocorrelazione rilevante')) : copy('non calcolabile'),
       },
     ],
     notes: [
-      'Mann–Kendall è non parametrico e resistente agli outlier: p piccolo indica una tendenza monotona.',
-      'Il test dei runs verifica che l’ordine dei valori sia casuale, non la loro distribuzione.',
-      'Ljung–Box verifica se le prime autocorrelazioni sono congiuntamente nulle.',
+      copy('Mann–Kendall è non parametrico e resistente agli outlier: p piccolo indica una tendenza monotona.'),
+      copy('Il test dei runs verifica che l’ordine dei valori sia casuale, non la loro distribuzione.'),
+      copy('Ljung–Box verifica se le prime autocorrelazioni sono congiuntamente nulle.'),
     ],
   });
 
   if (decomposition) {
     tables.push({
       id: 'ts-seasonal',
-      title: 'Indici stagionali',
-      subtitle: `modello additivo · periodo ${period}`,
+      title: copy('Indici stagionali'),
+      subtitle: copy('modello additivo · periodo {s1}', { s1: period }),
       columns: [
-        { key: 'position', label: 'Posizione nel ciclo', format: 'int' },
-        { key: 'index', label: 'Indice', format: 'dec3' },
+        { key: 'position', label: copy('Posizione nel ciclo'), format: 'int' },
+        { key: 'index', label: copy('Indice'), format: 'dec3' },
       ],
       rows: decomposition.indices.map((value, index) => ({ position: index + 1, index: value })),
       notes: [
-        'Gli indici sono scostamenti medi dal trend, centrati su zero: valori positivi indicano periodi sopra la tendenza.',
-        `Forza della stagionalità = ${fmtEst(decomposition.strength, 3)} (0 = nessuna, 1 = stagionalità dominante).`,
+        copy('Gli indici sono scostamenti medi dal trend, centrati su zero: valori positivi indicano periodi sopra la tendenza.'),
+        copy('Forza della stagionalità = {s1} (0 = nessuna, 1 = stagionalità dominante).', { s1: fmtEst(decomposition.strength, 3) }),
       ],
     });
 
     tables.push({
       id: 'ts-decomposition',
-      title: 'Scomposizione',
-      subtitle: 'serie = trend + stagionalità + residuo',
+      title: copy('Scomposizione'),
+      subtitle: copy('serie = trend + stagionalità + residuo'),
       columns: [
-        { key: 't', label: 't', format: 'int' },
-        { key: 'value', label: 'Serie', format: 'dec3' },
-        { key: 'trend', label: 'Trend', format: 'dec3' },
-        { key: 'seasonal', label: 'Stagionalità', format: 'dec3' },
-        { key: 'remainder', label: 'Residuo', format: 'dec3' },
+        { key: 't', label: copy('t'), format: 'int' },
+        { key: 'value', label: copy('Serie'), format: 'dec3' },
+        { key: 'trend', label: copy('Trend'), format: 'dec3' },
+        { key: 'seasonal', label: copy('Stagionalità'), format: 'dec3' },
+        { key: 'remainder', label: copy('Residuo'), format: 'dec3' },
       ],
       rows: values.map((value, index) => ({
         t: index + 1,
@@ -150,7 +151,7 @@ export const timeSeriesTables = (options: TimeSeriesOptions): TableSpec[] => {
         seasonal: decomposition.seasonal[index],
         remainder: decomposition.remainder[index],
       })),
-      notes: ['Le prime e le ultime osservazioni non hanno trend stimato: la media mobile centrata non è definita ai bordi.'],
+      notes: [copy('Le prime e le ultime osservazioni non hanno trend stimato: la media mobile centrata non è definita ai bordi.')],
     });
   }
 
@@ -158,14 +159,14 @@ export const timeSeriesTables = (options: TimeSeriesOptions): TableSpec[] => {
   if (models.length > 0) {
     tables.push({
       id: 'ts-models',
-      title: 'Confronto dei modelli di previsione',
-      subtitle: 'errore su un campione di validazione (ultimo 20% della serie)',
+      title: copy('Confronto dei modelli di previsione'),
+      subtitle: copy('errore su un campione di validazione (ultimo 20% della serie)'),
       columns: [
-        { key: 'model', label: 'Modello', format: 'text' },
-        { key: 'rmse', label: 'RMSE', format: 'dec3' },
-        { key: 'mae', label: 'MAE', format: 'dec3' },
-        { key: 'mape', label: 'MAPE %', format: 'dec2' },
-        { key: 'note', label: 'Dettaglio', format: 'text' },
+        { key: 'model', label: copy('Modello'), format: 'text' },
+        { key: 'rmse', label: copy('RMSE'), format: 'dec3' },
+        { key: 'mae', label: copy('MAE'), format: 'dec3' },
+        { key: 'mape', label: copy('MAPE %'), format: 'dec2' },
+        { key: 'note', label: copy('Dettaglio'), format: 'text' },
       ],
       rows: models.map(model => ({
         model: model.name,
@@ -175,23 +176,23 @@ export const timeSeriesTables = (options: TimeSeriesOptions): TableSpec[] => {
         note: model.note,
       })),
       notes: [
-        'RMSE e MAE sono nella stessa unità della serie; il MAPE è percentuale e non è definito se la serie contiene zeri.',
-        'Questi modelli servono da riferimento: il migliore viene confrontato con l’ARIMA, che è il modello usato per le previsioni con intervalli.',
+        copy('RMSE e MAE sono nella stessa unità della serie; il MAPE è percentuale e non è definito se la serie contiene zeri.'),
+        copy('Questi modelli servono da riferimento: il migliore viene confrontato con l’ARIMA, che è il modello usato per le previsioni con intervalli.'),
       ],
     });
 
     tables.push({
       id: 'ts-forecast',
-      title: `Previsioni (${models[0].name})`,
-      subtitle: `orizzonte ${models[0].forecast.length} passi`,
+      title: copy('Previsioni ({s1})', { s1: models[0].name }),
+      subtitle: copy('orizzonte {s1} passi', { s1: models[0].forecast.length }),
       columns: [
-        { key: 'step', label: 'Passo', format: 'int' },
-        { key: 'forecast', label: 'Previsione', format: 'dec3' },
+        { key: 'step', label: copy('Passo'), format: 'int' },
+        { key: 'forecast', label: copy('Previsione'), format: 'dec3' },
       ],
       rows: models[0].forecast.map((value, index) => ({ step: n + index + 1, forecast: value })),
       notes: [
-        'Le previsioni sono puntuali: non incorporano l’incertezza del modello né quella dei dati.',
-        'Con orizzonti lunghi l’errore cresce: oltre un ciclo stagionale le previsioni vanno lette come indicazione di direzione.',
+        copy('Le previsioni sono puntuali: non incorporano l’incertezza del modello né quella dei dati.'),
+        copy('Con orizzonti lunghi l’errore cresce: oltre un ciclo stagionale le previsioni vanno lette come indicazione di direzione.'),
       ],
     });
   }
@@ -200,10 +201,10 @@ export const timeSeriesTables = (options: TimeSeriesOptions): TableSpec[] => {
 };
 
 export const modelQuality = (rmse: number, sd: number): string => {
-  if (!Number.isFinite(rmse) || !Number.isFinite(sd) || sd <= 0) return 'non calcolabile';
+  if (!Number.isFinite(rmse) || !Number.isFinite(sd) || sd <= 0) return copy('non calcolabile');
   const ratio = rmse / sd;
-  if (ratio < 0.3) return 'molto buona';
+  if (ratio < 0.3) return copy('molto buona');
   if (ratio < 0.6) return 'discreta';
   if (ratio < 1) return 'modesta';
-  return 'scarsa (peggio della media)';
+  return copy('scarsa (peggio della media)');
 };

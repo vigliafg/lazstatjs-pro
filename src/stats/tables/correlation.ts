@@ -1,4 +1,5 @@
 import type { TableSpec } from '../types';
+import { copy } from '../reportCopy';
 import { stars, interpretR } from '../format';
 import {
   columnSummaries,
@@ -24,39 +25,39 @@ export const correlationTables = (options: CorrelationTablesOptions): TableSpec[
   const pairs = correlationPairs(rows, varIdxs, level);
   const pairMap = new Map<string, CorrelationPair>();
   pairs.forEach(pair => {
-    pairMap.set(`${pair.a}-${pair.b}`, pair);
-    pairMap.set(`${pair.b}-${pair.a}`, pair);
+    pairMap.set(copy('{s1}-{s2}', { s1: pair.a, s2: pair.b }), pair);
+    pairMap.set(copy('{s1}-{s2}', { s1: pair.b, s2: pair.a }), pair);
   });
 
   const tables: TableSpec[] = [];
 
   const pairColumns = [
-    { key: 'a', label: 'Variabile A', format: 'text' as const },
-    { key: 'b', label: 'Variabile B', format: 'text' as const },
-    { key: 'n', label: 'N', format: 'int' as const },
-    { key: 'pearson', label: 'Pearson r', format: 'dec3' as const },
-    { key: 'pearsonP', label: 'p', format: 'p' as const },
-    { key: 'lo', label: 'CI low', format: 'dec3' as const },
-    { key: 'hi', label: 'CI high', format: 'dec3' as const },
-    { key: 'r2', label: 'r²', format: 'dec3' as const },
+    { key: 'a', label: copy('Variabile A'), format: 'text' as const },
+    { key: 'b', label: copy('Variabile B'), format: 'text' as const },
+    { key: 'n', label: copy('N'), format: 'int' as const },
+    { key: 'pearson', label: copy('Pearson r'), format: 'dec3' as const },
+    { key: 'pearsonP', label: copy('p'), format: 'p' as const },
+    { key: 'lo', label: copy('CI low'), format: 'dec3' as const },
+    { key: 'hi', label: copy('CI high'), format: 'dec3' as const },
+    { key: 'r2', label: copy('r²'), format: 'dec3' as const },
     ...(showSpearman
       ? [
-          { key: 'spearman', label: 'Spearman ρ', format: 'dec3' as const },
-          { key: 'spearmanP', label: 'p', format: 'p' as const },
+          { key: 'spearman', label: copy('Spearman ρ'), format: 'dec3' as const },
+          { key: 'spearmanP', label: copy('p'), format: 'p' as const },
         ]
       : []),
     ...(showKendall
       ? [
-          { key: 'kendall', label: 'Kendall τ', format: 'dec3' as const },
-          { key: 'kendallP', label: 'p', format: 'p' as const },
+          { key: 'kendall', label: copy('Kendall τ'), format: 'dec3' as const },
+          { key: 'kendallP', label: copy('p'), format: 'p' as const },
         ]
       : []),
   ];
 
   tables.push({
     id: 'corr-pairs',
-    title: 'Correlazioni a coppie',
-    subtitle: `Metodo primario: ${method} · CI ${level}% · eliminazione pairwise`,
+    title: copy('Correlazioni a coppie'),
+    subtitle: copy('Metodo primario: {s1} · CI {s2}% · eliminazione pairwise', { s1: method, s2: level }),
     columns: pairColumns,
     rows: pairs.map(pair => ({
       a: varNames[pair.a],
@@ -73,9 +74,9 @@ export const correlationTables = (options: CorrelationTablesOptions): TableSpec[
       kendallP: showKendall ? pair.kendallP : undefined,
     })),
     notes: [
-      'Ogni coppia usa tutte le righe con entrambi i valori validi (pairwise deletion): N può variare tra le coppie.',
-      'p di Pearson e Spearman: t con df = N − 2. p di Kendall: approssimazione normale con correzione dei ranghi pari.',
-      'CI di Pearson: trasformazione z di Fisher, tanh(z ± z_crit/√(N−3)).',
+      copy('Ogni coppia usa tutte le righe con entrambi i valori validi (pairwise deletion): N può variare tra le coppie.'),
+      copy('p di Pearson e Spearman: t con df = N − 2. p di Kendall: approssimazione normale con correzione dei ranghi pari.'),
+      copy('CI di Pearson: trasformazione z di Fisher, tanh(z ± z_crit/√(N−3)).'),
     ],
   });
 
@@ -89,60 +90,60 @@ export const correlationTables = (options: CorrelationTablesOptions): TableSpec[
     id,
     title,
     columns: [
-      { key: 'variable', label: 'Variable', format: 'text' },
-      ...varNames.map((name, index) => ({ key: `v${index}`, label: name, format: 'text' as const, align: 'right' as const })),
+      { key: 'variable', label: copy('Variable'), format: 'text' },
+      ...varNames.map((name, index) => ({ key: copy('v{s1}', { s1: index }), label: name, format: 'text' as const, align: 'right' as const })),
     ],
     rows: varNames.map((name, i) => {
       const row: { [key: string]: string } = { variable: name };
       varNames.forEach((_, j) => {
         if (i === j) {
-          row[`v${j}`] = '1';
+          row[copy('v{s1}', { s1: j })] = '1';
           return;
         }
-        const pair = pairMap.get(`${i}-${j}`);
+        const pair = pairMap.get(copy('{s1}-{s2}', { s1: i, s2: j }));
         if (!pair || pair.n < 3) {
-          row[`v${j}`] = '—';
+          row[copy('v{s1}', { s1: j })] = '—';
           return;
         }
         if (j < i) {
           const value = coefficient(pair);
-          row[`v${j}`] = `${isFinite(value) ? value.toFixed(3) : '—'}${stars(pValue(pair))}`;
+          row[copy('v{s1}', { s1: j })] = copy('{s1}{s2}', { s1: isFinite(value) ? value.toFixed(3) : '—', s2: stars(pValue(pair)) });
         } else {
-          row[`v${j}`] = `n=${pair.n}`;
+          row[copy('v{s1}', { s1: j })] = copy('n={s1}', { s1: pair.n });
         }
       });
       return row;
     }),
     notes: [
       note,
-      'Triangolo inferiore: coefficiente con stelle di significatività (* p<.05, ** p<.01, *** p<.001). Triangolo superiore: N della coppia.',
+      copy('Triangolo inferiore: coefficiente con stelle di significatività (* p<.05, ** p<.01, *** p<.001). Triangolo superiore: N della coppia.'),
     ],
   });
 
   const matrices: TableSpec[] = [];
   if (method === 'spearman' && showSpearman) {
-    matrices.push(matrixTable('corr-matrix-spearman', 'Matrice di correlazione di Spearman (ρ)', p => p.spearman, p => p.spearmanP, 'Rho di Spearman sui ranghi.'));
+    matrices.push(matrixTable('corr-matrix-spearman', copy('Matrice di correlazione di Spearman (ρ)'), p => p.spearman, p => p.spearmanP, copy('Rho di Spearman sui ranghi.')));
   }
-  matrices.push(matrixTable('corr-matrix-pearson', 'Matrice di correlazione di Pearson (r)', p => p.pearson, p => p.pearsonP, 'Coefficiente lineare di Pearson.'));
+  matrices.push(matrixTable('corr-matrix-pearson', copy('Matrice di correlazione di Pearson (r)'), p => p.pearson, p => p.pearsonP, copy('Coefficiente lineare di Pearson.')));
   if (method !== 'spearman' && showSpearman) {
-    matrices.push(matrixTable('corr-matrix-spearman', 'Matrice di correlazione di Spearman (ρ)', p => p.spearman, p => p.spearmanP, 'Rho di Spearman sui ranghi.'));
+    matrices.push(matrixTable('corr-matrix-spearman', copy('Matrice di correlazione di Spearman (ρ)'), p => p.spearman, p => p.spearmanP, copy('Rho di Spearman sui ranghi.')));
   }
   if (showKendall) {
-    matrices.push(matrixTable('corr-matrix-kendall', "Matrice di correlazione di Kendall (τ-b)", p => p.kendall, p => p.kendallP, 'Tau-b di Kendall con correzione dei ranghi pari.'));
+    matrices.push(matrixTable('corr-matrix-kendall', copy("Matrice di correlazione di Kendall (τ-b)"), p => p.kendall, p => p.kendallP, copy('Tau-b di Kendall con correzione dei ranghi pari.')));
   }
   tables.push(...matrices);
 
   tables.push({
     id: 'corr-descriptives',
-    title: 'Descrittive delle variabili',
+    title: copy('Descrittive delle variabili'),
     columns: [
-      { key: 'variable', label: 'Variable', format: 'text' },
-      { key: 'n', label: 'N', format: 'int' },
-      { key: 'mean', label: 'Mean', format: 'dec4' },
-      { key: 'sd', label: 'SD', format: 'dec4' },
-      { key: 'median', label: 'Median', format: 'dec4' },
-      { key: 'min', label: 'Min', format: 'dec4' },
-      { key: 'max', label: 'Max', format: 'dec4' },
+      { key: 'variable', label: copy('Variable'), format: 'text' },
+      { key: 'n', label: copy('N'), format: 'int' },
+      { key: 'mean', label: copy('Mean'), format: 'dec4' },
+      { key: 'sd', label: copy('SD'), format: 'dec4' },
+      { key: 'median', label: copy('Median'), format: 'dec4' },
+      { key: 'min', label: copy('Min'), format: 'dec4' },
+      { key: 'max', label: copy('Max'), format: 'dec4' },
     ],
     rows: columnSummaries(rows, varIdxs).map((summary, position) => ({
       variable: varNames[position],
@@ -158,22 +159,22 @@ export const correlationTables = (options: CorrelationTablesOptions): TableSpec[
     const q = varIdxs.length;
     tables.push({
       id: 'corr-partial',
-      title: 'Correlazioni parziali',
-      subtitle: `controllando per le altre ${q - 2} variabili · CI ${level}%`,
+      title: copy('Correlazioni parziali'),
+      subtitle: copy('controllando per le altre {s1} variabili · CI {s2}%', { s1: q - 2, s2: level }),
       columns: [
-        { key: 'a', label: 'Variabile A', format: 'text' },
-        { key: 'b', label: 'Variabile B', format: 'text' },
-        { key: 'controls', label: 'Controllate', format: 'text' },
-        { key: 'r', label: 'r parziale', format: 'dec3' },
-        { key: 'df', label: 'df', format: 'int' },
-        { key: 'p', label: 'p', format: 'p' },
-        { key: 'lo', label: 'CI low', format: 'dec3' },
-        { key: 'hi', label: 'CI high', format: 'dec3' },
+        { key: 'a', label: copy('Variabile A'), format: 'text' },
+        { key: 'b', label: copy('Variabile B'), format: 'text' },
+        { key: 'controls', label: copy('Controllate'), format: 'text' },
+        { key: 'r', label: copy('r parziale'), format: 'dec3' },
+        { key: 'df', label: copy('df'), format: 'int' },
+        { key: 'p', label: copy('p'), format: 'p' },
+        { key: 'lo', label: copy('CI low'), format: 'dec3' },
+        { key: 'hi', label: copy('CI high'), format: 'dec3' },
       ],
       rows: partialRows,
       notes: [
-        'Calcolate su casi completi per tutte le variabili selezionate (listwise deletion), per garantire una matrice invertibile.',
-        'r parziale da inversa della matrice di correlazione: r_ij·rest = −P_ij/√(P_ii·P_jj); p con t e df = N − q (q = numero di variabili selezionate).',
+        copy('Calcolate su casi completi per tutte le variabili selezionate (listwise deletion), per garantire una matrice invertibile.'),
+        copy('r parziale da inversa della matrice di correlazione: r_ij·rest = −P_ij/√(P_ii·P_jj); p con t e df = N − q (q = numero di variabili selezionate).'),
       ],
     });
   }

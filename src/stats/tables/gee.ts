@@ -1,43 +1,44 @@
 import type { TableSpec } from '../types';
+import { copy } from '../reportCopy';
 import type { GeeStats } from '../gee/types';
 
 export const geeTables = (stats: GeeStats, level: number): TableSpec[] => [
   {
     id: 'gee-summary',
-    title: 'GEE',
-    subtitle: `${stats.family === 'gaussian' ? 'Gaussiana' : 'Binomiale'} · ${stats.correlation} · CI ${level}%`,
+    title: copy('GEE'),
+    subtitle: copy('{s1} · {s2} · CI {s3}%', { s1: stats.family === 'gaussian' ? 'Gaussiana' : 'Binomiale', s2: stats.correlation, s3: level }),
     columns: [
-      { key: 'metric', label: 'Metrica', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'dec4' },
+      { key: 'metric', label: copy('Metrica'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'dec4' },
     ],
     rows: [
-      { metric: 'N', value: stats.n },
-      { metric: 'Cluster', value: stats.clusters },
-      { metric: 'Dimensione massima cluster', value: stats.maxCluster },
-      { metric: 'Alpha (correlazione di lavoro)', value: stats.alpha },
-      { metric: 'Phi (dispersione)', value: stats.phi },
-      { metric: 'Iterazioni', value: stats.iterations },
+      { metric: copy('N'), value: stats.n },
+      { metric: copy('Cluster'), value: stats.clusters },
+      { metric: copy('Dimensione massima cluster'), value: stats.maxCluster },
+      { metric: copy('Alpha (correlazione di lavoro)'), value: stats.alpha },
+      { metric: copy('Phi (dispersione)'), value: stats.phi },
+      { metric: copy('Iterazioni'), value: stats.iterations },
     ],
     notes: [
-      'Gli errori standard sono robusti per cluster (sandwich), non model-based.',
-      'La correlazione exchangeable assume la stessa correlazione tra tutte le coppie dentro cluster.',
+      copy('Gli errori standard sono robusti per cluster (sandwich), non model-based.'),
+      copy('La correlazione exchangeable assume la stessa correlazione tra tutte le coppie dentro cluster.'),
     ],
   },
   {
     id: 'gee-coefficients',
-    title: 'Coefficienti',
-    subtitle: 'SE robusti per cluster',
+    title: copy('Coefficienti'),
+    subtitle: copy('SE robusti per cluster'),
     columns: [
-      { key: 'term', label: 'Termine', format: 'text' },
-      { key: 'beta', label: 'β', format: 'dec4' },
-      { key: 'se', label: 'SE robusto', format: 'dec4' },
-      { key: 'z', label: 'z', format: 'dec3' },
-      { key: 'p', label: 'p', format: 'p' },
-      { key: 'or', label: 'exp(β)', format: 'dec4' },
-      { key: 'lo', label: 'CI low', format: 'dec4' },
-      { key: 'hi', label: 'CI high', format: 'dec4' },
+      { key: 'term', label: copy('Termine'), format: 'text' },
+      { key: 'beta', label: copy('β'), format: 'dec4' },
+      { key: 'se', label: copy('SE robusto'), format: 'dec4' },
+      { key: 'z', label: copy('z'), format: 'dec3' },
+      { key: 'p', label: copy('p'), format: 'p' },
+      { key: 'or', label: copy('exp(β)'), format: 'dec4' },
+      { key: 'lo', label: copy('CI low'), format: 'dec4' },
+      { key: 'hi', label: copy('CI high'), format: 'dec4' },
     ],
     rows: stats.coefficients.map(coefficient => ({ ...coefficient })),
-    notes: ['Per la famiglia binomiale exp(β) è l’odds ratio; per la gaussiana è un rapporto di medie.'],
+    notes: [copy('Per la famiglia binomiale exp(β) è l’odds ratio; per la gaussiana è un rapporto di medie.')],
   },
 ];

@@ -12,13 +12,15 @@ import type { GridData } from '../grid/types';
 import type { ReportSpec } from '../stats/report';
 import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
 import type { Toast } from './useToasts';
-import { t } from '../i18n';
+import { t, translate, type Locale } from '../i18n';
 
 interface UseOutputConsoleOptions {
   /** Blocchi ripristinati dal progetto/autosave. */
   initial?: StoredOutput[];
   grid: GridData;
   ciLevel: number;
+  /** Language of the exported document; the console chrome follows the UI. */
+  reportLocale: Locale;
   showToast: (title: string, msg: string, type?: Toast['type']) => void;
 }
 
@@ -29,7 +31,8 @@ interface UseOutputConsoleOptions {
  * snapshot HTML statico, così la console sopravvive a reload e file `.lzs`.
  * Gli export lavorano sul DOM già renderizzato: nessun ricalcolo.
  */
-export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutputConsoleOptions) => {
+export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToast }: UseOutputConsoleOptions) => {
+  const reportText = (key: Parameters<typeof translate>[1]): string => translate(reportLocale, key);
   const [outputs, setOutputs] = useState<OutputEntry[]>(() => restoredOutputs(initial));
   const runSeq = useRef(0);
 
@@ -70,7 +73,9 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     const block = (
       <>
         {node}
-        {report && <AnalysisReport spec={report} />}
+        {report && (
+          <AnalysisReport spec={report} limitationsLabel={reportText('report.limitations')} />
+        )}
       </>
     );
     let html = '';
@@ -162,9 +167,9 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     const el = document.getElementById('output-content');
     if (!el) return;
     const html = buildReportFromElement(el, {
-      title: t('output.reportTitle'),
-      generatedAt: new Date().toLocaleString(),
-      details: [`${nonEmptyRowCount(grid.rows)} ${t('output.rows')}`, `${grid.cols.length} ${t('output.columns')}`, `${t('output.ci')} ${ciLevel}%`],
+      title: reportText('output.reportTitle'),
+      generatedAt: new Date().toLocaleString(reportLocale),
+      details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.doc', 'application/msword;charset=utf-8');
     showToast(t('toast.report'), t('output.reportReady'), 'ok');
@@ -174,9 +179,9 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     const el = document.getElementById('output-content');
     if (!el) return;
     const html = buildReportFromElement(el, {
-      title: t('output.reportTitle'),
-      generatedAt: new Date().toLocaleString(),
-      details: [`${nonEmptyRowCount(grid.rows)} ${t('output.rows')}`, `${grid.cols.length} ${t('output.columns')}`, `${t('output.ci')} ${ciLevel}%`],
+      title: reportText('output.reportTitle'),
+      generatedAt: new Date().toLocaleString(reportLocale),
+      details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.html', 'text/html;charset=utf-8');
     showToast(t('toast.report'), t('output.reportReady'), 'ok');

@@ -16,7 +16,7 @@ export const DEFAULT_LOCALE: Locale = 'en';
 export const DEFAULT_REPORT_LOCALE: Locale = 'it';
 
 /** Locales whose report prose is translated and selectable in Settings. */
-export const REPORT_LOCALES: readonly Locale[] = ['it'];
+export const REPORT_LOCALES: readonly Locale[] = ['it', 'en'];
 
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: 'English',

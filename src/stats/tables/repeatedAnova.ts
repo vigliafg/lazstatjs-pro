@@ -1,4 +1,5 @@
 import { fmtEst, fmtP } from '../format';
+import { copy } from '../reportCopy';
 import { isDecided, show } from '../reportKit';
 import { alphaOf } from '../kernels/alpha';
 import { tCrit } from '../distributions';
@@ -17,20 +18,20 @@ export const repeatedAnovaTables = (
   return [
     {
       id: 'rm-anova',
-      title: 'ANOVA a misure ripetute',
-      subtitle: `${result.n} soggetti · ${result.k} condizioni · CI ${level}%`,
+      title: copy('ANOVA a misure ripetute'),
+      subtitle: copy('{s1} soggetti · {s2} condizioni · CI {s3}%', { s1: result.n, s2: result.k, s3: level }),
       columns: [
-        { key: 'source', label: 'Sorgente', format: 'text' },
-        { key: 'ss', label: 'SS', format: 'dec4' },
-        { key: 'df', label: 'df', format: 'dec2' },
-        { key: 'ms', label: 'MS', format: 'dec4' },
-        { key: 'f', label: 'F', format: 'dec3' },
-        { key: 'p', label: 'p', format: 'p' },
-        { key: 'etaP', label: 'η²p', format: 'dec3' },
+        { key: 'source', label: copy('Sorgente'), format: 'text' },
+        { key: 'ss', label: copy('SS'), format: 'dec4' },
+        { key: 'df', label: copy('df'), format: 'dec2' },
+        { key: 'ms', label: copy('MS'), format: 'dec4' },
+        { key: 'f', label: copy('F'), format: 'dec3' },
+        { key: 'p', label: copy('p'), format: 'p' },
+        { key: 'etaP', label: copy('η²p'), format: 'dec3' },
       ],
       rows: [
         {
-          source: 'Condizioni (within)',
+          source: copy('Condizioni (within)'),
           ss: result.ssConditions,
           df: result.dfConditions,
           ms: result.msConditions,
@@ -48,7 +49,7 @@ export const repeatedAnovaTables = (
           etaP: NaN,
         },
         {
-          source: 'Errore (Condizioni × Soggetti)',
+          source: copy('Errore (Condizioni × Soggetti)'),
           ss: result.ssError,
           df: result.dfError,
           ms: result.msError,
@@ -67,46 +68,46 @@ export const repeatedAnovaTables = (
         },
       ],
       notes: [
-        'F = MS_condizioni / MS_errore, con df = (k−1) e (n−1)(k−1).',
-        `η²p = ${fmtEst(result.partialEta2, 3)} · η²G = ${fmtEst(result.generalizedEta2, 3)}.`,
+        copy('F = MS_condizioni / MS_errore, con df = (k−1) e (n−1)(k−1).'),
+        copy('η²p = {s1} · η²G = {s2}.', { s1: fmtEst(result.partialEta2, 3), s2: fmtEst(result.generalizedEta2, 3) }),
       ],
     },
     {
       id: 'rm-sphericity',
-      title: 'Sfericità e correzioni',
-      subtitle: sphericityMet ? 'sfericità non rifiutata' : 'sfericità violata: usare la correzione',
+      title: copy('Sfericità e correzioni'),
+      subtitle: sphericityMet ? copy('sfericità non rifiutata') : copy('sfericità violata: usare la correzione'),
       columns: [
-        { key: 'metric', label: 'Metrica', format: 'text' },
-        { key: 'value', label: 'Valore', format: 'dec4' },
-        { key: 'detail', label: 'Dettaglio', format: 'text' },
+        { key: 'metric', label: copy('Metrica'), format: 'text' },
+        { key: 'value', label: copy('Valore'), format: 'dec4' },
+        { key: 'detail', label: copy('Dettaglio'), format: 'text' },
       ],
       rows: [
-        { metric: 'Mauchly W', value: result.mauchlyW, detail: '1 = sfericità perfetta' },
-        { metric: 'Mauchly χ²', value: result.mauchlyChi2, detail: `df = ${result.mauchlyDf}` },
-        { metric: 'Mauchly p', value: result.mauchlyP, detail: sphericityMet ? 'nessuna violazione' : 'violazione' },
-        { metric: 'ε Greenhouse–Geisser', value: result.ggEpsilon, detail: 'limite inferiore = 1/(k−1)' },
-        { metric: 'ε Huynh–Feldt', value: result.hfEpsilon, detail: 'più liberale di GG' },
-        { metric: 'F (df non corretti)', value: result.f, detail: `${result.dfConditions}, ${result.dfError}` },
-        { metric: 'p non corretto', value: result.p, detail: 'valido solo con sfericità' },
-        { metric: 'p GG', value: result.pGG, detail: `df = ${fmtEst(correctedDf1, 2)}, ${fmtEst(correctedDf2, 2)}` },
-        { metric: 'p HF', value: result.pHF, detail: 'df corretti con ε HF' },
-        { metric: 'η² generalizzato', value: result.generalizedEta2, detail: 'SS condizioni / SS totale' },
+        { metric: copy('Mauchly W'), value: result.mauchlyW, detail: copy('1 = sfericità perfetta') },
+        { metric: copy('Mauchly χ²'), value: result.mauchlyChi2, detail: copy('df = {s1}', { s1: result.mauchlyDf }) },
+        { metric: copy('Mauchly p'), value: result.mauchlyP, detail: sphericityMet ? copy('nessuna violazione') : 'violazione' },
+        { metric: copy('ε Greenhouse–Geisser'), value: result.ggEpsilon, detail: copy('limite inferiore = 1/(k−1)') },
+        { metric: copy('ε Huynh–Feldt'), value: result.hfEpsilon, detail: copy('più liberale di GG') },
+        { metric: copy('F (df non corretti)'), value: result.f, detail: copy('{s1}, {s2}', { s1: result.dfConditions, s2: result.dfError }) },
+        { metric: copy('p non corretto'), value: result.p, detail: copy('valido solo con sfericità') },
+        { metric: copy('p GG'), value: result.pGG, detail: copy('df = {s1}, {s2}', { s1: fmtEst(correctedDf1, 2), s2: fmtEst(correctedDf2, 2) }) },
+        { metric: copy('p HF'), value: result.pHF, detail: copy('df corretti con ε HF') },
+        { metric: copy('η² generalizzato'), value: result.generalizedEta2, detail: copy('SS condizioni / SS totale') },
       ],
       notes: [
-        'Mauchly richiede normalità multivariata; con n piccolo il test ha potenza bassa.',
-        'Se Mauchly è significativo, riportare il p corretto GG (conservativo) o HF.',
+        copy('Mauchly richiede normalità multivariata; con n piccolo il test ha potenza bassa.'),
+        copy('Se Mauchly è significativo, riportare il p corretto GG (conservativo) o HF.'),
       ],
     },
     {
       id: 'rm-descriptives',
-      title: 'Descrittive per condizione',
+      title: copy('Descrittive per condizione'),
       columns: [
-        { key: 'condition', label: 'Condizione', format: 'text' },
-        { key: 'n', label: 'N', format: 'int' },
-        { key: 'mean', label: 'Media', format: 'dec3' },
-        { key: 'sd', label: 'SD', format: 'dec3' },
-        { key: 'ciLo', label: 'CI low', format: 'dec3' },
-        { key: 'ciHi', label: 'CI high', format: 'dec3' },
+        { key: 'condition', label: copy('Condizione'), format: 'text' },
+        { key: 'n', label: copy('N'), format: 'int' },
+        { key: 'mean', label: copy('Media'), format: 'dec3' },
+        { key: 'sd', label: copy('SD'), format: 'dec3' },
+        { key: 'ciLo', label: copy('CI low'), format: 'dec3' },
+        { key: 'ciHi', label: copy('CI high'), format: 'dec3' },
       ],
       rows: names.map((name, index) => {
         const half = crit * (result.sds[index] / Math.sqrt(result.n));
@@ -119,7 +120,7 @@ export const repeatedAnovaTables = (
           ciHi: result.means[index] + half,
         };
       }),
-      notes: [`CI = media ± t(${level}%, df = ${result.n - 1})·SE.`],
+      notes: [copy('CI = media ± t({s1}%, df = {s2})·SE.', { s1: level, s2: result.n - 1 })],
     },
   ];
 };

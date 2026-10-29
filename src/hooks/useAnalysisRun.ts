@@ -3,13 +3,16 @@ import { validateAnalysisColumnRefs } from '../analyses/params';
 import type { AnalysisRunResult } from '../analyses/types';
 import type { Dataset } from '../grid/types';
 import type { ProjectParams } from '../io/project';
-import { t } from '../i18n';
+import { t, type Locale } from '../i18n';
+import { isReportLocale, withReportLocale } from '../stats/reportCopy';
 
 interface UseAnalysisRunOptions {
   activeAnalysis: string;
   grid: Dataset;
   params: ProjectParams;
   ciLevel: number;
+  /** Language of the written report; only translated languages stay switched on. */
+  reportLocale: Locale;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */
   emit: (
     result: AnalysisRunResult,
@@ -31,6 +34,7 @@ export const useAnalysisRun = ({
   grid,
   params,
   ciLevel,
+  reportLocale,
   emit,
   warn,
 }: UseAnalysisRunOptions) => {
@@ -52,8 +56,9 @@ export const useAnalysisRun = ({
     if (runner) {
       // A stale live run may finish after a newer one: never publish it.
       if (options?.isCurrent && !options.isCurrent()) return false;
+      const locale = isReportLocale(reportLocale) ? reportLocale : 'it';
       return emit(
-        runner({ grid, params: paramsUsed, ciLevel: level }),
+        withReportLocale(locale, () => runner({ grid, params: paramsUsed, ciLevel: level })),
         analysisId,
         paramsUsed,
         { ...options, ciLevel: level }

@@ -109,7 +109,6 @@ export const outputMessages: Record<keyof typeof enOutput, string> = {
   'report.limitations': 'Limiti e cautele',
   'xlsx.table': 'Tabella {n}',
   'output.untitled': 'Output dell’analisi',
-  'settings.reportItOnly': 'I testi dei report sono disponibili in italiano; inglese e le altre lingue arrivano nell’onda successiva. Le schede esistenti restano nella lingua in cui sono state prodotte.',
   'project.tooLarge': 'Il file di progetto è troppo grande',
   'import.done': 'righe e',
   'import.columns': 'colonne importate',

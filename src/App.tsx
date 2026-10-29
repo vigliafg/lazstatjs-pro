@@ -317,7 +317,7 @@ export default function App() {
     exportResultsXlsx,
     exportReportHtml,
     exportReportWord,
-  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
+  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast });
 
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
     useColumnOperations({ grid, params, setParams, setGrid, showToast });
@@ -458,6 +458,7 @@ export default function App() {
     grid: analysisGrid,
     params,
     ciLevel,
+    reportLocale,
     emit,
     warn: (message) => showToast(t('toast.analysis'), message, 'warn'),
   });

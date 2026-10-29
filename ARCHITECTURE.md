@@ -135,6 +135,30 @@ parsing di `.lzs` non trascina il dizionario. `uiLocale`, `reportLocale` e
 `helpLocale` sono campi opzionali di `ProjectSettings`: i progetti vecchi si
 aprono con i default e `PROJECT_VERSION` non cambia.
 
+### Prosa dei report e etichette delle tabelle
+
+`src/stats/reportCopy/` traduce l'output scritto senza duplicare i builder:
+
+- i builder e le tabelle scrivono la frase italiana come **msgid**
+  (`copy('Le medie di {s1} sono diverse: {s2}.', { s1, s2 })`), stile gettext;
+- `copy()` risolve il msgid nel catalogo della lingua attiva e, se manca, torna
+  all'italiano: una traduzione parziale non produce mai `undefined`;
+- `withReportLocale(locale, () => runner(...))` imposta la lingua per la durata
+  di una singola esecuzione (`useAnalysisRun`), quindi report e tabelle della
+  stessa card sono sempre nella stessa lingua;
+- `TRANSLATED_REPORT_LOCALES` elenca le lingue con catalogo completo e
+  `REPORT_LOCALES` solo quelle selezionabili in Impostazioni;
+- `sourceOf()` riporta un'etichetta tradotta al msgid italiano: i report che
+  leggono le righe delle tabelle (`rowLike`, `rowBy`, confronti sui nomi delle
+  metriche) continuano a trovare i numeri in ogni lingua;
+- `scripts/check-locale.mjs <locale>` valida un'ondata (chiavi UI, pagine del
+  manuale, prosa dei report, segnaposto) prima di dichiararla attiva;
+  `docs/glossary/glossary.md` fissa la terminologia nelle sei lingue.
+
+La lingua dei report si sceglie in Impostazioni ed è persistita nel progetto:
+le card già prodotte restano nella lingua in cui sono state generate, `Re-run
+all` le rigenera con la lingua corrente.
+
 ## Manuale (help)
 
 - contenuto strutturato in `src/help/content/<locale>/` (`areas.ts`,
@@ -146,7 +170,9 @@ aprono con i default e `PROJECT_VERSION` non cambia.
 - `src/help/book.ts` costruisce gli URL, `HelpPanel` ospita il libro nella scheda
   HELP, `HelpButton` + `HelpDialog` aprono la pagina di una procedura in popup;
 - `src/help/content.test.ts` impone la parità tra lingue, la copertura di ogni
-  procedura del registry con entrambi i livelli e l'esistenza dei dataset.
+  procedura del registry con entrambi i livelli e l'esistenza dei dataset;
+- `docs/glossary/glossary.md` è la fonte terminologica per tradurre una nuova
+  pagina o un nuovo report.
 
 ## Debito noto
 

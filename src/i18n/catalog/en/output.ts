@@ -107,7 +107,6 @@ export const outputMessages = {
   'report.limitations': 'Limitations and caveats',
   'xlsx.table': 'Table {n}',
   'output.untitled': 'Analysis output',
-  'settings.reportItOnly': 'Report wording is available in Italian; English and the other languages arrive in the next wave. Existing cards keep the language they were produced in.',
   'project.tooLarge': 'The project file is too large',
   'import.done': 'rows and',
   'import.columns': 'columns imported',

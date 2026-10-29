@@ -48,3 +48,18 @@ test('the procedure popup deep-links to the handbook page', async ({ page }) => 
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
 });
+
+test('the report language switches the written card, not just the interface', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
+  await page.getByRole('main').getByLabel('Report language').selectOption('en');
+
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByPlaceholder('Search analyses…').fill('T-Test');
+  await page.getByText('T-Test', { exact: true }).first().click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+
+  await expect(page.getByText('Reading report — T-Test')).toBeVisible();
+  await expect(page.getByText('The main test')).toBeVisible();
+  await expect(page.getByText('Report di lettura — Test t')).toHaveCount(0);
+});
