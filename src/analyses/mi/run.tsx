@@ -81,13 +81,13 @@ export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunRe
       }),
       makeChart({
         id: 'mi-missingness',
-        kind: 'bar',
+        kind: 'missingness',
         title: copy('Valori osservati e mancanti'),
         subtitle: copy('{s1} righe · {s2} imputazioni', { s1: stats.n, s2: stats.imputations }),
         note: copy('La barra grigia misura i valori mancanti per variabile: sono i valori che l’imputazione ricostruisce.'),
         data: { bars },
         fields: { xLabel: copy('Variabile'), yLabel: copy('Conteggio'), series: copy('Stato') },
-        options: { valueLabels: true } as never,
+        options: { showLabels: true } as never,
       }),
     ],
   };

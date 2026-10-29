@@ -1,11 +1,11 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
-import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { AncovaParams } from '../../io/project';
 import { numericColumnIndexes } from '../shared/columns';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
+  GroupSelect,
   VariableList,
   VariableSelect,
   variableOptionsFrom,
@@ -28,7 +28,6 @@ export const AncovaForm = ({
 }: AncovaFormProps) => {
   const { response, factor, covariates } = ancovaParams;
   const numericColumns = continuousColumnIndexes(grid);
-  const factorColumns = groupColumnIndexes(grid);
   const availableCovariates = numericColumns.filter(
     index => index !== response && index !== factor
   );
@@ -41,21 +40,13 @@ export const AncovaForm = ({
         options={variableOptionsFrom(grid.cols, numericColumns)}
         onChange={value => setAncovaParams(prev => ({ ...prev, response: value }))}
       />
-      <VariableSelect
+      <GroupSelect
         label={t('form.factor')}
+        grid={grid}
         value={factor}
-        options={variableOptionsFrom(grid.cols, factorColumns)}
         onChange={value => setAncovaParams(prev => ({ ...prev, factor: value }))}
-        trailing={
-          <LevelsEditor
-            grid={grid}
-            column={factor}
-            onLevels={onLevels}
-            onRecode={onRecode}
-            label={t('action.levels')}
-            className={LEVELS_BUTTON_CLASS}
-          />
-        }
+        onLevels={onLevels}
+        onRecode={onRecode}
       />
       <VariableList
         label={t('form.covariatesOne')}

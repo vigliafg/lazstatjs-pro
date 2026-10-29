@@ -1,12 +1,6 @@
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  useId,
-  type ReactElement,
-  type ReactNode,
-} from 'react';
-import { columnLabel, type Column } from '../grid/types';
+import { Children, cloneElement, isValidElement, useId, type ReactElement, type ReactNode } from 'react';
+import { columnLabel, groupColumnIndexes, type CategoryLevel, type Column, type GridData } from '../grid/types';
+import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../grid/LevelsEditor';
 import { t } from '../i18n';
 import { useUiMode } from './UiMode';
 
@@ -99,6 +93,7 @@ export const VariableSelect = ({
   onChange,
   hint,
   trailing,
+  disabledValues = [],
 }: {
   label: string;
   ariaLabel?: string;
@@ -107,6 +102,8 @@ export const VariableSelect = ({
   onChange: (value: number) => void;
   hint?: string;
   trailing?: ReactNode;
+  /** Values shown but not selectable (prevents duplicate roles). */
+  disabledValues?: readonly number[];
 }) => {
   const id = useId();
   return (
@@ -120,7 +117,7 @@ export const VariableSelect = ({
           onChange={event => onChange(Number(event.target.value))}
         >
           {options.map(option => (
-            <option key={option.value} value={option.value}>
+            <option key={option.value} value={option.value} disabled={disabledValues.includes(option.value)}>
               {option.label}
             </option>
           ))}
@@ -144,6 +141,7 @@ export const NumberField = ({
   step = 'any',
   integer = false,
   hint,
+  width = 'w-24',
 }: {
   label: string;
   value: number;
@@ -153,9 +151,14 @@ export const NumberField = ({
   step?: string;
   integer?: boolean;
   hint?: string;
+  width?: string;
 }) => {
   const id = useId();
-  const invalid = !Number.isFinite(value);
+  const minValue = min === undefined ? -Infinity : Number(min);
+  const maxValue = max === undefined ? Infinity : Number(max);
+  const outOfRange =
+    Number.isFinite(value) && (value < minValue || value > maxValue);
+  const invalid = !Number.isFinite(value) || outOfRange;
   return (
     <Field label={label} hint={hint} htmlFor={id}>
       <input
@@ -166,7 +169,7 @@ export const NumberField = ({
         step={step}
         aria-label={label}
         aria-invalid={invalid || undefined}
-        className={`w-24 rounded border bg-surface3 p-1.5 text-[11px] text-text ${
+        className={`${width} rounded border bg-surface3 p-1.5 text-[11px] text-text ${
           invalid ? 'border-red' : 'border-border2'
         }`}
         value={Number.isFinite(value) ? value : ''}
@@ -178,7 +181,7 @@ export const NumberField = ({
       />
       {invalid && (
         <span role="alert" className="text-[9px] text-red">
-          {t('form.numberRequired')}
+          {Number.isFinite(value) ? t('form.outOfRange') : t('form.numberRequired')}
         </span>
       )}
     </Field>
@@ -187,6 +190,83 @@ export const NumberField = ({
 
 export const variableOptions = (cols: Column[]): VariableOption[] =>
   cols.map((col, index) => ({ value: index, label: columnLabel(col) }));
+
+/**
+ * Single entry point for a grouping variable: filters to `isGroupColumn`,
+ * offers an optional "None", shows an explicit empty state and exposes the
+ * levels editor consistently across every procedure.
+ */
+export const GroupSelect = ({
+  label,
+  ariaLabel,
+  grid,
+  value,
+  onChange,
+  allowNone = false,
+  noneLabel,
+  fallback = false,
+  optionLabel,
+  hint,
+  onLevels,
+  onRecode,
+  disabledValues = [],
+}: {
+  label: string;
+  ariaLabel?: string;
+  grid: GridData;
+  value: number;
+  onChange: (value: number) => void;
+  /** Optional designs allow -1 (no group). */
+  allowNone?: boolean;
+  noneLabel?: string;
+  /** Keep the current non-group column visible while the user fixes it. */
+  fallback?: boolean;
+  /** Custom label, e.g. the Wizard's level count. */
+  optionLabel?: (index: number) => string;
+  hint?: string;
+  onLevels?: (column: number, levels: CategoryLevel[], reference?: string) => void;
+  onRecode?: (column: number, mapping: Record<string, string>) => void;
+  disabledValues?: readonly number[];
+}) => {
+  const indexes = groupColumnIndexes(grid);
+  const options: VariableOption[] = indexes.map(index => ({
+    value: index,
+    label: optionLabel?.(index) ?? columnLabel(grid.cols[index]),
+  }));
+  if (allowNone) {
+    options.unshift({ value: -1, label: noneLabel ?? t('form.none') });
+  }
+  if (fallback && value >= 0 && !indexes.includes(value) && grid.cols[value]) {
+    options.push({
+      value,
+      label: `${columnLabel(grid.cols[value])} (${t('form.groupNumericFallback')})`,
+    });
+  }
+  const hasGroup = indexes.length > 0;
+  const levels =
+    value >= 0 && grid.cols[value] && (onLevels || onRecode) ? (
+      <LevelsEditor
+        grid={grid}
+        column={value}
+        onLevels={onLevels ?? (() => undefined)}
+        onRecode={onRecode ?? (() => undefined)}
+        label={t('action.levels')}
+        className={LEVELS_BUTTON_CLASS}
+      />
+    ) : undefined;
+  return (
+    <VariableSelect
+      label={label}
+      ariaLabel={ariaLabel}
+      value={value}
+      options={options}
+      onChange={onChange}
+      disabledValues={disabledValues}
+      hint={hasGroup ? hint : t('form.noGroupColumns')}
+      trailing={levels}
+    />
+  );
+};
 
 /** Options restricted to a subset of grid indexes (order preserved). */
 export const variableOptionsFrom = (

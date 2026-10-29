@@ -522,4 +522,24 @@ export const chartCopy: Record<string, string> = {
     "{s1} completed values",
   "Confronta la distribuzione osservata con quella completata dalle imputazioni.":
     "Compare the observed distribution with the one completed by imputation.",
+  "{s1} · altri predittori alla media":
+    "{s1} · other predictors at their mean",
+  "La curva mostra il profilo del primo predittore mantenendo gli altri al valore medio; i punti sono le osservazioni.":
+    "The curve shows the profile of the first predictor while keeping the others at their mean; the points are the observations.",
+  "Soggetto {s1}":
+    "Subject {s1}",
+  "Ogni linea è un soggetto attraverso le condizioni; linee non parallele indicano risposte diverse al trattamento.":
+    "Each line is a subject across conditions; non-parallel lines indicate different responses to the treatment.",
+  "Matrice di correlazione":
+    "Correlation matrix",
+  "La diagonale vale 1; i colori mostrano direzione e forza delle correlazioni a coppie.":
+    "The diagonal is 1; the colours show the direction and strength of the pairwise correlations.",
+  "Kaplan–Meier per strato":
+    "Kaplan–Meier by stratum",
+  "{s1} strati · IC {s2}%":
+    "{s1} strata · CI {s2}%",
+  "Le curve descrivono la sopravvivenza osservata in ogni strato; il modello Cox condivide le stime delle covariate tra gli strati.":
+    "The curves describe the observed survival in each stratum; the Cox model shares covariate estimates across strata.",
+  "Strato":
+    "Stratum",
 };

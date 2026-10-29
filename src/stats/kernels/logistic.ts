@@ -227,6 +227,31 @@ export const fitLogistic = (
 
 
 /** Probability curve for a single-predictor model (for the chart). */
+/**
+ * Probability profile for the first predictor while keeping the other
+ * predictors at their means. For a single-predictor model it is identical to
+ * `logisticCurve`.
+ */
+export const logisticProfileCurve = (
+  model: LogisticModel,
+  predictorValues: number[],
+  otherMeans: number[],
+  points = 40
+): { x: number; y: number }[] => {
+  const min = Math.min(...predictorValues);
+  const max = Math.max(...predictorValues);
+  if (!Number.isFinite(min) || !Number.isFinite(max) || min === max) return [];
+  const step = (max - min) / (points - 1);
+  return Array.from({ length: points }, (_, index) => {
+    const x = min + step * index;
+    const eta =
+      model.beta[0] +
+      model.beta[1] * x +
+      otherMeans.reduce((sum, value, offset) => sum + model.beta[offset + 2] * value, 0);
+    return { x, y: sigmoid(eta) * 100 };
+  });
+};
+
 export const logisticCurve = (
   model: LogisticModel,
   predictorValues: number[],

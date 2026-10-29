@@ -43,7 +43,12 @@ export const serializeTable = (
   opts: ExportOptions
 ): { content: string; fileName: string; mime: string } => {
   const delim = opts.format === 'csv' || opts.format === 'spss' ? opts.delimiter : formatFor(opts.format);
-  const converted = rows.map((row) => row.map((v) => applyDecimals(v, opts.decimalSeparator)));
+  // JSON is a machine-readable format: locale decimal commas would turn
+  // numbers into strings that no consumer can parse. Only delimited exports
+  // apply the user's decimal separator.
+  const converted = opts.format === 'json'
+    ? rows.map((row) => row.map((value) => String(value ?? '')))
+    : rows.map((row) => row.map((v) => applyDecimals(v, opts.decimalSeparator)));
   if (opts.format === 'json') {
     const arr = converted.map((row) => Object.fromEntries(names.map((n, i) => [n, row[i] ?? ''])));
     return { content: JSON.stringify(arr, null, 2), fileName: 'lazstats.json', mime: 'application/json;charset=utf-8' };
@@ -55,7 +60,11 @@ export const serializeTable = (
     return { content: body, fileName: 'lazstats.csv', mime: 'text/csv;charset=utf-8' };
   }
   const ext = opts.format === 'tsv' ? 'tsv' : opts.format === 'pipe' ? 'txt' : 'csv';
-  const mime = opts.format === 'tsv' ? 'text/tab-separated-values;charset=utf-8' : 'text/csv;charset=utf-8';
+  const mime = opts.format === 'tsv'
+    ? 'text/tab-separated-values;charset=utf-8'
+    : opts.format === 'pipe'
+      ? 'text/plain;charset=utf-8'
+      : 'text/csv;charset=utf-8';
   return { content: body, fileName: `lazstats.${ext}`, mime };
 };
 

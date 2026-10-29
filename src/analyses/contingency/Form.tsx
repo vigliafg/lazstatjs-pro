@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { ContingencyParams } from '../../io/project';
 import { t } from '../../i18n';
-import { CheckboxField, Field } from '../../components/FormFields';
+import { CheckboxField } from '../../components/FormFields';
 
 export interface ContingencyFormProps {
   contingencyParams: ContingencyParams;
@@ -91,7 +91,8 @@ export const ContingencyForm = ({
   };
 
   return (
-    <Field label={t('contingency.title')}>
+    <div className="flex flex-col gap-1">
+      <span className="font-mono text-[10px] uppercase tracking-widest text-text3">{t('contingency.title')}</span>
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex gap-1.5">
@@ -191,6 +192,6 @@ export const ContingencyForm = ({
           />
         </div>
       </div>
-    </Field>
+    </div>
   );
 };

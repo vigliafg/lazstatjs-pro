@@ -7,7 +7,7 @@ import { factoryOptions } from '../defaults';
 import { makeChart } from '../kits/common';
 import type { ChartKind, ScatterOptions } from '../../stats/charts';
 
-const kinds: ChartKind[] = ['scatter', 'line', 'bar', 'box', 'histogram', 'qq', 'forest', 'survival', 'acf', 'heatmap', 'mosaic', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness'];
+const kinds: ChartKind[] = ['scatter', 'line', 'bar', 'box', 'histogram', 'qq', 'forest', 'survival', 'acf', 'heatmap', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness'];
 
 const modelFor = (kind: ChartKind) =>
   makeChart({

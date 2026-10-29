@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { GridData } from '../grid/types';
+import { filterRowIndexes, type RowFilter } from '../grid/ops';
 import { nonEmptyRowCount } from '../grid/types';
 import {
   buildSpsSyntax,
@@ -16,11 +17,13 @@ import { buildDataWorkbook, XLSX_MIME } from './xlsx';
 
 interface Props {
   grid: GridData;
+  rowFilter?: RowFilter | null;
+  filterAffectsAnalysis?: boolean;
   onClose: () => void;
   onExport: (files: ExportFile[]) => void;
 }
 
-export function ExportDialog({ grid, onClose, onExport }: Props) {
+export function ExportDialog({ grid, rowFilter, filterAffectsAnalysis, onClose, onExport }: Props) {
   const prefs = useMemo(() => loadPrefs(), []);
   const [format, setFormat] = useState<ExportFormat>(
     (['csv', 'tsv', 'pipe', 'json', 'spss', 'xlsx'] as ExportFormat[]).includes(prefs.exportFormat as ExportFormat)
@@ -35,16 +38,25 @@ export function ExportDialog({ grid, onClose, onExport }: Props) {
   const [decimalSeparator, setDecimalSeparator] = useState<'.' | ','>(prefs.decimalSeparator);
   const [includeHeader, setIncludeHeader] = useState(prefs.includeHeader);
   const [dropEmptyRows, setDropEmptyRows] = useState(prefs.dropEmptyRows);
+  const [onlyFiltered, setOnlyFiltered] = useState(false);
+  const filteredGrid = useMemo<GridData | undefined>(() => {
+    if (!filterAffectsAnalysis || !rowFilter) return undefined;
+    return {
+      cols: grid.cols,
+      rows: filterRowIndexes(grid, rowFilter).map((index) => grid.rows[index]),
+    };
+  }, [grid, filterAffectsAnalysis, rowFilter]);
+  const activeGrid = onlyFiltered && filteredGrid ? filteredGrid : grid;
 
-  const rows = gridToRows(grid, dropEmptyRows);
+  const rows = gridToRows(activeGrid, dropEmptyRows);
   const opts: ExportOptions = { format, delimiter, decimalSeparator, includeHeader, dropEmptyRows };
   const isXlsx = format === 'xlsx';
-  const main = isXlsx ? null : serializeTable(grid.cols.map((c) => c.name), rows, opts);
+  const main = isXlsx ? null : serializeTable(activeGrid.cols.map((c) => c.name), rows, opts);
   // Preview on logical rows (re-serialize the head): splitting content on
   // '\n' would cut quoted multiline cells in half.
   const preview = isXlsx
-    ? `Workbook .xlsx\n  Foglio "Dati": ${rows.length} righe x ${grid.cols.length} colonne${includeHeader ? ' (con intestazioni)' : ''}\n  Foglio "Info": metadati dell'esportazione\n  Le colonne numeriche diventano celle numeriche.`
-    : serializeTable(grid.cols.map((c) => c.name), rows.slice(0, 8), opts).content;
+    ? `Workbook .xlsx\n  Foglio "Dati": ${rows.length} righe x ${activeGrid.cols.length} colonne${includeHeader ? ' (con intestazioni)' : ''}\n  Foglio "Info": metadati dell'esportazione\n  Le colonne numeriche diventano celle numeriche.`
+    : serializeTable(activeGrid.cols.map((c) => c.name), rows.slice(0, 8), opts).content;
 
   const doExport = () => {
     const prefs = loadPrefs();
@@ -59,13 +71,13 @@ export function ExportDialog({ grid, onClose, onExport }: Props) {
     if (format === 'xlsx') {
       onExport([
         {
-          bytes: buildDataWorkbook(grid, { includeHeader, dropEmptyRows }),
+          bytes: buildDataWorkbook(activeGrid, { includeHeader, dropEmptyRows }),
           fileName: 'lazstats.xlsx',
           mime: XLSX_MIME,
         },
       ]);
     } else if (format === 'spss' && main) {
-      const sps = buildSpsSyntax(main.fileName, grid.cols.map((c) => c.name), grid.cols.map((c) => c.type), opts);
+      const sps = buildSpsSyntax(main.fileName, activeGrid.cols.map((c) => c.name), activeGrid.cols.map((c) => c.type), opts);
       onExport([
         { content: main.content, fileName: main.fileName, mime: main.mime },
         { content: sps, fileName: 'lazstats.sps', mime: 'text/plain;charset=utf-8' },
@@ -77,7 +89,7 @@ export function ExportDialog({ grid, onClose, onExport }: Props) {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
-      <div className="bg-surface border border-border2 rounded-lg shadow-2xl w-full max-w-xl flex flex-col" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-surface border border-border2 rounded-lg shadow-2xl w-full max-w-xl flex flex-col" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('io.exportTitle')}>
         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
           <h2 className="text-accent2 font-mono text-[12px] font-bold uppercase tracking-widest">{t('io.exportTitle')}</h2>
           <button className="tb-btn" onClick={onClose}>{t('io.close')}</button>
@@ -85,7 +97,7 @@ export function ExportDialog({ grid, onClose, onExport }: Props) {
         <div className="px-4 py-3 flex flex-wrap gap-4 items-end text-[11px]">
           <label className="flex flex-col gap-1">
             <span className="text-[10px] text-text3 font-mono uppercase">{t('io.format')}</span>
-            <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={format} onChange={(e) => setFormat(e.target.value as ExportFormat)}>
+            <select data-export="format" className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={format} onChange={(e) => setFormat(e.target.value as ExportFormat)}>
               <option value="csv">{t('io.csv')}</option>
               <option value="tsv">{t('io.tsv')}</option>
               <option value="pipe">{t('io.pipe')}</option>
@@ -114,23 +126,37 @@ export function ExportDialog({ grid, onClose, onExport }: Props) {
               </select>
             </label>
           )}
-          <label className="flex items-center gap-1.5 text-text2">
-            <input type="checkbox" className="accent-accent" checked={includeHeader} onChange={(e) => setIncludeHeader(e.target.checked)} />
-            {t('io.headerRow')}
-          </label>
+          {format !== 'json' && (
+            <label className="flex items-center gap-1.5 text-text2">
+              <input type="checkbox" className="accent-accent" checked={includeHeader} onChange={(e) => setIncludeHeader(e.target.checked)} />
+              {t('io.headerRow')}
+            </label>
+          )}
           <label className="flex items-center gap-1.5 text-text2">
             <input type="checkbox" className="accent-accent" checked={dropEmptyRows} onChange={(e) => setDropEmptyRows(e.target.checked)} />
             {t('io.dropEmptyRows')}
           </label>
+          {filteredGrid && (
+            <label className="flex items-center gap-1.5 text-text2">
+              <input
+                data-export="filtered"
+                type="checkbox"
+                className="accent-accent"
+                checked={onlyFiltered}
+                onChange={(e) => setOnlyFiltered(e.target.checked)}
+              />
+              {t('io.onlyFiltered')}
+            </label>
+          )}
         </div>
         <div className="px-4 py-2 text-[10px] font-mono text-text3 border-t border-border">
-          {rows.length} {t('output.rows')} ({nonEmptyRowCount(grid.rows)} {t('io.nonEmpty')}) x {grid.cols.length} {t('output.columns')} → {main?.fileName ?? 'lazstats.xlsx'}
+          {rows.length} {t('output.rows')} ({nonEmptyRowCount(activeGrid.rows)} {t('io.nonEmpty')}) x {activeGrid.cols.length} {t('output.columns')} → {main?.fileName ?? 'lazstats.xlsx'}
           {format === 'spss' && <span> + lazstats.sps</span>}
         </div>
         <pre className="mx-4 mb-2 p-2 bg-surface3/40 border border-border rounded text-[10px] font-mono text-text2 overflow-auto max-h-40 scrollbar whitespace-pre-wrap">{preview}</pre>
         <div className="px-4 py-3 border-t border-border flex justify-end gap-2">
           <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
-          <button className="tb-btn bg-accent text-white border-accent" onClick={doExport} disabled={rows.length === 0}>
+          <button data-export="download" className="tb-btn bg-accent text-white border-accent" onClick={doExport} disabled={rows.length === 0}>
             {t('io.download')}
           </button>
         </div>

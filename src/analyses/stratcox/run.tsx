@@ -1,4 +1,5 @@
 import { stratifiedCoxStats } from '../../stats/kernels/stratcox';
+import { kaplanMeier } from '../../stats/survival';
 import { stratCoxTables } from '../../stats/tables/stratcox';
 import { stratCoxReport } from '../../stats/reports/stratcox';
 import type { Dataset } from '../../grid/types';
@@ -6,6 +7,8 @@ import type { StratifiedCoxParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
+import { naturalCompare } from '../../grid/types';
+import type { ChartRow } from '../../stats/charts';
 
 export interface StratifiedCoxInput {
   grid: Dataset;
@@ -46,6 +49,24 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
     };
   }
   const tables = stratCoxTables(stats, ciLevel);
+  const curves: ChartRow[] = [];
+  const censored: ChartRow[] = [];
+  const labels = Array.from(new Set(strata.map(label => label.trim()).filter(Boolean))).sort(naturalCompare);
+  labels.forEach(label => {
+    const observations = strata.flatMap((stratum, index) =>
+      stratum === label && Number.isFinite(time[index]) && time[index] >= 0
+        ? [{ time: time[index], event: event[index] === 1 ? 1 : 0 }]
+        : []
+    );
+    if (observations.length === 0) return;
+    const km = kaplanMeier(observations.map(item => item.time), observations.map(item => item.event), ciLevel);
+    if (km.points.length === 0) return;
+    curves.push({ x: 0, y: 1, series: label, lo: 1, hi: 1 });
+    km.points.forEach(point => {
+      curves.push({ x: point.time, y: point.survival, series: label, lo: point.lo, hi: point.hi });
+      if (point.censored > 0) censored.push({ x: point.time, y: point.survival, series: label });
+    });
+  });
   const forest = makeChart({
     id: 'stratcox-forest',
     kind: 'forest',
@@ -56,11 +77,25 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
     fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
     stats: { n: stats.n, events: stats.events },
   });
+  const charts = [forest];
+  if (curves.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'stratcox-km',
+        kind: 'survival',
+        title: copy('Kaplan–Meier per strato'),
+        subtitle: copy('{s1} strati · IC {s2}%', { s1: labels.length, s2: ciLevel }),
+        note: copy('Le curve descrivono la sopravvivenza osservata in ogni strato; il modello Cox condivide le stime delle covariate tra gli strati.'),
+        data: { curves, censored },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Strato') },
+      })
+    );
+  }
   return {
     ok: true,
     title: copy('Cox stratificato'),
     tables,
     report: stratCoxReport(stats, ciLevel),
-    charts: [forest],
+    charts,
   };
 };

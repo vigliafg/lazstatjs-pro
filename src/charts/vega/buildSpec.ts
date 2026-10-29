@@ -39,7 +39,6 @@ export const buildVegaSpec = (chart: AnalysisChart, options: ChartOptions = char
     case 'acf':
       return spec(chart, options, acfLayers(chart, options));
     case 'heatmap':
-    case 'mosaic':
       return spec(chart, options, heatmapLayers(chart, options as Extract<ChartOptions, { kind: 'heatmap' }>));
     case 'residual':
     case 'score':

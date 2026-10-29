@@ -24,6 +24,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
       label={t('form.variables')}
       cols={grid.cols}
       only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
       selected={miParams.variables}
       showType
       hint={t('hint.mi')}
@@ -61,6 +62,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
           label={t('form.predictorsX')}
           cols={grid.cols}
           only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
           selected={miParams.predictors}
           disabled={[miParams.outcome]}
           onToggle={(index, checked) =>

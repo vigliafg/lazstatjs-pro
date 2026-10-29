@@ -5,7 +5,6 @@ import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
   CheckboxField,
-  Field,
   VariableList,
   NumberField,
   VariableSelect,
@@ -32,6 +31,7 @@ export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: Logist
         label={t('form.predictorsX')}
         cols={grid.cols}
         only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
         selected={predictors}
         disabled={[outcome]}
         onToggle={(index, checked) =>
@@ -43,13 +43,11 @@ export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: Logist
           }))
         }
       />
-      <Field label={t('form.penalization')}>
-        <CheckboxField
-          label={t('form.firth')}
-          checked={penalized}
-          onChange={checked => setLogisticParams(prev => ({ ...prev, penalized: checked }))}
-        />
-      </Field>
+      <CheckboxField
+        label={t('form.firth')}
+        checked={penalized}
+        onChange={checked => setLogisticParams(prev => ({ ...prev, penalized: checked }))}
+      />
       <NumberField
         label={t('form.cutoff')}
         value={cutoff}

@@ -28,18 +28,21 @@ export const ParametricForm = ({
         label={t('form.time')}
         value={time}
         options={variableOptions(grid.cols)}
+        disabledValues={[event]}
         onChange={value => setParametricParams(prev => ({ ...prev, time: value }))}
       />
       <VariableSelect
         label={t('form.event')}
         value={event}
         options={variableOptions(grid.cols)}
+        disabledValues={[time]}
         onChange={value => setParametricParams(prev => ({ ...prev, event: value }))}
       />
       <VariableList
         label={t('form.predictorsX')}
         cols={grid.cols}
         only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
         selected={predictors}
         disabled={[time, event]}
         showType

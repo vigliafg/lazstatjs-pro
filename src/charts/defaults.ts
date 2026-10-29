@@ -181,8 +181,6 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
       return { ...P, kind, showBand: true };
     case 'heatmap':
       return { ...P, kind, showValues: false, diverging: false, sort: 'none' };
-    case 'mosaic':
-      return { ...P, kind, showResiduals: false, showValues: false };
     case 'residual':
       return { ...P, kind, showPoints: true, showZeroLine: true };
     case 'scree':

@@ -106,6 +106,7 @@ export {
   setColType,
   setColumnLevels,
   splitColumn,
+  splitColumnAll,
 } from './ops/columns';
 export { recodeColumn, recodeColumnValues, type RecodeLevelsResult } from './ops/recode';
 export {

@@ -50,6 +50,7 @@ export const AgreementForm = ({ grid, agreementParams, setAgreementParams }: Agr
         }
         cols={grid.cols}
         only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
         selected={columns}
         showType
         onToggle={(index, checked) =>

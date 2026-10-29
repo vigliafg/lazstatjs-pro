@@ -15,6 +15,7 @@ export const DescriptiveForm = ({ grid, descVars, setDescVars }: DescriptiveForm
     label={t('form.selectVariables')}
     cols={grid.cols}
     only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
     selected={descVars}
     hint={t('hint.descriptive')}
     onToggle={(column, checked) =>

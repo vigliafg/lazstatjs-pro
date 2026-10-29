@@ -79,9 +79,9 @@ export interface ColTypeDef {
  * `tim` are descriptive metadata plus strict cell validation.
  */
 export const COL_TYPES: ColTypeDef[] = [
-  { id: 'num', label: 'num', full: 'Numeric — auto-detect, decimal comma allowed', regex: /^-?\d*[.,]?\d*$/ },
+  { id: 'num', label: 'num', full: 'Numeric — auto-detect, decimal comma allowed', regex: /^-?(?:\d+(?:[.,]\d*)?|[.,]\d+)$/ },
   { id: 'int', label: 'int', full: 'Integer — whole number', regex: /^-?\d+$/ },
-  { id: 'dec', label: 'dec', full: 'Decimal — floating point number', regex: /^-?\d+[.,]?\d*$/ },
+  { id: 'dec', label: 'dec', full: 'Decimal — floating point number', regex: /^-?(?:\d+[.,]?\d*|[.,]\d+)$/ },
   { id: 'cat', label: 'cat', full: 'Categorical — group or label text', regex: /[\s\S]*/ },
   { id: 'str', label: 'str', full: 'Text — free text, numbers included', regex: /[\s\S]*/ },
   { id: 'id', label: 'id', full: 'Identifier — unique key, excluded from statistics', regex: /[\s\S]*/ },

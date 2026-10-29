@@ -2,7 +2,7 @@ import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { factorialCells, factorialReport, factorialTables } from '../../stats/factorial';
 import { parseNum } from '../../stats/core';
-import { analysisRows, type Dataset } from '../../grid/types';
+import { analysisRows, naturalCompare, orderedColumnLevels, type Dataset } from '../../grid/types';
 import type { FactorialParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
@@ -63,8 +63,15 @@ export const buildFactorialOutput = ({
   }
 
   const cells = factorialCells(options);
-  const bLevels = Array.from(new Set(cells.map(cell => cell.b))).sort();
-  const aLevels = Array.from(new Set(cells.map(cell => cell.a))).sort();
+  const orderedValues = (values: string[], column: number): string[] => {
+    const declared = orderedColumnLevels(grid.cols[column], grid.rows, column).map(level => level.label);
+    const present = new Set(values);
+    const known = declared.filter(value => present.has(value));
+    const extra = values.filter(value => !known.includes(value)).sort(naturalCompare);
+    return [...known, ...extra];
+  };
+  const bLevels = orderedValues(Array.from(new Set(cells.map(cell => cell.b))), factorB);
+  const aLevels = orderedValues(Array.from(new Set(cells.map(cell => cell.a))), factorA);
   const series = aLevels.flatMap(level =>
     bLevels
       .map(b => {

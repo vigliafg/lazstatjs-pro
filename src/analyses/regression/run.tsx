@@ -221,6 +221,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
         stats: {
           df,
           equation: `y = ${coef[0].toFixed(3)} + ${coef[1].toFixed(3)}·x`,
+          equationShort: `y = ${coef[0].toFixed(2)} + ${coef[1].toFixed(2)}·x`,
           r2: Number(R2.toFixed(4)),
           n,
         },
@@ -249,13 +250,13 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
       }),
       makeChart({
         id: 'reg-residual-fitted',
-        kind: 'scatter',
+        kind: 'residual',
         title: copy('Residui vs stimati: {s1}', { s1: depName }),
         subtitle: copy('N = {s1}', { s1: n }),
         note: copy('Una nuvola senza struttura è coerente con l’ipotesi di residui omoschedastici.'),
         data: { points: residualVsFitted, rules: [{ y: 0 }] },
         fields: { xLabel: copy('Valori stimati'), yLabel: copy('Residui') },
-        options: { fit: 'none', band: 'none' } as never,
+        options: { showPoints: true, showZeroLine: true } as never,
       })
     );
   }

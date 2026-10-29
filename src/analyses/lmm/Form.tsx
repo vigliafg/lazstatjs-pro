@@ -1,9 +1,10 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { groupColumnIndexes, type GridData } from '../../grid/types';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { LmmParams } from '../../io/project';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
+  GroupSelect,
   VariableList,
   VariableSelect,
   variableOptions,
@@ -12,11 +13,13 @@ import {
 
 export interface LmmFormProps {
   grid: GridData;
+  onLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
+  onRecode: (column: number, mapping: Record<string, string>) => void;
   lmmParams: LmmParams;
   setLmmParams: Dispatch<SetStateAction<LmmParams>>;
 }
 
-export const LmmForm = ({ grid, lmmParams, setLmmParams }: LmmFormProps) => {
+export const LmmForm = ({ grid, onLevels, onRecode, lmmParams, setLmmParams }: LmmFormProps) => {
   const { dep, indeps, group } = lmmParams;
   return (
     <div className="flex flex-col gap-3">
@@ -30,6 +33,7 @@ export const LmmForm = ({ grid, lmmParams, setLmmParams }: LmmFormProps) => {
         label={t('form.fixedPredictors')}
         cols={grid.cols}
         only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
         selected={indeps}
         disabled={[dep, group]}
         showType
@@ -43,11 +47,13 @@ export const LmmForm = ({ grid, lmmParams, setLmmParams }: LmmFormProps) => {
           }))
         }
       />
-      <VariableSelect
+      <GroupSelect
         label={t('form.groupRandomIntercept')}
+        grid={grid}
         value={group}
-        options={variableOptionsFrom(grid.cols, groupColumnIndexes(grid))}
         onChange={value => setLmmParams(prev => ({ ...prev, group: value }))}
+        onLevels={onLevels}
+        onRecode={onRecode}
       />
     </div>
   );

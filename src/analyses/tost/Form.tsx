@@ -38,6 +38,7 @@ export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => 
         label={t('form.variable1')}
         value={var1}
         options={options}
+        disabledValues={design === 'one' ? [] : [var2]}
         onChange={value => update({ var1: value })}
       />
       {design !== 'one' && (
@@ -45,6 +46,7 @@ export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => 
           label={t('form.variable2')}
           value={var2}
           options={options}
+          disabledValues={[var1]}
           onChange={value => update({ var2: value })}
         />
       )}

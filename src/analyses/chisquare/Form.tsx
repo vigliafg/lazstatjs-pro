@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { ChiSqParams } from '../../io/project';
 import { t } from '../../i18n';
-import { CheckboxField, Field } from '../../components/FormFields';
+import { CheckboxField } from '../../components/FormFields';
 
 export interface ChiSquareFormProps {
   grid: GridData;
@@ -25,7 +25,8 @@ export const ChiSquareForm = ({ chisqParams, setChisqParams }: ChiSquareFormProp
     setChisqParams(prev => ({ ...prev, ...patch }));
 
   return (
-    <Field label={t('chisq.title')}>
+    <div className="flex flex-col gap-1">
+      <span className="font-mono text-[10px] uppercase tracking-widest text-text3">{t('chisq.title')}</span>
       <div className="rounded border border-border2 bg-surface3 p-3">
         <table className="text-[11px] text-text2">
           <thead>
@@ -159,6 +160,6 @@ export const ChiSquareForm = ({ chisqParams, setChisqParams }: ChiSquareFormProp
           </div>
         </div>
       </div>
-    </Field>
+    </div>
   );
 };

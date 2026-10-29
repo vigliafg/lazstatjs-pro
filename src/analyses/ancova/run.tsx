@@ -89,13 +89,21 @@ export const buildAncovaOutput = ({ grid, params, ciLevel }: AncovaInput): Analy
     group: String(row.group ?? ''),
     raw: Number(row.rawMean ?? NaN),
     adjusted: Number(row.adjusted ?? NaN),
+    ciLo: Number(row.ciLo ?? NaN),
+    ciHi: Number(row.ciHi ?? NaN),
   }));
   const bars = chartData.flatMap(point => [
     ...(Number.isFinite(point.raw)
-      ? [{ category: point.group, value: point.raw, series: copy('Grezza') }]
+      ? [{ category: point.group, value: point.raw, series: copy('Grezza'), lo: null, hi: null }]
       : []),
     ...(Number.isFinite(point.adjusted)
-      ? [{ category: point.group, value: point.adjusted, series: copy('Aggiustata') }]
+      ? [{
+          category: point.group,
+          value: point.adjusted,
+          series: copy('Aggiustata'),
+          lo: Number.isFinite(point.ciLo) ? point.ciLo : null,
+          hi: Number.isFinite(point.ciHi) ? point.ciHi : null,
+        }]
       : []),
   ]);
 
@@ -114,7 +122,7 @@ export const buildAncovaOutput = ({ grid, params, ciLevel }: AncovaInput): Analy
         note: copy('Le barre aggiustate sono le medie alla media delle covariate: è questa la differenza che l’ANCOVA testa.'),
         data: { bars },
         fields: { xLabel: factorName, yLabel: responseName, series: copy('Stima') },
-        options: { valueLabels: true } as never,
+        options: { valueLabels: true, error: 'ci' } as never,
       }),
     ],
   };

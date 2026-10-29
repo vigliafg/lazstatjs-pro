@@ -3,7 +3,7 @@ import { parseNum } from '../../stats/core';
 import { anovaTables } from '../../stats/anova';
 import { anovaReport } from '../../stats/report';
 import { calcKruskalWallis, calcMannWhitneyU } from '../../stats/kernels';
-import { analysisRows } from '../../grid/types';
+import { analysisRows, levelLabel, naturalCompare, orderedColumnLevels } from '../../grid/types';
 import type { Dataset } from '../../grid/types';
 import type { AnovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -36,7 +36,17 @@ export interface AnovaRunInput {
       }
     });
 
-    const groupKeys = Object.keys(groups);
+    const declaredOrder = orderedColumnLevels(grid.cols[grp], grid.rows, grp).map((level) =>
+      levelLabel(grid.cols[grp], level.value)
+    );
+    const groupKeys = Object.keys(groups).sort((left, right) => {
+      const li = declaredOrder.indexOf(left);
+      const ri = declaredOrder.indexOf(right);
+      if (li >= 0 && ri >= 0) return li - ri;
+      if (li >= 0) return -1;
+      if (ri >= 0) return 1;
+      return naturalCompare(left, right);
+    });
     if (groupKeys.length < 2) {
       return { ok: false, reason: 'Need at least 2 groups for ANOVA' };
     }
@@ -217,8 +227,17 @@ export interface AnovaRunInput {
     const bars = groupKeys.map(key => {
       const values = groups[key];
       const mean = jStat.mean(values);
-      const se = Math.sqrt(msWithin / values.length);
-      return { category: key, value: mean, lo: mean - critical * se, hi: mean + critical * se };
+      const sd = jStat.stdev(values, true);
+      const se = sd / Math.sqrt(values.length);
+      const interval = Math.sqrt(msWithin / values.length);
+      return {
+        category: key,
+        value: mean,
+        sd,
+        se,
+        lo: mean - critical * interval,
+        hi: mean + critical * interval,
+      };
     });
     const charts: AnalysisChart[] = [
       makeChart({

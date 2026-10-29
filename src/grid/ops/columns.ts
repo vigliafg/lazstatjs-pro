@@ -5,7 +5,7 @@ import {
   distinctColumnValues,
   uniqueColName,
 } from '../types';
-import { evalFormula, renameFormulaReferences } from '../formulas';
+import { evalFormula, formulaReferencesColumn, renameFormulaReferences } from '../formulas';
 
 /* ---------- Column metadata ---------- */
 
@@ -106,7 +106,14 @@ export const duplicateColumn = (grid: GridData, c: number): GridData => {
   if (c < 0 || c >= grid.cols.length) return grid;
   const src = grid.cols[c];
   const name = uniqueColName(grid.cols, `${src.name}_copy`);
-  const cols = [...grid.cols.slice(0, c + 1), { id: createColumnId(), name, type: src.type }, ...grid.cols.slice(c + 1)];
+  const copy: Column = {
+    ...src,
+    id: createColumnId(),
+    name,
+    levels: src.levels?.map((level) => ({ ...level })),
+    missing: src.missing ? [...src.missing] : undefined,
+  };
+  const cols = [...grid.cols.slice(0, c + 1), copy, ...grid.cols.slice(c + 1)];
   const rows = grid.rows.map((r) => [...r.slice(0, c + 1), r[c] ?? '', ...r.slice(c + 1)]);
   return { cols, rows };
 };
@@ -125,8 +132,17 @@ export const moveColumn = (grid: GridData, c: number, dir: -1 | 1): GridData => 
 };
 
 export const deleteColumn = (grid: GridData, c: number): GridData => {
-  if (grid.cols.length <= 1) return grid;
-  return { cols: grid.cols.filter((_, i) => i !== c), rows: grid.rows.map((r) => r.filter((_, i) => i !== c)) };
+  if (grid.cols.length <= 1 || c < 0 || c >= grid.cols.length) return grid;
+  return {
+    cols: grid.cols
+      .filter((_, i) => i !== c)
+      .map((col) =>
+        col.formula && formulaReferencesColumn(col.formula, grid.cols, c)
+          ? { ...col, formula: undefined }
+          : col
+      ),
+    rows: grid.rows.map((r) => r.filter((_, i) => i !== c)),
+  };
 };
 
 export const splitColumn = (grid: GridData, col: number, sep: string, newName2?: string): GridData => {
@@ -134,7 +150,8 @@ export const splitColumn = (grid: GridData, col: number, sep: string, newName2?:
   if (col < 0 || col >= grid.cols.length) return grid;
   const src = grid.cols[col];
   const name2 = uniqueColName(grid.cols, newName2?.trim() || `${src.name}_2`);
-  const cols = [...grid.cols.slice(0, col + 1), { id: createColumnId(), name: name2, type: src.type }, ...grid.cols.slice(col + 1)];
+  const left: Column = { ...src, formula: undefined };
+  const cols = [...grid.cols.slice(0, col), left, { id: createColumnId(), name: name2, type: src.type }, ...grid.cols.slice(col + 1)];
   const rows = grid.rows.map((r) => {
     const v = String(r[col] ?? '');
     const idx = v.indexOf(sep);
@@ -143,6 +160,38 @@ export const splitColumn = (grid: GridData, col: number, sep: string, newName2?:
     const copy = [...r];
     copy[col] = left;
     copy.splice(col + 1, 0, right);
+    return copy;
+  });
+  return { cols, rows };
+};
+
+/**
+ * Split every occurrence of `sep` into new columns. The original column keeps
+ * the first part and its id; a file with a;b;c produces a, b, c. If no row
+ * contains the separator the grid is returned unchanged.
+ */
+export const splitColumnAll = (grid: GridData, col: number, sep: string): GridData => {
+  if (!sep || col < 0 || col >= grid.cols.length) return grid;
+  const src = grid.cols[col];
+  const parts = grid.rows.map((row) => String(row[col] ?? '').split(sep));
+  const width = parts.reduce((max, row) => Math.max(max, row.length), 1);
+  if (width <= 1) return grid;
+  const names: string[] = [];
+  for (let index = 2; index <= width; index += 1) {
+    names.push(uniqueColName([...grid.cols, ...names.map((name) => ({ name, type: src.type }))], `${src.name}_${index}`));
+  }
+  const left: Column = { ...src, formula: undefined };
+  const cols: Column[] = [
+    ...grid.cols.slice(0, col),
+    left,
+    ...names.map((name) => ({ id: createColumnId(), name, type: src.type })),
+    ...grid.cols.slice(col + 1),
+  ];
+  const rows = grid.rows.map((row, r) => {
+    const cells = parts[r];
+    const copy = [...row];
+    copy[col] = cells[0] ?? '';
+    copy.splice(col + 1, 0, ...names.map((_, index) => cells[index + 1] ?? ''));
     return copy;
   });
   return { cols, rows };
@@ -158,9 +207,27 @@ export const mergeColumns = (grid: GridData, a: number, b: number, sep: string, 
   // uniqueColName checks against the passed list: exclude the slot being
   // renamed so keeping the current name does not gain a spurious suffix.
   const others = cols.filter((_, i) => i !== lo);
-  cols[lo] = { ...cols[lo], name: others.some((c) => c.name.toLowerCase() === raw.toLowerCase()) ? uniqueColName(others, raw) : raw };
+  cols[lo] = {
+    id: cols[lo].id,
+    name: others.some((c) => c.name.toLowerCase() === raw.toLowerCase()) ? uniqueColName(others, raw) : raw,
+    // The concatenation is text, not the old numeric/categorical variable:
+    // formula, levels, reference, missing and label would all be misleading.
+    type: 'str',
+  };
+  // Removing/renaming the source columns invalidates formulas in the other
+  // columns; keep their last values but drop the stale formula.
+  for (let i = 0; i < cols.length; i += 1) {
+    const col = cols[i];
+    if (i !== lo && col.formula &&
+      (formulaReferencesColumn(col.formula, grid.cols, lo) || formulaReferencesColumn(col.formula, grid.cols, hi))) {
+      cols[i] = { ...col, formula: undefined };
+    }
+  }
   const rows = grid.rows.map((r) => {
-    const merged = `${r[lo] ?? ''}${sep}${r[hi] ?? ''}`;
+    const merged = [r[lo], r[hi]]
+      .map(value => String(value ?? ''))
+      .filter(value => value !== '')
+      .join(sep);
     const copy = r.filter((_, i) => i !== hi);
     copy[lo] = merged;
     return copy;

@@ -44,7 +44,7 @@ const CopyTableButton: React.FC<{ spec: TableSpec }> = ({ spec }) => {
 };
 
 export const ResultTable: React.FC<{ spec: TableSpec }> = ({ spec }) => (
-  <section className="mb-6">
+  <section className="mb-6 min-w-0">
     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
       <h3 className="text-[11px] text-accent2 font-semibold uppercase tracking-wider">
         {spec.title}
@@ -55,7 +55,7 @@ export const ResultTable: React.FC<{ spec: TableSpec }> = ({ spec }) => (
       <CopyTableButton spec={spec} />
     </div>
 
-    <div className="overflow-x-auto scrollbar">
+    <div className="min-w-0 max-w-full overflow-x-auto scrollbar">
       <table className="output-table w-full">
         <thead>
           <tr>

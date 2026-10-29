@@ -1,6 +1,5 @@
 import { useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
-import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
-import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { NonParamMode, NonParamParams } from '../../io/project';
 import { defaultSelection, isBinaryColumn } from './defaults';
 import { numericColumnIndexes } from '../shared/columns';
@@ -8,6 +7,7 @@ import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
+  GroupSelect,
   VariableList,
   VariableSelect,
   variableOptions,
@@ -112,12 +112,14 @@ export const NonParamForm = ({
             label={t('form.firstMeasure')}
             value={left}
             options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
+            disabledValues={[right]}
             onChange={value => setNonParamParams(prev => ({ ...prev, left: value }))}
           />
           <VariableSelect
             label={t('form.secondMeasure')}
             value={right}
             options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
+            disabledValues={[left]}
             onChange={value => setNonParamParams(prev => ({ ...prev, right: value }))}
           />
         </>
@@ -131,22 +133,14 @@ export const NonParamForm = ({
             options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
             onChange={value => setNonParamParams(prev => ({ ...prev, outcome: value }))}
           />
-          <VariableSelect
+          <GroupSelect
             label={t('form.orderedGroups')}
+            grid={grid}
             value={group}
-            options={variableOptionsFrom(grid.cols, groupColumnIndexes(grid))}
             hint={t('hint.jonckheere')}
+            onLevels={onLevels}
+            onRecode={onRecode}
             onChange={value => setNonParamParams(prev => ({ ...prev, group: value }))}
-            trailing={
-              <LevelsEditor
-                grid={grid}
-                column={group}
-                onLevels={onLevels}
-                onRecode={onRecode}
-                label={t('action.levels')}
-                className={LEVELS_BUTTON_CLASS}
-              />
-            }
           />
         </>
       )}

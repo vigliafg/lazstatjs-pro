@@ -31,9 +31,17 @@ interface UseOutputConsoleOptions {
 const settled = async (root: ParentNode, showToast: (title: string, msg: string, type?: Toast['type']) => void) => {
   const ready = await awaitChartsReady(root);
   if (!ready.ready || ready.failed > 0) {
-    showToast(t('toast.charts'), t('output.chartsPending'), 'warn');
+    showToast(t('toast.charts'), t('output.chartsPending'), 'error');
+    return false;
   }
-  return ready;
+  return true;
+};
+
+/** Cards produced before the last grid/parameter change are marked in the DOM. */
+const warnStale = (root: ParentNode, showToast: (title: string, msg: string, type?: Toast['type']) => void) => {
+  if (root.querySelector('[data-stale="true"]')) {
+    showToast(t('toast.output'), t('output.staleTitle'), 'warn');
+  }
 };
 
 /**
@@ -169,7 +177,8 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
   const copyOutput = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
-    await settled(el, showToast);
+    if (!(await settled(el, showToast))) return;
+    warnStale(el, showToast);
     // Keep the analysis text, drop the per-block toolbars from the clipboard.
     const clone = el.cloneNode(true) as HTMLElement;
     clone.querySelectorAll('button, [data-no-print]').forEach(node => node.remove());
@@ -187,6 +196,8 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
   const exportChartPngs = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
+    if (!(await settled(el, showToast))) return;
+    warnStale(el, showToast);
     const result = await exportChartsAsPng(el, 'lazstats-chart');
     if (result.exported === 0 && result.failed === 0 && result.pending === 0) {
       showToast(t('toast.charts'), t('output.noCharts'), 'warn');
@@ -204,6 +215,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
   const exportResultsXlsx = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
+    warnStale(el, showToast);
     try {
       const { buildResultsWorkbookFromElement, XLSX_MIME } = await import('../io/xlsx');
       const bytes = buildResultsWorkbookFromElement(el, grid);
@@ -217,10 +229,12 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
   const exportReportWord = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
-    await settled(el, showToast);
+    if (!(await settled(el, showToast))) return;
+    warnStale(el, showToast);
     const html = buildReportFromElement(el, {
       title: reportText('output.reportTitle'),
       generatedAt: new Date().toLocaleString(reportLocale),
+      lang: reportLocale,
       details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.doc', 'application/msword;charset=utf-8');
@@ -230,10 +244,12 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
   const exportReportHtml = async () => {
     const el = document.getElementById('output-content');
     if (!el) return;
-    await settled(el, showToast);
+    if (!(await settled(el, showToast))) return;
+    warnStale(el, showToast);
     const html = buildReportFromElement(el, {
       title: reportText('output.reportTitle'),
       generatedAt: new Date().toLocaleString(reportLocale),
+      lang: reportLocale,
       details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.html', 'text/html;charset=utf-8');

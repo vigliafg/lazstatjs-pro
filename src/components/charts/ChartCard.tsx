@@ -29,24 +29,15 @@ export const ChartCard = ({ chart, analysisName, onOptionsChange, className = ''
 
   return (
     <section
-      className={`output-chart mb-6 ${className}`}
+      className={`output-chart mb-6 min-w-0 ${className}`}
       aria-label={chart.title}
       data-chart-id={chart.id}
     >
       <div
         className={`relative ${interactive ? 'cursor-pointer' : ''}`}
-        role={interactive ? 'button' : undefined}
-        tabIndex={interactive ? 0 : undefined}
-        aria-label={interactive ? `${t('chart.edit')}: ${chart.title}` : chart.title}
         onClick={event => {
           if ((event.target as HTMLElement).closest('button')) return;
           open();
-        }}
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            open();
-          }
         }}
       >
         <VegaChart chart={chart} options={options} />
@@ -66,9 +57,6 @@ export const ChartCard = ({ chart, analysisName, onOptionsChange, className = ''
           </button>
         )}
       </div>
-      {options.showSubtitle === false && chart.subtitle && (
-        <p className="mt-1 font-mono text-[9px] text-text3">{chart.subtitle}</p>
-      )}
       {options.showNote && chart.note && <p className="mt-1 text-[10px] leading-snug text-text3">{chart.note}</p>}
       {chart.sampled && <p className="mt-1 font-mono text-[9px] text-yellow">{t('chart.sampled')}</p>}
       {editing && interactive && (

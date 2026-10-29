@@ -1,6 +1,6 @@
 import { useRef, useState, type Dispatch, type SetStateAction } from 'react';
-import { loadPrefs, savePrefs, type IoPreferences } from '../io/prefs';
-import { looksLikeJson } from '../io/detect';
+import { loadPrefs, type IoPreferences } from '../io/prefs';
+import { detectFormat, looksLikeJson } from '../io/detect';
 import { readDelimitedTable } from '../io/readers';
 import type { XlsxSheet } from '../io/xlsx';
 import type { ImportMode } from '../io/ImportWizard';
@@ -9,6 +9,7 @@ import type { Column, GridData } from '../grid/types';
 import { createColumnId } from '../grid/types';
 import type { Toast } from './useToasts';
 import { t } from '../i18n';
+import { MAX_TEXT_IMPORT_BYTES, readFileText } from '../io/text';
 
 export interface PendingImport {
   fileName: string;
@@ -25,6 +26,8 @@ interface UseImportExportOptions {
   setValidation: (value: { ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] }) => void;
   setActiveTab: (tab: 'data' | 'analysis' | 'settings' | 'help') => void;
   showToast: (title: string, msg: string, type?: Toast['type']) => void;
+  /** True when there is at least one result block that an overwrite would clear. */
+  hasResults?: () => boolean;
 }
 
 /**
@@ -40,6 +43,7 @@ export const useImportExport = ({
   setValidation,
   setActiveTab,
   showToast,
+  hasResults,
 }: UseImportExportOptions) => {
   const csvInputRef = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<PendingImport | null>(null);
@@ -47,6 +51,17 @@ export const useImportExport = ({
   const [ioPrefs, setIoPrefs] = useState(() => initialPrefs ?? loadPrefs());
 
   const applyImportTable = (table: ImportTable, mode: ImportMode) => {
+    // Overwrite also resets parameters and clears the output console. Ask
+    // before discarding results; an empty session (first import) needs no
+    // extra confirmation.
+    if (
+      mode === 'overwrite' &&
+      hasResults?.() &&
+      typeof window !== 'undefined' &&
+      !window.confirm(t('data.confirmNew'))
+    ) {
+      return;
+    }
     const makeColumn = (index: number): Column => {
       const meta = table.meta?.[index];
       return {
@@ -150,29 +165,38 @@ export const useImportExport = ({
         setPendingImport({ fileName: file.name, sheets });
         return;
       }
-      const text = await file.text();
+      if (file.size > MAX_TEXT_IMPORT_BYTES) {
+        throw new Error(t('io.tooLargeText', { mb: 25 }));
+      }
+      // Decode from bytes instead of File.text(): UTF-16 and Windows-1252
+      // files are real-world CSV exports, and a BOM must not become part of
+      // the first header.
+      const { text } = await readFileText(file);
       if (!text.trim()) {
         showToast(t('toast.import'), t('import.empty'), 'warn');
         return;
       }
       // Fast path: small plain CSV goes straight in; anything ambiguous
-      // (JSON, semicolons, pipes, tabs) opens the wizard.
-      const prefs = loadPrefs();
+      // (JSON, semicolons, pipes, tabs, uncertain header) opens the wizard.
+      // Detection — not the persisted defaults — decides delimiter and header
+      // here, otherwise a headerless CSV silently loses its first data row.
+      const detection = detectFormat(file.name, text);
       const json = looksLikeJson(text) || file.name.toLowerCase().endsWith('.json');
       const tricky = json || /[;\t|]/.test(text.slice(0, 2000));
-      if (!tricky && text.length < 200000) {
-        const prefDelim = prefs.delimiter === 'tab' || prefs.delimiter === '\t'
-          ? '\t'
-          : ([';', '|', ','].includes(prefs.delimiter) ? prefs.delimiter : ',');
+      const confidentHeader = detection.hasHeader
+        ? detection.headerConfidence >= 0.7
+        : detection.headerConfidence <= 0.3;
+      if (!tricky && text.length < 200000 && confidentHeader) {
         const table = readDelimitedTable(text, {
-          delimiter: prefDelim,
-          hasHeader: prefs.hasHeader,
-          decimalComma: prefs.decimalSeparator === ',',
+          delimiter: detection.delimiter,
+          hasHeader: detection.hasHeader,
+          decimalComma: detection.decimalComma,
         });
         applyImportTable(table, 'overwrite');
         return;
       }
-      setPendingImport({ fileName: file.name, text: text.slice(0, 2000000) });
+      // Never slice the payload: truncating a CSV silently drops rows.
+      setPendingImport({ fileName: file.name, text });
     } catch (error) {
       console.error(error);
       showToast(t('toast.import'), error instanceof Error ? error.message : t('import.readError'), 'error');

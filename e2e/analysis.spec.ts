@@ -283,7 +283,7 @@ test('filters, pins and clears result cards', async ({ page, isMobile }) => {
   const filter = page.getByLabel('Filter results by analysis');
   await expect(filter).toBeVisible();
   await filter.selectOption({ label: 'ANOVA' });
-  await expect(page.locator('article.output-card')).toHaveCount(1);
+  await expect(page.locator('article.output-card:visible')).toHaveCount(1);
   await filter.selectOption({ label: 'All analyses' });
 
   await page.getByRole('button', { name: 'Pin result' }).first().click();

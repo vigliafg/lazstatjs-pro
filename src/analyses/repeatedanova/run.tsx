@@ -6,6 +6,7 @@ import {
   repeatedMeasuresAnova,
 } from '../../stats/repeatedAnova';
 import { parseNum } from '../../stats/core';
+import { jStat } from '../../stats/jstat';
 import type { Dataset } from '../../grid/types';
 import type { RepeatedAnovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -50,7 +51,21 @@ export const buildRepeatedAnovaOutput = ({
 
   const names = columns.map(index => grid.cols[index]?.name ?? `Var${index + 1}`);
   const tables = repeatedAnovaTables(result, names, ciLevel);
-  const data = names.map((name, index) => ({ x: name, y: result.means[index] }));
+  const critical = result.dfError > 0
+    ? jStat.studentt.inv(1 - (1 - ciLevel / 100) / 2, result.dfError)
+    : 1.96;
+  const bars = names.map((name, index) => {
+    const mean = result.means[index];
+    const se = result.sds[index] / Math.sqrt(result.n);
+    return { category: name, value: mean, lo: mean - critical * se, hi: mean + critical * se };
+  });
+  const trajectories = blocks.slice(0, 30).flatMap((row, subject) =>
+    names.map((name, index) => ({
+      x: name,
+      y: row[index],
+      series: copy('Soggetto {s1}', { s1: subject + 1 }),
+    }))
+  );
 
   return {
     ok: true,
@@ -63,9 +78,19 @@ export const buildRepeatedAnovaOutput = ({
         kind: 'bar',
         title: copy('Medie per condizione'),
         subtitle: copy('{s1} soggetti · {s2} condizioni', { s1: result.n, s2: result.k }),
-        data: { bars: data.map(point => ({ category: point.x, value: point.y })) },
+        data: { bars },
         fields: { xLabel: copy('Condizione'), yLabel: copy('Media') },
-        options: { valueLabels: true } as never,
+        options: { valueLabels: true, error: 'ci' } as never,
+      }),
+      makeChart({
+        id: 'repeated-trajectories',
+        kind: 'line',
+        title: copy('Traiettorie dei soggetti'),
+        subtitle: copy('{s1} soggetti · {s2} condizioni', { s1: Math.min(30, result.n), s2: result.k }),
+        note: copy('Ogni linea è un soggetto attraverso le condizioni; linee non parallele indicano risposte diverse al trattamento.'),
+        data: { series: trajectories },
+        fields: { xType: 'nominal', xLabel: copy('Condizione'), yLabel: copy('Valore'), series: copy('Soggetto') },
+        options: { showMarkers: true, showBand: false } as never,
       }),
     ],
   };

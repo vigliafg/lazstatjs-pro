@@ -41,7 +41,7 @@ export const ChartSpecificPanel = ({ chart, options, onChange, onReset }: ChartS
           <div className="grid gap-1.5">
             {group.map(feature => (
               <Fragment key={feature.id}>
-                <ChartControls features={[feature]} options={options} onChange={onChange} />
+                <ChartControls features={[feature]} options={options} onChange={onChange} chart={chart} />
               </Fragment>
             ))}
           </div>

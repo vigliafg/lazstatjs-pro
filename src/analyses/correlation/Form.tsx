@@ -22,6 +22,7 @@ export const CorrelationForm = ({ grid, corrParams, setCorrParams }: Correlation
       label={t('form.variables')}
       cols={grid.cols}
       only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
       selected={corrParams.vars}
       onToggle={(column, checked) =>
         setCorrParams(previous => ({

@@ -24,6 +24,8 @@ export interface FeatureDescriptor {
   prominent?: boolean;
   section?: MessageKey;
   choices?: FeatureChoice[];
+  /** Choices that depend on the chart data (e.g. SE/SD only when present). */
+  choicesFor?: (chart: AnalysisChart) => FeatureChoice[];
   min?: number;
   max?: number;
   step?: number;
@@ -91,6 +93,20 @@ const specific = (
   ...extra,
 });
 
+const hasSeries = (chart: AnalysisChart): boolean =>
+  Boolean(
+    chart.data.series?.length ||
+      chart.data.bars?.some(row => row.series !== undefined)
+  );
+
+const hasPoints = (chart: AnalysisChart): boolean =>
+  chart.kind === 'scatter' || chart.kind === 'box' || chart.kind === 'line';
+
+const hasLines = (chart: AnalysisChart): boolean =>
+  ['scatter', 'line', 'histogram', 'qq', 'forest', 'survival', 'acf', 'power', 'bootstrap'].includes(
+    chart.kind
+  );
+
 const GENERAL: FeatureDescriptor[] = [
   common('general.preset', 'chart.feature.preset', 'select', 'general', {
     prominent: true,
@@ -114,9 +130,13 @@ const GENERAL: FeatureDescriptor[] = [
       choice('mono', 'chart.palette.mono'),
     ],
   }),
-  common('general.showLegend', 'chart.feature.legend', 'checkbox', 'general', { prominent: true }),
+  common('general.showLegend', 'chart.feature.legend', 'checkbox', 'general', {
+    prominent: true,
+    visible: (_options, chart) => hasSeries(chart),
+  }),
   common('general.legendPosition', 'chart.feature.legendPosition', 'select', 'general', {
     choices: [choice('bottom', 'chart.legend.bottom'), choice('right', 'chart.legend.right')],
+    visible: (_options, chart) => hasSeries(chart),
   }),
   common('general.showTitle', 'chart.feature.title', 'checkbox', 'general'),
   common('general.showSubtitle', 'chart.feature.subtitle', 'checkbox', 'general'),
@@ -140,21 +160,25 @@ const STYLE: FeatureDescriptor[] = [
       choice('diamond', 'chart.shape.diamond'),
       choice('triangle', 'chart.shape.triangle'),
     ],
+    visible: (_options, chart) => hasPoints(chart),
   }),
   common('style.pointSize', 'chart.feature.pointSize', 'range', 'style', {
     min: 16,
     max: 200,
     step: 4,
+    visible: (_options, chart) => hasPoints(chart),
   }),
   common('style.pointOpacity', 'chart.feature.pointOpacity', 'range', 'style', {
     min: 0.1,
     max: 1,
     step: 0.05,
+    visible: (_options, chart) => hasPoints(chart),
   }),
   common('style.lineWidth', 'chart.feature.lineWidth', 'range', 'style', {
     min: 1,
     max: 6,
     step: 0.5,
+    visible: (_options, chart) => hasLines(chart),
   }),
   common('style.lineDash', 'chart.feature.lineDash', 'select', 'style', {
     choices: [
@@ -162,6 +186,7 @@ const STYLE: FeatureDescriptor[] = [
       choice('dashed', 'chart.dash.dashed'),
       choice('dotted', 'chart.dash.dotted'),
     ],
+    visible: (_options, chart) => hasLines(chart),
   }),
   common('style.size', 'chart.feature.size', 'select', 'style', {
     choices: [
@@ -201,12 +226,14 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         choice(95, 'chart.level.95'),
         choice(99, 'chart.level.99'),
       ],
+      visible: options => options.kind === 'scatter' && options.band !== 'none',
     }),
     specific('scatter', 'bandOpacity', 'chart.feature.bandOpacity', 'range', {
       section: 'chart.section.uncertainty',
       min: 0.05,
       max: 0.6,
       step: 0.05,
+      visible: options => options.kind === 'scatter' && options.band !== 'none',
     }),
     specific('scatter', 'equation', 'chart.feature.equation', 'select', {
       section: 'chart.section.annotation',
@@ -220,9 +247,6 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
       section: 'chart.section.annotation',
     }),
     specific('scatter', 'showN', 'chart.feature.n', 'checkbox', {
-      section: 'chart.section.annotation',
-    }),
-    specific('scatter', 'pointLabels', 'chart.feature.pointLabels', 'checkbox', {
       section: 'chart.section.annotation',
     }),
   ],
@@ -244,6 +268,18 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         choice('ci', 'chart.error.ci'),
         choice('sd', 'chart.error.sd'),
       ],
+      choicesFor: chart => {
+        const bars = chart.data.bars ?? [];
+        const hasSe = bars.some(row => Number.isFinite(Number(row.se)));
+        const hasSd = bars.some(row => Number.isFinite(Number(row.sd)));
+        const hasCi = bars.some(row => row.lo !== undefined && row.hi !== undefined);
+        return [
+          choice('none', 'chart.error.none'),
+          ...(hasSe ? [choice('se', 'chart.error.se')] : []),
+          ...(hasCi ? [choice('ci', 'chart.error.ci')] : []),
+          ...(hasSd ? [choice('sd', 'chart.error.sd')] : []),
+        ];
+      },
     }),
     specific('bar', 'valueLabels', 'chart.feature.valueLabels', 'checkbox', {
       section: 'chart.section.annotation',
@@ -355,10 +391,6 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         choice('desc', 'chart.sort.desc'),
       ],
     }),
-  ],
-  mosaic: [
-    specific('mosaic', 'showResiduals', 'chart.feature.residuals', 'checkbox'),
-    specific('mosaic', 'showValues', 'chart.feature.valueLabels', 'checkbox'),
   ],
   residual: [
     specific('residual', 'showPoints', 'chart.feature.points', 'checkbox'),

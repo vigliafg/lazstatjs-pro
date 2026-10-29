@@ -1,23 +1,25 @@
 import { t } from '../../i18n';
-import type { ChartOptions } from '../../stats/charts';
+import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import type { FeatureDescriptor } from '../../charts/features';
 
 interface ChartControlsProps {
   features: FeatureDescriptor[];
   options: ChartOptions;
   onChange: (options: ChartOptions) => void;
+  chart?: AnalysisChart;
 }
 
 const controlId = (feature: FeatureDescriptor): string =>
   `chart-feature-${feature.id.replace(/\./g, '-')}`;
 
 /** The single renderer of a feature descriptor: toolbar and panel only compose. */
-export const ChartControls = ({ features, options, onChange }: ChartControlsProps) => (
+export const ChartControls = ({ features, options, onChange, chart }: ChartControlsProps) => (
   <>
     {features.map(feature => {
       const id = controlId(feature);
       const value = feature.get(options);
       const label = t(feature.labelKey);
+      const choices = chart && feature.choicesFor ? feature.choicesFor(chart) : feature.choices;
       if (feature.type === 'checkbox') {
         return (
           <label key={feature.id} htmlFor={id} className="flex cursor-pointer items-center gap-1.5 text-[10px] text-text2">
@@ -41,12 +43,12 @@ export const ChartControls = ({ features, options, onChange }: ChartControlsProp
               value={String(value)}
               onChange={event => {
                 const raw = event.target.value;
-                const choice = feature.choices?.find(item => String(item.value) === raw);
-                onChange(feature.set(options, choice ? choice.value : raw));
+                const selected = choices?.find(item => String(item.value) === raw);
+                onChange(feature.set(options, selected ? selected.value : raw));
               }}
               className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 text-[10px] text-text2"
             >
-              {(feature.choices ?? []).map(item => (
+              {(choices ?? []).map(item => (
                 <option key={String(item.value)} value={String(item.value)}>
                   {t(item.labelKey)}
                 </option>

@@ -41,6 +41,7 @@ export const shellMessages = {
   'error.reload': 'Recarregar',
   'error.download': 'Descarregar diagnóstico',
   'settings.restoreBackup': 'Restaurar cópia de segurança',
+  'settings.confirmRestore': 'Restaurar a cópia de segurança? A sessão atual será substituída.',
   'settings.noBackup': 'Não há cópia de segurança IndexedDB disponível',
   'settings.backupRestored': 'Cópia de segurança restaurada',
   'settings.recentEmpty': 'Ainda não há projetos abertos. Os ficheiros que abrir aparecem aqui como referência; use Abrir projeto para recarregar um deles.',

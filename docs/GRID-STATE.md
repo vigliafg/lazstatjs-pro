@@ -59,10 +59,17 @@ La griglia non è più solo un editor di celle. Ora è **identity-safe** e
 - `Column.id` è opzionale nel tipo per compatibilità, ma viene creato per ogni
   colonna nuova e assegnato alle colonne dei progetti vecchi in `parseGrid`.
 - Insert/delete/move non cambiano l'id delle colonne esistenti.
-- Split conserva l'id della colonna originale (parte sinistra) e crea un id per
-  la nuova colonna.
-- Merge conserva l'id della colonna `lo` e rimuove `hi`.
-- Duplicate crea un id nuovo.
+- Split conserva l'id della colonna originale (parte sinistra), crea un id per
+  la nuova colonna e rimuove la formula dalla colonna originale (il valore
+  spezzato non è più il risultato dell'espressione).
+- Merge conserva l'id della colonna `lo`, rimuove `hi`, produce una colonna
+  `str` e azzera formula, livelli, reference, missing e label: il valore fuso
+  è testo, non la vecchia variabile numerica/categorica.
+- Duplicate crea un id nuovo e copia label, description, livelli, reference,
+  missing e formula; i valori sono uno snapshot.
+- Delete rimuove la formula delle colonne che citavano la colonna eliminata.
+- Split all crea una colonna per ogni parte; Split semplice divide alla prima
+  occorrenza.
 - Compute e paste che aggiungono colonne creano id nuovi.
 
 ### 3.2 Effetto delle operazioni
@@ -76,9 +83,10 @@ La griglia non è più solo un editor di celle. Ora è **identity-safe** e
 | Duplicate column i | `>= i+1` → `+1` | remap | remap |
 | Move column i→j | permutazione | remap | remap |
 | Delete column i | `> i` → `-1`; `i` sparisce | ruolo su `i` → `-1` | invalidazione |
-| Split column i | nuova a `i+1`; `>= i+1` → `+1`; `i` resta | ruolo su `i` → `-1` | invalidazione |
+| Split column i | nuova a `i+1`; `>= i+1` → `+1`; `i` resta | ruolo su `i` → `-1` | invalidazione; formula rimossa |
+| Split all | N-1 nuove colonne | ruolo su `i` → `-1` | invalidazione; formula rimossa |
 | Merge columns a,b | `hi` sparisce; `lo` fusa; `> hi` → `-1` | ruoli su `a`/`b` → `-1` | invalidazione |
-| Recode values/levels | invariati | invariati | stale, **validazione tipo non automatica** |
+| Recode values/levels | invariati | invariati | stale; il pannello Transform usa `recodeColumnValues` e aggiorna livelli/reference/tipo |
 | Rename | invariati | invariati | stale; le formule seguono il nome |
 | Cambio tipo | invariati | ruolo incompatibile → errore | stale + Run bloccato |
 | New / Import overwrite | tutte nuove | reset | reset + `datasetId` + output svuotati |
@@ -155,6 +163,10 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 - `recalculateFormulas` gira dentro `useGridHistory.commit`: ogni edit,
   paste, fill, recode o rename aggiorna le colonne calcolate prima di salvare
   la revisione; i valori delle celle restano la fonte per export e reload.
+- Merge e split rimuovono la formula, altrimenti il ricalcolo sovrascriverebbe
+  il valore strutturalmente trasformato al primo commit successivo.
+- `fillMissing` considera mancanti sia le celle vuote sia i codici dichiarati
+  in `Column.missing`.
 - Le colonne sono valutate da sinistra a destra: una formula può usare una
   colonna calcolata precedente.
 - Una formula che non compila (colonna referenziata cancellata) conserva i

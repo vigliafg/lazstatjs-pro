@@ -134,6 +134,12 @@ export const useProjectSession = ({
       showToast(t('toast.project'), t('settings.noBackup'), 'warn');
       return;
     }
+    if (
+      typeof window !== 'undefined' &&
+      !window.confirm(t('settings.confirmRestore'))
+    ) {
+      return;
+    }
     try {
       applyProject(parseProject(text));
       showToast(t('toast.project'), t('settings.backupRestored'), 'ok');
@@ -159,7 +165,7 @@ export const useProjectSession = ({
     try {
       if (file.size > 25_000_000) throw new Error(t('project.tooLarge'));
       const project = parseProject(await file.text());
-      if (!window.confirm(`Load "${file.name}"? The current grid will be replaced and the output console cleared.`)) {
+      if (!window.confirm(t('project.confirmOpen', { name: file.name }))) {
         return;
       }
       applyProject(project);

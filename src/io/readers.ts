@@ -1,6 +1,7 @@
 import { parseCsv, inferColumnType, type InferredType } from '../csv';
 import type { ColType } from '../grid/types';
 import type { Delimiter } from './detect';
+import { stripBom } from './text';
 
 /** Metadata preserved by binary formats such as SPSS and Stata. */
 export interface ImportColumnMeta {
@@ -33,7 +34,9 @@ export const readDelimited = (
   opts: { delimiter: Delimiter | string; hasHeader: boolean; decimalComma?: boolean }
 ): { rows: string[][]; skippedEmpty: number } => {
   const delim = opts.delimiter === 'tab' ? '\t' : (opts.delimiter as string);
-  const rows = parseCsv(text, delim, { keepEmpty: true });
+  // The BOM belongs to the file, not to the first header: strip it before
+  // parsing so a quoted first field does not keep the invisible character.
+  const rows = parseCsv(stripBom(text), delim, { keepEmpty: true });
   const before = rows.length;
   const kept = rows.filter((r) => r.some((v) => v.trim() !== ''));
   return { rows: kept, skippedEmpty: before - kept.length };
@@ -47,7 +50,7 @@ const flatten = (value: unknown): string => {
 
 /** Accept array-of-objects, array-of-arrays, or {columns, data}. */
 export const readJson = (text: string): { names: string[]; rows: string[][] } => {
-  const parsed: unknown = JSON.parse(text);
+  const parsed: unknown = JSON.parse(stripBom(text));
   if (Array.isArray(parsed) && parsed.length === 0) throw new Error('No data rows found');
   if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object' && !Array.isArray(parsed[0])) {
     const objs = parsed as Record<string, unknown>[];

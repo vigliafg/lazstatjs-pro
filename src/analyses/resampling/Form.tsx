@@ -1,10 +1,12 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { groupColumnIndexes, type GridData } from '../../grid/types';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { ResamplingParams } from '../../io/project';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
+  GroupSelect,
+  NumberField,
   VariableSelect,
   variableOptions,
   variableOptionsFrom,
@@ -12,12 +14,16 @@ import {
 
 export interface ResamplingFormProps {
   grid: GridData;
+  onLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
+  onRecode: (column: number, mapping: Record<string, string>) => void;
   resamplingParams: ResamplingParams;
   setResamplingParams: Dispatch<SetStateAction<ResamplingParams>>;
 }
 
 export const ResamplingForm = ({
   grid,
+  onLevels,
+  onRecode,
   resamplingParams,
   setResamplingParams,
 }: ResamplingFormProps) => (
@@ -26,13 +32,17 @@ export const ResamplingForm = ({
       label={t('form.outcome')}
       value={resamplingParams.outcome}
       options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
+      disabledValues={[resamplingParams.group]}
       onChange={value => setResamplingParams(prev => ({ ...prev, outcome: value }))}
     />
-    <VariableSelect
+    <GroupSelect
       label={t('form.group')}
+      grid={grid}
       value={resamplingParams.group}
-      options={variableOptionsFrom(grid.cols, groupColumnIndexes(grid))}
       onChange={value => setResamplingParams(prev => ({ ...prev, group: value }))}
+      onLevels={onLevels}
+      onRecode={onRecode}
+      disabledValues={[resamplingParams.outcome]}
     />
     <Field label={t('form.statistic')}>
       <select
@@ -51,34 +61,24 @@ export const ResamplingForm = ({
       </select>
     </Field>
     <div className="flex gap-2">
-      <Field label={t('form.permutations')}>
-        <input
-          type="number"
-          min="99"
-          max="50000"
-          step="100"
-          aria-label={t('form.permutations')}
-          className="w-28 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
-          value={resamplingParams.permutations}
-          onChange={e =>
-            setResamplingParams(prev => ({ ...prev, permutations: parseInt(e.target.value, 10) }))
-          }
-        />
-      </Field>
-      <Field label={t('form.bootstrapReps')}>
-        <input
-          type="number"
-          min="99"
-          max="50000"
-          step="100"
-          aria-label={t('form.bootstrapReps')}
-          className="w-28 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
-          value={resamplingParams.bootstrap}
-          onChange={e =>
-            setResamplingParams(prev => ({ ...prev, bootstrap: parseInt(e.target.value, 10) }))
-          }
-        />
-      </Field>
+      <NumberField
+        label={t('form.permutations')}
+        value={resamplingParams.permutations}
+        min="99"
+        max="50000"
+        step="100"
+        integer
+        onChange={value => setResamplingParams(prev => ({ ...prev, permutations: value }))}
+      />
+      <NumberField
+        label={t('form.bootstrapReps')}
+        value={resamplingParams.bootstrap}
+        min="99"
+        max="50000"
+        step="100"
+        integer
+        onChange={value => setResamplingParams(prev => ({ ...prev, bootstrap: value }))}
+      />
     </div>
     <p className="max-w-[340px] text-[10px] text-text3">{t('hint.resampling')}</p>
   </div>

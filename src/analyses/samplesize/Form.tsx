@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { SampleSizeParams } from '../../io/project';
 import { t } from '../../i18n';
-import { Field } from '../../components/FormFields';
+import { Field, NumberField } from '../../components/FormFields';
 
 export interface SampleSizeFormProps {
   samplesizeParams: SampleSizeParams;
@@ -19,40 +19,6 @@ const DESIGNS: { id: SampleSizeDesign; key: Parameters<typeof t>[0] }[] = [
   { id: 'tost', key: 'samplesize.tost' },
   { id: 'survival', key: 'samplesize.survival' },
 ];
-
-const inputClass =
-  'w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text';
-
-const NumberField = ({
-  label,
-  value,
-  onChange,
-  step = 'any',
-  min,
-  max,
-  width = 'w-24',
-}: {
-  label: string;
-  value: number;
-  onChange: (value: number) => void;
-  step?: string;
-  min?: string;
-  max?: string;
-  width?: string;
-}) => (
-  <Field label={label}>
-    <input
-      type="number"
-      step={step}
-      min={min}
-      max={max}
-      aria-label={label}
-      className={`${inputClass} ${width}`}
-      value={value}
-      onChange={e => onChange(parseFloat(e.target.value))}
-    />
-  </Field>
-);
 
 export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: SampleSizeFormProps) => {
   const { design, alpha, power, delta, sd, p1, p2, r, groups, f, margin, hazardRatio, eventRate } =
@@ -180,17 +146,14 @@ export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: Sample
 
         {design === 'anova' && (
           <>
-            <Field label={t('samplesize.groups')}>
-              <input
-                type="number"
-                min="2"
-                step="1"
-                aria-label={t('samplesize.groups')}
-                className={`${inputClass} w-20`}
-                value={groups}
-                onChange={e => update({ groups: parseInt(e.target.value, 10) })}
-              />
-            </Field>
+            <NumberField
+              label={t('samplesize.groups')}
+              value={groups}
+              min="2"
+              step="1"
+              integer
+              onChange={value => update({ groups: value })}
+            />
             <NumberField
               label={t('samplesize.cohensF')}
               value={f}

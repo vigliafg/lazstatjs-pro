@@ -25,6 +25,7 @@ export const OrdinalForm = ({ grid, ordinalParams, setOrdinalParams }: OrdinalFo
         label={t('form.predictorsX')}
         cols={grid.cols}
         only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
         selected={indeps}
         disabled={[dep]}
         showType

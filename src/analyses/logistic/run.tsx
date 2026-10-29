@@ -1,4 +1,4 @@
-import { fitLogistic, logisticCurve, logisticReport, logisticTables } from '../../stats/logistic';
+import { fitLogistic, logisticProfileCurve, logisticReport, logisticTables } from '../../stats/logistic';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
@@ -79,39 +79,36 @@ export const buildLogisticOutput = ({
   const outcomeName = grid.cols[outcome]?.name ?? 'Y';
   const header = `Outcome: ${outcomeName} · event = "${levels[1]}"`;
 
-  if (predictors.length === 1) {
-    const curve = logisticCurve(model, predictorData[0].values, 40);
-    const predictorName = predictorData[0].name;
-    return {
-      ok: true,
-      title: copy('Regressione logistica: {s1}', { s1: outcomeName }),
-      header,
-      tables,
-      report: logisticReport(tables, ciLevel),
-      charts: [
-        makeChart({
-          id: 'logistic-curve',
-          kind: 'line',
-          title: copy('Curva di probabilità'),
-          subtitle: predictorName,
-          note: copy('La curva è la probabilità stimata dall’esito (0–100%); i punti in alto sono le osservazioni con esito = 1, quelli in basso con esito = 0.'),
-          data: {
-            series: curve.map(point => ({ x: point.x, y: point.y, series: copy('Probabilità stimata') })),
-            markers: rows.map(row => ({ x: row.values[0], y: row.y * 100, series: copy('Osservazioni') })),
-          },
-          fields: { xLabel: predictorName, yLabel: copy('Probabilità (%)'), series: copy('Serie') },
-          options: { showMarkers: true, showBand: false } as never,
-        }),
-      ],
-    };
-  }
-
+  const predictorName = predictorData[0].name;
+  const means = predictorData.map((predictor) =>
+    predictor.values.reduce((sum, value) => sum + value, 0) / Math.max(1, predictor.values.length)
+  );
+  const curve = logisticProfileCurve(model, predictorData[0].values, means.slice(1), 40);
+  const multiple = predictors.length > 1;
   return {
     ok: true,
     title: copy('Regressione logistica: {s1}', { s1: outcomeName }),
     header,
     tables,
     report: logisticReport(tables, ciLevel),
-    charts: [],
+    charts: [
+      makeChart({
+        id: 'logistic-curve',
+        kind: 'line',
+        title: copy('Curva di probabilità'),
+        subtitle: multiple
+          ? copy('{s1} · altri predittori alla media', { s1: predictorName })
+          : predictorName,
+        note: multiple
+          ? copy('La curva mostra il profilo del primo predittore mantenendo gli altri al valore medio; i punti sono le osservazioni.')
+          : copy('La curva è la probabilità stimata dall’esito (0–100%); i punti in alto sono le osservazioni con esito = 1, quelli in basso con esito = 0.'),
+        data: {
+          series: curve.map(point => ({ x: point.x, y: point.y, series: copy('Probabilità stimata') })),
+          markers: rows.map(row => ({ x: row.values[0], y: row.y * 100, series: copy('Osservazioni') })),
+        },
+        fields: { xLabel: predictorName, yLabel: copy('Probabilità (%)'), series: copy('Serie') },
+        options: { showMarkers: true, showBand: false } as never,
+      }),
+    ],
   };
 };

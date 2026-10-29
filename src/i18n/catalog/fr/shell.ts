@@ -44,6 +44,7 @@ export const shellMessages: Record<keyof typeof enShell, string> = {
   'error.reload': 'Recharger',
   'error.download': 'Télécharger le diagnostic',
   'settings.restoreBackup': 'Restaurer la sauvegarde',
+  'settings.confirmRestore': 'Restaurer la sauvegarde ? La session actuelle sera remplacée.',
   'settings.noBackup': 'Aucune sauvegarde IndexedDB disponible',
   'settings.backupRestored': 'Sauvegarde restaurée',
   'settings.recentEmpty': 'Aucun projet ouvert pour l’instant. Les fichiers que vous ouvrez apparaissent ici pour référence ; utilisez Ouvrir un projet pour en recharger un.',

@@ -28,7 +28,6 @@ export type ChartKind =
   | 'survival'
   | 'acf'
   | 'heatmap'
-  | 'mosaic'
   | 'residual'
   | 'scree'
   | 'score'
@@ -141,12 +140,6 @@ export interface HeatmapOptions extends CommonChartOptions {
   sort: 'none' | 'asc' | 'desc';
 }
 
-export interface MosaicOptions extends CommonChartOptions {
-  kind: 'mosaic';
-  showResiduals: boolean;
-  showValues: boolean;
-}
-
 export interface ResidualOptions extends CommonChartOptions {
   kind: 'residual';
   showPoints: boolean;
@@ -200,7 +193,6 @@ export type ChartOptions =
   | SurvivalOptions
   | AcfOptions
   | HeatmapOptions
-  | MosaicOptions
   | ResidualOptions
   | ScreeOptions
   | ScoreOptions

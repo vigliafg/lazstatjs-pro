@@ -1,12 +1,11 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
-import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { FactorialParams } from '../../io/project';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
   CheckboxField,
-  Field,
+  GroupSelect,
   VariableSelect,
   variableOptions,
   variableOptionsFrom,
@@ -28,8 +27,6 @@ export const FactorialForm = ({
   setFactorialParams,
 }: FactorialFormProps) => {
   const { response, factorA, factorB, interaction } = factorialParams;
-  const factors = groupColumnIndexes(grid);
-  const factorOptions = variableOptionsFrom(grid.cols, factors);
 
   return (
     <div className="flex flex-col gap-3">
@@ -39,45 +36,29 @@ export const FactorialForm = ({
         options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setFactorialParams(prev => ({ ...prev, response: value }))}
       />
-      <VariableSelect
+      <GroupSelect
         label={t('form.factorA')}
+        grid={grid}
         value={factorA}
-        options={factorOptions}
         onChange={value => setFactorialParams(prev => ({ ...prev, factorA: value }))}
-        trailing={
-          <LevelsEditor
-            grid={grid}
-            column={factorA}
-            onLevels={onLevels}
-            onRecode={onRecode}
-            label={t('action.levels')}
-            className={LEVELS_BUTTON_CLASS}
-          />
-        }
+        disabledValues={[factorB]}
+        onLevels={onLevels}
+        onRecode={onRecode}
       />
-      <VariableSelect
+      <GroupSelect
         label={t('form.factorB')}
+        grid={grid}
         value={factorB}
-        options={factorOptions}
         onChange={value => setFactorialParams(prev => ({ ...prev, factorB: value }))}
-        trailing={
-          <LevelsEditor
-            grid={grid}
-            column={factorB}
-            onLevels={onLevels}
-            onRecode={onRecode}
-            label={t('action.levels')}
-            className={LEVELS_BUTTON_CLASS}
-          />
-        }
+        disabledValues={[factorA]}
+        onLevels={onLevels}
+        onRecode={onRecode}
       />
-      <Field label={t('form.model')}>
-        <CheckboxField
-          label={t('form.interaction')}
-          checked={interaction}
-          onChange={checked => setFactorialParams(prev => ({ ...prev, interaction: checked }))}
-        />
-      </Field>
+      <CheckboxField
+        label={t('form.interaction')}
+        checked={interaction}
+        onChange={checked => setFactorialParams(prev => ({ ...prev, interaction: checked }))}
+      />
     </div>
   );
 };

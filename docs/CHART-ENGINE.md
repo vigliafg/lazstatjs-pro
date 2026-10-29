@@ -12,8 +12,9 @@ render. Victory e `recharts` non sono più dipendenze.
 2. **Edit** — cliccando un grafico (o il pulsante *Edit chart*) si apre
    `ChartEditorDialog`: preview live, toolbar generale sticky, pannello destro
    con le opzioni specifiche. **Done** aggiorna le opzioni della card senza
-   rilanciare l'analisi; **Cancel** scarta; **Reset** torna ai default. Le
-   modifiche sono salvate da autosave e `.lzs` e restano modificabili al reload.
+   rilanciare l'analisi; **Cancel** scarta; **Reset** torna alle opzioni
+   iniziali della card. Le modifiche sono salvate da autosave e `.lzs` e
+   restano modificabili al reload.
 
 Sotto 1024px il dialogo diventa full-screen e il pannello specifico collassa in
 un `<details>` sotto il grafico. Il pannello contiene solo opzioni di
@@ -144,7 +145,13 @@ lo sfondo dichiarato da `data-chart-background`.
   nessun warning, test numerico CI/PI (PI più larga della CI e monotonia con il
   livello).
 - `src/io/outputsCharts.test.ts`: persistenza, card legacy, overflow.
-- Playwright: run + chart ready, edit + reload, PNG + report HTML.
+- Playwright: run + chart ready, edit + reload, PNG + report HTML;
+  `e2e/chart-editor.spec.ts` copre toolbar, pannello specifico, Reset,
+  undo/redo, export PNG diretto, persistenza, focus trap e layout mobile su
+  ANOVA e regressione semplice (screenshot in
+  `test-results/chart-editor-audit/`).
+- Baseline visive opzionali: `VISUAL=1 npx playwright test
+  e2e/chart-editor.spec.ts --project=desktop -g baseline`.
 - `npm run check`, build e guardrail restano verdi.
 
 ## Localizzazione

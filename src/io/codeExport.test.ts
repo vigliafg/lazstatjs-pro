@@ -21,8 +21,10 @@ test('builds R and Python code for a t-test', () => {
   const r = buildAnalysisCode('ttest', grid, params, 95, 'r');
   assert.match(r ?? '', /t\.test/);
   assert.match(r ?? '', /Score/);
+  assert.match(r ?? '', /lazstats\.csv/);
   const py = buildAnalysisCode('ttest', grid, params, 95, 'python');
   assert.match(py ?? '', /ttest_ind/);
+  assert.match(py ?? '', /lazstats\.csv/);
 });
 
 test('returns null for analyses without a supported snippet', () => {

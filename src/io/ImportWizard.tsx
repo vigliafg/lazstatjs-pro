@@ -119,6 +119,17 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
   }, [binaryTable, sheet, isJson, text, effDelim, hasHeader, decimalComma, overrides]);
   const { table, error } = parsed;
 
+  const mapping = useMemo(() => {
+    if (!table || mode === 'overwrite') return null;
+    const existing = new Set(gridCols.map((name) => name.toLowerCase()));
+    const matched = table.names.filter((name) => existing.has(name.toLowerCase())).length;
+    return {
+      matched,
+      created: table.names.length - matched,
+      positional: mode === 'append-rows' && table.names.length === gridCols.length,
+    };
+  }, [table, mode, gridCols]);
+
   const preview = table ? table.rows.slice(0, 10) : [];
 
   return (
@@ -141,6 +152,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
             <label className="flex flex-col gap-1">
               <span className="text-[10px] text-text3 font-mono uppercase">{t('io.worksheet')}</span>
               <select
+                data-import="worksheet"
                 className="bg-surface3 border border-border2 rounded px-2 py-1 text-text"
                 value={sheetIndex}
                 onChange={(e) => switchSheet(parseInt(e.target.value, 10))}
@@ -157,7 +169,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
             <>
               <label className="flex flex-col gap-1">
                 <span className="text-[10px] text-text3 font-mono uppercase">{t('io.delimiter')} {delimId === 'auto' && <span className="text-accent">({t('io.detected')}: {detection.delimiter === '\t' ? t('io.tab') : detection.delimiter})</span>}</span>
-                <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={delimId} onChange={(e) => setDelimId(e.target.value)}>
+                <select data-import="delimiter" className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={delimId} onChange={(e) => setDelimId(e.target.value)}>
                   {DELIMS.map((d) => (
                     <option key={d.id} value={d.id}>{d.label}</option>
                   ))}
@@ -165,7 +177,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
               </label>
               <label className="flex flex-col gap-1">
                 <span className="text-[10px] text-text3 font-mono uppercase">{t('io.header')}</span>
-                <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={hasHeader ? 'yes' : 'no'} onChange={(e) => setHasHeader(e.target.value === 'yes')}>
+                <select data-import="header" className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={hasHeader ? 'yes' : 'no'} onChange={(e) => setHasHeader(e.target.value === 'yes')}>
                   <option value="yes">{t('io.firstRowHeader')} ({Math.round(detection.headerConfidence * 100)}%)</option>
                   <option value="no">{t('io.noHeader')}</option>
                 </select>
@@ -175,7 +187,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
           {isWorkbook && (
             <label className="flex flex-col gap-1">
               <span className="text-[10px] text-text3 font-mono uppercase">{t('io.header')}</span>
-              <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={hasHeader ? 'yes' : 'no'} onChange={(e) => setHasHeader(e.target.value === 'yes')}>
+              <select data-import="header" className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={hasHeader ? 'yes' : 'no'} onChange={(e) => setHasHeader(e.target.value === 'yes')}>
                 <option value="yes">{t('io.firstRowHeader')}</option>
                 <option value="no">{t('io.noHeader')}</option>
               </select>
@@ -184,7 +196,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
           {!isBinary && (
           <label className="flex flex-col gap-1">
             <span className="text-[10px] text-text3 font-mono uppercase">{t('io.decimals')}</span>
-            <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={decimalComma ? 'comma' : 'dot'} onChange={(e) => setDecimalComma(e.target.value === 'comma')}>
+            <select data-import="decimals" className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={decimalComma ? 'comma' : 'dot'} onChange={(e) => setDecimalComma(e.target.value === 'comma')}>
               <option value="dot">{t('io.dot')}</option>
               <option value="comma">{t('io.comma')}</option>
             </select>
@@ -192,7 +204,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
           )}
           <label className="flex flex-col gap-1">
             <span className="text-[10px] text-text3 font-mono uppercase">{t('io.applyAs')}</span>
-            <select className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={mode} onChange={(e) => setMode(e.target.value as ImportMode)}>
+            <select data-import="mode" className="bg-surface3 border border-border2 rounded px-2 py-1 text-text" value={mode} onChange={(e) => setMode(e.target.value as ImportMode)}>
               <option value="overwrite">{t('io.overwrite')}</option>
               <option value="append-rows">{t('io.appendRows')} ({gridCols.length} {t('data.column').toLowerCase()})</option>
               <option value="append-cols">{t('io.mergeCols')}</option>
@@ -203,6 +215,12 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
         {isBinary && (
           <div className="border-b border-border bg-accent/5 px-4 py-2 text-[10px] leading-relaxed text-text3">
             {t('io.binaryPreserved')}
+          </div>
+        )}
+
+        {mode === 'overwrite' && (
+          <div className="border-b border-border bg-yellow/5 px-4 py-2 text-[10px] leading-relaxed text-yellow">
+            {t('io.overwriteWarning')}
           </div>
         )}
 
@@ -217,6 +235,13 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
               {table.renamedDupes > 0 && <span> · {table.renamedDupes} {t('io.dupHeaders')}</span>}
               {detection.hadBOM && <span> · {t('io.bomStripped')}</span>}
             </div>
+            {mapping && (
+              <div data-import="mapping" className="border-b border-border px-4 py-2 text-[10px] text-text3">
+                {mapping.positional
+                  ? t('io.mappingPositional')
+                  : t('io.mappingSummary', { matched: mapping.matched, created: mapping.created })}
+              </div>
+            )}
             <div className="flex-1 overflow-auto scrollbar px-4 py-2">
               <table className="w-full border-collapse font-mono text-[11px]">
                 <thead className="sticky top-0">
@@ -225,6 +250,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
                       <th key={i} className="border border-border p-1">
                         <div className="text-accent2">{n}</div>
                         <select
+                          data-import="type"
                           className="mt-1 w-full bg-surface3 border border-border2 text-text2 text-[10px] rounded px-1 py-0.5"
                           value={overrides[i] ?? table.types[i]}
                           onChange={(e) => setOverrides((o) => ({ ...o, [i]: e.target.value as ColType }))}
@@ -257,6 +283,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
         <div className="px-4 py-3 border-t border-border flex justify-end gap-2">
           <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
           <button
+            data-import="apply"
             className="tb-btn bg-accent text-white border-accent disabled:opacity-40"
             disabled={!table}
             onClick={() => {

@@ -1,5 +1,5 @@
 import type { GridData } from '../types';
-import { emptyRow } from '../types';
+import { emptyRow, isMissingCell, isMissingCode } from '../types';
 import { numVal } from './shared';
 
 export const addRowEnd = (grid: GridData): GridData => ({
@@ -31,7 +31,9 @@ export const clearGrid = (grid: GridData): GridData => ({
 export const newGrid = (): GridData => ({ cols: [{ name: 'Var1', type: 'num' }], rows: Array(20).fill(null).map(() => ['']) });
 
 export const removeEmptyRows = (grid: GridData): { grid: GridData; removed: number } => {
-  const kept = grid.rows.filter((r) => r.some((v) => String(v ?? '').trim() !== ''));
+  const kept = grid.rows.filter((r) =>
+    r.some((value, column) => !isMissingCell(grid.cols[column], value))
+  );
   return { grid: { cols: grid.cols, rows: kept.length ? kept : [emptyRow(grid.cols.length)] }, removed: grid.rows.length - kept.length };
 };
 
@@ -56,8 +58,11 @@ export const fillMissing = (
   strategy: 'mean' | 'median' | 'mode' | { value: string }
 ): { grid: GridData; filled: number; fillWith: string } => {
   if (col < 0 || col >= grid.cols.length) return { grid, filled: 0, fillWith: '' };
+  const column = grid.cols[col];
+  const isMissing = (value: string): boolean =>
+    String(value).trim() === '' || isMissingCode(column, value);
   const vals = grid.rows.map((r) => r[col] ?? '');
-  const filled = vals.filter((v) => String(v).trim() !== '');
+  const filled = vals.filter((v) => !isMissing(v));
   let fillWith = '';
   if (typeof strategy === 'object') {
     fillWith = strategy.value;
@@ -83,7 +88,7 @@ export const fillMissing = (
   }
   let n = 0;
   const rows = grid.rows.map((row) => {
-    if (String(row[col] ?? '').trim() !== '') return [...row];
+    if (!isMissing(row[col] ?? '')) return [...row];
     n += 1;
     const copy = [...row];
     copy[col] = fillWith;

@@ -142,6 +142,14 @@ export const OutputConsole = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const analysisIds = useMemo(() => analysisIdsOf(outputs), [outputs]);
   const visibleOutputs = useMemo(() => selectOutputs(outputs, filterId), [outputs, filterId]);
+  // Keep filtered cards mounted but hidden: exports, reports and PNG need the
+  // whole console, while the filter is only a reading aid.
+  const orderedOutputs = useMemo(() => {
+    const all = selectOutputs(outputs, 'all');
+    return all.slice().sort(
+      (a, b) => Number(pinned.has(b.output.id)) - Number(pinned.has(a.output.id))
+    );
+  }, [outputs, pinned]);
   const lastId = outputs.length > 0 ? outputs[outputs.length - 1].id : null;
   const [activeId, setActiveId] = useState<string | null>(lastId);
 
@@ -371,14 +379,10 @@ export const OutputConsole = ({
             </button>
           </div>
         ) : (
-          <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-            {visibleOutputs
-              .slice()
-              .sort(
-                (a, b) =>
-                  Number(pinned.has(b.output.id)) - Number(pinned.has(a.output.id))
-              )
+          <div className="mx-auto flex w-full min-w-0 max-w-5xl flex-col gap-4">
+            {orderedOutputs
               .map(({ output, index }) => {
+              const isVisible = filterId === 'all' || output.analysisId === filterId;
               const isCollapsed = collapsed.has(output.id);
               const title = output.analysisId
                 ? analysisLabel(output.analysisId)
@@ -397,7 +401,8 @@ export const OutputConsole = ({
                 <article
                   key={output.id}
                   id={`output-block-${output.id}`}
-                  className="output-card scroll-mt-4"
+                  data-stale={stale ? 'true' : undefined}
+                  className={`output-card min-w-0 scroll-mt-4 ${isVisible ? '' : 'hidden'}`}
                 >
                   <header
                     className="flex items-center gap-2 border-b border-border bg-surface2/50 px-2.5 py-1.5"

@@ -41,6 +41,7 @@ export const shellMessages = {
   'error.reload': 'Reload',
   'error.download': 'Download diagnostics',
   'settings.restoreBackup': 'Restore backup',
+  'settings.confirmRestore': 'Restore the backup? The current session will be replaced.',
   'settings.noBackup': 'No IndexedDB backup available',
   'settings.backupRestored': 'Backup restored',
   'settings.recentEmpty': 'No opened projects yet. Files you open appear here for reference; use Open project to reload one.',

@@ -259,6 +259,8 @@ export default function App() {
       'ok'
     );
   };
+  // The import hook is declared first, so read the result count through a ref.
+  const outputsRef = useRef<OutputEntry[]>(restoredOutputs(boot?.outputs));
   const {
     csvInputRef,
     pendingImport,
@@ -272,11 +274,8 @@ export default function App() {
     exportCsv,
   } = useImportExport({
     initialPrefs: boot?.prefs,
-    setGrid,
-    replaceDataset,
-    setValidation,
-    setActiveTab,
-    showToast,
+    setGrid, replaceDataset, setValidation, setActiveTab, showToast,
+    hasResults: () => outputsRef.current.length > 0,
   });
   const [datasetId, setDatasetId] = useState(
     () => boot?.datasetId ?? `dataset-${Date.now().toString(36)}`
@@ -310,6 +309,7 @@ export default function App() {
     exportReportHtml,
     exportReportWord,
   } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast });
+  useEffect(() => { outputsRef.current = outputs; }, [outputs]);
 
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
     useColumnOperations({ grid, params, setParams, setGrid, showToast });
@@ -670,7 +670,7 @@ export default function App() {
       {showExport && (
         <Suspense fallback={null}>
         <ExportDialog
-          grid={grid}
+          grid={grid} rowFilter={activeRowFilter} filterAffectsAnalysis={filterAffectsAnalysis}
           onClose={() => setShowExport(false)}
           onExport={(files) => {
             files.forEach((f) => downloadExportFile(f));

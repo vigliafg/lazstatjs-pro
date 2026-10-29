@@ -25,13 +25,21 @@ export const RegressionForm = ({ grid, regParams, setRegParams }: RegressionForm
       label={t('form.dependentY')}
       value={regParams.dep}
       options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
-      onChange={value => setRegParams(previous => ({ ...previous, dep: value }))}
+      onChange={value =>
+        setRegParams(previous => ({
+          ...previous,
+          dep: value,
+          indeps: previous.indeps.filter(index => index !== value),
+        }))
+      }
     />
     <VariableList
       label={t('form.independentsX')}
       cols={grid.cols}
       only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
       selected={regParams.indeps}
+      disabled={[regParams.dep]}
       onToggle={(column, checked) =>
         setRegParams(previous => ({
           ...previous,

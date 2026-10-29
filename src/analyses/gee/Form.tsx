@@ -1,10 +1,11 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { groupColumnIndexes, type GridData } from '../../grid/types';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { GeeParams } from '../../io/project';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
+  GroupSelect,
   VariableList,
   VariableSelect,
   variableOptions,
@@ -13,11 +14,13 @@ import {
 
 export interface GeeFormProps {
   grid: GridData;
+  onLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
+  onRecode: (column: number, mapping: Record<string, string>) => void;
   geeParams: GeeParams;
   setGeeParams: Dispatch<SetStateAction<GeeParams>>;
 }
 
-export const GeeForm = ({ grid, geeParams, setGeeParams }: GeeFormProps) => (
+export const GeeForm = ({ grid, onLevels, onRecode, geeParams, setGeeParams }: GeeFormProps) => (
   <div className="flex flex-col gap-3">
     <VariableSelect
       label={t('form.outcome')}
@@ -29,6 +32,7 @@ export const GeeForm = ({ grid, geeParams, setGeeParams }: GeeFormProps) => (
       label={t('form.predictorsX')}
       cols={grid.cols}
       only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
       selected={geeParams.indeps}
       disabled={[geeParams.dep, geeParams.cluster]}
       showType
@@ -42,11 +46,13 @@ export const GeeForm = ({ grid, geeParams, setGeeParams }: GeeFormProps) => (
         }))
       }
     />
-    <VariableSelect
+    <GroupSelect
       label={t('form.cluster')}
+      grid={grid}
       value={geeParams.cluster}
-      options={variableOptionsFrom(grid.cols, groupColumnIndexes(grid))}
       onChange={value => setGeeParams(prev => ({ ...prev, cluster: value }))}
+      onLevels={onLevels}
+      onRecode={onRecode}
     />
     <Field label={t('form.family')}>
       <select

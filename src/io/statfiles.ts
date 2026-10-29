@@ -104,10 +104,30 @@ const cellText = (
   variable: StatVariable,
   kind: DateKind | null
 ): string => {
-  if (value === null || inMissingRange(value, variable)) return '';
+  if (value === null) return '';
+  // Keep user-missing sentinels in the grid and declare them on the column:
+  // analyses mask them like blanks, but the original code is not lost.
+  if (inMissingRange(value, variable)) {
+    return typeof value === 'number' ? formatNumber(value) : value.trim();
+  }
   if (typeof value === 'string') return value.trim();
   if (kind) return convertDate(value, variable.format, kind) ?? formatNumber(value);
   return formatNumber(value);
+};
+
+const missingCodes = (
+  rows: (number | string | null)[][],
+  variable: StatVariable,
+  index: number
+): string[] => {
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const value = row[index];
+    if (value === null || !inMissingRange(value, variable)) continue;
+    const code = typeof value === 'number' ? formatNumber(value) : value.trim();
+    if (code !== '') seen.add(code);
+  }
+  return Array.from(seen);
 };
 
 const uniqueValues = (rows: (number | string | null)[][], index: number): boolean => {
@@ -202,9 +222,11 @@ export const readStatFile = async (fileName: string, buffer: ArrayBuffer): Promi
       value: typeof entry.value === 'number' ? formatNumber(entry.value) : String(entry.value),
       label: String(entry.label),
     }));
+    const missing = missingCodes(dataset.rows, variable, variable.index ?? index);
     return {
       ...(variable.label?.trim() ? { label: variable.label.trim() } : {}),
       ...(levels.length > 0 ? { levels } : {}),
+      ...(missing.length > 0 ? { missing } : {}),
     };
   });
 

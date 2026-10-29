@@ -37,6 +37,7 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
         label={t('form.variable1')}
         value={ttestParams.var1}
         options={options}
+        disabledValues={ttestParams.type === 'one' ? [] : [ttestParams.var2]}
         onChange={value => setTTestParams(previous => ({ ...previous, var1: value }))}
       />
       {ttestParams.type !== 'one' ? (
@@ -44,6 +45,7 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
           label={t('form.variable2')}
           value={ttestParams.var2}
           options={options}
+          disabledValues={[ttestParams.var1]}
           onChange={value => setTTestParams(previous => ({ ...previous, var2: value }))}
         />
       ) : (

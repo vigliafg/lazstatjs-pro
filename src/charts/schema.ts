@@ -24,7 +24,6 @@ const KINDS: readonly ChartKind[] = [
   'survival',
   'acf',
   'heatmap',
-  'mosaic',
   'residual',
   'scree',
   'score',

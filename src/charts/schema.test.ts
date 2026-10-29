@@ -74,7 +74,7 @@ test('a chart model crosses a structuredClone boundary unchanged', () => {
 });
 
 test('factory options are valid for every kind', () => {
-  for (const kind of ['scatter', 'line', 'bar', 'box', 'histogram', 'qq', 'forest', 'survival', 'acf', 'heatmap', 'mosaic', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness'] as const) {
+  for (const kind of ['scatter', 'line', 'bar', 'box', 'histogram', 'qq', 'forest', 'survival', 'acf', 'heatmap', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness'] as const) {
     assert.equal(factoryOptions(kind).kind, kind);
   }
 });

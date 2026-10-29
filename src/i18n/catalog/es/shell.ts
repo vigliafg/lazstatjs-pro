@@ -43,6 +43,7 @@ export const shellMessages: Record<keyof typeof enShell, string> = {
   'error.reload': 'Recargar',
   'error.download': 'Descargar diagnóstico',
   'settings.restoreBackup': 'Restaurar copia de seguridad',
+  'settings.confirmRestore': '¿Restaurar la copia de seguridad? La sesión actual se reemplazará.',
   'settings.noBackup': 'No hay copia de seguridad de IndexedDB disponible',
   'settings.backupRestored': 'Copia de seguridad restaurada',
   'settings.recentEmpty': 'Todavía no hay proyectos abiertos. Los archivos que abras aparecen aquí como referencia; usa Abrir proyecto para volver a cargar uno.',

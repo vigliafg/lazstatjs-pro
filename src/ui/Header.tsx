@@ -24,7 +24,7 @@ export const Header = ({
   setUiLocale,
   reportLocale,
 }: HeaderProps) => (
-  <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-surface2 px-2 pt-1.5 scrollbar">
+  <div className="flex w-full min-w-0 max-w-full shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-surface2 px-2 pt-1.5 scrollbar">
     <div className="mr-1 flex shrink-0 items-center gap-2 border-r border-border px-2 pb-1.5">
       <div className="flex h-5 w-5 items-center justify-center rounded border border-accent/30 bg-accent/10">
         <BarChart3 className="h-3 w-3 text-accent" />

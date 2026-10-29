@@ -43,6 +43,7 @@ export const shellMessages: Record<keyof typeof enShell, string> = {
   'error.reload': 'Ricarica',
   'error.download': 'Scarica diagnostica',
   'settings.restoreBackup': 'Ripristina backup',
+  'settings.confirmRestore': 'Ripristinare il backup? La sessione corrente verrà sostituita.',
   'settings.noBackup': 'Nessun backup IndexedDB disponibile',
   'settings.backupRestored': 'Backup ripristinato',
   'settings.recentEmpty': 'Nessun progetto ancora aperto. I file che apri compaiono qui come riferimento; usa Apri progetto per ricaricarne uno.',

@@ -12,6 +12,8 @@ export interface RecodeLevelsResult {
   merged: number;
   /** Set when the new codes no longer satisfy the declared column type. */
   typeChangedTo?: ColType;
+  /** True when recoding removed a persistent formula from the target column. */
+  formulaDropped: boolean;
 }
 
 /**
@@ -29,14 +31,14 @@ export const recodeColumnValues = (
   c: number,
   mapping: Record<string, string>
 ): RecodeLevelsResult => {
-  if (c < 0 || c >= grid.cols.length) return { grid, changed: 0, cleared: 0, merged: 0 };
+  if (c < 0 || c >= grid.cols.length) return { grid, changed: 0, cleared: 0, merged: 0, formulaDropped: false };
   const map = new Map<string, string>();
   Object.entries(mapping ?? {}).forEach(([from, to]) => {
     const key = String(from ?? '').trim();
     if (key === '') return;
     map.set(key, String(to ?? '').trim());
   });
-  if (map.size === 0) return { grid, changed: 0, cleared: 0, merged: 0 };
+  if (map.size === 0) return { grid, changed: 0, cleared: 0, merged: 0, formulaDropped: false };
 
   let changed = 0;
   let cleared = 0;
@@ -60,6 +62,7 @@ export const recodeColumnValues = (
   });
   const ref = col.reference && map.has(col.reference) ? map.get(col.reference) : col.reference;
 
+  const formulaDropped = Boolean(col.formula?.trim());
   let next = setColumnLevels({ cols: grid.cols, rows }, c, levels, ref || undefined);
   // Groups that disappear minus the ones removed by clearing: a code emptied
   // by "clear" is not a merge, while 21 → 20 fuses into the existing group 20.
@@ -72,7 +75,15 @@ export const recodeColumnValues = (
     typeChangedTo = 'cat';
     next = setColType(next, c, 'cat');
   }
-  return { grid: next, changed, cleared, merged, typeChangedTo };
+  if (formulaDropped) {
+    next = {
+      cols: next.cols.map((column, index) =>
+        index === c ? { ...column, formula: undefined } : column
+      ),
+      rows: next.rows,
+    };
+  }
+  return { grid: next, changed, cleared, merged, typeChangedTo, formulaDropped };
 };
 
 /** Apply a plain value mapping; unmatched values can be kept or cleared. */

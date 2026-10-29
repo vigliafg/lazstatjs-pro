@@ -7,6 +7,7 @@ import { t } from '../../i18n';
 import {
   CheckboxField,
   Field,
+  NumberField,
   VariableList,
 } from '../../components/FormFields';
 
@@ -85,23 +86,15 @@ export const MultivariateForm = ({
 
       {mode === 'efa' && (
         <>
-          <Field label={t('form.factorsAuto')}>
-            <input
-              type="number"
-              min="0"
-              max="10"
-              step="1"
-              aria-label={t('form.factorsAuto')}
-              className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
-              value={factors}
-              onChange={event =>
-                setMultivariateParams(prev => ({
-                  ...prev,
-                  factors: parseInt(event.target.value, 10),
-                }))
-              }
-            />
-          </Field>
+          <NumberField
+            label={t('form.factorsAuto')}
+            value={factors}
+            min="0"
+            max="10"
+            step="1"
+            integer
+            onChange={value => setMultivariateParams(prev => ({ ...prev, factors: value }))}
+          />
           <Field label={t('form.rotation')}>
             <select
               aria-label={t('form.rotation')}
@@ -122,15 +115,13 @@ export const MultivariateForm = ({
       )}
 
       {mode === 'pca' && (
-        <Field label={t('form.matrix')}>
-          <CheckboxField
-            label={t('form.correlationStandardized')}
-            checked={standardize}
-            onChange={checked =>
-              setMultivariateParams(prev => ({ ...prev, standardize: checked }))
-            }
-          />
-        </Field>
+        <CheckboxField
+          label={t('form.correlationStandardized')}
+          checked={standardize}
+          onChange={checked =>
+            setMultivariateParams(prev => ({ ...prev, standardize: checked }))
+          }
+        />
       )}
     </div>
   );

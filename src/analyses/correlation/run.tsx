@@ -1,6 +1,7 @@
 import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { correlationTables } from '../../stats/correlation';
+import { correlationPairs } from '../../stats/kernels/correlation';
 import { correlationReport } from '../../stats/report';
 import { calcKendallTau } from '../../stats/kernels';
 import type { Dataset } from '../../grid/types';
@@ -175,6 +176,36 @@ export interface CorrelationRunInput {
           subtitle: copy('Confronto delle scale'),
           data: { summary: box.summary, points: box.points, outliers: box.outliers },
           fields: { xLabel: copy('Variabile'), yLabel: copy('Valore') },
+        })
+      );
+      const pairs = correlationPairs(grid.rows, vars, ciLevel);
+      const pairMap = new Map(pairs.map(pair => [`${pair.a}-${pair.b}`, pair]));
+      const cells = vars.flatMap((_, i) =>
+        vars.map((__, j) => {
+          const pair = i === j ? null : pairMap.get(`${Math.min(i, j)}-${Math.max(i, j)}`);
+          const value = i === j
+            ? 1
+            : pair
+              ? method === 'spearman' ? pair.spearman : method === 'kendall' ? pair.kendall : pair.pearson
+              : NaN;
+          return {
+            x: names[j],
+            y: names[i],
+            value: Number.isFinite(value) ? value : 0,
+            label: Number.isFinite(value) ? value.toFixed(2) : '—',
+          };
+        })
+      );
+      charts.push(
+        makeChart({
+          id: 'corr-heatmap',
+          kind: 'heatmap',
+          title: copy('Matrice di correlazione'),
+          subtitle: `${method} · CI ${ciLevel}%`,
+          note: copy('La diagonale vale 1; i colori mostrano direzione e forza delle correlazioni a coppie.'),
+          data: { cells },
+          fields: { xLabel: copy('Variabile'), yLabel: copy('Variabile') },
+          options: { showValues: true, diverging: true } as never,
         })
       );
     }

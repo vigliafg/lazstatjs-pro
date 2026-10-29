@@ -92,10 +92,12 @@ export const colorEncoding = (
 };
 
 export const titleFor = (chart: AnalysisChart, options: CommonChartOptions, theme: ReturnType<typeof themeFor>): Spec | undefined => {
-  if (!options.showTitle && !(options.showSubtitle && chart.subtitle)) return undefined;
+  const title = options.showTitle ? chart.title : '';
+  const subtitle = options.showSubtitle && chart.subtitle ? chart.subtitle : '';
+  if (!title && !subtitle) return undefined;
   return {
-    ...(options.showTitle ? { text: chart.title } : { text: '' }),
-    ...(options.showSubtitle && chart.subtitle ? { subtitle: chart.subtitle } : {}),
+    ...(title || subtitle ? { text: title || ' ' } : {}),
+    ...(subtitle ? { subtitle } : {}),
     color: theme.text,
     subtitleColor: theme.muted,
     fontSize: 12,

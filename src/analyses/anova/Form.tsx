@@ -1,12 +1,9 @@
 import { t } from '../../i18n';
-import { variableOptionsFrom } from '../../components/FormFields';
 import { continuousColumnIndexes } from '../shared/columns';
 import type { Dispatch, SetStateAction } from 'react';
-import { groupColumnIndexes, isGroupColumn } from '../../grid/types';
 import type { CategoryLevel, GridData } from '../../grid/types';
-import { LevelsEditor } from '../../grid/LevelsEditor';
 import type { AnovaParams } from '../../io/project';
-import { Advanced, CheckboxField, Field, VariableSelect, variableOptions } from '../../components/FormFields';
+import { Advanced, CheckboxField, Field, GroupSelect, VariableSelect, variableOptions, variableOptionsFrom } from '../../components/FormFields';
 
 export interface AnovaFormProps {
   grid: GridData;
@@ -17,18 +14,6 @@ export interface AnovaFormProps {
 }
 
 export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecode }: AnovaFormProps) => {
-  const groups = groupColumnIndexes(grid);
-  const groupOptions = groups.map(index => ({
-    value: index,
-    label: grid.cols[index].label?.trim() || grid.cols[index].name,
-  }));
-  if (!isGroupColumn(grid, anovaParams.grp) && grid.cols[anovaParams.grp]) {
-    groupOptions.push({
-      value: anovaParams.grp,
-      label: `${grid.cols[anovaParams.grp].name} (numeric)`,
-    });
-  }
-
   return (
     <>
       <VariableSelect
@@ -38,22 +23,15 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
         options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setAnovaParams(previous => ({ ...previous, dep: value }))}
       />
-      <VariableSelect
+      <GroupSelect
         label={t('form.groupVar')}
         ariaLabel="ANOVA group variable"
+        grid={grid}
         value={anovaParams.grp}
-        options={groupOptions}
         onChange={value => setAnovaParams(previous => ({ ...previous, grp: value }))}
-        trailing={
-          <LevelsEditor
-            grid={grid}
-            column={anovaParams.grp}
-            onLevels={onLevels}
-            onRecode={onRecode}
-            label={t('action.levels')}
-            className="tb-btn flex h-[29px] items-center gap-1 whitespace-nowrap px-2 text-[10px]"
-          />
-        }
+        fallback
+        onLevels={onLevels}
+        onRecode={onRecode}
       />
       <Field label={t('form.postHoc')}>
         <select

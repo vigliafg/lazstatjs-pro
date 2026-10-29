@@ -1,23 +1,27 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { groupColumnIndexes, type GridData } from '../../grid/types';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { StratifiedCoxParams } from '../../io/project';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
+  GroupSelect,
   VariableList,
   VariableSelect,
   variableOptions,
-  variableOptionsFrom,
 } from '../../components/FormFields';
 
 export interface StratifiedCoxFormProps {
   grid: GridData;
+  onLevels: (column: number, levels: CategoryLevel[], reference?: string) => void;
+  onRecode: (column: number, mapping: Record<string, string>) => void;
   stratCoxParams: StratifiedCoxParams;
   setStratCoxParams: Dispatch<SetStateAction<StratifiedCoxParams>>;
 }
 
 export const StratifiedCoxForm = ({
   grid,
+  onLevels,
+  onRecode,
   stratCoxParams,
   setStratCoxParams,
 }: StratifiedCoxFormProps) => {
@@ -48,13 +52,14 @@ export const StratifiedCoxForm = ({
           }))
         }
       />
-      <VariableSelect
+      <GroupSelect
         label={t('form.stratum')}
+        grid={grid}
         value={stratCoxParams.stratum}
-        options={[
-          { value: -1, label: t('form.none') },
-          ...variableOptionsFrom(grid.cols, groupColumnIndexes(grid)),
-        ]}
+        allowNone
+        disabledValues={[stratCoxParams.time, stratCoxParams.event]}
+        onLevels={onLevels}
+        onRecode={onRecode}
         onChange={value =>
           setStratCoxParams(prev => ({
             ...prev,
@@ -67,6 +72,7 @@ export const StratifiedCoxForm = ({
         label={t('form.covariatesX')}
         cols={grid.cols}
         only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
         selected={stratCoxParams.covariates}
         disabled={[stratCoxParams.time, stratCoxParams.event, stratCoxParams.stratum]}
         showType

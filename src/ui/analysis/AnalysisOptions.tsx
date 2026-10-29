@@ -166,6 +166,8 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
     }
   })();
 
+  const showCi = p.activeAnalysis !== 'descriptive' && p.activeAnalysis !== 'samplesize';
+
   const form = (() => {
     switch (p.activeAnalysis) {
       case 'descriptive':
@@ -331,6 +333,8 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
         return (
           <StratifiedCoxForm
             grid={p.grid}
+            onLevels={p.updateColumnLevels}
+            onRecode={p.updateColumnRecode}
             stratCoxParams={params.stratcox}
             setStratCoxParams={setSlice('stratcox')}
           />
@@ -339,6 +343,8 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
         return (
           <GeeForm
             grid={p.grid}
+            onLevels={p.updateColumnLevels}
+            onRecode={p.updateColumnRecode}
             geeParams={params.gee}
             setGeeParams={setSlice('gee')}
           />
@@ -347,6 +353,8 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
         return (
           <ResamplingForm
             grid={p.grid}
+            onLevels={p.updateColumnLevels}
+            onRecode={p.updateColumnRecode}
             resamplingParams={params.resampling}
             setResamplingParams={setSlice('resampling')}
           />
@@ -363,6 +371,8 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
         return (
           <MixedAnovaForm
             grid={p.grid}
+            onLevels={p.updateColumnLevels}
+            onRecode={p.updateColumnRecode}
             mixedAnovaParams={params.mixedanova}
             setMixedAnovaParams={setSlice('mixedanova')}
           />
@@ -381,7 +391,13 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
         );
       case 'lmm':
         return (
-          <LmmForm grid={p.grid} lmmParams={params.lmm} setLmmParams={setSlice('lmm')} />
+          <LmmForm
+            grid={p.grid}
+            onLevels={p.updateColumnLevels}
+            onRecode={p.updateColumnRecode}
+            lmmParams={params.lmm}
+            setLmmParams={setSlice('lmm')}
+          />
         );
       case 'countreg':
         return (
@@ -612,18 +628,20 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
             </div>
           )}
 
-          <Section title={t('analysis.confidence')} hint={t('analysis.confidenceHint')}>
-            <select
-              aria-label={t('analysis.confidence')}
-              className={inputClass}
-              value={p.ciLevel}
-              onChange={event => p.setCiLevel(parseInt(event.target.value, 10))}
-            >
-              <option value={90}>90%</option>
-              <option value={95}>95%</option>
-              <option value={99}>99%</option>
-            </select>
-          </Section>
+          {showCi && (
+            <Section title={t('analysis.confidence')} hint={t('analysis.confidenceHint')}>
+              <select
+                aria-label={t('analysis.confidence')}
+                className={inputClass}
+                value={p.ciLevel}
+                onChange={event => p.setCiLevel(parseInt(event.target.value, 10))}
+              >
+                <option value={90}>90%</option>
+                <option value={95}>95%</option>
+                <option value={99}>99%</option>
+              </select>
+            </Section>
+          )}
 
           {presets.length > 0 && (
             <Field label={t('analysis.preset')}>

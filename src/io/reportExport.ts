@@ -4,6 +4,8 @@ export interface ReportMeta {
   title: string;
   generatedAt: string;
   details?: string[];
+  /** BCP-47 language of the document; the cards may have been produced earlier. */
+  lang?: string;
 }
 
 const escapeHtml = (value: string): string =>
@@ -107,7 +109,7 @@ const PRINT_CSS = `
 export const buildReportDocument = (bodyHtml: string, meta: ReportMeta): string => {
   const details = (meta.details ?? []).map(escapeHtml).join(' · ');
   return `<!doctype html>
-<html lang="en">
+<html lang="${escapeHtml(meta.lang ?? 'en')}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />

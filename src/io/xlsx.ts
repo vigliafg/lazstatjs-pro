@@ -24,7 +24,7 @@ export interface XlsxSheet {
 
 export interface WorkbookSheet {
   name: string;
-  rows: (string | number | null)[][];
+  rows: (string | number | Date | null)[][];
 }
 
 const NUMBER_RE = /^-?\d+(\.\d+)?([eE][+-]?\d+)?$/;
@@ -48,7 +48,11 @@ export const readXlsxSheets = (bytes: ArrayBuffer | Uint8Array): XlsxSheet[] => 
     if (!worksheet) return;
     const matrix = XLSX.utils.sheet_to_json<unknown[]>(worksheet, {
       header: 1,
-      raw: false,
+      // Keep the real cell value: `raw: false` renders dates in the workbook
+      // locale ("1/2/24") and they would be imported as text, losing the date
+      // type. With `cellDates: true` a date arrives as a Date and cellText
+      // normalises it to ISO below.
+      raw: true,
       defval: '',
       blankrows: false,
     });
@@ -123,8 +127,17 @@ export const sanitizeSheetName = (name: string): string => {
 const toNumericCell = (value: string, numericColumn: boolean): string | number => {
   const trimmed = value.trim();
   if (trimmed === '') return '';
-  if (numericColumn && NUMBER_RE.test(trimmed)) return Number(trimmed);
-  return value;
+  if (!numericColumn) return value;
+  if (NUMBER_RE.test(trimmed)) return Number(trimmed);
+  // Decimal comma and mixed thousands separators are common in imported
+  // Italian/European datasets: a typed numeric column must produce a real
+  // numeric cell, not text that Excel cannot sort or average.
+  const commaDecimal = trimmed.includes(',')
+    ? (trimmed.includes('.')
+        ? trimmed.replace(/\./g, '').replace(',', '.')
+        : trimmed.replace(',', '.'))
+    : trimmed;
+  return NUMBER_RE.test(commaDecimal) ? Number(commaDecimal) : value;
 };
 
 export const gridToWorkbookSheet = (

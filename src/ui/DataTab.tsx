@@ -7,6 +7,7 @@ import { fillRightRange as gridFillRight } from '../grid/fillRight';
 import { setRangeValue as gridSetRangeValue } from '../grid/ops';
 import { DataGrid } from '../grid/DataGrid';
 import { TransformPanel } from '../grid/TransformPanel';
+import { copyText } from '../io/clipboard';
 import {
   addColumnEnd as gridAddColumn,
   addRowEnd as gridAddRow,
@@ -216,7 +217,7 @@ export const DataTab = ({
     <input
       ref={csvInputRef}
       type="file"
-      accept=".csv,.tsv,.tab,.txt,.json,.psv,.xlsx,.xls,.xlsm,.sav,.dta,text/csv,text/plain,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+      accept=".csv,.tsv,.tab,.txt,.json,.psv,.xlsx,.xls,.xlsm,.sav,.zsav,.dta,text/csv,text/plain,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
       className="hidden"
       onChange={(event) => {
         const file = event.target.files?.[0];
@@ -480,8 +481,13 @@ export const DataTab = ({
     onCopyRange={(range) => {
       setSelRange(range);
       const tsv = gridRangeToTsv(grid, range);
-      navigator.clipboard?.writeText(tsv).catch(() => undefined);
-      showToast(t('toast.copy'), t('data.rangeCopied'), 'ok');
+      void copyText(tsv).then((ok) => {
+        showToast(
+          t('toast.copy'),
+          ok ? t('data.rangeCopied') : t('output.copyFailed'),
+          ok ? 'ok' : 'error'
+        );
+      });
     }}
     onClearRange={(range) => setGrid((prev) => gridClearRange(prev, range))}
     onFillDown={(range) => setGrid((prev) => gridFillDown(prev, range))}
@@ -518,8 +524,13 @@ export const DataTab = ({
       <button
         className="tb-btn"
         onClick={() => {
-          navigator.clipboard?.writeText(gridRangeToTsv(grid, selRange)).catch(() => undefined);
-          showToast(t('toast.copy'), t('data.rangeCopied'), 'ok');
+          void copyText(gridRangeToTsv(grid, selRange)).then((ok) => {
+            showToast(
+              t('toast.copy'),
+              ok ? t('data.rangeCopied') : t('output.copyFailed'),
+              ok ? 'ok' : 'error'
+            );
+          });
         }}
       >
         {t('data.copy')}

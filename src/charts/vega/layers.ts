@@ -7,6 +7,7 @@ import {
   colorEncoding,
   field,
   lineStyle,
+  mark,
   num,
   pointMark,
   rowsOf,
@@ -54,11 +55,6 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
       encoding: {
         x: xEncoding(chart, options, theme),
         y: yEncoding(chart, options, theme),
-        ...(options.pointLabels
-          ? {
-              tooltip: { content: 'data' },
-            }
-          : {}),
       },
     });
   }
@@ -69,21 +65,27 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
       encoding: { y: { field: 'y', type: 'quantitative' } },
     });
   });
-  rowsOf(chart, 'labels').forEach(row => {
-    layers.push({
-      data: { values: [row] },
-      mark: { type: 'text', align: 'left', dx: 6, dy: -6, fontSize: 9, color: theme.muted },
-      encoding: {
-        x: xEncoding(chart, options, theme),
-        y: yEncoding(chart, options, theme),
-        text: { field: 'text', type: 'nominal' },
-      },
+  if (options.pointLabels) {
+    rowsOf(chart, 'labels').forEach(row => {
+      layers.push({
+        data: { values: [row] },
+        mark: { type: 'text', align: 'left', dx: 6, dy: -6, fontSize: 9, color: theme.muted },
+        encoding: {
+          x: xEncoding(chart, options, theme),
+          y: yEncoding(chart, options, theme),
+          text: { field: 'text', type: 'nominal' },
+        },
+      });
     });
-  });
+  }
   if (options.equation !== 'none' || options.showR2 || options.showN) {
     const annotations: string[] = [];
     const eq = typeof chart.stats?.equation === 'string' ? chart.stats.equation : '';
-    if (options.equation !== 'none' && eq) annotations.push(eq);
+    const shortEq = typeof chart.stats?.equationShort === 'string' ? chart.stats.equationShort : eq;
+    if (options.equation !== 'none') {
+      const equation = options.equation === 'short' ? shortEq : eq;
+      if (equation) annotations.push(equation);
+    }
     if (options.showR2 && chart.stats?.r2 !== undefined) annotations.push(`R² = ${chart.stats.r2}`);
     if (options.showN && chart.stats?.n !== undefined) annotations.push(`N = ${chart.stats.n}`);
     if (annotations.length > 0) {
@@ -128,6 +130,7 @@ export const lineLayers = (chart: AnalysisChart, options: Extract<ChartOptions, 
     mark: {
       ...lineStyle(options, colorAt(options, 0)),
       ...(options.step ? { interpolate: 'step-after' } : {}),
+      ...tooltip(options),
     },
     encoding: {
       x: xEncoding(chart, options, theme),
@@ -157,18 +160,27 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
   const theme = themeFor(options);
   const bars = rowsOf(chart, 'bars', options);
   const layers: Spec[] = [];
-  const hasError = bars.some(row => row.lo !== undefined && row.hi !== undefined && row.lo !== null && row.hi !== null);
-  if (options.error !== 'none' && hasError) {
-    layers.push({
-      data: { values: bars },
-      mark: { type: 'rule', color: theme.muted, strokeWidth: 1 },
-      encoding: {
-        x: { field: 'category', type: 'nominal', axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX) },
-        y: { field: 'lo', type: 'quantitative', title: null },
-        y2: { field: 'hi' },
-      },
-    });
-  }
+  const intervalOf = (row: ChartRow): { lo: number; hi: number } | null => {
+    if (options.error === 'none') return null;
+    const value = num(row.value);
+    if (options.error === 'sd' && Number.isFinite(num(row.sd)) && Number.isFinite(value)) {
+      const sd = num(row.sd);
+      return { lo: value - sd, hi: value + sd };
+    }
+    if (options.error === 'se' && Number.isFinite(num(row.se)) && Number.isFinite(value)) {
+      const se = num(row.se);
+      return { lo: value - se, hi: value + se };
+    }
+    if (options.error === 'ci' && row.lo !== undefined && row.hi !== undefined) {
+      const lo = num(row.lo);
+      const hi = num(row.hi);
+      if (Number.isFinite(lo) && Number.isFinite(hi)) return { lo, hi };
+    }
+    return null;
+  };
+  const errorBars = bars
+    .map(row => ({ row, interval: intervalOf(row) }))
+    .filter((item): item is { row: ChartRow; interval: { lo: number; hi: number } } => item.interval !== null);
   layers.push({
     data: { values: bars },
     mark: { type: 'bar', color: colorAt(options, 0), ...tooltip(options) },
@@ -185,6 +197,19 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
         : {}),
     },
   });
+  // Error bars ride on top of the filled bars, otherwise the bar layer hides
+  // the confidence interval completely.
+  if (errorBars.length > 0) {
+    layers.push({
+      data: { values: errorBars.map(({ row, interval }) => ({ category: row.category, lo: interval.lo, hi: interval.hi })) },
+      mark: { type: 'rule', color: theme.text, strokeWidth: 1.5 },
+      encoding: {
+        x: { field: 'category', type: 'nominal', axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX) },
+        y: { field: 'lo', type: 'quantitative', title: null },
+        y2: { field: 'hi' },
+      },
+    });
+  }
   if (options.valueLabels) {
     layers.push({
       data: { values: bars },
@@ -263,7 +288,15 @@ export const boxLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
   if (options.showPoints) {
     layers.push({
       data: { values: rowsOf(chart, 'points') },
-      mark: { type: 'point', size: 16, color: colorAt(options, 1), opacity: 0.5 },
+      mark: {
+        type: 'point',
+        filled: true,
+        shape: mark(options),
+        size: options.pointSize,
+        color: colorAt(options, 1),
+        opacity: options.pointOpacity,
+        ...tooltip(options),
+      },
       encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'value') },
     });
   }

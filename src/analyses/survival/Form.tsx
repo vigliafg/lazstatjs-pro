@@ -1,16 +1,11 @@
 import type { Dispatch, SetStateAction } from 'react';
-import {
-  groupColumnIndexes,
-  type CategoryLevel,
-  type GridData,
-} from '../../grid/types';
-import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
+import type { CategoryLevel, GridData } from '../../grid/types';
 import type { SurvivalParams } from '../../io/project';
 import { t } from '../../i18n';
 import {
+  GroupSelect,
   VariableSelect,
   variableOptions,
-  variableOptionsFrom,
 } from '../../components/FormFields';
 
 export interface SurvivalFormProps {
@@ -35,34 +30,24 @@ export const SurvivalForm = ({
         label={t('form.time')}
         value={survivalParams.timeVariable}
         options={options}
+        disabledValues={[survivalParams.eventVariable]}
         onChange={value => setSurvivalParams(prev => ({ ...prev, timeVariable: value }))}
       />
       <VariableSelect
         label={t('form.event')}
         value={survivalParams.eventVariable}
         options={options}
+        disabledValues={[survivalParams.timeVariable]}
         onChange={value => setSurvivalParams(prev => ({ ...prev, eventVariable: value }))}
       />
-      <VariableSelect
+      <GroupSelect
         label={t('form.groupOptional')}
+        grid={grid}
         value={survivalParams.groupVariable}
-        options={[
-          { value: -1, label: t('form.none') },
-          ...variableOptionsFrom(grid.cols, groupColumnIndexes(grid)),
-        ]}
+        allowNone
+        onLevels={onLevels}
+        onRecode={onRecode}
         onChange={value => setSurvivalParams(prev => ({ ...prev, groupVariable: value }))}
-        trailing={
-          survivalParams.groupVariable >= 0 ? (
-            <LevelsEditor
-              grid={grid}
-              column={survivalParams.groupVariable}
-              onLevels={onLevels}
-              onRecode={onRecode}
-              label={t('action.levels')}
-              className={LEVELS_BUTTON_CLASS}
-            />
-          ) : undefined
-        }
       />
     </div>
   );

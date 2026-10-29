@@ -1,10 +1,9 @@
 import { columnLabel } from '../../grid/types';
 import { useMemo, type Dispatch, type SetStateAction } from 'react';
 import { ArrowRight, Compass } from 'lucide-react';
-import { analysisRows, groupColumnIndexes, type CategoryLevel, type GridData } from '../../grid/types';
-import { LevelsEditor, LEVELS_BUTTON_CLASS } from '../../grid/LevelsEditor';
+import { analysisRows, type CategoryLevel, type GridData } from '../../grid/types';
 import { t } from '../../i18n';
-import { Field } from '../../components/FormFields';
+import { Field, GroupSelect } from '../../components/FormFields';
 import type { WizardParams } from '../../io/project';
 import {
   WIZARD_GOALS,
@@ -96,7 +95,7 @@ export const WizardForm = ({
             >
               <option value={-1}>{t('wizard.select')}</option>
               {grid.cols.map((column, index) => (
-                <option key={index} value={index}>
+                <option key={index} value={index} disabled={index === group || index === second}>
                   {columnLabel(column)} ({profiles[index]?.kind ?? t('wizard.empty')})
                 </option>
               ))}
@@ -105,31 +104,18 @@ export const WizardForm = ({
         )}
 
         {needsGroup && (
-          <Field label={goal === 'survive' ? t('wizard.groupsOptional') : t('wizard.groups')}>
-            <div className="flex items-center gap-1">
-              <select
-                aria-label={t('wizard.groups')}
-                className={inputClass}
-                value={group}
-                onChange={e => setWizardParams(prev => ({ ...prev, group: parseInt(e.target.value, 10) }))}
-              >
-                <option value={-1}>{t('wizard.noGroup')}</option>
-                {groupColumnIndexes(grid).map(index => (
-                  <option key={index} value={index}>
-                    {columnLabel(grid.cols[index])} ({profiles[index]?.unique ?? 0} {t('wizard.levels')})
-                  </option>
-                ))}
-              </select>
-              <LevelsEditor
-                grid={grid}
-                column={group}
-                onLevels={onLevels}
-                onRecode={onRecode}
-                label={t('action.levels')}
-                className={LEVELS_BUTTON_CLASS}
-              />
-            </div>
-          </Field>
+          <GroupSelect
+            label={goal === 'survive' ? t('wizard.groupsOptional') : t('wizard.groups')}
+            ariaLabel={t('wizard.groups')}
+            grid={grid}
+            value={group}
+            allowNone
+            noneLabel={t('wizard.noGroup')}
+            optionLabel={index => `${columnLabel(grid.cols[index])} (${profiles[index]?.unique ?? 0} ${t('wizard.levels')})`}
+            onLevels={onLevels}
+            onRecode={onRecode}
+            onChange={value => setWizardParams(prev => ({ ...prev, group: value }))}
+          />
         )}
 
         {needsSecond && (
@@ -144,7 +130,7 @@ export const WizardForm = ({
             >
               <option value={-1}>{t('form.none')}</option>
               {grid.cols.map((column, index) => (
-                <option key={index} value={index}>
+                <option key={index} value={index} disabled={index === outcome || index === group}>
                   {columnLabel(column)} ({profiles[index]?.kind ?? t('wizard.empty')})
                 </option>
               ))}

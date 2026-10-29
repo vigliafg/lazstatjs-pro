@@ -113,6 +113,22 @@ describe('io writers', () => {
     assert.ok(!content.startsWith(','));
   });
 
+  it('keeps JSON values locale-independent', () => {
+    const { content } = serializeTable(['P'], [['12.5']], {
+      format: 'json', delimiter: ',', decimalSeparator: ',', includeHeader: true, dropEmptyRows: true,
+    });
+    assert.equal(JSON.parse(content)[0].P, '12.5');
+    assert.ok(!content.includes('12,5'));
+  });
+
+  it('labels pipe exports as plain text', () => {
+    const file = serializeTable(['A'], [['1']], {
+      format: 'pipe', delimiter: ',', decimalSeparator: '.', includeHeader: true, dropEmptyRows: true,
+    });
+    assert.equal(file.fileName, 'lazstats.txt');
+    assert.equal(file.mime, 'text/plain;charset=utf-8');
+  });
+
   it('keeps a forced numeric header as names', () => {
     const t = readDelimitedTable('2020,2021\n1,2\n3,4\n', { delimiter: ',', hasHeader: true });
     assert.deepEqual(t.names, ['2020', '2021']);
@@ -129,6 +145,18 @@ describe('io writers', () => {
 
   it('rejects empty json arrays', () => {
     assert.throws(() => readJsonTable('[]'), /No data rows/);
+  });
+
+  it('accepts a UTF-8 BOM in JSON and delimited input', () => {
+    const json = readJsonTable('\ufeff[{"x":1}]');
+    assert.deepEqual(json.names, ['x']);
+    assert.equal(json.rows[0][0], '1');
+
+    const quoted = readDelimitedTable('\ufeff"A",B\n1,2\n', {
+      delimiter: ',',
+      hasHeader: true,
+    });
+    assert.deepEqual(quoted.names, ['A', 'B']);
   });
 
   it('pads ragged json arrays', () => {

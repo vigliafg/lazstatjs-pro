@@ -47,6 +47,7 @@ export const shellMessages: Record<keyof typeof enShell, string> = {
   'error.reload': 'Neu laden',
   'error.download': 'Diagnose herunterladen',
   'settings.restoreBackup': 'Sicherung wiederherstellen',
+  'settings.confirmRestore': 'Sicherung wiederherstellen? Die aktuelle Sitzung wird ersetzt.',
   'settings.noBackup': 'Keine IndexedDB-Sicherung verfügbar',
   'settings.backupRestored': 'Sicherung wiederhergestellt',
   'settings.recentEmpty':

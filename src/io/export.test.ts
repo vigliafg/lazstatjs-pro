@@ -63,4 +63,10 @@ describe('buildReportDocument', () => {
     assert.ok(html.includes('@media print'));
     assert.ok(html.includes('@page'));
   });
+
+  it('uses the report language for the document', () => {
+    const html = buildReportDocument('', { title: 'LazStats', generatedAt: 'adesso', lang: 'it' });
+    assert.ok(html.includes('<html lang="it">'));
+    assert.ok(!html.includes('<html lang="en">'));
+  });
 });

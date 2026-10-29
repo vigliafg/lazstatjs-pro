@@ -1,5 +1,7 @@
 import type { ProjectParams } from '../io/project';
 import type { GridData } from '../grid/types';
+import { analysisLabel } from './registry';
+import { t, type MessageKey } from '../i18n';
 import { isContinuousColumn, isGroupColumn } from '../grid/types';
 
 export type RoleKind = 'continuous' | 'group' | 'any';
@@ -32,6 +34,41 @@ const append = (values: readonly number[], column: number): number[] =>
  * Analyses without column roles (chi-square, contingency, sample size) return
  * an empty list.
  */
+const ROLE_SUFFIX_KEYS: Record<string, MessageKey> = {
+  variables: 'form.variables',
+  'first variable': 'form.variable1',
+  'second variable': 'form.variable2',
+  'dependent variable': 'form.dependentVar',
+  'group variable': 'form.groupVar',
+  predictors: 'form.predictorsX',
+  outcome: 'form.outcome',
+  time: 'form.time',
+  event: 'form.event',
+  covariates: 'form.covariatesX',
+  group: 'form.group',
+  series: 'form.series',
+  response: 'form.responseY',
+  factor: 'form.factor',
+  'factor a': 'form.factorA',
+  'factor b': 'form.factorB',
+  conditions: 'form.withinConditions',
+  left: 'form.firstMeasure',
+  right: 'form.secondMeasure',
+  start: 'form.start',
+  stop: 'form.stop',
+  stratum: 'form.stratum',
+  cluster: 'form.cluster',
+  measurements: 'form.measurements',
+};
+
+/** Localised role label: "ANOVA: dependent variable" becomes the active UI language. */
+const roleLabel = (analysisId: string, label: string): string => {
+  const separator = label.indexOf(': ');
+  const suffix = separator >= 0 ? label.slice(separator + 2) : label;
+  const key = ROLE_SUFFIX_KEYS[suffix.toLowerCase()];
+  return `${analysisLabel(analysisId)}: ${key ? t(key) : suffix}`;
+};
+
 const ROLES: Record<string, AnalysisRole[]> = {
   descriptive: [
     {
@@ -344,6 +381,13 @@ const ROLES: Record<string, AnalysisRole[]> = {
       set: (p, c) => ({ ...p, stratcox: { ...p.stratcox, event: c } }),
     },
     {
+      key: 'stratum',
+      label: 'Stratified Cox: stratum',
+      kind: 'group',
+      get: p => [p.stratcox.stratum],
+      set: (p, c) => ({ ...p, stratcox: { ...p.stratcox, stratum: c } }),
+    },
+    {
       key: 'covariates',
       label: 'Stratified Cox: covariates',
       kind: 'continuous',
@@ -352,13 +396,6 @@ const ROLES: Record<string, AnalysisRole[]> = {
         ...p,
         stratcox: { ...p.stratcox, covariates: append(p.stratcox.covariates, c) },
       }),
-    },
-    {
-      key: 'stratum',
-      label: 'Stratified Cox: stratum',
-      kind: 'group',
-      get: p => [p.stratcox.stratum],
-      set: (p, c) => ({ ...p, stratcox: { ...p.stratcox, stratum: c } }),
     },
   ],
   gee: [
@@ -587,7 +624,7 @@ export const analysisRoles = (analysisId: string): AnalysisRole[] =>
 export const roleStates = (analysisId: string, params: ProjectParams): RoleState[] =>
   analysisRoles(analysisId).map(role => ({
     key: role.key,
-    label: role.label,
+    label: roleLabel(analysisId, role.label),
     kind: role.kind,
     columns: role.get(params),
   }));
@@ -623,9 +660,9 @@ export const validateRoleTypes = (
       if (index < 0 || index >= grid.cols.length) continue;
       const col = grid.cols[index];
       if (role.kind === 'continuous' && !isContinuousColumn(col)) {
-        errors.push(`${role.label} (${col.name}: ${col.type} is not numeric)`);
+        errors.push(`${roleLabel(analysisId, role.label)} (${col.name}: ${col.type} is not numeric)`);
       } else if (role.kind === 'group' && !isGroupColumn(grid, index)) {
-        errors.push(`${role.label} (${col.name}: not a grouping variable)`);
+        errors.push(`${roleLabel(analysisId, role.label)} (${col.name}: not a grouping variable)`);
       }
     }
   }

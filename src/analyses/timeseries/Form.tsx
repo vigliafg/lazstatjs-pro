@@ -30,7 +30,7 @@ export const TimeSeriesForm = ({
   return (
     <div className="flex flex-col gap-3">
       <VariableSelect
-        label={t('form.seriesY')}
+        label={t('form.series')}
         value={variable}
         options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => update({ variable: value })}

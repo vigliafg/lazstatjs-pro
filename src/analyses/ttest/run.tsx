@@ -98,7 +98,7 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           note: copy('La linea tratteggiata è il valore di test; la media osservata è il punto.'),
           data: (() => {
             const box = boxRows([{ category: grid.cols[var1].name, values: a1 }]);
-            return { summary: box.summary, points: box.points, outliers: box.outliers };
+            return { summary: box.summary, points: box.points, outliers: box.outliers, rules: [{ y: mu }] };
           })(),
           fields: { xLabel: copy('Campione'), yLabel: grid.cols[var1].name },
           options: { showPoints: true, showMean: true } as never,
@@ -297,18 +297,6 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           median: q2[1],
           q3: q2[2],
           max: jStat.max(paired.b)
-        }
-      ];
-
-      const qDiffs = jStat.quartiles(diffs);
-      const boxDataDiffs = [
-        {
-          x: 'Differences',
-          min: jStat.min(diffs),
-          q1: qDiffs[0],
-          median: qDiffs[1],
-          q3: qDiffs[2],
-          max: jStat.max(diffs)
         }
       ];
 

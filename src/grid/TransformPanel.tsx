@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { GridData } from './types';
-import { sortByColumn, recodeColumn, splitColumn, mergeColumns, computeColumn } from './ops';
+import { sortByColumn, recodeColumnValues, splitColumn, splitColumnAll, mergeColumns, computeColumn } from './ops';
 import type { ColumnOperation } from './columnOps';
 import { t } from '../i18n';
 
@@ -53,33 +53,43 @@ export function TransformPanel({ grid, onApply }: Props) {
       <div className="flex flex-col gap-1">
         <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.sort')}</span>
         <div className="flex gap-1.5 items-center">
-          <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={sortCol} onChange={(e) => setSortCol(Number(e.target.value))}>
+          <select data-transform="sort-col" className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={sortCol} onChange={(e) => setSortCol(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
               <option key={i} value={i}>{c.name}</option>
             ))}
           </select>
-          <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={sortDir} onChange={(e) => setSortDir(e.target.value as 'asc' | 'desc')}>
+          <select data-transform="sort-dir" className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={sortDir} onChange={(e) => setSortDir(e.target.value as 'asc' | 'desc')}>
             <option value="asc">{t('data.transform.asc')}</option>
             <option value="desc">{t('data.transform.desc')}</option>
           </select>
-          <button className="tb-btn" onClick={() => onApply(sortByColumn(grid, sortCol, sortDir), `${t('data.sortedBy')} ${grid.cols[sortCol]?.name}`)}>{t('data.transform.sort')}</button>
+          <button data-transform="sort-apply" className="tb-btn" onClick={() => onApply(sortByColumn(grid, sortCol, sortDir), `${t('data.sortedBy')} ${grid.cols[sortCol]?.name}`)}>{t('data.transform.sort')}</button>
         </div>
       </div>
 
       <div className="flex flex-col gap-1">
         <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.recode')}</span>
         <div className="flex gap-1.5 items-start">
-          <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={recodeCol} onChange={(e) => setRecodeCol(Number(e.target.value))}>
+          <select data-transform="recode-col" className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={recodeCol} onChange={(e) => setRecodeCol(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
               <option key={i} value={i}>{c.name}</option>
             ))}
           </select>
-          <textarea className="bg-surface3 border border-border2 rounded px-2 py-1 w-28 h-[52px] text-text font-mono" value={recodeText} onChange={(e) => setRecodeText(e.target.value)} />
+          <textarea data-transform="recode-map" className="bg-surface3 border border-border2 rounded px-2 py-1 w-28 h-[52px] text-text font-mono" value={recodeText} onChange={(e) => setRecodeText(e.target.value)} />
           <button
             className="tb-btn"
+            data-transform="recode-apply"
             onClick={() => {
-              const { grid: next, changed } = recodeColumn(grid, recodeCol, parseMapping());
-              onApply(next, changed === 0 ? t('data.transform.noRecoded') : `${changed} ${t('data.transform.cellsRecoded')}`);
+              const result = recodeColumnValues(grid, recodeCol, parseMapping());
+              const parts = [`${result.changed} ${t('recode.cells')}`];
+              if (result.merged > 0) parts.push(`${result.merged} ${t('recode.merged')}`);
+              if (result.cleared > 0) parts.push(`${result.cleared} ${t('recode.cleared')}`);
+              if (result.typeChangedTo) parts.push(`${t('recode.typeChanged')} → ${result.typeChangedTo}`);
+              if (result.formulaDropped) parts.push(t('data.transform.formulaDropped'));
+              onApply(
+                result.grid,
+                result.changed === 0 ? t('data.transform.noRecoded') : parts.join(', '),
+                result.changed === 0 ? 'warn' : 'ok'
+              );
             }}
           >
             {t('data.transform.recodeAction')}
@@ -90,26 +100,27 @@ export function TransformPanel({ grid, onApply }: Props) {
       <div className="flex flex-col gap-1">
         <span className="text-[10px] text-text3 font-mono uppercase tracking-widest">{t('data.transform.splitMerge')}</span>
         <div className="flex gap-1.5 items-center">
-          <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={splitCol} onChange={(e) => setSplitCol(Number(e.target.value))}>
+          <select data-transform="split-col" className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={splitCol} onChange={(e) => setSplitCol(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
               <option key={i} value={i}>{c.name}</option>
             ))}
           </select>
-          <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={splitSep} onChange={(e) => setSplitSep(e.target.value)} title={t('data.transform.separator')} />
-          <button className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), t('data.transform.columnSplit'), 'ok', { kind: 'split', at: splitCol })}>{t('data.transform.split')}</button>
+          <input data-transform="split-sep" className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={splitSep} onChange={(e) => setSplitSep(e.target.value)} title={t('data.transform.separator')} />
+          <button data-transform="split-apply" className="tb-btn" onClick={() => onApply(splitColumn(grid, splitCol, splitSep), t('data.transform.columnSplit'), 'ok', { kind: 'split', at: splitCol })}>{t('data.transform.split')}</button>
+          <button data-transform="split-all" className="tb-btn" onClick={() => onApply(splitColumnAll(grid, splitCol, splitSep), t('data.transform.columnSplit'), 'ok', { kind: 'split', at: splitCol })}>{t('data.transform.splitAll')}</button>
           <span className="text-text3">|</span>
-          <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={mergeA} onChange={(e) => setMergeA(Number(e.target.value))}>
+          <select data-transform="merge-a" className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={mergeA} onChange={(e) => setMergeA(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
               <option key={i} value={i}>{c.name}</option>
             ))}
           </select>
-          <select className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={mergeB} onChange={(e) => setMergeB(Number(e.target.value))}>
+          <select data-transform="merge-b" className="bg-surface3 border border-border2 rounded px-1 py-1 text-text" value={mergeB} onChange={(e) => setMergeB(Number(e.target.value))}>
             {grid.cols.map((c, i) => (
               <option key={i} value={i}>{c.name}</option>
             ))}
           </select>
-          <input className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={mergeSep} onChange={(e) => setMergeSep(e.target.value)} title={t('data.transform.separator')} />
-          <button className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), t('data.transform.columnsMerged'), 'ok', { kind: 'merge', a: mergeA, b: mergeB })}>{t('data.transform.merge')}</button>
+          <input data-transform="merge-sep" className="bg-surface3 border border-border2 rounded px-1 py-1 w-10 text-text text-center" value={mergeSep} onChange={(e) => setMergeSep(e.target.value)} title={t('data.transform.separator')} />
+          <button data-transform="merge-apply" className="tb-btn" onClick={() => onApply(mergeColumns(grid, mergeA, mergeB, mergeSep), t('data.transform.columnsMerged'), 'ok', { kind: 'merge', a: mergeA, b: mergeB })}>{t('data.transform.merge')}</button>
         </div>
       </div>
 

@@ -44,6 +44,12 @@ describe('xlsx import', () => {
     assert.equal(table.rows.length, 2);
   });
 
+  it('reads a real date as an ISO string, not a locale-formatted label', () => {
+    const bytes = writeWorkbook([{ name: 'Dati', rows: [['Data'], [new Date(Date.UTC(2024, 0, 2))]] }]);
+    const [sheet] = readXlsxSheets(bytes);
+    assert.equal(sheet.rows[1][0], '2024-01-02');
+  });
+
   it('rejects an empty workbook', () => {
     assert.throws(() => readXlsxSheets(new Uint8Array()), /workbook|Unsupported|File is empty/i);
   });
@@ -73,6 +79,17 @@ describe('xlsx export', () => {
     assert.equal(data['C3'].v, 42);
     // Empty row dropped: only header + 2 rows are written.
     assert.equal(data['!ref'], 'A1:C3');
+  });
+
+  it('turns decimal-comma values in numeric columns into numbers', () => {
+    const gridComma: GridData = {
+      cols: [{ name: 'Peso', type: 'dec' }],
+      rows: [['13,75'], ['1.234,5']],
+    };
+    const bytes = buildDataWorkbook(gridComma, { includeHeader: true, dropEmptyRows: true });
+    const workbook = XLSX.read(bytes, { type: 'array' });
+    assert.equal(workbook.Sheets['Dati']['A2'].v, 13.75);
+    assert.equal(workbook.Sheets['Dati']['A3'].v, 1234.5);
   });
 
   it('skips the header when requested', () => {

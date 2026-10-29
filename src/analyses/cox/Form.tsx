@@ -21,18 +21,21 @@ export const CoxForm = ({ grid, coxParams, setCoxParams }: CoxFormProps) => {
         label={t('form.time')}
         value={timeVariable}
         options={options}
+        disabledValues={[eventVariable]}
         onChange={value => setCoxParams(prev => ({ ...prev, timeVariable: value }))}
       />
       <VariableSelect
         label={t('form.event')}
         value={eventVariable}
         options={options}
+        disabledValues={[timeVariable]}
         onChange={value => setCoxParams(prev => ({ ...prev, eventVariable: value }))}
       />
       <VariableList
         label={t('form.covariatesX')}
         cols={grid.cols}
         only={continuousColumnIndexes(grid)}
+      emptyText={t('form.noNumericColumns')}
         selected={covariates}
         disabled={[timeVariable, eventVariable]}
         onToggle={(index, checked) =>

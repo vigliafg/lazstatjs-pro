@@ -53,8 +53,8 @@ test('type/role validation blocks categorical continua and continuous groups', (
     anova: { ...DEFAULT_PARAMS.anova, dep: 1, grp: 0 },
   };
   const errors = validateRoleTypes('anova', params, grid());
-  assert.ok(errors.some(error => error.startsWith('ANOVA: dependent variable')));
-  assert.ok(errors.some(error => error.startsWith('ANOVA: group variable')));
+  assert.ok(errors.some(error => error.toLowerCase().startsWith('anova: dependent variable')));
+  assert.ok(errors.some(error => error.toLowerCase().startsWith('anova: group variable')));
 
   const valid = {
     ...DEFAULT_PARAMS,
@@ -70,7 +70,7 @@ test('a categorical column stays invalid even when its codes are numeric', () =>
   };
   const params = { ...DEFAULT_PARAMS, anova: { ...DEFAULT_PARAMS.anova, dep: 0 } };
   const errors = validateRoleTypes('anova', params, numericCat);
-  assert.ok(errors.some(error => error.startsWith('ANOVA: dependent variable')));
+  assert.ok(errors.some(error => error.toLowerCase().startsWith('anova: dependent variable')));
 });
 
 test('type/role validation ignores roles outside the grid', () => {
