@@ -33,7 +33,14 @@ const AnalysisTab = lazy(() =>
   import('./ui/AnalysisTab').then(module => ({ default: module.AnalysisTab }))
 );
 import { ANALYSIS_TABS } from './analyses/registry';
-import { t } from './i18n';
+import {
+  activeLocaleOf,
+  setLocale,
+  t,
+  useLocale,
+  type HelpLocale,
+  type Locale,
+} from './i18n';
 import { maskMissingCodes } from './grid/types';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import { createDefaultGrid } from './grid/defaults';
@@ -286,6 +293,20 @@ export default function App() {
 
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
+  const [uiLocale, setUiLocale] = useState<Locale>(
+    boot?.settings.uiLocale ?? DEFAULT_SETTINGS.uiLocale
+  );
+  const [reportLocale, setReportLocale] = useState<Locale>(
+    boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale
+  );
+  const [helpLocale, setHelpLocale] = useState<HelpLocale>(
+    boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale
+  );
+
+  // The store drives `t()` everywhere; updating it re-renders the shell through
+  // the `useLocale()` subscription below.
+  useEffect(() => setLocale(activeLocaleOf(uiLocale)), [uiLocale]);
+  useLocale();
   const {
     outputs,
     setOutputs,
@@ -325,8 +346,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode }),
-    [ciLevel, activeAnalysis, activeTab, uiMode]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale]
   );
 
   const roleErrors = [
@@ -364,6 +385,9 @@ export default function App() {
     setParams(project.params);
     setCiLevel(project.settings.ciLevel);
     setUiMode(project.settings.uiMode);
+    setUiLocale(project.settings.uiLocale);
+    setReportLocale(project.settings.reportLocale);
+    setHelpLocale(project.settings.helpLocale);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
         ? project.settings.activeAnalysis
@@ -501,7 +525,15 @@ export default function App() {
     <UiModeProvider mode={uiMode}>
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} />
+      <Header
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        uiMode={uiMode}
+        setUiMode={setUiMode}
+        uiLocale={uiLocale}
+        setUiLocale={setUiLocale}
+        reportLocale={reportLocale}
+      />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
@@ -616,6 +648,12 @@ export default function App() {
             onRestoreBackup={() => void restoreBackup()}
             recentProjects={recentProjects}
             onClearRecent={clearRecentProjects}
+            uiLocale={uiLocale}
+            setUiLocale={setUiLocale}
+            reportLocale={reportLocale}
+            setReportLocale={setReportLocale}
+            helpLocale={helpLocale}
+            setHelpLocale={setHelpLocale}
           />
         )}
         </ErrorBoundary>

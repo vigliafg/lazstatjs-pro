@@ -1,5 +1,11 @@
 import type { GridData } from '../../grid/types';
 import type { IoPreferences } from '../prefs';
+import {
+  DEFAULT_LOCALE,
+  DEFAULT_REPORT_LOCALE,
+  type HelpLocale,
+  type Locale,
+} from '../../i18n/locales';
 import type { StoredOutput } from '../outputs';
 import type { SampleSizeDesign } from '../../stats/samplesize';
 import type { DistributionName } from '../../stats/distfit';
@@ -318,6 +324,12 @@ export interface ProjectSettings {
   activeTab: ProjectTab;
   /** Guided hides the advanced form sections; Expert shows everything. */
   uiMode: 'guided' | 'expert';
+  /** Interface language. */
+  uiLocale: Locale;
+  /** Language of the written report of every new run. */
+  reportLocale: Locale;
+  /** Language of the help book; `auto` follows the interface. */
+  helpLocale: HelpLocale;
 }
 
 export interface ProjectSnapshot {
@@ -529,4 +541,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   activeAnalysis: 'wizard',
   activeTab: 'data',
   uiMode: 'guided',
+  uiLocale: DEFAULT_LOCALE,
+  reportLocale: DEFAULT_REPORT_LOCALE,
+  helpLocale: 'auto',
 };
