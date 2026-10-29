@@ -1,6 +1,15 @@
 /** English messages — analysis. Source of truth for the message keys. */
 export const analysisMessages = {
   'analysis.library': 'Library',
+  'chart.time': 'Time',
+  'chart.mean': 'Mean',
+  'chart.nPerGroup': 'n per group',
+  'chart.theoreticalQuantiles': 'Theoretical quantiles',
+  'chart.observedValues': 'Observed values',
+  'chart.meanOfBoth': 'Mean of the two measurements',
+  'chart.difference': 'Difference',
+  'chart.hazardRatio': 'Hazard ratio',
+  'chart.lag': 'Lag',
   'analysis.setup': 'Setup',
   'analysis.output': 'Output',
   'chisq.title': 'Contingency Table (2x2)',

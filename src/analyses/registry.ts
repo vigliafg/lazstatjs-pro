@@ -6,6 +6,8 @@
  * one entry here, its form and its runner: no duplicated lists in JSX.
  */
 
+import { t, type MessageKey } from '../i18n';
+
 export type AnalysisFamilyId =
   | 'guided'
   | 'descriptive'
@@ -304,9 +306,26 @@ export const ANALYSIS_TABS: readonly AnalysisMeta[] = ANALYSIS_DEFINITIONS;
 
 export const ANALYSIS_IDS: readonly string[] = ANALYSIS_TABS.map(tab => tab.id);
 
-/** Human-readable label for an analysis id, with an id fallback. */
-export const analysisLabel = (id: string): string =>
-  ANALYSIS_TABS.find(tab => tab.id === id)?.label ?? id;
+const metaKey = (id: string, field: 'label' | 'description'): MessageKey =>
+  `meta.analysis.${id}.${field}` as MessageKey;
+
+const familyKey = (id: string, field: 'label' | 'description'): MessageKey =>
+  `meta.family.${id}.${field}` as MessageKey;
+
+/** Localised label for an analysis id, with an id fallback. */
+export const analysisLabel = (id: string): string => {
+  const meta = ANALYSIS_TABS.find(tab => tab.id === id);
+  return meta ? t(metaKey(id, 'label')) : id;
+};
+
+/** Localised one-line description of an analysis. */
+export const analysisDescription = (meta: AnalysisMeta): string =>
+  t(metaKey(meta.id, 'description'));
+
+export const familyLabel = (family: AnalysisFamily): string => t(familyKey(family.id, 'label'));
+
+export const familyDescription = (family: AnalysisFamily): string =>
+  t(familyKey(family.id, 'description'));
 
 /** Full metadata for an analysis id. */
 export const analysisMeta = (id: string): AnalysisMeta | undefined =>
@@ -330,15 +349,16 @@ const normalizeWords = (value: string): string =>
 /** Relevance of one analysis for one query term (higher is better). */
 const termScore = (meta: AnalysisMeta, term: string): number => {
   const family = ANALYSIS_FAMILIES.find(item => item.id === meta.family);
-  const label = normalizeWords(meta.label);
+  const label = normalizeWords(`${meta.label} ${t(metaKey(meta.id, 'label'))}`);
   if (label === term) return 100;
   if (label.split(' ').some(word => word === term)) return 80;
   if (label.startsWith(term)) return 60;
   if (label.includes(term)) return 40;
   const keywords = meta.keywords.flatMap(normalizeWords);
   if (keywords.some(word => word === term)) return 25;
-  if (normalizeWords(meta.description).includes(term)) return 12;
-  if (normalizeWords(family?.label ?? '').includes(term)) return 8;
+  if (normalizeWords(`${meta.description} ${t(metaKey(meta.id, 'description'))}`).includes(term)) return 12;
+  if (normalizeWords(`${family?.label ?? ''} ${family ? familyLabel(family) : ''}`).includes(term))
+    return 8;
   return 0;
 };
 
@@ -354,7 +374,15 @@ export const filterAnalyses = (query: string): AnalysisMeta[] => {
   return ANALYSIS_TABS.map((meta, index) => {
     const family = ANALYSIS_FAMILIES.find(item => item.id === meta.family);
     const words = normalizeWords(
-      [meta.label, meta.description, family?.label ?? '', ...meta.keywords].join(' ')
+      [
+        meta.label,
+        meta.description,
+        t(metaKey(meta.id, 'label')),
+        t(metaKey(meta.id, 'description')),
+        family?.label ?? '',
+        family ? familyLabel(family) : '',
+        ...meta.keywords,
+      ].join(' ')
     );
     const haystack = ` ${words} `;
     if (!terms.every(term => haystack.includes(` ${term}`))) return null;
@@ -368,7 +396,9 @@ export const filterAnalyses = (query: string): AnalysisMeta[] => {
 
 /** Flat alphabetical index used by the library's A–Z mode. */
 export const alphabeticalAnalyses = (analyses: readonly AnalysisMeta[] = ANALYSIS_TABS): AnalysisMeta[] =>
-  [...analyses].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
+  [...analyses].sort((a, b) =>
+    analysisLabel(a.id).localeCompare(analysisLabel(b.id), undefined, { sensitivity: 'base' })
+  );
 
 /** Group a list of analyses by family, preserving the family order. */
 export const groupByFamily = (

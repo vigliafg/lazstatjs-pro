@@ -12,6 +12,7 @@ import { parseNum } from '../../stats/core';
 import { analysisRows, type Dataset } from '../../grid/types';
 import type { FactorialParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { t } from '../../i18n';
 
 export interface FactorialInput {
   grid: Dataset;
@@ -117,7 +118,7 @@ export const buildFactorialOutput = ({
               />
               <VictoryAxis
                 dependentAxis
-                label="Media"
+                label={t('chart.mean')}
                 style={{
                   axis: { stroke: '#333' },
                   axisLabel: { fill: '#888', fontSize: 10, padding: 40 },

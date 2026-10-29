@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode, type SetStateAction } from 'react';
 import { Play } from 'lucide-react';
-import { analysisMeta, familyOf } from '../../analyses/registry';
+import {
+  analysisDescription,
+  analysisLabel,
+  analysisMeta,
+  familyLabel,
+  familyOf,
+} from '../../analyses/registry';
 import { rowMatches } from '../../grid/ops';
 import { isMissingCell, missingCodeCount } from '../../grid/types';
 import { DescriptiveForm } from '../../analyses/descriptive/Form';
@@ -432,7 +438,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
       <div className="shrink-0 border-b border-border p-4">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-accent2">
-            {family?.label ?? t('analysis.familyFallback')}
+            {family ? familyLabel(family) : t('analysis.familyFallback')}
           </span>
           {meta?.cost === 'heavy' && (
             <span className="rounded border border-yellow/25 bg-yellow/5 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-yellow/80">
@@ -440,9 +446,9 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
             </span>
           )}
         </div>
-        <h2 className="text-[15px] font-semibold text-text">{meta?.label ?? p.activeAnalysis}</h2>
+        <h2 className="text-[15px] font-semibold text-text">{meta ? analysisLabel(meta.id) : p.activeAnalysis}</h2>
         <p className="mt-1 text-[10px] leading-relaxed text-text3">
-          {meta?.description ?? t('analysis.descriptionFallback')}
+          {meta ? analysisDescription(meta) : t('analysis.descriptionFallback')}
         </p>
         <div className="mt-2 flex flex-wrap gap-1">
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">

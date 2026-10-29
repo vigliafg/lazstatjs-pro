@@ -15,6 +15,7 @@ import type { Dataset } from '../../grid/types';
 import type { TimeSeriesParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { isFiniteNumber } from '../shared/numbers';
+import { t } from '../../i18n';
 
 export interface TimeSeriesInput {
   grid: Dataset;
@@ -120,7 +121,7 @@ export const buildTimeSeriesOutput = ({
           <div className="h-[240px] w-full bg-surface3/30 rounded p-2">
             <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 45, left: 55, right: 20 }}>
               <VictoryAxis
-                label="Lag"
+                label={t('chart.lag')}
                 tickValues={acfRows.map(row => Number(row.lag))}
                 style={axisStyle}
               />

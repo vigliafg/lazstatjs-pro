@@ -3,6 +3,15 @@ import type { analysisMessages as enAnalysis } from '../en/analysis';
 
 export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   'analysis.library': 'Libreria',
+  'chart.time': 'Tempo',
+  'chart.mean': 'Media',
+  'chart.nPerGroup': 'n per gruppo',
+  'chart.theoreticalQuantiles': 'Quantili teorici',
+  'chart.observedValues': 'Valori osservati',
+  'chart.meanOfBoth': 'Media delle due misure',
+  'chart.difference': 'Differenza',
+  'chart.hazardRatio': 'Hazard ratio',
+  'chart.lag': 'Lag',
   'analysis.setup': 'Impostazione',
   'analysis.output': 'Output',
   'chisq.title': 'Tabella di contingenza (2x2)',

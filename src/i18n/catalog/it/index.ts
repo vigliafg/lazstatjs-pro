@@ -5,6 +5,7 @@ import { formMessages } from './form';
 import { dataMessages } from './data';
 import { analysisMessages } from './analysis';
 import { outputMessages } from './output';
+import { metaMessages } from './meta';
 
 export const itMessages: Messages = {
   ...shellMessages,
@@ -12,4 +13,5 @@ export const itMessages: Messages = {
   ...dataMessages,
   ...analysisMessages,
   ...outputMessages,
+  ...metaMessages,
 };

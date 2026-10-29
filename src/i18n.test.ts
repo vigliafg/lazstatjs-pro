@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { ANALYSIS_FAMILIES, ANALYSIS_TABS } from './analyses/registry';
 import {
   ACTIVE_LOCALES,
   MESSAGE_KEYS,
@@ -12,6 +13,7 @@ import {
   setLocale,
   t,
   translate,
+  type MessageKey,
 } from './i18n';
 
 /** Keys resolved through a variable instead of a literal `t('key')` call. */
@@ -73,11 +75,35 @@ test('planned locales fall back to English until their catalog ships', () => {
   }
 });
 
+/** Keys built at runtime from registry ids (`meta.analysis.<id>.label`). */
+const DYNAMIC_PREFIXES = ['meta.analysis.', 'meta.family.'];
+
 test('every shell message is referenced by the UI', () => {
   const orphans = MESSAGE_KEYS.filter(
-    key => !DYNAMIC_KEYS.has(key) && !sourceText.includes(`t('${key}'`)
+    key =>
+      !DYNAMIC_KEYS.has(key) &&
+      !DYNAMIC_PREFIXES.some(prefix => key.startsWith(prefix)) &&
+      !sourceText.includes(`t('${key}'`)
   );
   assert.deepEqual(orphans, [], `orphan i18n keys: ${orphans.join(', ')}`);
+});
+
+test('every family and analysis has localised metadata in every active locale', () => {
+  for (const locale of ACTIVE_LOCALES) {
+    const catalog = catalogFor(locale);
+    for (const family of ANALYSIS_FAMILIES) {
+      for (const field of ['label', 'description'] as const) {
+        const key = `meta.family.${family.id}.${field}` as MessageKey;
+        assert.ok(catalog[key]?.trim(), `${locale}: missing ${key}`);
+      }
+    }
+    for (const analysis of ANALYSIS_TABS) {
+      for (const field of ['label', 'description'] as const) {
+        const key = `meta.analysis.${analysis.id}.${field}` as MessageKey;
+        assert.ok(catalog[key]?.trim(), `${locale}: missing ${key}`);
+      }
+    }
+  }
 });
 
 test('translate selects the requested catalog and interpolates parameters', () => {

@@ -12,6 +12,7 @@ import { blandAltmanReport, iccReport, kappaReport } from '../../stats/reports/a
 import type { Dataset } from '../../grid/types';
 import type { AgreementParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { t } from '../../i18n';
 
 export interface AgreementInput {
   grid: Dataset;
@@ -56,8 +57,8 @@ export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput):
             </h3>
             <div className="h-[300px] w-full bg-surface3/30 rounded p-2">
               <VictoryChart theme={VictoryTheme.material} padding={{ top: 15, bottom: 50, left: 65, right: 25 }}>
-                <VictoryAxis label="Media delle due misure" style={axisStyle} />
-                <VictoryAxis dependentAxis label="Differenza" style={axisStyle} />
+                <VictoryAxis label={t('chart.meanOfBoth')} style={axisStyle} />
+                <VictoryAxis dependentAxis label={t('chart.difference')} style={axisStyle} />
                 <VictoryLine data={line} style={{ data: { stroke: '#4f9cf9', strokeWidth: 2 } }} />
                 <VictoryLine
                   data={[

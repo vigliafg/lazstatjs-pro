@@ -11,6 +11,7 @@ import { parseNum } from '../../stats/core';
 import type { Dataset } from '../../grid/types';
 import type { CoxParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { t } from '../../i18n';
 
 export interface CoxInput {
   grid: Dataset;
@@ -175,7 +176,7 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
               domain={{ x: [low - span * 0.08, high + span * 0.08], y: [-0.5, fit.coefficients.length - 0.5] }}
             >
               <VictoryAxis
-                label="Hazard ratio"
+                label={t('chart.hazardRatio')}
                 style={{
                   axis: { stroke: '#333' },
                   axisLabel: { fill: '#888', fontSize: 10, padding: 32 },
