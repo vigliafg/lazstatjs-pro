@@ -1,5 +1,18 @@
 # Istruzioni per l'agente — lazstatjs-pro
 
+## Terminologia: run-report e session-report
+
+Usare sempre questi due termini con il significato seguente:
+
+- **run-report**: l'output di **una singola procedura statistica**, cioè il
+  risultato di un singolo run (tabelle, report discorsivo, grafici e metadati
+  della card).
+- **session-report**: l'**insieme degli output di più run-report consecutivi**
+  presenti nella finestra Output/Report della sessione.
+
+Non usare i due termini in modo intercambiabile: un run-report è il singolo
+blocco, un session-report è la collezione ordinata dei blocchi.
+
 ## Esecuzione di procedure multi-step
 
 Quando l'agente sta implementando una procedura composta da più step e l'utente
