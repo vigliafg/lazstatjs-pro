@@ -276,17 +276,17 @@ Sono stati implementati i **cinque passi a maggior impatto** del piano. Il repor
 
 ### Passo 5 — Chrome statica e documentazione
 
-- `src/i18n.ts` passa a **701 chiavi**; tutte le stringhe statiche di shell, form, editor dati, dialoghi e toast sono centralizzate (`SettingsTab`, `AnalysisOptions`, `OutputConsole`, `AnalysisLibrary`, `AnalysisTab`, `Header`, `DataTab`, `TransformPanel`, `VariableInspector`, `DataGrid`, `CleanPanel`, `ImportWizard`, `ExportDialog`, hook di sessione/IO/output).
+- `src/i18n.ts` passa a **738 chiavi**; tutte le stringhe statiche di shell, form, editor dati, dialoghi e toast sono centralizzate (`SettingsTab`, `AnalysisOptions`, `OutputConsole`, `AnalysisLibrary`, `AnalysisTab`, `Header`, `DataTab`, `TransformPanel`, `VariableInspector`, `DataGrid`, `CleanPanel`, `ImportWizard`, `ExportDialog`, hook di sessione/IO/output).
 - `i18n.test.ts` ora verifica anche che ogni chiave statica sia referenziata (allowlist per le chiavi risolte dinamicamente).
 - Wizard: label/hint dei goal in inglese; la prosa della raccomandazione resta italiana come contenuto.
 - Fuori perimetro dichiarato: catalogo analisi (label/descrizioni), help/report, messaggi di dominio dei kernel, sentinel dei titoli output.
 - `docs/UI-STATE.md`, `docs/GRID-STATE.md` e `README.md` aggiornati (conteggi, i18n, stale, App, `statsHelpers`, runner).
-- `scripts/check-file-size.mjs`: eccezione per `src/i18n.ts` (733 righe, dizionario statico).
+- `scripts/check-file-size.mjs`: eccezione per `src/i18n.ts` (770 righe, dizionario statico).
 
 ### Verifica finale
 
-- `npm run check`: **461 test**, 0 fail; dependency-cruiser, madge e file-size guard ok.
-- `npm run test:e2e`: **34 passed, 26 skipped**, 0 fail.
+- `npm run check`: **467 test**, 0 fail; dependency-cruiser, madge e file-size guard ok.
+- `npm run test:e2e`: **38 passed, 30 skipped**, 0 fail.
 - `npm run build`: ok, nessun chunk >500 kB.
 
 ## Seconda tranche — chiusura dei rilievi UI (R8–R18)
@@ -308,3 +308,32 @@ Implementati tutti i passi 6–9 del piano (`docs/plans/2026-10-29-chiusura-rili
 - **R18 — filtro analysis**: la firma del filtro non è persistita; una card prodotta con filtro analysis non viene confrontata dopo reload.
 - **R13** (righe ragged) resta **non riproducibile**; **R19** (doppio dispatch nello stesso tick) resta da verificare.
 - **R4 — formula dipendente**: il fast-path non copre l'edit di una colonna referenziata; il caso resta misurato (~37,5 ms a 50k) e documentato.
+
+
+## Terza tranche — potenziamento per ricercatore/studente (2026-10-29)
+
+Implementata una release verticale dei tre sprint:
+
+- **Error boundary** per pannello, con reload e download diagnostico (`src/ui/ErrorBoundary.tsx`).
+- **Schema progetto v2** con migrazione automatica da v1 (`PROJECT_VERSION=2`, parser compatibile).
+- **Backup IndexedDB** dell'autosave, con ripristino da Settings (`src/io/backup.ts`).
+- **Validazione numerica inline** (`NumberField`) su t-test, logistica, MI, serie temporali e TOST.
+- **Guided / Expert mode** persistita nel progetto: in Guided le sezioni Advanced sono nascoste.
+- **Onboarding** con tre percorsi (descrivi, confronta, prevedi) nella libreria analisi.
+- **Preset** per t-test, ANOVA, regressione, logistica e correlazione.
+- **Re-run all** delle card salvate con i loro parametri.
+- **Report Word** oltre a HTML/XLSX.
+- **Export codice R/Python** per descriptive, t-test, ANOVA, regressione, correlazione e logistica.
+
+Verifica: **467 test**, Playwright **38 passed / 30 skipped**, build senza chunk >500 kB, file-size guard ok.
+
+### Non implementato in questa release
+
+Restano esplicitamente fuori, e non vanno considerati fatti:
+
+- Web Worker reale per tutti i kernel pesanti (serve il refactor del contratto di output).
+- Import binario SPSS `.sav` / Stata `.dta`.
+- Reshape long/wide guidato.
+- Model comparison e diagnostics dashboard.
+- Seed modificabile dall'utente (i kernel usano già seed fissi deterministici).
+- Desktop wrapper / File System Access e dataset oltre i limiti attuali.

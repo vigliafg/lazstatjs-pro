@@ -527,6 +527,7 @@ export const parseSettings = (value: unknown): ProjectSettings => {
       activeTab === 'analysis' || activeTab === 'settings' || activeTab === 'data' || activeTab === 'help'
         ? activeTab
         : DEFAULT_SETTINGS.activeTab,
+    uiMode: raw.uiMode === 'expert' ? 'expert' : 'guided',
   };
 };
 

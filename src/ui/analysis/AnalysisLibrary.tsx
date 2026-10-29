@@ -121,6 +121,22 @@ export const AnalysisLibrary = ({
     loadFavorites(ANALYSIS_TABS.map(meta => meta.id))
   );
   const [alphabetical, setAlphabetical] = useState(false);
+  const [welcome, setWelcome] = useState(() => {
+    try {
+      return typeof localStorage === 'undefined' || localStorage.getItem('lazstats.onboarded') !== '1';
+    } catch {
+      return false;
+    }
+  });
+
+  const dismissWelcome = () => {
+    try {
+      localStorage.setItem('lazstats.onboarded', '1');
+    } catch {
+      // Storage disabled: dismiss for this session only.
+    }
+    setWelcome(false);
+  };
 
   const toggleFavorite = (id: string) => {
     setFavorites(previous => {
@@ -275,6 +291,47 @@ export const AnalysisLibrary = ({
           items[next]?.focus();
         }}
       >
+        {normalizedQuery.length === 0 && welcome && (
+          <section className="mb-3 rounded border border-accent/30 bg-accent/5 p-2">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="font-mono text-[9px] uppercase tracking-widest text-accent2">
+                  {t('analysis.welcome')}
+                </p>
+                <p className="mt-0.5 text-[10px] leading-relaxed text-text3">
+                  {t('analysis.welcomeHint')}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={dismissWelcome}
+                className="text-[9px] text-text3 hover:text-text"
+              >
+                {t('analysis.welcomeDismiss')}
+              </button>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-1">
+              {[
+                ['descriptive', t('analysis.welcomeDescribe')],
+                ['ttest', t('analysis.welcomeCompare')],
+                ['regression', t('analysis.welcomePredict')],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className="tb-btn px-1.5 py-0.5 text-[9px]"
+                  onClick={() => {
+                    dismissWelcome();
+                    onSelect(id);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
         {normalizedQuery.length === 0 && favoriteItems.length > 0 && (
           <section className="mb-3">
             <div className="flex items-center gap-1.5 px-2 py-1">

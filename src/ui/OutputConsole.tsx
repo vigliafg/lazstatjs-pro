@@ -49,10 +49,12 @@ export interface OutputConsoleProps {
   onCopy: () => void;
   onExportCharts: () => void;
   onExportReport: () => void;
+  onExportWord: () => void;
   onExportXlsx: () => void;
   onBackToData: () => void;
   onOpenAnalysis?: (analysisId: string) => void;
   onRerun?: (entry: OutputEntry) => void;
+  onRerunAll?: () => void;
   onApplyParams?: (entry: OutputEntry) => void;
   /** Current signature of an analysis' parameters, for the params-stale badge. */
   paramsSignatureFor?: (analysisId: string) => string;
@@ -90,10 +92,12 @@ export const OutputConsole = ({
   onCopy,
   onExportCharts,
   onExportReport,
+  onExportWord,
   onExportXlsx,
   onBackToData,
   onOpenAnalysis,
   onRerun,
+  onRerunAll,
   onApplyParams,
   paramsSignatureFor,
   currentRevision,
@@ -202,6 +206,17 @@ export const OutputConsole = ({
           <button
             type="button"
             className={actionClass}
+            onClick={onRerunAll}
+            disabled={outputs.length === 0}
+            title={t('output.rerunAllHint')}
+            aria-label={t('output.rerunAllHint')}
+          >
+            <RotateCcw className="h-3 w-3" />
+            <span className="hidden 2xl:inline">{t('output.rerunAll')}</span>
+          </button>
+          <button
+            type="button"
+            className={actionClass}
             onClick={onBackToData}
             title={t('output.openDataTitle')}
             aria-label={t('output.openDataTitle')}
@@ -252,6 +267,17 @@ export const OutputConsole = ({
           >
             <FileCode2 className="h-3 w-3" />
             <span className="hidden xl:inline">{t('output.report')}</span>
+          </button>
+          <button
+            type="button"
+            className={actionClass}
+            onClick={onExportWord}
+            disabled={outputs.length === 0}
+            title={t('output.wordHint')}
+            aria-label={t('output.wordHint')}
+          >
+            <FileText className="h-3 w-3" />
+            <span className="hidden xl:inline">{t('output.word')}</span>
           </button>
           <button
             type="button"

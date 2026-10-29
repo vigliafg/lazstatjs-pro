@@ -33,6 +33,7 @@ export interface AnalysisTabProps {
   roles: RoleState[];
   onAssignRole: (column: number, roleKey: string) => void;
   onRerunOutput: (entry: OutputEntry) => void;
+  onRerunAllOutputs: () => void;
   onApplyOutputParams: (entry: OutputEntry) => void;
   paramsSignatureFor: (analysisId: string) => string;
   removeOutput: (index: number) => void;
@@ -40,6 +41,7 @@ export interface AnalysisTabProps {
   copyOutput: () => void;
   exportChartPngs: () => void;
   exportReportHtml: () => void;
+  exportReportWord: () => void;
   exportResultsXlsx: () => void;
   setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
   runAnalysis: () => Promise<boolean>;

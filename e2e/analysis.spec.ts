@@ -36,6 +36,44 @@ test('collapses a result and reopens it from the setup shortcut', async ({ page,
   await expect(page.locator('article.output-card')).toHaveCount(2);
 });
 
+test('onboards a new user through the three goals', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the library onboarding is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await expect(page.getByText('Start here', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Compare groups', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'T-Test' })).toBeVisible();
+  await expect(page.getByText('Start here', { exact: true })).toHaveCount(0);
+});
+
+test('hides advanced sections in Guided mode and shows them in Expert mode', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the mode switch is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('Regression');
+  await page.locator('button[title="Ordinary least squares with robust options."]').click();
+
+  await expect(page.getByText('Robust SE', { exact: true })).toHaveCount(0);
+  await page.getByLabel('Interface mode').selectOption('expert');
+  await expect(page.getByText('Robust SE', { exact: true })).toHaveCount(1);
+});
+
+test('shows an inline error when a numeric field is empty', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the setup form is exercised on the desktop layout');
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+  await page.getByLabel('Test type').selectOption('one');
+  await page.getByLabel('Test mean (μ₀)').fill('');
+
+  await expect(page.getByText('Enter a number')).toBeVisible();
+});
+
 test('associates a form label with its control', async ({ page, isMobile }) => {
   test.skip(isMobile, 'the setup form is exercised on the desktop layout');
 
@@ -133,6 +171,21 @@ test('turning Live off invalidates the pending run', async ({ page, isMobile }) 
 
   await expect(page.locator('article.output-card')).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Live run' })).toHaveAttribute('aria-pressed', 'false');
+});
+
+test('re-runs every stored card in one action', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the output workspace is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(2);
+
+  await page.getByLabel('Run every stored card again with its saved parameters').click();
+  await expect(page.locator('article.output-card')).toHaveCount(4);
 });
 
 test('filters, pins and clears result cards', async ({ page, isMobile }) => {

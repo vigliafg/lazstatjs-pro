@@ -19,6 +19,7 @@ import { nonEmptyRowCount, type GridData } from '../grid/types';
 import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
 import type { Toast } from './useToasts';
 import { t } from '../i18n';
+import { loadBackup, saveBackup } from '../io/backup';
 
 interface UseProjectSessionOptions {
   /** Snapshot ripristinato all'avvio (autosave), già letto una volta. */
@@ -87,7 +88,11 @@ export const useProjectSession = ({
       const snapshot = buildProject();
       const json = serializeProject(snapshot);
       if (json === lastSavedProject.current) return;
-      if (saveAutosaveText(json)) {
+      const local = saveAutosaveText(json);
+      // Keep a second copy outside the 5 MB localStorage budget. It is
+      // best-effort: failure must never block the local autosave path.
+      void saveBackup(json);
+      if (local) {
         lastSavedProject.current = json;
         autosaveWarned.current = false;
         setLastAutosave(new Date().toLocaleTimeString());
@@ -123,6 +128,24 @@ export const useProjectSession = ({
     );
   };
 
+  const restoreBackup = async () => {
+    const text = await loadBackup();
+    if (!text) {
+      showToast(t('toast.project'), t('settings.noBackup'), 'warn');
+      return;
+    }
+    try {
+      applyProject(parseProject(text));
+      showToast(t('toast.project'), t('settings.backupRestored'), 'ok');
+    } catch (error) {
+      showToast(
+        t('toast.project'),
+        error instanceof Error ? error.message : t('project.readError'),
+        'error'
+      );
+    }
+  };
+
   const saveProjectFile = () => {
     downloadText(
       serializeProject(buildProject()),
@@ -151,6 +174,7 @@ export const useProjectSession = ({
     lastAutosave,
     saveProjectFile,
     openProjectFile,
+    restoreBackup,
     recentProjects,
     clearRecentProjects,
   };

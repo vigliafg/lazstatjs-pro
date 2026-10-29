@@ -6,7 +6,7 @@ import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 
 export const PROJECT_APP = 'lazstats';
-export const PROJECT_VERSION = 1;
+export const PROJECT_VERSION = 2;
 export const PROJECT_STORAGE_KEY = 'lazstats.project.v1';
 /** Keep autosave comfortably below the ~5 MB localStorage budget. */
 export const MAX_AUTOSAVE_CHARS = 4_000_000;
@@ -316,6 +316,8 @@ export interface ProjectSettings {
   ciLevel: number;
   activeAnalysis: string;
   activeTab: ProjectTab;
+  /** Guided hides the advanced form sections; Expert shows everything. */
+  uiMode: 'guided' | 'expert';
 }
 
 export interface ProjectSnapshot {
@@ -526,4 +528,5 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   ciLevel: 95,
   activeAnalysis: 'wizard',
   activeTab: 'data',
+  uiMode: 'guided',
 };

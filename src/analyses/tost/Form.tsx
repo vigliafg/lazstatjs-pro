@@ -4,7 +4,7 @@ import type { TostParams } from '../../io/project';
 import { t } from '../../i18n';
 import { variableOptionsFrom } from '../../components/FormFields';
 import { continuousColumnIndexes } from '../shared/columns';
-import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
+import { Field, NumberField, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface TostFormProps {
   grid: GridData;
@@ -49,16 +49,11 @@ export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => 
         />
       )}
       {design === 'one' && (
-        <Field label={t('form.targetMu')}>
-          <input
-            type="number"
-            step="any"
-            aria-label={t('form.targetMu')}
-            className={inputClass}
-            value={mu}
-            onChange={e => update({ mu: parseFloat(e.target.value) })}
-          />
-        </Field>
+        <NumberField
+          label={t('form.targetMu')}
+          value={mu}
+          onChange={value => update({ mu: value })}
+        />
       )}
       {design === 'ind' && (
         <Field label={t('form.variances')}>
@@ -73,17 +68,13 @@ export const TostForm = ({ grid, tostParams, setTostParams }: TostFormProps) => 
           </select>
         </Field>
       )}
-      <Field label={t('form.equivalenceMargin')} hint={t('hint.tost')}>
-        <input
-          type="number"
-          min="0"
-          step="any"
-          aria-label={t('form.equivalenceMargin')}
-          className={inputClass}
-          value={margin}
-          onChange={e => update({ margin: parseFloat(e.target.value) })}
-        />
-      </Field>
+      <NumberField
+        label={t('form.equivalenceMargin')}
+        value={margin}
+        min="0"
+        hint={t('hint.tost')}
+        onChange={value => update({ margin: value })}
+      />
     </div>
   );
 };

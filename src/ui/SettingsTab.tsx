@@ -10,6 +10,7 @@ export interface SettingsTabProps {
   onSaveProject: () => void;
   onOpenProject: () => void;
   onExport: () => void;
+  onRestoreBackup: () => void;
   recentProjects: readonly string[];
   onClearRecent: () => void;
 }
@@ -24,6 +25,7 @@ export const SettingsTab = ({
   onSaveProject,
   onOpenProject,
   onExport,
+  onRestoreBackup,
   recentProjects,
   onClearRecent,
 }: SettingsTabProps) => (
@@ -48,6 +50,10 @@ export const SettingsTab = ({
             <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onExport}>
               <FileDown className="h-3 w-3" />
               {t('settings.export')}
+            </button>
+            <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onRestoreBackup}>
+              <Clock3 className="h-3 w-3" />
+              {t('settings.restoreBackup')}
             </button>
           </div>
           <div className="mt-5">

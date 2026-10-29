@@ -37,9 +37,11 @@ import { TdCoxForm } from '../../analyses/tdcox/Form';
 import type { ProjectParams } from '../../io/project';
 import type { AnalysisTabProps } from './types';
 import { useAnalysisStore } from './store';
-import { Section } from '../../components/FormFields';
+import { Field, Section } from '../../components/FormFields';
 import { analysisParamsSignature } from '../../analyses/paramsSnapshot';
 import { createRunGate } from './liveGate';
+import { CodeExport } from './CodeExport';
+import { presetsFor } from './presets';
 import { t } from '../../i18n';
 
 const inputClass =
@@ -55,6 +57,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
     (updater: SetStateAction<ProjectParams[K]>) =>
       dispatch({ type: 'slice', key, updater });
   const meta = analysisMeta(p.activeAnalysis);
+  const presets = presetsFor(p.activeAnalysis);
   const family = familyOf(p.activeAnalysis);
   const [peek, setPeek] = useState(false);
   const [live, setLive] = useState(false);
@@ -634,12 +637,40 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
             </select>
           </Section>
 
+          {presets.length > 0 && (
+            <Field label={t('analysis.preset')}>
+              <select
+                aria-label={t('analysis.preset')}
+                className={inputClass}
+                value=""
+                onChange={event => {
+                  const preset = presets.find(item => item.id === event.target.value);
+                  if (preset) dispatch({ type: 'replace', params: preset.apply(params) });
+                }}
+              >
+                <option value="">—</option>
+                {presets.map(preset => (
+                  <option key={preset.id} value={preset.id}>
+                    {preset.label}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          )}
+
           <Section
             title={sectionTitle}
             hint={p.activeAnalysis === 'wizard' ? t('analysis.guided') : undefined}
           >
             <div className="flex flex-col gap-3">{form}</div>
           </Section>
+
+          <CodeExport
+            analysisId={p.activeAnalysis}
+            grid={p.grid}
+            params={params}
+            ciLevel={p.ciLevel}
+          />
         </div>
       </div>
 

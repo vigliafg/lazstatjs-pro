@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { TTestParams } from '../../io/project';
-import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
+import { Field, NumberField, VariableSelect, variableOptions } from '../../components/FormFields';
 import { t } from '../../i18n';
 import { variableOptionsFrom } from '../../components/FormFields';
 import { continuousColumnIndexes } from '../shared/columns';
@@ -47,17 +47,11 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
           onChange={value => setTTestParams(previous => ({ ...previous, var2: value }))}
         />
       ) : (
-        <Field label={t('form.testMean')}>
-          <input
-            type="number"
-            aria-label={t('form.testMean')}
-            className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
-            value={ttestParams.mu}
-            onChange={event =>
-              setTTestParams(previous => ({ ...previous, mu: parseFloat(event.target.value) }))
-            }
-          />
-        </Field>
+        <NumberField
+          label={t('form.testMean')}
+          value={ttestParams.mu}
+          onChange={value => setTTestParams(previous => ({ ...previous, mu: value }))}
+        />
       )}
       {ttestParams.type === 'ind' && (
         <Field label={t('form.variances')}>

@@ -8,7 +8,7 @@ import type {
 import { t } from '../../i18n';
 import { variableOptionsFrom } from '../../components/FormFields';
 import { continuousColumnIndexes } from '../shared/columns';
-import { Field, VariableSelect, variableOptions } from '../../components/FormFields';
+import { Field, NumberField, VariableSelect, variableOptions } from '../../components/FormFields';
 
 export interface TimeSeriesFormProps {
   grid: GridData;
@@ -36,29 +36,23 @@ export const TimeSeriesForm = ({
         onChange={value => update({ variable: value })}
       />
       <div className="flex gap-2">
-        <Field label={t('form.seasonalPeriod')}>
-          <input
-            type="number"
-            min="0"
-            step="1"
-            aria-label={t('form.seasonalPeriod')}
-            className={inputClass}
-            value={period}
-            onChange={e => update({ period: parseInt(e.target.value, 10) })}
-          />
-        </Field>
-        <Field label={t('form.forecastHorizon')}>
-          <input
-            type="number"
-            min="1"
-            max="60"
-            step="1"
-            aria-label={t('form.forecastHorizon')}
-            className={inputClass}
-            value={horizon}
-            onChange={e => update({ horizon: parseInt(e.target.value, 10) })}
-          />
-        </Field>
+        <NumberField
+          label={t('form.seasonalPeriod')}
+          value={period}
+          min="0"
+          step="1"
+          integer
+          onChange={value => update({ period: value })}
+        />
+        <NumberField
+          label={t('form.forecastHorizon')}
+          value={horizon}
+          min="1"
+          max="60"
+          step="1"
+          integer
+          onChange={value => update({ horizon: value })}
+        />
       </div>
       <div className="flex gap-2">
         <Field label={t('form.differencing')}>

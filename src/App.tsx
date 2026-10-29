@@ -6,6 +6,8 @@ import { DataWorkspace } from './ui/DataWorkspace';
 import { Header } from './ui/Header';
 import { Footer } from './ui/Footer';
 import { Toasts } from './ui/Toasts';
+import { ErrorBoundary } from './ui/ErrorBoundary';
+import { UiModeProvider, type UiMode } from './components/UiMode';
 import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
 import { useImportExport } from './hooks/useImportExport';
@@ -283,6 +285,7 @@ export default function App() {
   const { params, setParams } = useProjectParams(boot, grid);
 
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
+  const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
   const {
     outputs,
     setOutputs,
@@ -293,6 +296,7 @@ export default function App() {
     exportChartPngs,
     exportResultsXlsx,
     exportReportHtml,
+    exportReportWord,
   } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
 
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
@@ -321,8 +325,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab }),
-    [ciLevel, activeAnalysis, activeTab]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode }),
+    [ciLevel, activeAnalysis, activeTab, uiMode]
   );
 
   const roleErrors = [
@@ -359,6 +363,7 @@ export default function App() {
     setDatasetId(project.datasetId ?? `dataset-${Date.now().toString(36)}`);
     setParams(project.params);
     setCiLevel(project.settings.ciLevel);
+    setUiMode(project.settings.uiMode);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
         ? project.settings.activeAnalysis
@@ -384,6 +389,7 @@ export default function App() {
     lastAutosave,
     saveProjectFile,
     openProjectFile,
+    restoreBackup,
     recentProjects,
     clearRecentProjects,
   } = useProjectSession({
@@ -460,6 +466,26 @@ export default function App() {
     showToast(t('toast.output'), t('analysis.paramsRestored'), 'ok');
   };
 
+  const rerunAllOutputs = () => {
+    const runnable = outputs.filter(
+      entry => entry.analysisId && entry.params !== undefined && analysisParamsKey(entry.analysisId)
+    );
+    void (async () => {
+      let done = 0;
+      for (const entry of runnable) {
+        if (!entry.analysisId) continue;
+        const next = parseParams(
+          withAnalysisParams(params, entry.analysisId, entry.params),
+          grid.cols.length
+        );
+        if (await runAnalysisWith(entry.analysisId, next, entry.ciLevel)) done += 1;
+      }
+      if (done > 0) {
+        showToast(t('toast.output'), `${done} ${t('output.rerunAll')}`, 'ok');
+      }
+    })();
+  };
+
   const rerunOutput = (entry: OutputEntry) => {
     const next = restoreOutputParams(entry);
     if (!next || !entry.analysisId) {
@@ -472,12 +498,14 @@ export default function App() {
   };
 
   return (
+    <UiModeProvider mode={uiMode}>
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
+        <ErrorBoundary resetKey={activeTab} label={activeTab}>
         <div className={activeTab === 'data' ? 'flex min-h-0 flex-1 flex-col' : 'hidden'}>
           <DataWorkspace
             grid={grid}
@@ -552,6 +580,7 @@ export default function App() {
             roles={roles}
             onAssignRole={assignRoleTo}
             onRerunOutput={rerunOutput}
+            onRerunAllOutputs={rerunAllOutputs}
             onApplyOutputParams={applyOutputParams}
             paramsSignatureFor={paramsSignatureFor}
             removeOutput={removeOutput}
@@ -559,6 +588,7 @@ export default function App() {
             copyOutput={copyOutput}
             exportChartPngs={exportChartPngs}
             exportReportHtml={exportReportHtml}
+            exportReportWord={exportReportWord}
             exportResultsXlsx={exportResultsXlsx}
             setActiveTab={setActiveTab}
             runAnalysis={runAnalysis}
@@ -583,10 +613,12 @@ export default function App() {
             onSaveProject={saveProjectFile}
             onOpenProject={() => projectInputRef.current?.click()}
             onExport={() => setShowExport(true)}
+            onRestoreBackup={() => void restoreBackup()}
             recentProjects={recentProjects}
             onClearRecent={clearRecentProjects}
           />
         )}
+        </ErrorBoundary>
       </main>
 
       {pendingImport && (
@@ -625,5 +657,6 @@ export default function App() {
       {/* Toasts */}
       <Toasts toasts={toasts} />
     </div>
+    </UiModeProvider>
   );
 }

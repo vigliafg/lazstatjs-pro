@@ -158,6 +158,18 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     }
   };
 
+  const exportReportWord = () => {
+    const el = document.getElementById('output-content');
+    if (!el) return;
+    const html = buildReportFromElement(el, {
+      title: t('output.reportTitle'),
+      generatedAt: new Date().toLocaleString(),
+      details: [`${nonEmptyRowCount(grid.rows)} ${t('output.rows')}`, `${grid.cols.length} ${t('output.columns')}`, `${t('output.ci')} ${ciLevel}%`],
+    });
+    downloadText(html, 'lazstats-report.doc', 'application/msword;charset=utf-8');
+    showToast(t('toast.report'), t('output.reportReady'), 'ok');
+  };
+
   const exportReportHtml = () => {
     const el = document.getElementById('output-content');
     if (!el) return;
@@ -180,5 +192,6 @@ export const useOutputConsole = ({ initial, grid, ciLevel, showToast }: UseOutpu
     exportChartPngs,
     exportResultsXlsx,
     exportReportHtml,
+    exportReportWord,
   };
 };

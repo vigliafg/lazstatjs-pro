@@ -6,6 +6,7 @@ import { variableOptionsFrom } from '../../components/FormFields';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
   Field,
+  NumberField,
   VariableList,
   VariableSelect,
   variableOptions,
@@ -74,34 +75,24 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
       </>
     )}
     <div className="flex gap-2">
-      <Field label={t('form.imputations')}>
-        <input
-          type="number"
-          min="2"
-          max="50"
-          step="1"
-          aria-label={t('form.imputations')}
-          className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
-          value={miParams.imputations}
-          onChange={e =>
-            setMiParams(prev => ({ ...prev, imputations: parseInt(e.target.value, 10) }))
-          }
-        />
-      </Field>
-      <Field label={t('form.iterations')}>
-        <input
-          type="number"
-          min="1"
-          max="50"
-          step="1"
-          aria-label={t('form.iterations')}
-          className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
-          value={miParams.iterations}
-          onChange={e =>
-            setMiParams(prev => ({ ...prev, iterations: parseInt(e.target.value, 10) }))
-          }
-        />
-      </Field>
+      <NumberField
+        label={t('form.imputations')}
+        value={miParams.imputations}
+        min="2"
+        max="50"
+        step="1"
+        integer
+        onChange={value => setMiParams(prev => ({ ...prev, imputations: value }))}
+      />
+      <NumberField
+        label={t('form.iterations')}
+        value={miParams.iterations}
+        min="1"
+        max="50"
+        step="1"
+        integer
+        onChange={value => setMiParams(prev => ({ ...prev, iterations: value }))}
+      />
     </div>
   </div>
 );

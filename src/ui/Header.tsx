@@ -1,14 +1,17 @@
 import { BarChart3, Database, HelpCircle, Settings } from 'lucide-react';
 import type { ProjectTab } from '../io/project';
+import type { UiMode } from '../components/UiMode';
 import { t } from '../i18n';
 
 export interface HeaderProps {
   activeTab: ProjectTab;
   setActiveTab: (tab: ProjectTab) => void;
+  uiMode: UiMode;
+  setUiMode: (mode: UiMode) => void;
 }
 
 /** Main navigation: brand plus the four top-level areas. */
-export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
+export const Header = ({ activeTab, setActiveTab, uiMode, setUiMode }: HeaderProps) => (
   <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-surface2 px-2 pt-1.5 scrollbar">
     <div className="mr-1 flex shrink-0 items-center gap-2 border-r border-border px-2 pb-1.5">
       <div className="flex h-5 w-5 items-center justify-center rounded border border-accent/30 bg-accent/10">
@@ -49,5 +52,17 @@ export const Header = ({ activeTab, setActiveTab }: HeaderProps) => (
       <HelpCircle className="mr-2 inline h-3 w-3" />
       {t('nav.help')}
     </button>
+    <label className="ml-auto flex shrink-0 items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-text3">
+      <span className="hidden sm:inline">{t('mode.label')}</span>
+      <select
+        aria-label={t('mode.label')}
+        className="rounded border border-border2 bg-surface3 px-1 py-0.5 text-[10px] text-text"
+        value={uiMode}
+        onChange={event => setUiMode(event.target.value as UiMode)}
+      >
+        <option value="guided">{t('mode.guided')}</option>
+        <option value="expert">{t('mode.expert')}</option>
+      </select>
+    </label>
   </div>
 );

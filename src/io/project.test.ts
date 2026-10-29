@@ -38,13 +38,23 @@ const makeSnapshot = () =>
     {
       grid,
       prefs: DEFAULT_PREFS,
-      settings: { ciLevel: 99, activeAnalysis: 'ttest', activeTab: 'analysis' },
+      settings: { ciLevel: 99, activeAnalysis: 'ttest', activeTab: 'analysis', uiMode: 'guided' },
       params: DEFAULT_PARAMS,
     },
     '2026-10-19T10:00:00.000Z'
   );
 
 describe('project snapshot roundtrip', () => {
+  it('migrates a version 1 project to the current schema', () => {
+    const raw = JSON.parse(serializeProject(makeSnapshot()));
+    raw.version = 1;
+    delete raw.datasetId;
+    delete raw.dataRevision;
+    const migrated = parseProject(JSON.stringify(raw));
+    assert.equal(migrated.version, 2);
+    assert.equal(migrated.grid.cols.length, 3);
+  });
+
   it('serialises and restores grid, settings and params', () => {
     const restored = parseProject(serializeProject(makeSnapshot()));
     assert.deepEqual(withoutIds(restored.grid), grid);

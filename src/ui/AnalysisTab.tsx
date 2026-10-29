@@ -232,9 +232,11 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             onCopy={props.copyOutput}
             onExportCharts={props.exportChartPngs}
             onExportReport={props.exportReportHtml}
+            onExportWord={props.exportReportWord}
             onExportXlsx={props.exportResultsXlsx}
             onBackToData={() => props.setActiveTab('data')}
             onRerun={props.onRerunOutput}
+            onRerunAll={props.onRerunAllOutputs}
             onApplyParams={props.onApplyOutputParams}
             paramsSignatureFor={props.paramsSignatureFor}
             currentRevision={props.dataRevision}

@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { columnLabel, type Column } from '../grid/types';
 import { t } from '../i18n';
+import { useUiMode } from './UiMode';
 
 /** Card-style section used by the setup panel and by the forms. */
 export const Section = ({
@@ -133,6 +134,57 @@ export const VariableSelect = ({
   );
 };
 
+/** Numeric input with inline validation; the runner still guards finiteness. */
+export const NumberField = ({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step = 'any',
+  integer = false,
+  hint,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  min?: string;
+  max?: string;
+  step?: string;
+  integer?: boolean;
+  hint?: string;
+}) => {
+  const id = useId();
+  const invalid = !Number.isFinite(value);
+  return (
+    <Field label={label} hint={hint} htmlFor={id}>
+      <input
+        id={id}
+        type="number"
+        min={min}
+        max={max}
+        step={step}
+        aria-label={label}
+        aria-invalid={invalid || undefined}
+        className={`w-24 rounded border bg-surface3 p-1.5 text-[11px] text-text ${
+          invalid ? 'border-red' : 'border-border2'
+        }`}
+        value={Number.isFinite(value) ? value : ''}
+        onChange={event => {
+          const raw = event.target.value;
+          const next = integer ? parseInt(raw, 10) : parseFloat(raw);
+          onChange(Number.isNaN(next) ? Number.NaN : next);
+        }}
+      />
+      {invalid && (
+        <span role="alert" className="text-[9px] text-red">
+          {t('form.numberRequired')}
+        </span>
+      )}
+    </Field>
+  );
+};
+
 export const variableOptions = (cols: Column[]): VariableOption[] =>
   cols.map((col, index) => ({ value: index, label: columnLabel(col) }));
 
@@ -246,14 +298,18 @@ export const Advanced = ({
   title?: string;
   children: ReactNode;
   open?: boolean;
-}) => (
-  <details open={open} className="rounded border border-border/70 bg-surface3/30 px-2 py-1.5">
-    <summary className="cursor-pointer font-mono text-[9px] uppercase tracking-widest text-text3">
-      {title}
-    </summary>
-    <div className="mt-2 flex flex-col gap-3">{children}</div>
-  </details>
-);
+}) => {
+  const mode = useUiMode();
+  if (mode === 'guided') return null;
+  return (
+    <details open={open} className="rounded border border-border/70 bg-surface3/30 px-2 py-1.5">
+      <summary className="cursor-pointer font-mono text-[9px] uppercase tracking-widest text-text3">
+        {title}
+      </summary>
+      <div className="mt-2 flex flex-col gap-3">{children}</div>
+    </details>
+  );
+};
 
 export const CheckboxField = ({
   label,

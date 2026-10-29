@@ -7,6 +7,7 @@ import {
   CheckboxField,
   Field,
   VariableList,
+  NumberField,
   VariableSelect,
   variableOptions,
 } from '../../components/FormFields';
@@ -49,20 +50,14 @@ export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: Logist
           onChange={checked => setLogisticParams(prev => ({ ...prev, penalized: checked }))}
         />
       </Field>
-      <Field label={t('form.cutoff')}>
-        <input
-          type="number"
-          min="0.05"
-          max="0.95"
-          step="0.05"
-          aria-label={t('form.cutoff')}
-          className="w-20 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
-          value={cutoff}
-          onChange={e =>
-            setLogisticParams(prev => ({ ...prev, cutoff: parseFloat(e.target.value) }))
-          }
-        />
-      </Field>
+      <NumberField
+        label={t('form.cutoff')}
+        value={cutoff}
+        min="0.05"
+        max="0.95"
+        step="0.05"
+        onChange={value => setLogisticParams(prev => ({ ...prev, cutoff: value }))}
+      />
     </div>
   );
 };

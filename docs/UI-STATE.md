@@ -146,6 +146,7 @@ basso.
 - [x] Shell i18n centralizzata e footer/aria-live responsive.
 - [x] Bundle senza warning: pannelli, help, IO e runners lazy.
 - [x] Suite Playwright per il workspace analisi (desktop + mobile).
+- [x] Potenziamento per ricercatore/studente: Guided/Expert, onboarding, preset, NumberField, re-run all, report Word, export codice, backup IndexedDB, schema v2, error boundary.
 - [x] Rilievi UI R8–R18 chiusi: stato vuoto, live token, a11y, ruoli, resize, vista, performance, freschezza, toolbar/categoria (`docs/plans/2026-10-29-chiusura-rilievi-ui.md`).
 
 ## 5. Valutazione
@@ -204,7 +205,7 @@ Priorità:
 |---|---|---|---|---|
 | **UI-01** | P0 | Iteration loop: parametri nella card, re-run, apply | **Fatto** | `params`/`paramsSignature` nello snapshot; Re-run e Apply nella card; stale anche sui parametri |
 | **UI-02** | P0 | Store context/reducer e riduzione props | **Fatto** | `ui/analysis/store.tsx`; 88 → 38 props; `applyAnalysisAction` testato |
-| **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 13 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria, CI/stale, filtro rimosso, live off, label form, predittori categorici, breakpoint |
+| **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 17 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria, CI/stale, filtro rimosso, live off, label form, predittori categorici, breakpoint |
 | **UI-04** | P2 | Live-run `instant` con debounce e stato | **Fatto** | Toggle Live, 500 ms, card unica sostituita, indicatore “syncing” |
 | **UI-05** | P2 | Output workspace: filtro, pin, copia, conferma Clear | **Fatto** | Filtro per analisi, pin in cima, copia card, conferma su Clear |
 | **UI-06** | P2 | Form system condiviso | **Fatto** | `Field`, `Section`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`; **tutti i 31 form** migrati |
