@@ -11,6 +11,8 @@
  * project data, and localStorage has a ~5 MB budget shared with the grid.
  */
 
+import { t } from '../i18n';
+
 export const MAX_STORED_OUTPUTS = 20;
 /** Total HTML kept in the project file / autosave (roughly 20 charts-heavy runs). */
 export const MAX_STORED_OUTPUT_CHARS = 1_500_000;
@@ -97,7 +99,7 @@ export const extractOutputTitle = (html: string): string => {
   );
   const raw = match ? match[1].replace(/<[^>]*>/g, ' ') : '';
   const title = decodeEntities(raw).replace(/\s+/g, ' ').trim();
-  return title || 'Analysis output';
+  return title || t('output.untitled');
 };
 
 /** Keep the newest blocks that fit the count and character budget. */
@@ -124,7 +126,7 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
     if (!html || html.length > MAX_SINGLE_OUTPUT_CHARS) return;
     entries.push({
       id: text(raw.id, `run-${entries.length + 1}`),
-      title: text(raw.title, 'Analysis output'),
+      title: text(raw.title, t('output.untitled')),
       createdAt: text(raw.createdAt, ''),
       ...(typeof raw.analysisId === 'string' && raw.analysisId.length > 0
         ? { analysisId: raw.analysisId.slice(0, 64) }

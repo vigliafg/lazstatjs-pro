@@ -38,7 +38,7 @@ test('aborting a run terminates the worker and reports cancellation', async () =
 });
 
 test('maps worker progress and results to the serialisable outcome', async () => {
-  let posted: { id: number } | null = null;
+  let posted: { id: number; reportLocale?: string } | null = null;
   const phases: string[] = [];
   let terminated = false;
   const fake = {
@@ -57,9 +57,10 @@ test('maps worker progress and results to the serialisable outcome', async () =>
     { cols: [{ name: 'Y', type: 'num' }], rows: [['1']] },
     DEFAULT_PARAMS,
     95,
-    { workerFactory: () => fake, onProgress: phase => phases.push(phase) }
+    { workerFactory: () => fake, reportLocale: 'de', onProgress: phase => phases.push(phase) }
   );
   const id = (posted as { id: number }).id;
+  assert.equal(posted?.reportLocale, 'de', 'the worker receives the report language');
   (fake as unknown as { onmessage: (event: { data: unknown }) => void }).onmessage({
     data: { type: 'progress', id, phase: 'computing', progress: 0.4 },
   });

@@ -22,6 +22,7 @@ import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
 import type { AnalysisRunResult } from '../types';
 import { ResultTables } from '../../components/ResultTable';
+import { t } from '../../i18n';
 
 export interface DescriptiveInput {
   rows: readonly (readonly string[])[];
@@ -255,7 +256,7 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
                         padding={{ top: 15, bottom: 40, left: 55, right: 15 }}
                       >
                         <VictoryAxis
-                          label="Theoretical Quantiles"
+                          label={t('chart.theoreticalQuantiles')}
                           style={{ 
                             axis: { stroke: '#444' }, 
                             axisLabel: { fill: '#888', fontSize: 9, padding: 25 },
@@ -265,7 +266,7 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
                         />
                         <VictoryAxis
                           dependentAxis
-                          label="Observed Values"
+                          label={t('chart.observedValues')}
                           style={{ 
                             axis: { stroke: '#444' }, 
                             axisLabel: { fill: '#888', fontSize: 9, padding: 35 },

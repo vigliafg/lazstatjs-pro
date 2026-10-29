@@ -4,6 +4,7 @@ import type { AnalysisChart } from '../../stats/charts';
 import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
 import type { HeavyAnalysisId } from './heavyIds';
+import type { ReportLocale } from '../../stats/reportCopy/types';
 
 export type HeavyProgressPhase = 'starting' | 'computing' | 'finishing';
 
@@ -14,6 +15,8 @@ export interface HeavyRunRequest {
   grid: Dataset;
   params: ProjectParams;
   ciLevel: number;
+  /** The worker builds the written report, so it needs the language too. */
+  reportLocale: ReportLocale;
 }
 
 export type HeavyWorkerMessage =

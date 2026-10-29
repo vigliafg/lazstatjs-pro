@@ -1,4 +1,5 @@
 import { fmtEst, fmtP } from '../format';
+import { copy } from '../reportCopy';
 import type { ReportSpec } from '../report';
 import type { OrdinalStats } from '../ordinal/types';
 
@@ -6,28 +7,28 @@ export const ordinalReport = (stats: OrdinalStats, predNames: string[], level: n
   const significant = stats.coefficients.filter(coefficient => coefficient.p < 1 - level / 100);
   return {
     id: 'ordinal',
-    title: 'Report di regressione ordinale',
-    headline: `Modello a odds proporzionali su ${stats.categories.length} categorie e ${stats.n} casi.`,
-    badge: significant.length > 0 ? 'Predittori associati all’esito' : 'Nessun predittore significativo',
+    title: copy('Report di regressione ordinale'),
+    headline: copy('Modello a odds proporzionali su {s1} categorie e {s2} casi.', { s1: stats.categories.length, s2: stats.n }),
+    badge: significant.length > 0 ? copy('Predittori associati all’esito') : copy('Nessun predittore significativo'),
     tone: significant.length > 0 ? 'neutral' : 'caution',
     intro: [
-      `LR vs modello nullo: χ² = ${fmtEst(stats.lr, 3)}, p = ${fmtP(stats.lrP)}.`,
-      `Predittori: ${predNames.join(', ')}.`,
+      copy('LR vs modello nullo: χ² = {s1}, p = {s2}.', { s1: fmtEst(stats.lr, 3), s2: fmtP(stats.lrP) }),
+      copy('Predittori: {s1}.', { s1: predNames.join(', ') }),
     ],
     sections: [
       {
         heading: 'Lettura',
         body: [
           significant.length > 0
-            ? `${significant.length} predittore/i spostano significativamente la probabilità verso le categorie più alte.`
-            : 'Nessun predittore raggiunge la significatività al livello scelto.',
-          'L’ipotesi di odds proporzionali assume che l’effetto di ogni predittore sia lo stesso su tutti i tagli: se non regge, servono modelli ordinali non proporzionali.',
+            ? copy('{s1} predittore/i spostano significativamente la probabilità verso le categorie più alte.', { s1: significant.length })
+            : copy('Nessun predittore raggiunge la significatività al livello scelto.'),
+          copy('L’ipotesi di odds proporzionali assume che l’effetto di ogni predittore sia lo stesso su tutti i tagli: se non regge, servono modelli ordinali non proporzionali.'),
         ],
       },
     ],
     limitations: [
-      'Con poche osservazioni per categoria le stime sono instabili.',
-      'Il modello assume categorie ordinate: l’ordine è quello alfabetico/numerico delle etichette.',
+      copy('Con poche osservazioni per categoria le stime sono instabili.'),
+      copy('Il modello assume categorie ordinate: l’ordine è quello alfabetico/numerico delle etichette.'),
     ],
   };
 };

@@ -1,5 +1,6 @@
 import { coxReport, coxTables, fitCox } from '../../stats/cox';
 import { AnalysisOutput } from '../../components/AnalysisOutput';
+import { t } from '../../i18n';
 import { parseNum } from '../../stats/core';
 import type { AnalysisChart } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
@@ -134,7 +135,7 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     id: 'cox-forest',
     title: 'Hazard ratio per covariata',
     subtitle: `IC ${ciLevel}% · scala lineare`,
-    xLabel: 'Hazard ratio',
+    xLabel: t('chart.hazardRatio'),
     note:
       'Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.' +
       (fit.separation ? ' Con stime instabili gli intervalli non finiti sono omessi dal grafico.' : ''),

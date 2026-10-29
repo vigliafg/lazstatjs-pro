@@ -19,7 +19,12 @@
     "test:e2e": "playwright test",
     "test:samples": "node --import tsx --test src/io/samples.test.ts",
     "samples:generate": "Rscript samples/generate.R",
-    "bench:grid": "node --import tsx scripts/bench-grid.mjs"
+    "bench:grid": "node --import tsx scripts/bench-grid.mjs",
+    "help:build": "node --import tsx scripts/build-help.mjs",
+    "predev": "npm run help:build",
+    "prebuild": "npm run help:build",
+    "pretest": "npm run help:build",
+    "locales:check": "node --import tsx scripts/check-locale.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

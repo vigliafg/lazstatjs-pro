@@ -1,4 +1,5 @@
 import { HEAVY_RUNNERS } from './heavyRunners';
+import { withReportLocale } from '../../stats/reportCopy';
 import type { HeavyRunRequest, HeavyWorkerMessage } from './protocol';
 
 /**
@@ -37,11 +38,13 @@ scope.onmessage = event => {
   post({ type: 'progress', id: request.id, phase: 'starting', progress: 0.05 });
   try {
     post({ type: 'progress', id: request.id, phase: 'computing', progress: 0.2 });
-    const result = runner({
-      grid: request.grid,
-      params: request.params,
-      ciLevel: request.ciLevel,
-    });
+    const result = withReportLocale(request.reportLocale ?? 'it', () =>
+      runner({
+        grid: request.grid,
+        params: request.params,
+        ciLevel: request.ciLevel,
+      })
+    );
     post({ type: 'progress', id: request.id, phase: 'finishing', progress: 0.92 });
     const elapsedMs = Math.round(performance.now() - started);
     if ('reason' in result) {

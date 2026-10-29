@@ -1,4 +1,5 @@
 import type { TableRow, TableSpec } from '../types';
+import { copy, sourceOf } from '../reportCopy';
 import {
   fmtCI,
   fmtEst,
@@ -37,7 +38,7 @@ export interface ReportSpec {
 }
 
 export const P_SENTENCE =
-  'Il p-value è la probabilità di osservare un risultato almeno così estremo se l’ipotesi nulla fosse vera: non è la probabilità che l’ipotesi nulla sia vera.';
+  copy('Il p-value è la probabilità di osservare un risultato almeno così estremo se l’ipotesi nulla fosse vera: non è la probabilità che l’ipotesi nulla sia vera.');
 
 export const tableById = (tables: TableSpec[], id: string): TableSpec | undefined =>
   tables.find(spec => spec.id === id);
@@ -47,10 +48,10 @@ export const rowsOf = (tables: TableSpec[], id: string): TableRow[] => tableById
 export const subtitleOf = (tables: TableSpec[], id: string): string => tableById(tables, id)?.subtitle ?? '';
 
 export const rowBy = (rows: TableRow[], key: string, value: string): TableRow | undefined =>
-  rows.find(row => String(row[key] ?? '') === value);
+  rows.find(row => sourceOf(String(row[key] ?? '')) === sourceOf(value));
 
 export const rowLike = (rows: TableRow[], key: string, needle: string): TableRow | undefined =>
-  rows.find(row => String(row[key] ?? '').toLowerCase().includes(needle.toLowerCase()));
+  rows.find(row => sourceOf(String(row[key] ?? '')).toLowerCase().includes(sourceOf(needle).toLowerCase()));
 
 export const num = (row: TableRow | undefined, key: string): number => {
   const value = row?.[key];
@@ -67,7 +68,7 @@ export const alphaText = (level: number): string => alphaOf(level).toFixed(2);
 export const isDecided = (p: number, level: number): boolean => Number.isFinite(p) && p < alphaOf(level);
 /** Reads as "p = 0.032" or "p < 0.001" with the caller's label. */
 export const describeP = (value: number, label = 'p'): string =>
-  !Number.isFinite(value) ? `${label} non calcolabile` : value < 0.001 ? `${label} < 0.001` : `${label} = ${fmtP(value)}`;
+  !Number.isFinite(value) ? copy('{s1} non calcolabile', { s1: label }) : value < 0.001 ? copy('{s1} < 0.001', { s1: label }) : copy('{s1} = {s2}', { s1: label, s2: fmtP(value) });
 export const show = (value: number, decimals = 3): string =>
   Number.isFinite(value) ? fmtEst(value, decimals) : '—';
 export const showInt = (value: number): string =>
@@ -76,7 +77,7 @@ export const showCI = (lo: number, hi: number, decimals = 3): string =>
   Number.isFinite(lo) && Number.isFinite(hi) ? fmtCI(lo, hi, decimals) : '—';
 
 export const ciSentence = (level: number): string =>
-  `L’intervallo di confidenza al ${level}% indica i valori plausibili per la stima: se non contiene lo zero (o il valore di riferimento) il risultato è coerente con un test significativo.`;
+  copy('L’intervallo di confidenza al {s1}% indica i valori plausibili per la stima: se non contiene lo zero (o il valore di riferimento) il risultato è coerente con un test significativo.', { s1: level });
 
 // ---------------------------------------------------------------------------
 

@@ -1,4 +1,5 @@
 import type { TableSpec } from '../types';
+import { copy } from '../reportCopy';
 import { interpretPhi } from '../format';
 import { chiSquareStats } from '../kernels/chisquare';
 
@@ -51,94 +52,94 @@ export const chiSquareTables = (options: ChiSquareTablesOptions): TableSpec[] =>
 
   tables.push({
     id: 'chisq-contingency',
-    title: 'Tabella di contingenza e residui',
-    subtitle: `${row1}/${row2} × ${col1}/${col2}`,
+    title: copy('Tabella di contingenza e residui'),
+    subtitle: copy('{s1}/{s2} × {s3}/{s4}', { s1: row1, s2: row2, s3: col1, s4: col2 }),
     columns: [
-      { key: 'cell', label: 'Cella', format: 'text' },
-      { key: 'observed', label: 'Osservato', format: 'int' },
-      { key: 'expected', label: 'Atteso', format: 'dec3' },
-      { key: 'rowPct', label: 'Row %', format: 'dec1' },
-      { key: 'colPct', label: 'Column %', format: 'dec1' },
-      { key: 'totalPct', label: 'Total %', format: 'dec1' },
-      { key: 'standardized', label: 'Residuo std.', format: 'dec3' },
-      { key: 'adjusted', label: 'Residuo aggiustato', format: 'dec3' },
-      { key: 'contribution', label: 'Contributo χ²', format: 'dec3' },
+      { key: 'cell', label: copy('Cella'), format: 'text' },
+      { key: 'observed', label: copy('Osservato'), format: 'int' },
+      { key: 'expected', label: copy('Atteso'), format: 'dec3' },
+      { key: 'rowPct', label: copy('Row %'), format: 'dec1' },
+      { key: 'colPct', label: copy('Column %'), format: 'dec1' },
+      { key: 'totalPct', label: copy('Total %'), format: 'dec1' },
+      { key: 'standardized', label: copy('Residuo std.'), format: 'dec3' },
+      { key: 'adjusted', label: copy('Residuo aggiustato'), format: 'dec3' },
+      { key: 'contribution', label: copy('Contributo χ²'), format: 'dec3' },
     ],
     rows: [
-      cell(`${row1} · ${col1}`, o11, e11, r1, c1, rowProp1, colProp1),
-      cell(`${row1} · ${col2}`, o12, e12, r1, c2, rowProp1, colProp2),
-      cell(`${row2} · ${col1}`, o21, e21, r2, c1, rowProp2, colProp1),
-      cell(`${row2} · ${col2}`, o22, e22, r2, c2, rowProp2, colProp2),
+      cell(copy('{s1} · {s2}', { s1: row1, s2: col1 }), o11, e11, r1, c1, rowProp1, colProp1),
+      cell(copy('{s1} · {s2}', { s1: row1, s2: col2 }), o12, e12, r1, c2, rowProp1, colProp2),
+      cell(copy('{s1} · {s2}', { s1: row2, s2: col1 }), o21, e21, r2, c1, rowProp2, colProp1),
+      cell(copy('{s1} · {s2}', { s1: row2, s2: col2 }), o22, e22, r2, c2, rowProp2, colProp2),
     ],
     notes: [
-      `Totali: righe ${r1} / ${r2}, colonne ${c1} / ${c2}, N = ${n}.`,
-      'Residuo standardizzato = (O − E)/√E; aggiustato = (O − E)/√(E·(1−row%)(1−col%)). Il contributo è (O − E)²/E.',
+      copy('Totali: righe {s1} / {s2}, colonne {s3} / {s4}, N = {s5}.', { s1: r1, s2: r2, s3: c1, s4: c2, s5: n }),
+      copy('Residuo standardizzato = (O − E)/√E; aggiustato = (O − E)/√(E·(1−row%)(1−col%)). Il contributo è (O − E)²/E.'),
     ],
   });
 
   tables.push({
     id: 'chisq-tests',
-    title: 'Test di indipendenza',
-    subtitle: `α = ${(1 - level / 100).toFixed(2)}`,
+    title: copy('Test di indipendenza'),
+    subtitle: copy('α = {s1}', { s1: (1 - level / 100).toFixed(2) }),
     columns: [
-      { key: 'test', label: 'Test', format: 'text' },
-      { key: 'statistic', label: 'Statistica', format: 'dec4' },
-      { key: 'df', label: 'df', format: 'int' },
-      { key: 'p', label: 'p', format: 'p' },
+      { key: 'test', label: copy('Test'), format: 'text' },
+      { key: 'statistic', label: copy('Statistica'), format: 'dec4' },
+      { key: 'df', label: copy('df'), format: 'int' },
+      { key: 'p', label: copy('p'), format: 'p' },
     ],
     rows: [
-      { test: 'Pearson χ²', statistic: chi2, df: 1, p: pPearson },
-      { test: 'Likelihood ratio G²', statistic: g2, df: 1, p: pG2 },
-      { test: 'Yates continuity correction', statistic: chi2Yates, df: 1, p: pYates },
-      ...(runFisher ? [{ test: "Fisher's exact (two-sided)", statistic: NaN, df: NaN, p: pFisher }] : []),
+      { test: copy('Pearson χ²'), statistic: chi2, df: 1, p: pPearson },
+      { test: copy('Likelihood ratio G²'), statistic: g2, df: 1, p: pG2 },
+      { test: copy('Yates continuity correction'), statistic: chi2Yates, df: 1, p: pYates },
+      ...(runFisher ? [{ test: copy("Fisher's exact (two-sided)"), statistic: NaN, df: NaN, p: pFisher }] : []),
     ],
     notes: [
-      'Per tabelle 2×2 χ² e G² hanno df = 1; con frequenze attese piccole (< 5) preferire il test esatto di Fisher.',
+      copy('Per tabelle 2×2 χ² e G² hanno df = 1; con frequenze attese piccole (< 5) preferire il test esatto di Fisher.'),
     ],
   });
 
   tables.push({
     id: 'chisq-effects',
-    title: 'Effect size e misure di associazione',
-    subtitle: `CI ${level}%`,
+    title: copy('Effect size e misure di associazione'),
+    subtitle: copy('CI {s1}%', { s1: level }),
     columns: [
-      { key: 'measure', label: 'Misura', format: 'text' },
-      { key: 'estimate', label: 'Stima', format: 'dec4' },
-      { key: 'ciLo', label: 'CI low', format: 'dec4' },
-      { key: 'ciHi', label: 'CI high', format: 'dec4' },
-      { key: 'note', label: 'Interpretazione', format: 'text' },
+      { key: 'measure', label: copy('Misura'), format: 'text' },
+      { key: 'estimate', label: copy('Stima'), format: 'dec4' },
+      { key: 'ciLo', label: copy('CI low'), format: 'dec4' },
+      { key: 'ciHi', label: copy('CI high'), format: 'dec4' },
+      { key: 'note', label: copy('Interpretazione'), format: 'text' },
     ],
     rows: [
-      { measure: 'φ (phi)', estimate: phi, ciLo: phiLo, ciHi: phiHi, note: interpretPhi(phi) },
-      { measure: "Cramér's V", estimate: cramersV, ciLo: phiLo, ciHi: phiHi, note: interpretPhi(cramersV) },
-      { measure: 'Odds Ratio', estimate: oddsRatio, ciLo: orLo, ciHi: orHi, note: oddsRatio > 1 ? 'associazione positiva' : oddsRatio < 1 ? 'associazione negativa' : 'nulla' },
-      { measure: 'Relative Risk', estimate: relativeRisk, ciLo: rrLo, ciHi: rrHi, note: 'rischio riga 1 / rischio riga 2' },
-      { measure: 'Risk Difference', estimate: riskDiff, ciLo: riskDiff - crit * seRD, ciHi: riskDiff + crit * seRD, note: 'differenza assoluta dei rischi' },
+      { measure: copy('φ (phi)'), estimate: phi, ciLo: phiLo, ciHi: phiHi, note: interpretPhi(phi) },
+      { measure: copy("Cramér's V"), estimate: cramersV, ciLo: phiLo, ciHi: phiHi, note: interpretPhi(cramersV) },
+      { measure: copy('Odds Ratio'), estimate: oddsRatio, ciLo: orLo, ciHi: orHi, note: oddsRatio > 1 ? copy('associazione positiva') : oddsRatio < 1 ? copy('associazione negativa') : 'nulla' },
+      { measure: copy('Relative Risk'), estimate: relativeRisk, ciLo: rrLo, ciHi: rrHi, note: copy('rischio riga 1 / rischio riga 2') },
+      { measure: copy('Risk Difference'), estimate: riskDiff, ciLo: riskDiff - crit * seRD, ciHi: riskDiff + crit * seRD, note: copy('differenza assoluta dei rischi') },
     ],
     notes: [
-      'Per una tabella 2×2 φ e Cramér’s V coincidono numericamente; sono riportati separatamente perché la formula generale di V usa min(r−1, c−1).',
-      'OR: CI di Woolf su log(OR). RR: CI di Katz su log(RR). RD: CI di Wald. Con celle vuote le stime OR/RR non sono definite.',
-      'CI di φ/V: bootstrap percentile (500 repliche, seed fisso) ricampionando le osservazioni dalla tabella.',
+      copy('Per una tabella 2×2 φ e Cramér’s V coincidono numericamente; sono riportati separatamente perché la formula generale di V usa min(r−1, c−1).'),
+      copy('OR: CI di Woolf su log(OR). RR: CI di Katz su log(RR). RD: CI di Wald. Con celle vuote le stime OR/RR non sono definite.'),
+      copy('CI di φ/V: bootstrap percentile (500 repliche, seed fisso) ricampionando le osservazioni dalla tabella.'),
     ],
   });
 
   tables.push({
     id: 'chisq-assumptions',
-    title: 'Assunzioni',
+    title: copy('Assunzioni'),
     columns: [
-      { key: 'metric', label: 'Controllo', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'dec3' },
-      { key: 'note', label: 'Nota', format: 'text' },
+      { key: 'metric', label: copy('Controllo'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'dec3' },
+      { key: 'note', label: copy('Nota'), format: 'text' },
     ],
     rows: [
-      { metric: 'Frequenza attesa minima', value: minExpected, note: 'Cochran: tutte ≥ 5 desiderabile' },
-      { metric: 'Celle con E < 5', value: lowCells, note: `${((lowCells / 4) * 100).toFixed(0)}% delle celle` },
-      { metric: 'N', value: n, note: 'numerosità totale' },
+      { metric: copy('Frequenza attesa minima'), value: minExpected, note: copy('Cochran: tutte ≥ 5 desiderabile') },
+      { metric: copy('Celle con E < 5'), value: lowCells, note: copy('{s1}% delle celle', { s1: ((lowCells / 4) * 100).toFixed(0) }) },
+      { metric: copy('N'), value: n, note: copy('numerosità totale') },
     ],
     notes: [
       minExpected < 5
-        ? 'Attenzione: una o più frequenze attese sono < 5. Yates o Fisher sono preferibili; per tabelle più grandi serve il test esatto o il bootstrap.'
-        : 'Le frequenze attese soddisfano la regola di Cochran.',
+        ? copy('Attenzione: una o più frequenze attese sono < 5. Yates o Fisher sono preferibili; per tabelle più grandi serve il test esatto o il bootstrap.')
+        : copy('Le frequenze attese soddisfano la regola di Cochran.'),
     ],
   });
 

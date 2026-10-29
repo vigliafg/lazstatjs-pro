@@ -1,5 +1,4 @@
 import { lazy, Suspense, useState, useEffect, useMemo, useRef } from 'react';
-import type { AnalysisRunResult } from './analyses/types';
 import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
 import { SettingsTab } from './ui/SettingsTab';
 import { DataWorkspace } from './ui/DataWorkspace';
@@ -7,7 +6,7 @@ import { Header } from './ui/Header';
 import { Footer } from './ui/Footer';
 import { Toasts } from './ui/Toasts';
 import { ErrorBoundary } from './ui/ErrorBoundary';
-import { loadAnalysisOutput } from './ui/analysis/analysisOutputNode';
+import { useAnalysisEmit } from './ui/analysis/useAnalysisEmit';
 import { UiModeProvider, type UiMode } from './components/UiMode';
 import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
@@ -26,7 +25,6 @@ import {
 import { assignRole, roleStates, validateRoleTypes } from './analyses/roles';
 import {
   analysisParamsKey,
-  analysisParamsOf,
   analysisParamsSignature,
   withAnalysisParams,
 } from './analyses/paramsSnapshot';
@@ -34,7 +32,15 @@ const AnalysisTab = lazy(() =>
   import('./ui/AnalysisTab').then(module => ({ default: module.AnalysisTab }))
 );
 import { ANALYSIS_TABS } from './analyses/registry';
-import { t } from './i18n';
+import {
+  activeLocaleOf,
+  getLocale,
+  setLocale,
+  t,
+  useLocale,
+  type HelpLocale,
+  type Locale,
+} from './i18n';
 import { maskMissingCodes } from './grid/types';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import { createDefaultGrid } from './grid/defaults';
@@ -45,6 +51,10 @@ import { useGridHistory } from './grid/useGridHistory';
 const HelpPanel = lazy(() =>
   import('./help/HelpPanel').then(module => ({ default: module.HelpPanel }))
 );
+const HelpDialog = lazy(() =>
+  import('./help/HelpDialog').then(module => ({ default: module.HelpDialog }))
+);
+import { bookLocaleFor } from './help/book';
 import {
   setCell as gridSetCell,
   addColumnEnd as gridAddColumn,
@@ -102,7 +112,6 @@ import {
   type TTestParams,
   type WizardParams,
 } from './io/project';
-
 
 export default function App() {
   // Restore the last silent autosave before any state is initialised, so the
@@ -187,7 +196,6 @@ export default function App() {
     if (!window.confirm(t('data.confirmNew'))) return;
     replaceDataset(gridNewGrid());
   };
-
 
   function replaceDataset(next: GridData) {
     resetGridHistory(next);
@@ -287,6 +295,14 @@ export default function App() {
 
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
+  const [uiLocale, setUiLocale] = useState<Locale>(boot?.settings.uiLocale ?? getLocale());
+  const [reportLocale, setReportLocale] = useState<Locale>(boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale);
+  const [helpLocale, setHelpLocale] = useState<HelpLocale>(boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale);
+
+  // The store drives `t()` everywhere; updating it re-renders the shell through
+  // the `useLocale()` subscription below.
+  useEffect(() => setLocale(activeLocaleOf(uiLocale)), [uiLocale]);
+  useLocale();
   const {
     outputs,
     setOutputs,
@@ -298,7 +314,7 @@ export default function App() {
     exportResultsXlsx,
     exportReportHtml,
     exportReportWord,
-  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, showToast });
+  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast });
 
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
     useColumnOperations({ grid, params, setParams, setGrid, showToast });
@@ -326,8 +342,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode }),
-    [ciLevel, activeAnalysis, activeTab, uiMode]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, uiLocale, reportLocale, helpLocale]
   );
 
   const roleErrors = [
@@ -365,6 +381,9 @@ export default function App() {
     setParams(project.params);
     setCiLevel(project.settings.ciLevel);
     setUiMode(project.settings.uiMode);
+    setUiLocale(project.settings.uiLocale);
+    setReportLocale(project.settings.reportLocale);
+    setHelpLocale(project.settings.helpLocale);
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
         ? project.settings.activeAnalysis
@@ -406,33 +425,18 @@ export default function App() {
     showToast,
   });
 
-
   // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
   // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
-  const emit = async (
-    result: AnalysisRunResult,
-    analysisId: string = activeAnalysis,
-    paramsUsed = params,
-    options?: { live?: boolean; ciLevel?: number }
-  ): Promise<boolean> => {
-    if ('reason' in result) {
-      showToast(t('toast.error'), result.reason, 'error');
-      return false;
-    }
-    const meta = {
-      dataRevision,
-      datasetId,
-      filterSignature,
-      params: analysisParamsOf(analysisId, paramsUsed),
-      paramsSignature: analysisParamsSignature(analysisId, paramsUsed),
-      ciLevel: options?.ciLevel ?? ciLevel,
-      live: options?.live,
-    };
-    const node = await loadAnalysisOutput(result);
-    if (!node) return false;
-    pushOutput(node, result.report, analysisId, meta);
-    return true;
-  };
+  const emit = useAnalysisEmit({
+    activeAnalysis,
+    params,
+    dataRevision,
+    datasetId,
+    filterSignature,
+    ciLevel,
+    pushOutput,
+    showToast,
+  });
 
   const {
     runAnalysis,
@@ -446,6 +450,7 @@ export default function App() {
     grid: analysisGrid,
     params,
     ciLevel,
+    reportLocale,
     emit,
     warn: (message) => showToast(t('toast.analysis'), message, 'warn'),
   });
@@ -519,7 +524,7 @@ export default function App() {
     <UiModeProvider mode={uiMode}>
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
@@ -622,7 +627,7 @@ export default function App() {
 
         {activeTab === 'help' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingHelp')}</div>}>
-            <HelpPanel />
+            <HelpPanel locale={bookLocaleFor(helpLocale, uiLocale)} />
           </Suspense>
         )}
 
@@ -637,6 +642,12 @@ export default function App() {
             onRestoreBackup={() => void restoreBackup()}
             recentProjects={recentProjects}
             onClearRecent={clearRecentProjects}
+            uiLocale={uiLocale}
+            setUiLocale={setUiLocale}
+            reportLocale={reportLocale}
+            setReportLocale={setReportLocale}
+            helpLocale={helpLocale}
+            setHelpLocale={setHelpLocale}
           />
         )}
         </ErrorBoundary>
@@ -677,6 +688,10 @@ export default function App() {
       <Footer grid={grid} />
 
       {/* Toasts */}
+      <Suspense fallback={null}>
+        <HelpDialog locale={bookLocaleFor(helpLocale, uiLocale)} />
+      </Suspense>
+
       <Toasts toasts={toasts} />
     </div>
     </UiModeProvider>

@@ -1,10 +1,13 @@
 import type { Dataset } from '../../grid/types';
 import type { ProjectParams } from '../../io/project';
 import type { HeavyAnalysisId } from './heavyIds';
+import type { ReportLocale } from '../../stats/reportCopy/types';
 import type { HeavyProgressPhase, HeavyRunOutcome, HeavyWorkerMessage } from './protocol';
 
 export interface HeavyRunOptions {
   signal?: AbortSignal;
+  /** Language of the written report built inside the worker. */
+  reportLocale?: ReportLocale;
   onProgress?: (phase: HeavyProgressPhase, progress: number) => void;
   /** Test seam: lets the client run without a real browser Worker. */
   workerFactory?: () => Worker;
@@ -93,7 +96,15 @@ export const runHeavyAnalysis = async (
 
     options.signal?.addEventListener('abort', onAbort, { once: true });
     try {
-      worker.postMessage({ type: 'run', id, analysisId, grid, params, ciLevel });
+      worker.postMessage({
+        type: 'run',
+        id,
+        analysisId,
+        grid,
+        params,
+        ciLevel,
+        reportLocale: options.reportLocale ?? 'it',
+      });
       options.onProgress?.(phase, progress);
     } catch (error) {
       finish(failure(error instanceof Error ? error.message : 'Could not start the analysis worker'));

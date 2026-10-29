@@ -1,4 +1,5 @@
 import type { TableSpec } from '../types';
+import { copy } from '../reportCopy';
 import type { CoxCoefficient } from '../cox/types';
 
 export interface TimeDependentCoxSummary {
@@ -20,43 +21,43 @@ export interface TimeDependentCoxSummary {
 export const tdCoxTables = (stats: TimeDependentCoxSummary, level: number): TableSpec[] => [
   {
     id: 'tdcox-summary',
-    title: 'Cox con covariate tempo-dipendenti',
-    subtitle: `${stats.intervals} intervalli · ${stats.events} eventi`,
+    title: copy('Cox con covariate tempo-dipendenti'),
+    subtitle: copy('{s1} intervalli · {s2} eventi', { s1: stats.intervals, s2: stats.events }),
     columns: [
-      { key: 'metric', label: 'Metrica', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'dec4' },
+      { key: 'metric', label: copy('Metrica'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'dec4' },
     ],
     rows: [
-      { metric: 'Intervalli', value: stats.intervals },
-      { metric: 'Eventi', value: stats.events },
-      { metric: 'Log-verosimiglianza', value: stats.logLik },
-      { metric: 'LR vs nullo', value: stats.lr },
-      { metric: 'p LR', value: stats.lrP },
-      { metric: 'Wald', value: stats.wald },
-      { metric: 'p Wald', value: stats.waldP },
-      { metric: 'Score', value: stats.score },
-      { metric: 'p score', value: stats.scoreP },
+      { metric: copy('Intervalli'), value: stats.intervals },
+      { metric: copy('Eventi'), value: stats.events },
+      { metric: copy('Log-verosimiglianza'), value: stats.logLik },
+      { metric: copy('LR vs nullo'), value: stats.lr },
+      { metric: copy('p LR'), value: stats.lrP },
+      { metric: copy('Wald'), value: stats.wald },
+      { metric: copy('p Wald'), value: stats.waldP },
+      { metric: copy('Score'), value: stats.score },
+      { metric: copy('p score'), value: stats.scoreP },
     ],
     notes: [
-      'Formato start-stop: ogni riga è un intervallo in cui le covariate sono costanti.',
-      'Il rischio a ogni evento include tutti gli intervalli con start < t ≤ stop.',
+      copy('Formato start-stop: ogni riga è un intervallo in cui le covariate sono costanti.'),
+      copy('Il rischio a ogni evento include tutti gli intervalli con start < t ≤ stop.'),
     ],
   },
   {
     id: 'tdcox-coefficients',
-    title: 'Coefficienti',
-    subtitle: `Hazard ratio · CI ${level}%`,
+    title: copy('Coefficienti'),
+    subtitle: copy('Hazard ratio · CI {s1}%', { s1: level }),
     columns: [
-      { key: 'term', label: 'Termine', format: 'text' },
-      { key: 'beta', label: 'β', format: 'dec4' },
-      { key: 'se', label: 'SE', format: 'dec4' },
-      { key: 'z', label: 'z', format: 'dec3' },
-      { key: 'p', label: 'p', format: 'p' },
-      { key: 'hr', label: 'HR', format: 'dec4' },
-      { key: 'lo', label: 'HR low', format: 'dec4' },
-      { key: 'hi', label: 'HR high', format: 'dec4' },
+      { key: 'term', label: copy('Termine'), format: 'text' },
+      { key: 'beta', label: copy('β'), format: 'dec4' },
+      { key: 'se', label: copy('SE'), format: 'dec4' },
+      { key: 'z', label: copy('z'), format: 'dec3' },
+      { key: 'p', label: copy('p'), format: 'p' },
+      { key: 'hr', label: copy('HR'), format: 'dec4' },
+      { key: 'lo', label: copy('HR low'), format: 'dec4' },
+      { key: 'hi', label: copy('HR high'), format: 'dec4' },
     ],
     rows: stats.coefficients.map(coefficient => ({ ...coefficient })),
-    notes: ['HR > 1 indica un rischio maggiore per un’unità in più della covariata tempo-dipendente.'],
+    notes: [copy('HR > 1 indica un rischio maggiore per un’unità in più della covariata tempo-dipendente.')],
   },
 ];

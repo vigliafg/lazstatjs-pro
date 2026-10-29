@@ -1,7 +1,15 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { Clock3, FileDown, FilePlus2, FolderOpen, Save, Trash2 } from 'lucide-react';
 import { savePrefs, type IoPreferences } from '../io/prefs';
-import { t } from '../i18n';
+import {
+  ACTIVE_LOCALES,
+  LOCALE_LABELS,
+  PLANNED_LOCALES,
+  REPORT_LOCALES,
+  t,
+  type HelpLocale,
+  type Locale,
+} from '../i18n';
 
 export interface SettingsTabProps {
   ioPrefs: IoPreferences;
@@ -13,6 +21,12 @@ export interface SettingsTabProps {
   onRestoreBackup: () => void;
   recentProjects: readonly string[];
   onClearRecent: () => void;
+  uiLocale: Locale;
+  setUiLocale: (locale: Locale) => void;
+  reportLocale: Locale;
+  setReportLocale: (locale: Locale) => void;
+  helpLocale: HelpLocale;
+  setHelpLocale: (locale: HelpLocale) => void;
 }
 
 const sectionTitle =
@@ -28,6 +42,12 @@ export const SettingsTab = ({
   onRestoreBackup,
   recentProjects,
   onClearRecent,
+  uiLocale,
+  setUiLocale,
+  reportLocale,
+  setReportLocale,
+  helpLocale,
+  setHelpLocale,
 }: SettingsTabProps) => (
   <>
     <div className="flex-1 overflow-auto scrollbar p-8">
@@ -89,6 +109,67 @@ export const SettingsTab = ({
                 ))}
               </ul>
             )}
+          </div>
+        </section>
+
+
+        <section className="rounded-lg border border-border bg-surface p-6">
+          <h2 className={sectionTitle}>{t('settings.language')}</h2>
+          <p className="mb-4 text-[11px] leading-relaxed text-text3">{t('settings.languageHint')}</p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-[12px] text-text2">{t('settings.uiLanguage')}</span>
+              <select
+                aria-label={t('settings.uiLanguage')}
+                className="min-w-[140px] rounded border border-border2 bg-surface3 p-1 text-[11px] text-text"
+                value={uiLocale}
+                onChange={e => setUiLocale(e.target.value as Locale)}
+              >
+                {ACTIVE_LOCALES.map(locale => (
+                  <option key={locale} value={locale}>
+                    {LOCALE_LABELS[locale]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-[12px] text-text2">{t('settings.reportLanguage')}</span>
+              <select
+                aria-label={t('settings.reportLanguage')}
+                className="min-w-[140px] rounded border border-border2 bg-surface3 p-1 text-[11px] text-text"
+                value={reportLocale}
+                onChange={e => setReportLocale(e.target.value as Locale)}
+              >
+                {REPORT_LOCALES.map(locale => (
+                  <option key={locale} value={locale}>
+                    {LOCALE_LABELS[locale]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-[12px] text-text2">{t('settings.helpLanguage')}</span>
+              <select
+                aria-label={t('settings.helpLanguage')}
+                className="min-w-[140px] rounded border border-border2 bg-surface3 p-1 text-[11px] text-text"
+                value={helpLocale}
+                onChange={e => setHelpLocale(e.target.value as HelpLocale)}
+              >
+                <option value="auto">{t('settings.helpFollowsUi')}</option>
+                {ACTIVE_LOCALES.map(locale => (
+                  <option key={locale} value={locale}>
+                    {LOCALE_LABELS[locale]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <p className="rounded border border-border2 bg-surface3/40 px-2 py-1.5 text-[10px] leading-relaxed text-text3">
+              {t('settings.reportCoverage', { locales: REPORT_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.
+              {PLANNED_LOCALES.length > 0 && (
+                <> {t('settings.plannedNote', { locales: PLANNED_LOCALES.map(l => LOCALE_LABELS[l]).join(', ') })}.</>
+              )}
+            </p>
+            <p className="text-[10px] leading-relaxed text-text3">{t('settings.reportSnapshotNote')}</p>
           </div>
         </section>
 

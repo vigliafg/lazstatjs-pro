@@ -1,6 +1,7 @@
 import { timeSeriesReport, timeSeriesTables } from '../../stats/timeseries';
 import { arimaAnalysis } from '../../stats/arima';
 import { AnalysisOutput } from '../../components/AnalysisOutput';
+import { t } from '../../i18n';
 import { numericColumnValues } from '../shared/data';
 import type { Dataset } from '../../grid/types';
 import type { TimeSeriesParams } from '../../io/project';
@@ -88,7 +89,7 @@ export const buildTimeSeriesOutput = ({
       id: 'ts-acf-chart',
       title: 'Autocorrelazione',
       subtitle: `banda ±${band.toFixed(3)}`,
-      xLabel: 'Lag',
+      xLabel: t('chart.lag'),
       bars: acfRows.map(row => ({ x: Number(row.lag), y: Number(row.acf), label: String(row.lag) })),
       bands: [
         { y: band, color: '#f87171' },

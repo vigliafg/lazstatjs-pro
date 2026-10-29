@@ -27,6 +27,9 @@ import {
   groupByFamily,
   type AnalysisFamilyId,
   type AnalysisMeta,
+  analysisDescription,
+  analysisLabel,
+  familyLabel,
 } from '../../analyses/registry';
 import { loadFavorites, saveFavorites } from './favorites';
 import { t } from '../../i18n';
@@ -71,7 +74,7 @@ const AnalysisItem = ({
     type="button"
     data-analysis-item={meta.id}
     onClick={() => onSelect(meta.id)}
-    title={meta.description}
+    title={analysisDescription(meta)}
     aria-current={active ? 'true' : undefined}
     className={`w-full rounded border-l-2 px-2 py-1.5 pr-7 text-left transition-colors ${
       active
@@ -80,7 +83,7 @@ const AnalysisItem = ({
     }`}
   >
     <span className="flex items-center gap-1.5">
-      <span className="truncate text-[11px] font-medium">{meta.label}</span>
+      <span className="truncate text-[11px] font-medium">{analysisLabel(meta.id)}</span>
       {meta.cost === 'heavy' && (
         <span
           className="ml-auto shrink-0 rounded border border-yellow/25 bg-yellow/5 px-1 font-mono text-[8px] uppercase tracking-wider text-yellow/80"
@@ -91,13 +94,13 @@ const AnalysisItem = ({
       )}
     </span>
     <span className="mt-0.5 block truncate text-[9px] leading-tight text-text3">
-      {meta.description}
+      {analysisDescription(meta)}
     </span>
   </button>
   <button
     type="button"
     onClick={() => onToggleFavorite(meta.id)}
-    aria-label={favorite ? `${t('analysis.favoriteRemove')} ${meta.label} ${t('analysis.favoriteRemoveSuffix')}` : `${t('analysis.favoriteAdd')} ${meta.label} ${t('analysis.favoriteSuffix')}`}
+    aria-label={favorite ? `${t('analysis.favoriteRemove')} ${analysisLabel(meta.id)} ${t('analysis.favoriteRemoveSuffix')}` : `${t('analysis.favoriteAdd')} ${analysisLabel(meta.id)} ${t('analysis.favoriteSuffix')}`}
     aria-pressed={favorite}
     className={`absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded ${
       favorite ? 'text-yellow' : 'text-text3/60 opacity-0 group-hover:opacity-100 focus:opacity-100'
@@ -411,7 +414,7 @@ export const AnalysisLibrary = ({
               >
                 <Icon className="h-3 w-3 shrink-0 text-text3" />
                 <span className="font-mono text-[9px] uppercase tracking-widest text-text3">
-                  {group.family.label}
+                  {familyLabel(group.family)}
                 </span>
                 <span className="ml-auto font-mono text-[9px] text-text3/70">
                   {group.analyses.length}

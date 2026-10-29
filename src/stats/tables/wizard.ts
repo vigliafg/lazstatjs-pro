@@ -1,22 +1,23 @@
 import { isDecided } from '../reportKit';
+import { copy } from '../reportCopy';
 import type { TableSpec } from '../types';
 import type { ColumnProfile, GroupCheck, WizardContext, WizardRecommendation } from '../wizard/types';
 
 export const auditTable = (profiles: ColumnProfile[], level: number): TableSpec => ({
   id: 'wiz-audit',
-  title: 'Audit delle colonne',
-  subtitle: `${profiles.length} colonne · classificazione automatica`,
+  title: copy('Audit delle colonne'),
+  subtitle: copy('{s1} colonne · classificazione automatica', { s1: profiles.length }),
   columns: [
-    { key: 'column', label: 'Colonna', format: 'text' },
-    { key: 'kind', label: 'Tipo', format: 'text' },
-    { key: 'n', label: 'N', format: 'int' },
-    { key: 'missing', label: 'Mancanti', format: 'int' },
-    { key: 'unique', label: 'Livelli', format: 'int' },
-    { key: 'min', label: 'Min', format: 'dec3' },
-    { key: 'max', label: 'Max', format: 'dec3' },
-    { key: 'mean', label: 'Media', format: 'dec3' },
-    { key: 'sd', label: 'SD', format: 'dec3' },
-    { key: 'normalityP', label: 'Normalità p', format: 'p' },
+    { key: 'column', label: copy('Colonna'), format: 'text' },
+    { key: 'kind', label: copy('Tipo'), format: 'text' },
+    { key: 'n', label: copy('N'), format: 'int' },
+    { key: 'missing', label: copy('Mancanti'), format: 'int' },
+    { key: 'unique', label: copy('Livelli'), format: 'int' },
+    { key: 'min', label: copy('Min'), format: 'dec3' },
+    { key: 'max', label: copy('Max'), format: 'dec3' },
+    { key: 'mean', label: copy('Media'), format: 'dec3' },
+    { key: 'sd', label: copy('SD'), format: 'dec3' },
+    { key: 'normalityP', label: copy('Normalità p'), format: 'p' },
   ],
   rows: profiles.map(profile => ({
     column: profile.name,
@@ -38,83 +39,83 @@ export const auditTable = (profiles: ColumnProfile[], level: number): TableSpec 
     normalityP: profile.normalityP,
   })),
   notes: [
-    'Tipo numerico: almeno il 95% dei valori non vuoti è numerico. Binaria: due soli livelli.',
-    `Il p di normalità è il test di Lilliefors (α = ${(1 - level / 100).toFixed(2)}): con pochi dati ha poca potenza, con molti è iper-sensibile.`,
+    copy('Tipo numerico: almeno il 95% dei valori non vuoti è numerico. Binaria: due soli livelli.'),
+    copy('Il p di normalità è il test di Lilliefors (α = {s1}): con pochi dati ha poca potenza, con molti è iper-sensibile.', { s1: (1 - level / 100).toFixed(2) }),
   ],
 });
 
 export const groupTable = (groups: GroupCheck[]): TableSpec => ({
   id: 'wiz-groups',
-  title: 'Esito per gruppo',
+  title: copy('Esito per gruppo'),
   columns: [
-    { key: 'level', label: 'Gruppo', format: 'text' },
-    { key: 'n', label: 'N', format: 'int' },
-    { key: 'mean', label: 'Media', format: 'dec3' },
-    { key: 'sd', label: 'SD', format: 'dec3' },
-    { key: 'normalityP', label: 'Normalità p', format: 'p' },
+    { key: 'level', label: copy('Gruppo'), format: 'text' },
+    { key: 'n', label: copy('N'), format: 'int' },
+    { key: 'mean', label: copy('Media'), format: 'dec3' },
+    { key: 'sd', label: copy('SD'), format: 'dec3' },
+    { key: 'normalityP', label: copy('Normalità p'), format: 'p' },
   ],
   rows: groups.map(group => ({ ...group })),
-  notes: ['Le medie descrivono i gruppi; il test scelto dal wizard confronta medie o ranghi a seconda delle assunzioni.'],
+  notes: [copy('Le medie descrivono i gruppi; il test scelto dal wizard confronta medie o ranghi a seconda delle assunzioni.')],
 });
 
 export const checkTable = (context: WizardContext): TableSpec => {
   const rows: TableSpec['rows'] = [];
   if (Number.isFinite(context.leveneP)) {
     rows.push({
-      check: 'Levene (uguaglianza delle varianze)',
+      check: copy('Levene (uguaglianza delle varianze)'),
       statistic: context.leveneP,
       p: context.leveneP,
       reading: isDecided(context.leveneP, context.level)
-        ? 'varianze diverse: Welch o test dei ranghi'
-        : 'varianze compatibili',
+        ? copy('varianze diverse: Welch o test dei ranghi')
+        : copy('varianze compatibili'),
     });
   }
   if (context.outcome && Number.isFinite(context.outcome.normalityP)) {
     rows.push({
-      check: `Normalità di ${context.outcome.name}`,
+      check: copy('Normalità di {s1}', { s1: context.outcome.name }),
       statistic: context.outcome.normalityP,
       p: context.outcome.normalityP,
       reading: isDecided(context.outcome.normalityP, context.level)
-        ? 'normalità rifiutata'
-        : 'compatibile con la gaussiana',
+        ? copy('normalità rifiutata')
+        : copy('compatibile con la gaussiana'),
     });
   }
   if (context.paired && Number.isFinite(context.pairedDifferenceP)) {
     rows.push({
-      check: 'Normalità delle differenze appaiate',
+      check: copy('Normalità delle differenze appaiate'),
       statistic: context.pairedDifferenceP,
       p: context.pairedDifferenceP,
       reading: isDecided(context.pairedDifferenceP, context.level)
-        ? 'differenze non gaussiane'
-        : 'differenze compatibili con la gaussiana',
+        ? copy('differenze non gaussiane')
+        : copy('differenze compatibili con la gaussiana'),
     });
   }
   return {
     id: 'wiz-checks',
-    title: 'Controlli sulle assunzioni',
-    subtitle: context.groups.length > 0 ? `${context.groups.length} gruppi` : 'nessun gruppo selezionato',
+    title: copy('Controlli sulle assunzioni'),
+    subtitle: context.groups.length > 0 ? copy('{s1} gruppi', { s1: context.groups.length }) : copy('nessun gruppo selezionato'),
     columns: [
-      { key: 'check', label: 'Controllo', format: 'text' },
-      { key: 'p', label: 'p', format: 'p' },
-      { key: 'reading', label: 'Lettura', format: 'text' },
+      { key: 'check', label: copy('Controllo'), format: 'text' },
+      { key: 'p', label: copy('p'), format: 'p' },
+      { key: 'reading', label: copy('Lettura'), format: 'text' },
     ],
     rows: rows.map(row => ({ check: row.check, p: row.p, reading: row.reading })),
-    notes: ['I controlli sono di screening: con pochi dati i test di normalità hanno poca potenza, con molti sono iper-sensibili.'],
+    notes: [copy('I controlli sono di screening: con pochi dati i test di normalità hanno poca potenza, con molti sono iper-sensibili.')],
   };
 };
 
 export const selectionTable = (recommendation: WizardRecommendation): TableSpec => ({
   id: 'wiz-path',
-  title: 'Percorso consigliato',
-  subtitle: `${recommendation.tabLabel} · ${recommendation.title}`,
+  title: copy('Percorso consigliato'),
+  subtitle: copy('{s1} · {s2}', { s1: recommendation.tabLabel, s2: recommendation.title }),
   columns: [
-    { key: 'step', label: 'Passo', format: 'int' },
-    { key: 'action', label: 'Cosa fare', format: 'text' },
+    { key: 'step', label: copy('Passo'), format: 'int' },
+    { key: 'action', label: copy('Cosa fare'), format: 'text' },
   ],
   rows: [
     ...recommendation.selection.map((item, index) => ({ step: index + 1, action: item })),
-    { step: recommendation.selection.length + 1, action: `Apri ${recommendation.tabLabel} e premi Run Analysis.` },
+    { step: recommendation.selection.length + 1, action: copy('Apri {s1} e premi Run Analysis.', { s1: recommendation.tabLabel }) },
   ],
-  notes: [`Alternativa: ${recommendation.alternative}`],
+  notes: [copy('Alternativa: {s1}', { s1: recommendation.alternative })],
 });
 

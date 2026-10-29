@@ -3,7 +3,8 @@ import { validateAnalysisColumnRefs } from '../analyses/params';
 import type { AnalysisRunResult } from '../analyses/types';
 import type { Dataset } from '../grid/types';
 import type { ProjectParams } from '../io/project';
-import { t } from '../i18n';
+import { t, type Locale } from '../i18n';
+import { isReportLocale, withReportLocale, type ReportLocale } from '../stats/reportCopy';
 import { isHeavyAnalysis } from '../analyses/worker/heavyIds';
 import { runHeavyAnalysis } from '../analyses/worker/client';
 import type { HeavyProgressPhase } from '../analyses/worker/protocol';
@@ -13,6 +14,8 @@ interface UseAnalysisRunOptions {
   grid: Dataset;
   params: ProjectParams;
   ciLevel: number;
+  /** Language of the written report, forwarded to the sync runner and the worker. */
+  reportLocale: Locale;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */
   emit: (
     result: AnalysisRunResult,
@@ -36,6 +39,7 @@ export const useAnalysisRun = ({
   grid,
   params,
   ciLevel,
+  reportLocale,
   emit,
   warn,
 }: UseAnalysisRunOptions) => {
@@ -56,13 +60,16 @@ export const useAnalysisRun = ({
   const runSync = async (
     analysisId: string,
     paramsUsed: ProjectParams,
-    level: number
+    level: number,
+    locale: ReportLocale
   ): Promise<AnalysisRunResult | null> => {
     // The runners (and the statistics/victory code they need) load on first
     // run: the workspace itself stays small.
     const { ANALYSIS_RUNNERS } = await import('../analyses/runners');
     const runner = ANALYSIS_RUNNERS[analysisId];
-    return runner ? runner({ grid, params: paramsUsed, ciLevel: level }) : null;
+    return runner
+      ? withReportLocale(locale, () => runner({ grid, params: paramsUsed, ciLevel: level }))
+      : null;
   };
 
   const run = async (
@@ -71,6 +78,7 @@ export const useAnalysisRun = ({
     options?: { live?: boolean; ciLevel?: number; isCurrent?: () => boolean }
   ): Promise<boolean> => {
     const level = options?.ciLevel ?? ciLevel;
+    const locale: ReportLocale = isReportLocale(reportLocale) ? reportLocale : 'it';
     const invalid = validateAnalysisColumnRefs(analysisId, paramsUsed, grid.cols.length);
     if (invalid.length > 0) {
       warn(`${t('analysis.reselectPrefix')} ${invalid.slice(0, 2).join(' · ')}`);
@@ -88,6 +96,7 @@ export const useAnalysisRun = ({
       setPhase('starting');
       const outcome = await runHeavyAnalysis(analysisId, grid, paramsUsed, level, {
         signal: controller.signal,
+        reportLocale: locale,
         onProgress: nextPhase => setPhase(nextPhase),
       });
       if (outcome.status === 'cancelled') {
@@ -123,7 +132,7 @@ export const useAnalysisRun = ({
     }
 
     try {
-      const result = await runSync(analysisId, paramsUsed, level);
+      const result = await runSync(analysisId, paramsUsed, level, locale);
       if (controller?.signal.aborted) {
         finishRun(token);
         return false;

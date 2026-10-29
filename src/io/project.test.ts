@@ -38,7 +38,15 @@ const makeSnapshot = () =>
     {
       grid,
       prefs: DEFAULT_PREFS,
-      settings: { ciLevel: 99, activeAnalysis: 'ttest', activeTab: 'analysis', uiMode: 'guided' },
+      settings: {
+        ciLevel: 99,
+        activeAnalysis: 'ttest',
+        activeTab: 'analysis',
+        uiMode: 'guided',
+        uiLocale: 'it',
+        reportLocale: 'it',
+        helpLocale: 'auto',
+      },
       params: DEFAULT_PARAMS,
     },
     '2026-10-19T10:00:00.000Z'

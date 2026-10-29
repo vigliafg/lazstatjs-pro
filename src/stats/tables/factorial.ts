@@ -1,4 +1,5 @@
 import { jStat } from '../jstat';
+import { copy } from '../reportCopy';
 import { fSF, leveneTest, lillieforsTest } from '../distributions';
 import { fmtEst, fmtP } from '../format';
 import type { TableSpec } from '../types';
@@ -70,7 +71,7 @@ export const factorialTables = (options: FactorialTablesOptions): TableSpec[] =>
     { source: aName, ss: ssA, df: dfA },
     { source: bName, ss: ssB, df: dfB },
   ];
-  if (interaction) terms.push({ source: `${aName} × ${bName}`, ss: ssAB, df: dfAB });
+  if (interaction) terms.push({ source: copy('{s1} × {s2}', { s1: aName, s2: bName }), ss: ssAB, df: dfAB });
   terms.push({ source: 'Residuals', ss: ssError, df: dfError });
   terms.push({ source: 'Total', ss: totalSS, df: n - 1 });
 
@@ -84,17 +85,17 @@ export const factorialTables = (options: FactorialTablesOptions): TableSpec[] =>
 
   tables.push({
     id: 'fac-anova',
-    title: 'ANOVA a due fattori',
-    subtitle: `${aName} x ${bName}${interaction ? ' · con interazione' : ' · solo effetti principali'} · N = ${n}`,
+    title: copy('ANOVA a due fattori'),
+    subtitle: copy('{s1} x {s2}{s3} · N = {s4}', { s1: aName, s2: bName, s3: interaction ? copy(' · con interazione') : copy(' · solo effetti principali'), s4: n }),
     columns: [
-      { key: 'source', label: 'Sorgente', format: 'text' },
-      { key: 'ss', label: 'SS', format: 'dec3' },
-      { key: 'df', label: 'df', format: 'int' },
-      { key: 'ms', label: 'MS', format: 'dec3' },
-      { key: 'f', label: 'F', format: 'dec3' },
-      { key: 'p', label: 'p', format: 'p' },
-      { key: 'eta2p', label: 'η² parziale', format: 'dec3' },
-      { key: 'omega2', label: 'ω²', format: 'dec3' },
+      { key: 'source', label: copy('Sorgente'), format: 'text' },
+      { key: 'ss', label: copy('SS'), format: 'dec3' },
+      { key: 'df', label: copy('df'), format: 'int' },
+      { key: 'ms', label: copy('MS'), format: 'dec3' },
+      { key: 'f', label: copy('F'), format: 'dec3' },
+      { key: 'p', label: copy('p'), format: 'p' },
+      { key: 'eta2p', label: copy('η² parziale'), format: 'dec3' },
+      { key: 'omega2', label: copy('ω²'), format: 'dec3' },
     ],
     rows: terms.map(term => {
       const isResidual = term.source === 'Residuals';
@@ -112,10 +113,10 @@ export const factorialTables = (options: FactorialTablesOptions): TableSpec[] =>
       };
     }),
     notes: [
-      'Le somme dei quadrati sono sequenziali (Type I) nell’ordine indicato: in un disegno bilanciato coincidono con le Type III.',
-      `F = MS_effetto / MS_residui, con df residui = ${dfError} (N − numero di celle).`,
-      'η² parziale = SS_effetto / (SS_effetto + SS_residui): quota di variabilità non spiegata dal resto del modello.',
-      `Il modello spiega ${fmtEst(totalSequential - ssError, 3)} delle ${fmtEst(totalSS, 3)} unità di SS totale; il resto sono i residui.`,
+      copy('Le somme dei quadrati sono sequenziali (Type I) nell’ordine indicato: in un disegno bilanciato coincidono con le Type III.'),
+      copy('F = MS_effetto / MS_residui, con df residui = {s1} (N − numero di celle).', { s1: dfError }),
+      copy('η² parziale = SS_effetto / (SS_effetto + SS_residui): quota di variabilità non spiegata dal resto del modello.'),
+      copy('Il modello spiega {s1} delle {s2} unità di SS totale; il resto sono i residui.', { s1: fmtEst(totalSequential - ssError, 3), s2: fmtEst(totalSS, 3) }),
     ],
   });
 
@@ -129,18 +130,18 @@ export const factorialTables = (options: FactorialTablesOptions): TableSpec[] =>
 
   tables.push({
     id: 'fac-cells',
-    title: 'Medie per cella',
-    subtitle: `${cells.length} combinazioni · ${cells.every(cell => cell.n === cells[0].n) ? 'disegno bilanciato' : 'disegno non bilanciato'}`,
+    title: copy('Medie per cella'),
+    subtitle: copy('{s1} combinazioni · {s2}', { s1: cells.length, s2: cells.every(cell => cell.n === cells[0].n) ? copy('disegno bilanciato') : copy('disegno non bilanciato') }),
     columns: [
       { key: 'a', label: aName, format: 'text' },
       { key: 'b', label: bName, format: 'text' },
-      { key: 'n', label: 'N', format: 'int' },
-      { key: 'mean', label: 'Media', format: 'dec3' },
-      { key: 'sd', label: 'SD', format: 'dec3' },
+      { key: 'n', label: copy('N'), format: 'int' },
+      { key: 'mean', label: copy('Media'), format: 'dec3' },
+      { key: 'sd', label: copy('SD'), format: 'dec3' },
     ],
     rows: cellRows,
     notes: [
-      'Sono le medie che alimentano il grafico dell’interazione: se le linee non sono parallele, l’effetto di un fattore cambia a seconda del livello dell’altro.',
+      copy('Sono le medie che alimentano il grafico dell’interazione: se le linee non sono parallele, l’effetto di un fattore cambia a seconda del livello dell’altro.'),
     ],
   });
 
@@ -157,24 +158,24 @@ export const factorialTables = (options: FactorialTablesOptions): TableSpec[] =>
 
   tables.push({
     id: 'fac-marginal-a',
-    title: `Medie marginali · ${aName}`,
+    title: copy('Medie marginali · {s1}', { s1: aName }),
     columns: [
       { key: 'level', label: aName, format: 'text' },
-      { key: 'n', label: 'N', format: 'int' },
-      { key: 'mean', label: 'Media', format: 'dec3' },
-      { key: 'sd', label: 'SD', format: 'dec3' },
+      { key: 'n', label: copy('N'), format: 'int' },
+      { key: 'mean', label: copy('Media'), format: 'dec3' },
+      { key: 'sd', label: copy('SD'), format: 'dec3' },
     ],
     rows: marginal(aLevels, 'a'),
   });
 
   tables.push({
     id: 'fac-marginal-b',
-    title: `Medie marginali · ${bName}`,
+    title: copy('Medie marginali · {s1}', { s1: bName }),
     columns: [
       { key: 'level', label: bName, format: 'text' },
-      { key: 'n', label: 'N', format: 'int' },
-      { key: 'mean', label: 'Media', format: 'dec3' },
-      { key: 'sd', label: 'SD', format: 'dec3' },
+      { key: 'n', label: copy('N'), format: 'int' },
+      { key: 'mean', label: copy('Media'), format: 'dec3' },
+      { key: 'sd', label: copy('SD'), format: 'dec3' },
     ],
     rows: marginal(bLevels, 'b'),
   });
@@ -188,8 +189,8 @@ export const factorialTables = (options: FactorialTablesOptions): TableSpec[] =>
 
   const residuals: number[] = [];
   const cellMeans = new Map<string, number>();
-  cells.forEach(cell => cellMeans.set(`${cell.a}\u0000${cell.b}`, cell.mean));
-  rows.forEach(row => residuals.push(row.value - (cellMeans.get(`${row.a}\u0000${row.b}`) ?? grandMean)));
+  cells.forEach(cell => cellMeans.set(copy('{s1}\\u0000{s2}', { s1: cell.a, s2: cell.b }), cell.mean));
+  rows.forEach(row => residuals.push(row.value - (cellMeans.get(copy('{s1}\\u0000{s2}', { s1: row.a, s2: row.b })) ?? grandMean)));
   const lilliefors = lillieforsTest(residuals, 500);
 
   const r2 = totalSS > 0 ? 1 - ssError / totalSS : NaN;
@@ -197,35 +198,35 @@ export const factorialTables = (options: FactorialTablesOptions): TableSpec[] =>
 
   tables.push({
     id: 'fac-diagnostics',
-    title: 'Diagnostica del modello',
+    title: copy('Diagnostica del modello'),
     columns: [
-      { key: 'metric', label: 'Metrica', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'dec4' },
-      { key: 'note', label: 'Lettura', format: 'text' },
+      { key: 'metric', label: copy('Metrica'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'dec4' },
+      { key: 'note', label: copy('Lettura'), format: 'text' },
     ],
     rows: [
-      { metric: 'R²', value: r2, note: 'quota di variabilità spiegata dal modello' },
-      { metric: 'R² aggiustato', value: adjustedR2, note: 'penalizza il numero di parametri' },
-      { metric: 'RMSE', value: Math.sqrt(mse), note: 'deviazione standard dei residui' },
+      { metric: copy('R²'), value: r2, note: copy('quota di variabilità spiegata dal modello') },
+      { metric: copy('R² aggiustato'), value: adjustedR2, note: copy('penalizza il numero di parametri') },
+      { metric: copy('RMSE'), value: Math.sqrt(mse), note: copy('deviazione standard dei residui') },
       {
-        metric: 'Levene (celle)',
+        metric: copy('Levene (celle)'),
         value: levene.p,
-        note: `F = ${fmtEst(levene.stat, 3)}, df = ${levene.df1}, ${levene.df2}: ${levene.p < 0.05 ? 'varianze non omogenee' : 'varianze compatibili'}`,
+        note: copy('F = {s1}, df = {s2}, {s3}: {s4}', { s1: fmtEst(levene.stat, 3), s2: levene.df1, s3: levene.df2, s4: levene.p < 0.05 ? copy('varianze non omogenee') : copy('varianze compatibili') }),
       },
       {
-        metric: 'Lilliefors (residui)',
+        metric: copy('Lilliefors (residui)'),
         value: lilliefors.p,
-        note: lilliefors.p < 0.05 ? 'residui non normali: valuta la trasformazione' : 'residui compatibili con la normalità',
+        note: lilliefors.p < 0.05 ? copy('residui non normali: valuta la trasformazione') : copy('residui compatibili con la normalità'),
       },
       {
-        metric: 'Celle con N = 1',
+        metric: copy('Celle con N = 1'),
         value: cells.filter(cell => cell.n === 1).length,
-        note: 'una cella con una sola osservazione non permette di stimare la variabilità interna',
+        note: copy('una cella con una sola osservazione non permette di stimare la variabilità interna'),
       },
     ],
     notes: [
-      'Con una cella per combinazione il disegno non è stimabile: servono repliche.',
-      `Livello di confidenza scelto: ${level}% (usato nel report).`,
+      copy('Con una cella per combinazione il disegno non è stimabile: servono repliche.'),
+      copy('Livello di confidenza scelto: {s1}% (usato nel report).', { s1: level }),
     ],
   });
 

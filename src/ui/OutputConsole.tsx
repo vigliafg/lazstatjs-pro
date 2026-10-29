@@ -20,6 +20,8 @@ import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { isOutputStale, sanitizeOutputHtml, type StoredOutput } from '../io/outputs';
 import { copyText } from '../io/clipboard';
 import { t } from '../i18n';
+import { HelpButton } from '../help/HelpButton';
+import { topicForAnalysis } from '../help/book';
 import { analysisIdsOf, isValidFilter, selectOutputs } from './analysis/outputSelection';
 
 /** Un blocco della console: React live nella sessione, HTML quando ripristinato. */
@@ -387,6 +389,9 @@ export const OutputConsole = ({
                     <span className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-accent2">
                       {title}
                     </span>
+                    {output.analysisId && (
+                      <HelpButton topicId={topicForAnalysis(output.analysisId)} level="advanced" />
+                    )}
                     <span className="shrink-0 font-mono text-[9px] text-text3">
                       {formatTime(output.createdAt)}
                     </span>

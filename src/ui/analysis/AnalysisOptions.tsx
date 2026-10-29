@@ -43,6 +43,7 @@ import { CodeExport } from './CodeExport';
 import { presetsFor } from './presets';
 import { RunControl } from './RunControl';
 import { t } from '../../i18n';
+import { AnalysisHeader } from './AnalysisHeader';
 
 const inputClass =
   'w-full bg-surface3 border border-border2 text-text text-[11px] p-1.5 rounded focus:border-accent focus:outline-none';
@@ -430,20 +431,7 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
       className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
     >
       <div className="shrink-0 border-b border-border p-4">
-        <div className="mb-1 flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-accent2">
-            {family?.label ?? t('analysis.familyFallback')}
-          </span>
-          {meta?.cost === 'heavy' && (
-            <span className="rounded border border-yellow/25 bg-yellow/5 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-yellow/80">
-              {t('analysis.heavyBadge')}
-            </span>
-          )}
-        </div>
-        <h2 className="text-[15px] font-semibold text-text">{meta?.label ?? p.activeAnalysis}</h2>
-        <p className="mt-1 text-[10px] leading-relaxed text-text3">
-          {meta?.description ?? t('analysis.descriptionFallback')}
-        </p>
+        <AnalysisHeader meta={meta} family={family} activeAnalysis={p.activeAnalysis} />
         <div className="mt-2 flex flex-wrap gap-1">
           <span className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 font-mono text-[9px] text-text3">
             {t('analysis.rows')} {p.filterAffectsAnalysis ? `${p.visibleRowCount}/${p.grid.rows.length}` : p.grid.rows.length}

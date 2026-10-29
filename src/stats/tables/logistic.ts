@@ -1,4 +1,5 @@
 import { jStat } from '../jstat';
+import { copy } from '../reportCopy';
 import { fmtEst, fmtP } from '../format';
 import { zCrit } from '../distributions';
 import type { TableSpec } from '../types';
@@ -14,46 +15,46 @@ export const logisticTables = (
 
   tables.push({
     id: 'logit-fit',
-    title: 'Modello logistico',
-    subtitle: `${model.penalized ? 'Firth penalized likelihood' : 'stima di massima verosimiglianza'} · N = ${model.n}`,
+    title: copy('Modello logistico'),
+    subtitle: copy('{s1} · N = {s2}', { s1: model.penalized ? copy('Firth penalized likelihood') : copy('stima di massima verosimiglianza'), s2: model.n }),
     columns: [
-      { key: 'metric', label: 'Metrica', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'text' },
+      { key: 'metric', label: copy('Metrica'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'text' },
     ],
     rows: [
-      { metric: 'Osservazioni', value: String(model.n) },
-      { metric: 'Eventi (Y = 1)', value: String(model.events) },
-      { metric: 'Eventi per parametro', value: fmtEst(model.events / (model.names.length - 1), 1) },
-      { metric: 'Log-verosimiglianza', value: fmtEst(model.logLik, 3) },
-      { metric: 'Log-verosimiglianza nulla', value: fmtEst(model.logLikNull, 3) },
-      { metric: 'LR χ² (vs modello nullo)', value: fmtEst(model.lr, 3) },
-      { metric: 'df', value: String(model.df) },
-      { metric: 'p del modello', value: fmtP(model.p) },
-      { metric: 'McFadden R²', value: fmtEst(model.mcfadden, 3) },
-      { metric: 'Cox–Snell R²', value: fmtEst(model.coxSnell, 3) },
-      { metric: 'Nagelkerke R²', value: fmtEst(model.nagelkerke, 3) },
-      { metric: 'AIC', value: fmtEst(model.aic, 2) },
-      { metric: 'BIC', value: fmtEst(model.bic, 2) },
+      { metric: copy('Osservazioni'), value: String(model.n) },
+      { metric: copy('Eventi (Y = 1)'), value: String(model.events) },
+      { metric: copy('Eventi per parametro'), value: fmtEst(model.events / (model.names.length - 1), 1) },
+      { metric: copy('Log-verosimiglianza'), value: fmtEst(model.logLik, 3) },
+      { metric: copy('Log-verosimiglianza nulla'), value: fmtEst(model.logLikNull, 3) },
+      { metric: copy('LR χ² (vs modello nullo)'), value: fmtEst(model.lr, 3) },
+      { metric: copy('df'), value: String(model.df) },
+      { metric: copy('p del modello'), value: fmtP(model.p) },
+      { metric: copy('McFadden R²'), value: fmtEst(model.mcfadden, 3) },
+      { metric: copy('Cox–Snell R²'), value: fmtEst(model.coxSnell, 3) },
+      { metric: copy('Nagelkerke R²'), value: fmtEst(model.nagelkerke, 3) },
+      { metric: copy('AIC'), value: fmtEst(model.aic, 2) },
+      { metric: copy('BIC'), value: fmtEst(model.bic, 2) },
     ],
     notes: [
-      'Il test LR confronta il modello con quello che contiene solo l’intercetta: p piccolo = almeno un predittore aggiunge informazione.',
-      'Le pseudo-R² non hanno il significato dell’R² lineare: valori intorno a 0,2–0,4 indicano già un buon adattamento.',
+      copy('Il test LR confronta il modello con quello che contiene solo l’intercetta: p piccolo = almeno un predittore aggiunge informazione.'),
+      copy('Le pseudo-R² non hanno il significato dell’R² lineare: valori intorno a 0,2–0,4 indicano già un buon adattamento.'),
     ],
   });
 
   tables.push({
     id: 'logit-coefficients',
-    title: 'Coefficienti e odds ratio',
-    subtitle: `CI ${level}%`,
+    title: copy('Coefficienti e odds ratio'),
+    subtitle: copy('CI {s1}%', { s1: level }),
     columns: [
-      { key: 'predictor', label: 'Predittore', format: 'text' },
-      { key: 'b', label: 'B', format: 'dec4' },
-      { key: 'se', label: 'SE', format: 'dec4' },
-      { key: 'z', label: 'Wald z', format: 'dec3' },
-      { key: 'p', label: 'p', format: 'p' },
-      { key: 'or', label: 'OR', format: 'dec3' },
-      { key: 'orLo', label: 'OR CI low', format: 'dec3' },
-      { key: 'orHi', label: 'OR CI high', format: 'dec3' },
+      { key: 'predictor', label: copy('Predittore'), format: 'text' },
+      { key: 'b', label: copy('B'), format: 'dec4' },
+      { key: 'se', label: copy('SE'), format: 'dec4' },
+      { key: 'z', label: copy('Wald z'), format: 'dec3' },
+      { key: 'p', label: copy('p'), format: 'p' },
+      { key: 'or', label: copy('OR'), format: 'dec3' },
+      { key: 'orLo', label: copy('OR CI low'), format: 'dec3' },
+      { key: 'orHi', label: copy('OR CI high'), format: 'dec3' },
     ],
     rows: model.names.map((name, index) => {
       const isIntercept = index === 0;
@@ -69,39 +70,39 @@ export const logisticTables = (
       };
     }),
     notes: [
-      'OR > 1 aumenta le probabilità dell’esito per un’unità in più del predittore; OR < 1 le riduce. OR = 1 non ha effetto.',
-      'L’intervallo dell’OR è calcolato su scala logaritmica: exp(B ± z·SE). Se contiene 1, l’effetto non è significativo.',
-      'Il p è di Wald (z = B/SE): con campioni piccoli o effetti forti può essere meno affidabile del test LR.',
+      copy('OR > 1 aumenta le probabilità dell’esito per un’unità in più del predittore; OR < 1 le riduce. OR = 1 non ha effetto.'),
+      copy('L’intervallo dell’OR è calcolato su scala logaritmica: exp(B ± z·SE). Se contiene 1, l’effetto non è significativo.'),
+      copy('Il p è di Wald (z = B/SE): con campioni piccoli o effetti forti può essere meno affidabile del test LR.'),
     ],
   });
 
   tables.push({
     id: 'logit-classification',
-    title: 'Classificazione',
-    subtitle: `soglia p ≥ ${fmtEst(cutoff, 2)} → Y = 1`,
+    title: copy('Classificazione'),
+    subtitle: copy('soglia p ≥ {s1} → Y = 1', { s1: fmtEst(cutoff, 2) }),
     columns: [
-      { key: 'metric', label: 'Metrica', format: 'text' },
-      { key: 'value', label: 'Valore', format: 'text' },
+      { key: 'metric', label: copy('Metrica'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'text' },
     ],
     rows: [
-      { metric: 'Accuratezza', value: `${fmtEst(model.accuracy * 100, 1)}%` },
-      { metric: 'Sensibilità', value: `${fmtEst(model.sensitivity * 100, 1)}%` },
-      { metric: 'Specificità', value: `${fmtEst(model.specificity * 100, 1)}%` },
-      { metric: 'AUC', value: fmtEst(model.auc, 3) },
+      { metric: copy('Accuratezza'), value: copy('{s1}%', { s1: fmtEst(model.accuracy * 100, 1) }) },
+      { metric: copy('Sensibilità'), value: copy('{s1}%', { s1: fmtEst(model.sensitivity * 100, 1) }) },
+      { metric: copy('Specificità'), value: copy('{s1}%', { s1: fmtEst(model.specificity * 100, 1) }) },
+      { metric: copy('AUC'), value: fmtEst(model.auc, 3) },
     ],
     notes: [
-      'L’AUC non dipende dalla soglia: 0,5 è il caso, 0,7 accettabile, 0,8 buono, 0,9 eccellente.',
-      'La soglia 0,5 è arbitraria: se il costo di un falso negativo è alto, abbassala e guarda come cambiano sensibilità e specificità.',
+      copy('L’AUC non dipende dalla soglia: 0,5 è il caso, 0,7 accettabile, 0,8 buono, 0,9 eccellente.'),
+      copy('La soglia 0,5 è arbitraria: se il costo di un falso negativo è alto, abbassala e guarda come cambiano sensibilità e specificità.'),
     ],
   });
 
   if (model.separation) {
     tables.push({
       id: 'logit-warning',
-      title: model.penalized ? 'Separazione gestita da Firth' : 'Attenzione: separazione',
-      columns: [{ key: 'note', label: 'Diagnostica', format: 'text' }],
-      rows: [{ note: 'Almeno un coefficiente è molto grande: i dati separano quasi perfettamente gli esiti e le stime/SE non sono affidabili.' }],
-      notes: [model.penalized ? 'La verosimiglianza penalizzata di Firth mantiene finite le stime; gli errori standard restano approssimati.' : 'Raccogli più casi, riduci i predittori o usa una regressione penalizzata (Firth).'],
+      title: model.penalized ? copy('Separazione gestita da Firth') : copy('Attenzione: separazione'),
+      columns: [{ key: 'note', label: copy('Diagnostica'), format: 'text' }],
+      rows: [{ note: copy('Almeno un coefficiente è molto grande: i dati separano quasi perfettamente gli esiti e le stime/SE non sono affidabili.') }],
+      notes: [model.penalized ? copy('La verosimiglianza penalizzata di Firth mantiene finite le stime; gli errori standard restano approssimati.') : copy('Raccogli più casi, riduci i predittori o usa una regressione penalizzata (Firth).')],
     });
   }
 

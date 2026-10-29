@@ -1,0 +1,209 @@
+/** es: report and table prose (normalised). */
+export const chisquareCopy: Record<string, string> = {
+  ', φ = {s1} ({s2})':
+    ', φ = {s1} ({s2})',
+  '{s1} · {s2}':
+    '{s1} · {s2}',
+  '{s1} volte (cioè meno) di quelle di {s2}':
+    '{s1} veces (es decir, menos) que las de {s2}',
+  '{s1} volte quelle di {s2}':
+    '{s1} veces las de {s2}',
+  '{s1}/{s2} × {s3}/{s4}':
+    '{s1}/{s2} × {s3}/{s4}',
+  '{s1}% delle celle':
+    '{s1} % de las celdas',
+  'associazione negativa':
+    'asociación negativa',
+  'associazione positiva':
+    'asociación positiva',
+  'Associazione presente':
+    'Asociación presente',
+  'Assunzioni':
+    'Supuestos',
+  'Attenzione: una o più frequenze attese sono < 5. Yates o Fisher sono preferibili; per tabelle più grandi serve il test esatto o il bootstrap.':
+    'Atención: una o más frecuencias esperadas son < 5. Son preferibles Yates o Fisher; para tablas más grandes hace falta la prueba exacta o el bootstrap.',
+  'Atteso':
+    'Esperado',
+  'C’è un legame tra le due variabili, ma la forza è {s1}: con molti dati anche un legame debole diventa significativo, quindi valuta l’ampiezza prima di agire.':
+    'Hay relación entre las dos variables, pero la fuerza es {s1}: con muchos datos incluso una relación débil resulta significativa, así que valora la magnitud antes de actuar.',
+  'Cella':
+    'Celda',
+  'Celle con E < 5':
+    'Celdas con E < 5',
+  'CI {s1}%':
+    'CI {s1}%',
+  'CI di φ/V: bootstrap percentile (500 repliche, seed fisso) ricampionando le osservazioni dalla tabella.':
+    'CI de φ/V: bootstrap percentil (500 réplicas, semilla fija) remuestreando las observaciones de la tabla.',
+  'CI high':
+    'CI superior',
+  'CI low':
+    'CI inferior',
+  'Cochran: tutte ≥ 5 desiderabile':
+    'Cochran: deseable que todas sean ≥ 5',
+  'Column %':
+    '% columna',
+  'Come leggere i numeri':
+    'Cómo leer los números',
+  'conferma l’associazione':
+    'confirma la asociación',
+  'Confronta i conteggi osservati con quelli attesi se non ci fosse alcun legame: se le differenze sono troppo grandi per il caso, l’indipendenza viene rifiutata.':
+    'Compara los recuentos observados con los esperados si no hubiera ninguna relación: si las diferencias son demasiado grandes para el azar, se rechaza la independencia.',
+  'Contributo χ²':
+    'Contribución χ²',
+  'Controllo':
+    'Comprobación',
+  'Correzione di continuità di Yates: {s1} (più prudente su tabelle 2×2).':
+    'Corrección de continuidad de Yates: {s1} (más prudente en tablas 2×2).',
+  'Cramér\'s V':
+    'V de Cramér',
+  'da quantificare':
+    'por cuantificar',
+  'df':
+    'df',
+  'differenza assoluta dei rischi':
+    'diferencia absoluta de riesgos',
+  'differenza rispetto all’atteso superiore a 2, quindi rilevante':
+    'diferencia respecto a lo esperado superior a 2, por tanto relevante',
+  'Dove sta l’associazione':
+    'Dónde está la asociación',
+  'Effect size e misure di associazione':
+    'Tamaño del efecto y medidas de asociación',
+  'Esiste un’associazione tra {s1}/{s2} e {s3}/{s4}: χ² = {s5}, {s6} (soglia α = {s7}){s8}.':
+    'Existe una asociación entre {s1}/{s2} y {s3}/{s4}: χ² = {s5}, {s6} (umbral α = {s7}){s8}.',
+  'Fisher esatto: {s1} → {s2}; è il riferimento quando le frequenze attese sono piccole.':
+    'Fisher exacto: {s1} → {s2}; es la referencia cuando las frecuencias esperadas son pequeñas.',
+  'Fisher\'s exact (two-sided)':
+    'Fisher exacto (bilateral)',
+  'Frequenza attesa minima':
+    'Frecuencia esperada mínima',
+  'Frequenza attesa minima = {s1}; celle con atteso < 5: {s2} su 4. {s3}':
+    'Frecuencia esperada mínima = {s1}; celdas con esperado < 5: {s2} de 4. {s3}',
+  'Frequenze attese non disponibili.':
+    'Frecuencias esperadas no disponibles.',
+  'Il residuo aggiustato dice quanto una cella è lontana da quanto ci si aspetterebbe se le variabili fossero indipendenti: oltre ±2 è un segnale concreto.':
+    'El residuo ajustado dice cuánto se aleja una celda de lo que se esperaría si las variables fueran independientes: más allá de ±2 es una señal concreta.',
+  'Il test è omnibus: non indica da solo quale cella o quale direzione spieghi l’associazione.':
+    'La prueba es ómnibus: por sí sola no indica qué celda ni qué dirección explica la asociación.',
+  'Il test non è calcolabile con i dati disponibili.':
+    'La prueba no se puede calcular con los datos disponibles.',
+  'Il test principale':
+    'La prueba principal',
+  'Il χ² richiede frequenze attese sufficienti: sotto 5 per cella il test classico è inaffidabile e va usato Fisher esatto.':
+    'El χ² requiere frecuencias esperadas suficientes: por debajo de 5 por celda, la prueba clásica no es fiable y debe usarse Fisher exacto.',
+  'In pratica':
+    'En la práctica',
+  'Interpretazione':
+    'Interpretación',
+  'La cella che contribuisce di più è «{s1}»: osservati {s2}, attesi {s3}, residuo aggiustato {s4} → {s5}.':
+    'La celda que más contribuye es «{s1}»: observados {s2}, esperados {s3}, residuo ajustado {s4} → {s5}.',
+  'La regola di Cochran è rispettata: il χ² classico è affidabile.':
+    'Se cumple la regla de Cochran: el χ² clásico es fiable.',
+  'La regola di Cochran non è rispettata: usa Fisher esatto (o Yates) e diffida del χ² classico.':
+    'No se cumple la regla de Cochran: usa Fisher exacto (o Yates) y desconfía del χ² clásico.',
+  'La significatività dipende dalla numerosità: con campioni molto grandi anche associazioni irrilevanti risultano significative.':
+    'La significación depende del tamaño: con muestras muy grandes incluso asociaciones irrelevantes resultan significativas.',
+  'Le differenze osservate sono compatibili con l’indipendenza tra righe e colonne.':
+    'Las diferencias observadas son compatibles con la independencia entre filas y columnas.',
+  'Le due variabili non sono indipendenti: la distribuzione delle risposte cambia tra le righe.':
+    'Las dos variables no son independientes: la distribución de las respuestas cambia entre las filas.',
+  'Le frequenze attese soddisfano la regola di Cochran.':
+    'Las frecuencias esperadas cumplen la regla de Cochran.',
+  'Le percentuali di riga rendono confrontabili gruppi con numerosità diverse; le percentuali di colonna rispondono alla domanda inversa.':
+    'Los porcentajes de fila hacen comparables grupos con tamaños distintos; los porcentajes de columna responden a la pregunta inversa.',
+  'Likelihood ratio G²':
+    'Razón de verosimilitud G²',
+  'Misura':
+    'Medida',
+  'N':
+    'N',
+  'Nessuna cella dominante.':
+    'Ninguna celda dominante.',
+  'Non ci sono prove di un legame tra le due variabili su questi dati. Con numerosità ridotta l’assenza di significatività può riflettere mancanza di potenza più che vera indipendenza.':
+    'No hay pruebas de relación entre las dos variables en estos datos. Con un tamaño reducido, la ausencia de significación puede reflejar falta de potencia más que una verdadera independencia.',
+  'non conferma l’associazione':
+    'no confirma la asociación',
+  'Non emerge un’associazione tra {s1}/{s2} e {s3}/{s4}: χ² = {s5}, {s6} (soglia α = {s7}).':
+    'No emerge una asociación entre {s1}/{s2} y {s3}/{s4}: χ² = {s5}, {s6} (umbral α = {s7}).',
+  'Nota':
+    'Nota',
+  'numerosità totale':
+    'tamaño total',
+  'Odds Ratio':
+    'Odds ratio',
+  'Odds ratio = {s1} (CI {s2}% {s3}): le odds di {s4} in {s5} sono {s6}.':
+    'Odds ratio = {s1} (CI {s2}% {s3}): las odds de {s4} en {s5} son {s6}.',
+  'Odds ratio non calcolabile (celle a zero).':
+    'Odds ratio no calculable (celdas a cero).',
+  'Ogni osservazione deve stare in una sola cella: conteggi ripetuti della stessa unità gonfiano artificialmente la significatività.':
+    'Cada observación debe estar en una sola celda: los recuentos repetidos de la misma unidad inflan artificialmente la significación.',
+  'OR: CI di Woolf su log(OR). RR: CI di Katz su log(RR). RD: CI di Wald. Con celle vuote le stime OR/RR non sono definite.':
+    'OR: CI de Woolf sobre log(OR). RR: CI de Katz sobre log(RR). RD: CI de Wald. Con celdas vacías, las estimaciones OR/RR no están definidas.',
+  'Osservato':
+    'Observado',
+  'p':
+    'p',
+  'Pearson χ²':
+    'Pearson χ²',
+  'Pearson χ² = {s1} con df = {s2}, {s3} (α = {s4}).':
+    'Pearson χ² = {s1} con df = {s2}, {s3} (α = {s4}).',
+  'Per tabelle 2×2 χ² e G² hanno df = 1; con frequenze attese piccole (< 5) preferire il test esatto di Fisher.':
+    'En tablas 2×2, χ² y G² tienen df = 1; con frecuencias esperadas pequeñas (< 5) es preferible la prueba exacta de Fisher.',
+  'Per una tabella 2×2 φ e Cramér’s V coincidono numericamente; sono riportati separatamente perché la formula generale di V usa min(r−1, c−1).':
+    'En una tabla 2×2, φ y la V de Cramér coinciden numéricamente; se presentan por separado porque la fórmula general de V usa min(r−1, c−1).',
+  'Quanto è forte l’associazione':
+    'Cuán fuerte es la asociación',
+  'Rapporto di verosimiglianza G² = {s1}, {s2}: lettura alternativa, di solito concorde.':
+    'Razón de verosimilitud G² = {s1}, {s2}: lectura alternativa, normalmente concordante.',
+  'Relative Risk':
+    'Riesgo relativo',
+  'Report di lettura — Chi quadrato':
+    'Informe de lectura — Chi-cuadrado',
+  'Residuo aggiustato':
+    'Residuo ajustado',
+  'Residuo standardizzato = (O − E)/√E; aggiustato = (O − E)/√(E·(1−row%)(1−col%)). Il contributo è (O − E)²/E.':
+    'Residuo tipificado = (O − E)/√E; ajustado = (O − E)/√(E·(1−fila%)(1−columna%)). La contribución es (O − E)²/E.',
+  'Residuo std.':
+    'Residuo tip.',
+  'Rischio relativo = {s1}: {s2} ha un rischio di {s3} {s4} rispetto a {s5}.':
+    'Riesgo relativo = {s1}: {s2} tiene un riesgo de {s3} {s4} respecto a {s5}.',
+  'rischio riga 1 / rischio riga 2':
+    'riesgo fila 1 / riesgo fila 2',
+  'Risk Difference':
+    'Diferencia de riesgos',
+  'Row %':
+    '% fila',
+  'scostamento contenuto':
+    'desviación contenida',
+  'Statistica':
+    'Estadístico',
+  'Stima':
+    'Estimación',
+  'Tabella di contingenza e residui':
+    'Tabla de contingencia y residuos',
+  'Test':
+    'Prueba',
+  'Test di indipendenza':
+    'Prueba de independencia',
+  'Total %':
+    '% total',
+  'Totale osservazioni: {s1}. Composizione per riga: {s2} {s3}% in {s4}, {s5}% in {s6}.':
+    'Total de observaciones: {s1}. Composición por fila: {s2} {s3} % en {s4}, {s5} % en {s6}.',
+  'Totali: righe {s1} / {s2}, colonne {s3} / {s4}, N = {s5}.':
+    'Totales: filas {s1} / {s2}, columnas {s3} / {s4}, N = {s5}.',
+  'Valore':
+    'Valor',
+  'Variabili indipendenti':
+    'Variables independientes',
+  'Verifica se due variabili categoriche sono indipendenti: le righe sono {s1} e {s2}, le colonne {s3} e {s4}.':
+    'Comprueba si dos variables categóricas son independientes: las filas son {s1} y {s2}, las columnas {s3} y {s4}.',
+  'Yates continuity correction':
+    'Corrección de continuidad de Yates',
+  'α = {s1}':
+    'α = {s1}',
+  'φ (phi)':
+    'φ (phi)',
+  'φ = {s1}: associazione {s2} (0.1 debole, 0.3 moderata, 0.5 forte su tabelle 2×2).':
+    'φ = {s1}: asociación {s2} (0.1 débil, 0.3 moderada, 0.5 fuerte en tablas 2×2).',
+  'φ non calcolabile.':
+    'φ no calculable.',
+};
