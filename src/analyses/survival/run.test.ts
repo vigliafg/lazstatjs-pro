@@ -31,7 +31,7 @@ test('survival builder returns tables, report and Kaplan–Meier curves', () => 
   assert.ok(result.report);
   assert.ok(result.tables.some(spec => spec.id === 'surv-km'));
   const ids = (result.charts ?? []).map(chart => chart.id);
-  assert.deepEqual(ids, ['survival-km', 'survival-risk']);
+  assert.deepEqual(ids, ['survival-km', 'survival-rmst', 'survival-risk']);
   const risk = (result.charts ?? []).find(chart => chart.id === 'survival-risk');
   assert.equal(risk?.kind, 'risk');
   assert.ok((risk?.data.rows ?? []).length >= 5);

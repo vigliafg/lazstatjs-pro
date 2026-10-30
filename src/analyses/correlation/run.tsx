@@ -145,7 +145,7 @@ export interface CorrelationRunInput {
           note: copy('Ogni punto è un caso completo; la nuvola mostra direzione e forza dell’associazione.'),
           data: { points: rawScatterData },
           fields: { xLabel: names[0], yLabel: names[1] },
-          options: { fit: 'none', band: 'none' } as never,
+          options: { fit: 'none', band: 'none', ellipse: true } as never,
         })
       );
       if (showSpearman && rankScatterData.length > 0) {
@@ -180,6 +180,28 @@ export interface CorrelationRunInput {
       );
       const pairs = correlationPairs(grid.rows, vars, ciLevel);
       const pairMap = new Map(pairs.map(pair => [`${pair.a}-${pair.b}`, pair]));
+      let pairCount = 0;
+      for (let i = 0; i < vars.length && pairCount < 6; i++) {
+        for (let j = i + 1; j < vars.length && pairCount < 6; j++) {
+          const points = grid.rows
+            .map(row => ({ x: parseNum(row[vars[i]]), y: parseNum(row[vars[j]]) }))
+            .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+          if (points.length < 3) continue;
+          charts.push(
+            makeChart({
+              id: `corr-pair-${i + 1}-${j + 1}`,
+              kind: 'scatter',
+              title: copy('Dispersione: {s1} × {s2}', { s1: names[i], s2: names[j] }),
+              subtitle: copy('Casi completi: {s1}', { s1: points.length }),
+              note: copy('Una linea crescente indica associazione positiva, una decrescente negativa; la nuvola mostra anche valori anomali.'),
+              data: { points },
+              fields: { xLabel: names[i], yLabel: names[j] },
+              options: { fit: 'ols', band: 'none', ellipse: true } as never,
+            })
+          );
+          pairCount += 1;
+        }
+      }
       const cells = vars.flatMap((_, i) =>
         vars.map((__, j) => {
           const pair = i === j ? null : pairMap.get(`${Math.min(i, j)}-${Math.max(i, j)}`);

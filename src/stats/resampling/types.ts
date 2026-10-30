@@ -21,6 +21,9 @@ export interface ResamplingStats {
   permutations: number;
   bootstrap: number;
   statistic: 'mean' | 'median';
+  /** BCa interval (bias-corrected and accelerated). */
+  bcaLo: number;
+  bcaHi: number;
   /** Permutation null distribution and bootstrap distribution (for charts). */
   permutationStatistics: number[];
   bootstrapDifferences: number[];

@@ -3,6 +3,7 @@ import { categoricalMultivariateChartCopy } from './charts-multivariate';
 import { timeMissingChartCopy } from './charts-time-missing';
 import { distfitTTestChartCopy } from './charts-distfit-ttest';
 import { lmmChartCopy } from './charts-lmm';
+import { remainingChartCopy } from './charts-remaining';
 
 export const chartCopy: Record<string, string> = {
   " Con stime instabili gli intervalli non finiti sono omessi dal grafico.":
@@ -391,8 +392,6 @@ export const chartCopy: Record<string, string> = {
     "TOST: difference and equivalence margins",
   "Differenza {s1} · IC {s2}% · margine ±{s3}":
     "Difference {s1} · CI {s2}% · margin ±{s3}",
-  "La barra è la differenza stimata con il suo intervallo; le linee tratteggiate sono i margini di equivalenza.":
-    "The bar is the estimated difference with its interval; dashed lines are the equivalence margins.",
   "Equivalenza TOST":
     "TOST equivalence",
   "Regressione per conteggi: {s1}":
@@ -493,8 +492,6 @@ export const chartCopy: Record<string, string> = {
     "Bootstrap distribution of the difference",
   "{s1} ricampionamenti · IC {s2}%":
     "{s1} resamples · CI {s2}%",
-  "Le linee tratteggiate sono i limiti dell’intervallo percentile; la linea continua è la differenza osservata.":
-    "Dashed lines are the percentile interval limits; the solid line is the observed difference.",
   "Distribuzione nulla di permutazione":
     "Permutation null distribution",
   "{s1} permutazioni · p = {s2}":
@@ -642,5 +639,6 @@ export const chartCopy: Record<string, string> = {
   ...timeMissingChartCopy,
   ...distfitTTestChartCopy,
   ...lmmChartCopy,
+  ...remainingChartCopy,
   ...categoricalMultivariateChartCopy,
 };

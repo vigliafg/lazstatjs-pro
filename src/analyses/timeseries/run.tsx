@@ -208,6 +208,60 @@ export const buildTimeSeriesOutput = ({
     );
   }
 
+  const n = values.length;
+  const spectrum = Array.from({ length: Math.max(1, Math.floor(n / 2)) }, (_, index) => {
+    const frequency = (index + 1) / n;
+    let real = 0;
+    let imaginary = 0;
+    values.forEach((value, time) => {
+      const angle = 2 * Math.PI * frequency * time;
+      real += value * Math.cos(angle);
+      imaginary -= value * Math.sin(angle);
+    });
+    return { x: frequency, y: (2 / n) * (real * real + imaginary * imaginary) };
+  }).filter(point => Number.isFinite(point.y));
+  if (spectrum.length > 1) {
+    charts.push(
+      makeChart({
+        id: 'ts-spectrum',
+        kind: 'line',
+        title: copy('Densità spettrale (periodogramma)'),
+        subtitle: copy('Frequenze da 1/N a 1/2'),
+        note: copy('I picchi indicano le frequenze dominanti: un picco alla frequenza 1/periodo segnala la stagionalità.'),
+        data: { series: spectrum.map(point => ({ ...point, series: copy('Periodogramma') })) },
+        fields: { xLabel: copy('Frequenza'), yLabel: copy('Potenza'), series: copy('Serie') },
+        options: { showMarkers: false, showBand: false } as never,
+      })
+    );
+  }
+
+  const rollingWindow = period >= 2 ? period : Math.max(3, Math.floor(n / 5));
+  if (rollingWindow >= 2 && n > rollingWindow) {
+    const rollingMean: ChartRow[] = [];
+    const rollingSd: ChartRow[] = [];
+    for (let index = rollingWindow - 1; index < n; index++) {
+      const windowValues = values.slice(index - rollingWindow + 1, index + 1);
+      const mean = windowValues.reduce((sum, value) => sum + value, 0) / windowValues.length;
+      const variance =
+        windowValues.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) /
+        Math.max(1, windowValues.length - 1);
+      rollingMean.push({ x: index + 1, y: mean, series: copy('Media mobile') });
+      rollingSd.push({ x: index + 1, y: Math.sqrt(variance), series: copy('DS mobile') });
+    }
+    charts.push(
+      makeChart({
+        id: 'ts-rolling',
+        kind: 'line',
+        title: copy('Statistiche mobili'),
+        subtitle: copy('Finestra di {s1} osservazioni', { s1: rollingWindow }),
+        note: copy('La media mobile evidenzia il trend; la DS mobile mostra se la variabilità cambia nel tempo.'),
+        data: { series: [...rollingMean, ...rollingSd] },
+        fields: { xLabel: 't', yLabel: copy('Valore'), series: copy('Statistica') },
+        options: { showMarkers: false, showBand: false } as never,
+      })
+    );
+  }
+
   if (arimaForecastRows.length > 0) {
     const arimaRows: ChartRow[] = [
       ...seriesData.map(point => ({ x: point.x, y: point.y, series: copy('Osservato') })),

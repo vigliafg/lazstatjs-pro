@@ -59,6 +59,16 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
       },
     });
   }
+  if (options.ellipse) {
+    const outline = confidenceEllipse(rowsOf(chart, 'points'), 95);
+    if (outline.length > 1) {
+      layers.push({
+        data: { values: [...outline, outline[0]] },
+        mark: { type: 'line', color: colorAt(options, 4), strokeWidth: 1, strokeDash: [4, 4] },
+        encoding: { x: xEncoding(chart, options, theme), y: yEncoding(chart, options, theme) },
+      });
+    }
+  }
   rowsOf(chart, 'rules').forEach((row, index) => {
     layers.push({
       data: { values: [row] },
@@ -296,6 +306,16 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
   const rules = rowsOf(chart, 'rules');
   if (options.referenceLine === 'zero') rules.push({ value: 0 });
   if (options.referenceLine === 'one') rules.push({ value: 1 });
+  rowsOf(chart, 'regions').forEach(row => {
+    layers.push({
+      data: { values: [row] },
+      mark: { type: 'rect', color: colorAt(options, 3), opacity: 0.12 },
+      encoding: {
+        y: { field: 'lo', type: 'quantitative' },
+        y2: { field: 'hi' },
+      },
+    });
+  });
   rules.forEach(row => {
     layers.push({
       data: { values: [row] },
@@ -360,8 +380,7 @@ export const survivalLayers = (chart: AnalysisChart, options: Extract<ChartOptio
   }
   layers.push({
     data: { values: curves },
-    mark: { type: 'line', strokeWidth: options.lineWidth, ...(options.step ? { interpolate: 'step-after' } : {}) },
-    encoding: {
+    mark: { type: 'line', strokeWidth: options.lineWidth, ...(options.step ? { interpolate: 'step-after' } : {}) },    encoding: {
       x: xEncoding(chart, options, theme),
       y: yEncoding(chart, options, theme, 'y', { scale: { domain: [0, 1] }, axis: axis(options, theme, options.showYTitle ? field(chart, 'yLabel', '') : null, options.gridY) }),
       color: colorEncoding(chart, options, theme),
@@ -393,6 +412,17 @@ export const survivalLayers = (chart: AnalysisChart, options: Extract<ChartOptio
       });
     }
   }
+  rowsOf(chart, 'annotations').forEach(row => {
+    layers.push({
+      data: { values: [row] },
+      mark: { type: 'text', align: 'left', fontSize: 10, color: theme.text },
+      encoding: {
+        x: { field: 'x', type: 'quantitative' },
+        y: { field: 'y', type: 'quantitative' },
+        text: { field: 'text', type: 'nominal' },
+      },
+    });
+  });
   return layers;
 };
 
@@ -619,5 +649,12 @@ export const bootstrapLayers = (
       });
     });
   }
+  rowsOf(chart, 'bca').forEach(row => {
+    histogram.push({
+      data: { values: [row] },
+      mark: { type: 'rule', color: colorAt(options, 1), strokeDash: [2, 3], strokeWidth: 1 },
+      encoding: { x: { field: 'value', type: 'quantitative' } },
+    });
+  });
   return histogram;
 };

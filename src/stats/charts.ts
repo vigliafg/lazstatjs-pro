@@ -78,6 +78,7 @@ export interface ScatterOptions extends CommonChartOptions {
   showR2: boolean;
   showN: boolean;
   pointLabels: boolean;
+  ellipse: boolean;
 }
 
 export interface LineOptions extends CommonChartOptions {
@@ -100,7 +101,7 @@ export interface BarOptions extends CommonChartOptions {
 export interface BoxOptions extends CommonChartOptions {
   kind: 'box';
   /** Presentation: classic box, notched box or KDE violin. */
-  display: 'box' | 'notched' | 'violin';
+  display: 'box' | 'notched' | 'violin' | 'raincloud';
   showPoints: boolean;
   showOutliers: boolean;
   showMean: boolean;

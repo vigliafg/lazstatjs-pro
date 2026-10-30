@@ -149,8 +149,7 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
         })
       );
     }
-    const dotPoints = results.flatMap(r => r.data.map(value => ({ category: r.name, value })));
-    if (dotPoints.length > 0) {
+    const dotPoints = results.flatMap(r => r.data.map(value => ({ category: r.name, value })));    if (dotPoints.length > 0) {
       charts.push(
         makeChart({
           id: 'desc-dot',
@@ -161,6 +160,47 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
           fields: { xLabel: copy('Variabile'), yLabel: copy('Valore') },
         })
       );
+    }
+    if (results.length > 1) {
+      charts.push(
+        makeChart({
+          id: 'desc-spread-level',
+          kind: 'scatter',
+          title: copy('Dispersione vs livello'),
+          subtitle: copy('Media e deviazione standard delle variabili selezionate'),
+          note: copy('Serve a vedere se le variabili più grandi hanno anche più variabilità; una relazione crescente suggerisce eteroschedasticità o scala.'),
+          data: {
+            points: results.map(r => ({ x: r.mean, y: r.stdev, label: r.name })),
+          },
+          fields: { xLabel: copy('Media'), yLabel: copy('Deviazione standard') },
+          options: { fit: 'ols', band: 'none', pointLabels: true } as never,
+        })
+      );
+      let pairCount = 0;
+      for (let i = 0; i < results.length && pairCount < 6; i++) {
+        for (let j = i + 1; j < results.length && pairCount < 6; j++) {
+          const points = input.rows
+            .map(row => ({
+              x: parseNum(row[input.indices[i]]),
+              y: parseNum(row[input.indices[j]]),
+            }))
+            .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+          if (points.length < 3) continue;
+          charts.push(
+            makeChart({
+              id: `desc-pair-${i + 1}-${j + 1}`,
+              kind: 'scatter',
+              title: copy('Dispersione: {s1} × {s2}', { s1: results[i].name, s2: results[j].name }),
+              subtitle: copy('Casi completi: {s1}', { s1: points.length }),
+              note: copy('Una linea crescente indica associazione positiva, una decrescente negativa; la nuvola mostra anche valori anomali.'),
+              data: { points },
+              fields: { xLabel: results[i].name, yLabel: results[j].name },
+              options: { fit: 'ols', band: 'none', ellipse: true } as never,
+            })
+          );
+          pairCount += 1;
+        }
+      }
     }
     const first = results[0];
     if (first) {

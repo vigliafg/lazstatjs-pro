@@ -60,4 +60,10 @@ export const resamplingCopy: Record<string, string> = {
     'Estatísticas por grupo',
   'Valore':
     'Valor',
+  'CI BCa low':
+    'IC BCa inferior',
+  'CI BCa high':
+    'IC BCa superior',
+  'Il CI BCa corregge bias e asimmetria della distribuzione bootstrap ed è preferibile quando la distribuzione è sbilanciata.':
+    'O IC BCa corrige o viés e a assimetria da distribuição bootstrap e é preferível quando a distribuição está desequilibrada.',
 };

@@ -66,7 +66,7 @@ test('stratified Cox adds Kaplan-Meier curves per stratum', () => {
       ciLevel: 95,
     })
   );
-  assert.deepEqual(charts.map(chart => chart.kind), ['forest', 'survival', 'risk']);
+  assert.deepEqual(charts.map(chart => chart.kind), ['forest', 'survival', 'line', 'risk']);
 });
 
 test('repeated ANOVA adds CI bars and subject trajectories', () => {
@@ -77,10 +77,11 @@ test('repeated ANOVA adds CI bars and subject trajectories', () => {
   const charts = chartsOf(
     buildRepeatedAnovaOutput({ grid, params: { selected: [0, 1, 2] }, ciLevel: 95 })
   );
-  assert.equal(charts.length, 2);
+  assert.equal(charts.length, 3);
   const bars = charts[0].data.bars ?? [];
   assert.ok(bars.every(row => row.lo !== undefined && row.hi !== undefined));
   assert.equal(charts[1].id, 'repeated-trajectories');
+  assert.equal(charts[2].id, 'repeated-change');
 });
 
 test('ANCOVA bars expose the adjusted confidence interval', () => {

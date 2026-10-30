@@ -8,7 +8,7 @@ import type { Dataset } from '../../grid/types';
 import type { AnovaParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { copy } from '../../stats/reportCopy';
-import { makeChart, boxRows } from '../../charts/kits/common';
+import { makeChart, boxRows, qqBand, qqPoints, qqReference } from '../../charts/kits/common';
 import type { AnalysisChart } from '../../stats/charts';
 
 export interface AnovaRunInput {
@@ -117,7 +117,13 @@ export interface AnovaRunInput {
             comp: `${g1} vs ${g2}`,
             diff,
             p: pVal,
-            testName
+            testName,
+            lo: msWithin > 0 && dfWithin > 0
+              ? diff - jStat.studentt.inv(1 - (1 - ciLevel / 100) / 2, dfWithin) * Math.sqrt(msWithin * (1 / n1 + 1 / n2))
+              : NaN,
+            hi: msWithin > 0 && dfWithin > 0
+              ? diff + jStat.studentt.inv(1 - (1 - ciLevel / 100) / 2, dfWithin) * Math.sqrt(msWithin * (1 / n1 + 1 / n2))
+              : NaN,
           });
         }
       }
@@ -261,6 +267,57 @@ export interface AnovaRunInput {
         options: { error: 'ci', valueLabels: true } as never,
       }),
     ];
+    const postHocPoints = postHocResults
+      .filter(row => Number.isFinite(row.lo) && Number.isFinite(row.hi))
+      .map(row => ({ label: row.comp, estimate: row.diff, lo: row.lo, hi: row.hi }));
+    if (postHocPoints.length > 0) {
+      charts.push(
+        makeChart({
+          id: 'anova-posthoc-forest',
+          kind: 'forest',
+          title: copy('Differenze tra gruppi (post-hoc)'),
+          subtitle: copy('IC {s1}% · riferimento 0', { s1: ciLevel }),
+          note: copy('Punto: differenza media tra i due gruppi. Segmento: intervallo di confidenza; se contiene lo zero la coppia non è distinguibile.'),
+          data: { points: postHocPoints },
+          fields: { xLabel: copy('Differenza media'), yLabel: copy('Confronto') },
+          options: { reference: 'zero', sort: 'none' } as never,
+        })
+      );
+    }
+    const meanByGroup = new Map(groupKeys.map(key => [key, jStat.mean(groups[key])]));
+    const residualPoints = groupKeys.flatMap(key =>
+      groups[key].map(value => ({ x: meanByGroup.get(key) ?? 0, y: value - (meanByGroup.get(key) ?? 0) }))
+    );
+    if (residualPoints.length > 0) {
+      charts.push(
+        makeChart({
+          id: 'anova-residual-fitted',
+          kind: 'scatter',
+          title: copy('Residui vs medie di gruppo'),
+          subtitle: copy('N = {s1}', { s1: residualPoints.length }),
+          note: copy('Residui senza struttura indicano che la media di gruppo descrive i dati; imbuti o curvature suggeriscono varianze diverse.'),
+          data: { points: residualPoints, rules: [{ y: 0 }] },
+          fields: { xLabel: copy('Media di gruppo'), yLabel: copy('Residuo') },
+          options: { fit: 'none', band: 'none' } as never,
+        })
+      );
+    }
+    const residualQq = qqPoints(residualPoints.map(point => point.y));
+    if (residualQq.length > 0) {
+      const residualLine = qqReference(residualQq);
+      charts.push(
+        makeChart({
+          id: 'anova-residual-qq',
+          kind: 'qq',
+          title: copy('Q-Q dei residui'),
+          subtitle: copy('N = {s1}', { s1: residualQq.length }),
+          note: copy('I punti vicini alla diagonale indicano residui compatibili con la normalità.'),
+          data: { points: residualQq, reference: residualLine, band: qqBand(residualQq, residualLine, ciLevel) },
+          fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Residui osservati') },
+          options: { showCI: true } as never,
+        })
+      );
+    }
     if (useNonParam && !isNaN(kw.hStat)) {
       const rankBox = boxRows(groupKeys.map(key => ({
         category: key,

@@ -140,6 +140,7 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
         showR2: false,
         showN: false,
         pointLabels: false,
+        ellipse: false,
       };
     case 'line':
       return { ...P, kind, step: false, showMarkers: false, showBand: true };
@@ -211,11 +212,12 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
 };
 
 /** Merge per-card options over the factory defaults, keeping unknown keys out. */
-export type BoxDisplay = 'box' | 'notched' | 'violin';
+export type BoxDisplay = 'box' | 'notched' | 'violin' | 'raincloud';
 
 /** Runtime guard: stored projects can carry an older or hand-edited value. */
 export const boxDisplayOf = (options: ChartOptions): BoxDisplay =>
-  options.kind === 'box' && (options.display === 'notched' || options.display === 'violin')
+  options.kind === 'box' &&
+  (options.display === 'notched' || options.display === 'violin' || options.display === 'raincloud')
     ? options.display
     : 'box';
 

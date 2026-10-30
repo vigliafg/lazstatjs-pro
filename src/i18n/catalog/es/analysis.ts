@@ -248,6 +248,7 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.display.box": "Caja",
   "chart.display.notched": "Caja con muesca",
   "chart.display.violin": "Violín",
+  "chart.display.raincloud": "Nube de puntos",
   "chart.feature.bins": "Clases",
   "chart.feature.kde": "Curva KDE",
   "chart.feature.detrendedQq": "Q-Q sin tendencia",

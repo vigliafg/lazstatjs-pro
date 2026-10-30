@@ -207,6 +207,9 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     specific('scatter', 'showPoints', 'chart.feature.points', 'checkbox', {
       section: 'chart.section.data',
     }),
+    specific('scatter', 'ellipse', 'chart.feature.ellipse', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
     specific('scatter', 'fit', 'chart.feature.fit', 'select', {
       section: 'chart.section.fit',
       choices: [
@@ -326,6 +329,7 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         choice('box', 'chart.display.box'),
         choice('notched', 'chart.display.notched'),
         choice('violin', 'chart.display.violin'),
+        choice('raincloud', 'chart.display.raincloud'),
       ],
       get: options => boxDisplayOf(options),
     }),

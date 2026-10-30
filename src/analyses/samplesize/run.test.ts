@@ -18,6 +18,9 @@ test('sample-size builder returns tables, a report and the power curve', () => {
       row => Number.isFinite(Number(row.x)) && Number.isFinite(Number(row.y))
     )
   );
+  const sensitivity = (result.charts ?? []).find(chart => chart.id === 'samplesize-sensitivity');
+  assert.ok(sensitivity);
+  assert.ok((sensitivity?.data.series ?? []).length > 1);
 });
 
 test('sample-size builder rejects a zero effect size with the panel message', () => {

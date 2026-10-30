@@ -67,13 +67,13 @@ test('box, notched and violin displays compile without warnings', () => {
     },
     fields: { xLabel: 'Group', yLabel: 'Value' },
   });
-  const compileBox = (display: 'box' | 'notched' | 'violin') => {
+  const compileBox = (display: 'box' | 'notched' | 'violin' | 'raincloud') => {
     const warnings: string[] = [];
     const spec = buildVegaSpec(chart, { ...factoryOptions('box'), display } as never);
     compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
     return { spec: spec as never as { layer: Array<{ data?: { values?: Array<Record<string, unknown>> }; mark?: { type?: string } }> }, warnings };
   };
-  for (const display of ['box', 'notched', 'violin'] as const) {
+  for (const display of ['box', 'notched', 'violin', 'raincloud'] as const) {
     assert.deepEqual(compileBox(display).warnings, [], display);
   }
   const notched = compileBox('notched').spec;

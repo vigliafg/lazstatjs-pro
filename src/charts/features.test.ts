@@ -35,13 +35,13 @@ test('specific controls are declared per kind', () => {
   assert.equal(specificFeatures(chartOf('score')).some(feature => feature.id === 'showR2'), false);
 });
 
-test('box display offers three modes and normalizes an unknown stored value', () => {
+test('box display offers four modes and normalizes an unknown stored value', () => {
   const chart = chartOf('box');
   const display = specificFeatures(chart).find(feature => feature.id === 'display');
   assert.ok(display);
   assert.deepEqual(
     display!.choices?.map(item => item.value),
-    ['box', 'notched', 'violin']
+    ['box', 'notched', 'violin', 'raincloud']
   );
   const factory = factoryOptions('box');
   assert.equal(factory.kind === 'box' ? factory.display : null, 'box');

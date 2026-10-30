@@ -219,6 +219,78 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
   });
   const header = `Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${times.length} observations · ${fit.events} events`;
 
+  const covariateMeans = covariateValues.map(values =>
+    values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length)
+  );
+  const baselineAt = (time: number): number => {
+    let hazard = 0;
+    baseline.forEach(row => {
+      if (row.time <= time) hazard = row.hazard;
+    });
+    return hazard;
+  };
+  const etas = times.map((_, index) =>
+    fit.coefficients.reduce(
+      (sum, coefficient, column) => sum + coefficient.beta * (covariateValues[column]?.[index] ?? 0),
+      0
+    )
+  );
+  const martingale = times.map((time, index) => ({
+    x: time,
+    y: events[index] - baselineAt(time) * Math.exp(etas[index]),
+  }));
+  if (martingale.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'cox-martingale',
+        kind: 'scatter',
+        title: copy('Residui di martingala'),
+        subtitle: copy('Tempo dell’evento · N = {s1}', { s1: martingale.length }),
+        note: copy('I residui di martingala riassumono l’accordo tra evento osservato e rischio stimato: valori molto negativi segnalano osservazioni con rischio sovrastimato.'),
+        data: { points: martingale, rules: [{ y: 0 }] },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Residuo di martingala') },
+        options: { fit: 'none', band: 'none' } as never,
+      })
+    );
+  }
+  const firstValues = covariateValues[0] ?? [];
+  const firstMean = covariateMeans[0] ?? 0;
+  const firstSd = firstValues.length > 1
+    ? Math.sqrt(
+        firstValues.reduce((sum, value) => sum + Math.pow(value - firstMean, 2), 0) /
+          (firstValues.length - 1)
+      )
+    : 0;
+  const profiles = firstSd > 0 ? [firstMean - firstSd, firstMean, firstMean + firstSd] : [firstMean];
+  const predictedRows = profiles.flatMap(profile => {
+    const values = covariateMeans.map((mean, column) => (column === 0 ? profile : mean));
+    const eta = fit.coefficients.reduce(
+      (sum, coefficient, column) => sum + coefficient.beta * (values[column] ?? 0),
+      0
+    );
+    const label = `${encoded[0]?.name ?? 'X'} = ${profile.toFixed(3)}`;
+    const rows = baseline.map(row => ({
+      x: row.time,
+      y: Math.exp(-row.hazard * Math.exp(eta)),
+      series: label,
+    }));
+    return [{ x: 0, y: 1, series: label }, ...rows];
+  });
+  if (predictedRows.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'cox-predicted-survival',
+        kind: 'line',
+        title: copy('Sopravvivenza predetta per profilo'),
+        subtitle: copy('Profili a media ± 1 DS di {s1}', { s1: encoded[0]?.name ?? 'X' }),
+        note: copy('Le altre covariariate restano alla media; la curva usa la baseline di Breslow del modello.'),
+        data: { series: predictedRows },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Profilo') },
+        options: { showMarkers: false, showBand: false, step: true } as never,
+      })
+    );
+  }
+
   return {
     ok: true,
     title: copy('Cox: hazard ratio'),

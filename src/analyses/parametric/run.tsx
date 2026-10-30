@@ -81,43 +81,83 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
   const survivalCurves = curveKind('survival');
   const hazardCurves = curveKind('hazard');
   const cumulativeCurves = curveKind('cumhazard');
-
+  const coefficientPoints = stats.coefficients.map(row => ({
+    label: row.term,
+    estimate: row.timeRatio,
+    lo: row.lo,
+    hi: row.hi,
+  }));
+  const medianRows = profiles.map(profile => {
+    const values = predictorMeans.map((mean, column) => (column === 0 ? profile : mean));
+    const eta = stats.mu + stats.coefficients.reduce((sum, coefficient, column) => sum + coefficient.beta * values[column], 0);
+    const median = Math.exp(eta + stats.sigma * Math.log(Math.log(2)));
+    return { category: `${predNames[0]} = ${profile.toFixed(3)}`, value: median };
+  });
+  const charts = [
+    makeChart({
+      id: 'parametric-survival',
+      kind: 'survival',
+      title: copy('Curve di sopravvivenza per profilo'),
+      subtitle: copy('{s1} · profili a media ± 1 DS del primo predittore', { s1: stats.distribution }),
+      note: copy('Le altre covariate sono tenute al loro valore medio; le curve mostrano come cambia la sopravvivenza al variare del primo predittore.'),
+      data: { curves: survivalCurves },
+      fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Profilo') },
+      options: { showCI: false, showCensoring: false, step: false } as never,
+    }),
+    makeChart({
+      id: 'parametric-hazard',
+      kind: 'line',
+      title: copy('Hazard per profilo'),
+      subtitle: copy('{s1} · profili a media ± 1 DS del primo predittore', { s1: stats.distribution }),
+      note: copy('Il rischio istantaneo è calcolato dalla stessa distribuzione parametrica; le altre covariate restano alla media.'),
+      data: { series: hazardCurves },
+      fields: { xLabel: copy('Tempo'), yLabel: copy('Hazard'), series: copy('Profilo') },
+      options: { showBand: false } as never,
+    }),
+    makeChart({
+      id: 'parametric-cumhazard',
+      kind: 'line',
+      title: copy('Hazard cumulativo per profilo'),
+      subtitle: copy('{s1} · profili a media ± 1 DS del primo predittore', { s1: stats.distribution }),
+      note: copy('L’hazard cumulativo è −log S(t): riassume il rischio accumulato fino a ciascun tempo.'),
+      data: { series: cumulativeCurves },
+      fields: { xLabel: copy('Tempo'), yLabel: copy('Hazard cumulativo'), series: copy('Profilo') },
+      options: { showBand: false } as never,
+    }),
+  ];
+  if (coefficientPoints.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'parametric-coefficients',
+        kind: 'forest',
+        title: copy('Rapporti dei tempi per predittore'),
+        subtitle: copy('IC {s1}% · riferimento 1', { s1: ciLevel }),
+        note: copy('Punto: rapporto dei tempi (time ratio). Valori sopra 1 allungano il tempo all’evento; se l’intervallo contiene 1 il predittore non è distinguibile da nessun effetto.'),
+        data: { points: coefficientPoints },
+        fields: { xLabel: copy('Rapporto dei tempi'), yLabel: copy('Predittore') },
+        options: { reference: 'one' } as never,
+      })
+    );
+  }
+  if (medianRows.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'parametric-median',
+        kind: 'bar',
+        title: copy('Sopravvivenza mediana per profilo'),
+        subtitle: copy('Tempo in cui S(t) = 0,5'),
+        note: copy('La mediana è calcolata dalla distribuzione parametrica: barre più alte indicano un evento atteso più tardi.'),
+        data: { bars: medianRows },
+        fields: { xLabel: copy('Profilo'), yLabel: copy('Tempo mediano') },
+        options: { valueLabels: true } as never,
+      })
+    );
+  }
   return {
     ok: true,
     title: copy('Sopravvivenza parametrica: {s1}', { s1: grid.cols[params.time]?.name ?? 'T' }),
     tables,
     report: parametricReport(stats, predNames, ciLevel),
-    charts: [
-      makeChart({
-        id: 'parametric-survival',
-        kind: 'survival',
-        title: copy('Curve di sopravvivenza per profilo'),
-        subtitle: copy('{s1} · profili a media ± 1 DS del primo predittore', { s1: stats.distribution }),
-        note: copy('Le altre covariate sono tenute al loro valore medio; le curve mostrano come cambia la sopravvivenza al variare del primo predittore.'),
-        data: { curves: survivalCurves },
-        fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Profilo') },
-        options: { showCI: false, showCensoring: false, step: false } as never,
-      }),
-      makeChart({
-        id: 'parametric-hazard',
-        kind: 'line',
-        title: copy('Hazard per profilo'),
-        subtitle: copy('{s1} · profili a media ± 1 DS del primo predittore', { s1: stats.distribution }),
-        note: copy('Il rischio istantaneo è calcolato dalla stessa distribuzione parametrica; le altre covariate restano alla media.'),
-        data: { series: hazardCurves },
-        fields: { xLabel: copy('Tempo'), yLabel: copy('Hazard'), series: copy('Profilo') },
-        options: { showBand: false } as never,
-      }),
-      makeChart({
-        id: 'parametric-cumhazard',
-        kind: 'line',
-        title: copy('Hazard cumulativo per profilo'),
-        subtitle: copy('{s1} · profili a media ± 1 DS del primo predittore', { s1: stats.distribution }),
-        note: copy('L’hazard cumulativo è −log S(t): riassume il rischio accumulato fino a ciascun tempo.'),
-        data: { series: cumulativeCurves },
-        fields: { xLabel: copy('Tempo'), yLabel: copy('Hazard cumulativo'), series: copy('Profilo') },
-        options: { showBand: false } as never,
-      }),
-    ],
+    charts,
   };
 };

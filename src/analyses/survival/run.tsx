@@ -2,6 +2,7 @@ import { survivalReport, survivalTables } from '../../stats/survival';
 import { parseNum } from '../../stats/core';
 import { analysisRows, type Dataset } from '../../grid/types';
 import { copy } from '../../stats/reportCopy';
+import { fmtP } from '../../stats/format';
 import { makeChart } from '../../charts/kits/common';
 import type { SurvivalParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -103,6 +104,25 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
   const timeName = grid.cols[timeVariable]?.name ?? 'T';
   const eventName = grid.cols[eventVariable]?.name ?? 'E';
   const header = `Time: ${timeName} · event: ${eventName} = "${eventLevels[1]}" · ${rows.length} observations`;
+  const logRankRow = tables
+    .find(spec => spec.id === 'surv-logrank')
+    ?.rows.find(row => typeof row.pValue === 'number');
+  const logRankP = typeof logRankRow?.pValue === 'number' ? logRankRow.pValue : NaN;
+  const annotations = Number.isFinite(logRankP)
+    ? [{ x: 0, y: 0.98, text: `Log-rank p = ${fmtP(logRankP)}` }]
+    : [];
+  const rmstRows = groups.map(group => {
+    const points = curves
+      .filter(row => String(row.series) === group && Number.isFinite(Number(row.x)) && Number.isFinite(Number(row.y)))
+      .sort((a, b) => Number(a.x) - Number(b.x));
+    let area = 0;
+    for (let index = 1; index < points.length; index++) {
+      const previous = points[index - 1];
+      const current = points[index];
+      area += Number(previous.y) * (Number(current.x) - Number(previous.x));
+    }
+    return { category: group, value: area };
+  });
 
   return {
     ok: true,
@@ -117,8 +137,18 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
         title: copy('Curve di Kaplan–Meier'),
         subtitle: copy('IC {s1}%', { s1: ciLevel }),
         note: copy('Ogni gradino è un evento; i tratti piatti indicano che in quell’intervallo non ci sono stati eventi.'),
-        data: { curves, censored },
+        data: { curves, censored, annotations },
         fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Gruppo') },
+      }),
+      makeChart({
+        id: 'survival-rmst',
+        kind: 'bar',
+        title: copy('Sopravvivenza media ristretta'),
+        subtitle: copy('Area sotto la curva KM fino all’ultimo tempo osservato'),
+        note: copy('La RMST riassume quanti unità di tempo, in media, i soggetti sopravvivono entro l’orizzonte osservato; barre più alte indicano sopravvivenza media più lunga.'),
+        data: { bars: rmstRows },
+        fields: { xLabel: copy('Gruppo'), yLabel: copy('RMST') },
+        options: { valueLabels: true } as never,
       }),
       makeChart({
         id: 'survival-risk',

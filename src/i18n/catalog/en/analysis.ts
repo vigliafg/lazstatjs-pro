@@ -246,6 +246,7 @@ export const analysisMessages = {
   "chart.display.box": "Box",
   "chart.display.notched": "Notched box",
   "chart.display.violin": "Violin",
+  "chart.display.raincloud": "Raincloud",
   "chart.feature.bins": "Bins",
   "chart.feature.kde": "KDE curve",
   "chart.feature.detrendedQq": "Detrended Q-Q",

@@ -46,11 +46,12 @@ export const buildResamplingOutput = ({ grid, params, ciLevel }: ResamplingInput
         kind: 'bootstrap',
         title: copy('Distribuzione bootstrap della differenza'),
         subtitle: copy('{s1} ricampionamenti · IC {s2}%', { s1: stats.bootstrap, s2: ciLevel }),
-        note: copy('Le linee tratteggiate sono i limiti dell’intervallo percentile; la linea continua è la differenza osservata.'),
+        note: copy('Le linee tratteggiate sono i limiti dell’intervallo percentile, quelle punteggiate i limiti BCa; la linea continua è la differenza osservata.'),
         data: {
           values: stats.bootstrapDifferences.map(value => ({ value })),
           observed: [{ value: stats.difference }],
           ci: [{ value: stats.ciLo }, { value: stats.ciHi }],
+          bca: [{ value: stats.bcaLo }, { value: stats.bcaHi }],
         },
         fields: { xLabel: copy('Differenza'), yLabel: copy('Frequenza') },
         options: { showObserved: true, showCI: true, showDensity: true } as never,

@@ -412,5 +412,11 @@ export const boxLayers = (
   const display = boxDisplayOf(options);
   if (display === 'notched') return notchedLayers(chart, options);
   if (display === 'violin') return violinLayers(chart, options);
+  if (display === 'raincloud') {
+    return [
+      ...violinLayers(chart, { ...options, display: 'violin' } as Extract<ChartOptions, { kind: 'box' }>),
+      ...nominalBoxLayers(chart, { ...options, display: 'box' } as Extract<ChartOptions, { kind: 'box' }>),
+    ];
+  }
   return nominalBoxLayers(chart, options);
 };

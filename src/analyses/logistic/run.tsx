@@ -9,6 +9,7 @@ import {
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
+import { jStat } from '../../stats/jstat';
 import type { Dataset } from '../../grid/types';
 import type { LogisticParams } from '../../io/project';
 import type { AnalysisChart } from '../../stats/charts';
@@ -167,6 +168,85 @@ export const buildLogisticOutput = ({
           series: copy('Serie'),
         },
         options: { showMarkers: true, showBand: false } as never,
+      })
+    );
+  }
+  const predicted = model.fitted.map(value => (value >= cutoff ? 1 : 0));
+  const counts = [
+    { observed: 0, predicted: 0, value: 0 },
+    { observed: 0, predicted: 1, value: 0 },
+    { observed: 1, predicted: 0, value: 0 },
+    { observed: 1, predicted: 1, value: 0 },
+  ];
+  y.forEach((value, index) => {
+    const cell = counts.find(item => item.observed === value && item.predicted === predicted[index]);
+    if (cell) cell.value += 1;
+  });
+  charts.push(
+    makeChart({
+      id: 'logistic-confusion',
+      kind: 'heatmap',
+      title: copy('Matrice di confusione'),
+      subtitle: copy('Soglia {s1}', { s1: cutoff }),
+      note: copy('Righe: esito osservato. Colonne: classe predetta. La diagonale contiene le classificazioni corrette.'),
+      data: {
+        cells: counts.map(cell => ({
+          x: cell.predicted === 1 ? copy('Predetto 1') : copy('Predetto 0'),
+          y: cell.observed === 1 ? copy('Osservato 1') : copy('Osservato 0'),
+          value: cell.value,
+          label: String(cell.value),
+        })),
+      },
+      fields: { xLabel: copy('Classe predetta'), yLabel: copy('Esito osservato') },
+      options: { showValues: true, diverging: false } as never,
+    })
+  );
+  const zCritical = jStat.normal.inv(1 - (1 - ciLevel / 100) / 2, 0, 1);
+  const orPoints = model.names
+    .map((name, index) => ({
+      label: name,
+      beta: model.beta[index],
+      se: model.se[index],
+    }))
+    .slice(1)
+    .filter(row => Number.isFinite(row.beta) && Number.isFinite(row.se))
+    .map(row => ({
+      label: row.label,
+      estimate: Math.exp(row.beta),
+      lo: Math.exp(row.beta - zCritical * row.se),
+      hi: Math.exp(row.beta + zCritical * row.se),
+    }));
+  if (orPoints.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'logistic-or-forest',
+        kind: 'forest',
+        title: copy('Odds ratio per predittore'),
+        subtitle: copy('IC {s1}% · riferimento OR = 1', { s1: ciLevel }),
+        note: copy('Punto: odds ratio. Segmento: intervallo di confidenza. Se l’intervallo contiene 1 il predittore non è distinguibile da nessun effetto.'),
+        data: { points: orPoints },
+        fields: { xLabel: copy('Odds ratio'), yLabel: copy('Predittore') },
+        options: { reference: 'one' } as never,
+      })
+    );
+  }
+  const scale = model.fitted.reduce((sum, value) => sum + value * (1 - value), 0) / Math.max(1, model.fitted.length);
+  const marginalBars = model.names
+    .map((name, index) => ({ name, beta: model.beta[index] }))
+    .slice(1)
+    .filter(row => Number.isFinite(row.beta))
+    .map(row => ({ category: row.name, value: scale * row.beta }));
+  if (marginalBars.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'logistic-marginal',
+        kind: 'bar',
+        title: copy('Effetti marginali medi'),
+        subtitle: copy('Variazione media della probabilità per una unità in più'),
+        note: copy('L’effetto marginale medio approssima di quanto cambia la probabilità predetta quando il predittore aumenta di una unità, mediando sulle osservazioni.'),
+        data: { bars: marginalBars, rules: [{ value: 0 }] },
+        fields: { xLabel: copy('Predittore'), yLabel: copy('Effetto marginale') },
+        options: { valueLabels: true, referenceLine: 'none' } as never,
       })
     );
   }

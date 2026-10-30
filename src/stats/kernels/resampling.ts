@@ -65,6 +65,35 @@ export const resamplingStats = (options: ResamplingOptions): ResamplingStats | n
   const ciLo = percentile(bootstrapDifferences, alpha);
   const ciHi = percentile(bootstrapDifferences, 1 - alpha);
 
+  const jackknife: number[] = [];
+  a.forEach((_, index) => {
+    const reduced = a.filter((__, position) => position !== index);
+    jackknife.push(statisticOf(b, statistic) - statisticOf(reduced, statistic));
+  });
+  b.forEach((_, index) => {
+    const reduced = b.filter((__, position) => position !== index);
+    jackknife.push(statisticOf(reduced, statistic) - statisticOf(a, statistic));
+  });
+  const jackknifeMean = jackknife.reduce((sum, value) => sum + value, 0) / Math.max(1, jackknife.length);
+  const sumSquares = jackknife.reduce((sum, value) => sum + Math.pow(jackknifeMean - value, 2), 0);
+  const sumCubes = jackknife.reduce((sum, value) => sum + Math.pow(jackknifeMean - value, 3), 0);
+  const acceleration = sumSquares > 0 ? sumCubes / (6 * Math.pow(sumSquares, 1.5)) : 0;
+  const below = bootstrapDifferences.filter(value => value < difference).length;
+  const proportion = Math.min(1 - 1 / (2 * bootstrap), Math.max(1 / (2 * bootstrap), below / bootstrap));
+  const z0 = jStat.normal.inv(proportion, 0, 1);
+  const zLow = jStat.normal.inv(alpha, 0, 1);
+  const zHigh = jStat.normal.inv(1 - alpha, 0, 1);
+  const adjusted = (z: number): number => {
+    const denominator = 1 - acceleration * (z0 + z);
+    return denominator === 0
+      ? alpha
+      : jStat.normal.cdf(z0 + (z0 + z) / denominator, 0, 1);
+  };
+  const bcaAlphaLow = Number.isFinite(acceleration) ? adjusted(zLow) : alpha;
+  const bcaAlphaHigh = Number.isFinite(acceleration) ? adjusted(zHigh) : 1 - alpha;
+  const bcaLo = percentile(bootstrapDifferences, Math.min(1, Math.max(0, bcaAlphaLow)));
+  const bcaHi = percentile(bootstrapDifferences, Math.min(1, Math.max(0, bcaAlphaHigh)));
+
   return {
     groups: [groups[0], groups[1]],
     n1: a.length,
@@ -75,6 +104,8 @@ export const resamplingStats = (options: ResamplingOptions): ResamplingStats | n
     pPermutation,
     ciLo,
     ciHi,
+    bcaLo,
+    bcaHi,
     permutations,
     bootstrap,
     statistic,

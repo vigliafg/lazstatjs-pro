@@ -76,6 +76,48 @@ export const buildSampleSizeOutput = (params: SampleSizeParams): AnalysisRunResu
     );
   }
 
+  const sensitivityRows: { x: number; y: number }[] = [];
+  const trySensitivity = (overrides: Partial<SampleSizeParams>, value: number) => {
+    const candidate = sampleSizeTables({ ...params, ...overrides, tails: 2 });
+    if (Number.isFinite(candidate.result.nPerGroup)) {
+      sensitivityRows.push({ x: value, y: candidate.result.nPerGroup });
+    }
+  };
+  if (params.design === 'twoMeans' || params.design === 'oneMean' || params.design === 'paired') {
+    const base = Math.abs(params.delta) > 0 ? Math.abs(params.delta) : 1;
+    for (let factor = 5; factor <= 20; factor += 1) {
+      trySensitivity({ delta: (base * factor) / 10 }, (base * factor) / 10);
+    }
+  } else if (params.design === 'correlation') {
+    for (let r = 10; r <= 90; r += 5) {
+      trySensitivity({ r: r / 100 }, r / 100);
+    }
+  } else if (params.design === 'anova') {
+    for (let f = 10; f <= 60; f += 5) {
+      trySensitivity({ f: f / 100 }, f / 100);
+    }
+  } else if (params.design === 'twoProportions') {
+    for (let p2 = 5; p2 <= 90; p2 += 5) {
+      const value = p2 / 100;
+      if (value === params.p1) continue;
+      trySensitivity({ p2: value }, value);
+    }
+  }
+  if (sensitivityRows.length > 1) {
+    charts.push(
+      makeChart({
+        id: 'samplesize-sensitivity',
+        kind: 'line',
+        title: copy('Sensibilità della numerosità'),
+        subtitle: copy('n richiesto al variare dell’effetto'),
+        note: copy('La curva mostra quanto cambia il campione necessario quando l’effetto ipotizzato cambia: effetti più piccoli richiedono campioni molto più grandi.'),
+        data: { series: sensitivityRows.map(row => ({ ...row, series: copy('n per gruppo') })) },
+        fields: { xLabel: copy('Effetto ipotizzato'), yLabel: copy('n per gruppo') },
+        options: { showMarkers: true, showBand: false } as never,
+      })
+    );
+  }
+
   return {
     ok: true,
     title: copy('Numerosità campionaria e potenza'),

@@ -43,10 +43,11 @@ export const buildTostOutput = ({ grid, params, ciLevel }: TostInput): AnalysisR
       s2: ciLevel,
       s3: stats.margin,
     }),
-    note: copy('La barra è la differenza stimata con il suo intervallo; le linee tratteggiate sono i margini di equivalenza.'),
+    note: copy('La barra è la differenza stimata con il suo intervallo; la fascia colorata è la regione di equivalenza delimitata dai margini tratteggiati.'),
     data: {
       bars: [{ category: copy('Differenza'), value: stats.diff, lo: stats.ciLo, hi: stats.ciHi }],
       rules: [{ value: -stats.margin }, { value: stats.margin }],
+      regions: [{ lo: -stats.margin, hi: stats.margin }],
     },
     fields: { xLabel: copy('Stima'), yLabel: copy('Differenza') },
     options: { error: 'ci', valueLabels: true } as never,

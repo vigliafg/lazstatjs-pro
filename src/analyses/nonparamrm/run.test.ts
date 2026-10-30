@@ -37,6 +37,7 @@ test('non-parametric builder runs Friedman and returns tables plus a report', ()
   if (!('ok' in result) || !result.ok) return;
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
+  assert.ok((result.charts ?? []).some(chart => chart.id === 'friedman-posthoc'));
 });
 
 test('non-parametric builder dispatches to each mode validation', () => {

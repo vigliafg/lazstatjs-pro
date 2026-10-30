@@ -51,7 +51,26 @@ export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput):
       title: copy('Accordo tra le due misure'),
       tables,
       report: blandAltmanReport(stats, ciLevel),
-      charts: [chart],
+      charts: [
+        chart,
+        makeChart({
+          id: 'agreement-bland-ci',
+          kind: 'interval',
+          title: copy('Bias e limiti di accordo con IC'),
+          subtitle: copy('IC {s1}%', { s1: ciLevel }),
+          note: copy('Ogni punto è una stima (bias o limite) e il segmento è il suo intervallo di confidenza: limiti di accordo imprecisi vanno letti con cautela.'),
+          data: {
+            intervals: [
+              { category: copy('Bias'), estimate: stats.bias, lo: stats.biasLo, hi: stats.biasHi },
+              { category: copy('Limite superiore'), estimate: stats.loaUpper, lo: stats.loaUpperLo, hi: stats.loaUpperHi },
+              { category: copy('Limite inferiore'), estimate: stats.loaLower, lo: stats.loaLowerLo, hi: stats.loaLowerHi },
+            ],
+            rules: [{ value: 0 }],
+          },
+          fields: { xLabel: copy('Stima'), yLabel: copy('Differenza') },
+          options: { valueLabels: true } as never,
+        }),
+      ],
     };
   }
 
@@ -87,6 +106,19 @@ export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput):
           data: { cells },
           fields: { xLabel: copy('Valutatore / categoria'), yLabel: copy('Valutatore / categoria') },
           options: { showValues: true } as never,
+        }),
+        makeChart({
+          id: 'agreement-kappa-ci',
+          kind: 'interval',
+          title: copy('Kappa con intervallo di confidenza'),
+          subtitle: copy('IC {s1}%', { s1: ciLevel }),
+          note: copy('Se l’intervallo contiene lo zero l’accordo osservato non è distinguibile dal caso.'),
+          data: {
+            intervals: [{ category: copy('Kappa'), estimate: stats.kappa, lo: stats.lo, hi: stats.hi }],
+            rules: [{ value: 0 }],
+          },
+          fields: { xLabel: copy('Stima'), yLabel: copy('Kappa') },
+          options: { valueLabels: true } as never,
         }),
       ],
     };

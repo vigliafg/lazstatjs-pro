@@ -131,6 +131,34 @@ export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunRe
       options: { display: 'matrix' } as never,
     })
   );
+  const patternCounts = new Map<string, number>();
+  grid.rows.forEach(row => {
+    const key = names
+      .map((name, column) =>
+        Number.isFinite(parseNum(row[params.variables[column] ?? -1])) ? `${name}: O` : `${name}: M`
+      )
+      .join(' · ');
+    patternCounts.set(key, (patternCounts.get(key) ?? 0) + 1);
+  });
+  if (patternCounts.size > 0) {
+    charts.push(
+      makeChart({
+        id: 'mi-patterns',
+        kind: 'bar',
+        title: copy('Pattern dei valori mancanti'),
+        subtitle: copy('O = osservato · M = mancante'),
+        note: copy('Ogni barra conta le righe con la stessa combinazione di valori osservati e mancanti; i pattern frequenti guidano la scelta del modello di imputazione.'),
+        data: {
+          bars: [...patternCounts.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10)
+            .map(([category, value]) => ({ category, value })),
+        },
+        fields: { xLabel: copy('Pattern'), yLabel: copy('Righe') },
+        options: { valueLabels: true } as never,
+      })
+    );
+  }
   if (stats.iterations > 1 && traceRows.length > 0) {
     charts.push(
       makeChart({

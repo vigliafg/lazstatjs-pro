@@ -67,11 +67,30 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
       if (point.censored > 0) censored.push({ x: point.time, y: point.survival, series: label });
     });
   });
+  const baselineRows: ChartRow[] = labels.flatMap(label => {
+    const observations = strata.flatMap((stratum, index) =>
+      stratum === label && Number.isFinite(time[index]) && time[index] >= 0
+        ? [{ time: time[index], event: event[index] === 1 ? 1 : 0 }]
+        : []
+    );
+    if (observations.length === 0) return [];
+    const eventTimes = Array.from(
+      new Set(observations.filter(item => item.event === 1).map(item => item.time))
+    ).sort((a, b) => a - b);
+    let cumulative = 0;
+    const rows: ChartRow[] = [{ x: 0, y: 0, series: label }];
+    eventTimes.forEach(atTime => {
+      const atRisk = observations.filter(item => item.time >= atTime).length;
+      const events = observations.filter(item => item.time === atTime && item.event === 1).length;
+      if (atRisk > 0 && events > 0) cumulative += events / atRisk;
+      rows.push({ x: atTime, y: cumulative, series: label });
+    });
+    return rows;
+  });
   const maxTime = time.reduce(
     (max, value) => (Number.isFinite(value) && value >= 0 ? Math.max(max, value) : max),
     0
-  );
-  const riskTimes =
+  );  const riskTimes =
     maxTime > 0
       ? [0, 0.25, 0.5, 0.75, 1].map(fraction => Number((fraction * maxTime).toFixed(4)))
       : [0];
@@ -111,6 +130,20 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
         note: copy('Le curve descrivono la sopravvivenza osservata in ogni strato; il modello Cox condivide le stime delle covariate tra gli strati.'),
         data: { curves, censored },
         fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Strato') },
+      })
+    );
+  }
+  if (baselineRows.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'stratcox-baseline',
+        kind: 'line',
+        title: copy('Rischio cumulato di base per strato'),
+        subtitle: copy('Nelson–Aalen per strato'),
+        note: copy('Ogni curva è il rischio cumulato osservato nello strato; serve a confrontare l’andamento di base senza assumere rischi proporzionali tra strati.'),
+        data: { series: baselineRows },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Rischio cumulato'), series: copy('Strato') },
+        options: { showMarkers: false, showBand: false, step: true } as never,
       })
     );
   }

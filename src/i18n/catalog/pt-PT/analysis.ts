@@ -246,6 +246,7 @@ export const analysisMessages = {
   "chart.display.box": "Caixa",
   "chart.display.notched": "Caixa com entalhe",
   "chart.display.violin": "Violino",
+  "chart.display.raincloud": "Nuvem de pontos",
   "chart.feature.bins": "Classes",
   "chart.feature.kde": "Curva KDE",
   "chart.feature.detrendedQq": "Q-Q sem tendência",

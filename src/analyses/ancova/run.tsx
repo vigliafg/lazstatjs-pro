@@ -1,5 +1,5 @@
 import { copy } from '../../stats/reportCopy';
-import { makeChart } from '../../charts/kits/common';
+import { makeChart, qqBand, qqPoints, qqReference } from '../../charts/kits/common';
 import { ancovaReport, ancovaTables } from '../../stats/ancova';
 import { parseNum } from '../../stats/core';
 import {
@@ -106,6 +106,96 @@ export const buildAncovaOutput = ({ grid, params, ciLevel }: AncovaInput): Analy
         }]
       : []),
   ]);
+  const coefficientRows = tables.find(table => table.id === 'ancova-coefficients')?.rows ?? [];
+  const coefficientValues = coefficientRows.map(row => Number(row.b));
+  const groupNames = chartData.map(point => point.group);
+  const covariateMeans = covariateValues.map(values =>
+    values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length)
+  );
+  const firstCovariate = covariateValues[0] ?? [];
+  const firstMin = firstCovariate.length ? Math.min(...firstCovariate) : 0;
+  const firstMax = firstCovariate.length ? Math.max(...firstCovariate) : 1;
+  const profilePoints = Array.from({ length: 40 }, (_, index) => {
+    const x = firstMin + ((firstMax - firstMin) * index) / 39;
+    return groupNames.map((group, groupIndex) => {
+      const groupEffect = groupIndex === 0 ? 0 : coefficientValues[groupIndex] ?? 0;
+      const slope = coefficientValues[groupNames.length - 1 + 1] ?? 0;
+      const otherCovariates = covariateMeans
+        .slice(1)
+        .reduce((sum, mean, column) => sum + (coefficientValues[groupNames.length + column] ?? 0) * mean, 0);
+      return {
+        x,
+        y: (coefficientValues[0] ?? 0) + groupEffect + slope * x + otherCovariates,
+        series: group,
+      };
+    });
+  }).flat();
+  const predicted = y.map((_, index) => {
+    const groupIndex = groupNames.indexOf(levels[index]);
+    const groupEffect = groupIndex <= 0 ? 0 : coefficientValues[groupIndex] ?? 0;
+    const covariatePart = covariateValues.reduce((sum, values, column) => {
+      const slope = coefficientValues[groupNames.length + column] ?? 0;
+      return sum + slope * values[index];
+    }, 0);
+    return (coefficientValues[0] ?? 0) + groupEffect + covariatePart;
+  });
+  const residualPoints = predicted.map((value, index) => ({ x: value, y: y[index] - value }));
+  const residualQq = qqPoints(residualPoints.map(point => point.y));
+  const charts = [
+    makeChart({
+      id: 'ancova-means',
+      kind: 'bar',
+      title: copy('Medie grezze e aggiustate'),
+      subtitle: `${factorName} × ${responseName}`,
+      note: copy('Le barre aggiustate sono le medie alla media delle covariate: è questa la differenza che l’ANCOVA testa.'),
+      data: { bars },
+      fields: { xLabel: factorName, yLabel: responseName, series: copy('Stima') },
+      options: { valueLabels: true, error: 'ci', grouping: 'grouped' } as never,
+    }),
+  ];
+  if (profilePoints.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'ancova-profile',
+        kind: 'line',
+        title: copy('Profilo aggiustato per covariata'),
+        subtitle: copy('{s1} · altre covariate alla media', { s1: covariateNames[0] ?? 'Cov' }),
+        note: copy('Linee parallele indicano pendenze comuni; linee divergenti suggeriscono un’interazione gruppo × covariata.'),
+        data: { series: profilePoints },
+        fields: { xLabel: covariateNames[0] ?? 'Cov', yLabel: copy('Risposta aggiustata'), series: factorName },
+        options: { showMarkers: false, showBand: false } as never,
+      })
+    );
+  }
+  if (residualPoints.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'ancova-residual-fitted',
+        kind: 'scatter',
+        title: copy('Residui vs predetti'),
+        subtitle: copy('N = {s1}', { s1: residualPoints.length }),
+        note: copy('Residui senza struttura indicano che il modello descrive i dati; imbuti o curvature suggeriscono varianze diverse o un legame mal specificato.'),
+        data: { points: residualPoints, rules: [{ y: 0 }] },
+        fields: { xLabel: copy('Valori predetti'), yLabel: copy('Residui') },
+        options: { fit: 'none', band: 'none' } as never,
+      })
+    );
+  }
+  if (residualQq.length > 0) {
+    const residualLine = qqReference(residualQq);
+    charts.push(
+      makeChart({
+        id: 'ancova-residual-qq',
+        kind: 'qq',
+        title: copy('Q-Q dei residui'),
+        subtitle: copy('N = {s1}', { s1: residualQq.length }),
+        note: copy('I punti vicini alla diagonale indicano residui compatibili con la normalità.'),
+        data: { points: residualQq, reference: residualLine, band: qqBand(residualQq, residualLine, ciLevel) },
+        fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Residui osservati') },
+        options: { showCI: true } as never,
+      })
+    );
+  }
 
   return {
     ok: true,
@@ -113,17 +203,6 @@ export const buildAncovaOutput = ({ grid, params, ciLevel }: AncovaInput): Analy
     header: `ANCOVA · ${responseName} ~ ${factorName} + ${covariateNames.join(' + ')} · ${levels.length} righe`,
     tables,
     report: ancovaReport(tables, factorName, covariateNames, ciLevel),
-    charts: [
-      makeChart({
-        id: 'ancova-means',
-        kind: 'bar',
-        title: copy('Medie grezze e aggiustate'),
-        subtitle: `${factorName} × ${responseName}`,
-        note: copy('Le barre aggiustate sono le medie alla media delle covariate: è questa la differenza che l’ANCOVA testa.'),
-        data: { bars },
-        fields: { xLabel: factorName, yLabel: responseName, series: copy('Stima') },
-        options: { valueLabels: true, error: 'ci', grouping: 'grouped' } as never,
-      }),
-    ],
+    charts,
   };
 };

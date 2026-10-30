@@ -46,8 +46,14 @@ export const resamplingCopy: Record<string, string> = {
     'bootstrap CI low',
   'CI bootstrap high':
     'bootstrap CI high',
+  'CI BCa low':
+    'BCa CI low',
+  'CI BCa high':
+    'BCa CI high',
   'Il p di permutazione non assume normalità: confronta la differenza osservata con la distribuzione sotto etichette casuali.':
     'The permutation p does not assume normality: it compares the observed difference with the distribution under random labels.',
   'Il CI bootstrap percentile ricampiona dentro ciascun gruppo; con pochi casi può essere instabile.':
     'The percentile bootstrap CI resamples within each group; with few cases it can be unstable.',
+  'Il CI BCa corregge bias e asimmetria della distribuzione bootstrap ed è preferibile quando la distribuzione è sbilanciata.':
+    'The BCa CI corrects bootstrap bias and skewness and is preferable when the distribution is unbalanced.',
 };

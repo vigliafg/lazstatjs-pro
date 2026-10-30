@@ -31,10 +31,13 @@ export const resamplingTables = (stats: ResamplingStats, level: number): TableSp
       { metric: copy('p permutation (due code)'), value: stats.pPermutation },
       { metric: copy('CI bootstrap low'), value: stats.ciLo },
       { metric: copy('CI bootstrap high'), value: stats.ciHi },
+      { metric: copy('CI BCa low'), value: stats.bcaLo },
+      { metric: copy('CI BCa high'), value: stats.bcaHi },
     ],
     notes: [
       copy('Il p di permutazione non assume normalità: confronta la differenza osservata con la distribuzione sotto etichette casuali.'),
       copy('Il CI bootstrap percentile ricampiona dentro ciascun gruppo; con pochi casi può essere instabile.'),
+      copy('Il CI BCa corregge bias e asimmetria della distribuzione bootstrap ed è preferibile quando la distribuzione è sbilanciata.'),
     ],
   },
 ];

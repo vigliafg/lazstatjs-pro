@@ -57,6 +57,18 @@ const buildFriedman = (
   const posthoc = nemenyiPosthoc(test, ciLevel);
   const tables = friedmanTables(test, posthoc, names, ciLevel);
   const data = names.map((name, index) => ({ x: name, y: test.meanRanks[index] }));
+  const posthocCells = names.flatMap((rowName, i) =>
+    names.map((columnName, j) => {
+      if (i === j) return { x: columnName, y: rowName, value: 1, label: '—' };
+      const pair = posthoc.pairs.find(item => (item.a === i && item.b === j) || (item.a === j && item.b === i));
+      return {
+        x: columnName,
+        y: rowName,
+        value: pair ? pair.p : 1,
+        label: pair ? pair.p.toFixed(3) : '—',
+      };
+    })
+  );
 
   return {
     ok: true,
@@ -72,6 +84,16 @@ const buildFriedman = (
         data: { bars: data.map(point => ({ category: point.x, value: point.y })) },
         fields: { xLabel: copy('Condizione'), yLabel: copy('Rango medio') },
         options: { valueLabels: true } as never,
+      }),
+      makeChart({
+        id: 'friedman-posthoc',
+        kind: 'heatmap',
+        title: copy('Confronti a coppie (Nemenyi)'),
+        subtitle: copy('p non corrette · {s1} blocchi', { s1: blocks.length }),
+        note: copy('Valori bassi indicano coppie con ranghi diversi; la correzione Nemenyi controlla i confronti multipli.'),
+        data: { cells: posthocCells },
+        fields: { xLabel: copy('Condizione'), yLabel: copy('Condizione') },
+        options: { showValues: true, diverging: false } as never,
       }),
     ],
   };

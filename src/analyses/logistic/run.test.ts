@@ -33,6 +33,9 @@ test('logistic builder returns tables, report and the probability curve', () => 
   assert.ok(ids.includes('logistic-curve'));
   assert.ok(ids.includes('logistic-roc'));
   assert.ok(ids.includes('logistic-calibration'));
+  assert.ok(ids.includes('logistic-confusion'));
+  assert.ok(ids.includes('logistic-or-forest'));
+  assert.ok(ids.includes('logistic-marginal'));
   const roc = (result.charts ?? []).find(chart => chart.id === 'logistic-roc');
   assert.ok((roc?.data.series ?? []).length > 2);
   const diagonal = (roc?.data.series ?? []).filter(row => row.step === 0);

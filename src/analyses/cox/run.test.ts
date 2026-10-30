@@ -39,6 +39,8 @@ test('cox builder returns tables, report and the hazard-ratio plot', () => {
   const ids = (result.charts ?? []).map(item => item.id);
   assert.ok(ids.includes('cox-baseline-hazard'));
   assert.ok(ids.includes('cox-baseline-survival'));
+  assert.ok(ids.includes('cox-martingale'));
+  assert.ok(ids.includes('cox-predicted-survival'));
   assert.ok(ids.some(id => id.startsWith('cox-schoenfeld-')));
   const hazard = (result.charts ?? []).find(item => item.id === 'cox-baseline-hazard');
   const survival = (result.charts ?? []).find(item => item.id === 'cox-baseline-survival');
