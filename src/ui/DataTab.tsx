@@ -1,12 +1,11 @@
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { CleanPanel } from '../grid/CleanPanel';
 import { VariableInspector } from '../grid/VariableInspector';
 import { t } from '../i18n';
 import { fillRightRange as gridFillRight } from '../grid/fillRight';
 import { setRangeValue as gridSetRangeValue } from '../grid/ops';
 import { DataGrid } from '../grid/DataGrid';
-import { TransformPanel } from '../grid/TransformPanel';
+import { OperationsBar } from '../grid/OperationsBar';
 import { copyText } from '../io/clipboard';
 import {
   addColumnEnd as gridAddColumn,
@@ -87,10 +86,6 @@ export interface DataTabProps {
   filterNeedsValue: boolean;
   activeRowFilter: RowFilter | null;
   visibleRowCount: number;
-  showClean: boolean;
-  setShowClean: Dispatch<SetStateAction<boolean>>;
-  showTransform: boolean;
-  setShowTransform: Dispatch<SetStateAction<boolean>>;
   updateCell: (r: number, c: number, value: string) => void;
   updateColType: (c: number, type: ColType) => void;
   updateColumnLevels: (c: number, levels: CategoryLevel[], reference?: string) => void;
@@ -150,10 +145,6 @@ export const DataTab = ({
   filterNeedsValue,
   activeRowFilter,
   visibleRowCount,
-  showClean,
-  setShowClean,
-  showTransform,
-  setShowTransform,
   updateCell,
   updateColType,
   updateColumnLevels,
@@ -253,12 +244,6 @@ export const DataTab = ({
     >
       {t('data.autoFix')}
     </button>
-    <button className={`tb-btn ${showClean ? 'bg-accent text-on-accent border-accent' : ''}`} onClick={() => setShowClean((v) => !v)}>
-      {t('data.clean')}
-    </button>
-    <button className={`tb-btn ${showTransform ? 'bg-accent text-on-accent border-accent' : ''}`} onClick={() => setShowTransform((v) => !v)}>
-      {t('data.transform')}
-    </button>
     </div>
     <div className="h-4 w-px bg-border mx-1" />
     <div role="group" aria-label={t('data.groupView')} className="flex flex-wrap items-center gap-2">
@@ -285,6 +270,24 @@ export const DataTab = ({
     </button>
     </div>
   </div>
+
+  <OperationsBar
+    datasetId={datasetId}
+    grid={grid}
+    onTransformApply={(next, msg, kind = 'ok', operation) => {
+      if (next !== grid) {
+        if (operation) onColumnOperation(next, operation);
+        else setGrid(next);
+        setValidation({ ran: false, issues: [] });
+      }
+      showToast(t('toast.transform'), msg, kind);
+    }}
+    onCleanApply={(next, msg) => {
+      setGrid(next);
+      setValidation({ ran: false, issues: [] });
+      showToast(t('toast.clean'), msg, 'ok');
+    }}
+  />
 
   {showFilter && (
     <div className="bg-surface border-b border-border px-3 py-1.5 flex flex-wrap items-center gap-2 text-[11px] shrink-0">
@@ -347,31 +350,6 @@ export const DataTab = ({
           : t('data.viewOnlyHint')}
       </span>
     </div>
-  )}
-
-  {showTransform && (
-    <TransformPanel
-      grid={grid}
-      onApply={(next, msg, kind = 'ok', operation) => {
-        if (next !== grid) {
-          if (operation) onColumnOperation(next, operation);
-          else setGrid(next);
-          setValidation({ ran: false, issues: [] });
-        }
-        showToast(t('toast.transform'), msg, kind);
-      }}
-    />
-  )}
-
-  {showClean && (
-    <CleanPanel
-      grid={grid}
-      onApply={(next, msg) => {
-        setGrid(next);
-        setValidation({ ran: false, issues: [] });
-        showToast(t('toast.clean'), msg, 'ok');
-      }}
-    />
   )}
 
   {validation.ran && (

@@ -77,6 +77,19 @@ test('text tokens keep AA contrast on every surface', () => {
   }
 });
 
+test('operation toolbar and tooltip colours keep AA contrast in every theme', () => {
+  for (const theme of THEMES) {
+    // Closed trigger: accent icon and full-brightness label on the chip.
+    assertContrast(theme, theme.tokens.accent, theme.tokens.bg, 4.5);
+    assertContrast(theme, theme.tokens.text, theme.tokens.bg, 7);
+    // Hover/open trigger and tooltip: onAccent on the accent fill.
+    assertContrast(theme, theme.tokens.onAccent, theme.tokens.accent, 4.5);
+    // Panel header/body on the surface.
+    assertContrast(theme, theme.tokens.text, theme.tokens.surface, 7);
+    assertContrast(theme, theme.tokens.text2, theme.tokens.surface, 4.5);
+  }
+});
+
 test('accent tokens stay readable on the interface surfaces', () => {
   for (const theme of THEMES) {
     for (const background of [theme.tokens.bg, theme.tokens.surface]) {

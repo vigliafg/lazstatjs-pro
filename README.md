@@ -28,7 +28,8 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Virtualised rows** above 80 visible rows, with fill handle, `Ctrl+D` / `Ctrl+R`, multi-cell typing and 500-row paste smoke-tested
 - **Stable column ids** and parameter remapping: insert, delete, move, duplicate, split and merge never silently point an analysis at another variable; a type incompatible with the role blocks the run until the variable is reselected
 - **Sort ascending/descending per column** from the column context menu (undoable)
-- **Find & replace** with regex, case sensitivity and single-column scope; whitespace trim, duplicates/empty-row cleanup and mean/median/mode imputation live in the Clean panel
+- **Find & replace** with regex, case sensitivity and single-column scope; whitespace trim, duplicates/empty-row cleanup and mean/median/mode imputation live behind the Clean triggers
+- **Data operations bar**: one trigger per operation (Sort, Recode, Split, Split all, Merge, Compute | Find/Replace, Fill missing, Trim, Drop empty, Drop duplicates); each opens its own anchored panel with parameters and Cancel/Run, with icon + label from 1280 px and a themed tooltip
 
 ### Analysis workbench
 - **Three-pane workspace**: a searchable analysis library on the left, a setup panel in the middle and the output document on the right

@@ -86,7 +86,7 @@ La griglia non è più solo un editor di celle. Ora è **identity-safe** e
 | Split column i | nuova a `i+1`; `>= i+1` → `+1`; `i` resta | ruolo su `i` → `-1` | invalidazione; formula rimossa |
 | Split all | N-1 nuove colonne | ruolo su `i` → `-1` | invalidazione; formula rimossa |
 | Merge columns a,b | `hi` sparisce; `lo` fusa; `> hi` → `-1` | ruoli su `a`/`b` → `-1` | invalidazione |
-| Recode values/levels | invariati | invariati | stale; il pannello Transform usa `recodeColumnValues` e aggiorna livelli/reference/tipo |
+| Recode values/levels | invariati | invariati | stale; il comando Recode usa `recodeColumnValues` e aggiorna livelli/reference/tipo |
 | Rename | invariati | invariati | stale; le formule seguono il nome |
 | Cambio tipo | invariati | ruolo incompatibile → errore | stale + Run bloccato |
 | New / Import overwrite | tutte nuove | reset | reset + `datasetId` + output svuotati |
@@ -173,7 +173,7 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
   valori precedenti invece di svuotare la colonna; l'undo ripristina il
   riferimento.
 - `renameColumn` riscrive i riferimenti nelle formule.
-- `Compute` nel pannello Transform crea una formula persistente quando la
+- `Compute` nella barra operazioni crea una formula persistente quando la
   casella `formula` è selezionata (default) e una colonna one-shot altrimenti.
 
 ### 3.9 Virtualizzazione
@@ -190,6 +190,11 @@ L'output vecchio non viene conservato: apparteneva a un altro dataset.
 | File | Ruolo |
 |---|---|
 | `src/grid/types.ts` | `Column.id/formula/missing`, livelli, `columnLabel`, masking |
+| `src/grid/OperationsBar.tsx` | Barra dedicata: trigger Transform, separatore, trigger Clean |
+| `src/grid/OperationPopover.tsx` | Trigger con tooltip, pannello ancorato, Cancel/Run, chiusura Escape/esterno |
+| `src/grid/TransformOperations.tsx` | Form per Sort, Recode, Split, Split all, Merge, Compute |
+| `src/grid/CleanOperations.tsx` | Form per Find/Replace, Fill missing, Trim, Drop empty, Drop duplicates |
+| `src/grid/OperationFields.tsx` | Campi, tipi di callback e clamp condivisi dai due gruppi |
 | `src/grid/columnOps.ts` | Mappa indici per insert/delete/move/split/merge/map/reset |
 | `src/grid/formulas.ts` | Valutazione formule, ricalcolo, rewrite su rename |
 | `src/grid/virtual.ts` | Finestra di righe e costanti di virtualizzazione |

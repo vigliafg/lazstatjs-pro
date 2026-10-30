@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mapColumnIndex, mapColumnIndexes } from './columnOps';
+import { columnCountAfter, mapColumnIndex, mapColumnIndexes } from './columnOps';
 
 test('insert shifts indexes at and after the insertion point', () => {
   const op = { kind: 'insert' as const, at: 2, count: 1 };
@@ -34,6 +34,15 @@ test('split invalidates the original column and shifts the columns after it', ()
   assert.equal(mapColumnIndex(0, op), 0);
   assert.equal(mapColumnIndex(1, op), -1);
   assert.equal(mapColumnIndex(2, op), 3);
+});
+
+test('split all shifts columns after the source by every inserted part', () => {
+  const op = { kind: 'split' as const, at: 1, count: 3 };
+  assert.equal(mapColumnIndex(0, op), 0);
+  assert.equal(mapColumnIndex(1, op), -1);
+  assert.equal(mapColumnIndex(2, op), 5);
+  assert.equal(columnCountAfter(4, op), 7);
+  assert.equal(columnCountAfter(4, { kind: 'split', at: 1 }), 5);
 });
 
 test('merge invalidates both sources and shifts columns after the high index', () => {

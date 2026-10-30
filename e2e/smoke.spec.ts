@@ -208,10 +208,11 @@ test('keeps a computed column in sync when its source changes', async ({ page, i
   test.skip(isMobile, 'transform panel is exercised on the desktop layout');
 
   await page.goto('/');
-  await page.getByRole('button', { name: 'Transform' }).click();
-  await page.getByLabel('Formula expression').fill('Score_Post - Score_Pre');
-  await page.getByLabel('New column name').fill('Diff');
-  await page.getByRole('button', { name: 'Compute' }).click();
+  await page.locator('[data-transform="compute-open"]').click();
+  const compute = page.getByRole('dialog', { name: 'Compute' });
+  await compute.getByLabel('Formula expression').fill('Score_Post - Score_Pre');
+  await compute.getByLabel('New column name').fill('Diff');
+  await compute.getByRole('button', { name: 'Run' }).click();
 
   await expect(page.locator('input[data-cell="0-4"]')).toHaveValue('10');
   await page.locator('input[data-cell="0-0"]').fill('51');

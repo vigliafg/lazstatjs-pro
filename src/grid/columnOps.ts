@@ -9,7 +9,7 @@ export type ColumnOperation =
   | { kind: 'insert'; at: number; count?: number }
   | { kind: 'delete'; at: number; count?: number }
   | { kind: 'move'; from: number; to: number }
-  | { kind: 'split'; at: number }
+  | { kind: 'split'; at: number; count?: number }
   | { kind: 'merge'; a: number; b: number }
   | { kind: 'map'; map: Record<number, number> }
   | { kind: 'reset' };
@@ -33,10 +33,13 @@ export const mapColumnIndex = (index: number, op: ColumnOperation): number => {
       if (op.from < op.to) return index > op.from && index <= op.to ? index - 1 : index;
       return index >= op.to && index < op.from ? index + 1 : index;
     }
-    case 'split':
+    case 'split': {
+      // Split all inserts `count` columns after `at`; the plain split inserts 1.
+      const count = Math.max(1, op.count ?? 1);
       if (index < op.at) return index;
       if (index === op.at) return -1;
-      return index + 1;
+      return index + count;
+    }
     case 'merge': {
       const lo = Math.min(op.a, op.b);
       const hi = Math.max(op.a, op.b);
@@ -69,7 +72,7 @@ export const columnCountAfter = (width: number, op: ColumnOperation): number => 
     case 'delete':
       return Math.max(0, width - Math.max(1, op.count ?? 1));
     case 'split':
-      return width + 1;
+      return width + Math.max(1, op.count ?? 1);
     case 'merge':
       return Math.max(0, width - 1);
     case 'move':

@@ -66,8 +66,6 @@ interface Props {
 export const DataWorkspace = (p: Props) => {
   const [focusCell, setFocusCell] = useState<{ r: number; c: number; stamp: number } | null>(null);
   const [selRange, setSelRange] = useState<{ r0: number; c0: number; r1: number; c1: number } | null>(null);
-  const [showClean, setShowClean] = useState(false);
-  const [showTransform, setShowTransform] = useState(false);
   const [freezeFirstCol, setFreezeFirstCol] = useState(false);
   const [showInspector, setShowInspector] = useState(false);
   const [inspectorCol, setInspectorCol] = useState(0);
@@ -167,10 +165,6 @@ export const DataWorkspace = (p: Props) => {
       filterNeedsValue={p.filterNeedsValue}
       activeRowFilter={p.activeRowFilter}
       visibleRowCount={p.visibleRowCount}
-      showClean={showClean}
-      setShowClean={setShowClean}
-      showTransform={showTransform}
-      setShowTransform={setShowTransform}
       updateCell={p.updateCell}
       updateColType={p.updateColType}
       updateColumnLevels={p.updateColumnLevels}

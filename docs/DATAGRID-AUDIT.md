@@ -1,8 +1,10 @@
 # Audit Data Grid — import/export, operazioni e tipi
 
 Data: 2026-10-29. Perimetro: toolbar Data, `ImportWizard`, `ExportDialog`,
-operazioni pure in `src/grid/ops/`, `DataGrid`, `TransformPanel`,
-`VariableInspector`, `LevelsEditor`.
+operazioni pure in `src/grid/ops/`, `DataGrid`, `OperationsBar` con
+`OperationPopover`, `VariableInspector`, `LevelsEditor`. Aggiornamento
+2026-10-30: i pannelli inline Transform/Clean sono sostituiti da una barra
+dedicata con un trigger e un pannello per comando (`Cancel`/`Run`).
 
 ## Copertura
 
@@ -98,7 +100,7 @@ modello multi-tabella, oggi fuori perimetro.
 
 ### Recode
 
-- `Transform → Recode` usa ora `recodeColumnValues`, non il vecchio
+- `Recode` nella barra operazioni usa `recodeColumnValues`, non il vecchio
   `recodeColumn`: aggiorna livelli, reference, tipo (`cat` se i nuovi codici
   non rispettano il tipo) e riporta celle ricodificate/fuse/svuotate.
 - Il livello con etichetta duplicata non fonde gruppi: `setColumnLevels`
@@ -149,7 +151,7 @@ modello multi-tabella, oggi fuori perimetro.
 5. Merge conservava tipo/formula/metadati della colonna `lo` e produceva
    numeri/categorie invalide da testo concatenato.
 6. Merge inseriva un separatore anche tra celle vuote.
-7. Il pannello Transform usava `recodeColumn` e non aggiornava
+7. Il comando Recode usava `recodeColumn` e non aggiornava
    livelli/reference/tipo.
 8. `ExportDialog` non aveva un ruolo dialog per test/accessibilità.
 9. Recode rimuove la formula persistente della colonna, altrimenti il

@@ -12,6 +12,10 @@ const fileInput = (page: Page) => page.locator('input[type="file"][accept*=".csv
 const importDialog = (page: Page) => page.getByRole('dialog', { name: 'Smart Import' });
 const exportDialog = (page: Page) => page.getByRole('dialog', { name: 'Export data' });
 const transform = (page: Page, name: string) => page.locator(`[data-transform="${name}"]`);
+const operation = (page: Page, name: string) => page.locator(`[data-transform="${name}-open"]`);
+const panel = (page: Page, name: string) => page.getByRole('dialog', { name });
+const runPanel = (page: Page, name: string) =>
+  panel(page, name).getByRole('button', { name: 'Run' });
 
 const upload = async (page: Page, file: string) => {
   await fileInput(page).setInputFiles(path.resolve('e2e/fixtures', file));
@@ -139,30 +143,36 @@ test.describe('data grid — export', () => {
 });
 
 test.describe('data grid — transform operations', () => {
-  test.skip(({ isMobile }) => isMobile, 'transform panel is exercised on desktop');
+  test.skip(({ isMobile }) => isMobile, 'transform operations are exercised on desktop');
 
-  test('split creates a new column and preserves the left values', async ({ page }) => {
+  test('split creates a new column, preserves the left values and undoes in one step', async ({ page }) => {
     await page.goto('/');
     await cell(page, 0, 0).fill('x;y');
     await cell(page, 1, 0).fill('p;q');
-    await page.getByRole('button', { name: 'Transform' }).click();
+    await operation(page, 'split').click();
+    const dialog = panel(page, 'Split');
     await transform(page, 'split-col').selectOption('0');
     await transform(page, 'split-sep').fill(';');
-    await transform(page, 'split-apply').click();
+    await runPanel(page, 'Split').click();
+    await expect(dialog).toHaveCount(0);
 
     await expect(page.getByLabel('Type: Score_Pre_2')).toBeVisible();
     await expect(cell(page, 0, 0)).toHaveValue('x');
     await expect(cell(page, 0, 1)).toHaveValue('y');
     await expect(cell(page, 1, 1)).toHaveValue('q');
+
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await expect(page.getByLabel('Type: Score_Pre_2')).toHaveCount(0);
+    await expect(cell(page, 0, 0)).toHaveValue('x;y');
   });
 
   test('split all creates every part as a new column', async ({ page }) => {
     await page.goto('/');
     await cell(page, 0, 0).fill('a;b;c');
-    await page.getByRole('button', { name: 'Transform' }).click();
+    await operation(page, 'split-all').click();
     await transform(page, 'split-col').selectOption('0');
     await transform(page, 'split-sep').fill(';');
-    await transform(page, 'split-all').click();
+    await runPanel(page, 'Split all').click();
 
     await expect(page.getByLabel('Type: Score_Pre_2')).toBeVisible();
     await expect(page.getByLabel('Type: Score_Pre_3')).toBeVisible();
@@ -173,9 +183,9 @@ test.describe('data grid — transform operations', () => {
 
   test('merge concatenates two columns as text and removes the right one', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: 'Transform' }).click();
+    await operation(page, 'merge').click();
     await transform(page, 'merge-sep').fill('-');
-    await transform(page, 'merge-apply').click();
+    await runPanel(page, 'Merge').click();
 
     await expect(page.getByLabel('Type: Score_Pre_Score_Post')).toHaveValue('str');
     await expect(cell(page, 0, 0)).toHaveValue('50-60');
@@ -184,14 +194,135 @@ test.describe('data grid — transform operations', () => {
 
   test('recode maps values and reports the number of changed cells', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: 'Transform' }).click();
+    await operation(page, 'recode').click();
     await transform(page, 'recode-col').selectOption('0');
     await transform(page, 'recode-map').fill('50=99');
-    await transform(page, 'recode-apply').click();
+    await runPanel(page, 'Recode').click();
 
     await expect(cell(page, 0, 0)).toHaveValue('99');
     await expect(cell(page, 1, 0)).toHaveValue('52');
     await expect(page.getByText(/1 cells recoded/)).toBeVisible();
+  });
+
+  test('compute keeps the panel open when the formula fails', async ({ page }) => {
+    await page.goto('/');
+    await operation(page, 'compute').click();
+    const dialog = panel(page, 'Compute');
+    await dialog.getByLabel('Formula expression').fill('Nope(');
+    await dialog.getByRole('button', { name: 'Run' }).click();
+    await expect(dialog).toBeVisible();
+  });
+
+  test('cancel discards the draft and leaves the grid untouched', async ({ page }) => {
+    await page.goto('/');
+    await operation(page, 'recode').click();
+    await transform(page, 'recode-map').fill('50=99');
+    await panel(page, 'Recode').getByRole('button', { name: 'Cancel' }).click();
+
+    await expect(panel(page, 'Recode')).toHaveCount(0);
+    await expect(cell(page, 0, 0)).toHaveValue('50');
+  });
+
+  test('opening another operation closes the previous panel', async ({ page }) => {
+    await page.goto('/');
+    await operation(page, 'sort').click();
+    await expect(panel(page, 'Sort')).toBeVisible();
+    await operation(page, 'recode').click();
+    await expect(panel(page, 'Sort')).toHaveCount(0);
+    await expect(panel(page, 'Recode')).toBeVisible();
+  });
+
+  test('keyboard activation closes the previous panel too', async ({ page }) => {
+    await page.goto('/');
+    await operation(page, 'sort').click();
+    await expect(panel(page, 'Sort')).toBeVisible();
+    await operation(page, 'recode').focus();
+    await page.keyboard.press('Enter');
+    await expect(panel(page, 'Sort')).toHaveCount(0);
+    await expect(panel(page, 'Recode')).toBeVisible();
+  });
+
+  test('escape closes the panel and the trigger keeps a themed tooltip', async ({ page }) => {
+    await page.goto('/');
+    const trigger = operation(page, 'sort');
+    const tooltip = page.locator('[data-tooltip="sort"]');
+    await expect(tooltip).toContainText('Sort the rows by a column');
+    await trigger.hover();
+    await expect(tooltip).not.toHaveClass(/sr-only/);
+
+    await trigger.click();
+    await expect(panel(page, 'Sort')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(panel(page, 'Sort')).toHaveCount(0);
+  });
+
+  test('changing the dataset closes an open panel', async ({ page }) => {
+    await page.goto('/');
+    await operation(page, 'sort').click();
+    await expect(panel(page, 'Sort')).toBeVisible();
+    page.once('dialog', (dialog) => dialog.accept());
+    await page.getByRole('button', { name: 'New', exact: true }).click();
+    await expect(panel(page, 'Sort')).toHaveCount(0);
+  });
+});
+
+test.describe('data grid — clean operations', () => {
+  test.skip(({ isMobile }) => isMobile, 'clean operations are exercised on desktop');
+
+  test('find and replace updates a cell and undo restores it', async ({ page }) => {
+    await page.goto('/');
+    await cell(page, 0, 0).fill('alpha');
+    await operation(page, 'find-replace').click();
+    await page.locator('[data-clean="find"]').fill('alpha');
+    await page.locator('[data-clean="replace"]').fill('beta');
+    await runPanel(page, 'Find / Replace').click();
+
+    await expect(cell(page, 0, 0)).toHaveValue('beta');
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await expect(cell(page, 0, 0)).toHaveValue('alpha');
+  });
+
+  test('fill missing writes the requested literal value', async ({ page }) => {
+    await page.goto('/');
+    await cell(page, 0, 0).fill('');
+    await operation(page, 'fill').click();
+    await page.locator('[data-clean="column"]').selectOption('0');
+    await page.locator('[data-clean="strategy"]').selectOption('value');
+    await page.locator('[data-clean="value"]').fill('7');
+    await runPanel(page, 'Fill missing').click();
+
+    await expect(cell(page, 0, 0)).toHaveValue('7');
+  });
+
+  test('trim removes leading and trailing spaces', async ({ page }) => {
+    await page.goto('/');
+    await cell(page, 0, 0).fill('  x  ');
+    await operation(page, 'trim').click();
+    await runPanel(page, 'Trim spaces').click();
+
+    await expect(cell(page, 0, 0)).toHaveValue('x');
+  });
+
+  test('drop empty rows removes a blank row', async ({ page }) => {
+    await page.goto('/');
+    for (let c = 0; c < 4; c += 1) await cell(page, 0, c).fill('');
+    await operation(page, 'drop-empty').click();
+    await runPanel(page, 'Drop empty rows').click();
+
+    await expect(cell(page, 0, 0)).toHaveValue('52');
+    await expect(page.locator('[data-cell="19-0"]')).toHaveCount(0);
+  });
+
+  test('drop duplicates removes the repeated row', async ({ page }) => {
+    await page.goto('/');
+    for (const [c, value] of ['50', '60', '1', '20'].entries()) {
+      await cell(page, 1, c).fill(value);
+    }
+    await operation(page, 'drop-duplicates').click();
+    await runPanel(page, 'Drop duplicates').click();
+
+    await expect(cell(page, 1, 0)).toHaveValue('54');
+    await expect(page.locator('[data-cell="19-0"]')).toHaveCount(0);
   });
 });
 

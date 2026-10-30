@@ -31,6 +31,13 @@ test('split and merge invalidate the transformed variables', () => {
   assert.ok(merge.invalidated.length > 0);
 });
 
+test('split all shifts downstream roles by the number of inserted columns', () => {
+  const splitAll = remapParams(DEFAULT_PARAMS, { kind: 'split', at: 0, count: 3 });
+  // The source column is invalidated; roles on later columns move by 3.
+  assert.equal(splitAll.params.anova.dep, -1);
+  assert.equal(splitAll.params.anova.grp, DEFAULT_PARAMS.anova.grp + 3);
+});
+
 test('optional roles become -1 without being reported as errors', () => {
   const params = {
     ...DEFAULT_PARAMS,

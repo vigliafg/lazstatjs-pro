@@ -320,6 +320,9 @@ La scheda Data ha già:
 - griglia tipizzata (`num`, `int`, `dec`, `cat`, `str`, `id`, `bol`, `dat`,
   `dtm`, `tim`, `alp`, `chr`);
 - editor dei livelli con label, ordine, reference e ricode;
+- barra operazioni con un trigger per comando: Sort, Recode, Split, Split all,
+  Merge, Compute, Find/Replace, Fill missing, Trim, Drop empty, Drop duplicates;
+  ogni trigger apre il proprio pannello con parametri, `Cancel` e `Run`;
 - Clean: find/replace, trim, righe vuote/duplicate, missing con
   media/mediana/moda;
 - Transform: sort, recode, split/merge, **compute one-shot**;
