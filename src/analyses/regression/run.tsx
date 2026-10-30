@@ -154,7 +154,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   const olsResids = Y.map((value, index) => value - fitted[index]);
   const olsResidStats = boxStats(olsResids);
   const residualSummary: ChartRow[] = olsResidStats
-    ? [{ category: 'OLS', min: olsResidStats.min, q1: olsResidStats.q1, median: olsResidStats.median, q3: olsResidStats.q3, max: olsResidStats.max, mean: olsResidStats.mean }]
+    ? [{ category: 'OLS', n: olsResidStats.n, min: olsResidStats.min, q1: olsResidStats.q1, median: olsResidStats.median, q3: olsResidStats.q3, max: olsResidStats.max, mean: olsResidStats.mean }]
     : [];
   const residualPoints: ChartRow[] = olsResids.map(value => ({ category: 'OLS', value }));
   const residualOutliers: ChartRow[] = (olsResidStats?.outliers ?? []).map(value => ({ category: 'OLS', value }));
@@ -163,7 +163,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
     const tsResids = scatterData.map(d => d.y - (tsIntercept + tsSlope * d.x));
     const stats = boxStats(tsResids);
     if (stats) {
-      residualSummary.push({ category: 'Theil-Sen', min: stats.min, q1: stats.q1, median: stats.median, q3: stats.q3, max: stats.max, mean: stats.mean });
+      residualSummary.push({ category: 'Theil-Sen', n: stats.n, min: stats.min, q1: stats.q1, median: stats.median, q3: stats.q3, max: stats.max, mean: stats.mean });
       tsResids.forEach(value => residualPoints.push({ category: 'Theil-Sen', value }));
       stats.outliers.forEach(value => residualOutliers.push({ category: 'Theil-Sen', value }));
     }

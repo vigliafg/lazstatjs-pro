@@ -184,6 +184,40 @@ test.describe('chart editor — ANOVA', () => {
     await expect(reopened.dialog).toHaveCount(0);
   });
 
+  test('box chart: notched and violin displays render and persist', async ({ page }) => {
+    await runAnova(page);
+    const { dialog, preview } = await openEditor(page, 'anova-box');
+
+    await expect(field(dialog, 'display')).toHaveValue('box');
+    await field(dialog, 'display').selectOption('notched');
+    await waitPreview(page, preview);
+    await shot(dialog, 'anova-box-notched');
+
+    await field(dialog, 'display').selectOption('violin');
+    await waitPreview(page, preview);
+    // The point/outlier/mean/median toggles do not apply to a violin.
+    await expect(field(dialog, 'showPoints')).toHaveCount(0);
+    await expect(field(dialog, 'showOutliers')).toHaveCount(0);
+    await expect(field(dialog, 'showMean')).toHaveCount(0);
+    await expect(field(dialog, 'labelMedian')).toHaveCount(0);
+    await expect(field(dialog, 'sort')).toBeVisible();
+    await shot(dialog, 'anova-box-violin');
+
+    await field(dialog, 'general-theme').selectOption('light');
+    await waitPreview(page, preview);
+    await shot(dialog, 'anova-box-violin-light');
+
+    await dialog.getByRole('button', { name: 'Done' }).click();
+    await expect(dialog).toHaveCount(0);
+    await page.waitForTimeout(1200);
+    await page.reload();
+    await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+    const reopened = await openEditor(page, 'anova-box');
+    await expect(field(reopened.dialog, 'display')).toHaveValue('violin');
+    await reopened.dialog.getByRole('button', { name: 'Cancel' }).click();
+    await expect(reopened.dialog).toHaveCount(0);
+  });
+
   test('bar chart: error bars, labels, order, reference line, reset section', async ({ page }) => {
     await runAnova(page);
     const { dialog, preview } = await openEditor(page, 'anova-means');

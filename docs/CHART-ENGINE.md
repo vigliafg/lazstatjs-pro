@@ -39,8 +39,11 @@ numero di imputazioni, ...).
 
 I dati sono già aggregati dal kernel: il renderer non ricalcola statistica. Le
 uniche eccezioni sono la banda CI/PI della regressione (calcolata da `xGrid`,
-`seMean`, `sePred`, `df`) e il numero di classi dell'istogramma (transform
-Vega-Lite sui valori grezzi).
+`seMean`, `sePred`, `df`), il numero di classi dell'istogramma (transform
+Vega-Lite sui valori grezzi) e la KDE del violin (calcolata in TypeScript dai
+`points` del box). La KDE usa i punti presenti nel modello: oltre il cap di
+2000 punti per layer è una stima; il notch usa `n` dal summary, quindi resta
+esatto anche quando i punti sono campionati.
 
 ## Strati
 
@@ -53,7 +56,8 @@ src/charts/
   vega/theme.ts        palette, sfondi, colori di assi e griglia
   vega/buildSpec.ts    dispatcher modello -> TopLevelSpec
   vega/encoding.ts     helper comuni (assi, legenda, tooltip, bande)
-  vega/layers.ts       layer per famiglia (scatter, bar, box, forest, ...)
+  vega/layers.ts       layer per famiglia (scatter, bar, forest, ...)
+  vega/boxLayers.ts    box standard, box con tacca e violin
 src/components/charts/
   VegaChart.tsx        mount/update/finalize di vega-embed, renderer SVG
   ChartCard.tsx        cornice, note, pulsante Edit, apertura popup
@@ -75,7 +79,8 @@ posizione, titolo/sottotitolo/note, titoli assi, base zero, forma/dimensione/
 opacità punti, spessore e tratteggio linee, dimensione, tooltip.
 
 Specifiche: fit OLS/Theil-Sen e bande CI/PI 90/95/99 per la regressione;
-punti/outlier/media/mediana/ordine per il boxplot; barre d'errore, etichette,
+tipo di box (box, notched, violin), punti/outlier/media/mediana/ordine per il
+boxplot; barre d'errore, etichette,
 ordine e riferimento per le barre; densità/rug/media e classi per
 l'istogramma; IC/censura/mediana/gradini per la survival; scala log,
 riferimento e ordine per il forest; Kaiser e valori per lo scree; bias/LoA per
@@ -141,6 +146,10 @@ lo sfondo dichiarato da `data-chart-background`.
 ## Test
 
 - `src/charts/schema.test.ts`, `features.test.ts`, `copy.test.ts`.
+- `src/charts/kits/common.test.ts`: `n` nel summary e KDE del violin
+  (simmetria, semilarghezza, gruppi singleton/costanti).
+- `src/charts/vega/boxLayers.test.ts`: notch (folded, IQR=0), ordine delle
+  categorie e geometria di base di notch/violin.
 - `src/charts/vega/buildSpec.test.ts`: `vega-lite.compile()` per ogni kind,
   nessun warning, test numerico CI/PI (PI più larga della CI e monotonia con il
   livello).

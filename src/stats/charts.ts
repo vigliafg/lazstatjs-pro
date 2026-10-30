@@ -92,6 +92,8 @@ export interface BarOptions extends CommonChartOptions {
 
 export interface BoxOptions extends CommonChartOptions {
   kind: 'box';
+  /** Presentation: classic box, notched box or KDE violin. */
+  display: 'box' | 'notched' | 'violin';
   showPoints: boolean;
   showOutliers: boolean;
   showMean: boolean;

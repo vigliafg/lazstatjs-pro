@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { t } from '../../i18n';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
-import { mergeOptions } from '../../charts/defaults';
+import { boxDisplayOf, mergeOptions } from '../../charts/defaults';
 import { ChartEditorDialog } from './ChartEditorDialog';
 import { VegaChart } from './VegaChart';
 
@@ -22,6 +22,12 @@ export const ChartCard = ({ chart, analysisName, onOptionsChange, className = ''
   const [editing, setEditing] = useState(false);
   const options = mergeOptions(chart.kind, chart.options);
   const interactive = Boolean(onOptionsChange);
+  // The analysis note describes the box (median line, whiskers): hide it for
+  // the violin, where that wording would be wrong.
+  const note =
+    options.showNote && !(options.kind === 'box' && boxDisplayOf(options) === 'violin')
+      ? chart.note
+      : undefined;
 
   const open = () => {
     if (interactive) setEditing(true);
@@ -57,7 +63,7 @@ export const ChartCard = ({ chart, analysisName, onOptionsChange, className = ''
           </button>
         )}
       </div>
-      {options.showNote && chart.note && <p className="mt-1 text-[10px] leading-snug text-text3">{chart.note}</p>}
+      {note && <p className="mt-1 text-[10px] leading-snug text-text3">{note}</p>}
       {chart.sampled && <p className="mt-1 font-mono text-[9px] text-yellow">{t('chart.sampled')}</p>}
       {editing && interactive && (
         <ChartEditorDialog

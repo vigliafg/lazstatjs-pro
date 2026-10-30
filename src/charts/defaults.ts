@@ -156,6 +156,7 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
       return {
         ...P,
         kind,
+        display: 'box',
         showPoints: false,
         showOutliers: true,
         showMean: false,
@@ -199,6 +200,14 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
 };
 
 /** Merge per-card options over the factory defaults, keeping unknown keys out. */
+export type BoxDisplay = 'box' | 'notched' | 'violin';
+
+/** Runtime guard: stored projects can carry an older or hand-edited value. */
+export const boxDisplayOf = (options: ChartOptions): BoxDisplay =>
+  options.kind === 'box' && (options.display === 'notched' || options.display === 'violin')
+    ? options.display
+    : 'box';
+
 export const mergeOptions = (
   kind: ChartKind,
   options: Partial<ChartOptions> | undefined

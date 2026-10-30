@@ -50,6 +50,7 @@ export const makeChart = (init: ChartInit): AnalysisChart => {
 };
 
 export interface BoxStats {
+  n: number;
   min: number;
   q1: number;
   median: number;
@@ -72,6 +73,7 @@ export const boxStats = (values: number[]): BoxStats | null => {
   const highFence = q3 + 1.5 * iqr;
   const inside = clean.filter(value => value >= lowFence && value <= highFence);
   return {
+    n: clean.length,
     min: inside.length > 0 ? jStat.min(inside) : jStat.min(clean),
     q1,
     median,
@@ -94,6 +96,7 @@ export const boxRows = (
     if (!stats) return;
     summary.push({
       category: group.category,
+      n: stats.n,
       min: stats.min,
       q1: stats.q1,
       median: stats.median,
@@ -107,6 +110,78 @@ export const boxRows = (
     stats.outliers.forEach(value => outliers.push({ category: group.category, value }));
   });
   return { summary, points, outliers };
+};
+
+export interface ViolinRowsResult {
+  rows: ChartRow[];
+  /** Categories without enough variance/data for a density estimate. */
+  skipped: string[];
+}
+
+/**
+ * Gaussian KDE rows for a categorical violin plot.
+ *
+ * One row per grid point: `{ category, value, x1, x2 }`, sorted by category
+ * order and then by y. The bandwidth is Silverman's rule; the maximum
+ * half-width is 0.38 category units. Categories with fewer than two values or
+ * zero variance are reported in `skipped` so the renderer can draw an explicit
+ * summary range instead of a fake density.
+ */
+export const violinRows = (
+  points: ChartRow[],
+  categories: string[],
+  centers: Map<string, number>
+): ViolinRowsResult => {
+  const byCategory = new Map<string, number[]>();
+  points.forEach(row => {
+    const category = String(row.category ?? '');
+    const value = Number(row.value);
+    if (!Number.isFinite(value) || !centers.has(category)) return;
+    const values = byCategory.get(category) ?? [];
+    values.push(value);
+    byCategory.set(category, values);
+  });
+
+  const rows: ChartRow[] = [];
+  const skipped: string[] = [];
+  categories.forEach(category => {
+    const center = centers.get(category);
+    if (center === undefined) return;
+    const values = byCategory.get(category) ?? [];
+    if (values.length < 2) {
+      skipped.push(category);
+      return;
+    }
+    const sd = jStat.stdev(values, true);
+    const bandwidth = 1.06 * sd * values.length ** -0.2;
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    if (!Number.isFinite(bandwidth) || bandwidth <= 0 || !(max > min)) {
+      skipped.push(category);
+      return;
+    }
+    const grid = Array.from(
+      { length: 60 },
+      (_, index) => min + ((max - min) * index) / 59
+    );
+    const densities = grid.map(y => {
+      const sum = values.reduce(
+        (total, value) => total + Math.exp(-0.5 * ((y - value) / bandwidth) ** 2),
+        0
+      );
+      return sum / (values.length * bandwidth * Math.sqrt(2 * Math.PI));
+    });
+    const maxDensity = Math.max(...densities);
+    if (!Number.isFinite(maxDensity) || maxDensity <= 0) {
+      skipped.push(category);
+      return;
+    }
+    grid.forEach((value, index) => {
+      const half = 0.38 * (densities[index] / maxDensity);
+      rows.push({ category, value, x1: center - half, x2: center + half });
+    });
+  });
+  return { rows, skipped };
 };
 
 export const qqPoints = (values: number[]): ChartRow[] => {

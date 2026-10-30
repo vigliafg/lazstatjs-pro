@@ -48,6 +48,41 @@ test('every chart kind compiles to Vega-Lite without warnings', () => {
   }
 });
 
+test('box, notched and violin displays compile without warnings', () => {
+  const chart = makeChart({
+    id: 'box-display',
+    kind: 'box',
+    title: 'Box display',
+    data: {
+      summary: [
+        { category: 'B', n: 20, min: 1, q1: 2, median: 10, q3: 11, max: 12, mean: 6 },
+        { category: 'A', n: 20, min: 1, q1: 2, median: 2, q3: 3, max: 4, mean: 2 },
+      ],
+      points: Array.from({ length: 20 }, (_, index) => [
+        { category: 'A', value: 1 + index * 0.15 },
+        { category: 'B', value: 5 + index * 0.3 },
+      ]).flat(),
+      outliers: [],
+    },
+    fields: { xLabel: 'Group', yLabel: 'Value' },
+  });
+  const compileBox = (display: 'box' | 'notched' | 'violin') => {
+    const warnings: string[] = [];
+    const spec = buildVegaSpec(chart, { ...factoryOptions('box'), display } as never);
+    compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+    return { spec: spec as never as { layer: Array<{ data?: { values?: Array<Record<string, unknown>> }; mark?: { type?: string } }> }, warnings };
+  };
+  for (const display of ['box', 'notched', 'violin'] as const) {
+    assert.deepEqual(compileBox(display).warnings, [], display);
+  }
+  const notched = compileBox('notched').spec;
+  assert.ok(notched.layer.some(layer => layer.mark?.type === 'area'));
+  const violin = compileBox('violin').spec;
+  const area = violin.layer[0];
+  assert.ok(area.data.values?.length);
+  assert.ok(area.data.values!.every(row => 'x1' in row && 'x2' in row));
+});
+
 test('the scatter band is narrower than the prediction band and grows with the level', () => {
   const chart = makeChart({
     id: 'band',

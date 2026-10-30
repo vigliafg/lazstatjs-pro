@@ -5,7 +5,7 @@ import type {
   ChartOptions,
   CommonChartOptions,
 } from '../stats/charts';
-import { applyPreset } from './defaults';
+import { applyPreset, boxDisplayOf } from './defaults';
 
 export type FeatureGroup = 'general' | 'style' | 'specific';
 export type FeatureType = 'checkbox' | 'select' | 'number' | 'range';
@@ -99,8 +99,11 @@ const hasSeries = (chart: AnalysisChart): boolean =>
       chart.data.bars?.some(row => row.series !== undefined)
   );
 
-const hasPoints = (chart: AnalysisChart): boolean =>
-  chart.kind === 'scatter' || chart.kind === 'box' || chart.kind === 'line';
+const hasPoints = (chart: AnalysisChart, options?: ChartOptions): boolean =>
+  chart.kind === 'scatter' ||
+  chart.kind === 'line' ||
+  (chart.kind === 'box' &&
+    (!options || options.kind !== 'box' || boxDisplayOf(options) !== 'violin'));
 
 const hasLines = (chart: AnalysisChart): boolean =>
   ['scatter', 'line', 'histogram', 'qq', 'forest', 'survival', 'acf', 'power', 'bootstrap'].includes(
@@ -160,19 +163,19 @@ const STYLE: FeatureDescriptor[] = [
       choice('diamond', 'chart.shape.diamond'),
       choice('triangle', 'chart.shape.triangle'),
     ],
-    visible: (_options, chart) => hasPoints(chart),
+    visible: (options, chart) => hasPoints(chart, options),
   }),
   common('style.pointSize', 'chart.feature.pointSize', 'range', 'style', {
     min: 16,
     max: 200,
     step: 4,
-    visible: (_options, chart) => hasPoints(chart),
+    visible: (options, chart) => hasPoints(chart, options),
   }),
   common('style.pointOpacity', 'chart.feature.pointOpacity', 'range', 'style', {
     min: 0.1,
     max: 1,
     step: 0.05,
-    visible: (_options, chart) => hasPoints(chart),
+    visible: (options, chart) => hasPoints(chart, options),
   }),
   common('style.lineWidth', 'chart.feature.lineWidth', 'range', 'style', {
     min: 1,
@@ -302,17 +305,30 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     }),
   ],
   box: [
+    specific('box', 'display', 'chart.feature.display', 'select', {
+      section: 'chart.section.summary',
+      choices: [
+        choice('box', 'chart.display.box'),
+        choice('notched', 'chart.display.notched'),
+        choice('violin', 'chart.display.violin'),
+      ],
+      get: options => boxDisplayOf(options),
+    }),
     specific('box', 'showPoints', 'chart.feature.points', 'checkbox', {
       section: 'chart.section.data',
+      visible: options => boxDisplayOf(options) !== 'violin',
     }),
     specific('box', 'showOutliers', 'chart.feature.outliers', 'checkbox', {
       section: 'chart.section.data',
+      visible: options => boxDisplayOf(options) !== 'violin',
     }),
     specific('box', 'showMean', 'chart.feature.mean', 'checkbox', {
       section: 'chart.section.summary',
+      visible: options => boxDisplayOf(options) !== 'violin',
     }),
     specific('box', 'labelMedian', 'chart.feature.medianLabel', 'checkbox', {
       section: 'chart.section.summary',
+      visible: options => boxDisplayOf(options) !== 'violin',
     }),
     specific('box', 'sort', 'chart.feature.sort', 'select', {
       section: 'chart.section.order',

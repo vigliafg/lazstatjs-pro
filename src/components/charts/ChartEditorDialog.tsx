@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { t } from '../../i18n';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
-import { factoryOptions } from '../../charts/defaults';
+import { boxDisplayOf, factoryOptions } from '../../charts/defaults';
 import { exportChartsAsPng } from '../../io/chartExport';
 import { ChartGeneralToolbar } from './ChartGeneralToolbar';
 import { ChartSpecificPanel } from './ChartSpecificPanel';
@@ -246,7 +246,11 @@ export const ChartEditorDialog = ({
           <div className="min-w-0 p-3">
             <ChartGeneralToolbar chart={chart} options={draft} onChange={applyDraft} />
             <VegaChart chart={chart} options={preview} className="min-h-[240px]" />
-            {chart.note && preview.showNote && <p className="mt-1 text-[10px] text-text3">{chart.note}</p>}
+            {chart.note &&
+              preview.showNote &&
+              !(preview.kind === 'box' && boxDisplayOf(preview) === 'violin') && (
+                <p className="mt-1 text-[10px] text-text3">{chart.note}</p>
+              )}
             {!wide && (
               <details className="mt-3">
                 <summary className="cursor-pointer font-mono text-[10px] uppercase tracking-wider text-accent2">

@@ -1,11 +1,11 @@
 import type { TopLevelSpec } from 'vega-lite';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import { base, spec } from './encoding';
+import { boxLayers } from './boxLayers';
 import {
   acfLayers,
   bootstrapLayers,
   barLayers,
-  boxLayers,
   forestLayers,
   heatmapLayers,
   histogramLayers,

@@ -35,6 +35,40 @@ test('specific controls are declared per kind', () => {
   assert.equal(specificFeatures(chartOf('score')).some(feature => feature.id === 'showR2'), false);
 });
 
+test('box display offers three modes and normalizes an unknown stored value', () => {
+  const chart = chartOf('box');
+  const display = specificFeatures(chart).find(feature => feature.id === 'display');
+  assert.ok(display);
+  assert.deepEqual(
+    display!.choices?.map(item => item.value),
+    ['box', 'notched', 'violin']
+  );
+  const factory = factoryOptions('box');
+  assert.equal(factory.kind === 'box' ? factory.display : null, 'box');
+  assert.equal(display!.get(factory), 'box');
+
+  const dirty = { ...factory, display: 'bogus' } as never;
+  assert.equal(display!.get(dirty), 'box');
+  const next = display!.set(dirty, 'violin');
+  assert.equal(next.kind === 'box' ? next.display : null, 'violin');
+});
+
+test('box-specific toggles are hidden for the violin display', () => {
+  const chart = chartOf('box');
+  const violin = { ...factoryOptions('box'), display: 'violin' } as never;
+  const box = factoryOptions('box');
+  for (const id of ['showPoints', 'showOutliers', 'showMean', 'labelMedian']) {
+    const feature = specificFeatures(chart).find(item => item.id === id);
+    assert.ok(feature);
+    assert.equal(feature!.visible?.(violin, chart), false);
+    assert.equal(feature!.visible?.(box, chart), true);
+  }
+  const pointSize = featuresFor(chart).find(feature => feature.id === 'style.pointSize');
+  assert.ok(pointSize);
+  assert.equal(pointSize!.visible?.(violin, chart), false);
+  assert.equal(pointSize!.visible?.(box, chart), true);
+});
+
 test('setters update the option they describe and preserve the discriminant', () => {
   const options = factoryOptions('scatter');
   const fit = featuresFor(chartOf('scatter')).find(feature => feature.id === 'fit');
