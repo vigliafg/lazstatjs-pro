@@ -2,6 +2,7 @@ import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import { colorAt, themeFor } from './theme';
 import {
   axis,
+  colorEncoding,
   field,
   num,
   pointMark,
@@ -135,6 +136,7 @@ export const ecdfLayers = (
 ): Spec[] => {
   const theme = themeFor(options);
   const rows = rowsOf(chart, 'points');
+  const hasSeries = rows.some(row => row.series !== undefined);
   const layers: Spec[] = [
     {
       data: { values: rows },
@@ -142,6 +144,7 @@ export const ecdfLayers = (
       encoding: {
         x: { field: 'x', type: 'quantitative', axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX) },
         y: { field: 'y', type: 'quantitative', scale: { domain: [0, 1] }, axis: axis(options, theme, options.showYTitle ? field(chart, 'yLabel', '') : null, options.gridY) },
+        ...(hasSeries ? { color: colorEncoding(chart, options, theme, 'series', rows) } : {}),
       },
     },
   ];

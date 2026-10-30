@@ -2,7 +2,7 @@ import { resamplingStats } from '../../stats/kernels/resampling';
 import { resamplingTables } from '../../stats/tables/resampling';
 import { resamplingReport } from '../../stats/reports/resampling';
 import { copy } from '../../stats/reportCopy';
-import { makeChart } from '../../charts/kits/common';
+import { makeChart, qqPoints, qqReference } from '../../charts/kits/common';
 import type { Dataset } from '../../grid/types';
 import type { ResamplingParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -34,6 +34,7 @@ export const buildResamplingOutput = ({ grid, params, ciLevel }: ResamplingInput
     };
   }
   const tables = resamplingTables(stats, ciLevel);
+  const bootstrapQq = qqPoints(stats.bootstrapDifferences);
   return {
     ok: true,
     title: copy('Permutazione e bootstrap'),
@@ -52,7 +53,7 @@ export const buildResamplingOutput = ({ grid, params, ciLevel }: ResamplingInput
           ci: [{ value: stats.ciLo }, { value: stats.ciHi }],
         },
         fields: { xLabel: copy('Differenza'), yLabel: copy('Frequenza') },
-        options: { showObserved: true, showCI: true } as never,
+        options: { showObserved: true, showCI: true, showDensity: true } as never,
       }),
       makeChart({
         id: 'resampling-permutation',
@@ -66,8 +67,25 @@ export const buildResamplingOutput = ({ grid, params, ciLevel }: ResamplingInput
           ci: [],
         },
         fields: { xLabel: copy('Differenza'), yLabel: copy('Frequenza') },
-        options: { showObserved: true, showCI: false } as never,
+        options: { showObserved: true, showCI: false, showDensity: false } as never,
       }),
+      ...(bootstrapQq.length > 0
+        ? [
+            makeChart({
+              id: 'resampling-bootstrap-qq',
+              kind: 'qq',
+              title: copy('Q-Q della distribuzione bootstrap'),
+              subtitle: copy('Quantili della distribuzione bootstrap vs normale'),
+              note: copy('Se i punti seguono la retta la distribuzione bootstrap è circa normale; code o curvature indicano asimmetria e rendono l’intervallo percentile preferibile a quello normale.'),
+              data: {
+                points: bootstrapQq,
+                reference: qqReference(bootstrapQq),
+              },
+              fields: { xLabel: copy('Quantile normale teorico'), yLabel: copy('Differenza bootstrap') },
+              options: { showReference: true } as never,
+            }),
+          ]
+        : []),
     ],
   };
 };

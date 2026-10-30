@@ -170,6 +170,13 @@ export const lineLayers = (chart: AnalysisChart, options: Extract<ChartOptions, 
       },
     });
   }
+  rowsOf(chart, 'rules').forEach(row => {
+    layers.push({
+      data: { values: [row] },
+      mark: { type: 'rule', color: colorAt(options, 4), strokeDash: [4, 4], strokeWidth: 1 },
+      encoding: { y: { field: row.value !== undefined ? 'value' : 'y', type: 'quantitative' } },
+    });
+  });
   return layers;
 };
 
@@ -578,7 +585,7 @@ export const bootstrapLayers = (
   const histogram = histogramLayers(chart, {
     ...options,
     kind: 'histogram',
-    showDensity: false,
+    showDensity: options.showDensity,
     showRug: false,
     showMeanLine: false,
     bins: 16,

@@ -10,6 +10,14 @@ test('sample-size builder returns tables, a report and the power curve', () => {
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
   assert.ok(result.tables.some(spec => spec.id === 'ss-curve'));
+  const precision = (result.charts ?? []).find(chart => chart.id === 'samplesize-precision');
+  assert.ok(precision);
+  assert.ok((precision?.data.series ?? []).length >= 2);
+  assert.ok(
+    (precision?.data.series ?? []).every(
+      row => Number.isFinite(Number(row.x)) && Number.isFinite(Number(row.y))
+    )
+  );
 });
 
 test('sample-size builder rejects a zero effect size with the panel message', () => {

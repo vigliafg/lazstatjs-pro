@@ -15,21 +15,22 @@
 - **Diagnostica regressione**: `reg-scale-location`, `reg-residual-leverage`, `reg-cooks` (soglia 4/n, etichette delle osservazioni influenti) e un grafico di residui parziali per predittore (max 4).
 - **Logistica**: `logistic-roc` (AUC in sottotitolo, diagonale di non discriminazione) e `logistic-calibration` (decili di probabilità stimata).
 - **Survival/Cox**: `survival-risk` e `stratcox-risk` con conteggi a rischio ed eventi cumulati; `cox-baseline-hazard`, `cox-baseline-survival` e `cox-schoenfeld-*` (residui di Schoenfeld per covariata).
-- **Test**: 643 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
+- **Test**: 650 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
 - **Categoriche**: opzione barre `grouped` (affiancate) usata in Chi-square, GEE e ANCOVA; nuovo kind `mosaic` con grafico in Chi-square e Contingency; grafico dei residui di associazione.
 - **Multivariate**: `pca-loadings` heatmap e `pca-biplot` con vettori delle variabili; per EFA `efa-loadings`, `efa-parallel`, `efa-variance`, `efa-communalities`; per alpha `alpha-items`, `alpha-if-deleted`, `alpha-correlations`. Alpha ed EFA non restituiscono più `charts: []`.
 - **Ancora aperti**: P1/P2 del backlog (cappucci delle barre d’errore, EMM/post-hoc, missingness matrix, PACF/decomposition, precision curve, resampling density/QQ).
 - **Revisione delle modifiche (2026-10-31)**: il sort delle barre resta attivo anche con etichette e barre d’errore (stessa `sort` su tutti i layer); l’interval plot descrittivo usa la t di Student come la tabella; `alpha-if-deleted` è omesso quando nessun valore è finito (scala a 2 item); `showMarkers` ripiega sulle righe `series`; la diagonale ROC resta lineare mentre la curva è a gradini; le baseline Cox sono a gradini con origine (0,0)/(0,1); i residui di associazione non usano più il raggruppamento fittizio.
+- **Blocco mancanti/serie temporali/design (2026-10-31)**: MI con matrice dei mancanti (`display: matrix`), overlay ECDF osservati/completati, trace delle catene e forest dei coefficienti pooled; Time Series con PACF, decomposizione in due pannelli, ACF dei residui ARIMA e accuratezza dei modelli; Sample Size con curva di precisione; Resampling con densità bootstrap e Q-Q. Il kind `line` ora disegna anche `data.rules`.
 
 ## Sintesi esecutiva
 
 - **31 procedure**: **30 hanno almeno una modalità con grafici**; **Wizard** non ne produce (è una guida alla scelta). **Multivariate** ora produce grafici in tutte e tre le modalità: PCA, EFA e alpha.
-- **94 punti `makeChart` statici** nei runner. `Descriptive` ha 5 grafici fissi (bar, interval, dot, ECDF, box) + **1 istogramma per la sola prima variabile** + **fino a 8 Q-Q** se `qqData` esiste.
+- **105 punti `makeChart` statici** nei runner. `Descriptive` ha 5 grafici fissi (bar, interval, dot, ECDF, box) + **1 istogramma per la sola prima variabile** + **fino a 8 Q-Q** se `qqData` esiste.
 - **22 kind su 22 in uso**: scatter, line, bar, box, histogram, interval, dot, ecdf, qq, forest, survival, risk, mosaic, acf, heatmap, residual, scree, score, bland, power, bootstrap, missingness.
 - Diagnostica, categoriche e multivariate hanno aggiunto rispettivamente 4 siti in Regression, 2 in Logistic, 2 baseline + fino a 4 Schoenfeld in Cox, 1 risk table in Survival, 1 in Stratified Cox, 1 mosaico in Chi-square, 1 mosaico + 1 associazione in Contingency e 10 grafici tra PCA/EFA/alpha.
 - Il motore ha una buona base: box/notched/violin, barre con IC/SE/SD, scatter con fit/bande/equazione/R²/N, Q-Q, heatmap, forest, KM, ACF, power, bootstrap, missingness.
 - I gap maggiori non sono “mancano i grafici base”, ma **oggetti di confronto**: EMM/post-hoc, random effects/caterpillar, missingness matrix/convergence, PACF/decomposizione, precision curve. Diagnostica, mosaic e loadings/biplot sono ora coperti.
-- **Difetti risolti**: sort barre e heatmap, `score.ellipse`/`score.showLabels`, `residual.showPoints`, mediane survival, etichette scatter, sort con etichette/error bar, CI dell’interval plot, alpha a 2 item, marker di calibrazione/parallel analysis, diagonale ROC, step delle baseline Cox, raggruppamento dei residui di associazione. **Limiti ancora aperti**: barre d’errore senza cappucci, `line` che non disegna `rules`, nessuna banda Q-Q prodotta dai runner. Dettaglio nella sezione «Difetti e limiti confermati».
+- **Difetti risolti**: sort barre e heatmap, `score.ellipse`/`score.showLabels`, `residual.showPoints`, mediane survival, etichette scatter, sort con etichette/error bar, CI dell’interval plot, alpha a 2 item, marker di calibrazione/parallel analysis, diagonale ROC, step delle baseline Cox, raggruppamento dei residui di associazione, `line` che ora disegna `rules`. **Limiti ancora aperti**: barre d’errore senza cappucci, nessuna banda Q-Q prodotta dai runner. Dettaglio nella sezione «Difetti e limiti confermati».
 
 ## Mappa degli oggetti per kind
 
@@ -133,20 +134,20 @@ Nelle tabelle per procedura, **«Standard»** significa che il gap è coperto da
 
 | # | Procedura | Grafici e oggetti presenti | Gap rispetto ai migliori programmi | Priorità |
 |---|---|---|---|---|
-| 28 | **Time Series** (`timeseries`) | `ts-acf-chart` **acf**: barre, banda ±. `ts-arima-chart` **line**: osservato, previsione, marker, banda (se lo/hi); `ts-simple-chart` **line**: osservato/previsione, marker. | JASP/jamovi, SPSS, SAS, Stata `tsline`/`ac`/`pac`, R forecast/feasts, Minitab: PACF, decomposizione trend/stagionalità/residui, ACF dei residui, Q-Q, spectral density, rolling statistics, tabella accuratezza, intervallo per il modello semplice. | P1: PACF e decomposizione. |
+| 28 | **Time Series** (`timeseries`) | `ts-acf-chart` **acf** (ACF, banda ±), `ts-pacf-chart` **acf** (PACF), `ts-decomposition-trend` e `ts-decomposition-components` **line** (osservato/trend, stagionalità/residuo), `ts-residual-acf` **acf**, `ts-model-accuracy` **bar** (RMSE/MAE affiancati), `ts-arima-chart` **line** (osservato, previsione, marker, banda), `ts-simple-chart` **line**. | JASP/jamovi, SPSS, SAS, Stata `tsline`/`ac`/`pac`, R forecast/feasts, Minitab: PACF, decomposizione, ACF dei residui, spectral density, rolling statistics, tabella accuratezza, intervallo per il modello semplice. | **P1 chiuso**: aggiunti PACF, decomposizione, ACF dei residui e accuratezza. Restano spectral density e rolling statistics. |
 
 ### Famiglia Missing data
 
 | # | Procedura | Grafici e oggetti presenti | Gap rispetto ai migliori programmi | Priorità |
 |---|---|---|---|---|
-| 29 | **Missing Data (MI)** (`mi`) | `mi-observed-density` **histogram** (16 bin); `mi-completed-density` **histogram** (16 bin); `mi-missingness` **missingness** (barre + etichette). | JASP/jamovi, SPSS MI, SAS MI, Stata `mi`, R mice/VIM, Minitab: missingness matrix/pattern, overlay osservati/imputati, convergence/trace, strip, pooled estimates forest, incertezza delle imputazioni. | P1: matrice dei mancanti e convergenza. |
+| 29 | **Missing Data (MI)** (`mi`) | `mi-observed-density` e `mi-completed-density` **histogram**; `mi-observed-completed` **ecdf** (due curve); `mi-missingness` **missingness** (barre) e `mi-missingness-matrix` **missingness** con display matrix; `mi-trace` **line** (convergenza); `mi-pooled-forest` **forest** (coefficienti pooled, solo modello lineare). | JASP/jamovi, SPSS MI, SAS MI, Stata `mi`, R mice/VIM, Minitab: missingness matrix/pattern, overlay osservati/imputati, convergence/trace, strip, pooled estimates forest, incertezza delle imputazioni. | **P1 chiuso**: matrice, overlay, trace e forest pooled. Restano strip/pattern aggregati e incertezza per imputazione. |
 
 ### Famiglia Design & power
 
 | # | Procedura | Grafici e oggetti presenti | Gap rispetto ai migliori programmi | Priorità |
 |---|---|---|---|---|
-| 30 | **Sample Size / Power** (`samplesize`) | `samplesize-power` **power**: linea, marker, target, design marker. | G*Power, JASP/jamovi, R pwr, SAS POWER, Minitab, Prism: curva di precisione (il motore calcola anche n per precisione), sensitivity, tabella design, annotazioni. | P1: precision curve. |
-| 31 | **Resampling** (`resampling`) | `resampling-bootstrap` **bootstrap**: istogramma, osservato, CI; `resampling-permutation` **bootstrap**: istogramma, osservato. | R boot, Stata `bootstrap`/`permute`, SAS, JASP/jamovi, Minitab, Prism: densità/Q-Q, BCa, p annotato, distribuzione nulla sovrapposta, iterazioni/CI. | P2. |
+| 30 | **Sample Size / Power** (`samplesize`) | `samplesize-power` **power**: linea, marker, target, design marker; `samplesize-precision` **line**: semiampiezza dell’IC al variare di n, regola sul margine richiesto. | G*Power, JASP/jamovi, R pwr, SAS POWER, Minitab, Prism: curva di precisione, sensitivity, tabella design, annotazioni. | **P1 chiuso**: aggiunta la curva di precisione. Restano sensitivity e annotazioni. |
+| 31 | **Resampling** (`resampling`) | `resampling-bootstrap` **bootstrap**: istogramma, densità KDE opzionale, osservato, CI; `resampling-permutation` **bootstrap**: istogramma, osservato; `resampling-bootstrap-qq` **qq** della distribuzione bootstrap. | R boot, Stata `bootstrap`/`permute`, SAS, JASP/jamovi, Minitab, Prism: densità/Q-Q, BCa, p annotato, distribuzione nulla sovrapposta, iterazioni/CI. | **P2 parziale**: aggiunti densità e Q-Q. Restano BCa e p annotato. |
 
 ## Difetti e limiti confermati
 
@@ -162,7 +163,7 @@ Criterio: **P0** = controllo esposto che non produce l’oggetto promesso, o gra
 | 6 | **Survival showMedian senza dati** | `survivalLayers` calcola le mediane da `curves` quando `medians` manca (`survivalMedians`) | Le linee mediane compaiono sul punto in cui S(t) attraversa 0.5. | **CORRETTO** (test in `layers.test.ts`, `common.test.ts`) | P0 |
 | 7 | **Scatter pointLabels non raggiungibile** | Feature `pointLabels` esposta quando i punti hanno `label`; il renderer usa `labels` o fallback `points.label` | Il controllo è raggiungibile solo con dati etichettati. | **CORRETTO** (feature + test in `features.test.ts`) | P1 |
 | 8 | **Barre d’errore senza cappucci** | `barLayers` usa solo `rule` verticali | IC/SE/SD sono linee senza terminazioni; i programmi di riferimento usano cappucci o point-range. | `CONFERMATO` (gap visivo) | P1 |
-| 9 | **Line non disegna `rules`** | `lineLayers` (`layers.ts:111-157`) non legge `data.rules` | Una reference line passata a un line chart non compare. Oggi nessun runner lo usa, ma è un limite del renderer. | `CONFERMATO` (limite) | P1 |
+| 9 | **Line non disegna `rules`** | `lineLayers` ora legge `data.rules` e disegna una regola per riga | Una reference line passata a un line chart compare (usata dalla curva di precisione). | **CORRETTO** (test in `layers.test.ts`) | P1 |
 | 10 | **Q-Q CI non disponibile nei runner** | `QqOptions.showCI` e layer banda; nessun runner produce `data.band` | La feature è nascosta; non c’è envelope di confidenza. | `CONFERMATO` (gap) | P1 |
 | 11 | **Sort barre perso con etichette/error bar** | `barLayers` ripete `sort` sui layer rule/text | Il dominio compilato non torna alfabetico e non emette il warning di sort in conflitto. | **CORRETTO** (test in `layers.test.ts`, `buildSpec.test.ts`) | P0 |
 | 12 | **Interval plot descrittivo con z** | `buildDescriptiveOutput` usa `meanCI` (t, df = n−1) | Con n piccolo l’intervallo coincide con quello della tabella. | **CORRETTO** (test in `chartsCoverage.test.ts`) | P1 |
@@ -203,7 +204,7 @@ Criterio di ordine: massimo impatto sul maggior numero di procedure; Regression,
 
 ## Copertura test e residui non verificati
 
-- `src/charts/vega/buildSpec.test.ts` compila **tutti i 17 kind** e le tre modalità box (box/notched/violin) senza warning; non verifica la geometria SVG né l’ordine reso.
+- `src/charts/vega/buildSpec.test.ts` compila **tutti i 22 kind** e le tre modalità box (box/notched/violin) senza warning; verifica anche matrice dei mancanti, barre ordinate con etichette/error bar e linee a gradini con diagonale lineare.
 - `src/charts/features.test.ts` verifica il registro feature, display box e la visibilità dei controlli; non copre i no-op elencati.
 - `src/charts/kits/common.test.ts` e `src/charts/vega/boxLayers.test.ts` coprono n, KDE, notch e ordine categorie.
 - Playwright `e2e/chart-editor.spec.ts` copre editor, pannello specifico, display notched/violin, screenshot chiaro/scuro, reload; non copre ogni ramo condizionale delle 31 procedure.

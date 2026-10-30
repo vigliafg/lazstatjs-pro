@@ -230,12 +230,17 @@ export const miStats = (options: MiOptions): MiStats | null => {
   const withRegression = options.model === 'linear' && outcomePosition >= 0 && predictorPositions.length > 0;
   if (options.model === 'linear' && !withRegression) return null;
   let completed: number[][] | null = null;
+  const chainSums = variables.map(() => new Array<number>(iterations).fill(0));
 
   for (let imputation = 0; imputation < imputations; imputation++) {
     const data = observed.map(row => row.map((value, j) => (value === null ? means[j] : value)));
     for (let iteration = 0; iteration < iterations; iteration++) {
       variables.forEach((_, j) => {
         if (missingCounts[j] > 0) imputeColumn(data, j, variables.map((__, index) => index), rng);
+      });
+      variables.forEach((_, j) => {
+        const mean = data.reduce((sum, row) => sum + (row[j] as number), 0) / data.length;
+        chainSums[j][iteration] += mean;
       });
     }
     variables.forEach((_, j) => {
@@ -289,6 +294,7 @@ export const miStats = (options: MiOptions): MiStats | null => {
     variables: variableRows,
     observedValues,
     imputedValues,
+    chainMeans: chainSums.map(series => series.map(sum => sum / imputations)),
     regression,
   };
 };

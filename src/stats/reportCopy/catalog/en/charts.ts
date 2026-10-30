@@ -1,5 +1,6 @@
 /** English copy for chart titles, notes and axis labels. */
 import { categoricalMultivariateChartCopy } from './charts-multivariate';
+import { timeMissingChartCopy } from './charts-time-missing';
 
 export const chartCopy: Record<string, string> = {
   " Con stime instabili gli intervalli non finiti sono omessi dal grafico.":
@@ -640,5 +641,6 @@ export const chartCopy: Record<string, string> = {
     "Event time",
   "Un andamento nel tempo suggerisce una violazione del rischio proporzionale.":
     "A trend over time suggests a proportional-hazards violation.",
+  ...timeMissingChartCopy,
   ...categoricalMultivariateChartCopy,
 };

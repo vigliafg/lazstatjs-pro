@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildMiOutput } from './run';
+import { chartOptions } from '../../charts/defaults';
 
 const grid = {
   cols: [
@@ -50,4 +51,36 @@ test('multiple imputation still runs with finite settings', () => {
   const result = buildMiOutput(base);
   assert.ok('ok' in result && result.ok);
   if ('ok' in result && result.ok) assert.ok(result.tables.length > 0);
+});
+
+test('multiple imputation adds the missingness matrix, chain trace and ECDF overlay', () => {
+  const result = buildMiOutput(base);
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  const charts = result.charts ?? [];
+  const ids = charts.map(chart => chart.id);
+  assert.ok(ids.includes('mi-missingness-matrix'));
+  assert.ok(ids.includes('mi-trace'));
+  assert.ok(ids.includes('mi-observed-completed'));
+  const matrix = charts.find(chart => chart.id === 'mi-missingness-matrix');
+  assert.equal(matrix?.kind, 'missingness');
+  assert.equal(matrix?.data.cells?.length, grid.rows.length * grid.cols.length);
+  const matrixOptions = matrix ? chartOptions(matrix) : undefined;
+  assert.equal(matrixOptions?.kind === 'missingness' ? matrixOptions.display : '', 'matrix');
+  const trace = charts.find(chart => chart.id === 'mi-trace');
+  assert.ok((trace?.data.series ?? []).length > 0);
+  assert.ok((trace?.data.series ?? []).every(row => Number.isFinite(Number(row.y))));
+});
+
+test('multiple imputation draws a pooled forest when the linear model is requested', () => {
+  const result = buildMiOutput({
+    ...base,
+    params: { ...base.params, model: 'linear', outcome: 0, predictors: [1] },
+  });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  const forest = (result.charts ?? []).find(chart => chart.id === 'mi-pooled-forest');
+  assert.ok(forest);
+  assert.equal(forest?.kind, 'forest');
+  assert.ok((forest?.data.points ?? []).length >= 2);
 });

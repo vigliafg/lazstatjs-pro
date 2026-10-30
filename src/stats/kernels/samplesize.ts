@@ -253,8 +253,35 @@ export const sampleSizePrecision = (
   return Math.max(2, Math.ceil(groups * Math.pow((z * sd) / margin, 2)));
 };
 
-export const powerAt = (options: SampleSizeOptions, nPerGroup: number): number => {
-  const alpha = options.alpha;
+/**
+ * Half-width of the confidence interval at a given n per group: the precision
+ * curve is the inverse view of the sample-size calculation.
+ */
+export const precisionAt = (options: SampleSizeOptions, nPerGroup: number): number => {
+  if (!(nPerGroup >= 2)) return NaN;
+  const z = zAlpha(options.alpha, 2);
+  switch (options.design) {
+    case 'twoMeans': {
+      const sd = options.sd ?? 0;
+      return sd > 0 ? (z * sd * Math.sqrt(2 / nPerGroup)) : NaN;
+    }
+    case 'oneMean':
+    case 'paired': {
+      const sd = options.sd ?? 0;
+      return sd > 0 ? (z * sd) / Math.sqrt(nPerGroup) : NaN;
+    }
+    case 'twoProportions': {
+      const p1 = options.p1 ?? 0;
+      const p2 = options.p2 ?? 0;
+      const variance = p1 * (1 - p1) + p2 * (1 - p2);
+      return variance > 0 ? (z * Math.sqrt(variance)) / Math.sqrt(nPerGroup) : NaN;
+    }
+    default:
+      return NaN;
+  }
+};
+
+export const powerAt = (options: SampleSizeOptions, nPerGroup: number): number => {  const alpha = options.alpha;
   switch (options.design) {
     case 'twoMeans': {
       const es = Math.abs(options.delta ?? 0) / (options.sd ?? 0);

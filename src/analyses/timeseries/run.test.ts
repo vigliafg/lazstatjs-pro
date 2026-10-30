@@ -27,7 +27,27 @@ test('time-series builder returns tables, report and forecast content', () => {
   assert.ok(result.report);
   assert.ok(result.tables.some(spec => spec.id === 'ts-acf'));
   assert.ok(result.charts?.some(chart => chart.id === 'ts-acf-chart'));
+  assert.ok(result.charts?.some(chart => chart.id === 'ts-pacf-chart'));
+  assert.ok(result.charts?.some(chart => chart.id === 'ts-residual-acf'));
+  assert.ok(result.charts?.some(chart => chart.id === 'ts-model-accuracy'));
   assert.doesNotThrow(() => structuredClone({ tables: result.tables, charts: result.charts }));
+});
+
+test('time-series builder adds the seasonal decomposition charts', () => {
+  const grid = {
+    cols: [{ name: 'Y', type: 'num' as const }],
+    rows: Array.from({ length: 16 }, (_, index) => [
+      String(10 + index * 0.5 + (index % 4) * 2 + (index % 3)),
+    ]),
+  };
+  const result = buildTimeSeriesOutput({ ...base, grid, params: { ...base.params, period: 4 } });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  const ids = (result.charts ?? []).map(chart => chart.id);
+  assert.ok(ids.includes('ts-decomposition-trend'));
+  assert.ok(ids.includes('ts-decomposition-components'));
+  const components = (result.charts ?? []).find(chart => chart.id === 'ts-decomposition-components');
+  assert.ok((components?.data.series ?? []).some(row => row.series === 'Stagionalità'));
 });
 
 test('time-series builder validates the series length and period', () => {

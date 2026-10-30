@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildContingencyOutput } from './run';
+import { chartOptions } from '../../charts/defaults';
 import { DEFAULT_PARAMS } from '../../io/project';
 
 test('contingency builder returns tables and a report for the trial preset', () => {
@@ -16,7 +17,8 @@ test('contingency builder returns tables and a report for the trial preset', () 
   assert.ok((mosaic?.data.cells ?? []).length >= 4);
   assert.ok((mosaic?.data.cells ?? []).every(cell => cell.x0 !== undefined && cell.x1 !== undefined));
   const association = (result.charts ?? []).find(chart => chart.id === 'contingency-association');
-  assert.equal(association?.kind === 'bar' && association.options.grouping, 'stacked');
+  const assocOptions = association ? chartOptions(association) : undefined;
+  assert.equal(assocOptions?.kind === 'bar' ? assocOptions.grouping : undefined, 'stacked');
 });
 
 test('contingency builder rejects negative frequencies and a zero total', () => {

@@ -506,8 +506,19 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
   bootstrap: [
     specific('bootstrap', 'showObserved', 'chart.feature.observed', 'checkbox'),
     specific('bootstrap', 'showCI', 'chart.feature.band', 'checkbox'),
+    specific('bootstrap', 'showDensity', 'chart.feature.density', 'checkbox'),
   ],
-  missingness: [specific('missingness', 'showLabels', 'chart.feature.labels', 'checkbox')],
+  missingness: [
+    specific('missingness', 'display', 'chart.feature.missingDisplay', 'select', {
+      choices: [
+        choice('bars', 'chart.display.bars'),
+        choice('matrix', 'chart.display.matrix'),
+      ],
+    }),
+    specific('missingness', 'showLabels', 'chart.feature.labels', 'checkbox', {
+      visible: (options) => options.kind === 'missingness' && options.display !== 'matrix',
+    }),
+  ],
 };
 
 /** The single registry: toolbar and panel only filter/lay out these entries. */

@@ -259,8 +259,19 @@ export const kernelDensity = (values: number[], gridSize = 60): { x: number; y: 
   });
 };
 
-export const qqPoints = (values: number[]): ChartRow[] => {
+/** Empirical CDF points: sorted values with the cumulative proportion. */
+export const ecdfRows = (values: number[], series?: string): ChartRow[] => {
   const sorted = [...values].filter(value => Number.isFinite(value)).sort((a, b) => a - b);
+  const n = sorted.length;
+  if (n === 0) return [];
+  return sorted.map((value, index) => ({
+    x: value,
+    y: (index + 1) / n,
+    ...(series !== undefined ? { series } : {}),
+  }));
+};
+
+export const qqPoints = (values: number[]): ChartRow[] => {  const sorted = [...values].filter(value => Number.isFinite(value)).sort((a, b) => a - b);
   const n = sorted.length;
   if (n < 3) return [];
   return sorted.map((value, index) => {

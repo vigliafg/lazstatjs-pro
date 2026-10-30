@@ -231,6 +231,22 @@ test('step lines keep step:0 rows as a straight segment', () => {
   );
 });
 
+test('line charts draw the configured horizontal rules', () => {
+  const chart = makeChart({
+    id: 'line-rule',
+    kind: 'line',
+    title: 'Line',
+    data: {
+      series: [{ x: 1, y: 2 }, { x: 2, y: 3 }],
+      rules: [{ value: 2.5 }],
+    },
+  });
+  const options = factoryOptions('line') as Extract<ChartOptions, { kind: 'line' }>;
+  const rules = lineLayers(chart, options).filter(layer => layer.mark?.type === 'rule');
+  assert.equal(rules.length, 1);
+  assert.equal((rules[0].encoding?.y as { field?: string }).field, 'value');
+});
+
 test('the risk table shows counts and optional cumulative events', () => {
   const chart = makeChart({
     id: 'risk',

@@ -5,6 +5,7 @@ import { boxLayers } from './boxLayers';
 import { dotLayers, ecdfLayers, intervalLayers } from './descriptiveLayers';
 import { histogramLayers, qqLayers } from './distributionLayers';
 import { mosaicLayers } from './mosaicLayers';
+import { matrixLayers } from './missingLayers';
 import { riskLayers } from './riskLayers';
 import {
   acfLayers,
@@ -73,6 +74,7 @@ export const buildVegaSpec = (chart: AnalysisChart, options: ChartOptions = char
     case 'bootstrap':
       return spec(chart, options, bootstrapLayers(chart, options));
     case 'missingness':
+      if (options.display === 'matrix') return spec(chart, options, matrixLayers(chart, options));
       return spec(
         chart,
         options,

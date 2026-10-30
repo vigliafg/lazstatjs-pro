@@ -64,10 +64,11 @@ export const colorEncoding = (
   chart: AnalysisChart,
   options: CommonChartOptions,
   theme: ReturnType<typeof themeFor>,
-  fieldName = 'series'
+  fieldName = 'series',
+  rows: ChartRow[] = rowsOf(chart, 'series')
 ): Spec => {
   const domain = Array.from(
-    new Set(rowsOf(chart, 'series').map(row => String(row[fieldName] ?? '')))
+    new Set(rows.map(row => String(row[fieldName] ?? '')))
   ).filter(Boolean);
   return {
     field: fieldName,

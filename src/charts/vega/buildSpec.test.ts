@@ -161,8 +161,29 @@ test('a step line with a non-step reference diagonal compiles without warnings',
   assert.deepEqual(warnings, []);
 });
 
-test('the scatter band is narrower than the prediction band and grows with the level', () => {
+test('the missingness matrix compiles without warnings', () => {
   const chart = makeChart({
+    id: 'missing-matrix',
+    kind: 'missingness',
+    title: 'Missingness',
+    data: {
+      cells: [
+        { x: 'A', y: '#1', state: 'Observed' },
+        { x: 'B', y: '#1', state: 'Missing' },
+        { x: 'A', y: '#2', state: 'Observed' },
+        { x: 'B', y: '#2', state: 'Observed' },
+      ],
+    },
+    fields: { xLabel: 'Variable', yLabel: 'Row', series: 'State' },
+  });
+  const warnings: string[] = [];
+  const spec = buildVegaSpec(chart, { ...factoryOptions('missingness'), display: 'matrix' } as never);
+  compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+  assert.deepEqual(warnings, []);
+  assert.equal((spec as { layer?: Array<{ mark?: { type?: string } }> }).layer?.[0]?.mark?.type, 'rect');
+});
+
+test('the scatter band is narrower than the prediction band and grows with the level', () => {  const chart = makeChart({
     id: 'band',
     kind: 'scatter',
     title: 'Band',

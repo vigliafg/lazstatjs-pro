@@ -204,9 +204,9 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
     case 'power':
       return { ...P, kind, showTarget: true, showDesignMarker: false };
     case 'bootstrap':
-      return { ...P, kind, showObserved: true, showCI: true };
+      return { ...P, kind, showObserved: true, showCI: true, showDensity: false };
     case 'missingness':
-      return { ...P, kind, showLabels: false };
+      return { ...P, kind, showLabels: false, display: 'bars' };
   }
 };
 

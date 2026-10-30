@@ -217,11 +217,13 @@ export interface BootstrapOptions extends CommonChartOptions {
   kind: 'bootstrap';
   showObserved: boolean;
   showCI: boolean;
+  showDensity: boolean;
 }
 
 export interface MissingnessOptions extends CommonChartOptions {
   kind: 'missingness';
   showLabels: boolean;
+  display: 'bars' | 'matrix';
 }
 
 export type ChartOptions =

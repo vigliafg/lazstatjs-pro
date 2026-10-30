@@ -49,5 +49,7 @@ export interface MiStats {
   /** Observed values and values after the last imputation, per variable. */
   observedValues: number[][];
   imputedValues: number[][];
+  /** Mean of the completed values at each iteration, averaged over imputations. */
+  chainMeans: number[][];
   regression: MiRegression | null;
 }

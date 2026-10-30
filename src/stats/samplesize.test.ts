@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   noncentralFSF,
+  precisionAt,
   sampleSizeAnova,
   sampleSizeCorrelation,
   sampleSizeOneMean,
@@ -63,6 +64,15 @@ test('noncentral F reduces to the central F when lambda is zero', () => {
 test('precision-based sample size follows (z * SD / margin)^2', () => {
   assert.equal(sampleSizePrecision(10, 2, 95, 1), 97);
   assert.equal(sampleSizePrecision(10, 2, 95, 2), 193);
+});
+
+test('precisionAt is the inverse of the precision-based sample size', () => {
+  const options = { design: 'twoMeans' as const, alpha: 0.05, power: 0.8, tails: 2 as const, delta: 5, sd: 10 };
+  const n = sampleSizePrecision(10, 2, 95, 2);
+  assert.ok(precisionAt(options, n) <= 2);
+  assert.ok(precisionAt(options, n) > 1.9);
+  assert.ok(precisionAt(options, n * 4) < precisionAt(options, n));
+  assert.ok(Number.isNaN(precisionAt({ ...options, design: 'anova' }, 20)));
 });
 
 test('tables and report are produced for every design without NaN text', () => {
