@@ -267,3 +267,71 @@ export const logisticCurve = (
     return { x, y: sigmoid(eta) * 100 };
   });
 };
+
+export interface RocPoint {
+  fpr: number;
+  tpr: number;
+  threshold: number;
+}
+
+/** ROC points from the fitted probabilities, ordered by increasing FPR. */
+export const rocCurve = (y: number[], fitted: number[]): RocPoint[] => {
+  if (y.length !== fitted.length || y.length === 0) return [];
+  const positives = y.filter(value => value === 1).length;
+  const negatives = y.length - positives;
+  if (positives === 0 || negatives === 0) return [];
+  const thresholds = Array.from(new Set(fitted.filter(Number.isFinite))).sort(
+    (left, right) => right - left
+  );
+  const points: RocPoint[] = [{ fpr: 0, tpr: 0, threshold: Infinity }];
+  thresholds.forEach(threshold => {
+    let truePositive = 0;
+    let falsePositive = 0;
+    y.forEach((value, index) => {
+      const predicted = fitted[index] >= threshold ? 1 : 0;
+      if (predicted === 1 && value === 1) truePositive += 1;
+      if (predicted === 1 && value === 0) falsePositive += 1;
+    });
+    points.push({
+      fpr: falsePositive / negatives,
+      tpr: truePositive / positives,
+      threshold,
+    });
+  });
+  points.push({ fpr: 1, tpr: 1, threshold: -Infinity });
+  return points;
+};
+
+export interface CalibrationPoint {
+  predicted: number;
+  observed: number;
+  n: number;
+}
+
+/** Equal-size bins: mean predicted probability against observed proportion. */
+export const calibrationCurve = (
+  y: number[],
+  fitted: number[],
+  bins = 10
+): CalibrationPoint[] => {
+  if (y.length !== fitted.length || y.length === 0) return [];
+  const usable = y
+    .map((value, index) => ({ value, fitted: fitted[index] }))
+    .filter(item => Number.isFinite(item.fitted))
+    .sort((left, right) => left.fitted - right.fitted);
+  if (usable.length === 0) return [];
+  const groups = Math.max(1, Math.min(bins, usable.length));
+  const points: CalibrationPoint[] = [];
+  for (let group = 0; group < groups; group++) {
+    const start = Math.floor((group * usable.length) / groups);
+    const end = Math.floor(((group + 1) * usable.length) / groups);
+    const slice = usable.slice(start, end);
+    if (slice.length === 0) continue;
+    points.push({
+      predicted: slice.reduce((sum, item) => sum + item.fitted, 0) / slice.length,
+      observed: slice.reduce((sum, item) => sum + item.value, 0) / slice.length,
+      n: slice.length,
+    });
+  }
+  return points;
+};

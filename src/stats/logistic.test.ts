@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fitLogistic, logisticCurve, logisticReport, logisticTables } from './logistic';
+import {
+  calibrationCurve,
+  fitLogistic,
+  logisticCurve,
+  logisticReport,
+  logisticTables,
+  rocCurve,
+} from './logistic';
 import type { TableSpec } from './types';
 
 const close = (actual: number, expected: number, tolerance = 1e-6) =>
@@ -126,4 +133,31 @@ test('the probability curve stays inside the 0-100% range and follows the sign o
   assert.equal(curve.length, 20);
   assert.ok(curve.every(point => point.y >= 0 && point.y <= 100));
   close(curve[0].y, 100 / (1 + Math.exp(-model.beta[0])), 1e-9);
+});
+
+test('the ROC curve starts at (0,0), ends at (1,1) and is monotone in FPR', () => {
+  const { y, x } = binaryData();
+  const model = fitLogistic(y, [{ name: 'X', values: x }])!;
+  const roc = rocCurve(y, model.fitted);
+  assert.ok(roc.length >= 3);
+  assert.deepEqual([roc[0].fpr, roc[0].tpr], [0, 0]);
+  assert.deepEqual([roc[roc.length - 1].fpr, roc[roc.length - 1].tpr], [1, 1]);
+  for (let index = 1; index < roc.length; index++) {
+    assert.ok(roc[index].fpr >= roc[index - 1].fpr - 1e-12);
+    assert.ok(roc[index].tpr >= roc[index - 1].tpr - 1e-12);
+  }
+});
+
+test('the calibration curve returns equal-sized bins with observed proportions in 0-1', () => {
+  const { y, x } = binaryData();
+  const model = fitLogistic(y, [{ name: 'X', values: x }])!;
+  const points = calibrationCurve(y, model.fitted, 5);
+  assert.ok(points.length >= 2 && points.length <= 5);
+  assert.equal(points.reduce((sum, point) => sum + point.n, 0), y.length);
+  for (const point of points) {
+    assert.ok(point.predicted >= 0 && point.predicted <= 1);
+    assert.ok(point.observed >= 0 && point.observed <= 1);
+  }
+  const predicted = points.map(point => point.predicted);
+  assert.deepEqual(predicted, [...predicted].sort((left, right) => left - right));
 });

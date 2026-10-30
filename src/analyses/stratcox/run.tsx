@@ -67,6 +67,29 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
       if (point.censored > 0) censored.push({ x: point.time, y: point.survival, series: label });
     });
   });
+  const maxTime = time.reduce(
+    (max, value) => (Number.isFinite(value) && value >= 0 ? Math.max(max, value) : max),
+    0
+  );
+  const riskTimes =
+    maxTime > 0
+      ? [0, 0.25, 0.5, 0.75, 1].map(fraction => Number((fraction * maxTime).toFixed(4)))
+      : [0];
+  const riskRows: ChartRow[] = [];
+  labels.forEach(label => {
+    const indices = strata
+      .map((stratum, index) => (stratum === label ? index : -1))
+      .filter(index => index >= 0 && Number.isFinite(time[index]) && time[index] >= 0);
+    riskTimes.forEach(atTime => {
+      riskRows.push({
+        time: atTime,
+        group: label,
+        atRisk: indices.filter(index => time[index] >= atTime).length,
+        events: indices.filter(index => event[index] === 1 && time[index] <= atTime).length,
+      });
+    });
+  });
+
   const forest = makeChart({
     id: 'stratcox-forest',
     kind: 'forest',
@@ -88,6 +111,20 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
         note: copy('Le curve descrivono la sopravvivenza osservata in ogni strato; il modello Cox condivide le stime delle covariate tra gli strati.'),
         data: { curves, censored },
         fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Strato') },
+      })
+    );
+  }
+  if (riskRows.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'stratcox-risk',
+        kind: 'risk',
+        title: copy('Tabella dei soggetti a rischio'),
+        subtitle: copy('Soggetti a rischio per gruppo ai tempi selezionati'),
+        note: copy('Numero a rischio; tra parentesi gli eventi cumulati.'),
+        data: { rows: riskRows },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Strato') },
+        options: { showEvents: true } as never,
       })
     );
   }

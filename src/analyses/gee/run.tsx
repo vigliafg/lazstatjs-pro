@@ -77,7 +77,7 @@ export const buildGeeOutput = ({ grid, params, ciLevel }: GeeInput): AnalysisRun
           ]),
         },
         fields: { xLabel: copy('Cluster'), yLabel: copy('Media'), series: copy('Serie') },
-        options: { valueLabels: true } as never,
+        options: { valueLabels: true, grouping: 'grouped' } as never,
       }),
     ],
   };

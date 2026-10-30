@@ -180,3 +180,27 @@ test('impossible models are refused instead of guessed', () => {
     null
   );
 });
+
+test('Schoenfeld residuals sum to zero per covariate at the partial-likelihood optimum', () => {
+  const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+  const events = [1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1];
+  const first = [0.2, -0.4, 0.9, 0.1, -0.8, 1.2, 0.4, -0.3, 1.5, 0.6, -1.1, 0.8, 1.9, 0.0, -0.6, 0.3, -0.2, 1.1];
+  const second = [1, 2, 1, 3, 2, 4, 5, 3, 4, 6, 5, 7, 8, 6, 7, 9, 8, 10];
+  const fit = fitCox({
+    time: times,
+    event: events,
+    covariates: [
+      { name: 'Marker', values: first },
+      { name: 'Age', values: second },
+    ],
+  });
+  assert.ok(fit);
+  assert.ok(fit!.schoenfeld.length > 0);
+  for (const term of ['Marker', 'Age']) {
+    const sum = fit!.schoenfeld
+      .filter(row => row.term === term)
+      .reduce((total, row) => total + row.residual, 0);
+    close(sum, 0, 1e-6);
+  }
+  assert.ok(fit!.schoenfeld.every(row => Number.isFinite(row.time) && Number.isFinite(row.residual)));
+});

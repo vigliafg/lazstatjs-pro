@@ -10,6 +10,8 @@ import { buildCorrelationOutput } from './correlation/run';
 import { buildMiOutput } from './mi/run';
 import { buildRegressionOutput } from './regression/run';
 import { buildTTestOutput } from './ttest/run';
+import { buildDescriptiveOutput } from './descriptive/run';
+import { meanCI } from '../stats/distributions';
 import type { AnalysisRunResult } from './types';
 import type { ColType, GridData } from '../grid/types';
 
@@ -62,7 +64,7 @@ test('stratified Cox adds Kaplan-Meier curves per stratum', () => {
       ciLevel: 95,
     })
   );
-  assert.deepEqual(charts.map(chart => chart.kind), ['forest', 'survival']);
+  assert.deepEqual(charts.map(chart => chart.kind), ['forest', 'survival', 'risk']);
 });
 
 test('repeated ANOVA adds CI bars and subject trajectories', () => {
@@ -134,6 +136,27 @@ test('regression residual plot uses the residual chart kind', () => {
     buildRegressionOutput({ grid, regParams: { dep: 0, indeps: [1, 2], useNonParam: false, robustEstimator: 'theilsen', robustSE: 'none' }, ciLevel: 95 })
   );
   assert.ok(charts.some(chart => chart.kind === 'residual'));
+});
+
+test('descriptive interval plot uses the t-based confidence interval', () => {
+  const values = ['1', '2', '3', '4', '5'];
+  const result = buildDescriptiveOutput({
+    rows: values.map(value => [value]),
+    columnNames: ['X'],
+    indices: [0],
+    level: 95,
+  });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  const chart = (result.charts ?? []).find(item => item.id === 'desc-interval');
+  assert.ok(chart);
+  const rows = chart!.data.intervals ?? [];
+  const expected = meanCI([1, 2, 3, 4, 5], 95);
+  assert.equal(rows.length, 1);
+  assert.ok(Math.abs(Number(rows[0].lo) - expected.lo) < 1e-9);
+  assert.ok(Math.abs(Number(rows[0].hi) - expected.hi) < 1e-9);
+  // With n = 5 the t critical value (≈2.776) is wider than the normal one (1.96).
+  assert.ok(Number(rows[0].lo) < 3 - 1.96 * (Math.sqrt(2.5) / Math.sqrt(5)));
 });
 
 test('one-sample t-test draws the test-value rule', () => {

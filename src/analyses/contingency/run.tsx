@@ -1,6 +1,7 @@
 import { contingencyReport, contingencyTables } from '../../stats/contingency';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
+import { mosaicCells } from '../../charts/kits/categorical';
 import type { ContingencyParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
@@ -53,22 +54,58 @@ export const buildContingencyOutput = ({
     })
   );
 
+  const mosaic = mosaicCells({
+    observed,
+    rows: params.rows,
+    cols: params.cols,
+  });
+  const association = mosaic.map(cell => ({
+    category: `${cell.row} · ${cell.col}`,
+    value: Number(cell.residual),
+    series:
+      Number(cell.residual) >= 0 ? copy('Sopra l’atteso') : copy('Sotto l’atteso'),
+  }));
+  const charts = [
+    makeChart({
+      id: 'contingency-residuals',
+      kind: 'heatmap',
+      title: copy('Residui standardizzati'),
+      subtitle: copy('Osservato − atteso, diviso per la radice dell’atteso'),
+      note: copy('Valori positivi indicano celle più frequenti dell’atteso sotto indipendenza; valori negativi meno frequenti.'),
+      data: { cells },
+      fields: { xLabel: copy('Colonna'), yLabel: copy('Riga') },
+      options: { showValues: true, diverging: true } as never,
+    }),
+  ];
+  if (mosaic.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'contingency-mosaic',
+        kind: 'mosaic',
+        title: copy('Mosaico della contingenza'),
+        subtitle: copy('Ampiezza per totali di riga, larghezza per distribuzione condizionata'),
+        note: copy('L’area di ogni cella è proporzionale alla frequenza; il colore mostra il residuo standardizzato.'),
+        data: { cells: mosaic },
+        fields: { xLabel: copy('Colonna'), yLabel: copy('Riga') },
+        options: { showValues: true, residualColor: true } as never,
+      }),
+      makeChart({
+        id: 'contingency-association',
+        kind: 'bar',
+        title: copy('Residui di associazione'),
+        subtitle: copy('Barre sopra o sotto lo zero'),
+        note: copy('La barra è il residuo standardizzato: sopra lo zero la cella è più frequente dell’atteso, sotto lo zero meno frequente.'),
+        data: { bars: association },
+        fields: { xLabel: copy('Cella'), yLabel: copy('Residuo standardizzato'), series: copy('Direzione') },
+        options: { valueLabels: true, referenceLine: 'zero' } as never,
+      })
+    );
+  }
   return {
     ok: true,
     title: copy('Tabella di contingenza {s1} × {s2}', { s1: observed.length, s2: observed[0]?.length ?? 0 }),
     tables,
     report: contingencyReport(tables, ciLevel),
-    charts: [
-      makeChart({
-        id: 'contingency-residuals',
-        kind: 'heatmap',
-        title: copy('Residui standardizzati'),
-        subtitle: copy('Osservato − atteso, diviso per la radice dell’atteso'),
-        note: copy('Valori positivi indicano celle più frequenti dell’atteso sotto indipendenza; valori negativi meno frequenti.'),
-        data: { cells },
-        fields: { xLabel: copy('Colonna'), yLabel: copy('Riga') },
-        options: { showValues: true, diverging: true } as never,
-      }),
-    ],
+    charts,
   };
 };

@@ -1,5 +1,12 @@
 import { chi2SF, zCrit, zTwoSidedP } from '../distributions';
-import type { CoxBaselineRow, CoxCoefficient, CoxFit, CoxOptions, CoxPhRow } from '../cox/types';
+import type {
+  CoxBaselineRow,
+  CoxCoefficient,
+  CoxFit,
+  CoxOptions,
+  CoxPhRow,
+  CoxSchoenfeldRow,
+} from '../cox/types';
 
 interface PreparedCox {
   times: number[];
@@ -367,6 +374,32 @@ export const fitCox = (options: CoxOptions): CoxFit | null => {
     });
   });
 
+  const schoenfeld: CoxSchoenfeldRow[] = [];
+  prepared.eventTimes.forEach((atTime, position) => {
+    let total = 0;
+    const weighted = zeros(k);
+    for (let subject = 0; subject < prepared.n; subject++) {
+      if (sortedTimes[subject] < atTime) continue;
+      const weight = Math.exp(centeredEta(subject));
+      if (!Number.isFinite(weight) || weight <= 0) continue;
+      total += weight;
+      for (let column = 0; column < k; column++) {
+        weighted[column] += weight * sortedX[subject][column];
+      }
+    }
+    if (!(total > 0)) return;
+    const atRiskMeans = weighted.map(value => value / total);
+    prepared.eventIndices[position].forEach(subject => {
+      for (let column = 0; column < k; column++) {
+        schoenfeld.push({
+          term: options.covariates[column].name,
+          time: atTime,
+          residual: sortedX[subject][column] - atRiskMeans[column],
+        });
+      }
+    });
+  });
+
   const ph: CoxPhRow[] = [];
   let phGlobal = { chi2: NaN, df: k, p: NaN };
   if (eventTimes.every(atTime => atTime > 0) && n > 3 * k + 5) {
@@ -422,6 +455,7 @@ export const fitCox = (options: CoxOptions): CoxFit | null => {
     converged: base.converged,
     separation,
     baseline,
+    schoenfeld,
     ph,
     phGlobal,
     warnings,

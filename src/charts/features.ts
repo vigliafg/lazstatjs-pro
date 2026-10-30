@@ -102,6 +102,8 @@ const hasSeries = (chart: AnalysisChart): boolean =>
 const hasPoints = (chart: AnalysisChart, options?: ChartOptions): boolean =>
   chart.kind === 'scatter' ||
   chart.kind === 'line' ||
+  chart.kind === 'dot' ||
+  chart.kind === 'ecdf' ||
   (chart.kind === 'box' &&
     (!options || options.kind !== 'box' || boxDisplayOf(options) !== 'violin'));
 
@@ -252,6 +254,12 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     specific('scatter', 'showN', 'chart.feature.n', 'checkbox', {
       section: 'chart.section.annotation',
     }),
+    specific('scatter', 'pointLabels', 'chart.feature.pointLabels', 'checkbox', {
+      section: 'chart.section.annotation',
+      visible: (_options, chart) =>
+        Boolean(chart.data.labels?.length) ||
+        Boolean(chart.data.points?.some(row => row.label !== undefined && row.label !== null)),
+    }),
   ],
   line: [
     specific('line', 'step', 'chart.feature.step', 'checkbox', { section: 'chart.section.curve' }),
@@ -263,6 +271,13 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     }),
   ],
   bar: [
+    specific('bar', 'grouping', 'chart.feature.grouping', 'select', {
+      section: 'chart.section.data',
+      choices: [
+        choice('stacked', 'chart.grouping.stacked'),
+        choice('grouped', 'chart.grouping.grouped'),
+      ],
+    }),
     specific('bar', 'error', 'chart.feature.error', 'select', {
       section: 'chart.section.data',
       choices: [
@@ -339,6 +354,40 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
       ],
     }),
   ],
+  interval: [
+    specific('interval', 'valueLabels', 'chart.feature.valueLabels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('interval', 'sort', 'chart.feature.sort', 'select', {
+      section: 'chart.section.order',
+      choices: [
+        choice('none', 'chart.sort.none'),
+        choice('asc', 'chart.sort.asc'),
+        choice('desc', 'chart.sort.desc'),
+      ],
+    }),
+  ],
+  dot: [
+    specific('dot', 'showMean', 'chart.feature.mean', 'checkbox', {
+      section: 'chart.section.summary',
+    }),
+    specific('dot', 'sort', 'chart.feature.sort', 'select', {
+      section: 'chart.section.order',
+      choices: [
+        choice('none', 'chart.sort.none'),
+        choice('asc', 'chart.sort.asc'),
+        choice('desc', 'chart.sort.desc'),
+      ],
+    }),
+  ],
+  ecdf: [
+    specific('ecdf', 'showPoints', 'chart.feature.points', 'checkbox', {
+      section: 'chart.section.data',
+    }),
+    specific('ecdf', 'showMedian', 'chart.feature.median', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
   histogram: [
     specific('histogram', 'bins', 'chart.feature.bins', 'range', {
       section: 'chart.section.data',
@@ -347,6 +396,9 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
       step: 1,
     }),
     specific('histogram', 'showDensity', 'chart.feature.density', 'checkbox', {
+      section: 'chart.section.curve',
+    }),
+    specific('histogram', 'showKde', 'chart.feature.kde', 'checkbox', {
       section: 'chart.section.curve',
     }),
     specific('histogram', 'showRug', 'chart.feature.rug', 'checkbox', {
@@ -363,6 +415,9 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     specific('qq', 'showCI', 'chart.feature.qqCI', 'checkbox', {
       section: 'chart.section.uncertainty',
       visible: (_options, chart) => Boolean(chart.data.band?.length),
+    }),
+    specific('qq', 'detrended', 'chart.feature.detrendedQq', 'checkbox', {
+      section: 'chart.section.annotation',
     }),
   ],
   forest: [
@@ -396,6 +451,19 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     }),
     specific('survival', 'step', 'chart.feature.step', 'checkbox', { section: 'chart.section.curve' }),
   ],
+  mosaic: [
+    specific('mosaic', 'showValues', 'chart.feature.valueLabels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('mosaic', 'residualColor', 'chart.feature.diverging', 'checkbox', {
+      section: 'chart.section.options',
+    }),
+  ],
+  risk: [
+    specific('risk', 'showEvents', 'chart.feature.events', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
   acf: [specific('acf', 'showBand', 'chart.feature.band', 'checkbox')],
   heatmap: [
     specific('heatmap', 'showValues', 'chart.feature.valueLabels', 'checkbox'),
@@ -417,8 +485,14 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     specific('scree', 'showValues', 'chart.feature.valueLabels', 'checkbox'),
   ],
   score: [
-    specific('score', 'showLabels', 'chart.feature.labels', 'checkbox'),
+    specific('score', 'showLabels', 'chart.feature.labels', 'checkbox', {
+      visible: (_options, chart) =>
+        Boolean(chart.data.points?.some(row => row.label !== undefined && row.label !== null)),
+    }),
     specific('score', 'ellipse', 'chart.feature.ellipse', 'checkbox'),
+    specific('score', 'showVectors', 'chart.feature.vectors', 'checkbox', {
+      visible: (_options, chart) => Boolean(chart.data.vectors?.length),
+    }),
   ],
   bland: [
     specific('bland', 'showBias', 'chart.feature.bias', 'checkbox'),

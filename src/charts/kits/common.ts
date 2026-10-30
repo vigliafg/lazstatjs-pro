@@ -184,6 +184,81 @@ export const violinRows = (
   return { rows, skipped };
 };
 
+/**
+ * 95% data ellipse for a two-dimensional score plot. The axes are the square
+ * roots of the covariance eigenvalues scaled by the chi-square quantile; the
+ * angle comes from the covariance eigenvector. Returns 60 outline points.
+ */
+export const confidenceEllipse = (points: ChartRow[], level = 0.95): ChartRow[] => {
+  const pairs = points
+    .map(row => ({ x: Number(row.x), y: Number(row.y) }))
+    .filter(pair => Number.isFinite(pair.x) && Number.isFinite(pair.y));
+  const n = pairs.length;
+  if (n < 3) return [];
+  const meanX = pairs.reduce((sum, pair) => sum + pair.x, 0) / n;
+  const meanY = pairs.reduce((sum, pair) => sum + pair.y, 0) / n;
+  const sxx = pairs.reduce((sum, pair) => sum + (pair.x - meanX) ** 2, 0) / (n - 1);
+  const syy = pairs.reduce((sum, pair) => sum + (pair.y - meanY) ** 2, 0) / (n - 1);
+  const sxy = pairs.reduce((sum, pair) => sum + (pair.x - meanX) * (pair.y - meanY), 0) / (n - 1);
+  const trace = sxx + syy;
+  const determinant = sxx * syy - sxy * sxy;
+  const root = Math.sqrt(Math.max(0, (trace * trace) / 4 - determinant));
+  const lambda1 = trace / 2 + root;
+  const lambda2 = Math.max(0, trace / 2 - root);
+  const chi2 = level >= 0.99 ? 9.21 : level >= 0.95 ? 5.991 : 4.605;
+  const axis1 = Math.sqrt(Math.max(0, lambda1 * chi2));
+  const axis2 = Math.sqrt(Math.max(0, lambda2 * chi2));
+  const angle = 0.5 * Math.atan2(2 * sxy, sxx - syy);
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  return Array.from({ length: 60 }, (_, index) => {
+    const t = (2 * Math.PI * index) / 59;
+    const u = axis1 * Math.cos(t);
+    const v = axis2 * Math.sin(t);
+    return { x: meanX + u * cos - v * sin, y: meanY + u * sin + v * cos };
+  });
+};
+
+/** First time each survival curve reaches 50%, one row per series. */
+export const survivalMedians = (curves: ChartRow[]): ChartRow[] => {
+  const groups = new Map<string, ChartRow[]>();
+  curves.forEach(row => {
+    const x = Number(row.x);
+    const y = Number(row.y);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    const series = String(row.series ?? '');
+    groups.set(series, [...(groups.get(series) ?? []), { x, y }]);
+  });
+  const medians: ChartRow[] = [];
+  groups.forEach((rows, series) => {
+    const crossing = [...rows].sort((a, b) => Number(a.x) - Number(b.x)).find(row => Number(row.y) <= 0.5);
+    if (!crossing) return;
+    medians.push({ x: crossing.x, ...(series ? { series } : {}) });
+  });
+  return medians;
+};
+
+/** Gaussian KDE on a 60-point grid; empty when the sample has no variance. */
+export const kernelDensity = (values: number[], gridSize = 60): { x: number; y: number }[] => {
+  const clean = values.filter(Number.isFinite);
+  if (clean.length < 2) return [];
+  const sd = jStat.stdev(clean, true);
+  const bandwidth = 1.06 * sd * clean.length ** -0.2;
+  const min = Math.min(...clean);
+  const max = Math.max(...clean);
+  if (!Number.isFinite(bandwidth) || bandwidth <= 0 || !(max > min)) return [];
+  return Array.from({ length: gridSize }, (_, index) => {
+    const x = min + ((max - min) * index) / (gridSize - 1);
+    const density =
+      clean.reduce(
+        (sum, value) => sum + Math.exp(-0.5 * ((x - value) / bandwidth) ** 2),
+        0
+      ) /
+      (clean.length * bandwidth * Math.sqrt(2 * Math.PI));
+    return { x, y: density };
+  });
+};
+
 export const qqPoints = (values: number[]): ChartRow[] => {
   const sorted = [...values].filter(value => Number.isFinite(value)).sort((a, b) => a - b);
   const n = sorted.length;
@@ -192,6 +267,22 @@ export const qqPoints = (values: number[]): ChartRow[] => {
     const p = (index + 1 - 0.375) / (n + 0.25);
     return { x: jStat.normal.inv(p, 0, 1), y: value };
   });
+};
+
+/** Residuals of observed points around the Q-Q reference line. */
+export const detrendedQqRows = (points: ChartRow[], reference: ChartRow[]): ChartRow[] => {
+  const line = reference
+    .map(row => ({ x: Number(row.x), y: Number(row.y) }))
+    .filter(row => Number.isFinite(row.x) && Number.isFinite(row.y));
+  if (line.length < 2) return [];
+  const first = line[0];
+  const last = line[line.length - 1];
+  const slope = last.x === first.x ? 0 : (last.y - first.y) / (last.x - first.x);
+  const intercept = first.y - slope * first.x;
+  return points
+    .map(row => ({ x: Number(row.x), y: Number(row.y) }))
+    .filter(row => Number.isFinite(row.x) && Number.isFinite(row.y))
+    .map(row => ({ x: row.x, y: row.y - (intercept + slope * row.x) }));
 };
 
 export const qqReference = (points: ChartRow[]): ChartRow[] => {

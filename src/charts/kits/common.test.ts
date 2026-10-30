@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { boxRows, boxStats, violinRows } from './common';
+import { boxRows, boxStats, confidenceEllipse, detrendedQqRows, kernelDensity, survivalMedians, violinRows } from './common';
 
 const values = (start: number, step: number, count: number): number[] =>
   Array.from({ length: count }, (_, index) => start + index * step);
@@ -55,4 +55,51 @@ test('violinRows skips singleton and constant groups and reports them', () => {
   assert.deepEqual(result.skipped, ['A', 'B']);
   assert.equal(result.rows.length, 60);
   assert.ok(result.rows.every(row => row.category === 'C'));
+});
+
+test('confidenceEllipse returns 60 finite outline points around the centre', () => {
+  const points = [
+    { x: -1, y: -1 },
+    { x: 1, y: 1 },
+    { x: 1, y: -1 },
+    { x: -1, y: 1 },
+    { x: 0, y: 0 },
+  ];
+  const ellipse = confidenceEllipse(points);
+  assert.equal(ellipse.length, 60);
+  assert.ok(ellipse.every(row => Number.isFinite(Number(row.x)) && Number.isFinite(Number(row.y))));
+  const meanX = ellipse.reduce((sum, row) => sum + Number(row.x), 0) / ellipse.length;
+  const meanY = ellipse.reduce((sum, row) => sum + Number(row.y), 0) / ellipse.length;
+  assert.ok(Math.abs(meanX) < 0.1);
+  assert.ok(Math.abs(meanY) < 0.1);
+});
+
+test('survivalMedians finds the first time each curve reaches 50%', () => {
+  const medians = survivalMedians([
+    { x: 1, y: 1, series: 'A' },
+    { x: 2, y: 0.6, series: 'A' },
+    { x: 3, y: 0.4, series: 'A' },
+    { x: 1, y: 1, series: 'B' },
+    { x: 2, y: 0.8, series: 'B' },
+    { x: 3, y: 0.5, series: 'B' },
+  ]);
+  assert.deepEqual(medians, [
+    { x: 3, series: 'A' },
+    { x: 3, series: 'B' },
+  ]);
+});
+
+test('kernelDensity returns a finite non-negative curve', () => {
+  const curve = kernelDensity([1, 2, 3, 4, 5, 6, 7, 8]);
+  assert.equal(curve.length, 60);
+  assert.ok(curve.every(point => Number.isFinite(point.x) && Number.isFinite(point.y)));
+  assert.ok(curve.every(point => point.y >= 0));
+});
+
+test('detrendedQqRows subtracts the reference line', () => {
+  const rows = detrendedQqRows(
+    [{ x: 1, y: 2 }, { x: 2, y: 3 }],
+    [{ x: 0, y: 0 }, { x: 2, y: 2 }]
+  );
+  assert.deepEqual(rows, [{ x: 1, y: 1 }, { x: 2, y: 1 }]);
 });

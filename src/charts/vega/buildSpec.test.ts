@@ -7,7 +7,7 @@ import { factoryOptions } from '../defaults';
 import { makeChart } from '../kits/common';
 import type { ChartKind, ScatterOptions } from '../../stats/charts';
 
-const kinds: ChartKind[] = ['scatter', 'line', 'bar', 'box', 'histogram', 'qq', 'forest', 'survival', 'acf', 'heatmap', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness'];
+const kinds: ChartKind[] = ['scatter', 'line', 'bar', 'box', 'histogram', 'interval', 'dot', 'ecdf', 'qq', 'forest', 'survival', 'risk', 'mosaic', 'acf', 'heatmap', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness'];
 
 const modelFor = (kind: ChartKind) =>
   makeChart({
@@ -30,10 +30,11 @@ const modelFor = (kind: ChartKind) =>
       censored: [{ x: 1, y: 0.8, series: 'A' }],
       medians: [{ x: 1, series: 'A' }],
       band: [{ lag: 1, value: 0.2 }],
-      cells: [{ x: 'A', y: 'B', value: 2, label: '2' }],
+      cells: [{ x: 'A', y: 'B', value: 2, label: '2', x0: 0, x1: 0.5, y0: 0, y1: 1 }],
       line: [{ x: 1, y: 2 }],
       targets: [{ value: 80 }],
       rules: [{ y: 0 }],
+      rows: [{ time: 0, group: 'A', atRisk: 10, events: 0 }],
     },
     fields: { xLabel: 'X', yLabel: 'Y', series: 'Series' },
     stats: { df: 10, equation: 'y = 1 + x', r2: 0.9, n: 20 },
@@ -81,6 +82,83 @@ test('box, notched and violin displays compile without warnings', () => {
   const area = violin.layer[0];
   assert.ok(area.data.values?.length);
   assert.ok(area.data.values!.every(row => 'x1' in row && 'x2' in row));
+});
+
+test('histogram KDE and detrended Q-Q compile without warnings', () => {
+  const histogram = makeChart({
+    id: 'hist-kde',
+    kind: 'histogram',
+    title: 'Histogram',
+    data: { values: [1, 2, 3, 4, 5, 6, 7, 8].map(value => ({ value })) },
+  });
+  const qq = makeChart({
+    id: 'qq-detrended',
+    kind: 'qq',
+    title: 'Q-Q',
+    data: {
+      points: [{ x: -1, y: -1.2 }, { x: 0, y: 0.1 }, { x: 1, y: 0.9 }],
+      reference: [{ x: -1, y: -1 }, { x: 1, y: 1 }],
+    },
+  });
+  const cases = [
+    buildVegaSpec(histogram, { ...factoryOptions('histogram'), showKde: true } as never),
+    buildVegaSpec(qq, { ...factoryOptions('qq'), detrended: true } as never),
+  ];
+  for (const spec of cases) {
+    const warnings: string[] = [];
+    compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+    assert.deepEqual(warnings, []);
+  }
+});
+
+test('sorted bars with labels and error bars keep the value order after compilation', () => {
+  const chart = makeChart({
+    id: 'bar-sorted',
+    kind: 'bar',
+    title: 'Bar',
+    data: {
+      bars: [
+        { category: 'A', value: 10, lo: 8, hi: 12 },
+        { category: 'B', value: 1, lo: 0, hi: 2 },
+      ],
+    },
+  });
+  const warnings: string[] = [];
+  const spec = buildVegaSpec(chart, {
+    ...factoryOptions('bar'),
+    sort: 'asc',
+    error: 'ci',
+    valueLabels: true,
+  } as never);
+  const compiled = compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never }).spec as {
+    scales?: Array<{ name: string; domain?: { sort?: unknown } }>;
+  };
+  assert.deepEqual(warnings, []);
+  const x = compiled.scales?.find(scale => scale.name === 'x');
+  // A conflicting sort collapses to `true`, i.e. alphabetical.
+  assert.notEqual(x?.domain?.sort, true);
+  assert.equal(typeof x?.domain?.sort, 'object');
+});
+
+test('a step line with a non-step reference diagonal compiles without warnings', () => {
+  const chart = makeChart({
+    id: 'roc',
+    kind: 'line',
+    title: 'ROC',
+    data: {
+      series: [
+        { x: 0, y: 0, series: 'ROC' },
+        { x: 50, y: 80, series: 'ROC' },
+        { x: 100, y: 100, series: 'ROC' },
+        { x: 0, y: 0, series: 'Diagonal', step: 0 },
+        { x: 100, y: 100, series: 'Diagonal', step: 0 },
+      ],
+    },
+  });
+  const warnings: string[] = [];
+  const spec = buildVegaSpec(chart, { ...factoryOptions('line'), step: true } as never);
+  compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+  assert.deepEqual(warnings, []);
 });
 
 test('the scatter band is narrower than the prediction band and grows with the level', () => {

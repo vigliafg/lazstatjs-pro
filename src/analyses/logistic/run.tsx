@@ -1,9 +1,17 @@
-import { fitLogistic, logisticProfileCurve, logisticReport, logisticTables } from '../../stats/logistic';
+import {
+  calibrationCurve,
+  fitLogistic,
+  logisticProfileCurve,
+  logisticReport,
+  logisticTables,
+  rocCurve,
+} from '../../stats/logistic';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
 import type { Dataset } from '../../grid/types';
 import type { LogisticParams } from '../../io/project';
+import type { AnalysisChart } from '../../stats/charts';
 import type { AnalysisRunResult } from '../types';
 import { isFiniteNumber } from '../shared/numbers';
 
@@ -85,15 +93,9 @@ export const buildLogisticOutput = ({
   );
   const curve = logisticProfileCurve(model, predictorData[0].values, means.slice(1), 40);
   const multiple = predictors.length > 1;
-  return {
-    ok: true,
-    title: copy('Regressione logistica: {s1}', { s1: outcomeName }),
-    header,
-    tables,
-    report: logisticReport(tables, ciLevel),
-    charts: [
-      makeChart({
-        id: 'logistic-curve',
+  const charts: AnalysisChart[] = [
+    makeChart({
+      id: 'logistic-curve',
         kind: 'line',
         title: copy('Curva di probabilità'),
         subtitle: multiple
@@ -109,6 +111,71 @@ export const buildLogisticOutput = ({
         fields: { xLabel: predictorName, yLabel: copy('Probabilità (%)'), series: copy('Serie') },
         options: { showMarkers: true, showBand: false } as never,
       }),
-    ],
+  ];
+  const roc = rocCurve(y, model.fitted);
+  if (roc.length > 2) {
+    charts.push(
+      makeChart({
+        id: 'logistic-roc',
+        kind: 'line',
+        title: copy('Curva ROC'),
+        subtitle: copy('Sensibilità vs 1 − specificità · AUC = {s1}', { s1: model.auc.toFixed(3) }),
+        note: copy('La diagonale rappresenta l’assenza di discriminazione; una curva più alta verso l’angolo superiore sinistro indica maggiore capacità discriminante.'),
+        data: {
+          series: [
+            ...roc.map(point => ({
+              x: point.fpr * 100,
+              y: point.tpr * 100,
+              series: copy('Curva ROC'),
+            })),
+            { x: 0, y: 0, series: copy('Nessuna discriminazione'), step: 0 },
+            { x: 100, y: 100, series: copy('Nessuna discriminazione'), step: 0 },
+          ],
+        },
+        fields: {
+          xLabel: copy('1 − specificità (%)'),
+          yLabel: copy('Sensibilità (%)'),
+          series: copy('Serie'),
+        },
+        options: { showMarkers: false, showBand: false, step: true } as never,
+      })
+    );
+  }
+  const calibration = calibrationCurve(y, model.fitted);
+  if (calibration.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'logistic-calibration',
+        kind: 'line',
+        title: copy('Calibrazione del modello'),
+        subtitle: copy('Probabilità osservata vs probabilità stimata'),
+        note: copy('I punti sono i decili di probabilità stimata; la diagonale indica calibrazione perfetta.'),
+        data: {
+          series: [
+            ...calibration.map(point => ({
+              x: point.predicted * 100,
+              y: point.observed * 100,
+              series: copy('Calibrazione'),
+            })),
+            { x: 0, y: 0, series: copy('Calibrazione perfetta') },
+            { x: 100, y: 100, series: copy('Calibrazione perfetta') },
+          ],
+        },
+        fields: {
+          xLabel: copy('Probabilità stimata (%)'),
+          yLabel: copy('Probabilità osservata (%)'),
+          series: copy('Serie'),
+        },
+        options: { showMarkers: true, showBand: false } as never,
+      })
+    );
+  }
+  return {
+    ok: true,
+    title: copy('Regressione logistica: {s1}', { s1: outcomeName }),
+    header,
+    tables,
+    report: logisticReport(tables, ciLevel),
+    charts,
   };
 };

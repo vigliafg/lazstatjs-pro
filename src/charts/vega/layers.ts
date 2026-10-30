@@ -1,5 +1,6 @@
-import { jStat } from '../../stats/jstat';
 import type { AnalysisChart, ChartOptions, ChartRow } from '../../stats/charts';
+import { confidenceEllipse, survivalMedians } from '../kits/common';
+import { histogramLayers } from './distributionLayers';
 import { colorAt, themeFor } from './theme';
 import {
   axis,
@@ -66,7 +67,14 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
     });
   });
   if (options.pointLabels) {
-    rowsOf(chart, 'labels').forEach(row => {
+    const explicit = rowsOf(chart, 'labels');
+    const labels =
+      explicit.length > 0
+        ? explicit
+        : rowsOf(chart, 'points')
+            .filter(row => row.label !== undefined && row.label !== null)
+            .map(row => ({ x: row.x, y: row.y, text: String(row.label) }));
+    labels.forEach(row => {
       layers.push({
         data: { values: [row] },
         mark: { type: 'text', align: 'left', dx: 6, dy: -6, fontSize: 9, color: theme.muted },
@@ -125,29 +133,38 @@ export const lineLayers = (chart: AnalysisChart, options: Extract<ChartOptions, 
       },
     });
   }
-  layers.push({
-    data: { values: series },
+  const seriesColor = chart.data.series?.some(row => row.series !== undefined)
+    ? { color: colorEncoding(chart, options, theme) }
+    : {};
+  // A row with `step: 0` opts out of the step interpolation: the ROC
+  // reference diagonal must stay a straight line while the curve is stepped.
+  const stepped = options.step ? series.filter(row => row.step !== 0) : series;
+  const smooth = options.step ? series.filter(row => row.step === 0) : [];
+  const lineLayer = (values: ChartRow[], step: boolean): Spec => ({
+    data: { values },
     mark: {
       ...lineStyle(options, colorAt(options, 0)),
-      ...(options.step ? { interpolate: 'step-after' } : {}),
+      ...(step ? { interpolate: 'step-after' } : {}),
       ...tooltip(options),
     },
     encoding: {
       x: xEncoding(chart, options, theme),
       y: yEncoding(chart, options, theme),
-      ...(chart.data.series?.some(row => row.series !== undefined)
-        ? { color: colorEncoding(chart, options, theme) }
-        : {}),
+      ...seriesColor,
     },
   });
+  if (stepped.length > 0) layers.push(lineLayer(stepped, options.step));
+  if (smooth.length > 0) layers.push(lineLayer(smooth, false));
   if (options.showMarkers) {
+    const explicit = rowsOf(chart, 'markers');
+    const markers = explicit.length > 0 ? explicit : series;
     layers.push({
-      data: { values: rowsOf(chart, 'markers') },
+      data: { values: markers },
       mark: pointMark(options, theme),
       encoding: {
         x: xEncoding(chart, options, theme),
         y: yEncoding(chart, options, theme),
-        ...(chart.data.markers?.some(row => row.series !== undefined)
+        ...(markers.some(row => row.series !== undefined)
           ? { color: colorEncoding(chart, options, theme) }
           : {}),
       },
@@ -159,6 +176,22 @@ export const lineLayers = (chart: AnalysisChart, options: Extract<ChartOptions, 
 export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'bar' }>): Spec[] => {
   const theme = themeFor(options);
   const bars = rowsOf(chart, 'bars', options);
+  // The nominal axis is sorted alphabetically by default; use the value order
+  // for asc/desc so the control actually changes the axis, including grouped
+  // or stacked series (the order follows the category total).
+  const categories = Array.from(new Set(bars.map(row => String(row.category ?? ''))));
+  const totals = new Map<string, number>();
+  bars.forEach(row => {
+    const category = String(row.category ?? '');
+    totals.set(category, (totals.get(category) ?? 0) + num(row.value));
+  });
+  const orderedCategories =
+    options.sort === 'none'
+      ? null
+      : [...categories].sort(
+          (a, b) =>
+            ((totals.get(a) ?? 0) - (totals.get(b) ?? 0)) * (options.sort === 'asc' ? 1 : -1)
+        );
   const layers: Spec[] = [];
   const intervalOf = (row: ChartRow): { lo: number; hi: number } | null => {
     if (options.error === 'none') return null;
@@ -178,6 +211,11 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
     }
     return null;
   };
+  const hasSeries = bars.some(row => row.series !== undefined);
+  const grouped = options.grouping === 'grouped' && hasSeries;
+  const offset = grouped
+    ? { xOffset: { field: 'series', type: 'nominal', title: null } }
+    : {};
   const errorBars = bars
     .map(row => ({ row, interval: intervalOf(row) }))
     .filter((item): item is { row: ChartRow; interval: { lo: number; hi: number } } => item.interval !== null);
@@ -188,25 +226,40 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
       x: {
         field: 'category',
         type: 'nominal',
-        sort: options.sort === 'none' ? null : undefined,
+        sort: orderedCategories,
         axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX),
       },
-      y: yEncoding(chart, options, theme, 'value', { scale: { zero: true } }),
-      ...(chart.data.bars?.some(row => row.series !== undefined)
-        ? { color: colorEncoding(chart, options, theme) }
-        : {}),
+      y: yEncoding(chart, options, theme, 'value', {
+        scale: { zero: true },
+        ...(grouped ? { stack: null } : {}),
+      }),
+      ...(hasSeries ? { color: colorEncoding(chart, options, theme) } : {}),
+      ...offset,
     },
   });
   // Error bars ride on top of the filled bars, otherwise the bar layer hides
   // the confidence interval completely.
   if (errorBars.length > 0) {
     layers.push({
-      data: { values: errorBars.map(({ row, interval }) => ({ category: row.category, lo: interval.lo, hi: interval.hi })) },
+      data: {
+        values: errorBars.map(({ row, interval }) => ({
+          category: row.category,
+          series: row.series,
+          lo: interval.lo,
+          hi: interval.hi,
+        })),
+      },
       mark: { type: 'rule', color: theme.text, strokeWidth: 1.5 },
       encoding: {
-        x: { field: 'category', type: 'nominal', axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX) },
+        x: {
+          field: 'category',
+          type: 'nominal',
+          sort: orderedCategories,
+          axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX),
+        },
         y: { field: 'lo', type: 'quantitative', title: null },
         y2: { field: 'hi' },
+        ...offset,
       },
     });
   }
@@ -215,9 +268,10 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
       data: { values: bars },
       mark: { type: 'text', dy: -6, fontSize: 9, color: theme.text },
       encoding: {
-        x: { field: 'category', type: 'nominal' },
+        x: { field: 'category', type: 'nominal', sort: orderedCategories },
         y: { field: 'value', type: 'quantitative' },
         text: { field: 'value', type: 'quantitative', format: '.2f' },
+        ...offset,
       },
     });
   }
@@ -234,102 +288,6 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
   return layers;
 };
 
-
-export const histogramLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'histogram' }>): Spec[] => {
-  const theme = themeFor(options);
-  const values = rowsOf(chart, 'values');
-  const layers: Spec[] = [
-    {
-      data: { values },
-      transform: [{ bin: { maxbins: options.bins }, field: 'value', as: 'bin' }],
-      mark: { type: 'bar', color: colorAt(options, 1), ...tooltip(options) },
-      encoding: {
-        x: {
-          field: 'bin',
-          type: 'quantitative',
-          bin: { binned: true },
-          axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX),
-        },
-        x2: { field: 'bin_end' },
-        y: {
-          aggregate: 'count',
-          type: 'quantitative',
-          title: options.showYTitle ? field(chart, 'yLabel', 'Count') : null,
-          axis: axis(options, theme, options.showYTitle ? field(chart, 'yLabel', 'Count') : null, options.gridY),
-        },
-      },
-    },
-  ];
-  if (options.showRug) {
-    layers.push({
-      data: { values },
-      mark: { type: 'tick', size: 8, color: colorAt(options, 0), opacity: 0.5 },
-      encoding: { x: { field: 'value', type: 'quantitative' } },
-    });
-  }
-  const numeric = values.map(row => num(row.value)).filter(Number.isFinite);
-  if (options.showDensity && numeric.length > 2) {
-    const mean = jStat.mean(numeric);
-    const sd = jStat.stdev(numeric, true);
-    const min = Math.min(...numeric);
-    const max = Math.max(...numeric);
-    const width = (max - min) / Math.max(2, options.bins);
-    if (sd > 0) {
-      const density = Array.from({ length: 60 }, (_, index) => {
-        const x = min + ((max - min) * index) / 59;
-        return { x, y: numeric.length * width * jStat.normal.pdf(x, mean, sd) };
-      });
-      layers.push({
-        data: { values: density },
-        mark: { type: 'line', color: colorAt(options, 4), strokeWidth: options.lineWidth },
-        encoding: {
-          x: { field: 'x', type: 'quantitative' },
-          y: { field: 'y', type: 'quantitative' },
-        },
-      });
-    }
-  }
-  if (options.showMeanLine) {
-    const mean = values.reduce((sum, row) => sum + (Number.isFinite(num(row.value)) ? num(row.value) : 0), 0) / Math.max(1, values.length);
-    if (Number.isFinite(mean)) {
-      layers.push({
-        data: { values: [{ value: mean }] },
-        mark: { type: 'rule', color: colorAt(options, 4), strokeDash: [4, 4] },
-        encoding: { x: { field: 'value', type: 'quantitative' } },
-      });
-    }
-  }
-  return layers;
-};
-
-export const qqLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'qq' }>): Spec[] => {
-  const theme = themeFor(options);
-  const layers: Spec[] = [];
-  if (options.showCI) {
-    layers.push({
-      data: { values: rowsOf(chart, 'band') },
-      mark: { type: 'area', opacity: 0.15, color: colorAt(options, 0), line: false },
-      encoding: {
-        x: xEncoding(chart, options, theme),
-        y: { field: 'lo', type: 'quantitative', title: null },
-        y2: { field: 'hi' },
-      },
-    });
-  }
-  if (options.showReference) {
-    layers.push({
-      data: { values: rowsOf(chart, 'reference') },
-      mark: { type: 'line', color: colorAt(options, 4), strokeWidth: options.lineWidth, strokeDash: [4, 4] },
-      encoding: { x: xEncoding(chart, options, theme), y: yEncoding(chart, options, theme) },
-    });
-  }
-  layers.push({
-    data: { values: rowsOf(chart, 'points') },
-    mark: pointMark(options, theme),
-    encoding: { x: xEncoding(chart, options, theme), y: yEncoding(chart, options, theme) },
-  });
-  return layers;
-};
 
 export const forestLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'forest' }>): Spec[] => {
   const theme = themeFor(options);
@@ -403,14 +361,19 @@ export const survivalLayers = (chart: AnalysisChart, options: Extract<ChartOptio
     });
   }
   if (options.showMedian) {
-    layers.push({
-      data: { values: rowsOf(chart, 'medians') },
-      mark: { type: 'rule', color: colorAt(options, 3), strokeDash: [4, 4] },
-      encoding: {
-        x: { field: 'x', type: 'quantitative' },
-        color: colorEncoding(chart, options, theme),
-      },
-    });
+    const explicit = rowsOf(chart, 'medians');
+    const medians = explicit.length > 0 ? explicit : survivalMedians(curves);
+    if (medians.length > 0) {
+      const hasSeries = medians.some(row => row.series !== undefined);
+      layers.push({
+        data: { values: medians },
+        mark: { type: 'rule', color: colorAt(options, 3), strokeDash: [4, 4] },
+        encoding: {
+          x: { field: 'x', type: 'quantitative' },
+          ...(hasSeries ? { color: colorEncoding(chart, options, theme) } : {}),
+        },
+      });
+    }
   }
   return layers;
 };
@@ -442,13 +405,29 @@ export const acfLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
 export const heatmapLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'heatmap' }>): Spec[] => {
   const theme = themeFor(options);
   const cells = rowsOf(chart, 'cells');
+  const marginal = (fieldName: string, category: string): number => {
+    const values = cells
+      .filter(row => String(row[fieldName] ?? '') === category)
+      .map(row => num(row.value))
+      .filter(Number.isFinite);
+    return values.length > 0 ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
+  };
+  const orderOf = (fieldName: string): string[] | null => {
+    if (options.sort === 'none') return null;
+    const categories = Array.from(new Set(cells.map(row => String(row[fieldName] ?? ''))));
+    return [...categories].sort(
+      (a, b) => (marginal(fieldName, a) - marginal(fieldName, b)) * (options.sort === 'asc' ? 1 : -1)
+    );
+  };
+  const xOrder = orderOf('x');
+  const yOrder = orderOf('y');
   const layers: Spec[] = [
     {
       data: { values: cells },
       mark: { type: 'rect', ...tooltip(options) },
       encoding: {
-        x: { field: 'x', type: 'nominal', axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, false) },
-        y: { field: 'y', type: 'nominal', axis: axis(options, theme, options.showYTitle ? field(chart, 'yLabel', '') : null, false) },
+        x: { field: 'x', type: 'nominal', sort: xOrder, axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, false) },
+        y: { field: 'y', type: 'nominal', sort: yOrder, axis: axis(options, theme, options.showYTitle ? field(chart, 'yLabel', '') : null, false) },
         color: {
           field: 'value',
           type: 'quantitative',
@@ -465,8 +444,8 @@ export const heatmapLayers = (chart: AnalysisChart, options: Extract<ChartOption
       data: { values: cells },
       mark: { type: 'text', fontSize: 9, color: theme.text },
       encoding: {
-        x: { field: 'x', type: 'nominal' },
-        y: { field: 'y', type: 'nominal' },
+        x: { field: 'x', type: 'nominal', sort: xOrder },
+        y: { field: 'y', type: 'nominal', sort: yOrder },
         text: { field: 'label', type: 'nominal' },
       },
     });
@@ -476,9 +455,11 @@ export const heatmapLayers = (chart: AnalysisChart, options: Extract<ChartOption
 
 export const scatterOnly = (chart: AnalysisChart, options: ChartOptions): Spec[] => {
   const theme = themeFor(options);
-  const layers: Spec[] = [
-    {
-      data: { values: rowsOf(chart, 'points') },
+  const pointRows = rowsOf(chart, 'points');
+  const layers: Spec[] = [];
+  if (options.kind !== 'residual' || options.showPoints) {
+    layers.push({
+      data: { values: pointRows },
       mark: pointMark(options, theme),
       encoding: {
         x: xEncoding(chart, options, theme),
@@ -487,8 +468,56 @@ export const scatterOnly = (chart: AnalysisChart, options: ChartOptions): Spec[]
           ? { tooltip: { content: 'data' } }
           : {}),
       },
-    },
-  ];
+    });
+  }
+  if (options.kind === 'score' && options.showLabels) {
+    const labels = pointRows.filter(row => row.label !== undefined && row.label !== null && String(row.label).length > 0);
+    if (labels.length > 0) {
+      layers.push({
+        data: { values: labels },
+        mark: { type: 'text', dx: 6, dy: -6, fontSize: 9, color: theme.muted },
+        encoding: {
+          x: xEncoding(chart, options, theme),
+          y: yEncoding(chart, options, theme),
+          text: { field: 'label', type: 'nominal' },
+        },
+      });
+    }
+  }
+  if (options.kind === 'score' && options.ellipse) {
+    const ellipse = confidenceEllipse(pointRows);
+    if (ellipse.length > 0) {
+      layers.push({
+        data: { values: ellipse },
+        mark: { type: 'line', color: colorAt(options, 4), strokeDash: [4, 4], strokeWidth: 1 },
+        encoding: { x: xEncoding(chart, options, theme), y: yEncoding(chart, options, theme) },
+      });
+    }
+  }
+  if (options.kind === 'score' && options.showVectors) {
+    const vectors = rowsOf(chart, 'vectors');
+    if (vectors.length > 0) {
+      layers.push({
+        data: { values: vectors },
+        mark: { type: 'rule', color: colorAt(options, 2), strokeWidth: 1 },
+        encoding: {
+          x: { field: 'x', type: 'quantitative' },
+          y: { field: 'y', type: 'quantitative' },
+          x2: { field: 'x2' },
+          y2: { field: 'y2' },
+        },
+      });
+      layers.push({
+        data: { values: vectors },
+        mark: { type: 'text', dx: 4, dy: -4, fontSize: 8, color: theme.muted },
+        encoding: {
+          x: { field: 'x2', type: 'quantitative' },
+          y: { field: 'y2', type: 'quantitative' },
+          text: { field: 'label', type: 'nominal' },
+        },
+      });
+    }
+  }
   let rules = rowsOf(chart, 'rules');
   if (options.kind === 'bland') {
     rules = rules.filter((_, index) =>

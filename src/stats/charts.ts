@@ -23,9 +23,14 @@ export type ChartKind =
   | 'bar'
   | 'box'
   | 'histogram'
+  | 'interval'
+  | 'dot'
+  | 'ecdf'
   | 'qq'
   | 'forest'
   | 'survival'
+  | 'risk'
+  | 'mosaic'
   | 'acf'
   | 'heatmap'
   | 'residual'
@@ -88,6 +93,8 @@ export interface BarOptions extends CommonChartOptions {
   valueLabels: boolean;
   sort: 'none' | 'asc' | 'desc';
   referenceLine: 'none' | 'zero' | 'one';
+  /** Series side by side (dodged) instead of stacked. */
+  grouping: 'stacked' | 'grouped';
 }
 
 export interface BoxOptions extends CommonChartOptions {
@@ -104,15 +111,35 @@ export interface BoxOptions extends CommonChartOptions {
 export interface HistogramOptions extends CommonChartOptions {
   kind: 'histogram';
   showDensity: boolean;
+  showKde: boolean;
   showRug: boolean;
   showMeanLine: boolean;
   bins: number;
+}
+
+export interface IntervalOptions extends CommonChartOptions {
+  kind: 'interval';
+  valueLabels: boolean;
+  sort: 'none' | 'asc' | 'desc';
+}
+
+export interface DotOptions extends CommonChartOptions {
+  kind: 'dot';
+  showMean: boolean;
+  sort: 'none' | 'asc' | 'desc';
+}
+
+export interface EcdfOptions extends CommonChartOptions {
+  kind: 'ecdf';
+  showPoints: boolean;
+  showMedian: boolean;
 }
 
 export interface QqOptions extends CommonChartOptions {
   kind: 'qq';
   showReference: boolean;
   showCI: boolean;
+  detrended: boolean;
 }
 
 export interface ForestOptions extends CommonChartOptions {
@@ -128,6 +155,18 @@ export interface SurvivalOptions extends CommonChartOptions {
   showCensoring: boolean;
   showMedian: boolean;
   step: boolean;
+}
+
+export interface MosaicOptions extends CommonChartOptions {
+  kind: 'mosaic';
+  showValues: boolean;
+  residualColor: boolean;
+}
+
+export interface RiskOptions extends CommonChartOptions {
+  kind: 'risk';
+  /** Add cumulative events in parentheses next to the at-risk count. */
+  showEvents: boolean;
 }
 
 export interface AcfOptions extends CommonChartOptions {
@@ -158,6 +197,7 @@ export interface ScoreOptions extends CommonChartOptions {
   kind: 'score';
   showLabels: boolean;
   ellipse: boolean;
+  showVectors: boolean;
 }
 
 export interface BlandOptions extends CommonChartOptions {
@@ -190,9 +230,14 @@ export type ChartOptions =
   | BarOptions
   | BoxOptions
   | HistogramOptions
+  | IntervalOptions
+  | DotOptions
+  | EcdfOptions
   | QqOptions
   | ForestOptions
   | SurvivalOptions
+  | RiskOptions
+  | MosaicOptions
   | AcfOptions
   | HeatmapOptions
   | ResidualOptions

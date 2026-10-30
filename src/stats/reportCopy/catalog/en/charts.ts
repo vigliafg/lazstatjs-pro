@@ -1,4 +1,6 @@
 /** English copy for chart titles, notes and axis labels. */
+import { categoricalMultivariateChartCopy } from './charts-multivariate';
+
 export const chartCopy: Record<string, string> = {
   " Con stime instabili gli intervalli non finiti sono omessi dal grafico.":
     " With unstable estimates, non-finite intervals are omitted from the chart.",
@@ -542,4 +544,101 @@ export const chartCopy: Record<string, string> = {
     "The curves describe the observed survival in each stratum; the Cox model shares covariate estimates across strata.",
   "Strato":
     "Stratum",
+  "Medie e intervalli di confidenza":
+    "Means and confidence intervals",
+  "Dotplot delle variabili selezionate":
+    "Dotplot of the selected variables",
+  "Distribuzione cumulativa: {s1}":
+    "Cumulative distribution: {s1}",
+  "Valore cumulativo":
+    "Cumulative proportion",
+  "Diagnostica: scala-location":
+    "Diagnostics: scale-location",
+  "Radice del residuo standardizzato rispetto ai valori stimati":
+    "Square root of the standardized residual against fitted values",
+  "La curva dovrebbe restare piatta: un andamento a imbuto suggerisce varianza non costante.":
+    "The curve should stay flat: a funnel shape suggests non-constant variance.",
+  "√|residuo standardizzato|":
+    "√|standardized residual|",
+  "Residui standardizzati vs leverage":
+    "Standardized residuals vs leverage",
+  "Soglia di leverage 2p/n = {s1}":
+    "Leverage threshold 2p/n = {s1}",
+  "Osservazioni con leverage alto o residui grandi meritano attenzione; le linee tratteggiate sono a ±2.":
+    "Observations with high leverage or large residuals deserve attention; dashed lines are at ±2.",
+  "Leverage":
+    "Leverage",
+  "Residuo standardizzato":
+    "Standardized residual",
+  "Distanza di Cook":
+    "Cook's distance",
+  "Osservazioni influenti":
+    "Influential observations",
+  "La linea tratteggiata è la soglia 4/n; i punti etichettati sono le osservazioni più influenti.":
+    "The dashed line is the 4/n threshold; labelled points are the most influential observations.",
+  "Osservazione":
+    "Observation",
+  "Residui parziali: {s1}":
+    "Partial residuals: {s1}",
+  "Componente di {s1} più residuo":
+    "Component of {s1} plus residual",
+  "La linea mostra l’effetto del predittore dopo aver tolto gli altri; una curvatura suggerisce una relazione non lineare.":
+    "The line shows the predictor effect after removing the others; curvature suggests a non-linear relationship.",
+  "{s1} (centrata)":
+    "{s1} (centered)",
+  "Residuo parziale":
+    "Partial residual",
+  "Curva ROC":
+    "ROC curve",
+  "Sensibilità vs 1 − specificità · AUC = {s1}":
+    "Sensitivity vs 1 − specificity · AUC = {s1}",
+  "La diagonale rappresenta l’assenza di discriminazione; una curva più alta verso l’angolo superiore sinistro indica maggiore capacità discriminante.":
+    "The diagonal represents no discrimination; a curve closer to the top-left corner indicates better discrimination.",
+  "Nessuna discriminazione":
+    "No discrimination",
+  "1 − specificità (%)":
+    "1 − specificity (%)",
+  "Sensibilità (%)":
+    "Sensitivity (%)",
+  "Calibrazione del modello":
+    "Model calibration",
+  "Probabilità osservata vs probabilità stimata":
+    "Observed vs predicted probability",
+  "I punti sono i decili di probabilità stimata; la diagonale indica calibrazione perfetta.":
+    "Points are deciles of predicted probability; the diagonal indicates perfect calibration.",
+  "Calibrazione":
+    "Calibration",
+  "Calibrazione perfetta":
+    "Perfect calibration",
+  "Probabilità stimata (%)":
+    "Predicted probability (%)",
+  "Probabilità osservata (%)":
+    "Observed probability (%)",
+  "Tabella dei soggetti a rischio":
+    "Number at risk",
+  "Soggetti a rischio per gruppo ai tempi selezionati":
+    "Subjects at risk by group at the selected times",
+  "Numero a rischio; tra parentesi gli eventi cumulati.":
+    "Number at risk; cumulative events in parentheses.",
+  "Rischio cumulato di base":
+    "Baseline cumulative hazard",
+  "H₀(t) di Breslow al profilo medio delle covariariate":
+    "Breslow H₀(t) at the mean covariate profile",
+  "La curva cresce a ogni evento; un salto verticale indica un evento con rischio elevato.":
+    "The curve increases at each event; a vertical jump marks an event with high risk.",
+  "Rischio cumulato":
+    "Cumulative hazard",
+  "Sopravvivenza di base":
+    "Baseline survival",
+  "S₀(t) al profilo medio delle covariariate":
+    "S₀(t) at the mean covariate profile",
+  "La curva scende a ogni evento; il valore non va letto come la sopravvivenza media della coorte.":
+    "The curve falls at each event; it must not be read as the cohort average survival.",
+  "Residui di Schoenfeld: {s1}":
+    "Schoenfeld residuals: {s1}",
+  "Tempo dell’evento":
+    "Event time",
+  "Un andamento nel tempo suggerisce una violazione del rischio proporzionale.":
+    "A trend over time suggests a proportional-hazards violation.",
+  ...categoricalMultivariateChartCopy,
 };

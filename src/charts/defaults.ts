@@ -151,6 +151,7 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
         valueLabels: false,
         sort: 'none',
         referenceLine: 'none',
+        grouping: 'stacked',
       };
     case 'box':
       return {
@@ -164,9 +165,15 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
         sort: 'none',
       };
     case 'histogram':
-      return { ...P, kind, showDensity: false, showRug: false, showMeanLine: false, bins: 16 };
+      return { ...P, kind, showDensity: false, showKde: false, showRug: false, showMeanLine: false, bins: 16 };
+    case 'interval':
+      return { ...P, kind, valueLabels: false, sort: 'none' };
+    case 'dot':
+      return { ...P, kind, showMean: false, sort: 'none' };
+    case 'ecdf':
+      return { ...P, kind, showPoints: false, showMedian: false };
     case 'qq':
-      return { ...P, kind, showReference: true, showCI: false };
+      return { ...P, kind, showReference: true, showCI: false, detrended: false };
     case 'forest':
       return { ...P, kind, logScale: false, reference: 'one', sort: 'none' };
     case 'survival':
@@ -178,6 +185,10 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
         showMedian: false,
         step: true,
       };
+    case 'risk':
+      return { ...P, kind, showEvents: false };
+    case 'mosaic':
+      return { ...P, kind, showValues: true, residualColor: true };
     case 'acf':
       return { ...P, kind, showBand: true };
     case 'heatmap':
@@ -187,7 +198,7 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
     case 'scree':
       return { ...P, kind, showKaiser: false, showValues: true };
     case 'score':
-      return { ...P, kind, showLabels: false, ellipse: false };
+      return { ...P, kind, showLabels: false, ellipse: false, showVectors: false };
     case 'bland':
       return { ...P, kind, showBias: true, showLoA: true, showIdentity: false };
     case 'power':

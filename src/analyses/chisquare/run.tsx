@@ -5,6 +5,7 @@ import { fmtEst } from '../../stats/format';
 import { calcFisherExact } from '../../stats/kernels';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
+import { mosaicCells } from '../../charts/kits/categorical';
 import type { Dataset } from '../../grid/types';
 import type { ChiSqParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -128,14 +129,37 @@ export interface ChiSquareRunInput {
         ],
       },
       fields: { xLabel: copy('Cella'), yLabel: copy('Frequenza'), series: copy('Tipo') },
-      options: { valueLabels: true } as never,
+      options: { valueLabels: true, grouping: 'grouped' } as never,
     });
+    const mosaic = mosaicCells({
+      observed: [
+        [o11, o12],
+        [o21, o22],
+      ],
+      rows: [row1Label, row2Label],
+      cols: [col1Label, col2Label],
+    });
+    const charts = [chart];
+    if (mosaic.length > 0) {
+      charts.push(
+        makeChart({
+          id: 'chisq-mosaic',
+          kind: 'mosaic',
+          title: copy('Mosaico della contingenza'),
+          subtitle: copy('Ampiezza per totali di riga, larghezza per distribuzione condizionata'),
+          note: copy('L’area di ogni cella è proporzionale alla frequenza; il colore mostra il residuo standardizzato.'),
+          data: { cells: mosaic },
+          fields: { xLabel: copy('Colonna'), yLabel: copy('Riga') },
+          options: { showValues: true, residualColor: true } as never,
+        })
+      );
+    }
     return {
       ok: true,
       title: copy('Test chi-quadro di indipendenza'),
       tables,
       report,
-      charts: [chart],
+      charts,
       warnings: showCochranWarning
         ? [
             copy('Regola di Cochran: una o più frequenze attese sono minori di 5 (minimo {s1}). Il test chi-quadro standard può essere impreciso; valuta la correzione di Yates.', { s1: fmtEst(minExpected, 2) }),

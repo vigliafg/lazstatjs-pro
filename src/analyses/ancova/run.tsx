@@ -122,7 +122,7 @@ export const buildAncovaOutput = ({ grid, params, ciLevel }: AncovaInput): Analy
         note: copy('Le barre aggiustate sono le medie alla media delle covariate: è questa la differenza che l’ANCOVA testa.'),
         data: { bars },
         fields: { xLabel: factorName, yLabel: responseName, series: copy('Stima') },
-        options: { valueLabels: true, error: 'ci' } as never,
+        options: { valueLabels: true, error: 'ci', grouping: 'grouped' } as never,
       }),
     ],
   };

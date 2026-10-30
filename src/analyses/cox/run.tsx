@@ -4,6 +4,7 @@ import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
 import type { Dataset } from '../../grid/types';
 import type { CoxParams } from '../../io/project';
+import type { AnalysisChart } from '../../stats/charts';
 import type { AnalysisRunResult } from '../types';
 
 export interface CoxInput {
@@ -129,6 +130,7 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     lo: coefficient.lo,
     hi: coefficient.hi,
   }));
+  const charts: AnalysisChart[] = [];
   const forest = makeChart({
     id: 'cox-forest',
     kind: 'forest',
@@ -141,6 +143,80 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
     stats: { n: times.length, events: fit.events },
   });
+  charts.push(forest);
+  const baseline = fit.baseline.filter(
+    row => Number.isFinite(row.time) && Number.isFinite(row.hazard) && Number.isFinite(row.survival)
+  );
+  if (baseline.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'cox-baseline-hazard',
+        kind: 'line',
+        title: copy('Rischio cumulato di base'),
+        subtitle: copy('H₀(t) di Breslow al profilo medio delle covariariate'),
+        note: copy('La curva cresce a ogni evento; un salto verticale indica un evento con rischio elevato.'),
+        data: {
+          series: [
+            { x: 0, y: 0, series: copy('Rischio cumulato') },
+            ...baseline.map(row => ({
+              x: row.time,
+              y: row.hazard,
+              series: copy('Rischio cumulato'),
+            })),
+          ],
+        },
+        fields: {
+          xLabel: copy('Tempo'),
+          yLabel: copy('Rischio cumulato'),
+          series: copy('Serie'),
+        },
+        options: { showMarkers: false, showBand: false, step: true } as never,
+      }),
+      makeChart({
+        id: 'cox-baseline-survival',
+        kind: 'line',
+        title: copy('Sopravvivenza di base'),
+        subtitle: copy('S₀(t) al profilo medio delle covariariate'),
+        note: copy('La curva scende a ogni evento; il valore non va letto come la sopravvivenza media della coorte.'),
+        data: {
+          series: [
+            { x: 0, y: 1, series: copy('Sopravvivenza di base') },
+            ...baseline.map(row => ({
+              x: row.time,
+              y: row.survival,
+              series: copy('Sopravvivenza di base'),
+            })),
+          ],
+        },
+        fields: {
+          xLabel: copy('Tempo'),
+          yLabel: copy('Sopravvivenza'),
+          series: copy('Serie'),
+        },
+        options: { showMarkers: false, showBand: false, step: true } as never,
+      })
+    );
+  }
+  const terms = Array.from(new Set(fit.schoenfeld.map(row => row.term)));
+  terms.slice(0, 4).forEach((term, index) => {
+    const points = fit.schoenfeld
+      .filter(row => row.term === term)
+      .map(row => ({ x: row.time, y: row.residual }))
+      .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+    if (points.length === 0) return;
+    charts.push(
+      makeChart({
+        id: `cox-schoenfeld-${index + 1}`,
+        kind: 'scatter',
+        title: copy('Residui di Schoenfeld: {s1}', { s1: term }),
+        subtitle: copy('Tempo dell’evento'),
+        note: copy('Un andamento nel tempo suggerisce una violazione del rischio proporzionale.'),
+        data: { points, rules: [{ y: 0 }] },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Residuo') },
+        options: { fit: 'none', band: 'none' } as never,
+      })
+    );
+  });
   const header = `Time: ${grid.cols[timeVariable]?.name} · event: ${grid.cols[eventVariable]?.name} = "${eventLevels[1]}" · ${times.length} observations · ${fit.events} events`;
 
   return {
@@ -148,7 +224,7 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     title: copy('Cox: hazard ratio'),
     tables,
     report: coxReport(tables, ciLevel),
-    charts: [forest],
+    charts,
     header,
   };
 };

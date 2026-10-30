@@ -83,6 +83,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   let meanX = 0;
   let sxx = 1;
   let mse = 1;
+  let xtxInv: number[][] = [];
 
   try {
     if (k === 1) {
@@ -101,6 +102,15 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
         sumXY += diffX * diffY;
       }
       sxx = sumXX;
+      const sumX = xs.reduce((sum, value) => sum + value, 0);
+      const sumX2 = xs.reduce((sum, value) => sum + value * value, 0);
+      const determinant = n * sumX2 - sumX * sumX;
+      if (determinant > 0) {
+        xtxInv = [
+          [sumX2 / determinant, -sumX / determinant],
+          [-sumX / determinant, n / determinant],
+        ];
+      }
       const slope = sumXY / sumXX;
       const intercept = meanY - slope * meanX;
       coef = [intercept, slope];
@@ -123,6 +133,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
       const Xt = jStat.transpose(X);
       const XtX = jStat.multiply(Xt, X);
       const XtXinv = jStat.inv(XtX);
+      xtxInv = XtXinv as number[][];
       se = coef.map((_: unknown, i: number) => Math.sqrt(mse * XtXinv[i][i]));
       tStats = coef.map((c: number, i: number) => c / se[i]);
       pValues = tStats.map(t => 2 * (1 - jStat.studentt.cdf(Math.abs(t), df)));
@@ -152,6 +163,29 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
     coef[0] + indeps.reduce((sum, idx, position) => sum + coef[position + 1] * parseNum(row[idx]), 0)
   );
   const olsResids = Y.map((value, index) => value - fitted[index]);
+  const predMeans = indeps.map(index =>
+    jStat.mean(validRows.map(row => parseNum(row[index])))
+  );
+  const parameters = k + 1;
+  // Influence diagnostics share the hat matrix: h_ii = x_i' (X'X)^-1 x_i.
+  const leverage = X.map(row => {
+    let value = 0;
+    for (let left = 0; left < parameters; left++) {
+      for (let right = 0; right < parameters; right++) {
+        value += row[left] * (xtxInv[left]?.[right] ?? 0) * row[right];
+      }
+    }
+    return Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0;
+  });
+  const residualSd = Math.sqrt(mse);
+  const standardizedResiduals = olsResids.map((residual, index) => {
+    const denominator = residualSd * Math.sqrt(Math.max(1e-12, 1 - leverage[index]));
+    return denominator > 0 ? residual / denominator : NaN;
+  });
+  const cookDistances = olsResids.map((residual, index) => {
+    const denominator = parameters * mse * Math.pow(1 - leverage[index], 2);
+    return denominator > 0 ? (residual * residual * leverage[index]) / denominator : 0;
+  });
   const olsResidStats = boxStats(olsResids);
   const residualSummary: ChartRow[] = olsResidStats
     ? [{ category: 'OLS', n: olsResidStats.n, min: olsResidStats.min, q1: olsResidStats.q1, median: olsResidStats.median, q3: olsResidStats.q3, max: olsResidStats.max, mean: olsResidStats.mean }]
@@ -257,6 +291,91 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
         data: { points: residualVsFitted, rules: [{ y: 0 }] },
         fields: { xLabel: copy('Valori stimati'), yLabel: copy('Residui') },
         options: { showPoints: true, showZeroLine: true } as never,
+      })
+    );
+  }
+
+  const scaleLocation = fitted
+    .map((value, index) => ({ x: value, y: Math.sqrt(Math.abs(standardizedResiduals[index])) }))
+    .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+  if (scaleLocation.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'reg-scale-location',
+        kind: 'scatter',
+        title: copy('Diagnostica: scala-location'),
+        subtitle: copy('Radice del residuo standardizzato rispetto ai valori stimati'),
+        note: copy('La curva dovrebbe restare piatta: un andamento a imbuto suggerisce varianza non costante.'),
+        data: { points: scaleLocation, fit: [] },
+        fields: { xLabel: copy('Valori stimati'), yLabel: copy('√|residuo standardizzato|') },
+        options: { fit: 'none', band: 'none' } as never,
+      })
+    );
+  }
+  const leveragePoints = leverage
+    .map((value, index) => ({ x: value, y: standardizedResiduals[index] }))
+    .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+  if (leveragePoints.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'reg-residual-leverage',
+        kind: 'scatter',
+        title: copy('Residui standardizzati vs leverage'),
+        subtitle: copy('Soglia di leverage 2p/n = {s1}', { s1: (2 * parameters) / n }),
+        note: copy('Osservazioni con leverage alto o residui grandi meritano attenzione; le linee tratteggiate sono a ±2.'),
+        data: { points: leveragePoints, rules: [{ y: -2 }, { y: 2 }] },
+        fields: { xLabel: copy('Leverage'), yLabel: copy('Residuo standardizzato') },
+        options: { fit: 'none', band: 'none' } as never,
+      })
+    );
+  }
+  const cookThreshold = 4 / n;
+  const influential = cookDistances
+    .map((value, index) => ({ index, value }))
+    .sort((left, right) => right.value - left.value)
+    .slice(0, 3)
+    .filter(item => item.value > cookThreshold);
+  const labelled = new Set(influential.map(item => item.index));
+  const cookPoints = cookDistances.map((value, index) => ({
+    x: index + 1,
+    y: value,
+    ...(labelled.has(index) ? { label: `#${index + 1}` } : {}),
+  }));
+  charts.push(
+    makeChart({
+      id: 'reg-cooks',
+      kind: 'scatter',
+      title: copy('Distanza di Cook'),
+      subtitle: copy('Osservazioni influenti'),
+      note: copy('La linea tratteggiata è la soglia 4/n; i punti etichettati sono le osservazioni più influenti.'),
+      data: { points: cookPoints, rules: [{ y: cookThreshold }] },
+      fields: { xLabel: copy('Osservazione'), yLabel: copy('Distanza di Cook') },
+      stats: { n, threshold: cookThreshold },
+      options: { fit: 'none', band: 'none', pointLabels: true } as never,
+    })
+  );
+  const partialLimit = Math.min(k, 4);
+  for (let position = 0; position < partialLimit; position++) {
+    const slope = coef[position + 1];
+    const points = validRows
+      .map((row, index) => {
+        const centered = parseNum(row[indeps[position]]) - predMeans[position];
+        return { x: centered, y: olsResids[index] + slope * centered };
+      })
+      .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+    if (points.length === 0) continue;
+    const min = Math.min(...points.map(point => point.x));
+    const max = Math.max(...points.map(point => point.x));
+    charts.push(
+      makeChart({
+        id: `reg-partial-${position + 1}`,
+        kind: 'scatter',
+        title: copy('Residui parziali: {s1}', { s1: predNames[position] }),
+        subtitle: copy('Componente di {s1} più residuo', { s1: predNames[position] }),
+        note: copy('La linea mostra l’effetto del predittore dopo aver tolto gli altri; una curvatura suggerisce una relazione non lineare.'),
+        data: { points, fit: [{ x: min, y: slope * min }, { x: max, y: slope * max }] },
+        fields: { xLabel: copy('{s1} (centrata)', { s1: predNames[position] }), yLabel: copy('Residuo parziale') },
+        options: { fit: 'ols', band: 'none' } as never,
       })
     );
   }

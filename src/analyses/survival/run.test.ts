@@ -30,6 +30,12 @@ test('survival builder returns tables, report and Kaplan–Meier curves', () => 
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
   assert.ok(result.tables.some(spec => spec.id === 'surv-km'));
+  const ids = (result.charts ?? []).map(chart => chart.id);
+  assert.deepEqual(ids, ['survival-km', 'survival-risk']);
+  const risk = (result.charts ?? []).find(chart => chart.id === 'survival-risk');
+  assert.equal(risk?.kind, 'risk');
+  assert.ok((risk?.data.rows ?? []).length >= 5);
+  assert.ok((risk?.data.rows ?? []).every(row => Number(row.atRisk) >= 0));
 });
 
 test('survival builder validates the column choice and the event column', () => {

@@ -42,3 +42,21 @@ test('stratified Cox still rejects the stratum as a covariate', () => {
   assert.ok('reason' in result);
   if ('reason' in result) assert.match(result.reason, /stratum cannot also be a covariate/);
 });
+
+test('stratified Cox adds the number-at-risk table', () => {
+  const largeGrid = {
+    cols: grid.cols,
+    rows: Array.from({ length: 24 }, (_, index) => [
+      String(index + 1),
+      index % 3 === 0 ? '0' : '1',
+      index % 2 === 0 ? 'A' : 'B',
+      String((index % 7) / 7),
+    ]),
+  };
+  const result = buildStratifiedCoxOutput({ ...base, grid: largeGrid });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  const risk = (result.charts ?? []).find(chart => chart.id === 'stratcox-risk');
+  assert.equal(risk?.kind, 'risk');
+  assert.ok((risk?.data.rows ?? []).length > 0);
+});

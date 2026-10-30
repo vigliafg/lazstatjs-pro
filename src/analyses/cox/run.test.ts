@@ -36,6 +36,22 @@ test('cox builder returns tables, report and the hazard-ratio plot', () => {
   assert.ok(result.report);
   const chart = result.charts?.[0];
   assert.equal(chart?.kind, 'forest');
+  const ids = (result.charts ?? []).map(item => item.id);
+  assert.ok(ids.includes('cox-baseline-hazard'));
+  assert.ok(ids.includes('cox-baseline-survival'));
+  assert.ok(ids.some(id => id.startsWith('cox-schoenfeld-')));
+  const hazard = (result.charts ?? []).find(item => item.id === 'cox-baseline-hazard');
+  const survival = (result.charts ?? []).find(item => item.id === 'cox-baseline-survival');
+  assert.equal(hazard?.options.kind === 'line' && hazard.options.step, true);
+  assert.equal(survival?.options.kind === 'line' && survival.options.step, true);
+  assert.deepEqual(
+    hazard?.data.series?.[0] && { x: hazard.data.series[0].x, y: hazard.data.series[0].y },
+    { x: 0, y: 0 }
+  );
+  assert.deepEqual(
+    survival?.data.series?.[0] && { x: survival.data.series[0].x, y: survival.data.series[0].y },
+    { x: 0, y: 1 }
+  );
   assert.match(result.header ?? '', /events/);
   // The worker sends this payload across structured clone.
   assert.doesNotThrow(() =>

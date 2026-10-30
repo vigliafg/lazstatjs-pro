@@ -29,6 +29,12 @@ export interface CoxBaselineRow {
   survival: number;
 }
 
+export interface CoxSchoenfeldRow {
+  term: string;
+  time: number;
+  residual: number;
+}
+
 export interface CoxPhRow {
   term: string;
   chi2: number;
@@ -57,6 +63,7 @@ export interface CoxFit {
   converged: boolean;
   separation: boolean;
   baseline: CoxBaselineRow[];
+  schoenfeld: CoxSchoenfeldRow[];
   ph: CoxPhRow[];
   phGlobal: { chi2: number; df: number; p: number };
   warnings: string[];

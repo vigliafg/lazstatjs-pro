@@ -72,12 +72,85 @@ export const buildMultivariateOutput = ({
       };
     }
     const tables = efaTables(result, names);
+    const factorCount = Math.min(result.factors, result.loadings[0]?.length ?? 0);
+    const loadingCells = names.flatMap((name, row) =>
+      Array.from({ length: factorCount }, (_, column) => ({
+        x: `F${column + 1}`,
+        y: name,
+        value: result.loadings[row]?.[column] ?? 0,
+        label: (result.loadings[row]?.[column] ?? 0).toFixed(2),
+      }))
+    );
+    const parallelSeries = [
+      ...result.eigenvalues.map((value, index) => ({
+        x: index + 1,
+        y: value,
+        series: copy('Autovalori osservati'),
+      })),
+      ...result.parallelThreshold.map((value, index) => ({
+        x: index + 1,
+        y: value,
+        series: copy('Soglia casuale'),
+      })),
+    ];
+    const charts: AnalysisChart[] = [
+      makeChart({
+        id: 'efa-loadings',
+        kind: 'heatmap',
+        title: copy('Carichi fattoriali'),
+        subtitle: copy('{s1} fattori', { s1: factorCount }),
+        note: copy('Carichi alti sulla stessa colonna indicano item che misurano la stessa dimensione; il colore mostra segno e intensità.'),
+        data: { cells: loadingCells },
+        fields: { xLabel: copy('Fattore'), yLabel: copy('Variabile') },
+        options: { showValues: true, diverging: true } as never,
+      }),
+      makeChart({
+        id: 'efa-parallel',
+        kind: 'line',
+        title: copy('Analisi parallela'),
+        subtitle: copy('Autovalori osservati vs soglia generata'),
+        note: copy('Una componente è trattenuta quando il suo autovalore supera la soglia casuale; la linea mostra il confronto direttamente.'),
+        data: { series: parallelSeries },
+        fields: { xLabel: copy('Componente'), yLabel: copy('Autovalore'), series: copy('Serie') },
+        options: { showMarkers: true, showBand: false } as never,
+      }),
+      makeChart({
+        id: 'efa-variance',
+        kind: 'bar',
+        title: copy('Varianza spiegata dai fattori'),
+        subtitle: copy('{s1} fattori', { s1: factorCount }),
+        note: copy('Le barre sommano la quota di varianza spiegata da ogni fattore dopo la rotazione.'),
+        data: {
+          bars: result.variancePct.slice(0, factorCount).map((value, index) => ({
+            category: `F${index + 1}`,
+            value,
+          })),
+        },
+        fields: { xLabel: copy('Fattore'), yLabel: copy('Varianza spiegata (%)') },
+        options: { valueLabels: true, referenceLine: 'none' } as never,
+      }),
+      makeChart({
+        id: 'efa-communalities',
+        kind: 'bar',
+        title: copy('Comunalità'),
+        subtitle: copy('Quota di varianza spiegata per variabile'),
+        note: copy('Una comunalità bassa indica che il fattore comune spiega poco di quella variabile; valori alti indicano una buona rappresentazione.'),
+        data: {
+          bars: names.map((name, index) => ({
+            category: name,
+            value: result.communalities[index] ?? 0,
+          })),
+        },
+        fields: { xLabel: copy('Variabile'), yLabel: copy('Comunalità') },
+        options: { valueLabels: true, referenceLine: 'none' } as never,
+      }),
+    ];
     return {
       ok: true,
       title: copy('Analisi fattoriale esplorativa'),
       tables,
       report: efaReport(tables, result),
-      charts: [],
+      charts,
     };
   }
 
@@ -121,6 +194,55 @@ export const buildMultivariateOutput = ({
         fields: { xLabel: 'PC1', yLabel: 'PC2' },
       }),
     ];
+    const componentCount = Math.min(result.loadings[0]?.length ?? 0, 6);
+    const loadingCells = names.flatMap((name, row) =>
+      Array.from({ length: componentCount }, (_, column) => ({
+        x: `PC${column + 1}`,
+        y: name,
+        value: result.loadings[row]?.[column] ?? 0,
+        label: (result.loadings[row]?.[column] ?? 0).toFixed(2),
+      }))
+    );
+    charts.push(
+      makeChart({
+        id: 'pca-loadings',
+        kind: 'heatmap',
+        title: copy('Carichi delle componenti'),
+        subtitle: copy('{s1} componenti', { s1: componentCount }),
+        note: copy('Un carico alto indica che la variabile contribuisce soprattutto a quella componente; il colore mostra segno e intensità.'),
+        data: { cells: loadingCells },
+        fields: { xLabel: copy('Componente'), yLabel: copy('Variabile') },
+        options: { showValues: true, diverging: true } as never,
+      })
+    );
+    const scoreMax = Math.max(
+      1,
+      ...scoreData.flatMap(point => [Math.abs(point.x), Math.abs(point.y)])
+    );
+    const loadingMax = Math.max(
+      1e-9,
+      ...result.loadings.flatMap(row => [Math.abs(row[0] ?? 0), Math.abs(row[1] ?? 0)])
+    );
+    const vectorScale = (scoreMax * 0.8) / loadingMax;
+    const vectors = names.map((name, row) => ({
+      x: 0,
+      y: 0,
+      x2: (result.loadings[row]?.[0] ?? 0) * vectorScale,
+      y2: (result.loadings[row]?.[1] ?? 0) * vectorScale,
+      label: name,
+    }));
+    charts.push(
+      makeChart({
+        id: 'pca-biplot',
+        kind: 'score',
+        title: copy('Biplot delle componenti'),
+        subtitle: 'PC1 × PC2',
+        note: copy('I punti sono i casi; le frecce sono i vettori delle variabili. Frecce vicine indicano variabili correlate, frecce opposte variabili inversamente correlate.'),
+        data: { points: scoreData, vectors },
+        fields: { xLabel: 'PC1', yLabel: 'PC2' },
+        options: { showVectors: true } as never,
+      })
+    );
 
     return {
       ok: true,
@@ -139,11 +261,65 @@ export const buildMultivariateOutput = ({
     };
   }
   const tables = alphaTables(result);
+  const correlationCells = names.flatMap((name, row) =>
+    names.map((columnName, column) => ({
+      x: columnName,
+      y: name,
+      value: result.correlations[row]?.[column] ?? 0,
+      label: (result.correlations[row]?.[column] ?? 0).toFixed(2),
+    }))
+  );
+  const charts: AnalysisChart[] = [
+    makeChart({
+      id: 'alpha-items',
+      kind: 'bar',
+      title: copy('Correlazioni item-totale'),
+      subtitle: copy('Alpha = {s1}', { s1: result.alpha.toFixed(3) }),
+      note: copy('La correlazione item-totale misura quanto ogni item è coerente con il punteggio complessivo; valori bassi suggeriscono un item poco omogeneo.'),
+      data: {
+        bars: result.items.map(item => ({ category: item.item, value: item.itemTotal })),
+      },
+      fields: { xLabel: copy('Item'), yLabel: copy('Correlazione item-totale') },
+      options: { valueLabels: true, referenceLine: 'none' } as never,
+    }),
+    makeChart({
+      id: 'alpha-correlations',
+      kind: 'heatmap',
+      title: copy('Correlazioni tra item'),
+      subtitle: copy('Matrice delle correlazioni tra gli item della scala'),
+      note: copy('Correlazioni alte e omogenee tra gli item sostengono l’ipotesi di una dimensione comune; valori negativi o molto diversi vanno esaminati.'),
+      data: { cells: correlationCells },
+      fields: { xLabel: copy('Item'), yLabel: copy('Item') },
+      options: { showValues: true, diverging: true } as never,
+    }),
+  ];
+  // `alphaIfDeleted` is undefined for a two-item scale and for a constant
+  // rest score: without a finite value the chart would render empty bars.
+  const deleted = result.items.filter(item => Number.isFinite(item.alphaIfDeleted));
+  if (deleted.length > 0) {
+    charts.splice(
+      1,
+      0,
+      makeChart({
+        id: 'alpha-if-deleted',
+        kind: 'bar',
+        title: copy('Alpha se l’item è eliminato'),
+        subtitle: copy('Alpha = {s1}', { s1: result.alpha.toFixed(3) }),
+        note: copy('La linea tratteggiata è l’alpha totale: una barra sopra la linea indica che eliminare quell’item aumenterebbe l’affidabilità.'),
+        data: {
+          bars: deleted.map(item => ({ category: item.item, value: item.alphaIfDeleted })),
+          rules: [{ value: result.alpha }],
+        },
+        fields: { xLabel: copy('Item'), yLabel: copy('Alpha senza l’item') },
+        options: { valueLabels: true, referenceLine: 'none' } as never,
+      })
+    );
+  }
   return {
     ok: true,
     title: copy('Alpha di Cronbach'),
     tables,
     report: alphaReport(tables, result),
-    charts: [],
+    charts,
   };
 };

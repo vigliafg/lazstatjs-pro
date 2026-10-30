@@ -81,6 +81,25 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
       });
   });
 
+  const maxTime = rows.reduce((max, row) => Math.max(max, row.time), 0);
+  const riskTimes =
+    maxTime > 0
+      ? [0, 0.25, 0.5, 0.75, 1].map(fraction => Number((fraction * maxTime).toFixed(4)))
+      : [0];
+  const groupLabels = Array.from(new Set(rows.map(row => row.group)));
+  const riskRows: ChartRow[] = [];
+  groupLabels.forEach(group => {
+    const subset = rows.filter(row => row.group === group);
+    riskTimes.forEach(time => {
+      riskRows.push({
+        time,
+        group,
+        atRisk: subset.filter(row => row.time >= time).length,
+        events: subset.filter(row => row.event === 1 && row.time <= time).length,
+      });
+    });
+  });
+
   const timeName = grid.cols[timeVariable]?.name ?? 'T';
   const eventName = grid.cols[eventVariable]?.name ?? 'E';
   const header = `Time: ${timeName} · event: ${eventName} = "${eventLevels[1]}" · ${rows.length} observations`;
@@ -100,6 +119,16 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
         note: copy('Ogni gradino è un evento; i tratti piatti indicano che in quell’intervallo non ci sono stati eventi.'),
         data: { curves, censored },
         fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Gruppo') },
+      }),
+      makeChart({
+        id: 'survival-risk',
+        kind: 'risk',
+        title: copy('Tabella dei soggetti a rischio'),
+        subtitle: copy('Soggetti a rischio per gruppo ai tempi selezionati'),
+        note: copy('Numero a rischio; tra parentesi gli eventi cumulati.'),
+        data: { rows: riskRows },
+        fields: { xLabel: copy('Tempo'), yLabel: copy('Gruppo') },
+        options: { showEvents: true } as never,
       }),
     ],
   };

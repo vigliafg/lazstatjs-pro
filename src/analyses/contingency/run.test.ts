@@ -9,6 +9,14 @@ test('contingency builder returns tables and a report for the trial preset', () 
   if (!('ok' in result) || !result.ok) return;
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
+  const ids = (result.charts ?? []).map(chart => chart.id);
+  assert.deepEqual(ids, ['contingency-residuals', 'contingency-mosaic', 'contingency-association']);
+  const mosaic = (result.charts ?? []).find(chart => chart.id === 'contingency-mosaic');
+  assert.equal(mosaic?.kind, 'mosaic');
+  assert.ok((mosaic?.data.cells ?? []).length >= 4);
+  assert.ok((mosaic?.data.cells ?? []).every(cell => cell.x0 !== undefined && cell.x1 !== undefined));
+  const association = (result.charts ?? []).find(chart => chart.id === 'contingency-association');
+  assert.equal(association?.kind === 'bar' && association.options.grouping, 'stacked');
 });
 
 test('contingency builder rejects negative frequencies and a zero total', () => {

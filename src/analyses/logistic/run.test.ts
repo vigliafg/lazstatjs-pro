@@ -29,6 +29,17 @@ test('logistic builder returns tables, report and the probability curve', () => 
   if (!('ok' in result) || !result.ok) return;
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
+  const ids = (result.charts ?? []).map(chart => chart.id);
+  assert.ok(ids.includes('logistic-curve'));
+  assert.ok(ids.includes('logistic-roc'));
+  assert.ok(ids.includes('logistic-calibration'));
+  const roc = (result.charts ?? []).find(chart => chart.id === 'logistic-roc');
+  assert.ok((roc?.data.series ?? []).length > 2);
+  const diagonal = (roc?.data.series ?? []).filter(row => row.step === 0);
+  assert.equal(diagonal.length, 2);
+  assert.ok(diagonal.every(row => Number(row.x) === Number(row.y)));
+  const calibration = (result.charts ?? []).find(chart => chart.id === 'logistic-calibration');
+  assert.ok((calibration?.data.series ?? []).length > 2);
 });
 
 test('logistic builder rejects a non-finite or out-of-range cut-off', () => {

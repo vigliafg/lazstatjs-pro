@@ -1,7 +1,7 @@
 import { jStat } from '../../stats/jstat';
 import { buildHistogram, parseNum } from '../../stats/core';
 import { calcNormalityTests } from '../../stats/kernels';
-import { lillieforsTest } from '../../stats/distributions';
+import { lillieforsTest, meanCI } from '../../stats/distributions';
 import { descriptiveTables } from '../../stats/descriptive';
 import { descriptiveReport } from '../../stats/report';
 import { fmtEst } from '../../stats/format';
@@ -126,6 +126,59 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
       }),
     ];
 
+    const intervals = results
+      .filter(r => r.n > 1 && Number.isFinite(r.stdev))
+      .map(r => {
+        const ci = meanCI(r.data, input.level);
+        return {
+          category: r.name,
+          estimate: r.mean,
+          lo: ci.lo,
+          hi: ci.hi,
+        };
+      });
+    if (intervals.length > 0) {
+      charts.push(
+        makeChart({
+          id: 'desc-interval',
+          kind: 'interval',
+          title: copy('Medie e intervalli di confidenza'),
+          subtitle: copy('Valori medi delle variabili selezionate'),
+          data: { intervals },
+          fields: { xLabel: copy('Variabile'), yLabel: copy('Media') },
+        })
+      );
+    }
+    const dotPoints = results.flatMap(r => r.data.map(value => ({ category: r.name, value })));
+    if (dotPoints.length > 0) {
+      charts.push(
+        makeChart({
+          id: 'desc-dot',
+          kind: 'dot',
+          title: copy('Dotplot delle variabili selezionate'),
+          subtitle: copy('Distribuzione delle variabili selezionate'),
+          data: { points: dotPoints },
+          fields: { xLabel: copy('Variabile'), yLabel: copy('Valore') },
+        })
+      );
+    }
+    const first = results[0];
+    if (first) {
+      const sorted = [...first.data].sort((a, b) => a - b);
+      const ecdf = sorted.map((value, index) => ({ x: value, y: (index + 1) / sorted.length }));
+      if (ecdf.length > 0) {
+        charts.push(
+          makeChart({
+            id: 'desc-ecdf',
+            kind: 'ecdf',
+            title: copy('Distribuzione cumulativa: {s1}', { s1: first.name }),
+            subtitle: copy('{s1} osservazioni', { s1: first.n }),
+            data: { points: ecdf },
+            fields: { xLabel: first.name, yLabel: copy('Valore cumulativo') },
+          })
+        );
+      }
+    }
     results.slice(0, 1).forEach(r => {
       charts.push(
         makeChart({

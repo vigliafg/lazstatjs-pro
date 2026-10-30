@@ -2,16 +2,18 @@ import type { TopLevelSpec } from 'vega-lite';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import { base, spec } from './encoding';
 import { boxLayers } from './boxLayers';
+import { dotLayers, ecdfLayers, intervalLayers } from './descriptiveLayers';
+import { histogramLayers, qqLayers } from './distributionLayers';
+import { mosaicLayers } from './mosaicLayers';
+import { riskLayers } from './riskLayers';
 import {
   acfLayers,
   bootstrapLayers,
   barLayers,
   forestLayers,
   heatmapLayers,
-  histogramLayers,
   lineLayers,
   powerLayers,
-  qqLayers,
   scatterLayers,
   scatterOnly,
   survivalLayers,
@@ -30,12 +32,22 @@ export const buildVegaSpec = (chart: AnalysisChart, options: ChartOptions = char
       return spec(chart, options, boxLayers(chart, options));
     case 'histogram':
       return spec(chart, options, histogramLayers(chart, options));
+    case 'interval':
+      return spec(chart, options, intervalLayers(chart, options));
+    case 'dot':
+      return spec(chart, options, dotLayers(chart, options));
+    case 'ecdf':
+      return spec(chart, options, ecdfLayers(chart, options));
     case 'qq':
       return spec(chart, options, qqLayers(chart, options));
     case 'forest':
       return spec(chart, options, forestLayers(chart, options));
     case 'survival':
       return spec(chart, options, survivalLayers(chart, options));
+    case 'risk':
+      return spec(chart, options, riskLayers(chart, options));
+    case 'mosaic':
+      return spec(chart, options, mosaicLayers(chart, options));
     case 'acf':
       return spec(chart, options, acfLayers(chart, options));
     case 'heatmap':
