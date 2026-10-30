@@ -7,13 +7,13 @@ import { exportChartsAsPng } from '../io/chartExport';
 import { buildReportFromElement } from '../io/reportExport';
 
 import { downloadBytes, downloadText } from '../io/writers';
-import { capStoredOutputs, extractOutputTitle, type StoredOutput } from '../io/outputs';
+import { capStoredOutputs, extractOutputTitle, nextRunNumber, type StoredOutput } from '../io/outputs';
 import { fitChartBudget } from '../charts/schema';
 import { nonEmptyRowCount } from '../grid/types';
 import type { GridData } from '../grid/types';
 import type { AnalysisRunResult } from '../analyses/types';
 import type { AnalysisChart, ChartOptions } from '../stats/charts';
-import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
+import { restoredOutputs, type OutputEntry } from '../ui/output/types';
 import { analysisLabel } from '../analyses/registry';
 import type { Toast } from './useToasts';
 import { t, translate, type Locale } from '../i18n';
@@ -54,6 +54,7 @@ const warnStale = (root: ParentNode, showToast: (title: string, msg: string, typ
 export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToast }: UseOutputConsoleOptions) => {
   const reportText = (key: Parameters<typeof translate>[1]): string => translate(reportLocale, key);
   const [outputs, setOutputs] = useState<OutputEntry[]>(() => restoredOutputs(initial));
+  // Only used to keep card ids unique within a session.
   const runSeq = useRef(0);
 
   useEffect(() => {
@@ -136,11 +137,18 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     };
     setOutputs(prev => {
       // A live run owns one card per analysis: replace it instead of stacking
-      // a new result on every keystroke.
+      // a new result on every keystroke. The logical run keeps its number.
+      const previousLive = meta?.live
+        ? prev.find(item => item.live && item.analysisId === analysisId)
+        : undefined;
       const base = meta?.live
         ? prev.filter(item => !(item.live && item.analysisId === analysisId))
         : prev;
-      return capStoredOutputs([...base, entry]);
+      const numbered: OutputEntry = {
+        ...entry,
+        runNumber: previousLive?.runNumber ?? nextRunNumber(base),
+      };
+      return capStoredOutputs([...base, numbered]);
     });
   };
 
@@ -238,7 +246,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.doc', 'application/msword;charset=utf-8');
-    showToast(t('toast.report'), t('output.reportReady'), 'ok');
+    showToast(t('toast.report'), t('output.sessionReportReady'), 'ok');
   };
 
   const exportReportHtml = async () => {
@@ -253,8 +261,43 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
     downloadText(html, 'lazstats-report.html', 'text/html;charset=utf-8');
-    showToast(t('toast.report'), t('output.reportReady'), 'ok');
+    showToast(t('toast.report'), t('output.sessionReportReady'), 'ok');
   };
+
+  /**
+   * Export a single run-report. The card is already the source of truth for the
+   * session export, so the same builder is applied to `#output-block-<id>`;
+   * other cards can never leak into the file.
+   */
+  const exportRunReport = async (entryId: string, format: 'html' | 'word') => {
+    const entry = outputs.find(item => item.id === entryId);
+    const el = document.getElementById(`output-block-${entryId}`);
+    if (!entry || !el) return;
+    if (!(await settled(el, showToast))) return;
+    warnStale(el, showToast);
+    const analysis = entry.analysisId ? analysisLabel(entry.analysisId) : reportText('output.result');
+    const html = buildReportFromElement(el, {
+      title: `${reportText('output.runReportTitle')} — ${entry.title}`,
+      generatedAt: new Date(entry.createdAt).toLocaleString(reportLocale),
+      lang: reportLocale,
+      details: [
+        analysis,
+        `${reportText('output.ci')} ${entry.ciLevel ?? ciLevel}%`,
+      ],
+    });
+    const number = String(
+      entry.runNumber ?? outputs.findIndex(item => item.id === entryId) + 1
+    ).padStart(2, '0');
+    if (format === 'word') {
+      downloadText(html, `lazstats-run-${number}.doc`, 'application/msword;charset=utf-8');
+    } else {
+      downloadText(html, `lazstats-run-${number}.html`, 'text/html;charset=utf-8');
+    }
+    showToast(t('toast.report'), t('output.runReportReady'), 'ok');
+  };
+
+  const exportRunReportHtml = (entryId: string) => void exportRunReport(entryId, 'html');
+  const exportRunReportWord = (entryId: string) => void exportRunReport(entryId, 'word');
 
   return {
     outputs,
@@ -268,5 +311,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     exportResultsXlsx,
     exportReportHtml,
     exportReportWord,
+    exportRunReportHtml,
+    exportRunReportWord,
   };
 };

@@ -41,6 +41,7 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
         ...(entry.params !== undefined ? { params: entry.params } : {}),
         ...(entry.paramsSignature ? { paramsSignature: entry.paramsSignature } : {}),
         ...(entry.ciLevel !== undefined ? { ciLevel: entry.ciLevel } : {}),
+        ...(entry.runNumber !== undefined ? { runNumber: entry.runNumber } : {}),
         ...(entry.dataRevision !== undefined ? { dataRevision: entry.dataRevision } : {}),
         ...(entry.datasetId ? { datasetId: entry.datasetId } : {}),
         ...(entry.charts && entry.charts.length > 0 ? { charts: entry.charts } : {}),

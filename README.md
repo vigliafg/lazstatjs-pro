@@ -34,7 +34,10 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Three-pane workspace**: a searchable analysis library on the left, a setup panel in the middle and the output document on the right
 - **Library grouped into ten families** (Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power), with search across labels, descriptions, keywords and family names, recent analyses and a `heavy` badge for expensive procedures
 - **Sticky Run** at the bottom of the setup panel, `Ctrl/Cmd + Enter` to run and `Ctrl/Cmd + K` to focus the analysis search
-- **Output document**: one collapsible card per run with an outline, timestamp, analysis label and a *Setup* shortcut back to the parameters that produced it; Copy, Charts PNG, Report HTML and Results XLSX keep working
+- **Output document**: one collapsible card per run with a stable run number, timestamp, analysis label and a *Setup* shortcut back to the parameters that produced it; Copy, Charts PNG, Report HTML and Results XLSX keep working
+- **Session-report outline**: a family → analysis → run-report tree with pinned shortcuts, search and state filters, scroll sync and keyboard navigation; on a narrow output pane (< 720 px) it becomes a keyboard-friendly drawer; pins, closed groups and filters are restored per dataset after reload or tab switches
+- **Session identity header**: dataset, rows/variables, active filter, run count, distinct analyses, CI and stale/warning totals stay visible above the stack
+- **Two-level export**: *Export run report* (HTML/Word from one card) or *Export session report* (HTML/Word for the whole session); hidden or collapsed cards stay mounted, so session exports remain complete
 - **Responsive panes**: below `lg` a segmented control switches between Library, Setup and Output; *Focus output* hides the library and setup on wide screens
 - **Data context** in Setup: rows, variables, missing cells, active filter, **Data peek** and a shortcut to the data editor
 - **Focused column bridge**: focus a cell in the grid, pick any role of the active analysis and assign the column in two actions; the Data peek shows the role → column map
@@ -42,7 +45,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Iteration loop**: every card stores the parameters that produced it, with **Re-run** and **Apply parameters** shortcuts
 - **Live-run** for instant procedures: a debounced toggle that replaces the same card instead of stacking results
 - **Heavy procedures run in a Web Worker**: LMM, GEE, Cox (all variants), parametric survival, time series, multiple imputation and resampling keep the UI responsive, show phase/elapsed time and can be cancelled; the synchronous runner remains the fallback
-- **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear
+- **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear; the outline tree groups runs by family and analysis with search and stale/warning filters
 - **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
 - **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with static UI chrome centralised in `src/i18n/` (six complete catalogs: English, Italian, French, Spanish, German and European Portuguese); catalogue metadata, help book and report prose are content modules
 

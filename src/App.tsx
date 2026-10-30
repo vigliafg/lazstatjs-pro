@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useEffect, useMemo, useRef } from 'react';
-import { restoredOutputs, type OutputEntry } from './ui/OutputConsole';
+import { restoredOutputs, type OutputEntry } from './ui/output/types';
 import { SettingsTab } from './ui/SettingsTab';
 import { DataWorkspace } from './ui/DataWorkspace';
 import { Header } from './ui/Header';
@@ -304,9 +304,8 @@ export default function App() {
     removeOutput,
     copyOutput,
     exportChartPngs,
-    exportResultsXlsx,
-    exportReportHtml,
-    exportReportWord,
+    exportResultsXlsx, exportReportHtml, exportReportWord,
+    exportRunReportHtml, exportRunReportWord,
   } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast });
   useEffect(() => { outputsRef.current = outputs; }, [outputs]);
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
@@ -607,9 +606,9 @@ export default function App() {
             clearOutput={clearOutput}
             copyOutput={copyOutput}
             exportChartPngs={exportChartPngs}
-            exportReportHtml={exportReportHtml}
-            exportReportWord={exportReportWord}
+            exportReportHtml={exportReportHtml} exportReportWord={exportReportWord}
             exportResultsXlsx={exportResultsXlsx}
+            exportRunReportHtml={exportRunReportHtml} exportRunReportWord={exportRunReportWord}
             setActiveTab={setActiveTab}
             runAnalysis={runAnalysis}
             runAnalysisLive={runAnalysisLive}

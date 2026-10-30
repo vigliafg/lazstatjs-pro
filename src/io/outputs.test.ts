@@ -9,6 +9,7 @@ import {
   capStoredOutputs,
   extractOutputTitle,
   isOutputStale,
+  nextRunNumber,
   parseStoredOutputs,
   type StoredOutput,
 } from './outputs';
@@ -71,6 +72,24 @@ describe('output snapshots sizing', () => {
     assert.equal(capped.length, 1);
     assert.equal(capped[0].id, 'run-1');
   });
+
+  it('never renumbers runs when older blocks are capped away', () => {
+    const numbered = Array.from({ length: MAX_STORED_OUTPUTS + 2 }, (_, i) => ({
+      ...entry(i),
+      runNumber: i + 1,
+    }));
+    const capped = capStoredOutputs(numbered);
+    assert.equal(capped[0].runNumber, 3);
+    assert.equal(capped[capped.length - 1].runNumber, MAX_STORED_OUTPUTS + 2);
+  });
+
+  it('starts new run numbers after the highest existing one', () => {
+    assert.equal(nextRunNumber([]), 1);
+    assert.equal(nextRunNumber([{ runNumber: 2 }, { runNumber: 9 }]), 10);
+    // Legacy entries without a number contribute their 1-based position.
+    assert.equal(nextRunNumber([{}, {}, {}]), 4);
+    assert.equal(nextRunNumber([{ runNumber: 7 }, {}, {}]), 8);
+  });
 });
 
 describe('output snapshot validation', () => {
@@ -114,6 +133,15 @@ describe('output snapshot validation', () => {
     assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: 100 }])[0].ciLevel, undefined);
     assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: Number.NaN }])[0].ciLevel, undefined);
     assert.equal(parseStoredOutputs([{ html: 'ok', ciLevel: '95' }])[0].ciLevel, undefined);
+  });
+
+  it('keeps a positive integer run number and leaves legacy entries unnumbered', () => {
+    assert.equal(parseStoredOutputs([{ html: 'ok', runNumber: 12 }])[0].runNumber, 12);
+    assert.equal(parseStoredOutputs([{ html: 'ok', runNumber: 0 }])[0].runNumber, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok', runNumber: -3 }])[0].runNumber, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok', runNumber: 1.5 }])[0].runNumber, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok', runNumber: '4' }])[0].runNumber, undefined);
+    assert.equal(parseStoredOutputs([{ html: 'ok' }])[0].runNumber, undefined);
   });
 });
 
@@ -173,6 +201,7 @@ describe('output snapshots in project files', () => {
       createdAt: '2026-10-19T10:00:00.000Z',
       analysisId: 'descriptive',
       ciLevel: 95,
+      runNumber: 4,
       dataRevision: 3,
       datasetId: 'dataset-1',
       html,
@@ -193,6 +222,7 @@ describe('output snapshots in project files', () => {
     assert.equal(restored.outputs[0].title, 'Descriptive Statistics');
     assert.equal(restored.outputs[0].analysisId, 'descriptive');
     assert.equal(restored.outputs[0].ciLevel, 95);
+    assert.equal(restored.outputs[0].runNumber, 4);
     assert.equal(restored.outputs[0].dataRevision, 3);
     assert.equal(restored.outputs[0].datasetId, 'dataset-1');
     assert.ok(restored.outputs[0].html.includes('<table'));

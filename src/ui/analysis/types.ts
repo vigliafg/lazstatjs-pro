@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { CategoryLevel, GridData } from '../../grid/types';
 import type { RowFilter } from '../../grid/ops';
 import type { RoleState } from '../../analyses/roles';
-import type { OutputEntry } from '../OutputConsole';
+import type { OutputEntry } from '../output/types';
 import type { ProjectParams } from '../../io/project';
 import type { ChartOptions } from '../../stats/charts';
 
@@ -48,6 +48,8 @@ export interface AnalysisTabProps {
   exportReportHtml: () => void;
   exportReportWord: () => void;
   exportResultsXlsx: () => void;
+  exportRunReportHtml: (entryId: string) => void;
+  exportRunReportWord: (entryId: string) => void;
   setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
   runAnalysis: () => Promise<boolean>;
   runAnalysisLive: (isCurrent?: () => boolean) => Promise<boolean>;

@@ -201,7 +201,8 @@ test('exports ready charts as PNG and in the printable report', async ({ page, i
   await expect(await png).toBeTruthy();
 
   const report = page.waitForEvent('download', download => download.suggestedFilename().endsWith('.html'));
-  await page.getByRole('button', { name: 'Download a printable HTML report' }).click();
+  await page.getByRole('button', { name: 'Export session report' }).click();
+  await page.getByRole('menuitem', { name: 'Download a printable HTML report' }).click();
   const download = await report;
   const stream = await download.createReadStream();
   const chunks: Buffer[] = [];
@@ -233,8 +234,10 @@ test('live-run replaces one card when parameters change', async ({ page, isMobil
   await page.getByRole('button', { name: 'Live run' }).click();
 
   await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 5000 });
+  const firstNumber = await page.locator('article.output-card').getAttribute('data-run-number');
   await page.getByLabel('ANOVA dependent variable').selectOption('3');
   await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 5000 });
+  await expect(page.locator('article.output-card')).toHaveAttribute('data-run-number', firstNumber ?? '1');
   await expect(page.getByRole('button', { name: 'Live run' })).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -294,6 +297,131 @@ test('filters, pins and clears result cards', async ({ page, isMobile }) => {
   page.once('dialog', dialog => dialog.accept());
   await page.getByRole('button', { name: 'Clear every result block' }).click();
   await expect(page.locator('article.output-card')).toHaveCount(0);
+});
+
+test('shows the session identity and navigates the outline tree', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the side outline is exercised on the desktop layout');
+
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(2);
+
+  const header = page.locator('[data-session-header]');
+  await expect(header).toContainText('Session report');
+  await expect(header).toContainText('Dataset');
+  await expect(header).toContainText('Analyses');
+
+  const tree = page.getByRole('tree', { name: 'Outline' });
+  await expect(tree).toBeVisible();
+  await expect(tree.getByRole('treeitem', { name: /Compare groups/ })).toBeVisible();
+  await expect(tree.getByRole('treeitem', { name: /ANOVA/ }).first()).toBeVisible();
+  await expect(tree.locator('[data-tree-key^="run:"]')).toHaveCount(2);
+
+  // Search narrows both the outline and the cards without unmounting them.
+  await page.getByLabel('Search run reports').fill('T-Test');
+  await expect(tree.locator('[data-tree-key^="run:"]')).toHaveCount(1);
+  await expect(page.locator('article.output-card:visible')).toHaveCount(1);
+  await page.getByLabel('Search run reports').fill('');
+
+  // State filters keep their counts and only hide non-matching runs.
+  await expect(page.getByRole('button', { name: /^All 2$/ })).toBeVisible();
+  await page.locator('[data-tree-key^="run:"]').first().click();
+  await expect(tree.locator('[aria-selected="true"]')).toHaveCount(1);
+
+  // Collapse and re-expand a family from the tree.
+  const family = tree.getByRole('treeitem', { name: /Compare groups/ });
+  await family.click();
+  await expect(tree.locator('[data-tree-key^="analysis:"]')).toHaveCount(0);
+  await family.click();
+  await expect(tree.locator('[data-tree-key^="analysis:"]')).toHaveCount(2);
+
+  // Arrow keys move the roving focus between visible nodes.
+  await family.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(tree.locator('[data-tree-key^="analysis:"]:focus')).toHaveCount(1);
+});
+
+test('restores pins, closed groups and outline filters after reload', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the side outline is exercised on the desktop layout');
+
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(2);
+
+  await page.getByRole('button', { name: 'Pin result' }).first().click();
+  const tree = page.getByRole('tree', { name: 'Outline' });
+  await tree.getByRole('treeitem', { name: /Compare groups/ }).click();
+  await expect(tree.locator('[data-tree-key^="analysis:"]')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Pinned 1' }).click();
+  await expect(page.locator('article.output-card:visible')).toHaveCount(1);
+
+  // Switching tabs unmounts the console: the state must come back on return.
+  await page.getByRole('button', { name: 'Data', exact: true }).click();
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Unpin result' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Pinned 1' })).toHaveAttribute('aria-pressed', 'true');
+
+  // View state is written synchronously, so an immediate reload keeps it.
+  await page.reload();
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+
+  await expect(page.getByRole('button', { name: 'Unpin result' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Pinned 1' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('article.output-card:visible')).toHaveCount(1);
+  await expect(tree.getByRole('treeitem', { name: /Compare groups/ })).toHaveAttribute('aria-expanded', 'false');
+  await expect(tree.locator('[data-tree-key^="analysis:"]')).toHaveCount(0);
+});
+
+test('opens the outline as a drawer on a narrow output pane', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the drawer is exercised on the desktop layout with narrow panes');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(1);
+
+  const toggle = page.getByRole('button', { name: 'Outline', exact: true });
+  await expect(toggle).toBeVisible();
+  await expect(page.getByRole('tree', { name: 'Outline' })).toHaveCount(0);
+  await toggle.click();
+  const dialog = page.getByRole('dialog', { name: 'Outline' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('treeitem', { name: /ANOVA/ }).first()).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+});
+
+test('exports a single run-report without other cards', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the export toolbar is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await page.getByLabel('Search analyses').fill('T-Test');
+  await page.locator('button[title="Compare two means or paired measurements."]').click();
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(2);
+
+  const card = page.locator('article.output-card').first();
+  const download = page.waitForEvent('download', item => item.suggestedFilename().endsWith('.html'));
+  await card.getByRole('button', { name: 'Export run report' }).click();
+  await card.getByRole('menuitem', { name: 'Download this run report as HTML' }).click();
+  const stream = await (await download).createReadStream();
+  const chunks: Buffer[] = [];
+  for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+  const html = Buffer.concat(chunks).toString('utf8');
+  expect(html).toContain('ANOVA');
+  expect(html).not.toContain('T-Test');
 });
 
 test('hides categorical columns from continuous predictors', async ({ page, isMobile }) => {

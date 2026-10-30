@@ -185,12 +185,13 @@
    - Toast distinti.
    - Test E2E: download del run-report e della sessione; il file del run-report non contiene altri titoli di card. Rischio M.
 
-8. **Persistenza dello stato di vista** — fase successiva, separata.
-   - Salvare `pinned`, `collapsedFamilies`, `collapsedAnalyses`, `filter`, `outlineFilter` per `datasetId` in localStorage con chiave versionata.
-   - Non usare `ProjectSettings` per non far ripartire l'autosave a ogni collapse.
-   - Caricare al mount, salvare con debounce 300 ms.
-   - Test: reload mantiene pin e gruppi chiusi; dataset diverso parte pulito.
-   - Se il costo supera il budget, resta documentato come follow-up. Rischio S/M.
+8. **Persistenza dello stato di vista** — implementato in `src/ui/output/sessionViewState.ts` + `useSessionViewState.ts`.
+   - Salva `pinned`, `collapsedFamilies`, `collapsedAnalyses`, `filter`, `outlineFilter` per `datasetId` in `localStorage` con chiave versionata `lazstats.sessionView.v1`.
+   - Non usa `ProjectSettings`: l'autosave del progetto non riparte a ogni collapse.
+   - Scrittura sincrona perché lo stato è minuscolo: un reload immediato dopo un pin non lo perde; al mount lo stato viene riletto (copre anche il cambio scheda che smonta la console).
+   - Store limitato agli ultimi 5 dataset; pin e filtri non più validi vengono potati.
+   - Ricerca e card attiva restano volutamente non persistite.
+   - Test: `sessionViewState.test.ts` (parse, prune, cap, round-trip) + E2E reload e cambio scheda.
 
 9. **Chiusura e documentazione** — `docs/RUN-REPORT-SESSION-REPORT.md`, `docs/UI-STATE.md`, `README` se necessario.
    - Aggiornare il disegno semigrafico della finestra.
@@ -226,14 +227,18 @@
 
 ## Definition of Done
 
-- [ ] Outline ad albero famiglia → analisi → run-report.
-- [ ] Numero stabile del run-report persistito.
-- [ ] Pin, collapse, ricerca e filtri di stato.
-- [ ] Scroll sync e nodo attivo.
-- [ ] Outline laterale su desktop e drawer su pannello stretto.
-- [ ] Export separato run-report / session-report.
-- [ ] Metadati di sessione visibili.
-- [ ] Filtro per analisi, pin, clear, copy, re-run e grafici invariati.
-- [ ] i18n completa in 6 lingue.
-- [ ] `npm run check`, `npm run test:e2e`, `npm run build` verdi.
-- [ ] `docs/RUN-REPORT-SESSION-REPORT.md` e `docs/UI-STATE.md` aggiornati.
+- [x] Outline ad albero famiglia → analisi → run-report.
+- [x] Numero stabile del run-report persistito.
+- [x] Pin, collapse, ricerca e filtri di stato.
+- [x] Scroll sync e nodo attivo.
+- [x] Outline laterale su desktop e drawer su pannello stretto.
+- [x] Export separato run-report / session-report.
+- [x] Metadati di sessione visibili.
+- [x] Filtro per analisi, pin, clear, copy, re-run e grafici invariati.
+- [x] i18n completa in 6 lingue.
+- [x] `npm run check`, `npm run test:e2e`, `npm run build` verdi.
+- [x] `docs/RUN-REPORT-SESSION-REPORT.md` e `docs/UI-STATE.md` aggiornati.
+- [x] Persistenza per dataset di pin, gruppi chiusi e filtri dell’outline.
+
+Ricerca e card attiva restano volutamente stato transitorio: non vengono
+persistite.

@@ -184,7 +184,7 @@
      coherent with a custom background/foreground, without leaking outside
      this container. */
   #output-content {
-    @apply flex-1 overflow-auto p-4 leading-relaxed min-h-0 min-w-0 pb-8;
+    @apply flex-1 overflow-auto leading-relaxed min-h-0 min-w-0;
     background: var(--output-bg);
     color: var(--output-fg);
     font-family: var(--output-font);

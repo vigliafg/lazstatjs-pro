@@ -236,36 +236,50 @@ Si osservano quattro modelli dominanti.
 
 ## 6. Implicazioni per LazStats
 
-Stato attuale:
+Stato attuale (implementato):
 
-- `OutputConsole` è la **finestra del session-report**.
+- `OutputConsole` è la **finestra del session-report** e `src/ui/output/` ne
+  separa header, toolbar, outline e card.
 - Ogni `OutputEntry` / `article.output-card` è un **run-report**.
-- L'outline, i pin, il filtro per analisi e l'export riguardano il
-  session-report.
+- L'outline è un albero **famiglia → analisi → run-report** con sezione
+  **Fissati**, ricerca e filtri di stato; pin, collapse e filtro per analisi
+  restano non distruttivi.
+- Il numero del run-report (`runNumber`) è persistito e stabile: rimozioni,
+  restore e cap non lo rinumera. I progetti legacy usano la posizione.
+- L'header del session-report mostra dataset, righe/variabili, filtro attivo,
+  numero di run-report, analisi distinte, CI e conteggi stale/warning.
+- L'export è a due livelli: «Esporta run-report» (HTML/Word dalla singola
+  card) e «Esporta session-report» (HTML/Word dall'intera finestra); Copy,
+  Charts PNG e Results XLSX restano azioni di sessione.
+- Su pannello Output stretto (< 720 px) l'outline diventa un drawer; la soglia
+  è misurata sul contenitore con `ResizeObserver`.
 - I pulsanti “Re-run”, “Applica parametri”, “Setup”, “Modifica grafico”
   riguardano il singolo run-report.
 - Lo stato “stale”, le warnings e i metadati appartengono al run-report.
 - Le impostazioni “Finestra output” (sfondo, testo, font, dimensione) sono
   override del session-report, non del tema globale.
+- Pin, collapse e filtri dell'outline sono stato di vista persistito per
+  dataset in `localStorage`; ricerca e card attiva restano transitorie.
 
-Raccomandazioni:
+Raccomandazioni (stato):
 
-1. **Nominare esplicitamente i due livelli** nella documentazione e, dove
-   serve, nella UI: “run-report” e “session-report”.
-2. **Separare gli export**: “Esporta run-report” (singola card) e “Esporta
-   session-report” (tutta la finestra).
-3. **Dare identità stabile al run-report**: `id`, `analysisId`, `createdAt`,
-   `datasetId`, `dataRevision`, `paramsSignature`, `ciLevel`, `status`.
-4. **Dare identità al session-report**: dataset/progetto, filtri attivi,
-   lingua, versione, data di creazione, elenco ordinato dei run-report.
-5. **Mantenere l'outline** come indice del session-report, con numerazione
-   stabile e raggruppamento per analisi/famiglia.
-6. **Non mescolare stato e contenuto**: un run-report obsoleto resta nel
-   session-report ma va marcato come tale.
-7. **Conservare la provenienza**: parametri e versione devono rendere un
-   run-report riproducibile anche dopo il reload.
-8. **Evitare sessioni illeggibili**: introdurre ricerca/filtro per analisi e
-   collasso persistente quando i run-report crescono.
+1. **Nominare esplicitamente i due livelli** — fatto in UI, documentazione e
+   AGENTS.md.
+2. **Separare gli export** — fatto: menu di sessione nella toolbar, menu di
+   run-report nella card.
+3. **Dare identità stabile al run-report** — fatto con `runNumber` opzionale;
+   `id`, `analysisId`, `createdAt`, `datasetId`, `dataRevision`,
+   `paramsSignature`, `ciLevel` restano i metadati di provenienza.
+4. **Dare identità al session-report** — fatto con l'header di sessione;
+   dataset, filtro, CI e conteggi sono visibili e inclusi nell'export.
+5. **Mantenere l'outline** — fatto: albero con numerazione stabile e
+   raggruppamento famiglia/analisi.
+6. **Non mescolare stato e contenuto** — invariato: un run-report obsoleto
+   resta nel session-report ed è marcato `stale` in card e outline.
+7. **Conservare la provenienza** — invariato: parametri e firma restano
+   salvati per re-run e applicazione.
+8. **Evitare sessioni illeggibili** — fatto con ricerca, filtri di stato,
+   pin e collapse; la persistenza dello stato di vista resta un follow-up.
 
 ## 7. Schema concettuale consigliato
 

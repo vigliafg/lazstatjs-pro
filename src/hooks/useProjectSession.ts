@@ -16,7 +16,7 @@ import {
   saveRecentProjects,
 } from '../io/recent';
 import { nonEmptyRowCount, type GridData } from '../grid/types';
-import { restoredOutputs, type OutputEntry } from '../ui/OutputConsole';
+import { restoredOutputs, type OutputEntry } from '../ui/output/types';
 import type { Toast } from './useToasts';
 import { t } from '../i18n';
 import { loadBackup, saveBackup } from '../io/backup';

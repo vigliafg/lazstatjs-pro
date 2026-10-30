@@ -65,16 +65,32 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 
 **Output**
 
-- Una card per run, con etichetta dell'analisi, ora e titolo.
-- Outline orizzontale cliccabile.
-- Collapse/expand.
+- Una card per run-report, con numero stabile `NN` (persistito), etichetta
+  dell'analisi, ora e titolo.
+- Header del **session-report** sempre visibile: dataset, righe/variabili,
+  filtro attivo, numero di run-report, analisi distinte, CI e conteggi
+  stale/warning.
+- Outline ad albero nella colonna laterale: famiglia → analisi → run-report,
+  con sezione **Fissati** come scorciatoia e conteggi per gruppo.
+- Ricerca nell'outline (titolo, analisi, famiglia, numero) e filtri di stato
+  `Tutti / Fissati / Obsoleti / Avvisi`: nascondono nodi e card senza
+  smontarle, quindi export, stampa e copia restano completi.
+- Click su un nodo → scroll alla card; scroll → nodo attivo evidenziato.
+  Tastiera: `↑/↓`, `Home/End`, `→/←` per espandere/collassare, `Invio` per
+  attivare.
+- Panello Output stretto (< 720 px): pulsante **Indice** e drawer con
+  `Esc`/backdrop per chiuderlo. La soglia è sul contenitore, non sul viewport.
+- Collapse/expand della card e dei gruppi.
 - Pulsante **Setup** che riapre la procedura che ha prodotto la card.
 - Rimozione per card.
-- Copy, Charts PNG, Report HTML e Results XLSX invariati.
-- `analysisId` salvato nella card: il collegamento Setup sopravvive a reload e
-  file `.lzs`. I progetti vecchi restano compatibili.
-- Le card collapse restano nel DOM: Report HTML e XLSX le includono; il copy
-  rimuove la classe `hidden` e le include.
+- Export a due livelli: **Esporta run-report** (HTML/Word, solo quella card)
+  e **Esporta session-report** (HTML/Word); Copy, Charts PNG e Results XLSX
+  restano azioni di sessione.
+- `analysisId` e `runNumber` salvati nella card: Setup e numerazione
+  sopravvivono a reload e file `.lzs`. I progetti vecchi restano compatibili
+  (numerazione posizionale finché la card non viene risalvata).
+- Le card collapse o nascoste dai filtri restano nel DOM: Report HTML e XLSX
+  le includono; il copy rimuove la classe `hidden` e le include.
 - L'auto-scroll porta all'inizio della nuova card, non in fondo al report.
 
 ### 2.3 Responsive e tastiera
@@ -86,6 +102,8 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 - `Ctrl/Cmd + K` porta il focus alla ricerca della libreria e esce da Focus
   output se necessario.
 - `Ctrl/Cmd + Enter` esegue l'analisi attiva.
+- L'outline del session-report passa a drawer quando la larghezza del pannello
+  Output scende sotto 720 px (`ResizeObserver`, non media query del viewport).
 - Restano attivi `Ctrl+Z` / `Ctrl+Y` della griglia.
 - A 1024 px i tre pannelli sono usabili ma stretti; le tabelle larghe
   richiedono scroll orizzontale.
@@ -94,24 +112,45 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 
 - Autosave e `.lzs` continuano a salvare griglia, preferenze, impostazioni,
   parametri e snapshot HTML.
-- `StoredOutput.analysisId` è opzionale: nessun cambio di `PROJECT_VERSION`.
+- `StoredOutput.analysisId` e `StoredOutput.runNumber` sono opzionali: nessun
+  cambio di `PROJECT_VERSION`.
+- `runNumber` è un intero positivo; i blocchi legacy senza numero usano la
+  posizione. `capStoredOutputs` non rinumera e le nuove card partono dal
+  massimo esistente + 1.
 - I blocchi ripristinati senza `analysisId` mostrano `Result N` e non hanno il
   pulsante Setup.
+- Pin, collapse, ricerca e filtri dell'outline sono stato di vista: pin, gruppi
+  chiusi, filtro per analisi e filtro di stato vengono salvati in
+  `localStorage` per `datasetId` (`lazstats.sessionView.v1`, ultimi 5 dataset).
+  Ricerca e card attiva restano transitorie; pin non più validi sono potati.
+  Il salvataggio è sincrono, quindi sopravvive a reload immediati e al cambio
+  scheda che smonta la console.
 - Il formato del progetto resta leggibile dalle versioni precedenti.
 
 ## 3. Mappa dei componenti
 
 | File | Ruolo | Righe |
 |---|---|---|
-| `src/ui/AnalysisTab.tsx` | Shell del workbench, pane, focus, scorciatoie | 246 |
+| `src/ui/AnalysisTab.tsx` | Shell del workbench, pane, focus, scorciatoie, metadati di sessione | 297 |
 | `src/ui/analysis/AnalysisLibrary.tsx` | Libreria, ricerca, famiglie, recenti, badge | 404 |
 | `src/ui/analysis/AnalysisOptions.tsx` | Setup, CI, switch sui 31 form, Run | 645 |
-| `src/ui/analysis/types.ts` | Contratto `AnalysisTabProps` | 49 |
+| `src/ui/analysis/types.ts` | Contratto `AnalysisTabProps` | 62 |
 | `src/ui/analysis/useRecentAnalyses.ts` | Recenti in `localStorage` | ~39 |
-| `src/ui/OutputConsole.tsx` | Documento output, card, outline, azioni | 448 |
-| `src/analyses/registry.ts` | Metadati UI + registro analisi | 380 |
-| `src/io/outputs.ts` | Snapshot + `analysisId` | invariato nella sostanza |
-| `src/io/project/index.ts` | Persistenza `analysisId` | invariato nella sostanza |
+| `src/ui/analysis/sessionOutline.ts` | Modello puro dell'outline (famiglia → analisi → run) | 219 |
+| `src/ui/OutputConsole.tsx` | Orchestratore del session-report: stato di lettura, scroll sync, drawer | 463 |
+| `src/ui/output/types.ts` | `OutputEntry`, `SessionOutputBody`, metadati di sessione | 55 |
+| `src/ui/output/SessionReportHeader.tsx` | Identità del session-report e export di sessione | 123 |
+| `src/ui/output/SessionReportToolbar.tsx` | Filtro per analisi e azioni di sessione | 129 |
+| `src/ui/output/SessionOutline.tsx` | Albero accessibile, ricerca, filtri, tastiera | 360 |
+| `src/ui/output/RunReportCard.tsx` | Card del singolo run-report | 258 |
+| `src/ui/output/ExportMenu.tsx` | Menu export condiviso (sessione e run-report) | 88 |
+| `src/ui/output/sessionViewState.ts` | Store versionato e puro dello stato di vista per dataset | 178 |
+| `src/ui/output/useSessionViewState.ts` | Hook di lettura/scrittura, prune e reset per dataset | 119 |
+| `src/hooks/useContainerWidth.ts` | Larghezza del pannello Output via `ResizeObserver` | 32 |
+| `src/hooks/useOutputConsole.tsx` | Run numbers, push, export di sessione e singolo run | 317 |
+| `src/analyses/registry.ts` | Metadati UI + registro analisi | 410 |
+| `src/io/outputs.ts` | Snapshot, `runNumber`, cap e sanificazione | 277 |
+| `src/io/project/index.ts` | Persistenza `analysisId` e `runNumber` | invariato nella sostanza |
 | `src/index.css` | Card output, Run, focus ring, header | modificato |
 | `src/help/helpContent.ts` | Help allineato al workbench | aggiornato |
 

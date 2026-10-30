@@ -34,6 +34,12 @@ export interface StoredOutput {
   paramsSignature?: string;
   /** Confidence level used by the run (global setting at that moment). */
   ciLevel?: number;
+  /**
+   * Stable run number shown by the outline and the card. Persisted so removing
+   * an earlier card never renumbers the rest; legacy entries fall back to their
+   * position.
+   */
+  runNumber?: number;
   /** In-session grid revision that produced the card (persisted for reload). */
   dataRevision?: number;
   /** Dataset identity that produced the card (persisted for reload). */
@@ -113,6 +119,17 @@ export const extractOutputTitle = (html: string): string => {
 export const storedOutputChars = (entry: StoredOutput): number =>
   entry.html.length + (entry.charts ? JSON.stringify(entry.charts).length : 0);
 
+/**
+ * Next stable number for a new card: one past the highest persisted number.
+ * Entries without one (legacy projects) contribute their 1-based position, so
+ * the first new card can never reuse an existing number.
+ */
+export const nextRunNumber = (outputs: readonly Pick<StoredOutput, 'runNumber'>[]): number =>
+  outputs.reduce(
+    (max, entry, index) => Math.max(max, entry.runNumber ?? index + 1),
+    0
+  ) + 1;
+
 /** Keep the newest blocks that fit the count and character budget. */
 export const capStoredOutputs = <T extends StoredOutput>(outputs: T[]): T[] => {
   const capped = outputs.slice(-MAX_STORED_OUTPUTS);
@@ -165,6 +182,9 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
         : {}),
       ...(typeof raw.ciLevel === 'number' && Number.isFinite(raw.ciLevel) && raw.ciLevel > 0 && raw.ciLevel < 100
         ? { ciLevel: raw.ciLevel }
+        : {}),
+      ...(typeof raw.runNumber === 'number' && Number.isInteger(raw.runNumber) && raw.runNumber >= 1
+        ? { runNumber: raw.runNumber }
         : {}),
       ...(typeof raw.dataRevision === 'number' && Number.isInteger(raw.dataRevision) && raw.dataRevision >= 0
         ? { dataRevision: raw.dataRevision }

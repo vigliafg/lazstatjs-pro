@@ -8,6 +8,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { AnalysisTabProps } from './analysis/types';
 import { AnalysisStoreProvider } from './analysis/store';
 import { OutputConsole } from './OutputConsole';
+import type { SessionReportMeta } from './output/types';
 import { t } from '../i18n';
 
 type Pane = 'library' | 'options' | 'output';
@@ -134,6 +135,39 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
     (pane === 'library' && !showLibrary) || (pane === 'options' && !showOptions);
   const outputVisibility = pane === 'output' || selectedPaneHidden ? 'flex' : 'hidden';
 
+  const sessionMeta: SessionReportMeta = {
+    datasetId: props.datasetId,
+    rows: props.visibleRowCount,
+    totalRows: props.grid.rows.length,
+    columns: props.grid.cols.length,
+    ...(props.activeRowFilter
+      ? {
+          filterLabel: `${props.grid.cols[props.activeRowFilter.col]?.name ?? ''} ${
+            props.activeRowFilter.op === 'contains'
+              ? t('data.contains')
+              : props.activeRowFilter.op === 'equals'
+                ? '='
+                : props.activeRowFilter.op === 'notEquals'
+                  ? '≠'
+                  : props.activeRowFilter.op === 'gt'
+                    ? '>'
+                    : props.activeRowFilter.op === 'gte'
+                      ? '≥'
+                      : props.activeRowFilter.op === 'lt'
+                        ? '<'
+                        : props.activeRowFilter.op === 'lte'
+                          ? '≤'
+                          : props.activeRowFilter.op === 'empty'
+                            ? t('data.isEmpty')
+                            : t('data.isNotEmpty')
+          } ${props.activeRowFilter.value}`.trim(),
+          filterAffectsAnalysis: props.filterAffectsAnalysis,
+        }
+      : {}),
+    analyses: new Set(props.outputs.map(output => output.analysisId).filter(Boolean)).size,
+    ciLevel: props.ciLevel,
+  };
+
   return (
     <AnalysisStoreProvider params={props.params} onChange={props.setParams}>
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
@@ -227,6 +261,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
           <OutputConsole
             id="analysis-pane-output"
             outputs={props.outputs}
+            meta={sessionMeta}
             onRemove={props.removeOutput}
             onClear={props.clearOutput}
             onCopy={props.copyOutput}
@@ -234,6 +269,8 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             onExportReport={props.exportReportHtml}
             onExportWord={props.exportReportWord}
             onExportXlsx={props.exportResultsXlsx}
+            onExportRunHtml={props.exportRunReportHtml}
+            onExportRunWord={props.exportRunReportWord}
             onBackToData={() => props.setActiveTab('data')}
             onRerun={props.onRerunOutput}
             onRerunAll={props.onRerunAllOutputs}
