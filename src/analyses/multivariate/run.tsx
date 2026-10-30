@@ -213,6 +213,22 @@ export const buildMultivariateOutput = ({
         data: { cells: loadingCells },
         fields: { xLabel: copy('Componente'), yLabel: copy('Variabile') },
         options: { showValues: true, diverging: true } as never,
+      }),
+      makeChart({
+        id: 'pca-loading-plot',
+        kind: 'scatter',
+        title: copy('Loading plot'),
+        subtitle: 'PC1 × PC2',
+        note: copy('Variabili vicine nella mappa dei carichi sono correlate; variabili su lati opposti sono inversamente correlate.'),
+        data: {
+          points: names.map((name, row) => ({
+            x: result.loadings[row]?.[0] ?? 0,
+            y: result.loadings[row]?.[1] ?? 0,
+            label: name,
+          })),
+        },
+        fields: { xLabel: 'PC1', yLabel: 'PC2' },
+        options: { fit: 'none', band: 'none', pointLabels: true } as never,
       })
     );
     const scoreMax = Math.max(

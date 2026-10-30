@@ -65,7 +65,7 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
   const maxTime = times.length ? Math.max(...times) : 1;
   const upper = maxTime > minTime ? maxTime * 1.5 : Math.max(2, maxTime * 2);
   const gridPoints = Array.from({ length: 80 }, (_, index) => minTime + ((upper - minTime) * index) / 79);
-  const curveKind = (kind: 'survival' | 'hazard' | 'cumhazard'): ChartRow[] =>
+  const curveKind = (kind: 'survival' | 'hazard' | 'cumhazard' | 'density'): ChartRow[] =>
     profiles.flatMap(profile => {
       const values = predictorMeans.map((mean, column) => (column === 0 ? profile : mean));
       const eta = stats.mu + stats.coefficients.reduce((sum, coefficient, column) => sum + coefficient.beta * values[column], 0);
@@ -74,13 +74,21 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
         const z = (Math.log(time) - eta) / stats.sigma;
         const survival = Math.exp(-Math.exp(Math.min(50, z)));
         const hazard = (1 / (stats.sigma * time)) * Math.exp(Math.min(50, z));
-        const value = kind === 'survival' ? survival : kind === 'hazard' ? hazard : -Math.log(Math.max(1e-12, survival));
+        const value =
+          kind === 'survival'
+            ? survival
+            : kind === 'hazard'
+              ? hazard
+              : kind === 'density'
+                ? hazard * survival
+                : -Math.log(Math.max(1e-12, survival));
         return { x: time, y: value, series: label };
       });
     });
   const survivalCurves = curveKind('survival');
   const hazardCurves = curveKind('hazard');
   const cumulativeCurves = curveKind('cumhazard');
+  const densityCurves = curveKind('density');
   const coefficientPoints = stats.coefficients.map(row => ({
     label: row.term,
     estimate: row.timeRatio,
@@ -92,6 +100,18 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
     const eta = stats.mu + stats.coefficients.reduce((sum, coefficient, column) => sum + coefficient.beta * values[column], 0);
     const median = Math.exp(eta + stats.sigma * Math.log(Math.log(2)));
     return { category: `${predNames[0]} = ${profile.toFixed(3)}`, value: median };
+  });
+  const meanEta = stats.mu + stats.coefficients.reduce(
+    (sum, coefficient, column) => sum + coefficient.beta * (predictorMeans[column] ?? 0),
+    0
+  );
+  const sortedTimes = complete.map(entry => entry.time).sort((a, b) => a - b);
+  const qq = sortedTimes.map((time, index) => {
+    const p = (index + 1 - 0.375) / (sortedTimes.length + 0.25);
+    return {
+      x: Math.exp(meanEta + stats.sigma * Math.log(-Math.log(1 - p))),
+      y: time,
+    };
   });
   const charts = [
     makeChart({
@@ -124,6 +144,16 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
       fields: { xLabel: copy('Tempo'), yLabel: copy('Hazard cumulativo'), series: copy('Profilo') },
       options: { showBand: false } as never,
     }),
+    makeChart({
+      id: 'parametric-density',
+      kind: 'line',
+      title: copy('Densità dei tempi per profilo'),
+      subtitle: copy('{s1} · profili a media ± 1 DS del primo predittore', { s1: stats.distribution }),
+      note: copy('La densità è hazard × sopravvivenza: mostra dove si concentrano i tempi all’evento per ciascun profilo.'),
+      data: { series: densityCurves },
+      fields: { xLabel: copy('Tempo'), yLabel: copy('Densità'), series: copy('Profilo') },
+      options: { showBand: false } as never,
+    }),
   ];
   if (coefficientPoints.length > 0) {
     charts.push(
@@ -150,6 +180,22 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
         data: { bars: medianRows },
         fields: { xLabel: copy('Profilo'), yLabel: copy('Tempo mediano') },
         options: { valueLabels: true } as never,
+      })
+    );
+  }
+  if (qq.length > 2) {
+    const minQq = Math.min(...qq.flatMap(point => [point.x, point.y]));
+    const maxQq = Math.max(...qq.flatMap(point => [point.x, point.y]));
+    charts.push(
+      makeChart({
+        id: 'parametric-qq',
+        kind: 'qq',
+        title: copy('Q-Q della distribuzione parametrica'),
+        subtitle: copy('{s1} · profilo medio', { s1: stats.distribution }),
+        note: copy('I punti vicini alla diagonale indicano che i tempi osservati seguono la distribuzione fittata; deviazioni alle estremità segnalano code mal descritte.'),
+        data: { points: qq, reference: [{ x: minQq, y: minQq }, { x: maxQq, y: maxQq }] },
+        fields: { xLabel: copy('Tempi teorici'), yLabel: copy('Tempi osservati') },
+        options: { showReference: true } as never,
       })
     );
   }

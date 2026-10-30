@@ -2,7 +2,7 @@ import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
 import type { AnalysisChart } from '../../stats/charts';
-import { blandAltmanStats, iccStats, kappaStats } from '../../stats/kernels/agreement';
+import { blandAltmanStats, iccConfidence, iccStats, kappaStats } from '../../stats/kernels/agreement';
 import { blandAltmanTables, iccTables, kappaTables } from '../../stats/tables/agreement';
 import { blandAltmanReport, iccReport, kappaReport } from '../../stats/reports/agreement';
 import type { Dataset } from '../../grid/types';
@@ -135,28 +135,47 @@ export const buildAgreementOutput = ({ grid, params, ciLevel }: AgreementInput):
   const values = points.flatMap(point => [point.x, point.y]);
   const min = values.length ? Math.min(...values) : 0;
   const max = values.length ? Math.max(...values) : 1;
+  const iccCi = iccConfidence(stats, ciLevel);
+  const charts = [
+    makeChart({
+      id: 'agreement-icc',
+      kind: 'scatter',
+      title: copy('Accordo tra le prime due misure'),
+      subtitle: copy('ICC(2,1) = {s1} · N = {s2}', {
+        s1: Number.isFinite(stats.icc21) ? stats.icc21.toFixed(3) : 'n.d.',
+        s2: stats.n,
+      }),
+      note: copy('I punti vicini alla diagonale indicano accordo tra le due misurazioni.'),
+      data: { points, fit: [{ x: min, y: min }, { x: max, y: max }] },
+      fields: {
+        xLabel: grid.cols[params.columns[0]]?.name ?? 'X1',
+        yLabel: grid.cols[params.columns[1]]?.name ?? 'X2',
+      },
+      options: { fit: 'ols', band: 'none' } as never,
+    }),
+  ];
+  if (iccCi) {
+    charts.push(
+      makeChart({
+        id: 'agreement-icc-ci',
+        kind: 'interval',
+        title: copy('ICC(2,1) con intervallo di confidenza'),
+        subtitle: copy('IC {s1}%', { s1: ciLevel }),
+        note: copy('Il punto è l’ICC(2,1); se l’intervallo include valori bassi l’affidabilità stimata è compatibile anche con un accordo modesto.'),
+        data: {
+          intervals: [{ category: copy('ICC(2,1)'), estimate: stats.icc21, lo: iccCi.lo, hi: iccCi.hi }],
+          rules: [{ value: 0 }],
+        },
+        fields: { xLabel: copy('Stima'), yLabel: copy('ICC') },
+        options: { valueLabels: true } as never,
+      })
+    );
+  }
   return {
     ok: true,
     title: copy('ICC: affidabilità tra misure'),
     tables,
     report: iccReport(tables, stats, ciLevel),
-    charts: [
-      makeChart({
-        id: 'agreement-icc',
-        kind: 'scatter',
-        title: copy('Accordo tra le prime due misure'),
-        subtitle: copy('ICC(2,1) = {s1} · N = {s2}', {
-          s1: Number.isFinite(stats.icc21) ? stats.icc21.toFixed(3) : 'n.d.',
-          s2: stats.n,
-        }),
-        note: copy('I punti vicini alla diagonale indicano accordo tra le due misurazioni.'),
-        data: { points, fit: [{ x: min, y: min }, { x: max, y: max }] },
-        fields: {
-          xLabel: grid.cols[params.columns[0]]?.name ?? 'X1',
-          yLabel: grid.cols[params.columns[1]]?.name ?? 'X2',
-        },
-        options: { fit: 'ols', band: 'none' } as never,
-      }),
-    ],
+    charts,
   };
 };

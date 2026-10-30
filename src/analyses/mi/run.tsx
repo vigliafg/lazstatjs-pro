@@ -201,6 +201,26 @@ export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunRe
       })
     );
   }
+  const stripPoints = grid.rows.flatMap((row, index) => {
+    const value = parseNum(row[params.variables[0] ?? -1]);
+    if (Number.isFinite(value)) return [{ category: copy('Osservato'), value }];
+    const imputed = stats.imputedValues[0]?.[index];
+    return Number.isFinite(imputed) ? [{ category: copy('Imputato'), value: imputed }] : [];
+  });
+  if (stripPoints.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'mi-strip',
+        kind: 'dot',
+        title: copy('Valori osservati e imputati: {s1}', { s1: names[0] ?? 'V1' }),
+        subtitle: copy('Striscia dei valori per stato'),
+        note: copy('La striscia mostra dove cadono i valori imputati rispetto agli osservati: spostamenti sistematici indicano un modello di imputazione da rivedere.'),
+        data: { points: stripPoints },
+        fields: { xLabel: copy('Stato'), yLabel: names[0] ?? 'V1' },
+        options: { showMean: true } as never,
+      })
+    );
+  }
   return {
     ok: true,
     title: copy('Imputazione multipla: {s1}', { s1: names.join(', ') }),

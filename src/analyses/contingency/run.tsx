@@ -2,6 +2,7 @@ import { contingencyReport, contingencyTables } from '../../stats/contingency';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { mosaicCells } from '../../charts/kits/categorical';
+import { eigenSymmetric } from '../../stats/linalg';
 import type { ContingencyParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 
@@ -65,6 +66,49 @@ export const buildContingencyOutput = ({
     series:
       Number(cell.residual) >= 0 ? copy('Sopra l’atteso') : copy('Sotto l’atteso'),
   }));
+  const standardized = observed.map((row, i) =>
+    row.map((value, j) => {
+      const expected = total > 0 ? (rowTotals[i] * colTotals[j]) / total : 0;
+      return expected > 0 ? (value - expected) / Math.sqrt(expected) : 0;
+    })
+  );
+  const crossProduct = standardized.map((row, i) =>
+    standardized.map((_, k) =>
+      row.reduce((sum, value, j) => sum + value * standardized[k][j], 0)
+    )
+  );
+  const eigen = eigenSymmetric(crossProduct);
+  const order = eigen.values
+    .map((value, index) => ({ value, index }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 2);
+  const inertia = eigen.values.reduce((sum, value) => sum + Math.max(0, value), 0);
+  const caPoints = [
+    ...params.rows.map((label, i) => ({
+      x: order[0] ? eigen.vectors[i][order[0].index] * Math.sqrt(Math.max(0, order[0].value)) : 0,
+      y: order[1] ? eigen.vectors[i][order[1].index] * Math.sqrt(Math.max(0, order[1].value)) : 0,
+      label: `${copy('Riga')}: ${label}`,
+    })),
+    ...params.cols.map((label, j) => ({
+      x: order[0]
+        ? standardized.reduce(
+            (sum, row, i) => sum + row[j] * eigen.vectors[i][order[0].index],
+            0
+          )
+        : 0,
+      y: order[1]
+        ? standardized.reduce(
+            (sum, row, i) => sum + row[j] * eigen.vectors[i][order[1].index],
+            0
+          )
+        : 0,
+      label: `${copy('Colonna')}: ${label}`,
+    })),
+  ];
+  const inertiaBars = order.map((entry, index) => ({
+    category: copy('Dimensione {s1}', { s1: index + 1 }),
+    value: inertia > 0 ? (Math.max(0, entry.value) / inertia) * 100 : 0,
+  }));
   const charts = [
     makeChart({
       id: 'contingency-residuals',
@@ -98,6 +142,26 @@ export const buildContingencyOutput = ({
         data: { bars: association },
         fields: { xLabel: copy('Cella'), yLabel: copy('Residuo standardizzato'), series: copy('Direzione') },
         options: { valueLabels: true, referenceLine: 'zero' } as never,
+      }),
+      makeChart({
+        id: 'contingency-ca',
+        kind: 'scatter',
+        title: copy('Analisi delle corrispondenze'),
+        subtitle: copy('Righe e colonne nelle prime due dimensioni'),
+        note: copy('Righe e colonne vicine condividono un profilo simile; la distanza dall’origine misura quanto si discostano dal profilo medio.'),
+        data: { points: caPoints },
+        fields: { xLabel: copy('Dimensione 1'), yLabel: copy('Dimensione 2') },
+        options: { fit: 'none', band: 'none', pointLabels: true } as never,
+      }),
+      makeChart({
+        id: 'contingency-ca-inertia',
+        kind: 'bar',
+        title: copy('Inerzia spiegata'),
+        subtitle: copy('Quota di associazione spiegata da ciascuna dimensione'),
+        note: copy('Barre più alte indicano dimensioni che riassumono più associazione tra righe e colonne.'),
+        data: { bars: inertiaBars },
+        fields: { xLabel: copy('Dimensione'), yLabel: copy('Inerzia (%)') },
+        options: { valueLabels: true } as never,
       })
     );
   }

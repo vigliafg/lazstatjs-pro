@@ -111,6 +111,7 @@ test('the new regression, agreement and survival charts compile and are present'
   );
   assert.ok(parametric.some(chart => chart.id === 'parametric-coefficients'));
   assert.ok(parametric.some(chart => chart.id === 'parametric-median'));
+  assert.ok(parametric.some(chart => chart.id === 'parametric-qq'));
 });
 
 test('agreement, TOST, ANOVA, survival and selected time-series charts expose the new objects', () => {
@@ -131,6 +132,15 @@ test('agreement, TOST, ANOVA, survival and selected time-series charts expose th
     })
   );
   assert.ok(kappa.some(chart => chart.id === 'agreement-kappa-ci'));
+
+  const icc = chartsOf(
+    buildAgreementOutput({
+      grid: agreementGrid,
+      params: { ...DEFAULT_PARAMS.agreement, mode: 'icc' },
+      ciLevel: 95,
+    })
+  );
+  assert.ok(icc.some(chart => chart.id === 'agreement-icc-ci'));
 
   const tost = chartsOf(
     buildTostOutput({ grid: tostGrid, params: DEFAULT_PARAMS.tost, ciLevel: 95 })

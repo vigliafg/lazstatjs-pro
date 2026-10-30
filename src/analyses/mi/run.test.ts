@@ -61,6 +61,7 @@ test('multiple imputation adds the missingness matrix, chain trace and ECDF over
   const ids = charts.map(chart => chart.id);
   assert.ok(ids.includes('mi-missingness-matrix'));
   assert.ok(ids.includes('mi-patterns'));
+  assert.ok(ids.includes('mi-strip'));
   assert.ok(ids.includes('mi-trace'));
   assert.ok(ids.includes('mi-observed-completed'));
   const matrix = charts.find(chart => chart.id === 'mi-missingness-matrix');

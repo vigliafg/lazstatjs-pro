@@ -64,8 +64,26 @@ export const iccStats = (
   };
 };
 
-export const blandAltmanStats = (
-  rows: readonly (readonly string[])[],
+/** Approximate confidence interval for ICC(2,1) (McGraw & Wong). */
+export const iccConfidence = (
+  stats: IccResult,
+  level = 95
+): { lo: number; hi: number } | null => {
+  const { n, k, msb, msr, mse, f } = stats;
+  const dfB = n - 1;
+  const dfE = (n - 1) * (k - 1);
+  if (!(mse > 0) || !Number.isFinite(f) || dfB <= 0 || dfE <= 0) return null;
+  const alpha = (1 - level / 100) / 2;
+  const lowerF = f / jStat.centralF.inv(1 - alpha, dfB, dfE);
+  const upperF = f * jStat.centralF.inv(1 - alpha, dfE, dfB);
+  const denominator = (value: number) =>
+    value * msb + (k - 1) * mse + (k * (msr - mse)) / n;
+  const upper = denominator(lowerF) > 0 ? (msb - lowerF * mse) / denominator(lowerF) : NaN;
+  const lower = denominator(upperF) > 0 ? (msb - upperF * mse) / denominator(upperF) : NaN;
+  return Number.isFinite(lower) && Number.isFinite(upper) ? { lo: lower, hi: upper } : null;
+};
+
+export const blandAltmanStats = (  rows: readonly (readonly string[])[],
   first: number,
   second: number,
   level: number

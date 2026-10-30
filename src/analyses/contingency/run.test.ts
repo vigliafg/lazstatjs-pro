@@ -11,7 +11,13 @@ test('contingency builder returns tables and a report for the trial preset', () 
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
   const ids = (result.charts ?? []).map(chart => chart.id);
-  assert.deepEqual(ids, ['contingency-residuals', 'contingency-mosaic', 'contingency-association']);
+  assert.deepEqual(ids, [
+    'contingency-residuals',
+    'contingency-mosaic',
+    'contingency-association',
+    'contingency-ca',
+    'contingency-ca-inertia',
+  ]);
   const mosaic = (result.charts ?? []).find(chart => chart.id === 'contingency-mosaic');
   assert.equal(mosaic?.kind, 'mosaic');
   assert.ok((mosaic?.data.cells ?? []).length >= 4);

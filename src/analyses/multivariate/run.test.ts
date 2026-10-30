@@ -31,7 +31,7 @@ test('multivariate builder returns PCA tables, report and a scree plot', () => {
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
   const ids = (result.charts ?? []).map(chart => chart.id);
-  assert.deepEqual(ids, ['pca-scree', 'pca-score', 'pca-loadings', 'pca-biplot']);
+  assert.deepEqual(ids, ['pca-scree', 'pca-score', 'pca-loadings', 'pca-loading-plot', 'pca-biplot']);
   const biplot = (result.charts ?? []).find(chart => chart.id === 'pca-biplot');
   assert.equal((biplot?.data.vectors ?? []).length, 3);
   const loadings = (result.charts ?? []).find(chart => chart.id === 'pca-loadings');

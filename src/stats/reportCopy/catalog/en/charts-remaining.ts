@@ -250,4 +250,60 @@ export const remainingChartCopy: Record<string, string> = {
     "Nelson–Aalen per stratum",
   "Ogni curva è il rischio cumulato osservato nello strato; serve a confrontare l’andamento di base senza assumere rischi proporzionali tra strati.":
     "Each curve is the cumulative hazard observed in the stratum; it compares baseline behaviour without assuming proportional hazards between strata.",
+  "ICC(2,1) con intervallo di confidenza":
+    "ICC(2,1) with confidence interval",
+  "Il punto è l’ICC(2,1); se l’intervallo include valori bassi l’affidabilità stimata è compatibile anche con un accordo modesto.":
+    "The dot is ICC(2,1); if the interval includes low values the estimated reliability is also compatible with modest agreement.",
+  "ICC(2,1)":
+    "ICC(2,1)",
+  "ICC":
+    "ICC",
+  "Loading plot":
+    "Loading plot",
+  "Variabili vicine nella mappa dei carichi sono correlate; variabili su lati opposti sono inversamente correlate.":
+    "Variables close in the loading map are correlated; variables on opposite sides are inversely correlated.",
+  "Q-Q della distribuzione parametrica":
+    "Parametric distribution Q-Q",
+  "{s1} · profilo medio":
+    "{s1} · mean profile",
+  "I punti vicini alla diagonale indicano che i tempi osservati seguono la distribuzione fittata; deviazioni alle estremità segnalano code mal descritte.":
+    "Points close to the diagonal indicate that the observed times follow the fitted distribution; departures at the extremes signal poorly described tails.",
+  "Tempi teorici":
+    "Theoretical times",
+  "Tempi osservati":
+    "Observed times",
+  "Dimensione {s1}":
+    "Dimension {s1}",
+  "Analisi delle corrispondenze":
+    "Correspondence analysis",
+  "Righe e colonne nelle prime due dimensioni":
+    "Rows and columns in the first two dimensions",
+  "Righe e colonne vicine condividono un profilo simile; la distanza dall’origine misura quanto si discostano dal profilo medio.":
+    "Nearby rows and columns share a similar profile; distance from the origin measures how far they depart from the average profile.",
+  "Dimensione 1":
+    "Dimension 1",
+  "Dimensione 2":
+    "Dimension 2",
+  "Inerzia spiegata":
+    "Explained inertia",
+  "Quota di associazione spiegata da ciascuna dimensione":
+    "Share of association explained by each dimension",
+  "Barre più alte indicano dimensioni che riassumono più associazione tra righe e colonne.":
+    "Higher bars indicate dimensions that summarise more association between rows and columns.",
+  "Dimensione":
+    "Dimension",
+  "Inerzia (%)":
+    "Inertia (%)",
+  "Imputato":
+    "Imputed",
+  "Valori osservati e imputati: {s1}":
+    "Observed and imputed values: {s1}",
+  "Striscia dei valori per stato":
+    "Value strip by state",
+  "La striscia mostra dove cadono i valori imputati rispetto agli osservati: spostamenti sistematici indicano un modello di imputazione da rivedere.":
+    "The strip shows where imputed values fall relative to observed ones: systematic shifts indicate an imputation model to review.",
+  "Densità dei tempi per profilo":
+    "Time density per profile",
+  "La densità è hazard × sopravvivenza: mostra dove si concentrano i tempi all’evento per ciascun profilo.":
+    "The density is hazard × survival: it shows where event times concentrate for each profile.",
 };

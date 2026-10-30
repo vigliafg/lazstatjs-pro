@@ -176,6 +176,27 @@ test('distribution fit compiles the P-P, density and criteria charts', () => {
   );
 });
 
+test('descriptive adds spread-level and pair scatters for several variables', () => {
+  const rows = Array.from({ length: 12 }, (_, index) => [
+    String(index + 1),
+    String(index * 2 + (index % 3)),
+    String(20 - index + (index % 2)),
+  ]);
+  const result = buildDescriptiveOutput({
+    rows,
+    columnNames: ['A', 'B', 'C'],
+    indices: [0, 1, 2],
+    level: 95,
+  });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  const ids = (result.charts ?? []).map(chart => chart.id);
+  assert.ok(ids.includes('desc-spread-level'));
+  assert.ok(ids.includes('desc-pair-1-2'));
+  assert.ok(ids.includes('desc-pair-1-3'));
+  assert.ok(ids.includes('desc-pair-2-3'));
+});
+
 test('one-sample t-test draws the test-value rule', () => {
   const grid: GridData = {
     cols: numeric(['X']),

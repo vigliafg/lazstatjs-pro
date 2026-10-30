@@ -15,10 +15,10 @@
 - **Diagnostica regressione**: `reg-scale-location`, `reg-residual-leverage`, `reg-cooks` (soglia 4/n, etichette delle osservazioni influenti) e un grafico di residui parziali per predittore (max 4).
 - **Logistica**: `logistic-roc` (AUC in sottotitolo, diagonale di non discriminazione) e `logistic-calibration` (decili di probabilità stimata).
 - **Survival/Cox**: `survival-risk` e `stratcox-risk` con conteggi a rischio ed eventi cumulati; `cox-baseline-hazard`, `cox-baseline-survival` e `cox-schoenfeld-*` (residui di Schoenfeld per covariata).
-- **Test**: 657 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
+- **Test**: 658 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
 - **Categoriche**: opzione barre `grouped` (affiancate) usata in Chi-square, GEE e ANCOVA; nuovo kind `mosaic` con grafico in Chi-square e Contingency; grafico dei residui di associazione.
 - **Multivariate**: `pca-loadings` heatmap e `pca-biplot` con vettori delle variabili; per EFA `efa-loadings`, `efa-parallel`, `efa-variance`, `efa-communalities`; per alpha `alpha-items`, `alpha-if-deleted`, `alpha-correlations`. Alpha ed EFA non restituiscono più `charts: []`.
-- **Ancora aperti**: fourfold/correspondence analysis, IC dell’ICC, CIF/competing risks, loading plot con IC, Q-Q/densità parametrica e strip per imputazione.
+- **Ancora aperti**: fourfold per il 2×2, CIF/competing risks (il modello eventi è binario), IC dei carichi fattoriali e stem-and-leaf (oggetto testuale, non grafico).
 - **Revisione delle modifiche (2026-10-31)**: il sort delle barre resta attivo anche con etichette e barre d’errore (stessa `sort` su tutti i layer); l’interval plot descrittivo usa la t di Student come la tabella; `alpha-if-deleted` è omesso quando nessun valore è finito (scala a 2 item); `showMarkers` ripiega sulle righe `series`; la diagonale ROC resta lineare mentre la curva è a gradini; le baseline Cox sono a gradini con origine (0,0)/(0,1); i residui di associazione non usano più il raggruppamento fittizio.
 - **Blocco mancanti/serie temporali/design (2026-10-31)**: MI con matrice dei mancanti (`display: matrix`), overlay ECDF osservati/completati, trace delle catene e forest dei coefficienti pooled; Time Series con PACF, decomposizione in due pannelli, ACF dei residui ARIMA e accuratezza dei modelli; Sample Size con curva di precisione; Resampling con densità bootstrap e Q-Q. Il kind `line` ora disegna anche `data.rules`.
 - **Blocco fit/confronti (2026-10-31)**: Distribution Fit con P-P plot, densità di tutte le famiglie e confronto AIC/BIC; T-Test con mean plot e IC per una media, due gruppi e differenza appaiata; cappucci delle barre d’errore; banda Q-Q punto per punto in Descriptive, Regression e Distribution Fit.
@@ -28,7 +28,7 @@
 ## Sintesi esecutiva
 
 - **31 procedure**: **30 hanno almeno una modalità con grafici**; **Wizard** non ne produce (è una guida alla scelta). **Multivariate** ora produce grafici in tutte e tre le modalità: PCA, EFA e alpha.
-- **149 punti `makeChart` statici** nei runner. `Descriptive` ha 5 grafici fissi (bar, interval, dot, ECDF, box) + spread-level + fino a 6 coppie di scatter + **1 istogramma per la sola prima variabile** + **fino a 8 Q-Q** se `qqData` esiste.
+- **156 punti `makeChart` statici** nei runner. `Descriptive` ha 5 grafici fissi (bar, interval, dot, ECDF, box) + spread-level + fino a 6 coppie di scatter + **1 istogramma per la sola prima variabile** + **fino a 8 Q-Q** se `qqData` esiste.
 - **22 kind su 22 in uso**: scatter, line, bar, box, histogram, interval, dot, ecdf, qq, forest, survival, risk, mosaic, acf, heatmap, residual, scree, score, bland, power, bootstrap, missingness.
 - Diagnostica, categoriche e multivariate hanno aggiunto rispettivamente 4 siti in Regression, 2 in Logistic, 2 baseline + fino a 4 Schoenfeld in Cox, 1 risk table in Survival, 1 in Stratified Cox, 1 mosaico in Chi-square, 1 mosaico + 1 associazione in Contingency e 10 grafici tra PCA/EFA/alpha.
 - Il motore ha una buona base: box/notched/violin, barre con IC/SE/SD, scatter con fit/bande/equazione/R²/N, Q-Q, heatmap, forest, KM, ACF, power, bootstrap, missingness.
