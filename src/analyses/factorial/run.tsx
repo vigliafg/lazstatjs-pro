@@ -1,6 +1,7 @@
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { factorialCells, factorialReport, factorialTables } from '../../stats/factorial';
+import { tCrit } from '../../stats/distributions';
 import { parseNum } from '../../stats/core';
 import { analysisRows, naturalCompare, orderedColumnLevels, type Dataset } from '../../grid/types';
 import type { FactorialParams } from '../../io/project';
@@ -76,11 +77,17 @@ export const buildFactorialOutput = ({
     bLevels
       .map(b => {
         const cell = cells.find(item => item.a === level && item.b === b);
-        return cell
-          ? { x: b, y: cell.mean, series: `${grid.cols[factorA]?.name} = ${level}` }
-          : null;
+        if (!cell) return null;
+        const se = cell.n > 1 ? cell.sd / Math.sqrt(cell.n) : NaN;
+        const crit = tCrit(ciLevel, Math.max(1, cell.n - 1));
+        return {
+          x: b,
+          y: cell.mean,
+          ...(Number.isFinite(se) ? { lo: cell.mean - crit * se, hi: cell.mean + crit * se } : {}),
+          series: `${grid.cols[factorA]?.name} = ${level}`,
+        };
       })
-      .filter((row): row is { x: string; y: number; series: string } => row !== null)
+      .filter((row): row is { x: string; y: number; lo?: number; hi?: number; series: string } => row !== null)
   );
 
   return {
@@ -98,7 +105,7 @@ export const buildFactorialOutput = ({
         kind: 'line',
         title: copy('Grafico dell’interazione'),
         subtitle: `${grid.cols[factorA]?.name} × ${grid.cols[factorB]?.name}`,
-        note: copy('Linee non parallele indicano che l’effetto di un fattore cambia a seconda del livello dell’altro.'),
+        note: copy('Linee non parallele indicano che l’effetto di un fattore cambia a seconda del livello dell’altro; la banda è l’intervallo di confidenza della media di cella.'),
         data: { series },
         fields: {
           xType: 'nominal',
@@ -106,7 +113,7 @@ export const buildFactorialOutput = ({
           yLabel: copy('Media'),
           series: grid.cols[factorA]?.name ?? 'A',
         },
-        options: { showMarkers: true, showBand: false } as never,
+        options: { showMarkers: true, showBand: true } as never,
       }),
     ],
   };

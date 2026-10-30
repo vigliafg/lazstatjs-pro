@@ -203,15 +203,27 @@ export const lmmStats = (options: LmmOptions): LmmStats | null => {
     const values = observed.filter((__, index) => prepared.groupIndex[index] === group);
     return values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length);
   });
+  const residuals = observed.map((value, index) => value - fitted[index]);
+  const randomEffects: number[] = [];
+  const randomEffectsSe: number[] = [];
+  prepared.groupSizes.forEach((size, group) => {
+    const groupResiduals = residuals.filter((__, index) => prepared.groupIndex[index] === group);
+    const meanResidual = groupResiduals.reduce((sum, value) => sum + value, 0) / Math.max(1, size);
+    const denominator = size * sigmaU2 + sigma2;
+    randomEffects.push(denominator > 0 ? (size * sigmaU2 * meanResidual) / denominator : 0);
+    randomEffectsSe.push(denominator > 0 ? Math.sqrt((sigmaU2 * sigma2) / denominator) : NaN);
+  });
 
   return {
     n,
     groups: groupSizes.length,
     groupLabels: prepared.groupLabels,
     groupMeans,
+    randomEffects,
+    randomEffectsSe,
     observed,
     fitted,
-    residuals: observed.map((value, index) => value - fitted[index]),
+    residuals,
     k: p - 1,
     df: n - p,
     sigmaU2,

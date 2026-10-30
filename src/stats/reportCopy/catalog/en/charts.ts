@@ -2,6 +2,7 @@
 import { categoricalMultivariateChartCopy } from './charts-multivariate';
 import { timeMissingChartCopy } from './charts-time-missing';
 import { distfitTTestChartCopy } from './charts-distfit-ttest';
+import { lmmChartCopy } from './charts-lmm';
 
 export const chartCopy: Record<string, string> = {
   " Con stime instabili gli intervalli non finiti sono omessi dal grafico.":
@@ -146,8 +147,6 @@ export const chartCopy: Record<string, string> = {
     "Bars are the percentage of variance explained by each component.",
   "Le barre verdi sono le frequenze osservate, quelle blu le frequenze attese sotto l’ipotesi di indipendenza.":
     "Green bars are observed frequencies, blue bars are expected frequencies under independence.",
-  "Linee non parallele indicano che l’effetto di un fattore cambia a seconda del livello dell’altro.":
-    "Non-parallel lines indicate that the effect of one factor changes with the level of the other.",
   "Lo spazio dei ranghi riduce l’effetto di valori estremi e distribuzioni asimmetriche.":
     "Rank space reduces the effect of extreme values and skewed distributions.",
   "Mann-Whitney: ranghi per gruppo":
@@ -380,8 +379,6 @@ export const chartCopy: Record<string, string> = {
     "Subject",
   "Interazione gruppo × condizione":
     "Group × condition interaction",
-  "Linee non parallele indicano un’interazione tra il fattore tra soggetti e la condizione entro soggetti.":
-    "Non-parallel lines indicate an interaction between the between-subject factor and the within-subject condition.",
   "Traiettorie dei soggetti":
     "Subject trajectories",
   "Prime {s1} righe complete":
@@ -644,5 +641,6 @@ export const chartCopy: Record<string, string> = {
     "A trend over time suggests a proportional-hazards violation.",
   ...timeMissingChartCopy,
   ...distfitTTestChartCopy,
+  ...lmmChartCopy,
   ...categoricalMultivariateChartCopy,
 };

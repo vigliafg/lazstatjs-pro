@@ -2,7 +2,7 @@ import { lmmStats } from '../../stats/kernels/lmm';
 import { lmmTables } from '../../stats/tables/lmm';
 import { lmmReport } from '../../stats/reports/lmm';
 import { copy } from '../../stats/reportCopy';
-import { makeChart, qqPoints, qqReference } from '../../charts/kits/common';
+import { makeChart, qqBand, qqPoints, qqReference } from '../../charts/kits/common';
 import type { AnalysisChart } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { LmmParams } from '../../io/project';
@@ -80,7 +80,35 @@ export const buildLmmOutput = ({ grid, params, ciLevel }: LmmInput): AnalysisRun
       options: { valueLabels: true } as never,
     }),
   ];
+  const randomRows = stats.groupLabels
+    .map((label, index) => ({
+      category: label,
+      estimate: stats.randomEffects[index],
+      se: stats.randomEffectsSe[index],
+    }))
+    .filter(row => Number.isFinite(row.estimate) && Number.isFinite(row.se))
+    .map(row => ({
+      category: row.category,
+      estimate: row.estimate,
+      lo: row.estimate - 1.96 * row.se,
+      hi: row.estimate + 1.96 * row.se,
+    }));
+  if (randomRows.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'lmm-random-effects',
+        kind: 'interval',
+        title: copy('Effetti casuali per gruppo'),
+        subtitle: copy('Intercette casuali (BLUP) e IC 95% approssimato'),
+        note: copy('Ogni punto è lo scostamento stimato del gruppo dall’intercetta media; intervalli che si sovrappongono molto suggeriscono poca eterogeneità tra gruppi.'),
+        data: { intervals: randomRows, rules: [{ value: 0 }] },
+        fields: { xLabel: groupName, yLabel: copy('Intercetta casuale') },
+        options: { sort: 'asc' } as never,
+      })
+    );
+  }
   if (qq.length > 0) {
+    const qqLine = qqReference(qq);
     charts.push(
       makeChart({
         id: 'lmm-residual-qq',
@@ -88,8 +116,9 @@ export const buildLmmOutput = ({ grid, params, ciLevel }: LmmInput): AnalysisRun
         title: copy('Q-Q dei residui'),
         subtitle: copy('N = {s1}', { s1: stats.n }),
         note: copy('I punti vicini alla diagonale indicano residui compatibili con la normalità.'),
-        data: { points: qq, reference: qqReference(qq) },
+        data: { points: qq, reference: qqLine, band: qqBand(qq, qqLine, ciLevel) },
         fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Residui osservati') },
+        options: { showCI: true } as never,
       })
     );
   }

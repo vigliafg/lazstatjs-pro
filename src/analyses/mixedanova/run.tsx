@@ -3,6 +3,7 @@ import { mixedAnovaTables } from '../../stats/tables/mixedanova';
 import { mixedAnovaReport } from '../../stats/reports/mixedanova';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
+import { tCrit } from '../../stats/distributions';
 import { parseNum } from '../../stats/core';
 import type { AnalysisChart, ChartRow } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
@@ -39,12 +40,38 @@ export const buildMixedAnovaOutput = ({ grid, params, ciLevel }: MixedAnovaInput
   const groupName = grid.cols[params.group]?.name ?? 'Group';
   const tables = mixedAnovaTables(stats, conditionNames, groupName, ciLevel);
 
+  const cellValues = new Map<string, number[]>();
+  grid.rows.forEach(row => {
+    const group = String(row[params.group] ?? '').trim();
+    if (group === '') return;
+    params.conditions.forEach((column, ci) => {
+      const value = parseNum(row[column]);
+      if (!Number.isFinite(value)) return;
+      const key = `${group}|${ci}`;
+      cellValues.set(key, [...(cellValues.get(key) ?? []), value]);
+    });
+  });
+  const cellInterval = (group: string, ci: number): { lo: number; hi: number } | null => {
+    const values = cellValues.get(`${group}|${ci}`) ?? [];
+    if (values.length < 2) return null;
+    const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+    const variance =
+      values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / (values.length - 1);
+    const se = Math.sqrt(variance / values.length);
+    const crit = tCrit(ciLevel, values.length - 1);
+    return { lo: mean - crit * se, hi: mean + crit * se };
+  };
+
   const interaction: ChartRow[] = stats.groups.flatMap((group, gi) =>
-    conditionNames.map((condition, ci) => ({
-      x: condition,
-      y: stats.cellMeans[gi][ci],
-      series: `${groupName} = ${group}`,
-    }))
+    conditionNames.map((condition, ci) => {
+      const band = cellInterval(group, ci);
+      return {
+        x: condition,
+        y: stats.cellMeans[gi][ci],
+        ...(band ? { lo: band.lo, hi: band.hi } : {}),
+        series: `${groupName} = ${group}`,
+      };
+    })
   );
 
   const subjects: ChartRow[] = [];
@@ -64,10 +91,10 @@ export const buildMixedAnovaOutput = ({ grid, params, ciLevel }: MixedAnovaInput
       kind: 'line',
       title: copy('Interazione gruppo × condizione'),
       subtitle: `${groupName} × ${conditionNames.join(' / ')}`,
-      note: copy('Linee non parallele indicano un’interazione tra il fattore tra soggetti e la condizione entro soggetti.'),
+      note: copy('Linee non parallele indicano un’interazione tra il fattore tra soggetti e la condizione entro soggetti; la banda è l’intervallo di confidenza della media di cella.'),
       data: { series: interaction },
       fields: { xType: 'nominal', xLabel: copy('Condizione'), yLabel: copy('Media'), series: groupName },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showMarkers: true, showBand: true } as never,
     }),
   ];
   if (subjects.length > 0) {

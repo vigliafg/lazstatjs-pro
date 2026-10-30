@@ -21,6 +21,9 @@ export interface LmmStats {
   groups: number;
   groupLabels: string[];
   groupMeans: number[];
+  /** Best linear unbiased predictors of the random intercepts. */
+  randomEffects: number[];
+  randomEffectsSe: number[];
   observed: number[];
   fitted: number[];
   residuals: number[];
