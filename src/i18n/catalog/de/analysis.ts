@@ -351,4 +351,12 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.reference.none": "Keine",
   "chart.reference.zero": "Null",
   "chart.reference.one": "Eins",
+  "analysis.chartOutputs": "Grafiken",
+  "analysis.chartOutputsHint": "Pflichtdiagramme sind immer enthalten. Die Auswahl gilt für den nächsten Lauf.",
+  "analysis.chartGroup.recommended": "Empfohlen",
+  "analysis.chartGroup.recommendedHint": "Hauptdiagramme des Verfahrens.",
+  "analysis.chartGroup.diagnostic": "Diagnostik",
+  "analysis.chartGroup.diagnosticHint": "Residuen, Q-Q und Modellprüfungen.",
+  "analysis.chartShowAll": "Alle anzeigen",
+  "analysis.chartCount": "Diagramme",
 };

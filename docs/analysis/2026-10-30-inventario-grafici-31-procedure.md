@@ -15,7 +15,7 @@
 - **Diagnostica regressione**: `reg-scale-location`, `reg-residual-leverage`, `reg-cooks` (soglia 4/n, etichette delle osservazioni influenti) e un grafico di residui parziali per predittore (max 4).
 - **Logistica**: `logistic-roc` (AUC in sottotitolo, diagonale di non discriminazione) e `logistic-calibration` (decili di probabilità stimata).
 - **Survival/Cox**: `survival-risk` e `stratcox-risk` con conteggi a rischio ed eventi cumulati; `cox-baseline-hazard`, `cox-baseline-survival` e `cox-schoenfeld-*` (residui di Schoenfeld per covariata).
-- **Test**: 658 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
+- **Test**: 663 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
 - **Categoriche**: opzione barre `grouped` (affiancate) usata in Chi-square, GEE e ANCOVA; nuovo kind `mosaic` con grafico in Chi-square e Contingency; grafico dei residui di associazione.
 - **Multivariate**: `pca-loadings` heatmap e `pca-biplot` con vettori delle variabili; per EFA `efa-loadings`, `efa-parallel`, `efa-variance`, `efa-communalities`; per alpha `alpha-items`, `alpha-if-deleted`, `alpha-correlations`. Alpha ed EFA non restituiscono più `charts: []`.
 - **Ancora aperti**: fourfold per il 2×2, CIF/competing risks (il modello eventi è binario), IC dei carichi fattoriali e stem-and-leaf (oggetto testuale, non grafico).
@@ -24,6 +24,7 @@
 - **Blocco fit/confronti (2026-10-31)**: Distribution Fit con P-P plot, densità di tutte le famiglie e confronto AIC/BIC; T-Test con mean plot e IC per una media, due gruppi e differenza appaiata; cappucci delle barre d’errore; banda Q-Q punto per punto in Descriptive, Regression e Distribution Fit.
 - **Blocco modelli misti (2026-10-31)**: LMM con caterpillar degli effetti casuali; interaction plot di Factorial e Mixed ANOVA con banda IC della media di cella; Q-Q LMM con banda.
 - **Chiusura gap P1/P2 (2026-10-31)**: logistic con matrice di confusione, forest OR e effetti marginali; count con forest IRR, Q-Q, dispersione e rootogramma; ordinal con forest OR/soglie e mappa delle probabilità; GEE con forest, caterpillar dei cluster, Q-Q ed effetti marginali; agreement con IC di bias/limiti e kappa; ANOVA con forest post-hoc e residui; ANCOVA con profilo e residui; Repeated con change plot; TOST con regione di equivalenza; Survival con log-rank annotato e RMST; Cox con martingala e sopravvivenza predetta; Stratified Cox con baseline Nelson–Aalen; parametrica con forest dei time ratio e mediana; serie temporali con periodogramma e statistiche mobili; resampling con BCa; sample size con sensitivity; MI con pattern aggregati; Friedman con heatmap post-hoc; Descriptive/Correlation con spread-level, coppie di scatter ed ellisse; box con display raincloud.
+- **Selezione output (2026-10-31)**: nella finestra parametri c’è una sezione **Grafici** con i gruppi opzionali `Consigliati` e `Diagnostica`. I grafici obbligatori restano sempre inclusi; i gruppi nascosti si applicano al run successivo e vengono salvati nel progetto (`settings.hiddenChartGroups`). Il conteggio delle card è mostrato sopra i grafici del run-report.
 
 ## Sintesi esecutiva
 

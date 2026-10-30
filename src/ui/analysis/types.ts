@@ -5,6 +5,7 @@ import type { RoleState } from '../../analyses/roles';
 import type { OutputEntry } from '../output/types';
 import type { ProjectParams } from '../../io/project';
 import type { ChartOptions } from '../../stats/charts';
+import type { ChartOutputGroup } from '../../charts/outputs';
 
 /**
  * State and callbacks that the analysis workspace needs.
@@ -40,6 +41,9 @@ export interface AnalysisTabProps {
   limitationsLabel: string;
   /** CSS custom properties for the output/report window only. */
   outputStyle: Record<string, string>;
+  /** Optional chart groups hidden per procedure, persisted with the project. */
+  hiddenChartGroups: Record<string, ChartOutputGroup[]>;
+  setHiddenChartGroups: Dispatch<SetStateAction<Record<string, ChartOutputGroup[]>>>;
   onUpdateChart: (entryId: string, chartId: string, options: ChartOptions) => void;
   removeOutput: (index: number) => void;
   clearOutput: () => void;

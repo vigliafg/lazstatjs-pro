@@ -319,4 +319,12 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.reference.none": "Aucune",
   "chart.reference.zero": "Zéro",
   "chart.reference.one": "Un",
+  "analysis.chartOutputs": "Graphiques",
+  "analysis.chartOutputsHint": "Les graphiques obligatoires sont toujours inclus. Le choix s’applique au prochain run.",
+  "analysis.chartGroup.recommended": "Recommandés",
+  "analysis.chartGroup.recommendedHint": "Graphiques principaux de la procédure.",
+  "analysis.chartGroup.diagnostic": "Diagnostic",
+  "analysis.chartGroup.diagnosticHint": "Résidus, Q-Q et contrôles du modèle.",
+  "analysis.chartShowAll": "Tout afficher",
+  "analysis.chartCount": "graphiques",
 };

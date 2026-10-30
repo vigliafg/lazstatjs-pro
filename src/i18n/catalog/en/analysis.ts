@@ -317,4 +317,12 @@ export const analysisMessages = {
   "chart.reference.none": "None",
   "chart.reference.zero": "Zero",
   "chart.reference.one": "One",
+  "analysis.chartOutputs": "Charts",
+  "analysis.chartOutputsHint": "Mandatory charts are always included. The choice applies to the next run.",
+  "analysis.chartGroup.recommended": "Recommended",
+  "analysis.chartGroup.recommendedHint": "Main charts of the procedure.",
+  "analysis.chartGroup.diagnostic": "Diagnostics",
+  "analysis.chartGroup.diagnosticHint": "Residuals, Q-Q and model checks.",
+  "analysis.chartShowAll": "Show all",
+  "analysis.chartCount": "charts",
 } as const;

@@ -248,6 +248,24 @@ describe('project sanitisation', () => {
     assert.equal(parsed.params.ttest.mu, 0);
   });
 
+  it('keeps valid hidden chart groups and drops invalid ones', () => {
+    const base = makeSnapshot();
+    const parsed = parseProject(
+      JSON.stringify({
+        ...base,
+        settings: {
+          ...base.settings,
+          hiddenChartGroups: {
+            regression: ['diagnostic', 'bogus', 'diagnostic'],
+            descriptive: [],
+          },
+        },
+      })
+    );
+    assert.deepEqual(parsed.settings.hiddenChartGroups, { regression: ['diagnostic'] });
+    assert.deepEqual(parseProject(JSON.stringify(base)).settings.hiddenChartGroups, {});
+  });
+
   it('keeps a valid UI theme and rejects an unknown one', () => {
     const base = makeSnapshot();
     assert.equal(parseProject(serializeProject(base)).settings.theme, 'dracula');

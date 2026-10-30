@@ -9,6 +9,7 @@ import { isHeavyAnalysis } from '../analyses/worker/heavyIds';
 import { runHeavyAnalysis } from '../analyses/worker/client';
 import type { HeavyProgressPhase } from '../analyses/worker/protocol';
 import { withChartDefaults, type ChartDefaults } from '../charts/defaults';
+import { filterChartsByGroups, type ChartOutputGroup } from '../charts/outputs';
 
 interface UseAnalysisRunOptions {
   activeAnalysis: string;
@@ -19,6 +20,8 @@ interface UseAnalysisRunOptions {
   reportLocale: Locale;
   /** Defaults for charts produced by new runs (not applied to existing cards). */
   chartDefaults: ChartDefaults;
+  /** Optional chart groups hidden for each procedure. */
+  hiddenChartGroups: Record<string, ChartOutputGroup[]>;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */
   emit: (
     result: AnalysisRunResult,
@@ -44,6 +47,7 @@ export const useAnalysisRun = ({
   ciLevel,
   reportLocale,
   chartDefaults,
+  hiddenChartGroups,
   emit,
   warn,
 }: UseAnalysisRunOptions) => {
@@ -124,7 +128,11 @@ export const useAnalysisRun = ({
             ...(outcome.title ? { title: outcome.title } : {}),
             tables: outcome.tables,
             report: outcome.report,
-            charts: outcome.charts,
+            charts: filterChartsByGroups(
+              analysisId,
+              outcome.charts,
+              hiddenChartGroups[analysisId]
+            ),
             ...(outcome.header ? { header: outcome.header } : {}),
             ...(outcome.warnings ? { warnings: outcome.warnings } : {}),
             ...(outcome.callout ? { callout: outcome.callout } : {}),
@@ -154,7 +162,18 @@ export const useAnalysisRun = ({
       }
       // A stale live run may finish after a newer one: never publish it.
       if (options?.isCurrent && !options.isCurrent()) return false;
-      return await emit(result, analysisId, paramsUsed, { ...options, ciLevel: level });
+      const filtered =
+        'ok' in result && result.ok
+          ? {
+              ...result,
+              charts: filterChartsByGroups(
+                analysisId,
+                result.charts,
+                hiddenChartGroups[analysisId]
+              ),
+            }
+          : result;
+      return await emit(filtered, analysisId, paramsUsed, { ...options, ciLevel: level });
     } catch (error) {
       if (runSeq.current === token) {
         finishRun(token);

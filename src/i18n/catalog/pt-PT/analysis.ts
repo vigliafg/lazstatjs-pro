@@ -317,4 +317,12 @@ export const analysisMessages = {
   "chart.reference.none": "Nenhuma",
   "chart.reference.zero": "Zero",
   "chart.reference.one": "Um",
+  "analysis.chartOutputs": "Gráficos",
+  "analysis.chartOutputsHint": "Os gráficos obrigatórios são sempre incluídos. A escolha aplica-se ao próximo run.",
+  "analysis.chartGroup.recommended": "Recomendados",
+  "analysis.chartGroup.recommendedHint": "Gráficos principais do procedimento.",
+  "analysis.chartGroup.diagnostic": "Diagnóstico",
+  "analysis.chartGroup.diagnosticHint": "Resíduos, Q-Q e verificações do modelo.",
+  "analysis.chartShowAll": "Mostrar todos",
+  "analysis.chartCount": "gráficos",
 } as const;

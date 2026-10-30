@@ -19,6 +19,9 @@ export const AnalysisCharts = ({ charts, analysisName, onOptionsChange }: Analys
 
   return (
     <div className="mt-6 flex flex-wrap gap-4">
+      <div className="w-full font-mono text-[9px] uppercase tracking-wider text-text3">
+        {charts.length} {t('analysis.chartCount')}
+      </div>
       {visible.map(chart => (
         <ChartCard
           key={chart.id}

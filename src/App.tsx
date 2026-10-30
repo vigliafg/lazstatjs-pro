@@ -115,6 +115,7 @@ import {
   type WizardParams,
 } from './io/project';
 import { normalizeChartDefaults, type ChartDefaults } from './charts/defaults';
+import type { ChartOutputGroup } from './charts/outputs';
 
 export default function App() {
   // Restore the last silent autosave before any state is initialised, so the
@@ -291,6 +292,9 @@ export default function App() {
   const [chartDefaults, setChartDefaults] = useState<ChartDefaults>(
     () => boot?.settings.chartDefaults ?? DEFAULT_SETTINGS.chartDefaults
   );
+  const [hiddenChartGroups, setHiddenChartGroups] = useState<Record<string, ChartOutputGroup[]>>(
+    () => boot?.settings.hiddenChartGroups ?? {}
+  );
   // The store drives `t()` everywhere; updating it re-renders the shell through
   // the `useLocale()` subscription below.
   useEffect(() => setLocale(activeLocaleOf(uiLocale)), [uiLocale]);
@@ -333,8 +337,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, outputAppearance }),
-    [ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, outputAppearance]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, hiddenChartGroups, outputAppearance }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, hiddenChartGroups, outputAppearance]
   );
 
   const roleErrors = [
@@ -378,6 +382,7 @@ export default function App() {
     setReportLocale(project.settings.reportLocale);
     setHelpLocale(project.settings.helpLocale);
     setChartDefaults(normalizeChartDefaults(project.settings.chartDefaults));
+    setHiddenChartGroups(project.settings.hiddenChartGroups ?? {});
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
         ? project.settings.activeAnalysis
@@ -446,6 +451,7 @@ export default function App() {
     ciLevel,
     reportLocale,
     chartDefaults,
+    hiddenChartGroups,
     emit,
     warn: (message) => showToast(t('toast.analysis'), message, 'warn'),
   });
@@ -618,6 +624,8 @@ export default function App() {
             updateColumnLevels={updateColumnLevels}
             updateColumnRecode={updateColumnRecode}
             outputStyle={outputStyle}
+            hiddenChartGroups={hiddenChartGroups}
+            setHiddenChartGroups={setHiddenChartGroups}
           />
           </Suspense>
         )}

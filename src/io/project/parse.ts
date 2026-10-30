@@ -6,6 +6,7 @@ import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 import { isActiveLocale, isHelpLocale, isLocale } from '../../i18n/locales';
 import { normalizeChartDefaults } from '../../charts/defaults';
+import type { ChartOutputGroup } from '../../charts/outputs';
 import { isThemeId } from '../../theme/themes';
 import { normalizeOutputAppearance } from '../../theme/outputAppearance';
 import {
@@ -539,7 +540,28 @@ export const parseSettings = (value: unknown): ProjectSettings => {
     reportLocale: isLocale(raw.reportLocale) ? raw.reportLocale : DEFAULT_SETTINGS.reportLocale,
     helpLocale: isHelpLocale(raw.helpLocale) ? raw.helpLocale : DEFAULT_SETTINGS.helpLocale,
     chartDefaults: normalizeChartDefaults(raw.chartDefaults),
+    hiddenChartGroups: normalizeHiddenChartGroups(raw.hiddenChartGroups),
     outputAppearance: normalizeOutputAppearance(raw.outputAppearance),
   };
+};
+
+const normalizeHiddenChartGroups = (
+  value: unknown
+): Record<string, ChartOutputGroup[]> => {
+  if (!isRecord(value)) return {};
+  const result: Record<string, ChartOutputGroup[]> = {};
+  for (const [analysisId, groups] of Object.entries(value)) {
+    if (!Array.isArray(groups) || analysisId.length === 0) continue;
+    const clean = Array.from(
+      new Set(
+        groups.filter(
+          (group): group is ChartOutputGroup =>
+            group === 'recommended' || group === 'diagnostic'
+        )
+      )
+    );
+    if (clean.length > 0) result[analysisId] = clean;
+  }
+  return result;
 };
 
