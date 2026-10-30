@@ -74,6 +74,13 @@ export const intervalLayers = (
       },
     });
   }
+  rowsOf(chart, 'rules').forEach(row => {
+    layers.push({
+      data: { values: [row] },
+      mark: { type: 'rule', color: colorAt(options, 4), strokeDash: [4, 4], strokeWidth: 1 },
+      encoding: { y: { field: row.value !== undefined ? 'value' : 'y', type: 'quantitative' } },
+    });
+  });
   return layers;
 };
 

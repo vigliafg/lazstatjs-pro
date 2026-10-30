@@ -9,7 +9,7 @@ import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
 import type { AnalysisRunResult } from '../types';
 import { copy } from '../../stats/reportCopy';
-import { makeChart, boxRows } from '../../charts/kits/common';
+import { makeChart, boxRows, qqBand } from '../../charts/kits/common';
 import type { AnalysisChart } from '../../stats/charts';
 
 export interface DescriptiveInput {
@@ -201,8 +201,13 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
           title: copy('Q-Q normale: {s1}', { s1: r.name }),
           subtitle: copy('{s1} osservazioni', { s1: r.n }),
           note: copy('I punti vicini alla diagonale indicano una distribuzione compatibile con la normale.'),
-          data: { points: r.qqData, reference: r.qqLineData },
+          data: {
+            points: r.qqData,
+            reference: r.qqLineData,
+            band: qqBand(r.qqData, r.qqLineData, input.level),
+          },
           fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Valori osservati') },
+          options: { showCI: true } as never,
         })
       );
     });

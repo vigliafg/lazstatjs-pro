@@ -11,6 +11,7 @@ import type { AnalysisRunResult } from '../types';
 import { isFiniteNumber } from '../shared/numbers';
 import { copy } from '../../stats/reportCopy';
 import { makeChart, boxRows } from '../../charts/kits/common';
+import { meanCI } from '../../stats/distributions';
 import type { AnalysisChart } from '../../stats/charts';
 
 export interface TTestRunInput {
@@ -104,6 +105,24 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           options: { showPoints: true, showMean: true } as never,
         }),
       ];
+      const oneCi = meanCI(a1, ciLevel);
+      charts.push(
+        makeChart({
+          id: 'ttest-one-mean',
+          kind: 'interval',
+          title: copy('Media e intervallo di confidenza'),
+          subtitle: copy('IC {s1}% intorno alla media', { s1: ciLevel }),
+          note: copy('Il punto è la media campionaria; il segmento è l’intervallo di confidenza. La linea tratteggiata è il valore di test.'),
+          data: {
+            intervals: [
+              { category: grid.cols[var1].name, estimate: oneCi.mean, lo: oneCi.lo, hi: oneCi.hi },
+            ],
+            rules: [{ value: mu }],
+          },
+          fields: { xLabel: copy('Campione'), yLabel: grid.cols[var1].name },
+          options: { valueLabels: true } as never,
+        })
+      );
       if (useNonParam && !isNaN(wilcox.wStat)) {
         const box = boxRows([{ category: grid.cols[var1].name, values: a1 }]);
         charts.push(
@@ -241,6 +260,25 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           options: { showPoints: true } as never,
         }),
       ];
+      const c1 = meanCI(a1, ciLevel);
+      const c2 = meanCI(a2, ciLevel);
+      charts.push(
+        makeChart({
+          id: 'ttest-ind-means',
+          kind: 'interval',
+          title: copy('Medie e intervalli di confidenza'),
+          subtitle: copy('IC {s1}% per gruppo', { s1: ciLevel }),
+          note: copy('Confronta le medie con il loro intervallo: se gli intervalli non si sovrappongono la differenza è probabilmente rilevante, ma il test formale resta la statistica t.'),
+          data: {
+            intervals: [
+              { category: grid.cols[var1].name, estimate: c1.mean, lo: c1.lo, hi: c1.hi },
+              { category: grid.cols[var2].name, estimate: c2.mean, lo: c2.lo, hi: c2.hi },
+            ],
+          },
+          fields: { xLabel: copy('Gruppo'), yLabel: copy('Media') },
+          options: { valueLabels: true } as never,
+        })
+      );
       if (useNonParam && !isNaN(mw.uStat)) {
         const rankBox = boxRows([
           { category: grid.cols[var1].name, values: ranks1 },
@@ -340,6 +378,24 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           options: { showPoints: true } as never,
         }),
       ];
+      const diffCi = meanCI(diffs, ciLevel);
+      charts.push(
+        makeChart({
+          id: 'ttest-dep-mean',
+          kind: 'interval',
+          title: copy('Differenza media e intervallo di confidenza'),
+          subtitle: copy('{s1} − {s2} · IC {s3}%', { s1: grid.cols[var1].name, s2: grid.cols[var2].name, s3: ciLevel }),
+          note: copy('Il punto è la differenza media; se l’intervallo non contiene lo zero la differenza è compatibile con un effetto non nullo.'),
+          data: {
+            intervals: [
+              { category: copy('Differenze'), estimate: diffCi.mean, lo: diffCi.lo, hi: diffCi.hi },
+            ],
+            rules: [{ value: 0 }],
+          },
+          fields: { xLabel: copy('Confronto'), yLabel: copy('Differenza media') },
+          options: { valueLabels: true } as never,
+        })
+      );
       if (useNonParam && !isNaN(wilcox.wStat)) {
         const diffBox = boxRows([{ category: copy('Differenze'), values: diffs }]);
         charts.push(

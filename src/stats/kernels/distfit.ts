@@ -73,8 +73,16 @@ export const distributionCdf = (fit: DistributionFit, x: number): number => {
   }
 };
 
-export const distributionQuantile = (fit: DistributionFit, p: number): number => {
-  switch (fit.name) {
+/** Density via the numerical derivative of the fitted CDF. */
+export const distributionPdf = (fit: DistributionFit, x: number): number => {
+  const step = Math.max(1e-6, Math.abs(x) * 1e-6);
+  const lo = distributionCdf(fit, x - step);
+  const hi = distributionCdf(fit, x + step);
+  const density = (hi - lo) / (2 * step);
+  return Number.isFinite(density) ? Math.max(0, density) : NaN;
+};
+
+export const distributionQuantile = (fit: DistributionFit, p: number): number => {  switch (fit.name) {
     case 'normal':
       return jStat.normal.inv(p, fit.params.mu, fit.params.sigma);
     case 'lognormal':

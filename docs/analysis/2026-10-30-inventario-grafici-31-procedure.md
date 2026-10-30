@@ -15,17 +15,18 @@
 - **Diagnostica regressione**: `reg-scale-location`, `reg-residual-leverage`, `reg-cooks` (soglia 4/n, etichette delle osservazioni influenti) e un grafico di residui parziali per predittore (max 4).
 - **Logistica**: `logistic-roc` (AUC in sottotitolo, diagonale di non discriminazione) e `logistic-calibration` (decili di probabilità stimata).
 - **Survival/Cox**: `survival-risk` e `stratcox-risk` con conteggi a rischio ed eventi cumulati; `cox-baseline-hazard`, `cox-baseline-survival` e `cox-schoenfeld-*` (residui di Schoenfeld per covariata).
-- **Test**: 650 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
+- **Test**: 651 unit test verdi, `npm run lint`, `npm run guard` e build verdi; chart-editor e analysis e2e desktop restano verdi.
 - **Categoriche**: opzione barre `grouped` (affiancate) usata in Chi-square, GEE e ANCOVA; nuovo kind `mosaic` con grafico in Chi-square e Contingency; grafico dei residui di associazione.
 - **Multivariate**: `pca-loadings` heatmap e `pca-biplot` con vettori delle variabili; per EFA `efa-loadings`, `efa-parallel`, `efa-variance`, `efa-communalities`; per alpha `alpha-items`, `alpha-if-deleted`, `alpha-correlations`. Alpha ed EFA non restituiscono più `charts: []`.
 - **Ancora aperti**: P1/P2 del backlog (cappucci delle barre d’errore, EMM/post-hoc, missingness matrix, PACF/decomposition, precision curve, resampling density/QQ).
 - **Revisione delle modifiche (2026-10-31)**: il sort delle barre resta attivo anche con etichette e barre d’errore (stessa `sort` su tutti i layer); l’interval plot descrittivo usa la t di Student come la tabella; `alpha-if-deleted` è omesso quando nessun valore è finito (scala a 2 item); `showMarkers` ripiega sulle righe `series`; la diagonale ROC resta lineare mentre la curva è a gradini; le baseline Cox sono a gradini con origine (0,0)/(0,1); i residui di associazione non usano più il raggruppamento fittizio.
 - **Blocco mancanti/serie temporali/design (2026-10-31)**: MI con matrice dei mancanti (`display: matrix`), overlay ECDF osservati/completati, trace delle catene e forest dei coefficienti pooled; Time Series con PACF, decomposizione in due pannelli, ACF dei residui ARIMA e accuratezza dei modelli; Sample Size con curva di precisione; Resampling con densità bootstrap e Q-Q. Il kind `line` ora disegna anche `data.rules`.
+- **Blocco fit/confronti (2026-10-31)**: Distribution Fit con P-P plot, densità di tutte le famiglie e confronto AIC/BIC; T-Test con mean plot e IC per una media, due gruppi e differenza appaiata; cappucci delle barre d’errore; banda Q-Q punto per punto in Descriptive, Regression e Distribution Fit.
 
 ## Sintesi esecutiva
 
 - **31 procedure**: **30 hanno almeno una modalità con grafici**; **Wizard** non ne produce (è una guida alla scelta). **Multivariate** ora produce grafici in tutte e tre le modalità: PCA, EFA e alpha.
-- **105 punti `makeChart` statici** nei runner. `Descriptive` ha 5 grafici fissi (bar, interval, dot, ECDF, box) + **1 istogramma per la sola prima variabile** + **fino a 8 Q-Q** se `qqData` esiste.
+- **111 punti `makeChart` statici** nei runner. `Descriptive` ha 5 grafici fissi (bar, interval, dot, ECDF, box) + **1 istogramma per la sola prima variabile** + **fino a 8 Q-Q** se `qqData` esiste.
 - **22 kind su 22 in uso**: scatter, line, bar, box, histogram, interval, dot, ecdf, qq, forest, survival, risk, mosaic, acf, heatmap, residual, scree, score, bland, power, bootstrap, missingness.
 - Diagnostica, categoriche e multivariate hanno aggiunto rispettivamente 4 siti in Regression, 2 in Logistic, 2 baseline + fino a 4 Schoenfeld in Cox, 1 risk table in Survival, 1 in Stratified Cox, 1 mosaico in Chi-square, 1 mosaico + 1 associazione in Contingency e 10 grafici tra PCA/EFA/alpha.
 - Il motore ha una buona base: box/notched/violin, barre con IC/SE/SD, scatter con fit/bande/equazione/R²/N, Q-Q, heatmap, forest, KM, ACF, power, bootstrap, missingness.
@@ -79,13 +80,13 @@ Nelle tabelle per procedura, **«Standard»** significa che il gap è coperto da
 | # | Procedura | Grafici e oggetti presenti | Gap rispetto ai migliori programmi | Priorità |
 |---|---|---|---|---|
 | 2 | **Descriptive** (`descriptive`) | `desc-means` **bar**, `desc-interval` **interval** (media + CI), `desc-box` **box** (box/notch/violin), `desc-dot` **dot**, `desc-ecdf` **ecdf** (prima variabile), `desc-hist-*` **histogram** (prima variabile, normale/KDE), `desc-qq-*` **qq** (max 8, normale/detrendizzato). | Standard: raincloud, stem-and-leaf, spread-vs-level, scatter matrix, tail areas, n per gruppo, etichette outlier. | P1: mancano raincloud, stem-and-leaf, spread-level, scatter matrix. |
-| 3 | **Distribution Fit** (`distfit`) | `distfit-probability` **qq**: punti osservati vs quantili teorici, retta di riferimento. | Minitab Individual Distribution Identification, JASP/jamovi, R fitdistrplus, SAS/SPSS: PDF/CDF fittata sovrapposta all’istogramma, P-P plot, confronto tra più famiglie, zoom delle code, KS/AD annotati sul grafico. | P1: manca l’overlay densità/CDF e il confronto tra distribuzioni. |
+| 3 | **Distribution Fit** (`distfit`) | `distfit-probability` **qq** con banda, `distfit-pp` **qq** (P-P), `distfit-density` **line** (densità di tutte le famiglie), `distfit-criteria` **bar** (AIC/BIC affiancati). | Minitab Individual Distribution Identification, JASP/jamovi, R fitdistrplus, SAS/SPSS: PDF/CDF fittata sovrapposta all’istogramma, P-P plot, confronto tra più famiglie, zoom delle code, KS/AD annotati sul grafico. | **P1 chiuso** per P-P, confronto famiglie e criteri. Restano overlay su istogramma e zoom delle code. |
 
 ### Famiglia Compare groups
 
 | # | Procedura | Grafici e oggetti presenti | Gap rispetto ai migliori programmi | Priorità |
 |---|---|---|---|---|
-| 4 | **T-Test** (`ttest`) | Sei definizioni **box** condizionali: one-sample con regola μ e media; Wilcoxon one-sample con μ; indipendente; rank indipendente; appaiato; differenze appaiate con regola 0. Oggetti: scatola, mediana, baffi, cappucci, outlier, punti, media, regola; display notched/violin. | Standard: bar/dot delle medie con IC, paired slope/line, distribuzione delle differenze con densità, forest degli effect size, bootstrap della differenza, assumption plot. | P1: mancano mean plot con IC e paired/difference plot. |
+| 4 | **T-Test** (`ttest`) | Sei definizioni **box** condizionali; `ttest-one-mean`, `ttest-ind-means`, `ttest-dep-mean` **interval** (media o differenza media con IC e regola di riferimento). Oggetti: scatola, mediana, baffi, cappucci, outlier, punti, media, regola; display notched/violin. | Standard: bar/dot delle medie con IC, paired slope/line, distribuzione delle differenze con densità, forest degli effect size, bootstrap della differenza, assumption plot. | **P1 parziale**: aggiunto il mean plot con IC. Restano paired slope/line e forest degli effect size. |
 | 5 | **ANOVA** (`anova`) | `anova-box` **box** (scatola, mediana, baffi, cappucci, outlier, punti; display notched/violin); `anova-means` **bar** (barre, IC, etichette valori); `anova-rank-box` **box** per Kruskal-Wallis. | JASP/jamovi, SPSS GLM, SAS, Stata `marginsplot`, R emmeans: bracket/lettere post-hoc, forest degli effect size, residui vs fitted, Q-Q dei residui, Levene, EMM con IC, n per gruppo. | P1: diagnostica residui e post-hoc sono i gap principali. |
 | 6 | **Factorial ANOVA** (`factorial`) | `factorial-interaction` **line**: medie cellulari, marker; nessuna banda/errore. | JASP/jamovi, SPSS GPL, SAS LSMEANS, Stata `marginsplot`, R emmeans, Minitab: interaction plot con IC/SE, barre delle medie cellulari, simple-effects, residui, post-hoc. | P1: interaction plot senza incertezza e senza diagnostica. |
 | 7 | **ANCOVA** (`ancova`) | `ancova-means` **bar**: medie grezze/aggiustate, IC, etichette, serie/legenda. | JASP/jamovi, SPSS EMM, SAS LSMEANS, Stata `marginsplot`, R emmeans: adjusted means con IC e cappucci, profilo per covariate, interazione, residui. | P1. |
@@ -162,9 +163,9 @@ Criterio: **P0** = controllo esposto che non produce l’oggetto promesso, o gra
 | 5 | **Residual showPoints no-op** | `scatterOnly` ora salta il layer punti se `showPoints` è falso | Togliendo “Punti” restano la linea zero e gli altri oggetti. | **CORRETTO** (test in `layers.test.ts`) | P0 |
 | 6 | **Survival showMedian senza dati** | `survivalLayers` calcola le mediane da `curves` quando `medians` manca (`survivalMedians`) | Le linee mediane compaiono sul punto in cui S(t) attraversa 0.5. | **CORRETTO** (test in `layers.test.ts`, `common.test.ts`) | P0 |
 | 7 | **Scatter pointLabels non raggiungibile** | Feature `pointLabels` esposta quando i punti hanno `label`; il renderer usa `labels` o fallback `points.label` | Il controllo è raggiungibile solo con dati etichettati. | **CORRETTO** (feature + test in `features.test.ts`) | P1 |
-| 8 | **Barre d’errore senza cappucci** | `barLayers` usa solo `rule` verticali | IC/SE/SD sono linee senza terminazioni; i programmi di riferimento usano cappucci o point-range. | `CONFERMATO` (gap visivo) | P1 |
+| 8 | **Barre d’errore senza cappucci** | `barLayers` aggiunge due `tick` ai limiti oltre alla regola verticale | IC/SE/SD ora hanno terminazioni leggibili. | **CORRETTO** (test in `layers.test.ts`) | P1 |
 | 9 | **Line non disegna `rules`** | `lineLayers` ora legge `data.rules` e disegna una regola per riga | Una reference line passata a un line chart compare (usata dalla curva di precisione). | **CORRETTO** (test in `layers.test.ts`) | P1 |
-| 10 | **Q-Q CI non disponibile nei runner** | `QqOptions.showCI` e layer banda; nessun runner produce `data.band` | La feature è nascosta; non c’è envelope di confidenza. | `CONFERMATO` (gap) | P1 |
+| 10 | **Q-Q CI non disponibile nei runner** | `qqBand` produce la banda punto per punto; Descriptive, Regression e Distribution Fit la passano al grafico con `showCI` | La feature ora è raggiungibile e visibile. | **CORRETTO** (test in `common.test.ts`) | P1 |
 | 11 | **Sort barre perso con etichette/error bar** | `barLayers` ripete `sort` sui layer rule/text | Il dominio compilato non torna alfabetico e non emette il warning di sort in conflitto. | **CORRETTO** (test in `layers.test.ts`, `buildSpec.test.ts`) | P0 |
 | 12 | **Interval plot descrittivo con z** | `buildDescriptiveOutput` usa `meanCI` (t, df = n−1) | Con n piccolo l’intervallo coincide con quello della tabella. | **CORRETTO** (test in `chartsCoverage.test.ts`) | P1 |
 | 13 | **Alpha a 2 item senza barre** | Il grafico `alpha-if-deleted` è creato solo con almeno un valore finito | La card vuota non compare; scala a 2 item e item costanti non producono barre fantasma. | **CORRETTO** (test in `multivariate/run.test.ts`) | P1 |
@@ -181,7 +182,7 @@ Sono le voci **1, 3, 4, 5, 6** della tabella difetti: bar sort, heatmap sort, sc
 
 ### P1 — diagnostica e confronti standard
 
-1. **Barre**: grouped/dodged e cappucci (difetti 2 e 8); point-range/dot plot già disponibili.
+1. **Barre**: grouped/dodged e cappucci (difetti 2 e 8) **fatti**; point-range/dot plot già disponibili.
 2. **Regression diagnostics**: **fatto** scale-location, residui vs leverage, Cook, residui parziali; restano forest dei coefficienti e pannello unico.
 3. **Logistic**: **fatto** ROC e calibrazione; restano matrice di confusione/heatmap e forest OR.
 4. **Survival**: **fatti** risk table, mediane, Schoenfeld e baseline; restano p log-rank annotato e CIF/competing risks.

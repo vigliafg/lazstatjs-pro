@@ -296,8 +296,41 @@ export const detrendedQqRows = (points: ChartRow[], reference: ChartRow[]): Char
     .map(row => ({ x: row.x, y: row.y - (intercept + slope * row.x) }));
 };
 
-export const qqReference = (points: ChartRow[]): ChartRow[] => {
-  if (points.length < 2) return [];
+/**
+ * Pointwise normal Q-Q envelope around the reference line. The standard error
+ * of the i-th order statistic is sigma * sqrt(p(1-p)) / (sqrt(n) * f(z)).
+ */
+export const qqBand = (
+  points: ChartRow[],
+  reference: ChartRow[],
+  level = 95
+): ChartRow[] => {
+  const line = reference
+    .map(row => ({ x: Number(row.x), y: Number(row.y) }))
+    .filter(row => Number.isFinite(row.x) && Number.isFinite(row.y));
+  if (line.length < 2 || points.length < 3) return [];
+  const first = line[0];
+  const last = line[line.length - 1];
+  const slope = last.x === first.x ? 0 : (last.y - first.y) / (last.x - first.x);
+  const intercept = first.y - slope * first.x;
+  const sigma = Math.abs(slope);
+  if (!(sigma > 0)) return [];
+  const n = points.length;
+  const zCritical = jStat.normal.inv(1 - (1 - level / 100) / 2, 0, 1);
+  return points.flatMap(row => {
+    const x = Number(row.x);
+    if (!Number.isFinite(x)) return [];
+    const p = Math.min(1 - 1e-6, Math.max(1e-6, jStat.normal.cdf(x, 0, 1)));
+    const density = jStat.normal.pdf(x, 0, 1);
+    if (!(density > 0)) return [];
+    const se = (sigma * Math.sqrt((p * (1 - p)) / n)) / density;
+    if (!Number.isFinite(se)) return [];
+    const fitted = intercept + slope * x;
+    return [{ x, lo: fitted - zCritical * se, hi: fitted + zCritical * se }];
+  });
+};
+
+export const qqReference = (points: ChartRow[]): ChartRow[] => {  if (points.length < 2) return [];
   const xs = points.map(row => Number(row.x));
   const ys = points.map(row => Number(row.y));
   const meanX = jStat.mean(xs);

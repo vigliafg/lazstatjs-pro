@@ -4,7 +4,7 @@ import { regressionTables } from '../../stats/regression';
 import { regressionReport } from '../../stats/report';
 import { calcNormalityTests, calcTheilSen } from '../../stats/kernels';
 import { copy } from '../../stats/reportCopy';
-import { makeChart, boxStats } from '../../charts/kits/common';
+import { makeChart, boxStats, qqBand } from '../../charts/kits/common';
 import type { AnalysisChart, ChartRow } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { RegParams } from '../../io/project';
@@ -394,6 +394,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
 
   const qqPoints = qqRows(olsResids);
   if (qqPoints.length > 0) {
+    const qqLine = qqReference(qqPoints);
     charts.push(
       makeChart({
         id: 'reg-residual-qq',
@@ -401,8 +402,9 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
         title: copy('Q-Q dei residui'),
         subtitle: copy('N = {s1}', { s1: n }),
         note: copy('I punti vicini alla diagonale indicano residui compatibili con la normalità.'),
-        data: { points: qqPoints, reference: qqReference(qqPoints) },
+        data: { points: qqPoints, reference: qqLine, band: qqBand(qqPoints, qqLine, ciLevel) },
         fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Residui osservati') },
+        options: { showCI: true } as never,
       })
     );
   }

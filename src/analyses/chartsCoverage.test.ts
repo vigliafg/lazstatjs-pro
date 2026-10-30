@@ -11,6 +11,8 @@ import { buildMiOutput } from './mi/run';
 import { buildRegressionOutput } from './regression/run';
 import { buildTTestOutput } from './ttest/run';
 import { buildDescriptiveOutput } from './descriptive/run';
+import { buildDistributionFitOutput } from './distfit/run';
+import { DEFAULT_PARAMS } from '../io/project';
 import { meanCI } from '../stats/distributions';
 import type { AnalysisRunResult } from './types';
 import type { ColType, GridData } from '../grid/types';
@@ -157,6 +159,20 @@ test('descriptive interval plot uses the t-based confidence interval', () => {
   assert.ok(Math.abs(Number(rows[0].hi) - expected.hi) < 1e-9);
   // With n = 5 the t critical value (≈2.776) is wider than the normal one (1.96).
   assert.ok(Number(rows[0].lo) < 3 - 1.96 * (Math.sqrt(2.5) / Math.sqrt(5)));
+});
+
+test('distribution fit compiles the P-P, density and criteria charts', () => {
+  const grid: GridData = {
+    cols: numeric(['X']),
+    rows: ['1', '2', '3', '4', '5', '6', '7', '8'].map(value => [value]),
+  };
+  const charts = chartsOf(
+    buildDistributionFitOutput({ grid, params: DEFAULT_PARAMS.distfit, ciLevel: 95 })
+  );
+  assert.deepEqual(
+    charts.map(chart => chart.id),
+    ['distfit-probability', 'distfit-pp', 'distfit-density', 'distfit-criteria']
+  );
 });
 
 test('one-sample t-test draws the test-value rule', () => {

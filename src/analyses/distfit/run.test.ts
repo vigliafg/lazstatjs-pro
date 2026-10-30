@@ -18,6 +18,12 @@ test('distribution-fit builder returns tables, a report and a probability plot',
   if (!('ok' in result) || !result.ok) return;
   assert.ok(result.tables.length > 0);
   assert.ok(result.report);
+  const ids = (result.charts ?? []).map(chart => chart.id);
+  assert.deepEqual(ids, ['distfit-probability', 'distfit-pp', 'distfit-density', 'distfit-criteria']);
+  const density = (result.charts ?? []).find(chart => chart.id === 'distfit-density');
+  assert.ok((density?.data.series ?? []).length > 0);
+  const criteria = (result.charts ?? []).find(chart => chart.id === 'distfit-criteria');
+  assert.ok((criteria?.data.bars ?? []).length >= 2);
 });
 
 test('distribution-fit builder explains why a short variable cannot be fitted', () => {

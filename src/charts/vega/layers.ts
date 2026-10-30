@@ -247,15 +247,14 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
   // Error bars ride on top of the filled bars, otherwise the bar layer hides
   // the confidence interval completely.
   if (errorBars.length > 0) {
+    const errorRows = errorBars.map(({ row, interval }) => ({
+      category: row.category,
+      series: row.series,
+      lo: interval.lo,
+      hi: interval.hi,
+    }));
     layers.push({
-      data: {
-        values: errorBars.map(({ row, interval }) => ({
-          category: row.category,
-          series: row.series,
-          lo: interval.lo,
-          hi: interval.hi,
-        })),
-      },
+      data: { values: errorRows },
       mark: { type: 'rule', color: theme.text, strokeWidth: 1.5 },
       encoding: {
         x: {
@@ -268,6 +267,18 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
         y2: { field: 'hi' },
         ...offset,
       },
+    });
+    // Caps make the interval readable when it is short or the bar is tall.
+    (['lo', 'hi'] as const).forEach(key => {
+      layers.push({
+        data: { values: errorRows },
+        mark: { type: 'tick', color: theme.text, size: 9 },
+        encoding: {
+          x: { field: 'category', type: 'nominal', sort: orderedCategories },
+          y: { field: key, type: 'quantitative' },
+          ...offset,
+        },
+      });
     });
   }
   if (options.valueLabels) {

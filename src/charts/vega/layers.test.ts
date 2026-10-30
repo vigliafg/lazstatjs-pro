@@ -45,8 +45,10 @@ test('bar sort is repeated on the error-bar and value-label layers', () => {
   const categoryX = layers
     .map(layer => layer.encoding?.x as { field?: string; sort?: unknown } | undefined)
     .filter(x => x?.field === 'category');
-  assert.equal(categoryX.length, 3);
+  assert.equal(categoryX.length, 5);
   for (const x of categoryX) assert.deepEqual(x?.sort, ['B', 'A']);
+  // Two caps plus the central rule: the interval must be readable when short.
+  assert.equal(layers.filter(layer => layer.mark?.type === 'tick').length, 2);
 });
 
 test('heatmap sort orders both axes by their marginal mean', () => {
@@ -150,7 +152,7 @@ test('interval, dot and ECDF layers expose their marks and options', () => {
     data: { intervals: [
       { category: 'A', estimate: 2, lo: 1, hi: 3 },
       { category: 'B', estimate: 5, lo: 4, hi: 6 },
-    ] },
+    ], rules: [{ value: 4.5 }] },
   });
   const intervalOptions = { ...factoryOptions('interval'), valueLabels: true, sort: 'asc' } as Extract<ChartOptions, { kind: 'interval' }>;
   const intervalLayersResult = intervalLayers(interval, intervalOptions);

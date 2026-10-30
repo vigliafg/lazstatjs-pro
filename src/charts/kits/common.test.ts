@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { boxRows, boxStats, confidenceEllipse, detrendedQqRows, kernelDensity, survivalMedians, violinRows } from './common';
+import { boxRows, boxStats, confidenceEllipse, detrendedQqRows, kernelDensity, qqBand, survivalMedians, violinRows } from './common';
 
 const values = (start: number, step: number, count: number): number[] =>
   Array.from({ length: count }, (_, index) => start + index * step);
@@ -16,6 +16,20 @@ test('boxStats counts only finite values and exposes n', () => {
 test('boxRows carries n into every summary row', () => {
   const rows = boxRows([{ category: 'A', values: values(1, 1, 5) }]);
   assert.equal(rows.summary[0].n, 5);
+});
+
+test('qqBand widens towards the tails and contains the reference line', () => {
+  const points = values(-2, 0.5, 9).map(x => ({ x, y: 2 * x + 1 }));
+  const band = qqBand(points, [{ x: -2, y: -3 }, { x: 2, y: 5 }], 95);
+  assert.equal(band.length, points.length);
+  const width = (row: (typeof band)[number]) => Number(row.hi) - Number(row.lo);
+  assert.ok(width(band[0]) > width(band[4]));
+  assert.ok(
+    band.every(
+      row => Number(row.lo) < 2 * Number(row.x) + 1 && Number(row.hi) > 2 * Number(row.x) + 1
+    )
+  );
+  assert.deepEqual(qqBand(points.slice(0, 2), [{ x: -2, y: -3 }, { x: 2, y: 5 }]), []);
 });
 
 test('violinRows builds one symmetric density per group, in category and y order', () => {
