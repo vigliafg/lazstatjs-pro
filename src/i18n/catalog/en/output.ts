@@ -118,6 +118,7 @@ export const outputMessages = {
   'import.empty': 'The file is empty',
   'import.readError': 'Could not read the file',
   'project.saved': 'Project saved as .lzs',
+  'project.savedAs': 'Project saved as {name}',
   'project.readError': 'Could not read the project',
   'project.loaded': 'Loaded',
   'project.rowsAnd': 'rows and',

@@ -120,11 +120,11 @@ test('asks before replacing the dataset and resets the view filter', async ({ pa
   await page.getByPlaceholder('Value').fill('123');
 
   page.once('dialog', dialog => dialog.dismiss());
-  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await page.getByRole('button', { name: 'New project', exact: true }).click();
   await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('123');
 
   page.once('dialog', dialog => dialog.accept());
-  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await page.getByRole('button', { name: 'New project', exact: true }).click();
   await expect(page.locator('input[data-cell="0-0"]')).toHaveValue('');
   await expect(page.getByPlaceholder('Value')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Undo' })).toBeDisabled();
@@ -200,7 +200,7 @@ test('keeps the data view state across tab switches', async ({ page, isMobile })
   await expect(page.getByText('Variable', { exact: true })).toBeVisible();
 
   page.once('dialog', dialog => dialog.accept());
-  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await page.getByRole('button', { name: 'New project', exact: true }).click();
   await expect(page.locator('td[data-selected]')).toHaveCount(0);
 });
 

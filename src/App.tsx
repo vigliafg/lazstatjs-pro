@@ -413,6 +413,7 @@ export default function App() {
     projectInputRef,
     lastAutosave,
     saveProjectFile,
+    saveProjectFileAs,
     openProjectFile,
     restoreBackup,
     recentProjects,
@@ -556,6 +557,7 @@ export default function App() {
             exportCsv={exportCsv}
             importCsv={importCsv}
             saveProjectFile={saveProjectFile}
+            saveProjectFileAs={saveProjectFileAs}
             openProjectFile={openProjectFile}
             lastAutosave={lastAutosave}
             showToast={showToast}
@@ -648,6 +650,7 @@ export default function App() {
             setIoPrefs={setIoPrefs}
             onNewDataset={newDataset}
             onSaveProject={saveProjectFile}
+            onSaveProjectAs={saveProjectFileAs}
             onOpenProject={() => projectInputRef.current?.click()}
             onExport={() => setShowExport(true)}
             onRestoreBackup={() => void restoreBackup()}

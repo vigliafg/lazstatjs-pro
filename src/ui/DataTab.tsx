@@ -55,6 +55,7 @@ export interface DataTabProps {
   exportCsv: () => void;
   importCsv: (file: File) => Promise<void>;
   saveProjectFile: () => void;
+  saveProjectFileAs: () => void;
   openProjectFile: (file: File) => Promise<void>;
   lastAutosave: string | null;
   showToast: (title: string, msg: string, type?: 'ok' | 'warn' | 'error') => void;
@@ -114,6 +115,7 @@ export const DataTab = ({
   exportCsv,
   importCsv,
   saveProjectFile,
+  saveProjectFileAs,
   openProjectFile,
   lastAutosave,
   showToast,
@@ -175,6 +177,14 @@ export const DataTab = ({
       title={t('data.saveHint')}
     >
       {t('data.saveProject')}
+    </button>
+    <button
+      className="tb-btn"
+      onClick={saveProjectFileAs}
+      title={t('data.saveAsHint')}
+      data-project-save-as
+    >
+      {t('data.saveAs')}
     </button>
     <input
       ref={projectInputRef}

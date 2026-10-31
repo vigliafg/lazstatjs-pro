@@ -261,7 +261,7 @@ test.describe('data grid — transform operations', () => {
     await operation(page, 'sort').click();
     await expect(panel(page, 'Sort')).toBeVisible();
     page.once('dialog', (dialog) => dialog.accept());
-    await page.getByRole('button', { name: 'New', exact: true }).click();
+    await page.getByRole('button', { name: 'New project', exact: true }).click();
     await expect(panel(page, 'Sort')).toHaveCount(0);
   });
 });
@@ -391,5 +391,20 @@ test.describe('data grid — grouping variables', () => {
     await page.getByLabel(/Type.*Age/).selectOption('id');
     await page.getByRole('button', { name: 'Analysis', exact: true }).click();
     await expect(page.getByLabel('ANOVA group variable').locator('option', { hasText: 'Age' })).toHaveCount(0);
+  });
+});
+
+test.describe('project files', () => {
+  test.skip(({ isMobile }) => isMobile, 'file download is exercised on desktop');
+
+  test('New is labelled New project and Save as uses the chosen file name', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('button', { name: 'New project', exact: true })).toBeVisible();
+
+    page.once('dialog', dialog => dialog.accept('studio-2026'));
+    const pending = page.waitForEvent('download');
+    await page.locator('[data-project-save-as]').click();
+    const download = await pending;
+    expect(download.suggestedFilename()).toBe('studio-2026.lzs');
   });
 });

@@ -120,6 +120,7 @@ export const outputMessages: Record<keyof typeof enOutput, string> = {
   'import.empty': 'Le fichier est vide',
   'import.readError': 'Impossible de lire le fichier',
   'project.saved': 'Projet enregistré au format .lzs',
+  'project.savedAs': 'Projet enregistré sous {name}',
   'project.readError': 'Impossible de lire le projet',
   'project.loaded': 'Chargé',
   'project.rowsAnd': 'lignes et',

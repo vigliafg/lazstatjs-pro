@@ -9,13 +9,16 @@ export const dataMessages: Record<keyof typeof enData, string> = {
   'data.groupTools': 'Werkzeuge',
   'data.groupView': 'Ansicht',
   'grid.addLevel': 'Stufe hinzufügen',
-  'data.new': 'Neu',
+  'data.new': 'Neues Projekt',
   'data.import': 'Importieren',
   'data.export': 'Exportieren',
   'data.saveProject': 'Projekt speichern',
   'data.openProject': 'Projekt öffnen',
   'data.saveHint':
     'Raster, Einstellungen und Analyseparameter als .lzs-Projekt speichern',
+  'data.saveAs': 'Speichern unter…',
+  'data.saveAsHint': 'Eine Kopie des Projekts unter einem anderen Namen speichern',
+  'data.saveAsPrompt': 'Projekt speichern unter (Dateiname):',
   'data.openHint': 'Ein .lzs-Projekt öffnen und die aktuelle Sitzung ersetzen',
   'data.autosave': 'Automatisches Speichern',
   'data.autosaveHint':

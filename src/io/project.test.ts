@@ -9,6 +9,7 @@ import {
   createProjectSnapshot,
   loadAutosaveProject,
   parseGrid,
+  normalizeProjectFileName,
   parseProject,
   saveAutosaveProject,
   serializeProject,
@@ -56,6 +57,16 @@ const makeSnapshot = () =>
     },
     '2026-10-19T10:00:00.000Z'
   );
+
+describe('project file names', () => {
+  it('appends the .lzs extension and keeps a valid name', () => {
+    assert.equal(normalizeProjectFileName('studio 2026'), 'studio 2026.lzs');
+    assert.equal(normalizeProjectFileName('report.lzs'), 'report.lzs');
+    assert.equal(normalizeProjectFileName('REPORT.LZS'), 'REPORT.LZS');
+    assert.equal(normalizeProjectFileName('a/b:c'), 'a-b-c.lzs');
+    assert.equal(normalizeProjectFileName('   '), 'lazstats-project.lzs');
+  });
+});
 
 describe('project snapshot roundtrip', () => {
   it('migrates a version 1 project to the current schema', () => {

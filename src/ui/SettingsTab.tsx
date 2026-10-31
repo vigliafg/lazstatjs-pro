@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { Check, Clock3, FileDown, FilePlus2, FolderOpen, Save, Trash2 } from 'lucide-react';
+import { Check, Clock3, FileDown, FilePlus2, FolderOpen, Save, SaveAll, Trash2 } from 'lucide-react';
 import { savePrefs, type IoPreferences } from '../io/prefs';
 import { ChartDefaultsEditor } from '../components/charts/ChartDefaultsEditor';
 import { ChartPresetList } from '../components/charts/ChartPresetList';
@@ -23,6 +23,7 @@ export interface SettingsTabProps {
   setIoPrefs: Dispatch<SetStateAction<IoPreferences>>;
   onNewDataset: () => void;
   onSaveProject: () => void;
+  onSaveProjectAs: () => void;
   onOpenProject: () => void;
   onExport: () => void;
   onRestoreBackup: () => void;
@@ -55,6 +56,7 @@ export const SettingsTab = ({
   setIoPrefs,
   onNewDataset,
   onSaveProject,
+  onSaveProjectAs,
   onOpenProject,
   onExport,
   onRestoreBackup,
@@ -92,6 +94,15 @@ export const SettingsTab = ({
             <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onSaveProject}>
               <Save className="h-3 w-3" />
               {t('settings.saveProject')}
+            </button>
+            <button
+              type="button"
+              className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]"
+              onClick={onSaveProjectAs}
+              title={t('data.saveAsHint')}
+            >
+              <SaveAll className="h-3 w-3" />
+              {t('data.saveAs')}
             </button>
             <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onExport}>
               <FileDown className="h-3 w-3" />

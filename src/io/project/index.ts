@@ -62,6 +62,19 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
 
 export const serializeProject = (snapshot: ProjectSnapshot): string => JSON.stringify(snapshot, null, 2);
 
+/** Normalise a user-supplied "Save as" name into a safe `.lzs` file name. */
+export const normalizeProjectFileName = (value: string): string => {
+  const base = value
+    .trim()
+    .replace(/[\\/:*?"<>|]+/g, '-')
+    .replace(/\s+/g, ' ')
+    .replace(/^\.+/, '')
+    .slice(0, 120)
+    .trim();
+  if (!base) return 'lazstats-project.lzs';
+  return /\.lzs$/i.test(base) ? base : `${base}.lzs`;
+};
+
 /** Throws a user-facing Error when the file is not a valid LazStats project. */
 export const parseProject = (text: string): ProjectSnapshot => {
   let raw: unknown;

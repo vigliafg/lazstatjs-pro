@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   createProjectSnapshot,
+  normalizeProjectFileName,
   parseProject,
   saveAutosaveText,
   serializeProject,
@@ -152,13 +153,26 @@ export const useProjectSession = ({
     }
   };
 
-  const saveProjectFile = () => {
+  const downloadProject = (fileName: string) => {
     downloadText(
       serializeProject(buildProject()),
-      'lazstats-project.lzs',
+      fileName,
       'application/json;charset=utf-8'
     );
+  };
+
+  const saveProjectFile = () => {
+    downloadProject('lazstats-project.lzs');
     showToast(t('toast.project'), t('project.saved'), 'ok');
+  };
+
+  const saveProjectFileAs = () => {
+    if (typeof window === 'undefined') return;
+    const answer = window.prompt(t('data.saveAsPrompt'), 'lazstats-project.lzs');
+    if (answer === null) return;
+    const fileName = normalizeProjectFileName(answer);
+    downloadProject(fileName);
+    showToast(t('toast.project'), t('project.savedAs', { name: fileName }), 'ok');
   };
 
   const openProjectFile = async (file: File) => {
@@ -179,6 +193,7 @@ export const useProjectSession = ({
     projectInputRef,
     lastAutosave,
     saveProjectFile,
+    saveProjectFileAs,
     openProjectFile,
     restoreBackup,
     recentProjects,

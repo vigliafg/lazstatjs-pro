@@ -118,6 +118,7 @@ export const outputMessages = {
   'import.empty': 'O ficheiro está vazio',
   'import.readError': 'Não foi possível ler o ficheiro',
   'project.saved': 'Projeto guardado como .lzs',
+  'project.savedAs': 'Projeto guardado como {name}',
   'project.readError': 'Não foi possível ler o projeto',
   'project.loaded': 'Carregado',
   'project.rowsAnd': 'linhas e',

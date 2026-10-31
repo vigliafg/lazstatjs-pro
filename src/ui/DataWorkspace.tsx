@@ -16,6 +16,7 @@ interface Props {
   exportCsv: () => void;
   importCsv: (file: File) => Promise<void>;
   saveProjectFile: () => void;
+  saveProjectFileAs: () => void;
   openProjectFile: (file: File) => Promise<void>;
   lastAutosave: string | null;
   showToast: (title: string, message: string, type?: 'ok' | 'warn' | 'error') => void;
@@ -134,6 +135,7 @@ export const DataWorkspace = (p: Props) => {
       exportCsv={p.exportCsv}
       importCsv={p.importCsv}
       saveProjectFile={p.saveProjectFile}
+      saveProjectFileAs={p.saveProjectFileAs}
       openProjectFile={p.openProjectFile}
       lastAutosave={p.lastAutosave}
       showToast={p.showToast}
