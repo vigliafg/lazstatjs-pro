@@ -11,7 +11,7 @@ const chapters: HelpChapter[] = [
   { id: 'data', title: 'Les données', blurb: 'Importer, modifier, nettoyer et donner des noms lisibles aux groupes.' },
   { id: 'analysis', title: 'Analyses', blurb: 'Choisir la procédure, la configurer, la relancer.' },
   { id: 'procedures', title: 'Les procédures, une par une', blurb: 'Un tutoriel avec un exemple et une lecture avancée en langage simple.' },
-  { id: 'output', title: 'Résultats et projet', blurb: 'Lire la sortie, l’exporter, enregistrer et rouvrir votre travail.' },
+  { id: 'output', title: 'Résultats et projet', blurb: 'Lire la sortie, l’exporter, enregistrer et rouvrir votre travail, et personnaliser l’apparence.' },
 ];
 
 export const frBook: HelpBook = {

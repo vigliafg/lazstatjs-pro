@@ -33,7 +33,7 @@ const chapters: HelpChapter[] = [
     id: "output",
     title: "Ergebnisse und Projekt",
     blurb:
-      "Die Ausgabe lesen, exportieren, die Arbeit speichern und erneut öffnen.",
+      "Die Ausgabe lesen, exportieren, die Arbeit speichern und erneut öffnen sowie das Erscheinungsbild anpassen.",
   },
 ];
 

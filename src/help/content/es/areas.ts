@@ -264,18 +264,19 @@ export const areaTopics: HelpTopic[] = [
     id: 'output-console',
     area: 'output',
     title: 'Leer y exportar resultados',
-    summary: 'Tarjetas, esquema, copia, gráficos PNG, informes HTML/Word y libros de Excel.',
+    summary: 'Tarjetas, esquema, anotaciones, preajustes de gráficos, gráficos PNG, informes HTML/Word y libros de Excel.',
     tutorial: {
       goal: 'Sacar los resultados en un formato que puedas usar.',
       dataset: 'score-groups.csv',
       steps: [
         'Ejecuta un análisis y mira la tarjeta: primero las tablas, luego el informe de lectura y después los gráficos editables.',
-        'Haz clic en un gráfico para abrir el editor: cambia el tema, los colores y las opciones de la procedencia, y pulsa Hecho.',
+        'Haz clic en un gráfico para abrir el editor: cambia el tema, los colores, el preajuste y las opciones de la procedencia, y pulsa Hecho.',
+        'Pulsa Anotaciones para añadir texto, líneas, flechas o rectángulos sobre el gráfico; arrastra para mover, usa las asas para redimensionar y deshaz con Ctrl/⌘+Z.',
         'Abre el Esquema para saltar a una tarjeta o contráela con la flecha.',
         'Pulsa Informe para descargar un archivo HTML imprimible, o Word para uno editable.',
         'Usa XLSX para obtener datos y tablas en un libro; Gráficos descarga los archivos PNG.',
       ],
-      expected: 'Los archivos descargados contienen los mismos números que se ven en pantalla, con títulos y cabeceras coherentes.',
+      expected: 'Los archivos descargados contienen los mismos números y las mismas anotaciones que se ven en pantalla, con títulos y cabeceras coherentes.',
     },
     advanced: {
       whenToUse: [
@@ -286,14 +287,19 @@ export const areaTopics: HelpTopic[] = [
         '«obsoleto» significa que los datos cambiaron después de la ejecución: vuelve a ejecutar antes de exportar.',
         'Los gráficos siguen siendo editables tras recargar; las tarjetas guardadas con el motor anterior son estáticas: vuelve a ejecutarlas para obtener un gráfico editable.',
         'Ajustes → Gráficos define el estilo predeterminado de los gráficos futuros; las tarjetas existentes no cambian.',
+        'Las anotaciones usan coordenadas relativas al área del gráfico (0–1), así que siguen el redimensionado y la exportación dentro del mismo SVG de Vega.',
+        'Cada gesto sobre las anotaciones es un paso de deshacer; en móvil el editor del gráfico se divide en las pestañas Gráfico, Propiedades y Anotaciones.',
+        'Los preajustes con nombre están ligados al proyecto y aparecen en el selector Preajuste de cada editor de gráficos del proyecto.',
       ],
       pitfalls: [
         'Exportar una tarjeta obsoleta produce un informe formalmente correcto pero desactualizado.',
         'El filtro de filas «solo vista» no cambia los números que usan los análisis.',
+        'Las anotaciones pertenecen a una sola tarjeta: un preajuste nunca las copia a otro gráfico.',
       ],
       glossary: [
         { term: 'Informe de lectura', definition: 'El comentario en lenguaje llano que cierra cada análisis.' },
         { term: 'Libro', definition: 'El archivo .xlsx con varias hojas, una por tabla.' },
+        { term: 'Anotación', definition: 'Texto, línea, flecha o rectángulo dibujado sobre un gráfico y guardado con él.' },
       ],
     },
     seeAlso: ['analysis-workflow', 'projects'],
@@ -302,17 +308,18 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Guardar y reabrir un proyecto',
-    summary: 'Archivos .lzs, guardado automático y cómo restaurar una copia de seguridad.',
+    summary: 'Nuevo proyecto, archivos .lzs, Guardar como, guardado automático y cómo restaurar una copia de seguridad.',
     tutorial: {
       goal: 'Conservar datos, configuración y parámetros para continuar mañana.',
       dataset: 'score-groups.csv',
       steps: [
-        'Desde DATOS pulsa Guardar proyecto y pon nombre al archivo .lzs.',
+        'Desde DATOS pulsa Nuevo proyecto para empezar de cero: se borran el conjunto de datos, los parámetros y la salida, mientras que la configuración y las preferencias se mantienen.',
+        'Pulsa Guardar proyecto para escribir el archivo .lzs; Guardar como… pide un nombre nuevo y deja intacto el archivo actual.',
+        'Pulsa Abrir proyecto y elige un archivo para sustituir la sesión actual.',
         'Recarga la página: el guardado automático restaura la sesión desde el navegador.',
-        'Pulsa Abrir proyecto y elige el archivo para sustituir la sesión actual.',
         'Desde Ajustes puedes restaurar una copia de seguridad de IndexedDB si el guardado automático ha fallado.',
       ],
-      expected: 'Al abrir vuelves a encontrar la cuadrícula, los niveles, los parámetros y las tarjetas de salida guardadas.',
+      expected: 'Al abrir vuelves a encontrar la cuadrícula, los niveles, los parámetros, las tarjetas de salida, los temas personalizados y los preajustes de gráficos.',
     },
     advanced: {
       whenToUse: [
@@ -321,17 +328,67 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         'El proyecto también guarda instantáneas de la salida: legibles pero no recalculables.',
+        'Los temas personalizados y los preajustes de gráficos forman parte del proyecto y viajan en el archivo .lzs.',
         'Los campos añadidos en versiones más recientes son opcionales: los archivos antiguos se abren con valores predeterminados.',
       ],
       pitfalls: [
         'El guardado automático vive en el navegador: borrar los datos del sitio lo elimina.',
         'Un archivo .lzs no es una copia de seguridad de los datos originales: conserva también el CSV de origen.',
+        'Nuevo proyecto borra las tarjetas de salida: expórtalas o guárdalas antes si aún las necesitas.',
+        'Guardar como… crea una copia; los guardados posteriores usan el nombre elegido en el aviso.',
       ],
       glossary: [
         { term: '.lzs', definition: 'El formato del proyecto: JSON con datos, configuración y parámetros.' },
         { term: 'Copia de seguridad de IndexedDB', definition: 'Una copia local de seguridad que usa el guardado automático.' },
+        { term: 'Guardar como', definition: 'Comando que escribe una copia del proyecto con un nuevo nombre .lzs.' },
       ],
     },
-    seeAlso: ['data-import', 'output-console'],
+    seeAlso: ['data-import', 'output-console', 'appearance'],
+  },
+  {
+    id: 'appearance',
+    area: 'output',
+    title: 'Temas, preajustes de gráficos y el creador de temas',
+    summary: 'Diez temas integrados, temas personalizados del proyecto con vista previa en vivo y preajustes de gráficos con nombre.',
+    tutorial: {
+      goal: 'Crear un tema de proyecto y un preajuste de gráfico, y luego reutilizarlos.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Abre AJUSTES → Apariencia y elige uno de los cinco temas oscuros o cinco claros integrados; el selector de la cabecera lo aplica al instante.',
+        'Pulsa Crear tema: ponle nombre, elige el tema base y el modo, edita los colores y sigue la vista previa en vivo.',
+        'Revisa el panel de contraste WCAG y pulsa Guardar tema: entra en Temas personalizados, queda seleccionado y permanece en el proyecto.',
+        'Ejecuta un análisis, abre un gráfico y usa el selector Preajuste: elige Predeterminado, Mínimo, Impresión clara o uno de tus preajustes.',
+        'Pulsa Guardar preajuste para memorizar el estilo compartido actual; después renombra o elimina preajustes desde AJUSTES → Gráficos.',
+      ],
+      expected: 'El nuevo tema se aplica a toda la interfaz y el preajuste aparece en cada editor de gráficos del proyecto.',
+    },
+    advanced: {
+      whenToUse: [
+        'Cuando necesitas una paleta legible para una salida concreta, por ejemplo una revista, un proyector o la impresión.',
+        'Cuando varios gráficos deben compartir un mismo estilo sin repetir las mismas elecciones.',
+      ],
+      whenNotToUse: [
+        'No uses un preajuste para copiar anotaciones o datos: solo contiene las opciones de estilo compartidas.',
+        'No esperes que los temas personalizados cambien fuentes, espaciados ni la hoja de estilo de impresión del informe: el creador solo edita colores.',
+      ],
+      reading: [
+        'Los temas personalizados están ligados al proyecto, con un máximo de 20, y aparecen en un grupo propio del selector de la cabecera.',
+        'La vista previa del creador está limitada a su panel: el resto de la aplicación mantiene el tema actual hasta que guardas.',
+        'Las comprobaciones de contraste cubren 11 parejas, incluidas texto sobre superficies, acentos, texto de gráficos y el peor color de la paleta sobre el fondo del gráfico.',
+        'Los preajustes de gráficos guardan las 20 opciones de estilo compartidas y nunca las anotaciones por tarjeta ni los ajustes específicos de la procedencia.',
+      ],
+      pitfalls: [
+        'Guardar un tema por debajo del contraste recomendado pide confirmación: lee las insignias AA/AAA antes de usarlo en un informe.',
+        'Eliminar el tema personalizado activo vuelve al tema predeterminado; los gráficos conservan sus propias opciones.',
+        'Aplicar un preajuste sustituye el estilo compartido de ese gráfico; las anotaciones y las opciones de la procedencia se mantienen.',
+        'Renombrar o eliminar un preajuste en Ajustes actualiza el proyecto pero no reescribe las tarjetas que ya lo habían usado.',
+      ],
+      glossary: [
+        { term: 'Tema personalizado', definition: 'Paleta de la interfaz ligada al proyecto y creada a partir de un tema integrado.' },
+        { term: 'Preajuste de gráfico', definition: 'Conjunto con nombre de opciones de estilo compartidas, reutilizable entre tarjetas.' },
+        { term: 'Contraste WCAG', definition: 'Relación entre el color del texto y el del fondo, usada para comprobar la legibilidad.' },
+      ],
+    },
+    seeAlso: ['projects', 'output-console'],
   },
 ];

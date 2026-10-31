@@ -43,6 +43,7 @@ export const TOPIC_ORDER = [
   'resampling',
   'output-console',
   'projects',
+  'appearance',
 ] as const;
 
 export const orderTopics = <T extends { id: string }>(topics: T[]): T[] => {

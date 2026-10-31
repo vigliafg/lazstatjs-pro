@@ -11,7 +11,7 @@ const chapters: HelpChapter[] = [
   { id: 'data', title: 'Los datos', blurb: 'Importar, editar, limpiar y dar nombres legibles a los grupos.' },
   { id: 'analysis', title: 'Los análisis', blurb: 'Elegir el procedimiento, configurarlo, volver a ejecutarlo.' },
   { id: 'procedures', title: 'Los procedimientos, uno por uno', blurb: 'Un tutorial con ejemplo y una lectura avanzada en palabras sencillas.' },
-  { id: 'output', title: 'Resultados y proyecto', blurb: 'Leer la salida, exportarla, guardar y reabrir el trabajo.' },
+  { id: 'output', title: 'Resultados y proyecto', blurb: 'Leer la salida, exportarla, guardar y reabrir el trabajo y personalizar el aspecto.' },
 ];
 
 export const esBook: HelpBook = {

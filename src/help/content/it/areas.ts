@@ -268,18 +268,19 @@ export const areaTopics: HelpTopic[] = [
     id: 'output-console',
     area: 'output',
     title: 'Leggere ed esportare i risultati',
-    summary: 'Schede, indice, copia, grafici PNG, report HTML/Word e cartella Excel.',
+    summary: 'Schede, indice, annotazioni, preset grafici, grafici PNG, report HTML/Word e cartella Excel.',
     tutorial: {
       goal: 'Portare fuori i risultati in un formato utilizzabile.',
       dataset: 'score-groups.csv',
       steps: [
         'Esegui un’analisi e osserva la scheda: tabelle, poi il Report di lettura, poi i grafici modificabili.',
-        'Clicca un grafico per aprire l’editor: cambia tema, colori e opzioni della procedura, poi premi Fatto.',
+        'Clicca un grafico per aprire l’editor: cambia tema, colori, preset e opzioni della procedura, poi premi Fatto.',
+        'Premi Annotazioni per aggiungere testo, linee, frecce o rettangoli sul grafico; trascina per spostare, usa le maniglie per ridimensionare e annulla con Ctrl/⌘+Z.',
         'Apri l’Indice per saltare a una scheda o comprimerla con la freccia.',
         'Premi Report per scaricare un HTML stampabile, o Word per un file modificabile.',
         'Usa XLSX per avere dataset e tabelle in una cartella di lavoro; Grafici scarica i PNG.',
       ],
-      expected: 'I file scaricati contengono gli stessi numeri mostrati a schermo, con titoli e intestazioni coerenti.',
+      expected: 'I file scaricati contengono gli stessi numeri e le stesse annotazioni mostrati a schermo, con titoli e intestazioni coerenti.',
     },
     advanced: {
       whenToUse: [
@@ -290,14 +291,19 @@ export const areaTopics: HelpTopic[] = [
         '«obsoleto» indica che i dati sono cambiati dopo l’esecuzione: riesegui prima di esportare.',
         'I grafici restano modificabili dopo il reload; le schede salvate con il vecchio motore sono statiche: rilanciale per ottenere un grafico modificabile.',
         'Impostazioni → Grafici imposta lo stile predefinito dei grafici futuri; le schede esistenti non cambiano.',
+        'Le annotazioni usano coordinate relative all’area del grafico (0–1), quindi seguono ridimensionamento ed export nello stesso SVG di Vega.',
+        'Ogni gesto sulle annotazioni è un passo di annulla; su mobile l’editor del grafico si divide nei tab Grafico, Proprietà e Annotazioni.',
+        'I preset con nome sono legati al progetto e compaiono nel selettore Preset di ogni editor grafico del progetto.',
       ],
       pitfalls: [
         'Esportare una scheda obsoleta produce un report formalmente corretto ma non aggiornato.',
         'Il filtro righe «solo vista» non cambia i numeri esportati delle analisi.',
+        'Le annotazioni appartengono a una singola scheda: un preset non le copia su un altro grafico.',
       ],
       glossary: [
         { term: 'Report di lettura', definition: 'Il commento in parole semplici che chiude ogni analisi.' },
         { term: 'Cartella di lavoro', definition: 'Il file .xlsx con più fogli, uno per tabella.' },
+        { term: 'Annotazione', definition: 'Testo, linea, freccia o rettangolo disegnato sopra un grafico e salvato con esso.' },
       ],
     },
     seeAlso: ['analysis-workflow', 'projects'],
@@ -306,17 +312,18 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Salvare e riaprire un progetto',
-    summary: 'File .lzs, salvataggio automatico e ripristino di un backup.',
+    summary: 'Nuovo progetto, file .lzs, Salva con nome, salvataggio automatico e ripristino di un backup.',
     tutorial: {
       goal: 'Conservare dati, impostazioni e parametri per riprendere domani.',
       dataset: 'score-groups.csv',
       steps: [
-        'Da DATI premi Salva progetto e assegna un nome al file .lzs.',
-        'Chiudi o ricarica la pagina: il salvataggio automatico ripristina la sessione nel browser.',
-        'Premi Apri progetto e scegli il file per sostituire la sessione corrente.',
+        'Da DATI premi Nuovo progetto per partire da zero: dataset, parametri e output vengono azzerati, mentre impostazioni e preferenze restano.',
+        'Premi Salva progetto per scrivere il file .lzs; Salva con nome… chiede un nuovo nome e lascia invariato il file corrente.',
+        'Premi Apri progetto e scegli un file per sostituire la sessione corrente.',
+        'Ricarica la pagina: il salvataggio automatico ripristina la sessione dal browser.',
         'Da Impostazioni puoi ripristinare un backup IndexedDB se il salvataggio automatico è fallito.',
       ],
-      expected: 'Dopo l’apertura ritrovi griglia, livelli, parametri e le schede di output salvate.',
+      expected: 'Dopo l’apertura ritrovi griglia, livelli, parametri, schede di output, temi personalizzati e preset grafici.',
     },
     advanced: {
       whenToUse: [
@@ -325,17 +332,67 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         'Il progetto contiene anche gli snapshot dell’output: restano leggibili ma non ricalcolabili.',
+        'I temi personalizzati e i preset grafici sono dentro il progetto e viaggiano nel file .lzs.',
         'I campi aggiunti nelle versioni nuove sono opzionali: i file vecchi si aprono con i default.',
       ],
       pitfalls: [
         'Il salvataggio automatico vive nel browser: cancellare i dati del sito lo elimina.',
         'Un file .lzs non è un backup dei dati originali: conserva anche il CSV di partenza.',
+        'Nuovo progetto azzera le schede di output: esportale o salvale prima, se ti servono ancora.',
+        'Salva con nome… crea una copia; i salvataggi successivi usano il nome scelto nel prompt.',
       ],
       glossary: [
         { term: '.lzs', definition: 'Formato di progetto del programma: JSON con dati, impostazioni e parametri.' },
         { term: 'Backup IndexedDB', definition: 'Copia locale usata come rete di sicurezza dal salvataggio automatico.' },
+        { term: 'Salva con nome', definition: 'Comando che scrive una copia del progetto con un nuovo nome .lzs.' },
       ],
     },
-    seeAlso: ['data-import', 'output-console'],
+    seeAlso: ['data-import', 'output-console', 'appearance'],
+  },
+  {
+    id: 'appearance',
+    area: 'output',
+    title: 'Temi, preset grafici e theme creator',
+    summary: 'Dieci temi incorporati, temi personalizzati del progetto con anteprima live e preset grafici con nome.',
+    tutorial: {
+      goal: 'Creare un tema di progetto e un preset grafico, poi riutilizzarli.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Apri IMPOSTAZIONI → Aspetto e scegli uno dei cinque temi scuri o cinque chiari incorporati; il selettore nell’Header lo applica subito.',
+        'Premi Crea tema: assegna un nome, scegli tema di base e modalità, modifica i colori e segui l’anteprima live.',
+        'Controlla il pannello Contrasto WCAG, poi premi Salva tema: entra in Temi personalizzati, viene selezionato e resta nel progetto.',
+        'Esegui un’analisi, apri un grafico e usa il selettore Preset: scegli Predefinito, Minimale, Stampa chiara o uno dei tuoi preset.',
+        'Premi Salva preset per memorizzare lo stile condiviso corrente, poi rinomina o elimina i preset da IMPOSTAZIONI → Grafici.',
+      ],
+      expected: 'Il nuovo tema si applica a tutta l’interfaccia e il preset compare in ogni editor grafico del progetto.',
+    },
+    advanced: {
+      whenToUse: [
+        'Quando serve una palette leggibile per un output specifico, per esempio una rivista, un proiettore o la stampa.',
+        'Quando più grafici devono condividere lo stesso stile senza ripetere le stesse scelte.',
+      ],
+      whenNotToUse: [
+        'Non usare un preset per copiare annotazioni o dati: contiene solo le opzioni di stile condivise.',
+        'Non aspettarti che i temi personalizzati cambino font, spaziature o il CSS di stampa del report: il creator modifica solo i colori.',
+      ],
+      reading: [
+        'I temi personalizzati sono legati al progetto, al massimo 20, e compaiono in un gruppo dedicato del selettore nell’Header.',
+        'L’anteprima del theme creator è circoscritta al suo pannello: il resto dell’applicazione mantiene il tema corrente finché non salvi.',
+        'I controlli di contrasto coprono 11 coppie, tra cui testo su superfici, accenti, testo dei grafici e il colore peggiore della palette sullo sfondo del grafico.',
+        'I preset grafici memorizzano le 20 opzioni di stile condivise e mai le annotazioni per scheda o le impostazioni specifiche della procedura.',
+      ],
+      pitfalls: [
+        'Salvare un tema sotto il contrasto consigliato chiede conferma: leggi i badge AA/AAA prima di usarlo in un report.',
+        'Eliminare il tema personalizzato attivo riporta al tema predefinito; i grafici mantengono le proprie opzioni.',
+        'Applicare un preset sostituisce lo stile condiviso di quel grafico; annotazioni e opzioni della procedura restano come sono.',
+        'Rinominare o eliminare un preset in Impostazioni aggiorna il progetto ma non riscrive le schede che lo avevano già usato.',
+      ],
+      glossary: [
+        { term: 'Tema personalizzato', definition: 'Palette dell’interfaccia legata al progetto e creata a partire da un tema incorporato.' },
+        { term: 'Preset grafico', definition: 'Insieme con nome di opzioni di stile condivise, riutilizzabile tra le schede.' },
+        { term: 'Contrasto WCAG', definition: 'Rapporto tra colore del testo e dello sfondo, usato per controllare la leggibilità.' },
+      ],
+    },
+    seeAlso: ['projects', 'output-console'],
   },
 ];

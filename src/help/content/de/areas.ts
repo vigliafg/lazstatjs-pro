@@ -269,18 +269,19 @@ export const areaTopics: HelpTopic[] = [
     id: "output-console",
     area: "output",
     title: "Ergebnisse lesen und exportieren",
-    summary: "Karten, Gliederung, Kopieren, PNG-Diagramme, HTML-/Word-Berichte und Excel-Arbeitsmappen.",
+    summary: "Karten, Gliederung, Anmerkungen, Diagramm-Voreinstellungen, PNG-Diagramme, HTML-/Word-Berichte und Excel-Arbeitsmappen.",
     tutorial: {
       goal: "Ergebnisse in einem Format entnehmen, das Sie verwenden können.",
       dataset: "score-groups.csv",
       steps: [
         "Führen Sie eine Analyse aus und sehen Sie sich die Karte an: zuerst Tabellen, dann den Lesetext, dann die bearbeitbaren Diagramme.",
-        "Klicken Sie auf ein Diagramm, um den Editor zu öffnen: Ändern Sie Thema, Farben und verfahrensspezifische Optionen, und drücken Sie dann Fertig.",
+        "Klicken Sie auf ein Diagramm, um den Editor zu öffnen: Ändern Sie Thema, Farben, Voreinstellung und verfahrensspezifische Optionen, und drücken Sie dann Fertig.",
+        "Drücken Sie Anmerkungen, um Text, Linien, Pfeile oder Rechtecke auf dem Diagramm hinzuzufügen; ziehen Sie zum Verschieben, nutzen Sie die Griffe zum Größenändern und machen Sie mit Strg/⌘+Z rückgängig.",
         "Öffnen Sie die Gliederung, um zu einer Karte zu springen, oder klappen Sie sie mit dem Pfeil ein.",
         "Drücken Sie Bericht, um eine druckbare HTML-Datei herunterzuladen, oder Word für eine bearbeitbare.",
         "Mit XLSX erhalten Sie Daten und Tabellen in einer Arbeitsmappe; Diagramme lädt die PNG-Dateien herunter.",
       ],
-      expected: "Die heruntergeladenen Dateien enthalten dieselben Zahlen wie auf dem Bildschirm, mit einheitlichen Titeln und Kopfzeilen.",
+      expected: "Die heruntergeladenen Dateien enthalten dieselben Zahlen und Anmerkungen wie auf dem Bildschirm, mit einheitlichen Titeln und Kopfzeilen.",
     },
     advanced: {
       whenToUse: [
@@ -291,14 +292,19 @@ export const areaTopics: HelpTopic[] = [
         "„veraltet“ bedeutet, dass sich die Daten nach dem Lauf geändert haben: Führen Sie vor dem Export erneut aus.",
         "Diagramme bleiben nach dem Neuladen bearbeitbar; mit der alten Engine gespeicherte Karten bleiben statisch: Führen Sie sie erneut aus, um ein bearbeitbares Diagramm zu erhalten.",
         "Einstellungen → Diagramme legt den Standardstil künftiger Diagramme fest; bestehende Karten bleiben unverändert.",
+        "Anmerkungen verwenden Koordinaten relativ zur Diagrammfläche (0–1) und folgen daher Größenänderungen und Export innerhalb desselben Vega-SVG.",
+        "Jede Geste an den Anmerkungen ist ein Rückgängig-Schritt; auf Mobilgeräten teilt sich der Diagrammeditor in die Tabs Diagramm, Eigenschaften und Anmerkungen.",
+        "Benannte Voreinstellungen gehören zum Projekt und erscheinen im Voreinstellungs-Auswahlfeld jedes Diagrammeditors dieses Projekts.",
       ],
       pitfalls: [
         "Der Export einer veralteten Karte erzeugt einen formal korrekten, aber überholten Bericht.",
         "Der Zeilenfilter „nur Ansicht“ ändert nicht die von Analysen verwendeten Zahlen.",
+        "Anmerkungen gehören zu einer einzelnen Karte: Eine Voreinstellung kopiert sie nie auf ein anderes Diagramm.",
       ],
       glossary: [
         { term: "Lesetext", definition: "Der Kommentar in verständlicher Sprache, der jede Analyse abschließt." },
         { term: "Arbeitsmappe", definition: "Die .xlsx-Datei mit mehreren Tabellenblättern, eines pro Tabelle." },
+        { term: "Anmerkung", definition: "Text, Linie, Pfeil oder Rechteck, das über ein Diagramm gezeichnet und mit ihm gespeichert wird." },
       ],
     },
     seeAlso: ["analysis-workflow", "projects"],
@@ -307,17 +313,18 @@ export const areaTopics: HelpTopic[] = [
     id: "projects",
     area: "output",
     title: "Ein Projekt speichern und erneut öffnen",
-    summary: ".lzs-Dateien, automatisches Speichern und Wiederherstellen einer Sicherung.",
+    summary: "Neues Projekt, .lzs-Dateien, Speichern unter, automatisches Speichern und Wiederherstellen einer Sicherung.",
     tutorial: {
       goal: "Daten, Einstellungen und Parameter behalten, um morgen weiterzumachen.",
       dataset: "score-groups.csv",
       steps: [
-        "Drücken Sie in DATEN auf Projekt speichern und benennen Sie die .lzs-Datei.",
+        "Drücken Sie in DATEN auf Neues Projekt, um sauber zu beginnen: Datensatz, Parameter und Ausgabe werden geleert, Einstellungen und Voreinstellungen bleiben erhalten.",
+        "Drücken Sie Projekt speichern, um die .lzs-Datei zu schreiben; Speichern unter… fragt nach einem neuen Namen und lässt die aktuelle Datei unverändert.",
+        "Drücken Sie Projekt öffnen und wählen Sie eine Datei, um die aktuelle Sitzung zu ersetzen.",
         "Laden Sie die Seite neu: Das automatische Speichern stellt die Sitzung aus dem Browser wieder her.",
-        "Drücken Sie Projekt öffnen und wählen Sie die Datei, um die aktuelle Sitzung zu ersetzen.",
         "In den Einstellungen können Sie eine IndexedDB-Sicherung wiederherstellen, wenn das automatische Speichern fehlgeschlagen ist.",
       ],
-      expected: "Nach dem Öffnen finden Sie das Raster, die Stufen, die Parameter und die gespeicherten Ausgabekarten wieder.",
+      expected: "Nach dem Öffnen finden Sie das Raster, die Stufen, die Parameter, die Ausgabekarten, benutzerdefinierte Designs und Diagramm-Voreinstellungen wieder.",
     },
     advanced: {
       whenToUse: [
@@ -326,17 +333,67 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         "Das Projekt enthält auch Ausgabe-Momentaufnahmen: lesbar, aber nicht neu berechenbar.",
+        "Benutzerdefinierte Designs und Diagramm-Voreinstellungen sind Teil des Projekts und werden in der .lzs-Datei mitgeführt.",
         "In neueren Versionen hinzugefügte Felder sind optional: Alte Dateien öffnen sich mit Standardwerten.",
       ],
       pitfalls: [
         "Das automatische Speichern liegt im Browser: Das Löschen der Websitedaten entfernt es.",
         "Eine .lzs-Datei ist keine Sicherung der Originaldaten: Behalten Sie auch die Quell-CSV.",
+        "Neues Projekt leert die Ausgabekarten: Exportieren oder speichern Sie sie vorher, wenn Sie sie noch brauchen.",
+        "Speichern unter… erstellt eine Kopie; spätere Speicherungen verwenden den im Dialog gewählten Namen.",
       ],
       glossary: [
         { term: ".lzs", definition: "Das Projektformat: JSON mit Daten, Einstellungen und Parametern." },
         { term: "IndexedDB-Sicherung", definition: "Eine lokale Sicherheitskopie, die vom automatischen Speichern verwendet wird." },
+        { term: "Speichern unter", definition: "Befehl, der eine Kopie des Projekts unter einem neuen .lzs-Namen schreibt." },
       ],
     },
-    seeAlso: ["data-import", "output-console"],
+    seeAlso: ["data-import", "output-console", "appearance"],
+  },
+  {
+    id: "appearance",
+    area: "output",
+    title: "Designs, Diagramm-Voreinstellungen und der Design-Editor",
+    summary: "Zehn integrierte Designs, benutzerdefinierte Projektdesigns mit Live-Vorschau und benannte Diagramm-Voreinstellungen.",
+    tutorial: {
+      goal: "Ein Projektdesign und eine Diagramm-Voreinstellung erstellen und anschließend wiederverwenden.",
+      dataset: "score-groups.csv",
+      steps: [
+        "Öffnen Sie EINSTELLUNGEN → Darstellung und wählen Sie eines der fünf dunklen oder fünf hellen integrierten Designs; die Auswahl in der Kopfzeile wendet es sofort an.",
+        "Drücken Sie Design erstellen: Benennen Sie es, wählen Sie Basisdesign und Modus, bearbeiten Sie die Farben und verfolgen Sie die Live-Vorschau.",
+        "Prüfen Sie den WCAG-Kontrastbereich und drücken Sie Design speichern: Es erscheint unter Benutzerdefinierte Designs, wird ausgewählt und bleibt im Projekt.",
+        "Führen Sie eine Analyse aus, öffnen Sie ein Diagramm und nutzen Sie das Auswahlfeld Voreinstellung: Wählen Sie Standard, Minimal, Heller Druck oder eine Ihrer Voreinstellungen.",
+        "Drücken Sie Voreinstellung speichern, um den aktuellen gemeinsamen Stil zu sichern; anschließend können Sie Voreinstellungen unter EINSTELLUNGEN → Diagramme umbenennen oder löschen.",
+      ],
+      expected: "Das neue Design gilt für die gesamte Oberfläche und die Voreinstellung erscheint in jedem Diagrammeditor des Projekts.",
+    },
+    advanced: {
+      whenToUse: [
+        "Wenn Sie eine gut lesbare Palette für eine bestimmte Ausgabe benötigen, etwa für eine Zeitschrift, einen Projektor oder den Druck.",
+        "Wenn mehrere Diagramme denselben Stil teilen sollen, ohne dieselben Entscheidungen zu wiederholen.",
+      ],
+      whenNotToUse: [
+        "Verwenden Sie eine Voreinstellung nicht zum Kopieren von Anmerkungen oder Daten: Sie enthält nur die gemeinsamen Stiloptionen.",
+        "Erwarten Sie von benutzerdefinierten Designs keine Änderungen an Schriftarten, Abständen oder dem Druck-Stylesheet des Berichts: Der Editor bearbeitet nur Farben.",
+      ],
+      reading: [
+        "Benutzerdefinierte Designs gehören zum Projekt, sind auf 20 begrenzt und erscheinen in einer eigenen Gruppe der Kopfzeilen-Auswahl.",
+        "Die Vorschau des Design-Editors ist auf sein Panel beschränkt: Der Rest der Anwendung behält das aktuelle Design, bis Sie speichern.",
+        "Die Kontrastprüfungen decken 11 Paare ab, darunter Text auf Oberflächen, Akzente, Diagrammtext und die schlechteste Palettenfarbe auf dem Diagrammhintergrund.",
+        "Diagramm-Voreinstellungen speichern die 20 gemeinsamen Stiloptionen und niemals die Anmerkungen einzelner Karten oder verfahrensspezifische Einstellungen.",
+      ],
+      pitfalls: [
+        "Beim Speichern eines Designs unter dem empfohlenen Kontrast wird eine Bestätigung verlangt: Lesen Sie die AA/AAA-Badges, bevor Sie es in einem Bericht verwenden.",
+        "Das Löschen des aktiven benutzerdefinierten Designs fällt auf das Standarddesign zurück; Diagramme behalten ihre eigenen Optionen.",
+        "Das Anwenden einer Voreinstellung ersetzt den gemeinsamen Stil dieses Diagramms; Anmerkungen und Verfahrensoptionen bleiben unverändert.",
+        "Das Umbenennen oder Löschen einer Voreinstellung in den Einstellungen aktualisiert das Projekt, schreibt aber keine Karten neu, die es bereits verwendet haben.",
+      ],
+      glossary: [
+        { term: "Benutzerdefiniertes Design", definition: "Eine projektspezifische Oberflächenpalette, die aus einem integrierten Design erstellt wird." },
+        { term: "Diagramm-Voreinstellung", definition: "Ein benannter Satz gemeinsamer Diagrammstiloptionen, der kartenübergreifend wiederverwendbar ist." },
+        { term: "WCAG-Kontrast", definition: "Das Verhältnis zwischen Text- und Hintergrundfarbe, mit dem die Lesbarkeit geprüft wird." },
+      ],
+    },
+    seeAlso: ["projects", "output-console"],
   },
 ];

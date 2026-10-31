@@ -264,18 +264,19 @@ export const areaTopics: HelpTopic[] = [
     id: 'output-console',
     area: 'output',
     title: 'Reading and exporting results',
-    summary: 'Cards, outline, copy, PNG charts, HTML/Word reports and Excel workbooks.',
+    summary: 'Cards, outline, annotations, chart presets, PNG charts, HTML/Word reports and Excel workbooks.',
     tutorial: {
       goal: 'Take results out in a format you can use.',
       dataset: 'score-groups.csv',
       steps: [
         'Run an analysis and look at the card: tables, then the reading report, then the editable charts.',
-        'Click a chart to open the editor: change theme, colours and procedure-specific options, then press Done.',
+        'Click a chart to open the editor: change theme, colours, preset and procedure-specific options, then press Done.',
+        'Press Annotations to add text, lines, arrows or rectangles on the plot; drag to move, use the handles to resize and undo with Ctrl/⌘+Z.',
         'Open the Outline to jump to a card or collapse it with the chevron.',
         'Press Report to download a printable HTML file, or Word for an editable one.',
         'Use XLSX to get data and tables in a workbook; Charts downloads the PNG files.',
       ],
-      expected: 'Downloaded files contain the same numbers shown on screen, with consistent titles and headers.',
+      expected: 'Downloaded files contain the same numbers and annotations shown on screen, with consistent titles and headers.',
     },
     advanced: {
       whenToUse: [
@@ -286,14 +287,19 @@ export const areaTopics: HelpTopic[] = [
         '“stale” means data changed after the run: re-run before exporting.',
         'Charts stay editable after reload; cards saved with the old engine remain static: re-run them to get an editable chart.',
         'Settings → Charts sets the default style of future charts; existing cards are not changed.',
+        'Annotations use plot-relative coordinates (0–1 inside the plot area), so they follow resizing and export inside the same Vega SVG.',
+        'Each annotation gesture is one undo step; on mobile the chart editor splits into Chart, Properties and Annotations tabs.',
+        'Named presets are project-scoped and appear in the Preset selector of every chart editor in that project.',
       ],
       pitfalls: [
         'Exporting a stale card produces a formally correct but outdated report.',
         'The “view only” row filter does not change the numbers used by analyses.',
+        'Annotations belong to one card: a preset never copies them to another chart.',
       ],
       glossary: [
         { term: 'Reading report', definition: 'The plain-language comment closing every analysis.' },
         { term: 'Workbook', definition: 'The .xlsx file with several sheets, one per table.' },
+        { term: 'Annotation', definition: 'A text, line, arrow or rectangle drawn on top of a chart and saved with it.' },
       ],
     },
     seeAlso: ['analysis-workflow', 'projects'],
@@ -302,17 +308,18 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Saving and reopening a project',
-    summary: '.lzs files, autosave and how to restore a backup.',
+    summary: 'New project, .lzs files, Save as, autosave and how to restore a backup.',
     tutorial: {
       goal: 'Keep data, settings and parameters to resume tomorrow.',
       dataset: 'score-groups.csv',
       steps: [
-        'From DATA press Save project and name the .lzs file.',
+        'From DATA press New project to start clean: dataset, parameters and output are cleared, while settings and preferences stay.',
+        'Press Save project to write the .lzs file; Save as… asks for a new name and leaves the current file unchanged.',
+        'Press Open project and pick a file to replace the current session.',
         'Reload the page: autosave restores the session from the browser.',
-        'Press Open project and pick the file to replace the current session.',
         'From Settings you can restore an IndexedDB backup if autosave failed.',
       ],
-      expected: 'After opening you find the grid, levels, parameters and the saved output cards again.',
+      expected: 'After opening you find the grid, levels, parameters, output cards, custom themes and chart presets again.',
     },
     advanced: {
       whenToUse: [
@@ -321,17 +328,67 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         'The project also holds output snapshots: readable but not recalculable.',
+        'Custom themes and chart presets are stored inside the project and travel in the .lzs file.',
         'Fields added in newer versions are optional: old files open with defaults.',
       ],
       pitfalls: [
         'Autosave lives in the browser: clearing site data deletes it.',
         'A .lzs file is not a backup of the original data: keep the source CSV too.',
+        'New project clears the output cards: export or save them first if you still need them.',
+        'Save as… creates a copy; later saves keep using the name you chose in the prompt.',
       ],
       glossary: [
         { term: '.lzs', definition: 'The project format: JSON with data, settings and parameters.' },
         { term: 'IndexedDB backup', definition: 'A local safety copy used by autosave.' },
+        { term: 'Save as', definition: 'A command that writes a copy of the project under a new .lzs name.' },
       ],
     },
-    seeAlso: ['data-import', 'output-console'],
+    seeAlso: ['data-import', 'output-console', 'appearance'],
+  },
+  {
+    id: 'appearance',
+    area: 'output',
+    title: 'Themes, chart presets and the theme creator',
+    summary: 'Ten built-in themes, project custom themes with a live preview, and named chart presets.',
+    tutorial: {
+      goal: 'Create a project theme and a chart preset, then reuse them.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Open SETTINGS → Appearance and pick one of the five dark or five light built-in themes; the header selector applies it immediately.',
+        'Press Create theme: name it, choose the base and the mode, edit the colours and follow the live preview.',
+        'Check the WCAG contrast panel, then press Save theme: it joins Custom themes, is selected and stays inside the project.',
+        'Run an analysis, open a chart and use the Preset selector: choose Default, Minimal, Print light or one of your presets.',
+        'Press Save preset to store the current shared style, then rename or delete presets from SETTINGS → Charts.',
+      ],
+      expected: 'The new theme applies to the whole interface and the preset appears in every chart editor of the project.',
+    },
+    advanced: {
+      whenToUse: [
+        'When you need a readable palette for a specific output, such as a journal, a projector or print.',
+        'When several charts should share one style without repeating the same choices.',
+      ],
+      whenNotToUse: [
+        'Do not use a preset to copy annotations or data: it only holds shared style options.',
+        'Do not expect custom themes to change fonts, spacing or the report print stylesheet: the creator edits colours only.',
+      ],
+      reading: [
+        'Custom themes are project-scoped, capped at 20 and listed in a dedicated group of the header selector.',
+        'The theme creator preview is scoped to its panel: the rest of the application keeps the current theme until you save.',
+        'Contrast checks cover 11 pairs, including text on surfaces, accents, chart text and the worst palette colour against the chart background.',
+        'Chart presets store the 20 shared style options and never the per-card annotations or procedure-specific settings.',
+      ],
+      pitfalls: [
+        'Saving a theme below the recommended contrast asks for confirmation: read the AA/AAA badges before using it in a report.',
+        'Deleting the active custom theme falls back to the default theme; charts keep their own options.',
+        'Applying a preset replaces the shared style of that chart; annotations and procedure options stay as they are.',
+        'Renaming or deleting a preset in Settings updates the project but does not rewrite cards that already used it.',
+      ],
+      glossary: [
+        { term: 'Custom theme', definition: 'A project-scoped interface palette created from a built-in theme.' },
+        { term: 'Chart preset', definition: 'A named set of shared chart style options, reusable across cards.' },
+        { term: 'WCAG contrast', definition: 'The ratio between text and background colours, used to check readability.' },
+      ],
+    },
+    seeAlso: ['projects', 'output-console'],
   },
 ];

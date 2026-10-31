@@ -264,18 +264,19 @@ export const areaTopics: HelpTopic[] = [
     id: 'output-console',
     area: 'output',
     title: 'Lire et exporter les résultats',
-    summary: 'Cartes, plan, copie, graphiques PNG, rapports HTML/Word et classeurs Excel.',
+    summary: 'Cartes, plan, annotations, préréglages de graphiques, graphiques PNG, rapports HTML/Word et classeurs Excel.',
     tutorial: {
       goal: 'Sortir les résultats dans un format utilisable.',
       dataset: 'score-groups.csv',
       steps: [
         'Lancez une analyse et regardez la carte : les tableaux, puis le rapport de lecture, puis les graphiques modifiables.',
-        'Cliquez sur un graphique pour ouvrir l’éditeur : changez le thème, les couleurs et les options de la procédure, puis appuyez sur Terminé.',
+        'Cliquez sur un graphique pour ouvrir l’éditeur : changez le thème, les couleurs, le préréglage et les options de la procédure, puis appuyez sur Terminé.',
+        'Appuyez sur Annotations pour ajouter du texte, des lignes, des flèches ou des rectangles sur le graphique ; faites glisser pour déplacer, utilisez les poignées pour redimensionner et annulez avec Ctrl/⌘+Z.',
         'Ouvrez le Plan pour sauter à une carte ou la réduire avec le chevron.',
         'Appuyez sur Rapport pour télécharger un fichier HTML imprimable, ou sur Word pour une version modifiable.',
         'Utilisez XLSX pour obtenir données et tableaux dans un classeur ; Graphiques télécharge les fichiers PNG.',
       ],
-      expected: 'Les fichiers téléchargés contiennent les mêmes nombres que l’écran, avec des titres et des en-têtes cohérents.',
+      expected: 'Les fichiers téléchargés contiennent les mêmes nombres et les mêmes annotations que l’écran, avec des titres et des en-têtes cohérents.',
     },
     advanced: {
       whenToUse: [
@@ -286,14 +287,19 @@ export const areaTopics: HelpTopic[] = [
         '« obsolète » signifie que les données ont changé après l’exécution : relancez avant d’exporter.',
         'Les graphiques restent modifiables après rechargement ; les cartes enregistrées avec l’ancien moteur restent statiques : relancez-les pour obtenir un graphique modifiable.',
         'Réglages → Graphiques définit le style par défaut des futurs graphiques ; les cartes existantes ne changent pas.',
+        'Les annotations utilisent des coordonnées relatives à la zone du graphique (0–1) : elles suivent le redimensionnement et l’export dans le même SVG Vega.',
+        'Chaque geste sur les annotations est une étape d’annulation ; sur mobile, l’éditeur de graphique se divise en onglets Graphique, Propriétés et Annotations.',
+        'Les préréglages nommés sont liés au projet et apparaissent dans le sélecteur Préréglage de chaque éditeur de graphique du projet.',
       ],
       pitfalls: [
         'Exporter une carte obsolète produit un rapport formellement correct mais dépassé.',
         'Le filtre de lignes « affichage seulement » ne change pas les nombres utilisés par les analyses.',
+        'Les annotations appartiennent à une seule carte : un préréglage ne les copie jamais sur un autre graphique.',
       ],
       glossary: [
         { term: 'Rapport de lecture', definition: 'Le commentaire en langage simple qui clôt chaque analyse.' },
         { term: 'Classeur', definition: 'Le fichier .xlsx avec plusieurs feuilles, une par tableau.' },
+        { term: 'Annotation', definition: 'Texte, ligne, flèche ou rectangle dessiné sur un graphique et enregistré avec lui.' },
       ],
     },
     seeAlso: ['analysis-workflow', 'projects'],
@@ -302,17 +308,18 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Enregistrer et rouvrir un projet',
-    summary: 'Fichiers .lzs, sauvegarde automatique et restauration d’une sauvegarde.',
+    summary: 'Nouveau projet, fichiers .lzs, Enregistrer sous, sauvegarde automatique et restauration d’une sauvegarde.',
     tutorial: {
       goal: 'Conserver les données, les réglages et les paramètres pour reprendre demain.',
       dataset: 'score-groups.csv',
       steps: [
-        'Depuis DONNÉES, appuyez sur Enregistrer le projet et nommez le fichier .lzs.',
+        'Depuis DONNÉES, appuyez sur Nouveau projet pour repartir de zéro : le jeu de données, les paramètres et la sortie sont effacés, tandis que les réglages et préférences restent.',
+        'Appuyez sur Enregistrer le projet pour écrire le fichier .lzs ; Enregistrer sous… demande un nouveau nom et laisse le fichier courant inchangé.',
+        'Appuyez sur Ouvrir un projet et choisissez un fichier pour remplacer la session en cours.',
         'Rechargez la page : la sauvegarde automatique restaure la session depuis le navigateur.',
-        'Appuyez sur Ouvrir un projet et choisissez le fichier pour remplacer la session en cours.',
         'Depuis Paramètres, vous pouvez restaurer une sauvegarde IndexedDB si la sauvegarde automatique a échoué.',
       ],
-      expected: 'Après l’ouverture, vous retrouvez la grille, les niveaux, les paramètres et les cartes de sortie enregistrées.',
+      expected: 'Après l’ouverture, vous retrouvez la grille, les niveaux, les paramètres, les cartes de sortie, les thèmes personnalisés et les préréglages de graphiques.',
     },
     advanced: {
       whenToUse: [
@@ -321,17 +328,67 @@ export const areaTopics: HelpTopic[] = [
       ],
       reading: [
         'Le projet contient aussi des instantanés de sortie : lisibles mais non recalculables.',
+        'Les thèmes personnalisés et les préréglages de graphiques font partie du projet et voyagent dans le fichier .lzs.',
         'Les champs ajoutés dans les versions plus récentes sont facultatifs : les anciens fichiers s’ouvrent avec des valeurs par défaut.',
       ],
       pitfalls: [
         'La sauvegarde automatique vit dans le navigateur : effacer les données du site la supprime.',
         'Un fichier .lzs n’est pas une sauvegarde des données d’origine : gardez aussi le CSV source.',
+        'Nouveau projet efface les cartes de sortie : exportez-les ou enregistrez-les avant si vous en avez encore besoin.',
+        'Enregistrer sous… crée une copie ; les enregistrements suivants utilisent le nom choisi dans l’invite.',
       ],
       glossary: [
         { term: '.lzs', definition: 'Le format de projet : du JSON avec les données, les réglages et les paramètres.' },
         { term: 'Sauvegarde IndexedDB', definition: 'Une copie de sécurité locale utilisée par la sauvegarde automatique.' },
+        { term: 'Enregistrer sous', definition: 'Commande qui écrit une copie du projet sous un nouveau nom .lzs.' },
       ],
     },
-    seeAlso: ['data-import', 'output-console'],
+    seeAlso: ['data-import', 'output-console', 'appearance'],
+  },
+  {
+    id: 'appearance',
+    area: 'output',
+    title: 'Thèmes, préréglages de graphiques et créateur de thèmes',
+    summary: 'Dix thèmes intégrés, des thèmes personnalisés du projet avec aperçu en direct et des préréglages de graphiques nommés.',
+    tutorial: {
+      goal: 'Créer un thème de projet et un préréglage de graphique, puis les réutiliser.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Ouvrez RÉGLAGES → Apparence et choisissez l’un des cinq thèmes sombres ou cinq thèmes clairs intégrés ; le sélecteur d’en-tête l’applique immédiatement.',
+        'Appuyez sur Créer un thème : nommez-le, choisissez le thème de base et le mode, modifiez les couleurs et suivez l’aperçu en direct.',
+        'Vérifiez le panneau de contraste WCAG, puis appuyez sur Enregistrer le thème : il rejoint Thèmes personnalisés, est sélectionné et reste dans le projet.',
+        'Lancez une analyse, ouvrez un graphique et utilisez le sélecteur Préréglage : choisissez Par défaut, Minimal ou Impression claire, ou l’un de vos préréglages.',
+        'Appuyez sur Enregistrer le préréglage pour mémoriser le style partagé courant, puis renommez ou supprimez les préréglages depuis RÉGLAGES → Graphiques.',
+      ],
+      expected: 'Le nouveau thème s’applique à toute l’interface et le préréglage apparaît dans chaque éditeur de graphique du projet.',
+    },
+    advanced: {
+      whenToUse: [
+        'Lorsqu’il faut une palette lisible pour une sortie précise, par exemple une revue, un projecteur ou l’impression.',
+        'Lorsque plusieurs graphiques doivent partager un même style sans répéter les mêmes choix.',
+      ],
+      whenNotToUse: [
+        'N’utilisez pas un préréglage pour copier des annotations ou des données : il ne contient que les options de style partagées.',
+        'N’attendez pas des thèmes personnalisés qu’ils changent les polices, les espacements ou la feuille de style d’impression du rapport : le créateur ne modifie que les couleurs.',
+      ],
+      reading: [
+        'Les thèmes personnalisés sont liés au projet, limités à 20, et apparaissent dans un groupe dédié du sélecteur d’en-tête.',
+        'L’aperçu du créateur est limité à son panneau : le reste de l’application conserve le thème courant jusqu’à l’enregistrement.',
+        'Les contrôles de contraste couvrent 11 paires, dont le texte sur les surfaces, les accents, le texte des graphiques et la pire couleur de la palette sur le fond du graphique.',
+        'Les préréglages de graphiques stockent les 20 options de style partagées et jamais les annotations par carte ni les réglages propres à la procédure.',
+      ],
+      pitfalls: [
+        'Enregistrer un thème sous le contraste recommandé demande une confirmation : lisez les badges AA/AAA avant de l’utiliser dans un rapport.',
+        'Supprimer le thème personnalisé actif revient au thème par défaut ; les graphiques conservent leurs propres options.',
+        'Appliquer un préréglage remplace le style partagé de ce graphique ; les annotations et les options de la procédure restent inchangées.',
+        'Renommer ou supprimer un préréglage dans Réglages met à jour le projet mais ne réécrit pas les cartes qui l’avaient déjà utilisé.',
+      ],
+      glossary: [
+        { term: 'Thème personnalisé', definition: 'Palette d’interface liée au projet et créée à partir d’un thème intégré.' },
+        { term: 'Préréglage de graphique', definition: 'Ensemble nommé d’options de style partagées, réutilisable entre les cartes.' },
+        { term: 'Contraste WCAG', definition: 'Rapport entre la couleur du texte et celle du fond, utilisé pour vérifier la lisibilité.' },
+      ],
+    },
+    seeAlso: ['projects', 'output-console'],
   },
 ];

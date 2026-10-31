@@ -11,7 +11,7 @@ const chapters: HelpChapter[] = [
   { id: 'data', title: 'The data', blurb: 'Import, edit, clean and give the groups readable names.' },
   { id: 'analysis', title: 'Analyses', blurb: 'Choose the procedure, set it up, run it again.' },
   { id: 'procedures', title: 'Procedures, one by one', blurb: 'A tutorial with an example and an advanced reading in plain words.' },
-  { id: 'output', title: 'Results and project', blurb: 'Read the output, export it, save and reopen your work.' },
+  { id: 'output', title: 'Results and project', blurb: 'Read the output, export it, save and reopen your work, and tune the look of the program.' },
 ];
 
 export const enBook: HelpBook = {
