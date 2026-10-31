@@ -259,3 +259,15 @@ Nessuno. Il resto del flusso (per-card, default globali, parse, autosave) è coe
 La funzionalità è fattibile e ha un costo contenuto se resta **common-only** e riusa le funzioni già presenti. La cosa da non fare è estendere il campo `preset`: i preset nominati sono una libreria separata, applicata al draft con una singola transazione. Prima di aggiungerli va corretto il comportamento sticky dei tre preset incorporati, altrimenti la nuova funzione nasce sopra un’ambiguità già visibile all’utente.
 
 La v1 raccomandata è: **preset nominati di stile comune, salvati nel progetto, caricati con un undo, gestiti tra quick bar e Impostazioni → Grafici**. Le opzioni specifiche per tipo, le annotazioni, l’import/export e la libreria globale sono v2.
+
+## Stato di implementazione (2026-10-31)
+
+Implementato:
+
+- `applyPreset` ora applica `COMMON_DEFAULTS` prima della patch: `Print light` → `Default` ripristina tema, palette, griglia e legenda, preservando opzioni specifiche, `kind` e annotazioni (`src/charts/defaults.ts`).
+- Modello e normalizzatore `ChartPreset`/`ChartPresetOptions`, limiti (20 preset, 48 caratteri per nome/id, 20 KB), deduplica, applicazione atomica e matching dello stile (`src/charts/presets.ts`, `src/charts/presets.test.ts`).
+- Persistenza in `ProjectSettings.chartPresets?`, normalizzazione in `parseSettings`, default `[]`, stato App, ripristino dal progetto e clone nello snapshot (`src/io/project/types.ts`, `src/io/project/parse.ts`, `src/io/project/index.ts`, `src/App.tsx`).
+- UI: selettore preset combinato nella quick bar con gruppi «Incorporati»/«I miei preset» e form «Salva preset»; gestione rinomina/elimina in Impostazioni → Grafici (`src/components/charts/ChartPresetPicker.tsx`, `ChartPresetList.tsx`, `ChartPresetsProvider.tsx`).
+- Test: unitari su modello, normalizzazione, transizioni dei preset incorporati, round-trip `.lzs` e legacy; E2E desktop/mobile su salvataggio, caricamento, undo, sovrascrittura, rinomina, eliminazione e persistenza; baseline visive `chart-preset-editor.png`, `chart-preset-settings.png`, `chart-preset-mobile.png`.
+
+Verifica eseguita: `npm test` (704 test), `npm run lint`, `npm run guard`, `npm run build`, `npx playwright test` (113 pass, 107 skip) e baseline visive verdi con `VISUAL=1`.

@@ -27,6 +27,14 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
   prefs: { ...input.prefs },
   settings: {
     ...input.settings,
+    ...(input.settings.chartPresets
+      ? {
+          chartPresets: input.settings.chartPresets.map(preset => ({
+            ...preset,
+            options: { ...preset.options },
+          })),
+        }
+      : {}),
     outputAppearance: { ...input.settings.outputAppearance },
   },
   params: parseParams(input.params, input.grid.cols.length),

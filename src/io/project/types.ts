@@ -12,6 +12,7 @@ import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 import type { ChartOutputGroup } from '../../charts/outputs';
 import { DEFAULT_CHART_DEFAULTS, type ChartDefaults } from '../../charts/defaults';
+import type { ChartPreset } from '../../charts/presets';
 import { DEFAULT_THEME_ID, type ThemeId } from '../../theme/themes';
 import {
   DEFAULT_OUTPUT_APPEARANCE,
@@ -341,6 +342,8 @@ export interface ProjectSettings {
   helpLocale: HelpLocale;
   /** Factory defaults for new charts (never applied retroactively). */
   chartDefaults: ChartDefaults;
+  /** Named style presets saved with this project; optional for old projects. */
+  chartPresets?: ChartPreset[];
   /** Optional chart groups hidden per procedure; absent means every group. */
   hiddenChartGroups?: Record<string, ChartOutputGroup[]>;
   /** Optional overrides for the output/report window only. */
@@ -561,6 +564,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   reportLocale: DEFAULT_REPORT_LOCALE,
   helpLocale: 'auto',
   chartDefaults: DEFAULT_CHART_DEFAULTS,
+  chartPresets: [],
   hiddenChartGroups: {},
   outputAppearance: DEFAULT_OUTPUT_APPEARANCE,
 };

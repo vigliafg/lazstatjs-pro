@@ -96,7 +96,7 @@ test.describe('chart editor — ANOVA', () => {
     const { chart, dialog, preview } = await openEditor(page, 'anova-box');
 
     await expect(dialog.getByRole('heading', { name: /ANOVA a una via/ })).toBeVisible();
-    await expect(field(dialog, 'general-preset')).toHaveValue('default');
+    await expect(dialog.locator('[data-chart-preset-select]')).toHaveValue('builtin:default');
     await expect(field(dialog, 'general-theme')).toHaveValue('dark');
     await expect(field(dialog, 'general-palette')).toHaveValue('default');
     await expect(field(dialog, 'general-gridY')).toBeChecked();

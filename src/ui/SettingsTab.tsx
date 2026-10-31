@@ -2,7 +2,9 @@ import type { Dispatch, SetStateAction } from 'react';
 import { Check, Clock3, FileDown, FilePlus2, FolderOpen, Save, Trash2 } from 'lucide-react';
 import { savePrefs, type IoPreferences } from '../io/prefs';
 import { ChartDefaultsEditor } from '../components/charts/ChartDefaultsEditor';
+import { ChartPresetList } from '../components/charts/ChartPresetList';
 import type { ChartDefaults } from '../charts/defaults';
+import type { ChartPreset } from '../charts/presets';
 import { themesByMode, type ThemeId } from '../theme';
 import type { OutputAppearance } from '../theme/outputAppearance';
 import { OutputAppearanceSettings } from './OutputAppearanceSettings';
@@ -38,6 +40,8 @@ export interface SettingsTabProps {
   setOutputAppearance: Dispatch<SetStateAction<OutputAppearance>>;
   chartDefaults: ChartDefaults;
   setChartDefaults: Dispatch<SetStateAction<ChartDefaults>>;
+  chartPresets: ChartPreset[];
+  setChartPresets: Dispatch<SetStateAction<ChartPreset[]>>;
 }
 
 const sectionTitle =
@@ -68,6 +72,8 @@ export const SettingsTab = ({
   setOutputAppearance,
   chartDefaults,
   setChartDefaults,
+  chartPresets,
+  setChartPresets,
 }: SettingsTabProps) => (
   <>
     <div className="flex-1 overflow-auto scrollbar p-8">
@@ -278,10 +284,14 @@ export const SettingsTab = ({
           </div>
         </section>
 
-        <section className="rounded-lg border border-border bg-surface p-6">
+        <section data-settings-charts className="rounded-lg border border-border bg-surface p-6">
           <h2 className={sectionTitle}>{t('settings.charts')}</h2>
           <p className="mb-4 text-[11px] leading-relaxed text-text3">{t('settings.chartsHint')}</p>
           <ChartDefaultsEditor defaults={chartDefaults} onChange={setChartDefaults} />
+          <ChartPresetList
+            presets={chartPresets}
+            onChange={next => setChartPresets(next)}
+          />
         </section>
 
         <section className="rounded-lg border border-border bg-surface p-6">

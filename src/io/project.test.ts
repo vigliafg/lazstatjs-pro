@@ -14,6 +14,8 @@ import {
   serializeProject,
 } from './project';
 import { DEFAULT_PREFS } from './prefs';
+import { DEFAULT_CHART_DEFAULTS } from '../charts/defaults';
+import { createChartPreset } from '../charts/presets';
 import type { GridData } from '../grid/types';
 
 const grid: GridData = {
@@ -77,6 +79,36 @@ describe('project snapshot roundtrip', () => {
     assert.deepEqual(restored.settings.outputAppearance, DEFAULT_SETTINGS.outputAppearance);
     assert.deepEqual(restored.params, DEFAULT_PARAMS);
     assert.deepEqual(restored.settings.chartDefaults, DEFAULT_SETTINGS.chartDefaults);
+  });
+
+  it('round-trips named chart presets and defaults old projects to an empty library', () => {
+    const base = makeSnapshot();
+    const preset = createChartPreset('Paper', { ...DEFAULT_CHART_DEFAULTS, theme: 'light' });
+    const withPresets = {
+      ...base,
+      settings: { ...base.settings, chartPresets: [preset] },
+    };
+    const restored = parseProject(serializeProject(withPresets));
+    assert.equal(restored.settings.chartPresets?.length, 1);
+    assert.equal(restored.settings.chartPresets?.[0].name, 'Paper');
+    assert.equal(restored.settings.chartPresets?.[0].options.theme, 'light');
+    assert.deepEqual(parseProject(serializeProject(base)).settings.chartPresets, []);
+  });
+
+  it('drops malformed presets without losing the project', () => {
+    const base = makeSnapshot();
+    const preset = createChartPreset('Valid', DEFAULT_CHART_DEFAULTS);
+    const parsed = parseProject(
+      JSON.stringify({
+        ...base,
+        settings: {
+          ...base.settings,
+          chartPresets: [{ name: 'No options' }, null, preset],
+        },
+      })
+    );
+    assert.equal(parsed.settings.chartPresets?.length, 1);
+    assert.equal(parsed.settings.chartPresets?.[0].name, 'Valid');
   });
 
   it('rejects non-project payloads', () => {

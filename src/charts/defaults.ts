@@ -50,7 +50,8 @@ export const withChartDefaults = <T>(defaults: ChartDefaults | undefined, build:
 
 export const DEFAULT_CHART_DEFAULTS: ChartDefaults = { ...COMMON_DEFAULTS };
 
-const COMMON_KEYS: (keyof CommonChartOptions)[] = [
+/** The single source of truth for the shared chart options. */
+export const COMMON_KEYS: readonly (keyof CommonChartOptions)[] = [
   'preset',
   'theme',
   'gridX',
@@ -277,7 +278,20 @@ export const SIZE_OPTIONS: Record<
   wide: { height: 340, width: 780 },
 };
 
+/**
+ * Apply one of the three built-in presets.
+ *
+ * The preset is a snapshot of the shared options, not a patch on whatever the
+ * user had before: `Default` must be able to undo `Print light`, otherwise
+ * theme and palette stay stuck on the previous preset. Specific options,
+ * annotations and `kind` are preserved.
+ */
 export const applyPreset = (
   options: ChartOptions,
   preset: CommonChartOptions['preset']
-): ChartOptions => ({ ...options, preset, ...PRESET_OPTIONS[preset] });
+): ChartOptions => ({
+  ...options,
+  ...COMMON_DEFAULTS,
+  ...PRESET_OPTIONS[preset],
+  preset,
+});

@@ -115,6 +115,8 @@ import {
   type WizardParams,
 } from './io/project';
 import { normalizeChartDefaults, type ChartDefaults } from './charts/defaults';
+import { normalizeChartPresets, type ChartPreset } from './charts/presets';
+import { ChartPresetsProvider } from './components/charts/ChartPresetsProvider';
 import type { ChartOutputGroup } from './charts/outputs';
 
 export default function App() {
@@ -292,6 +294,9 @@ export default function App() {
   const [chartDefaults, setChartDefaults] = useState<ChartDefaults>(
     () => boot?.settings.chartDefaults ?? DEFAULT_SETTINGS.chartDefaults
   );
+  const [chartPresets, setChartPresets] = useState<ChartPreset[]>(() =>
+    normalizeChartPresets(boot?.settings.chartPresets)
+  );
   const [hiddenChartGroups, setHiddenChartGroups] = useState<Record<string, ChartOutputGroup[]>>(
     () => boot?.settings.hiddenChartGroups ?? {}
   );
@@ -337,8 +342,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, hiddenChartGroups, outputAppearance }),
-    [ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, hiddenChartGroups, outputAppearance]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance]
   );
 
   const roleErrors = [
@@ -382,6 +387,7 @@ export default function App() {
     setReportLocale(project.settings.reportLocale);
     setHelpLocale(project.settings.helpLocale);
     setChartDefaults(normalizeChartDefaults(project.settings.chartDefaults));
+    setChartPresets(normalizeChartPresets(project.settings.chartPresets));
     setHiddenChartGroups(project.settings.hiddenChartGroups ?? {});
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -582,6 +588,7 @@ export default function App() {
         </div>
         {activeTab === 'analysis' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingAnalysis')}</div>}>
+          <ChartPresetsProvider presets={chartPresets} setPresets={setChartPresets}>
           <AnalysisTab
             activeAnalysis={activeAnalysis}
             setActiveAnalysis={setActiveAnalysis}
@@ -627,6 +634,7 @@ export default function App() {
             hiddenChartGroups={hiddenChartGroups}
             setHiddenChartGroups={setHiddenChartGroups}
           />
+          </ChartPresetsProvider>
           </Suspense>
         )}
         {activeTab === 'help' && (
@@ -656,6 +664,8 @@ export default function App() {
             outputAppearance={outputAppearance} setOutputAppearance={setOutputAppearance}
             chartDefaults={chartDefaults}
             setChartDefaults={setChartDefaults}
+            chartPresets={chartPresets}
+            setChartPresets={setChartPresets}
           />
         )}
         </ErrorBoundary>

@@ -6,6 +6,7 @@ import type { DistributionName } from '../../stats/distfit';
 import type { WizardGoal } from '../../stats/wizard';
 import { isActiveLocale, isHelpLocale, isLocale } from '../../i18n/locales';
 import { normalizeChartDefaults } from '../../charts/defaults';
+import { normalizeChartPresets } from '../../charts/presets';
 import type { ChartOutputGroup } from '../../charts/outputs';
 import { isThemeId } from '../../theme/themes';
 import { normalizeOutputAppearance } from '../../theme/outputAppearance';
@@ -540,6 +541,7 @@ export const parseSettings = (value: unknown): ProjectSettings => {
     reportLocale: isLocale(raw.reportLocale) ? raw.reportLocale : DEFAULT_SETTINGS.reportLocale,
     helpLocale: isHelpLocale(raw.helpLocale) ? raw.helpLocale : DEFAULT_SETTINGS.helpLocale,
     chartDefaults: normalizeChartDefaults(raw.chartDefaults),
+    chartPresets: normalizeChartPresets(raw.chartPresets),
     hiddenChartGroups: normalizeHiddenChartGroups(raw.hiddenChartGroups),
     outputAppearance: normalizeOutputAppearance(raw.outputAppearance),
   };
