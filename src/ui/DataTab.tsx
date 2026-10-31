@@ -164,17 +164,17 @@ export const DataTab = ({
     <div className="h-4 w-px bg-border mx-1" />
     <button
       className="tb-btn"
-      onClick={saveProjectFile}
-      title={t('data.saveHint')}
-    >
-      {t('data.saveProject')}
-    </button>
-    <button
-      className="tb-btn"
       onClick={() => projectInputRef.current?.click()}
       title={t('data.openHint')}
     >
       {t('data.openProject')}
+    </button>
+    <button
+      className="tb-btn"
+      onClick={saveProjectFile}
+      title={t('data.saveHint')}
+    >
+      {t('data.saveProject')}
     </button>
     <input
       ref={projectInputRef}
