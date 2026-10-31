@@ -1,12 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   DEFAULT_THEME_ID,
-  applyTheme,
+  applyThemeDefinition,
   loadStoredTheme,
   saveStoredTheme,
-  themeById,
-  type ThemeId,
 } from '../theme';
+import {
+  normalizeCustomThemes,
+  resolveThemeDefinition,
+  resolveThemeId,
+  type CustomTheme,
+} from '../theme/custom';
 import {
   normalizeOutputAppearance,
   outputAppearanceStyle,
@@ -18,23 +22,78 @@ import {
  * cannot be overwritten by a slightly older autosave, then every change is
  * applied to the document and remembered outside the project snapshot.
  *
- * Output appearance lives here too because its fallbacks depend on the active
- * theme, but it only affects the result window.
+ * Custom themes are project-scoped: the project snapshot owns the definitions
+ * and the active theme id. The stored preference only remembers the id; an id
+ * that is no longer available falls back to the default theme.
  */
-export const useUiTheme = (fallback?: ThemeId, outputFallback?: OutputAppearance) => {
-  const [theme, setTheme] = useState<ThemeId>(
-    () => loadStoredTheme() ?? fallback ?? DEFAULT_THEME_ID
+export const useUiTheme = (
+  fallbackTheme?: string,
+  customFallback?: readonly CustomTheme[],
+  outputFallback?: OutputAppearance
+) => {
+  const [customThemes, setCustomThemes] = useState<CustomTheme[]>(() =>
+    normalizeCustomThemes(customFallback)
   );
+  const [theme, setThemeState] = useState<string>(() => {
+    const stored = loadStoredTheme();
+    return resolveThemeId(stored ?? fallbackTheme, customThemes);
+  });
   const [outputAppearance, setOutputAppearance] = useState<OutputAppearance>(() =>
     normalizeOutputAppearance(outputFallback)
   );
-  useEffect(() => {
-    applyTheme(theme);
-    saveStoredTheme(theme);
-  }, [theme]);
-  const outputStyle = useMemo(
-    () => outputAppearanceStyle(outputAppearance, themeById(theme)),
-    [outputAppearance, theme]
+
+  const themeDefinition = useMemo(
+    () => resolveThemeDefinition(theme, customThemes),
+    [theme, customThemes]
   );
-  return { theme, setTheme, outputAppearance, setOutputAppearance, outputStyle };
+
+  useEffect(() => {
+    applyThemeDefinition(themeDefinition);
+    saveStoredTheme(theme);
+  }, [themeDefinition, theme]);
+
+  const setTheme = useCallback(
+    (next: string) => {
+      setThemeState(resolveThemeId(next, customThemes));
+    },
+    [customThemes]
+  );
+
+  const saveCustomTheme = useCallback((next: CustomTheme) => {
+    setCustomThemes(previous => {
+      const without = previous.filter(theme => theme.id !== next.id);
+      return normalizeCustomThemes([...without, next]);
+    });
+    setThemeState(next.id);
+  }, []);
+
+  const deleteCustomTheme = useCallback((id: string) => {
+    setCustomThemes(previous => previous.filter(theme => theme.id !== id));
+    setThemeState(current => (current === id ? DEFAULT_THEME_ID : current));
+  }, []);
+
+  /** Project restore: replace the library and the active id in one render. */
+  const restoreTheme = useCallback((themeId: string | undefined, themes: unknown) => {
+    const normalized = normalizeCustomThemes(themes);
+    setCustomThemes(normalized);
+    setThemeState(resolveThemeId(themeId, normalized));
+  }, []);
+
+  const outputStyle = useMemo(
+    () => outputAppearanceStyle(outputAppearance, themeDefinition),
+    [outputAppearance, themeDefinition]
+  );
+
+  return {
+    theme,
+    setTheme,
+    themeDefinition,
+    customThemes,
+    saveCustomTheme,
+    deleteCustomTheme,
+    restoreTheme,
+    outputAppearance,
+    setOutputAppearance,
+    outputStyle,
+  };
 };

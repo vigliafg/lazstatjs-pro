@@ -1,13 +1,24 @@
-import type { Dispatch, SetStateAction } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import { Check, Clock3, FileDown, FilePlus2, FolderOpen, Save, SaveAll, Trash2 } from 'lucide-react';
 import { savePrefs, type IoPreferences } from '../io/prefs';
 import { ChartDefaultsEditor } from '../components/charts/ChartDefaultsEditor';
 import { ChartPresetList } from '../components/charts/ChartPresetList';
 import type { ChartDefaults } from '../charts/defaults';
 import type { ChartPreset } from '../charts/presets';
-import { themesByMode, type ThemeId } from '../theme';
+import {
+  THEMES,
+  createCustomTheme,
+  deriveChartTokens,
+  duplicateCustomTheme,
+  themesByMode,
+  type CustomTheme,
+  type ThemeDefinition,
+} from '../theme';
 import type { OutputAppearance } from '../theme/outputAppearance';
 import { OutputAppearanceSettings } from './OutputAppearanceSettings';
+import { ThemeCreatorDialog } from './theme/ThemeCreatorDialog';
+import { ThemeLibrary } from './theme/ThemeLibrary';
+import { ThemeSwatch } from './theme/ThemeSwatch';
 import {
   ACTIVE_LOCALES,
   LOCALE_LABELS,
@@ -35,8 +46,12 @@ export interface SettingsTabProps {
   setReportLocale: (locale: Locale) => void;
   helpLocale: HelpLocale;
   setHelpLocale: (locale: HelpLocale) => void;
-  theme: ThemeId;
-  setTheme: (theme: ThemeId) => void;
+  theme: string;
+  setTheme: (theme: string) => void;
+  themeDefinition: ThemeDefinition;
+  customThemes: CustomTheme[];
+  saveCustomTheme: (theme: CustomTheme) => void;
+  deleteCustomTheme: (id: string) => void;
   outputAppearance: OutputAppearance;
   setOutputAppearance: Dispatch<SetStateAction<OutputAppearance>>;
   chartDefaults: ChartDefaults;
@@ -50,6 +65,14 @@ const sectionTitle =
 
 const themeModeLabel = (mode: 'dark' | 'light') =>
   mode === 'dark' ? t('settings.themeDark') : t('settings.themeLight');
+
+interface ThemeCreatorState {
+  theme: CustomTheme;
+  initial: CustomTheme;
+  base: ThemeDefinition;
+  mode: 'create' | 'edit';
+  initialDerive: boolean;
+}
 
 export const SettingsTab = ({
   ioPrefs,
@@ -76,7 +99,40 @@ export const SettingsTab = ({
   setChartDefaults,
   chartPresets,
   setChartPresets,
-}: SettingsTabProps) => (
+  themeDefinition,
+  customThemes,
+  saveCustomTheme,
+  deleteCustomTheme,
+}: SettingsTabProps) => {
+  const [creator, setCreator] = useState<ThemeCreatorState | null>(null);
+
+  const openCreate = () => {
+    const base = themeDefinition;
+    const draft = createCustomTheme(t('settings.themeNewName'), base, customThemes);
+    setCreator({
+      theme: { ...draft, chart: deriveChartTokens(base.tokens) },
+      initial: { ...draft, chart: deriveChartTokens(base.tokens) },
+      base,
+      mode: 'create',
+      initialDerive: true,
+    });
+  };
+
+  const openEdit = (theme: CustomTheme) => {
+    setCreator({ theme, initial: theme, base: theme, mode: 'edit', initialDerive: false });
+  };
+
+  const openDuplicate = (theme: CustomTheme) => {
+    const draft = duplicateCustomTheme(theme, customThemes);
+    setCreator({ theme: draft, initial: draft, base: theme, mode: 'create', initialDerive: false });
+  };
+
+  const deleteTheme = (theme: CustomTheme) => {
+    if (!window.confirm(t('settings.themeDeleteConfirm', { name: theme.name }))) return;
+    deleteCustomTheme(theme.id);
+  };
+
+  return (
   <>
     <div className="flex-1 overflow-auto scrollbar p-8">
       <div className="mx-auto max-w-2xl space-y-8">
@@ -174,39 +230,14 @@ export const SettingsTab = ({
                         aria-checked={selected}
                         aria-label={`${option.name} · ${themeModeLabel(mode)}`}
                         data-theme-option={option.id}
-                        onClick={() => setTheme(option.id as ThemeId)}
+                        onClick={() => setTheme(option.id)}
                         className={`flex items-center gap-3 rounded border p-2 text-left transition-all ${
                           selected
                             ? 'border-accent bg-accent/10 shadow-[inset_0_0_0_1px_var(--color-accent)]'
                             : 'border-border bg-surface3/40 hover:border-border2 hover:bg-surface3'
                         }`}
                       >
-                        <span
-                          aria-hidden="true"
-                          className="flex h-11 w-16 shrink-0 overflow-hidden rounded border border-border2"
-                          style={{ background: option.tokens.bg }}
-                        >
-                          <span
-                            className="m-1 flex flex-1 flex-col justify-between rounded-sm p-1"
-                            style={{ background: option.tokens.surface }}
-                          >
-                            <span className="flex gap-0.5">
-                              {option.chart.palette.slice(0, 4).map(color => (
-                                <span
-                                  key={color}
-                                  className="h-1.5 flex-1 rounded-full"
-                                  style={{ backgroundColor: color }}
-                                />
-                              ))}
-                            </span>
-                            <span
-                              className="font-mono text-[8px] font-semibold leading-none"
-                              style={{ color: option.tokens.text }}
-                            >
-                              Aa
-                            </span>
-                          </span>
-                        </span>
+                        <ThemeSwatch theme={option} />
                         <span className="min-w-0 flex-1">
                           <span className="flex items-center gap-1 text-[12px] font-medium text-text">
                             {option.name}
@@ -223,13 +254,22 @@ export const SettingsTab = ({
               </div>
             ))}
           </div>
+          <ThemeLibrary
+            themes={customThemes}
+            activeTheme={theme}
+            onSelect={setTheme}
+            onCreate={openCreate}
+            onEdit={openEdit}
+            onDuplicate={openDuplicate}
+            onDelete={deleteTheme}
+          />
         </section>
 
         <section className="rounded-lg border border-border bg-surface p-6">
           <h2 className={sectionTitle}>{t('settings.outputStyle')}</h2>
           <p className="mb-4 text-[11px] leading-relaxed text-text3">{t('settings.outputStyleHint')}</p>
           <OutputAppearanceSettings
-            theme={theme}
+            theme={themeDefinition}
             appearance={outputAppearance}
             onChange={setOutputAppearance}
           />
@@ -381,5 +421,20 @@ export const SettingsTab = ({
         </section>
       </div>
     </div>
+    {creator && (
+      <ThemeCreatorDialog
+        initial={creator.initial}
+        baseTheme={creator.base}
+        baseThemes={[...THEMES, ...customThemes]}
+        mode={creator.mode}
+        initialDerive={creator.initialDerive}
+        onSave={theme => {
+          saveCustomTheme(theme);
+          setCreator(null);
+        }}
+        onCancel={() => setCreator(null)}
+      />
+    )}
   </>
-);
+  );
+};

@@ -8,7 +8,7 @@ import { isActiveLocale, isHelpLocale, isLocale } from '../../i18n/locales';
 import { normalizeChartDefaults } from '../../charts/defaults';
 import { normalizeChartPresets } from '../../charts/presets';
 import type { ChartOutputGroup } from '../../charts/outputs';
-import { isThemeId } from '../../theme/themes';
+import { normalizeCustomThemes, resolveThemeId } from '../../theme/custom';
 import { normalizeOutputAppearance } from '../../theme/outputAppearance';
 import {
   DEFAULT_PARAMS, DEFAULT_SETTINGS,
@@ -526,6 +526,7 @@ export const parseSettings = (value: unknown): ProjectSettings => {
   const raw = isRecord(value) ? value : {};
   const ci = finite(raw.ciLevel, DEFAULT_SETTINGS.ciLevel);
   const activeTab = raw.activeTab;
+  const customThemes = normalizeCustomThemes(raw.customThemes);
   return {
     ciLevel: ci === 90 || ci === 95 || ci === 99 ? ci : DEFAULT_SETTINGS.ciLevel,
     activeAnalysis: text(raw.activeAnalysis, DEFAULT_SETTINGS.activeAnalysis),
@@ -534,8 +535,10 @@ export const parseSettings = (value: unknown): ProjectSettings => {
         ? activeTab
         : DEFAULT_SETTINGS.activeTab,
     uiMode: raw.uiMode === 'expert' ? 'expert' : 'guided',
-    // Optional in projects saved before the theme registry existed.
-    theme: isThemeId(raw.theme) ? raw.theme : DEFAULT_SETTINGS.theme,
+    // Optional in projects saved before the theme registry existed; custom ids
+    // are validated against the themes carried by the same project.
+    theme: resolveThemeId(raw.theme, customThemes),
+    customThemes,
     // Locales are optional: projects saved before multilingual support keep working.
     uiLocale: isActiveLocale(raw.uiLocale) ? raw.uiLocale : DEFAULT_SETTINGS.uiLocale,
     reportLocale: isLocale(raw.reportLocale) ? raw.reportLocale : DEFAULT_SETTINGS.reportLocale,

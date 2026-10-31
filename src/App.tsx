@@ -287,7 +287,18 @@ export default function App() {
   const { params, setParams } = useProjectParams(boot, grid);
   const [ciLevel, setCiLevel] = useState(boot?.settings.ciLevel ?? DEFAULT_SETTINGS.ciLevel);
   const [uiMode, setUiMode] = useState<UiMode>(boot?.settings.uiMode ?? DEFAULT_SETTINGS.uiMode);
-  const { theme, setTheme, outputAppearance, setOutputAppearance, outputStyle } = useUiTheme(boot?.settings.theme, boot?.settings.outputAppearance);
+  const {
+    theme,
+    setTheme,
+    themeDefinition,
+    customThemes,
+    saveCustomTheme,
+    deleteCustomTheme,
+    restoreTheme,
+    outputAppearance,
+    setOutputAppearance,
+    outputStyle,
+  } = useUiTheme(boot?.settings.theme, boot?.settings.customThemes, boot?.settings.outputAppearance);
   const [uiLocale, setUiLocale] = useState<Locale>(boot?.settings.uiLocale ?? getLocale());
   const [reportLocale, setReportLocale] = useState<Locale>(boot?.settings.reportLocale ?? DEFAULT_SETTINGS.reportLocale);
   const [helpLocale, setHelpLocale] = useState<HelpLocale>(boot?.settings.helpLocale ?? DEFAULT_SETTINGS.helpLocale);
@@ -342,8 +353,8 @@ export default function App() {
 
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance }),
-    [ciLevel, activeAnalysis, activeTab, uiMode, theme, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, customThemes, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, theme, customThemes, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance]
   );
 
   const roleErrors = [
@@ -381,7 +392,7 @@ export default function App() {
     setParams(project.params);
     setCiLevel(project.settings.ciLevel);
     setUiMode(project.settings.uiMode);
-    setTheme(project.settings.theme);
+    restoreTheme(project.settings.theme, project.settings.customThemes);
     setOutputAppearance(project.settings.outputAppearance);
     setUiLocale(project.settings.uiLocale);
     setReportLocale(project.settings.reportLocale);
@@ -532,7 +543,7 @@ export default function App() {
     <UiModeProvider mode={uiMode}>
     <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} theme={theme} setTheme={setTheme} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} theme={theme} setTheme={setTheme} customThemes={customThemes} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
@@ -664,6 +675,10 @@ export default function App() {
             setHelpLocale={setHelpLocale}
             theme={theme}
             setTheme={setTheme}
+            themeDefinition={themeDefinition}
+            customThemes={customThemes}
+            saveCustomTheme={saveCustomTheme}
+            deleteCustomTheme={deleteCustomTheme}
             outputAppearance={outputAppearance} setOutputAppearance={setOutputAppearance}
             chartDefaults={chartDefaults}
             setChartDefaults={setChartDefaults}

@@ -11,7 +11,7 @@ import { join, relative, sep } from 'node:path';
 const LIMIT = 700;
 const EXCEPTIONS = new Map([
   ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
-  ['src/App.tsx', 720], // composizione root dell'app, preset e salva-con-nome inclusi
+  ['src/App.tsx', 735], // composizione root dell'app, preset, salva-con-nome e temi inclusi
 ]);
 
 const walk = directory =>

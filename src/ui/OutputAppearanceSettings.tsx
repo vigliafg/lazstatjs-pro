@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { t } from '../i18n';
-import { themeById, type ThemeId } from '../theme';
+import type { ThemeDefinition } from '../theme';
 import {
   DEFAULT_OUTPUT_APPEARANCE,
   OUTPUT_FONT_SIZES,
@@ -11,7 +11,7 @@ import {
 } from '../theme/outputAppearance';
 
 export interface OutputAppearanceSettingsProps {
-  theme: ThemeId;
+  theme: ThemeDefinition;
   appearance: OutputAppearance;
   onChange: Dispatch<SetStateAction<OutputAppearance>>;
 }
@@ -30,9 +30,8 @@ export const OutputAppearanceSettings = ({
   appearance,
   onChange,
 }: OutputAppearanceSettingsProps) => {
-  const themeDefinition = themeById(theme);
-  const background = appearance.background || themeDefinition.tokens.bg;
-  const foreground = appearance.foreground || themeDefinition.tokens.text2;
+  const background = appearance.background || theme.tokens.bg;
+  const foreground = appearance.foreground || theme.tokens.text2;
   const fontSize = appearance.fontSize || 12;
   const update = (patch: Partial<OutputAppearance>) =>
     onChange(previous => ({ ...previous, ...patch }));

@@ -1,10 +1,8 @@
 import {
   DEFAULT_THEME_ID,
   cssVariablesOf,
-  isThemeId,
   themeById,
   type ThemeDefinition,
-  type ThemeId,
 } from './themes';
 
 /** Kept separate from the project snapshot so the first paint is themed. */
@@ -23,16 +21,16 @@ const storage = (): Storage | null => {
   }
 };
 
-export const loadStoredTheme = (): ThemeId | null => {
+export const loadStoredTheme = (): string | null => {
   try {
     const raw = storage()?.getItem(THEME_STORAGE_KEY);
-    return isThemeId(raw) ? raw : null;
+    return typeof raw === 'string' && raw.length > 0 && raw.length <= 80 ? raw : null;
   } catch {
     return null;
   }
 };
 
-export const saveStoredTheme = (theme: ThemeId): void => {
+export const saveStoredTheme = (theme: string): void => {
   try {
     storage()?.setItem(THEME_STORAGE_KEY, theme);
   } catch {
@@ -41,11 +39,11 @@ export const saveStoredTheme = (theme: ThemeId): void => {
 };
 
 /**
- * Applies a theme to `document.documentElement`. Safe outside the browser: the
- * chart renderer and unit tests only need the in-memory `activeTheme`.
+ * Applies any complete theme definition, built-in or custom, to the document.
+ * Safe outside the browser: the chart renderer and unit tests only need the
+ * in-memory `activeTheme`.
  */
-export const applyTheme = (value: unknown): ThemeDefinition => {
-  const theme = themeById(value);
+export const applyThemeDefinition = (theme: ThemeDefinition): ThemeDefinition => {
   active = theme;
   if (typeof document !== 'undefined') {
     const root = document.documentElement;
@@ -57,3 +55,7 @@ export const applyTheme = (value: unknown): ThemeDefinition => {
   }
   return theme;
 };
+
+/** Resolve a built-in id and apply it; used where no custom list is available. */
+export const applyTheme = (value: unknown): ThemeDefinition =>
+  applyThemeDefinition(themeById(value));

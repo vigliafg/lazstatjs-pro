@@ -17,6 +17,8 @@ import {
 import { DEFAULT_PREFS } from './prefs';
 import { DEFAULT_CHART_DEFAULTS } from '../charts/defaults';
 import { createChartPreset } from '../charts/presets';
+import { createCustomTheme } from '../theme/custom';
+import { DEFAULT_THEME_ID, THEMES } from '../theme/themes';
 import type { GridData } from '../grid/types';
 
 const grid: GridData = {
@@ -104,6 +106,49 @@ describe('project snapshot roundtrip', () => {
     assert.equal(restored.settings.chartPresets?.[0].name, 'Paper');
     assert.equal(restored.settings.chartPresets?.[0].options.theme, 'light');
     assert.deepEqual(parseProject(serializeProject(base)).settings.chartPresets, []);
+  });
+
+  it('round-trips custom themes and the active custom theme id', () => {
+    const base = makeSnapshot();
+    const custom = createCustomTheme('Paper', THEMES[0]);
+    const parsed = parseProject(
+      JSON.stringify({
+        ...base,
+        settings: { ...base.settings, theme: custom.id, customThemes: [custom] },
+      })
+    );
+    assert.equal(parsed.settings.theme, custom.id);
+    assert.equal(parsed.settings.customThemes?.length, 1);
+    assert.equal(parsed.settings.customThemes?.[0].name, 'Paper');
+    assert.deepEqual(parsed.settings.customThemes?.[0].tokens, custom.tokens);
+  });
+
+  it('falls back when the active custom theme is missing', () => {
+    const base = makeSnapshot();
+    const parsed = parseProject(
+      JSON.stringify({
+        ...base,
+        settings: { ...base.settings, theme: 'custom-missing', customThemes: [] },
+      })
+    );
+    assert.equal(parsed.settings.theme, DEFAULT_THEME_ID);
+    assert.deepEqual(parsed.settings.customThemes, []);
+  });
+
+  it('drops malformed custom themes without losing the project', () => {
+    const base = makeSnapshot();
+    const custom = createCustomTheme('Valid', THEMES[0]);
+    const parsed = parseProject(
+      JSON.stringify({
+        ...base,
+        settings: {
+          ...base.settings,
+          customThemes: [{ name: 'Broken' }, custom, { ...custom, name: 'bad hex', tokens: { ...custom.tokens, bg: 'red' } }],
+        },
+      })
+    );
+    assert.equal(parsed.settings.customThemes?.length, 1);
+    assert.equal(parsed.settings.customThemes?.[0].name, 'Valid');
   });
 
   it('drops malformed presets without losing the project', () => {

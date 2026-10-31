@@ -30,6 +30,10 @@ const DYNAMIC_KEYS = new Set([
   'analysis.phase.starting',
   'analysis.phase.computing',
   'analysis.phase.finishing',
+  'settings.themeCreateTitle',
+  'settings.themeEditTitle',
+  'settings.themePreviewTab',
+  'settings.themeEditTab',
 ]);
 
 const walk = (directory: string): string[] =>
@@ -82,7 +86,16 @@ test('a locale without a catalog falls back to English', () => {
 });
 
 /** Keys built at runtime from registry ids (`meta.analysis.<id>.label`). */
-const DYNAMIC_PREFIXES = ['meta.analysis.', 'meta.family.', 'chart.', 'analysis.chartGroup.'];
+const DYNAMIC_PREFIXES = [
+  'meta.analysis.',
+  'meta.family.',
+  'chart.',
+  'analysis.chartGroup.',
+  'settings.themeToken.',
+  'settings.themeChart.',
+  'settings.themeContrast',
+  'settings.themeGroup',
+];
 
 test('every shell message is referenced by the UI', () => {
   const orphans = MESSAGE_KEYS.filter(

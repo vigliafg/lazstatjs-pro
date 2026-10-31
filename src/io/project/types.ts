@@ -13,7 +13,8 @@ import type { WizardGoal } from '../../stats/wizard';
 import type { ChartOutputGroup } from '../../charts/outputs';
 import { DEFAULT_CHART_DEFAULTS, type ChartDefaults } from '../../charts/defaults';
 import type { ChartPreset } from '../../charts/presets';
-import { DEFAULT_THEME_ID, type ThemeId } from '../../theme/themes';
+import { DEFAULT_THEME_ID } from '../../theme/themes';
+import type { CustomTheme } from '../../theme/custom';
 import {
   DEFAULT_OUTPUT_APPEARANCE,
   type OutputAppearance,
@@ -332,8 +333,10 @@ export interface ProjectSettings {
   activeTab: ProjectTab;
   /** Guided hides the advanced form sections; Expert shows everything. */
   uiMode: 'guided' | 'expert';
-  /** Interface colours; one of the five dark or five light themes. */
-  theme: ThemeId;
+  /** Active interface theme: a built-in id or a custom theme id. */
+  theme: string;
+  /** User-created themes saved with this project. */
+  customThemes?: CustomTheme[];
   /** Interface language. */
   uiLocale: Locale;
   /** Language of the written report of every new run. */
@@ -560,6 +563,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   activeTab: 'data',
   uiMode: 'guided',
   theme: DEFAULT_THEME_ID,
+  customThemes: [],
   uiLocale: DEFAULT_LOCALE,
   reportLocale: DEFAULT_REPORT_LOCALE,
   helpLocale: 'auto',

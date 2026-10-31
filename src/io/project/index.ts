@@ -35,6 +35,15 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
           })),
         }
       : {}),
+    ...(input.settings.customThemes
+      ? {
+          customThemes: input.settings.customThemes.map(theme => ({
+            ...theme,
+            tokens: { ...theme.tokens },
+            chart: { ...theme.chart, palette: [...theme.chart.palette] },
+          })),
+        }
+      : {}),
     outputAppearance: { ...input.settings.outputAppearance },
   },
   params: parseParams(input.params, input.grid.cols.length),

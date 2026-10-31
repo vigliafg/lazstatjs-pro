@@ -1,7 +1,7 @@
 import { BarChart3, Database, Globe, HelpCircle, Palette, Settings } from 'lucide-react';
 import type { ProjectTab } from '../io/project';
 import type { UiMode } from '../components/UiMode';
-import { themesByMode, type ThemeId } from '../theme';
+import { themesByMode, type CustomTheme } from '../theme';
 import { ACTIVE_LOCALES, LOCALE_LABELS, t, type Locale } from '../i18n';
 
 const themeModeLabel = (mode: 'dark' | 'light') =>
@@ -12,8 +12,9 @@ export interface HeaderProps {
   setActiveTab: (tab: ProjectTab) => void;
   uiMode: UiMode;
   setUiMode: (mode: UiMode) => void;
-  theme: ThemeId;
-  setTheme: (theme: ThemeId) => void;
+  theme: string;
+  setTheme: (theme: string) => void;
+  customThemes: CustomTheme[];
   uiLocale: Locale;
   setUiLocale: (locale: Locale) => void;
   /** Shown as a hint: the report language can differ from the interface one. */
@@ -28,6 +29,7 @@ export const Header = ({
   setUiMode,
   theme,
   setTheme,
+  customThemes,
   uiLocale,
   setUiLocale,
   reportLocale,
@@ -79,7 +81,7 @@ export const Header = ({
         aria-label={t('settings.theme')}
         className="max-w-[120px] rounded border border-border2 bg-surface3 px-1 py-0.5 text-[10px] text-text"
         value={theme}
-        onChange={event => setTheme(event.target.value as ThemeId)}
+        onChange={event => setTheme(event.target.value)}
       >
         {(['dark', 'light'] as const).map(mode => (
           <optgroup key={mode} label={themeModeLabel(mode)}>
@@ -90,6 +92,15 @@ export const Header = ({
             ))}
           </optgroup>
         ))}
+        {customThemes.length > 0 && (
+          <optgroup label={t('settings.themeCustom')}>
+            {customThemes.map(option => (
+              <option key={option.id} value={option.id}>
+                {option.name}
+              </option>
+            ))}
+          </optgroup>
+        )}
       </select>
     </label>
     <label className="flex shrink-0 items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-text3">
