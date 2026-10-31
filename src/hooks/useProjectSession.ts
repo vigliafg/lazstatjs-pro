@@ -10,7 +10,8 @@ import {
   type ProjectSnapshot,
 } from '../io/project';
 import { savePrefs, type IoPreferences } from '../io/prefs';
-import { downloadText } from '../io/writers';
+import { saveText } from '../io/writers';
+import { isDesktop, openDesktopFile } from '../platform/desktop';
 import {
   addRecentProject,
   loadRecentProjects,
@@ -153,26 +154,67 @@ export const useProjectSession = ({
     }
   };
 
-  const downloadProject = (fileName: string) => {
-    downloadText(
+  const saveProject = async (
+    suggestedName: string
+  ): Promise<{ saved: boolean; fileName?: string }> => {
+    const result = await saveText(
       serializeProject(buildProject()),
-      fileName,
+      suggestedName,
       'application/json;charset=utf-8'
     );
+    if (result.canceled) return { saved: false };
+    const chosen = result.filePath?.split(/[\\/]/).pop() || suggestedName;
+    rememberProject(chosen);
+    return { saved: true, fileName: chosen };
   };
 
   const saveProjectFile = () => {
-    downloadProject('lazstats-project.lzs');
-    showToast(t('toast.project'), t('project.saved'), 'ok');
+    void saveProject('lazstats-project.lzs').then(result => {
+      if (result.saved) showToast(t('toast.project'), t('project.saved'), 'ok');
+    });
   };
 
   const saveProjectFileAs = () => {
     if (typeof window === 'undefined') return;
+    if (isDesktop()) {
+      // The native save dialog already asks for a name.
+      void saveProject('lazstats-project.lzs').then(result => {
+        if (result.saved && result.fileName) {
+          showToast(t('toast.project'), t('project.savedAs', { name: result.fileName }), 'ok');
+        }
+      });
+      return;
+    }
     const answer = window.prompt(t('data.saveAsPrompt'), 'lazstats-project.lzs');
     if (answer === null) return;
     const fileName = normalizeProjectFileName(answer);
-    downloadProject(fileName);
-    showToast(t('toast.project'), t('project.savedAs', { name: fileName }), 'ok');
+    void saveProject(fileName).then(result => {
+      if (result.saved) {
+        showToast(t('toast.project'), t('project.savedAs', { name: result.fileName ?? fileName }), 'ok');
+      }
+    });
+  };
+
+  /** Native file picker in the desktop app; hidden input in the browser. */
+  const openProjectDialog = () => {
+    if (!isDesktop()) {
+      projectInputRef.current?.click();
+      return;
+    }
+    void openDesktopFile({
+      filters: [
+        { name: 'LazStats project', extensions: ['lzs', 'json'] },
+      ],
+      encoding: 'utf8',
+    }).then(result => {
+      if (result.canceled || !result.data) return;
+      const file = new File(
+        [result.data],
+        result.fileName ?? 'lazstats-project.lzs',
+        { type: 'application/json' }
+      );
+      return openProjectFile(file);
+    });
   };
 
   const openProjectFile = async (file: File) => {
@@ -195,6 +237,7 @@ export const useProjectSession = ({
     saveProjectFile,
     saveProjectFileAs,
     openProjectFile,
+    openProjectDialog,
     restoreBackup,
     recentProjects,
     clearRecentProjects,

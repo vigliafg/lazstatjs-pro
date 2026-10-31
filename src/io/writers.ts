@@ -1,6 +1,12 @@
 import { escapeField, toCsv, trimEmptyRows } from '../csv';
 import type { GridData } from '../grid/types';
 import type { Delimiter } from './detect';
+import {
+  bytesToBase64,
+  desktopBridge,
+  type DesktopFileFilter,
+  type DesktopSaveResult,
+} from '../platform/desktop';
 
 export type ExportFormat = 'csv' | 'tsv' | 'pipe' | 'json' | 'spss' | 'xlsx';
 
@@ -119,7 +125,14 @@ const sanitizeSpsName = (name: string): string => {
   return (s || 'VAR').slice(0, 64).toUpperCase();
 };
 
-export const downloadBlob = (blob: Blob, fileName: string): void => {
+const filterFor = (fileName: string, mime: string): DesktopFileFilter[] | undefined => {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+  if (!extension) return undefined;
+  const label = mime.split(';')[0]?.split('/').pop() || 'File';
+  return [{ name: label, extensions: [extension] }];
+};
+
+const browserDownloadBlob = (blob: Blob, fileName: string): void => {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
@@ -133,15 +146,106 @@ export const downloadBlob = (blob: Blob, fileName: string): void => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
+/**
+ * Save one text file. In the packaged application this opens the native save
+ * dialog; in a normal browser it falls back to the usual download anchor.
+ */
+export const saveText = async (
+  content: string,
+  fileName: string,
+  mime: string
+): Promise<DesktopSaveResult> => {
+  const bridge = desktopBridge();
+  if (!bridge) {
+    browserDownloadBlob(new Blob([content], { type: mime }), fileName);
+    return { canceled: false };
+  }
+  try {
+    return await bridge.saveFile({
+      suggestedName: fileName,
+      data: content,
+      encoding: 'utf8',
+      filters: filterFor(fileName, mime),
+    });
+  } catch (error) {
+    console.error('LazStats: text export failed', error);
+    return { canceled: true };
+  }
+};
+
+/** Save one binary file through the same native/browser abstraction. */
+export const saveBytes = async (
+  bytes: Uint8Array,
+  fileName: string,
+  mime: string
+): Promise<DesktopSaveResult> => {
+  const bridge = desktopBridge();
+  if (!bridge) {
+    const copy = new Uint8Array(bytes.length);
+    copy.set(bytes);
+    browserDownloadBlob(new Blob([copy], { type: mime }), fileName);
+    return { canceled: false };
+  }
+  try {
+    return await bridge.saveFile({
+      suggestedName: fileName,
+      data: bytesToBase64(bytes),
+      encoding: 'base64',
+      filters: filterFor(fileName, mime),
+    });
+  } catch (error) {
+    console.error('LazStats: binary export failed', error);
+    return { canceled: true };
+  }
+};
+
+/** Save several files at once; the packaged app asks for one destination folder. */
+export const saveFilesInFolder = async (
+  files: { name: string; bytes: Uint8Array }[],
+  directoryName?: string
+): Promise<{ canceled: boolean; saved: number } | undefined> => {
+  const bridge = desktopBridge();
+  if (!bridge) return undefined;
+  try {
+    return await bridge.saveFiles({
+      directoryName,
+      files: files.map(file => ({
+        name: file.name,
+        data: bytesToBase64(file.bytes),
+        encoding: 'base64',
+      })),
+    });
+  } catch (error) {
+    console.error('LazStats: batch export failed', error);
+    return { canceled: true, saved: 0 };
+  }
+};
+
+export const downloadBlob = (blob: Blob, fileName: string): void => {
+  const bridge = desktopBridge();
+  if (bridge) {
+    void blob
+      .arrayBuffer()
+      .then(buffer =>
+        bridge.saveFile({
+          suggestedName: fileName,
+          data: bytesToBase64(new Uint8Array(buffer)),
+          encoding: 'base64',
+          filters: filterFor(fileName, blob.type),
+        })
+      )
+      .catch(error => console.error('LazStats: download failed', error));
+    return;
+  }
+  browserDownloadBlob(blob, fileName);
+};
+
 export const downloadText = (content: string, fileName: string, mime: string): void => {
-  downloadBlob(new Blob([content], { type: mime }), fileName);
+  void saveText(content, fileName, mime);
 };
 
 export const downloadBytes = (bytes: Uint8Array, fileName: string, mime: string): void => {
-  // Copy into a fresh ArrayBuffer so the Blob never aliases a larger buffer.
-  const copy = new Uint8Array(bytes.length);
-  copy.set(bytes);
-  downloadBlob(new Blob([copy], { type: mime }), fileName);
+  void saveBytes(bytes, fileName, mime);
 };
 
 /** A file produced by an export dialog: text formats or binary workbooks. */

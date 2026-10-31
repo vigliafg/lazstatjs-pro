@@ -12,6 +12,7 @@ import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
 import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
+import { onDesktopCommand, type DesktopCommand } from './platform/desktop';
 import { useAnalysisRun } from './hooks/useAnalysisRun';
 import { useColumnOperations } from './hooks/useColumnOperations';
 import { useProjectParams } from './hooks/useProjectParams';
@@ -75,7 +76,7 @@ const ImportWizard = lazy(() =>
 const ExportDialog = lazy(() =>
   import('./io/ExportDialog').then(module => ({ default: module.ExportDialog }))
 );
-import { downloadExportFile } from './io/writers';
+import { saveExportFiles } from './io/exportFiles';
 import {
   DEFAULT_SETTINGS,
   loadAutosaveProject,
@@ -426,6 +427,7 @@ export default function App() {
     saveProjectFile,
     saveProjectFileAs,
     openProjectFile,
+    openProjectDialog,
     restoreBackup,
     recentProjects,
     clearRecentProjects,
@@ -441,6 +443,19 @@ export default function App() {
     restore: restoreProject,
     showToast,
   });
+
+  // Native menu commands from Electron (File, Help, Settings).
+  useEffect(() => {
+    const handle = (command: DesktopCommand) => {
+      if (command === 'new-project') newDataset();
+      else if (command === 'open-project') openProjectDialog();
+      else if (command === 'save-project') saveProjectFile();
+      else if (command === 'save-project-as') saveProjectFileAs();
+      else if (command === 'open-help') setActiveTab('help');
+      else if (command === 'open-settings') setActiveTab('settings');
+    };
+    return onDesktopCommand(handle);
+  }, [newDataset, openProjectDialog, saveProjectFile, saveProjectFileAs, setActiveTab]);
 
   // Tutte le analisi convergono qui: `build*Output` restituisce o il blocco
   // pronto per la console, o il motivo del rifiuto. Un solo punto di errore.
@@ -570,6 +585,7 @@ export default function App() {
             saveProjectFile={saveProjectFile}
             saveProjectFileAs={saveProjectFileAs}
             openProjectFile={openProjectFile}
+            openProjectDialog={openProjectDialog}
             lastAutosave={lastAutosave}
             showToast={showToast}
             validation={validation}
@@ -662,7 +678,7 @@ export default function App() {
             onNewDataset={newDataset}
             onSaveProject={saveProjectFile}
             onSaveProjectAs={saveProjectFileAs}
-            onOpenProject={() => projectInputRef.current?.click()}
+            onOpenProject={openProjectDialog}
             onExport={() => setShowExport(true)}
             onRestoreBackup={() => void restoreBackup()}
             recentProjects={recentProjects}
@@ -707,10 +723,12 @@ export default function App() {
         <ExportDialog
           grid={grid} rowFilter={activeRowFilter} filterAffectsAnalysis={filterAffectsAnalysis}
           onClose={() => setShowExport(false)}
-          onExport={(files) => {
-            files.forEach((f) => downloadExportFile(f));
-            setShowExport(false);
-            showToast(t('toast.export'), files.map((f) => f.fileName).join(' + '), 'ok');
+          onExport={files => {
+            void saveExportFiles(files).then(saved => {
+              if (!saved) return;
+              setShowExport(false);
+              showToast(t('toast.export'), files.map(file => file.fileName).join(' + '), 'ok');
+            });
           }}
         />
         </Suspense>

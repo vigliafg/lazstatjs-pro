@@ -1,7 +1,8 @@
 /** Rasterise rendered Vega-Lite SVG charts to downloadable PNGs. */
 
-import { downloadBlob } from './writers';
+import { downloadBlob, saveBytes, saveFilesInFolder } from './writers';
 import { awaitChartsReady } from './chartReady';
+import { desktopBridge } from '../platform/desktop';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const FALLBACK_BACKGROUND = '#0d0f14';
@@ -84,7 +85,7 @@ export const exportChartsAsPng = async (
     }
   );
 
-  let exported = 0;
+  const rendered: { name: string; bytes: Uint8Array }[] = [];
   let failed = ready.failed;
   for (let i = 0; i < charts.length; i += 1) {
     try {
@@ -92,13 +93,36 @@ export const exportChartsAsPng = async (
       const background = surface?.getAttribute('data-chart-background') ?? FALLBACK_BACKGROUND;
       const blob = await renderPng(charts[i], background);
       const suffix = charts.length > 1 ? `-${i + 1}` : '';
-      downloadBlob(blob, `${baseName}${suffix}.png`);
-      exported += 1;
+      rendered.push({
+        name: `${baseName}${suffix}.png`,
+        bytes: new Uint8Array(await blob.arrayBuffer()),
+      });
     } catch {
       failed += 1;
     }
+    // Let the renderer breathe between charts.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+
+  if (rendered.length === 0) return { exported: 0, failed, pending: ready.pending };
+
+  if (desktopBridge()) {
+    if (rendered.length === 1) {
+      const result = await saveBytes(rendered[0].bytes, rendered[0].name, 'image/png');
+      return { exported: result.canceled ? 0 : 1, failed, pending: ready.pending };
+    }
+    const result = await saveFilesInFolder(rendered, 'LazStats charts');
+    return {
+      exported: result?.canceled === false ? result.saved : 0,
+      failed,
+      pending: ready.pending,
+    };
+  }
+
+  for (const file of rendered) {
+    downloadBlob(new Blob([file.bytes], { type: 'image/png' }), file.name);
     // Give the download manager a tick between files.
     await new Promise((resolve) => setTimeout(resolve, 0));
   }
-  return { exported, failed, pending: ready.pending };
+  return { exported: rendered.length, failed, pending: ready.pending };
 };

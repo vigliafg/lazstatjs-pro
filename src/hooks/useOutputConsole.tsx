@@ -6,7 +6,7 @@ import { awaitChartsReady } from '../io/chartReady';
 import { exportChartsAsPng } from '../io/chartExport';
 import { buildReportFromElement } from '../io/reportExport';
 
-import { downloadBytes, downloadText } from '../io/writers';
+import { saveBytes, saveText } from '../io/writers';
 import { capStoredOutputs, extractOutputTitle, nextRunNumber, type StoredOutput } from '../io/outputs';
 import { fitChartBudget } from '../charts/schema';
 import { nonEmptyRowCount } from '../grid/types';
@@ -227,8 +227,8 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     try {
       const { buildResultsWorkbookFromElement, XLSX_MIME } = await import('../io/xlsx');
       const bytes = buildResultsWorkbookFromElement(el, grid);
-      downloadBytes(bytes, 'lazstats-risultati.xlsx', XLSX_MIME);
-      showToast(t('toast.export'), t('output.xlsxReady'), 'ok');
+      const result = await saveBytes(bytes, 'lazstats-risultati.xlsx', XLSX_MIME);
+      if (!result.canceled) showToast(t('toast.export'), t('output.xlsxReady'), 'ok');
     } catch (error) {
       showToast(t('toast.export'), error instanceof Error ? error.message : t('output.xlsxError'), 'error');
     }
@@ -245,8 +245,8 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       lang: reportLocale,
       details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
-    downloadText(html, 'lazstats-report.doc', 'application/msword;charset=utf-8');
-    showToast(t('toast.report'), t('output.sessionReportReady'), 'ok');
+    const result = await saveText(html, 'lazstats-report.doc', 'application/msword;charset=utf-8');
+    if (!result.canceled) showToast(t('toast.report'), t('output.sessionReportReady'), 'ok');
   };
 
   const exportReportHtml = async () => {
@@ -260,8 +260,8 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       lang: reportLocale,
       details: [`${nonEmptyRowCount(grid.rows)} ${reportText('output.rows')}`, `${grid.cols.length} ${reportText('output.columns')}`, `${reportText('output.ci')} ${ciLevel}%`],
     });
-    downloadText(html, 'lazstats-report.html', 'text/html;charset=utf-8');
-    showToast(t('toast.report'), t('output.sessionReportReady'), 'ok');
+    const result = await saveText(html, 'lazstats-report.html', 'text/html;charset=utf-8');
+    if (!result.canceled) showToast(t('toast.report'), t('output.sessionReportReady'), 'ok');
   };
 
   /**
@@ -288,12 +288,11 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
     const number = String(
       entry.runNumber ?? outputs.findIndex(item => item.id === entryId) + 1
     ).padStart(2, '0');
-    if (format === 'word') {
-      downloadText(html, `lazstats-run-${number}.doc`, 'application/msword;charset=utf-8');
-    } else {
-      downloadText(html, `lazstats-run-${number}.html`, 'text/html;charset=utf-8');
-    }
-    showToast(t('toast.report'), t('output.runReportReady'), 'ok');
+    const result =
+      format === 'word'
+        ? await saveText(html, `lazstats-run-${number}.doc`, 'application/msword;charset=utf-8')
+        : await saveText(html, `lazstats-run-${number}.html`, 'text/html;charset=utf-8');
+    if (!result.canceled) showToast(t('toast.report'), t('output.runReportReady'), 'ok');
   };
 
   const exportRunReportHtml = (entryId: string) => void exportRunReport(entryId, 'html');

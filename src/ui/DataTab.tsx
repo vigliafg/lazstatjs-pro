@@ -57,6 +57,7 @@ export interface DataTabProps {
   saveProjectFile: () => void;
   saveProjectFileAs: () => void;
   openProjectFile: (file: File) => Promise<void>;
+  openProjectDialog: () => void;
   lastAutosave: string | null;
   showToast: (title: string, msg: string, type?: 'ok' | 'warn' | 'error') => void;
   validation: { ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] };
@@ -117,6 +118,7 @@ export const DataTab = ({
   saveProjectFile,
   saveProjectFileAs,
   openProjectFile,
+  openProjectDialog,
   lastAutosave,
   showToast,
   validation,
@@ -166,7 +168,7 @@ export const DataTab = ({
     <div className="h-4 w-px bg-border mx-1" />
     <button
       className="tb-btn"
-      onClick={() => projectInputRef.current?.click()}
+      onClick={openProjectDialog}
       title={t('data.openHint')}
     >
       {t('data.openProject')}
