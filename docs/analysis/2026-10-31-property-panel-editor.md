@@ -5,6 +5,19 @@
 - **Data e revisione del codice**: 2026-10-31, commit `2d75bb9`.
 - **Stato**: studio di fattibilità, nessuna modifica al codice.
 
+## Stato implementazione (2026-10-31)
+
+Implementato il nocciolo del piano:
+
+- `ChartObjectPanel` + `src/charts/objects.ts`: albero di oggetti per i 5 kind pilota (box, scatter, line, bar, survival); per gli altri kind le sezioni esistenti diventano collassabili.
+- Chevron, occhio di visibilità, reset del singolo oggetto, proprietà impilate (`ChartControls layout="stacked"`).
+- Fascia destra a 380 px; su mobile tab “Grafico / Proprietà”.
+- Toolbar ridotta a quick bar (preset, tema, palette, dimensione); rimosso “More style”.
+- Nuovi flag: `showWhiskers`, `showFit`, `showBand`, `showErrorBars`, `capSize`.
+- Test: 671 unit test verdi, 40 e2e passati (38 skipped), lint/guard/build verdi; baseline visive aggiornate e ispezionate.
+
+**Deviazioni dichiarate**: l’albero completo per tutti i 22 kind non è stato implementato; per i kind non pilota si usano le sezioni collassabili. Annotazioni, colori arbitrari e `AxisStyle` restano nel piano dell’audit separato.
+
 ## Verdetto
 
 **Sì, si può integrare.** Non richiede un rewrite dei renderer: la maggior parte delle proprietà esiste già come `FeatureDescriptor`; manca soprattutto un **livello di raggruppamento “oggetto”** sopra le feature e una UI a sezioni collassabili con occhio di visibilità. La percentuale esatta va verificata su un prototipo, non assunta.

@@ -21,7 +21,7 @@ import {
 export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'scatter' }>): Spec[] => {
   const theme = themeFor(options);
   const layers: Spec[] = [];
-  const band = bandRows(chart, options);
+  const band = options.showBand && options.band !== 'none' ? bandRows(chart, options) : [];
   if (band.length > 0) {
     layers.push({
       data: { values: band },
@@ -33,7 +33,7 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
       },
     });
   }
-  if (options.fit !== 'none') {
+  if (options.showFit && options.fit !== 'none') {
     const fitLayers = options.fit === 'both' ? ['fit', 'robust'] : [options.fit === 'robust' ? 'robust' : 'fit'];
     fitLayers.forEach((layer, index) => {
       const rows = rowsOf(chart, layer);
@@ -256,7 +256,7 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
   });
   // Error bars ride on top of the filled bars, otherwise the bar layer hides
   // the confidence interval completely.
-  if (errorBars.length > 0) {
+  if (options.showErrorBars && errorBars.length > 0) {
     const errorRows = errorBars.map(({ row, interval }) => ({
       category: row.category,
       series: row.series,

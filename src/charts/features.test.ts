@@ -35,6 +35,27 @@ test('specific controls are declared per kind', () => {
   assert.equal(specificFeatures(chartOf('score')).some(feature => feature.id === 'showR2'), false);
 });
 
+test('visibility flags preserve the statistical variant', () => {
+  const scatter = specificFeatures(chartOf('scatter'));
+  const fit = scatter.find(feature => feature.id === 'showFit');
+  const band = scatter.find(feature => feature.id === 'showBand');
+  assert.ok(fit);
+  assert.ok(band);
+  const scatterOptions = { ...factoryOptions('scatter'), fit: 'none', band: 'none' } as never;
+  assert.equal(fit!.visible?.(scatterOptions, chartOf('scatter')), false);
+  assert.equal(band!.visible?.(scatterOptions, chartOf('scatter')), false);
+
+  const bar = specificFeatures(chartOf('bar'));
+  assert.ok(bar.some(feature => feature.id === 'showErrorBars'));
+  assert.ok(bar.some(feature => feature.id === 'capSize'));
+
+  const box = specificFeatures(chartOf('box'));
+  const whiskers = box.find(feature => feature.id === 'showWhiskers');
+  assert.ok(whiskers);
+  assert.equal(whiskers!.visible?.({ ...factoryOptions('box'), display: 'box' } as never, chartOf('box')), true);
+  assert.equal(whiskers!.visible?.({ ...factoryOptions('box'), display: 'violin' } as never, chartOf('box')), false);
+});
+
 test('box display offers four modes and normalizes an unknown stored value', () => {
   const chart = chartOf('box');
   const display = specificFeatures(chart).find(feature => feature.id === 'display');

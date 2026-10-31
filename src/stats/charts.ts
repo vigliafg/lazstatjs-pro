@@ -71,7 +71,9 @@ export interface ScatterOptions extends CommonChartOptions {
   kind: 'scatter';
   showPoints: boolean;
   fit: 'none' | 'ols' | 'robust' | 'both';
+  showFit: boolean;
   band: 'none' | 'ci' | 'pi';
+  showBand: boolean;
   bandLevel: 90 | 95 | 99;
   bandOpacity: number;
   equation: 'none' | 'short' | 'full';
@@ -91,6 +93,8 @@ export interface LineOptions extends CommonChartOptions {
 export interface BarOptions extends CommonChartOptions {
   kind: 'bar';
   error: 'none' | 'se' | 'ci' | 'sd';
+  showErrorBars: boolean;
+  capSize: number;
   valueLabels: boolean;
   sort: 'none' | 'asc' | 'desc';
   referenceLine: 'none' | 'zero' | 'one';
@@ -103,6 +107,7 @@ export interface BoxOptions extends CommonChartOptions {
   /** Presentation: classic box, notched box or KDE violin. */
   display: 'box' | 'notched' | 'violin' | 'raincloud';
   showPoints: boolean;
+  showWhiskers: boolean;
   showOutliers: boolean;
   showMean: boolean;
   labelMedian: boolean;

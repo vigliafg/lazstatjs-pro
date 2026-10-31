@@ -219,6 +219,10 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         choice('both', 'chart.fit.both'),
       ],
     }),
+    specific('scatter', 'showFit', 'chart.feature.showFit', 'checkbox', {
+      section: 'chart.section.fit',
+      visible: options => options.kind === 'scatter' && options.fit !== 'none',
+    }),
     specific('scatter', 'band', 'chart.feature.band', 'select', {
       section: 'chart.section.uncertainty',
       choices: [
@@ -226,6 +230,10 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         choice('ci', 'chart.band.ci'),
         choice('pi', 'chart.band.pi'),
       ],
+    }),
+    specific('scatter', 'showBand', 'chart.feature.showBand', 'checkbox', {
+      section: 'chart.section.uncertainty',
+      visible: options => options.kind === 'scatter' && options.band !== 'none',
     }),
     specific('scatter', 'bandLevel', 'chart.feature.bandLevel', 'select', {
       section: 'chart.section.uncertainty',
@@ -302,6 +310,18 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         ];
       },
     }),
+    specific('bar', 'showErrorBars', 'chart.feature.showErrorBars', 'checkbox', {
+      section: 'chart.section.data',
+      visible: options => options.kind === 'bar' && options.error !== 'none',
+    }),
+    specific('bar', 'capSize', 'chart.feature.capSize', 'range', {
+      section: 'chart.section.data',
+      min: 4,
+      max: 16,
+      step: 1,
+      visible: options =>
+        options.kind === 'bar' && options.error !== 'none' && options.showErrorBars,
+    }),
     specific('bar', 'valueLabels', 'chart.feature.valueLabels', 'checkbox', {
       section: 'chart.section.annotation',
     }),
@@ -332,6 +352,10 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
         choice('raincloud', 'chart.display.raincloud'),
       ],
       get: options => boxDisplayOf(options),
+    }),
+    specific('box', 'showWhiskers', 'chart.feature.whiskers', 'checkbox', {
+      section: 'chart.section.summary',
+      visible: options => boxDisplayOf(options) === 'box',
     }),
     specific('box', 'showPoints', 'chart.feature.points', 'checkbox', {
       section: 'chart.section.data',

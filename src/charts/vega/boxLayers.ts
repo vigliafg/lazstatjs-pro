@@ -88,11 +88,15 @@ const nominalBoxLayers = (
     },
   };
   const layers: Spec[] = [
-    {
-      data: { values: summary },
-      mark: { type: 'rule', color: colorAt(options, 4), strokeWidth: 1 },
-      encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'min'), y2: { field: 'max' } },
-    },
+    ...(options.showWhiskers
+      ? [
+          {
+            data: { values: summary },
+            mark: { type: 'rule', color: colorAt(options, 4), strokeWidth: 1 },
+            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'min'), y2: { field: 'max' } },
+          },
+        ]
+      : []),
     {
       data: { values: summary },
       mark: { type: 'bar', size: 22, color: colorAt(options, 0), opacity: 0.35 },
@@ -103,16 +107,20 @@ const nominalBoxLayers = (
       mark: { type: 'tick', color: theme.text, size: 22, thickness: 2 },
       encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'median') },
     },
-    {
-      data: { values: summary },
-      mark: { type: 'tick', color: theme.muted, size: 8 },
-      encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'min') },
-    },
-    {
-      data: { values: summary },
-      mark: { type: 'tick', color: theme.muted, size: 8 },
-      encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'max') },
-    },
+    ...(options.showWhiskers
+      ? [
+          {
+            data: { values: summary },
+            mark: { type: 'tick', color: theme.muted, size: 8 },
+            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'min') },
+          },
+          {
+            data: { values: summary },
+            mark: { type: 'tick', color: theme.muted, size: 8 },
+            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'max') },
+          },
+        ]
+      : []),
   ];
   if (options.showMean) {
     layers.push({

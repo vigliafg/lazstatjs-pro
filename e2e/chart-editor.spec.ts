@@ -70,8 +70,8 @@ const openEditor = async (page: Page, id: string) => {
   return { chart, dialog, preview };
 };
 
-const moreStyle = async (dialog: Locator) => {
-  await dialog.getByText('More style', { exact: true }).click();
+const moreStyle = async (_dialog: Locator) => {
+  // General and style controls now live in the right-hand property panel.
 };
 
 const field = (dialog: Locator, id: string): Locator =>
@@ -472,9 +472,11 @@ test.describe('chart editor — mobile layout', () => {
     expect(box?.width).toBeCloseTo(viewport?.width ?? 0, 0);
     expect(box?.height).toBeCloseTo(viewport?.height ?? 0, 0);
 
-    await dialog.getByText('Specific options', { exact: true }).click();
+    await dialog.getByRole('button', { name: 'Properties', exact: true }).click();
     await expect(field(dialog, 'showPoints')).toBeVisible();
     await field(dialog, 'showMean').check();
+    await page.screenshot({ path: 'test-results/chart-editor-audit/anova-box-mobile-properties.png' });
+    await dialog.getByRole('button', { name: 'Chart', exact: true }).click();
     const preview = dialog.locator('[data-chart-surface]');
     await waitPreview(page, preview);
     await page.screenshot({ path: 'test-results/chart-editor-audit/anova-box-mobile.png' });

@@ -58,6 +58,7 @@ export const ChartEditorDialog = ({
   const draft = history.items[history.index];
   const [preview, setPreview] = useState<ChartOptions>(initialOptions);
   const [exporting, setExporting] = useState(false);
+  const [mobileView, setMobileView] = useState<'chart' | 'properties'>('chart');
   const wide = useWideDialog();
   const panelRef = useRef<HTMLDivElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -146,14 +147,25 @@ export const ChartEditorDialog = ({
   });
 
   const reset = () => applyDraft(initialOptions);
-  const resetSection = () => {
-    const defaults = factoryOptions(chart.kind);
+  const featureKey = (id: string): string =>
+    id.startsWith('general.') ? id.slice('general.'.length) : id.startsWith('style.') ? id.slice('style.'.length) : id;
+  const resetSection = (featureIds?: string[]) => {
     const next: Record<string, unknown> = { ...draft };
-    Object.keys(defaults).forEach((key) => {
-      if (key !== 'kind' && !(key in commonKeys)) {
-        next[key] = (initialOptions as unknown as Record<string, unknown>)[key];
-      }
-    });
+    if (featureIds && featureIds.length > 0) {
+      featureIds.forEach((id) => {
+        const key = featureKey(id);
+        if (key in (initialOptions as unknown as Record<string, unknown>)) {
+          next[key] = (initialOptions as unknown as Record<string, unknown>)[key];
+        }
+      });
+    } else {
+      const defaults = factoryOptions(chart.kind);
+      Object.keys(defaults).forEach((key) => {
+        if (key !== 'kind' && !(key in commonKeys)) {
+          next[key] = (initialOptions as unknown as Record<string, unknown>)[key];
+        }
+      });
+    }
     applyDraft(next as unknown as ChartOptions);
   };
 
@@ -242,29 +254,42 @@ export const ChartEditorDialog = ({
         className="flex h-full min-h-0 w-full min-w-0 max-w-[100dvw] flex-col overflow-hidden border border-border2 bg-bg outline-none sm:h-auto sm:max-h-[95vh] sm:max-w-[1400px] sm:rounded-lg"
       >
         {header}
-        <div className="grid min-h-0 flex-1 grid-cols-1 overflow-auto lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="grid min-h-0 flex-1 grid-cols-1 overflow-auto lg:grid-cols-[minmax(0,1fr)_380px]">
           <div className="min-w-0 p-3">
-            <ChartGeneralToolbar chart={chart} options={draft} onChange={applyDraft} />
-            <VegaChart chart={chart} options={preview} className="min-h-[240px]" />
-            {chart.note &&
-              preview.showNote &&
-              !(preview.kind === 'box' && boxDisplayOf(preview) === 'violin') && (
-                <p className="mt-1 text-[10px] text-text3">{chart.note}</p>
-              )}
             {!wide && (
-              <details className="mt-3">
-                <summary className="cursor-pointer font-mono text-[10px] uppercase tracking-wider text-accent2">
-                  {t('chart.specificOptions')}
-                </summary>
-                <div className="mt-2">
-                  <ChartSpecificPanel
-                    chart={chart}
-                    options={draft}
-                    onChange={applyDraft}
-                    onReset={resetSection}
-                  />
-                </div>
-              </details>
+              <div className="mb-2 flex gap-1">
+                {(['chart', 'properties'] as const).map(view => (
+                  <button
+                    key={view}
+                    type="button"
+                    onClick={() => setMobileView(view)}
+                    className={`tb-btn px-2 py-0.5 text-[10px] ${mobileView === view ? 'border-accent bg-accent/10 text-text' : ''}`}
+                  >
+                    {t(view === 'chart' ? 'chart.tabChart' : 'chart.tabProperties')}
+                  </button>
+                ))}
+              </div>
+            )}
+            {wide || mobileView === 'chart' ? (
+              <>
+                <ChartGeneralToolbar chart={chart} options={draft} onChange={applyDraft} />
+                <VegaChart chart={chart} options={preview} className="min-h-[240px]" />
+                {chart.note &&
+                  preview.showNote &&
+                  !(preview.kind === 'box' && boxDisplayOf(preview) === 'violin') && (
+                    <p className="mt-1 text-[10px] text-text3">{chart.note}</p>
+                  )}
+              </>
+            ) : (
+              <>
+                <ChartGeneralToolbar chart={chart} options={draft} onChange={applyDraft} />
+                <ChartSpecificPanel
+                  chart={chart}
+                  options={draft}
+                  onChange={applyDraft}
+                  onReset={resetSection}
+                />
+              </>
             )}
           </div>
           {wide && (

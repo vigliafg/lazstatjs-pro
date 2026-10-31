@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { barLayers, heatmapLayers, lineLayers, scatterOnly, survivalLayers } from './layers';
+import { barLayers, heatmapLayers, lineLayers, scatterLayers, scatterOnly, survivalLayers } from './layers';
+import { boxLayers } from './boxLayers';
 import { dotLayers, ecdfLayers, intervalLayers } from './descriptiveLayers';
 import { riskLayers } from './riskLayers';
 import { mosaicLayers } from './mosaicLayers';
@@ -186,6 +187,64 @@ test('interval, dot and ECDF layers expose their marks and options', () => {
   assert.equal(ecdfLayersResult.some(layer => layer.mark?.type === 'line'), true);
   assert.equal(ecdfLayersResult.some(layer => layer.mark?.type === 'point'), true);
   assert.equal(ecdfLayersResult.some(layer => layer.mark?.type === 'rule'), true);
+});
+
+test('scatter showFit/showBand remove the fit line and band layers', () => {
+  const chart = makeChart({
+    id: 'scatter-flags',
+    kind: 'scatter',
+    title: 'Scatter',
+    data: {
+      points: [{ x: 1, y: 2 }, { x: 2, y: 3 }],
+      fit: [{ x: 1, y: 1.8 }, { x: 2, y: 3.2 }],
+      grid: [
+        { x: 1, yhat: 1.8, seMean: 0.1, sePred: 0.2 },
+        { x: 2, yhat: 3.2, seMean: 0.1, sePred: 0.2 },
+      ],
+    },
+  });
+  const base = { ...factoryOptions('scatter'), fit: 'ols', band: 'ci' } as Extract<
+    ChartOptions,
+    { kind: 'scatter' }
+  >;
+  const hidden = scatterLayers(chart, { ...base, showPoints: false, showFit: false, showBand: false });
+  assert.equal(hidden.some(layer => layer.mark?.type === 'area'), false);
+  assert.equal(hidden.some(layer => layer.mark?.type === 'line'), false);
+  const shown = scatterLayers(chart, { ...base, showPoints: false, showFit: true, showBand: true });
+  assert.equal(shown.some(layer => layer.mark?.type === 'area'), true);
+  assert.equal(shown.some(layer => layer.mark?.type === 'line'), true);
+});
+
+test('box showWhiskers removes the whisker rule', () => {
+  const chart = makeChart({
+    id: 'box-whiskers',
+    kind: 'box',
+    title: 'Box',
+    data: {
+      summary: [{ category: 'A', min: 0, q1: 1, median: 2, q3: 3, max: 4, mean: 2, n: 5 }],
+      points: [],
+      outliers: [],
+    },
+  });
+  const base = factoryOptions('box') as Extract<ChartOptions, { kind: 'box' }>;
+  assert.equal(boxLayers(chart, { ...base, showWhiskers: false }).some(layer => layer.mark?.type === 'rule'), false);
+  assert.equal(boxLayers(chart, { ...base, showWhiskers: true }).some(layer => layer.mark?.type === 'rule'), true);
+});
+
+test('bar showErrorBars removes rules and caps', () => {
+  const chart = makeChart({
+    id: 'bar-errors',
+    kind: 'bar',
+    title: 'Bar',
+    data: { bars: [{ category: 'A', value: 10, lo: 8, hi: 12 }] },
+  });
+  const base = { ...factoryOptions('bar'), error: 'ci' } as Extract<ChartOptions, { kind: 'bar' }>;
+  const hidden = barLayers(chart, { ...base, showErrorBars: false });
+  assert.equal(hidden.some(layer => layer.mark?.type === 'rule'), false);
+  assert.equal(hidden.some(layer => layer.mark?.type === 'tick'), false);
+  const shown = barLayers(chart, { ...base, showErrorBars: true });
+  assert.equal(shown.some(layer => layer.mark?.type === 'rule'), true);
+  assert.equal(shown.filter(layer => layer.mark?.type === 'tick').length, 2);
 });
 
 test('line markers fall back to the series rows when no marker layer exists', () => {
