@@ -115,6 +115,13 @@
     @apply mb-6;
   }
 
+  /* The editor draws annotations in its overlay while a gesture is in flight.
+     The static layer stays in the SVG for PNG/SVG export (external CSS is not
+     serialised with the cloned chart). */
+  [data-annotation-editing='true'] [data-chart-annotations] {
+    display: none;
+  }
+
   /* Per-run remove control: revealed on hover/focus, always faintly visible
      on touch devices where hover does not exist. */
   .output-remove {

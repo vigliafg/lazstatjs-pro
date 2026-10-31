@@ -2,8 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { t } from '../../i18n';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
+import type { ChartAnnotation } from '../../charts/annotations';
 import { boxDisplayOf, factoryOptions } from '../../charts/defaults';
 import { exportChartsAsPng } from '../../io/chartExport';
+import { AnnotationPanel } from './AnnotationPanel';
+import { AnnotationSurface } from './AnnotationSurface';
+import { AnnotationToolbar, type AnnotationTool } from './AnnotationToolbar';
 import { ChartGeneralToolbar } from './ChartGeneralToolbar';
 import { ChartSpecificPanel } from './ChartSpecificPanel';
 import { VegaChart } from './VegaChart';
@@ -58,13 +62,17 @@ export const ChartEditorDialog = ({
   const draft = history.items[history.index];
   const [preview, setPreview] = useState<ChartOptions>(initialOptions);
   const [exporting, setExporting] = useState(false);
-  const [mobileView, setMobileView] = useState<'chart' | 'properties'>('chart');
+  const [mobileView, setMobileView] = useState<'chart' | 'properties' | 'annotations'>('chart');
+  const [mode, setMode] = useState<'chart' | 'annotations'>('chart');
+  const [selectedAnnotationId, setSelectedAnnotationId] = useState<string | null>(null);
+  const [annotationTool, setAnnotationTool] = useState<AnnotationTool>('select');
   const wide = useWideDialog();
   const panelRef = useRef<HTMLDivElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
   const dirty = !sameOptions(draft, initialOptions);
   const canUndo = history.index > 0;
   const canRedo = history.index < history.items.length - 1;
+  const annotations = draft.annotations ?? [];
 
   const applyDraft = (next: ChartOptions) => {
     setHistory(previous => {
@@ -73,6 +81,23 @@ export const ChartEditorDialog = ({
       const capped = items.length > 60 ? items.slice(items.length - 60) : items;
       return { items: capped, index: capped.length - 1 };
     });
+  };
+
+  const setAnnotations = (next: ChartAnnotation[]) => {
+    applyDraft({ ...draft, annotations: next } as ChartOptions);
+  };
+
+  const enterAnnotations = () => {
+    setMode('annotations');
+    setAnnotationTool('select');
+    setMobileView('chart');
+    setSelectedAnnotationId(current => current ?? draft.annotations?.[0]?.id ?? null);
+  };
+
+  const leaveAnnotations = () => {
+    setMode('chart');
+    setAnnotationTool('select');
+    if (!wide) setMobileView('properties');
   };
 
   const undo = () =>
@@ -146,7 +171,10 @@ export const ChartEditorDialog = ({
     return () => document.removeEventListener('keydown', onKeyDown);
   });
 
-  const reset = () => applyDraft(initialOptions);
+  const reset = () => {
+    applyDraft(initialOptions);
+    setSelectedAnnotationId(null);
+  };
   const featureKey = (id: string): string =>
     id.startsWith('general.') ? id.slice('general.'.length) : id.startsWith('style.') ? id.slice('style.'.length) : id;
   const resetSection = (featureIds?: string[]) => {
@@ -195,6 +223,22 @@ export const ChartEditorDialog = ({
         <div className="ml-auto flex items-center gap-1.5">
           <button
             type="button"
+            className={`tb-btn px-2 py-1 text-[10px] ${
+              mode === 'annotations' ? 'border-accent bg-accent/10 text-text' : ''
+            }`}
+            onClick={() => (mode === 'annotations' ? leaveAnnotations() : enterAnnotations())}
+            aria-pressed={mode === 'annotations'}
+            title={
+              mode === 'annotations'
+                ? t('chart.annotation.closeEditor')
+                : t('chart.annotation.openEditor')
+            }
+            data-chart-annotations-toggle
+          >
+            {t('chart.annotation.title')}
+          </button>
+          <button
+            type="button"
             className="tb-btn px-2 py-1 text-[10px]"
             disabled={!canUndo}
             onClick={undo}
@@ -240,7 +284,7 @@ export const ChartEditorDialog = ({
         </div>
       </header>
     ),
-    [analysisName, chart.title, dirty, draft, canUndo, canRedo, exporting, onCancel, onDone]
+    [analysisName, chart.title, dirty, draft, canUndo, canRedo, exporting, mode, wide, onCancel, onDone]
   );
 
   return createPortal(
@@ -257,30 +301,75 @@ export const ChartEditorDialog = ({
         <div className="grid min-h-0 flex-1 grid-cols-1 overflow-auto lg:grid-cols-[minmax(0,1fr)_380px]">
           <div className="min-w-0 p-3">
             {!wide && (
-              <div className="mb-2 flex gap-1">
-                {(['chart', 'properties'] as const).map(view => (
+              <div className="mb-2 flex flex-wrap gap-1">
+                {(['chart', 'properties', 'annotations'] as const).map(view => (
                   <button
                     key={view}
                     type="button"
-                    onClick={() => setMobileView(view)}
-                    className={`tb-btn px-2 py-0.5 text-[10px] ${mobileView === view ? 'border-accent bg-accent/10 text-text' : ''}`}
+                    onClick={() => {
+                      if (view === 'annotations') {
+                        setMode('annotations');
+                        setMobileView('annotations');
+                        setSelectedAnnotationId(
+                          current => current ?? draft.annotations?.[0]?.id ?? null
+                        );
+                      } else if (view === 'properties') {
+                        setMode('chart');
+                        setMobileView('properties');
+                      } else {
+                        setMobileView('chart');
+                      }
+                    }}
+                    className={`tb-btn px-2 py-0.5 text-[10px] ${
+                      mobileView === view ? 'border-accent bg-accent/10 text-text' : ''
+                    }`}
+                    data-chart-mobile-tab={view}
                   >
-                    {t(view === 'chart' ? 'chart.tabChart' : 'chart.tabProperties')}
+                    {t(
+                      view === 'chart'
+                        ? 'chart.tabChart'
+                        : view === 'properties'
+                          ? 'chart.tabProperties'
+                          : 'chart.annotation.mobileTab'
+                    )}
                   </button>
                 ))}
               </div>
             )}
             {wide || mobileView === 'chart' ? (
               <>
-                <ChartGeneralToolbar chart={chart} options={draft} onChange={applyDraft} />
-                <VegaChart chart={chart} options={preview} className="min-h-[240px]" />
+                {mode === 'annotations' ? (
+                  <AnnotationToolbar tool={annotationTool} onChange={setAnnotationTool} />
+                ) : (
+                  <ChartGeneralToolbar chart={chart} options={draft} onChange={applyDraft} />
+                )}
+                <VegaChart
+                  chart={chart}
+                  options={preview}
+                  className="min-h-[240px]"
+                  annotationEditing={mode === 'annotations'}
+                  overlay={area =>
+                    mode === 'annotations' && area ? (
+                      <AnnotationSurface
+                        area={area}
+                        annotations={annotations}
+                        selectedId={selectedAnnotationId}
+                        tool={annotationTool}
+                        onChange={setAnnotations}
+                        onSelect={setSelectedAnnotationId}
+                        onToolChange={setAnnotationTool}
+                        theme={draft.theme}
+                      />
+                    ) : null
+                  }
+                />
                 {chart.note &&
                   preview.showNote &&
                   !(preview.kind === 'box' && boxDisplayOf(preview) === 'violin') && (
                     <p className="mt-1 text-[10px] text-text3">{chart.note}</p>
                   )}
               </>
-            ) : (
+            ) : mobileView === 'properties' ? (
               <>
                 <ChartGeneralToolbar chart={chart} options={draft} onChange={applyDraft} />
                 <ChartSpecificPanel
@@ -288,13 +377,42 @@ export const ChartEditorDialog = ({
                   options={draft}
                   onChange={applyDraft}
                   onReset={resetSection}
+                  selectedAnnotationId={selectedAnnotationId}
+                  onSelectAnnotation={setSelectedAnnotationId}
+                  onOpenAnnotations={enterAnnotations}
                 />
               </>
+            ) : (
+              <AnnotationPanel
+                annotations={annotations}
+                selectedId={selectedAnnotationId}
+                onChange={setAnnotations}
+                onSelect={setSelectedAnnotationId}
+                theme={draft.theme}
+              />
             )}
           </div>
           {wide && (
             <aside className="min-h-0 overflow-auto border-l border-border bg-surface p-3">
-              <ChartSpecificPanel chart={chart} options={draft} onChange={applyDraft} onReset={resetSection} />
+              {mode === 'annotations' ? (
+                <AnnotationPanel
+                  annotations={annotations}
+                  selectedId={selectedAnnotationId}
+                  onChange={setAnnotations}
+                  onSelect={setSelectedAnnotationId}
+                  theme={draft.theme}
+                />
+              ) : (
+                <ChartSpecificPanel
+                  chart={chart}
+                  options={draft}
+                  onChange={applyDraft}
+                  onReset={resetSection}
+                  selectedAnnotationId={selectedAnnotationId}
+                  onSelectAnnotation={setSelectedAnnotationId}
+                  onOpenAnnotations={enterAnnotations}
+                />
+              )}
             </aside>
           )}
         </div>

@@ -4,6 +4,7 @@ import type {
   ChartOptions,
   CommonChartOptions,
 } from '../stats/charts';
+import { normalizeAnnotations } from './annotations';
 
 export type ChartDefaults = CommonChartOptions;
 
@@ -234,7 +235,13 @@ export const mergeOptions = (
   const user = activeDefaults ?? {};
   if (!options) return { ...base, ...user, kind } as ChartOptions;
   if (options.kind !== undefined && options.kind !== kind) return { ...base, ...user, kind } as ChartOptions;
-  return { ...base, ...user, ...options, kind } as ChartOptions;
+  const merged = { ...base, ...user, ...options, kind } as ChartOptions;
+  // Annotations are a per-card list, never a global default. Normalising here
+  // keeps restored projects and hand-edited .lzs files safe.
+  if (options.annotations !== undefined) {
+    merged.annotations = normalizeAnnotations(options.annotations);
+  }
+  return merged;
 };
 
 /** Defaults for a chart, preserving a valid stored option object. */

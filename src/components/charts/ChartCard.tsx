@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { t } from '../../i18n';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
@@ -20,7 +20,9 @@ interface ChartCardProps {
  */
 export const ChartCard = ({ chart, analysisName, onOptionsChange, className = '' }: ChartCardProps) => {
   const [editing, setEditing] = useState(false);
-  const options = mergeOptions(chart.kind, chart.options);
+  // Keep the option (and annotation) identity stable across parent renders so
+  // the Vega view does not redraw its annotation layer unnecessarily.
+  const options = useMemo(() => mergeOptions(chart.kind, chart.options), [chart.kind, chart.options]);
   const interactive = Boolean(onOptionsChange);
   // The analysis note describes the box (median line, whiskers): hide it for
   // the violin, where that wording would be wrong.

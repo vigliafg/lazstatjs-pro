@@ -52,6 +52,35 @@ test('chart JSON counts towards the stored-output cap', () => {
   assert.ok(total <= 1_500_000);
 });
 
+test('a project round-trips chart annotations', () => {
+  const annotated = makeChart({
+    id: 'c-annotated',
+    kind: 'bar',
+    title: 'Annotated',
+    data: { bars: [{ category: 'A', value: 1 }] },
+    options: {
+      kind: 'bar',
+      annotations: [
+        { id: 'note', type: 'text', x: 0.25, y: 0.2, text: 'p = 0.03' },
+        { id: 'arrow', type: 'arrow', x: 0.2, y: 0.3, x2: 0.6, y2: 0.5, strokeWidth: 3 },
+      ],
+    },
+  });
+  const snapshot = createProjectSnapshot({
+    grid: { cols: [{ name: 'X', type: 'num' }], rows: [['1'], ['2']] },
+    prefs: DEFAULT_PREFS,
+    settings: DEFAULT_SETTINGS,
+    params: DEFAULT_PARAMS,
+    outputs: [{ ...entry(0), charts: [annotated] }],
+  });
+  const parsed = parseProject(serializeProject(snapshot));
+  const annotations = parsed.outputs[0].charts?.[0].options.annotations;
+  assert.equal(annotations?.length, 2);
+  assert.equal(annotations?.[0].text, 'p = 0.03');
+  assert.equal(annotations?.[1].type, 'arrow');
+  assert.equal(annotations?.[1].strokeWidth, 3);
+});
+
 test('a v3 project round-trips chart models and still accepts v1/v2 files', () => {
   const snapshot = createProjectSnapshot({
     grid: { cols: [{ name: 'X', type: 'num' }], rows: [['1'], ['2']] },

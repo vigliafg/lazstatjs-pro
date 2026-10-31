@@ -7,6 +7,8 @@
  * Vega-Lite specification on demand.
  */
 
+import type { ChartAnnotation } from '../charts/annotations';
+
 /** Deterministic downsample cap applied by the schema before persistence. */
 export const MAX_CHART_POINTS = 2000;
 /** Interface and persistence cap for one output card. */
@@ -65,6 +67,11 @@ export interface CommonChartOptions {
   lineDash: 'solid' | 'dashed' | 'dotted';
   size: 'compact' | 'regular' | 'wide';
   tooltip: boolean;
+  /**
+   * Free annotations in normalized plot coordinates. Per card only: this key
+   * is intentionally absent from factory, user and global chart defaults.
+   */
+  annotations?: ChartAnnotation[];
 }
 
 export interface ScatterOptions extends CommonChartOptions {

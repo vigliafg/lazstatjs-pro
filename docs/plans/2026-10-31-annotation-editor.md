@@ -245,3 +245,26 @@ Regole:
 - Il testo ricco (grassetto/corsivo) serve o basta testo semplice?
 - Le annotazioni devono essere incluse anche in HTML/Word oltre che in PNG/SVG?
 - Le coordinate dati sono richieste in una v2 o bastano le plot-relative?
+
+## Stato di implementazione (2026-10-31)
+
+Implementato:
+
+- modello, validazione, limiti e budget: `src/charts/annotations.ts` e
+  `src/charts/annotations.test.ts`;
+- persistenza per-card: `CommonChartOptions.annotations`, normalizzazione in
+  `mergeOptions` e `parseChartModel`, round-trip `.lzs` in
+  `src/io/outputsCharts.test.ts`;
+- renderer statico dentro l’SVG Vega: `applyAnnotationsToSvg` e
+  `VegaChart`; PNG/SVG/report ereditano il layer senza composizione;
+- overlay di editing: `AnnotationSurface` e `AnnotationToolbar` con drag,
+  resize, creazione, testo, nudge, elimina e una transazione per gesto;
+- property panel: `AnnotationPanel`, integrato in `ChartSpecificPanel` e nella
+  modalità annotazioni di `ChartEditorDialog`, con terzo tab mobile;
+- export verificato a pixel: `e2e/annotation-editor.spec.ts`;
+- baseline visive: `annotation-editor-desktop.png` e
+  `annotation-editor-mobile.png`, più le baseline dell’editor aggiornate.
+
+Verifica eseguita: `npm test` (687 test), `npm run lint`, `npm run guard`,
+`npm run build`, `npx playwright test` (110 pass, 98 skip) e baseline visive
+verdi con `VISUAL=1`.
