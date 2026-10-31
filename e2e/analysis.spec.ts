@@ -407,6 +407,7 @@ test('exports a single run-report without other cards', async ({ page, isMobile 
   await page.goto('/');
   await openAnova(page);
   await page.getByRole('button', { name: 'Run analysis' }).click();
+  await expect(page.locator('article.output-card')).toHaveCount(1);
   await page.getByLabel('Search analyses').fill('T-Test');
   await page.locator('button[title="Compare two means or paired measurements."]').click();
   await page.getByRole('button', { name: 'Run analysis' }).click();

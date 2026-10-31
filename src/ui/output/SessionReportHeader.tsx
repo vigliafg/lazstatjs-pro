@@ -1,4 +1,5 @@
 import { AlertTriangle, FileText, PanelLeft } from 'lucide-react';
+import { ToolbarButton } from '../../components/ToolbarButton';
 import { t } from '../../i18n';
 import { ExportMenu } from './ExportMenu';
 import type { SessionReportMeta } from './types';
@@ -80,17 +81,17 @@ export const SessionReportHeader = ({
         )}
         <div className="ml-auto flex items-center gap-1" data-no-print>
           {narrow && (
-            <button
-              type="button"
-              className="tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px]"
+            <ToolbarButton
+              icon={PanelLeft}
+              label={t('output.outlineToggle')}
+              size="sm"
+              labelVisibility="always"
+              className="px-2 py-0.5"
               onClick={onToggleOutline}
               aria-expanded={outlineOpen}
               aria-label={t('output.outlineToggle')}
               title={t('output.outlineToggle')}
-            >
-              <PanelLeft className="h-3 w-3" />
-              <span>{t('output.outlineToggle')}</span>
-            </button>
+            />
           )}
           <ExportMenu
             ariaLabel={t('output.exportSession')}

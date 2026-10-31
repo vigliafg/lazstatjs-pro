@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Check, ImageDown, Redo2, RotateCcw, SquarePen, Undo2, X } from 'lucide-react';
 import { t } from '../../i18n';
+import { ToolbarButton } from '../ToolbarButton';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import type { ChartAnnotation } from '../../charts/annotations';
 import { boxDisplayOf, factoryOptions } from '../../charts/defaults';
@@ -221,66 +223,60 @@ export const ChartEditorDialog = ({
           {analysisName && <p className="truncate font-mono text-[9px] text-text3">{analysisName}</p>}
         </div>
         <div className="ml-auto flex items-center gap-1.5">
-          <button
-            type="button"
-            className={`tb-btn px-2 py-1 text-[10px] ${
-              mode === 'annotations' ? 'border-accent bg-accent/10 text-text' : ''
-            }`}
+          <ToolbarButton
+            icon={SquarePen}
+            label={t('chart.annotation.title')}
+            active={mode === 'annotations'}
+            toggle
+            size="md"
             onClick={() => (mode === 'annotations' ? leaveAnnotations() : enterAnnotations())}
-            aria-pressed={mode === 'annotations'}
             title={
               mode === 'annotations'
                 ? t('chart.annotation.closeEditor')
                 : t('chart.annotation.openEditor')
             }
-            data-chart-annotations-toggle
-          >
-            {t('chart.annotation.title')}
-          </button>
-          <button
-            type="button"
-            className="tb-btn px-2 py-1 text-[10px]"
+            data-chart-annotations-toggle=""
+          />
+          <ToolbarButton
+            icon={Undo2}
+            label={t('chart.undo')}
+            size="md"
             disabled={!canUndo}
             onClick={undo}
-            title={t('chart.undo')}
-          >
-            {t('chart.undo')}
-          </button>
-          <button
-            type="button"
-            className="tb-btn px-2 py-1 text-[10px]"
+          />
+          <ToolbarButton
+            icon={Redo2}
+            label={t('chart.redo')}
+            size="md"
             disabled={!canRedo}
             onClick={redo}
-            title={t('chart.redo')}
-          >
-            {t('chart.redo')}
-          </button>
-          <button
-            type="button"
-            className="tb-btn px-2 py-1 text-[10px]"
+          />
+          <ToolbarButton
+            icon={ImageDown}
+            label={t('chart.exportPng')}
+            size="md"
             disabled={exporting}
             onClick={() => void exportPng()}
-            title={t('chart.exportPng')}
-          >
-            {t('chart.exportPng')}
-          </button>
-          <button type="button" className="tb-btn px-2 py-1 text-[10px]" onClick={reset}>
-            {t('chart.reset')}
-          </button>
-          <button
-            type="button"
-            className="tb-btn px-2 py-1 text-[10px]"
+          />
+          <ToolbarButton
+            icon={RotateCcw}
+            label={t('chart.reset')}
+            size="md"
+            onClick={reset}
+          />
+          <ToolbarButton
+            icon={X}
+            label={t('chart.cancel')}
+            size="md"
             onClick={() => requestClose(onCancel)}
-          >
-            {t('chart.cancel')}
-          </button>
-          <button
-            type="button"
-            className="tb-btn border-accent bg-accent px-3 py-1 text-[10px] text-on-accent hover:bg-accent2"
+          />
+          <ToolbarButton
+            icon={Check}
+            label={t('chart.done')}
+            size="md"
+            tone="primary"
             onClick={() => onDone(draft)}
-          >
-            {t('chart.done')}
-          </button>
+          />
         </div>
       </header>
     ),

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, Eye, Pencil, X } from 'lucide-react';
 import { t } from '../../i18n';
+import { ToolbarButton } from '../../components/ToolbarButton';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
   deriveChartTokens,
@@ -154,26 +155,31 @@ export const ThemeCreatorDialog = ({
           </div>
           <div className="ml-auto flex flex-wrap items-center gap-1.5">
             {!wide && (
-              <button
-                type="button"
-                className="tb-btn px-2 py-1 text-[10px]"
+              <ToolbarButton
+                icon={mobileView === 'edit' ? Eye : Pencil}
+                label={t(mobileView === 'edit' ? 'settings.themePreviewTab' : 'settings.themeEditTab')}
+                size="md"
+                labelVisibility="always"
                 onClick={() => setMobileView(mobileView === 'edit' ? 'preview' : 'edit')}
-                data-theme-mobile-toggle
-              >
-                {t(mobileView === 'edit' ? 'settings.themePreviewTab' : 'settings.themeEditTab')}
-              </button>
+                data-theme-mobile-toggle=""
+              />
             )}
-            <button type="button" className="tb-btn px-2 py-1 text-[10px]" onClick={requestClose}>
-              {t('settings.themeCancel')}
-            </button>
-            <button
-              type="button"
-              className="tb-btn border-accent bg-accent px-3 py-1 text-[10px] text-on-accent hover:bg-accent2"
+            <ToolbarButton
+              icon={X}
+              label={t('settings.themeCancel')}
+              size="md"
+              labelVisibility="always"
+              onClick={requestClose}
+            />
+            <ToolbarButton
+              icon={Check}
+              label={t('settings.themeSave')}
+              size="md"
+              tone="primary"
+              labelVisibility="always"
               onClick={save}
-              data-theme-save
-            >
-              {t('settings.themeSave')}
-            </button>
+              data-theme-save=""
+            />
           </div>
         </header>
 

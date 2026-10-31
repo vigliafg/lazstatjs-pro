@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Pencil } from 'lucide-react';
+import { ToolbarButton } from '../ToolbarButton';
 import { t } from '../../i18n';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import { boxDisplayOf, mergeOptions } from '../../charts/defaults';
@@ -50,19 +51,19 @@ export const ChartCard = ({ chart, analysisName, onOptionsChange, className = ''
       >
         <VegaChart chart={chart} options={options} />
         {interactive && (
-          <button
-            type="button"
+          <ToolbarButton
+            icon={Pencil}
+            label={t('chart.editShort')}
+            size="sm"
+            labelVisibility="always"
+            className="absolute right-2 top-2 z-10 px-2 py-0.5 opacity-80 hover:opacity-100"
             onClick={event => {
               event.stopPropagation();
               open();
             }}
-            className="tb-btn absolute right-2 top-2 z-10 flex items-center gap-1 px-2 py-0.5 text-[10px] opacity-80 hover:opacity-100"
             title={`${t('chart.edit')}: ${chart.title}`}
             aria-label={`${t('chart.edit')}: ${chart.title}`}
-          >
-            <Pencil className="h-3 w-3" />
-            <span>{t('chart.editShort')}</span>
-          </button>
+          />
         )}
       </div>
       {note && <p className="mt-1 text-[10px] leading-snug text-text3">{note}</p>}

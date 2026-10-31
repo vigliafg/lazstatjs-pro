@@ -7,6 +7,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { analysisLabel } from '../../analyses/registry';
+import { ToolbarButton } from '../../components/ToolbarButton';
 import { t } from '../../i18n';
 
 interface SessionReportToolbarProps {
@@ -23,7 +24,7 @@ interface SessionReportToolbarProps {
 }
 
 const actionClass =
-  'tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] disabled:cursor-not-allowed';
+  'px-2 disabled:cursor-not-allowed';
 
 /**
  * Reading and export actions for the whole session. The analysis filter stays
@@ -60,70 +61,70 @@ export const SessionReportToolbar = ({
         ))}
       </select>
     )}
-    <button
-      type="button"
+    <ToolbarButton
+      icon={RotateCcw}
+      label={t('output.rerunAll')}
+      size="sm"
+      labelVisibility="2xl"
       className={actionClass}
       onClick={onRerunAll}
       disabled={disabled}
       title={t('output.rerunAllHint')}
       aria-label={t('output.rerunAllHint')}
-    >
-      <RotateCcw className="h-3 w-3" />
-      <span className="hidden 2xl:inline">{t('output.rerunAll')}</span>
-    </button>
-    <button
-      type="button"
+    />
+    <ToolbarButton
+      icon={Database}
+      label={t('output.data')}
+      size="sm"
+      labelVisibility="xl"
       className={actionClass}
       onClick={onBackToData}
       title={t('output.openDataTitle')}
       aria-label={t('output.openDataTitle')}
-    >
-      <Database className="h-3 w-3" />
-      <span className="hidden xl:inline">{t('output.data')}</span>
-    </button>
-    <button
-      type="button"
+    />
+    <ToolbarButton
+      icon={Trash2}
+      label={t('output.clear')}
+      size="sm"
+      labelVisibility="xl"
       className={actionClass}
       onClick={onClear}
       disabled={disabled}
       title={t('output.clearAll')}
       aria-label={t('output.clearAll')}
-    >
-      <Trash2 className="h-3 w-3" />
-      <span className="hidden xl:inline">{t('output.clear')}</span>
-    </button>
-    <button
-      type="button"
+    />
+    <ToolbarButton
+      icon={Copy}
+      label={t('output.copy')}
+      size="sm"
+      labelVisibility="xl"
       className={actionClass}
       onClick={onCopy}
       disabled={disabled}
       title={t('output.copyText')}
       aria-label={t('output.copyText')}
-    >
-      <Copy className="h-3 w-3" />
-      <span className="hidden xl:inline">{t('output.copy')}</span>
-    </button>
-    <button
-      type="button"
+    />
+    <ToolbarButton
+      icon={Image}
+      label={t('output.charts')}
+      size="sm"
+      labelVisibility="xl"
       className={actionClass}
       onClick={onExportCharts}
       disabled={disabled}
       title={t('output.chartsHint')}
       aria-label={t('output.chartsHint')}
-    >
-      <Image className="h-3 w-3" />
-      <span className="hidden xl:inline">{t('output.charts')}</span>
-    </button>
-    <button
-      type="button"
+    />
+    <ToolbarButton
+      icon={Table2}
+      label={t('output.xlsx')}
+      size="sm"
+      labelVisibility="xl"
       className={`${actionClass} ml-auto`}
       onClick={onExportXlsx}
       disabled={disabled}
       title={t('output.xlsxHint')}
       aria-label={t('output.xlsxHint')}
-    >
-      <Table2 className="h-3 w-3" />
-      <span className="hidden xl:inline">{t('output.xlsx')}</span>
-    </button>
+    />
   </div>
 );

@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
+import { Download, X } from 'lucide-react';
 import type { GridData } from '../grid/types';
 import { filterRowIndexes, type RowFilter } from '../grid/ops';
 import { nonEmptyRowCount } from '../grid/types';
+import { ToolbarButton } from '../components/ToolbarButton';
 import {
   buildSpsSyntax,
   gridToRows,
@@ -92,7 +94,13 @@ export function ExportDialog({ grid, rowFilter, filterAffectsAnalysis, onClose, 
       <div className="bg-surface border border-border2 rounded-lg shadow-2xl w-full max-w-xl flex flex-col" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('io.exportTitle')}>
         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
           <h2 className="text-accent2 font-mono text-[12px] font-bold uppercase tracking-widest">{t('io.exportTitle')}</h2>
-          <button className="tb-btn" onClick={onClose}>{t('io.close')}</button>
+          <ToolbarButton
+            icon={X}
+            label={t('io.close')}
+            size="sm"
+            labelVisibility="always"
+            onClick={onClose}
+          />
         </div>
         <div className="px-4 py-3 flex flex-wrap gap-4 items-end text-[11px]">
           <label className="flex flex-col gap-1">
@@ -154,11 +162,24 @@ export function ExportDialog({ grid, rowFilter, filterAffectsAnalysis, onClose, 
           {format === 'spss' && <span> + lazstats.sps</span>}
         </div>
         <pre className="mx-4 mb-2 p-2 bg-surface3/40 border border-border rounded text-[10px] font-mono text-text2 overflow-auto max-h-40 scrollbar whitespace-pre-wrap">{preview}</pre>
-        <div className="px-4 py-3 border-t border-border flex justify-end gap-2">
-          <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
-          <button data-export="download" className="tb-btn bg-accent text-on-accent border-accent" onClick={doExport} disabled={rows.length === 0}>
-            {t('io.download')}
-          </button>
+        <div className="px-4 py-3 border-t border-border flex flex-wrap justify-end gap-2">
+          <ToolbarButton
+            icon={X}
+            label={t('io.cancel')}
+            size="md"
+            labelVisibility="always"
+            onClick={onClose}
+          />
+          <ToolbarButton
+            icon={Download}
+            label={t('io.download')}
+            size="md"
+            tone="primary"
+            labelVisibility="always"
+            data-export="download"
+            onClick={doExport}
+            disabled={rows.length === 0}
+          />
         </div>
       </div>
     </div>

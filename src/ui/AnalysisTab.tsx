@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BarChart3, Maximize2, Minimize2, PanelLeft, SlidersHorizontal } from 'lucide-react';
+import { ToolbarButton } from '../components/ToolbarButton';
 import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { AnalysisLibrary } from './analysis/AnalysisLibrary';
 import { AnalysisOptions } from './analysis/AnalysisOptions';
@@ -189,30 +190,26 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
         </div>
 
         <div className="hidden items-center gap-1 lg:flex">
-          <button
-            type="button"
-            onClick={toggleLibrary}
+          <ToolbarButton
+            icon={PanelLeft}
+            label={t('analysis.library')}
+            size="sm"
+            labelVisibility="always"
+            className={showLibrary ? 'text-text' : 'text-text3'}
             aria-pressed={showLibrary}
-            className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
-              showLibrary ? 'text-text' : 'text-text3'
-            }`}
+            onClick={toggleLibrary}
             title={showLibrary ? t('analysis.hideLibrary') : t('analysis.showLibrary')}
-          >
-            <PanelLeft className="h-3 w-3" />
-            {t('analysis.library')}
-          </button>
-          <button
-            type="button"
-            onClick={toggleOptions}
+          />
+          <ToolbarButton
+            icon={SlidersHorizontal}
+            label={t('analysis.setup')}
+            size="sm"
+            labelVisibility="always"
+            className={showOptions ? 'text-text' : 'text-text3'}
             aria-pressed={showOptions}
-            className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
-              showOptions ? 'text-text' : 'text-text3'
-            }`}
+            onClick={toggleOptions}
             title={showOptions ? t('analysis.hideSetup') : t('analysis.showSetup')}
-          >
-            <SlidersHorizontal className="h-3 w-3" />
-            {t('analysis.setup')}
-          </button>
+          />
         </div>
 
         <div className="ml-auto flex min-w-0 items-center gap-2">
@@ -220,19 +217,17 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             <BarChart3 className="h-3 w-3 shrink-0 text-accent2" />
             <span className="truncate">{analysisLabel(props.activeAnalysis)}</span>
           </span>
-          <button
-            type="button"
-            onClick={toggleFocus}
+          <ToolbarButton
+            icon={focusOutput ? Minimize2 : Maximize2}
+            label={focusOutput ? t('analysis.showSetup') : t('analysis.focusOutput')}
+            size="sm"
+            labelVisibility="xl"
+            className={focusOutput ? 'border-accent bg-accent/10 text-text' : ''}
             aria-pressed={focusOutput}
+            onClick={toggleFocus}
             aria-label={focusOutput ? t('analysis.showPanels') : t('analysis.focusOutput')}
-            className={`tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px] ${
-              focusOutput ? 'border-accent bg-accent/10 text-text' : ''
-            }`}
             title={focusOutput ? t('analysis.showPanelsTitle') : t('analysis.focusOutputTitle')}
-          >
-            {focusOutput ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
-            <span className="hidden xl:inline">{focusOutput ? t('analysis.showSetup') : t('analysis.focusOutput')}</span>
-          </button>
+          />
         </div>
       </div>
 

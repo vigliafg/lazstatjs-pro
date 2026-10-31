@@ -1,5 +1,32 @@
 import type { Dispatch, RefObject, SetStateAction } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import {
+  ArrowDownToLine,
+  ArrowRightToLine,
+  Columns3,
+  Copy,
+  CornerDownRight,
+  Eraser,
+  Eye,
+  EyeOff,
+  FileDown,
+  FilePlus2,
+  Filter,
+  FilterX,
+  FolderOpen,
+  PanelRight,
+  Pin,
+  Redo2,
+  Rows3,
+  Save,
+  SaveAll,
+  ShieldCheck,
+  Trash2,
+  Undo2,
+  Upload,
+  Wand2,
+  X,
+} from 'lucide-react';
+import { ToolbarButton } from '../components/ToolbarButton';
 import { VariableInspector } from '../grid/VariableInspector';
 import { t } from '../i18n';
 import { fillRightRange as gridFillRight } from '../grid/fillRight';
@@ -162,32 +189,29 @@ export const DataTab = ({
   <div role="toolbar" aria-label={t('data.toolbar')} className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
     <div role="group" aria-label={t('data.groupFile')} className="flex flex-wrap items-center gap-2">
     <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">{t('data.file')}:</span>
-    <button className="tb-btn" onClick={onNewDataset}>{t('data.new')}</button>
-    <button className="tb-btn" onClick={() => csvInputRef.current?.click()}>{t('data.import')}</button>
-    <button className="tb-btn" onClick={exportCsv}>{t('data.export')}</button>
+    <ToolbarButton icon={FilePlus2} label={t('data.new')} onClick={onNewDataset} />
+    <ToolbarButton icon={Upload} label={t('data.import')} onClick={() => csvInputRef.current?.click()} />
+    <ToolbarButton icon={FileDown} label={t('data.export')} onClick={exportCsv} />
     <div className="h-4 w-px bg-border mx-1" />
-    <button
-      className="tb-btn"
+    <ToolbarButton
+      icon={FolderOpen}
+      label={t('data.openProject')}
+      hint={t('data.openHint')}
       onClick={openProjectDialog}
-      title={t('data.openHint')}
-    >
-      {t('data.openProject')}
-    </button>
-    <button
-      className="tb-btn"
+    />
+    <ToolbarButton
+      icon={Save}
+      label={t('data.saveProject')}
+      hint={t('data.saveHint')}
       onClick={saveProjectFile}
-      title={t('data.saveHint')}
-    >
-      {t('data.saveProject')}
-    </button>
-    <button
-      className="tb-btn"
+    />
+    <ToolbarButton
+      icon={SaveAll}
+      label={t('data.saveAs')}
+      hint={t('data.saveAsHint')}
       onClick={saveProjectFileAs}
-      title={t('data.saveAsHint')}
-      data-project-save-as
-    >
-      {t('data.saveAs')}
-    </button>
+      data-project-save-as=""
+    />
     <input
       ref={projectInputRef}
       type="file"
@@ -201,7 +225,7 @@ export const DataTab = ({
     />
     {lastAutosave && (
       <span
-        className="font-mono text-[9px] text-text3 uppercase tracking-wider"
+        className="hidden font-mono text-[9px] text-text3 uppercase tracking-wider lg:inline"
         title={t('data.autosaveHint')}
       >
         {t('data.autosave')} {lastAutosave}
@@ -210,12 +234,20 @@ export const DataTab = ({
     </div>
     <div className="h-4 w-px bg-border mx-1" />
     <div role="group" aria-label={t('data.groupEdit')} className="flex flex-wrap items-center gap-2">
-    <button className="tb-btn" disabled={!canUndoGrid} onClick={undoGrid} title={`${t('data.undo')} (Ctrl+Z)`}>
-      {t('data.undo')}
-    </button>
-    <button className="tb-btn" disabled={!canRedoGrid} onClick={redoGrid} title={`${t('data.redo')} (Ctrl+Y)`}>
-      {t('data.redo')}
-    </button>
+    <ToolbarButton
+      icon={Undo2}
+      label={t('data.undo')}
+      hint={`${t('data.undo')} (Ctrl+Z)`}
+      disabled={!canUndoGrid}
+      onClick={undoGrid}
+    />
+    <ToolbarButton
+      icon={Redo2}
+      label={t('data.redo')}
+      hint={`${t('data.redo')} (Ctrl+Y)`}
+      disabled={!canRedoGrid}
+      onClick={redoGrid}
+    />
     </div>
     <input
       ref={csvInputRef}
@@ -230,19 +262,20 @@ export const DataTab = ({
     />
     <div className="h-4 w-px bg-border mx-2" />
     <div role="group" aria-label={t('data.groupTools')} className="flex flex-wrap items-center gap-2">
-    <button
-      className="tb-btn text-yellow"
+    <ToolbarButton
+      icon={ShieldCheck}
+      label={t('data.validate')}
+      tone="warning"
       onClick={() => {
         const issues = gridFindInvalid(grid);
         setValidation({ ran: true, issues });
         if (issues.length === 0) showToast(t('toast.validation'), t('data.validOk'), 'ok');
         else showToast(t('toast.validation'), `${issues.length} ${t('data.invalidFound')}`, 'warn');
       }}
-    >
-      {t('data.validate')}
-    </button>
-    <button
-      className="tb-btn"
+    />
+    <ToolbarButton
+      icon={Wand2}
+      label={t('data.autoFix')}
       onClick={() => {
         const { grid: next, changed } = gridCoerce(grid);
         if (changed === 0) {
@@ -253,33 +286,34 @@ export const DataTab = ({
         setValidation({ ran: false, issues: [] });
         showToast(t('toast.autoFix'), `${changed} ${t('data.cellsCoerced')}`, 'ok');
       }}
-    >
-      {t('data.autoFix')}
-    </button>
+    />
     </div>
     <div className="h-4 w-px bg-border mx-1" />
     <div role="group" aria-label={t('data.groupView')} className="flex flex-wrap items-center gap-2">
-    <button
-      className={`tb-btn ${freezeFirstCol ? 'bg-accent text-on-accent border-accent' : ''}`}
+    <ToolbarButton
+      icon={Pin}
+      label={t('data.freezeCol')}
+      hint={t('data.freezeHint')}
+      active={freezeFirstCol}
+      toggle
       onClick={() => setFreezeFirstCol((v) => !v)}
-      title={t('data.freezeHint')}
-    >
-      {t('data.freezeCol')}
-    </button>
-    <button
-      className={`tb-btn ${showInspector ? 'bg-accent text-on-accent border-accent' : ''}`}
+    />
+    <ToolbarButton
+      icon={PanelRight}
+      label={t('data.variables')}
+      hint={t('data.variablesHint')}
+      active={showInspector}
+      toggle
       onClick={() => setShowInspector((value) => !value)}
-      title={t('data.variablesHint')}
-    >
-      {t('data.variables')}
-    </button>
-    <button
-      className={`tb-btn ${showFilter ? 'bg-accent text-on-accent border-accent' : ''}`}
+    />
+    <ToolbarButton
+      icon={Filter}
+      label={t('data.filter')}
+      hint={t('data.filterHint')}
+      active={showFilter}
+      toggle
       onClick={() => setShowFilter((v) => !v)}
-      title={t('data.filterHint')}
-    >
-      {t('data.filter')}
-    </button>
+    />
     </div>
   </div>
 
@@ -339,23 +373,24 @@ export const DataTab = ({
       <span className="text-text3 font-mono text-[10px]">
         {visibleRowCount} / {grid.rows.length} {t('data.rowsUnit')}
       </span>
-      <button
-        className="tb-btn"
+      <ToolbarButton
+        icon={FilterX}
+        label={t('data.clearFilter')}
+        size="sm"
         onClick={() => {
           setFilterValue('');
           setFilterOp('contains');
         }}
-      >
-        {t('data.clearFilter')}
-      </button>
-      <button
-        type="button"
-        className={`tb-btn ${filterAffectsAnalysis ? 'bg-accent text-on-accent border-accent' : ''}`}
+      />
+      <ToolbarButton
+        icon={filterAffectsAnalysis ? Eye : EyeOff}
+        label={filterAffectsAnalysis ? t('data.alsoFilter') : t('data.viewOnly')}
+        hint={t('data.affectsHint')}
+        size="sm"
+        active={filterAffectsAnalysis}
+        toggle
         onClick={() => setFilterAffectsAnalysis(value => !value)}
-        title={t('data.affectsHint')}
-      >
-        {filterAffectsAnalysis ? t('data.alsoFilter') : t('data.viewOnly')}
-      </button>
+      />
       <span className="text-text3 text-[10px] italic">
         {filterAffectsAnalysis
           ? `${t('data.analysesUse')} ${visibleRowCount} ${t('data.of')} ${grid.rows.length} ${t('data.rowsUnit')}`
@@ -398,8 +433,10 @@ export const DataTab = ({
                 {c.name}: {c.count}
               </button>
             ))}
-          <button
-            className="tb-btn"
+          <ToolbarButton
+            icon={CornerDownRight}
+            label={t('data.jumpFirst')}
+            size="sm"
             onClick={() => {
               const first = validation.issues[0];
               if (!first) return;
@@ -412,12 +449,13 @@ export const DataTab = ({
               }
               setFocusCell({ r: first.r, c: first.c, stamp: Date.now() });
             }}
-          >
-            {t('data.jumpFirst')}
-          </button>
-          <button className="tb-btn" onClick={() => setValidation({ ran: false, issues: [] })}>
-            {t('data.dismiss')}
-          </button>
+          />
+          <ToolbarButton
+            icon={X}
+            label={t('data.dismiss')}
+            size="sm"
+            onClick={() => setValidation({ ran: false, issues: [] })}
+          />
         </>
       )}
     </div>
@@ -497,22 +535,33 @@ export const DataTab = ({
     }}
   />
   {selRange && (
-    <div className="bg-surface border-t border-border px-3 py-1 flex items-center gap-2 text-[10px] font-mono text-text3 shrink-0">
+    <div className="bg-surface border-t border-border px-3 py-1 flex flex-wrap items-center gap-2 text-[10px] font-mono text-text3 shrink-0">
       <span>
         {t('data.selection')}: R{Math.min(selRange.r0, selRange.r1) + 1}-{Math.max(selRange.r0, selRange.r1) + 1} C
         {Math.min(selRange.c0, selRange.c1) + 1}-{Math.max(selRange.c0, selRange.c1) + 1}
       </span>
-      <button className="tb-btn" onClick={() => setGrid((prev) => gridFillDown(prev, selRange))}>
-        {t('data.fillDown')}
-      </button>
-      <button className="tb-btn" onClick={() => setGrid((prev) => gridFillRight(prev, selRange))}>
-        {t('data.fillRight')}
-      </button>
-      <button className="tb-btn" onClick={() => setGrid((prev) => gridClearRange(prev, selRange))}>
-        {t('data.clearSelection')}
-      </button>
-      <button
-        className="tb-btn"
+      <ToolbarButton
+        icon={ArrowDownToLine}
+        label={t('data.fillDown')}
+        size="sm"
+        onClick={() => setGrid((prev) => gridFillDown(prev, selRange))}
+      />
+      <ToolbarButton
+        icon={ArrowRightToLine}
+        label={t('data.fillRight')}
+        size="sm"
+        onClick={() => setGrid((prev) => gridFillRight(prev, selRange))}
+      />
+      <ToolbarButton
+        icon={Eraser}
+        label={t('data.clearSelection')}
+        size="sm"
+        onClick={() => setGrid((prev) => gridClearRange(prev, selRange))}
+      />
+      <ToolbarButton
+        icon={Copy}
+        label={t('data.copy')}
+        size="sm"
         onClick={() => {
           void copyText(gridRangeToTsv(grid, selRange)).then((ok) => {
             showToast(
@@ -522,9 +571,7 @@ export const DataTab = ({
             );
           });
         }}
-      >
-        {t('data.copy')}
-      </button>
+      />
     </div>
   )}
     </div>
@@ -559,18 +606,20 @@ export const DataTab = ({
     )}
   </div>
 
-  <div className="bg-surface border-t border-border p-2 flex gap-2 shrink-0">
-    <button className="tb-btn" onClick={addColumn}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addColumn')}</button>
-    <button className="tb-btn" onClick={addRow}><Plus className="w-3 h-3 inline mr-1" /> {t('data.addRow')}</button>
-    <button
-      className="tb-btn text-red/80 hover:bg-red hover:text-on-accent"
+  <div className="bg-surface border-t border-border p-2 flex flex-wrap gap-2 shrink-0">
+    <ToolbarButton icon={Columns3} label={t('data.addColumn')} size="md" labelVisibility="always" onClick={addColumn} />
+    <ToolbarButton icon={Rows3} label={t('data.addRow')} size="md" labelVisibility="always" onClick={addRow} />
+    <ToolbarButton
+      icon={Trash2}
+      label={t('data.clear')}
+      size="md"
+      tone="danger"
+      labelVisibility="always"
       onClick={() => {
         if (!window.confirm(t('data.confirmClear'))) return;
         setGrid((prev) => gridClear(prev));
       }}
-    >
-      <Trash2 className="w-3 h-3 inline mr-1" /> {t('data.clear')}
-    </button>
+    />
   </div>
 </div>
   </>

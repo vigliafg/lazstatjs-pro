@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Upload, X } from 'lucide-react';
 import { detectFormat, detectHeader, looksLikeJson, type Delimiter, type Detection } from './detect';
 import { readDelimitedTable, readJsonTable, type ImportTable } from './readers';
 import { COL_TYPES, type ColType } from '../grid/types';
 import { t } from '../i18n';
+import { ToolbarButton } from '../components/ToolbarButton';
 import { loadPrefs, savePrefs } from './prefs';
 import { xlsxSheetToTable, type XlsxSheet } from './xlsx';
 
@@ -144,7 +146,13 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
               {isBinary && <span> · {binaryTable?.source === 'spss' ? 'SPSS .sav' : 'Stata .dta'}</span>}
             </p>
           </div>
-          <button className="tb-btn" onClick={onClose}>{t('io.close')}</button>
+          <ToolbarButton
+            icon={X}
+            label={t('io.close')}
+            size="sm"
+            labelVisibility="always"
+            onClick={onClose}
+          />
         </div>
 
         <div className="px-4 py-3 border-b border-border flex flex-wrap gap-4 items-end text-[11px]">
@@ -280,12 +288,22 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
           </>
         ) : null}
 
-        <div className="px-4 py-3 border-t border-border flex justify-end gap-2">
-          <button className="tb-btn" onClick={onClose}>{t('io.cancel')}</button>
-          <button
-            data-import="apply"
-            className="tb-btn bg-accent text-on-accent border-accent disabled:opacity-40"
+        <div className="px-4 py-3 border-t border-border flex flex-wrap justify-end gap-2">
+          <ToolbarButton
+            icon={X}
+            label={t('io.cancel')}
+            size="md"
+            labelVisibility="always"
+            onClick={onClose}
+          />
+          <ToolbarButton
+            icon={Upload}
+            label={`${t('io.importAction')} ${table ? `${table.rows.length} ${t('data.rowsUnit')}` : ''}`.trim()}
+            size="md"
+            tone="primary"
+            labelVisibility="always"
             disabled={!table}
+            data-import="apply"
             onClick={() => {
               if (!table) return;
               const prefs = loadPrefs();
@@ -297,9 +315,7 @@ export function ImportWizard({ fileName, text = '', sheets, binaryTable, gridCol
               });
               onApply({ ...table, types: table.names.map((_, i) => overrides[i] ?? table.types[i]) }, mode);
             }}
-          >
-            {t('io.importAction')} {table ? `${table.rows.length} ${t('data.rowsUnit')}` : ''}
-          </button>
+          />
         </div>
       </div>
     </div>

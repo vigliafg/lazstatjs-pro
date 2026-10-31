@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { BookmarkPlus } from 'lucide-react';
+import { ToolbarButton } from '../ToolbarButton';
 import { t } from '../../i18n';
 import type { ChartOptions, CommonChartOptions } from '../../stats/charts';
 import { applyPreset } from '../../charts/defaults';
@@ -107,17 +108,17 @@ export const ChartPresetPicker = ({ options, onChange }: ChartPresetPickerProps)
         </select>
       </label>
       {available && (
-        <button
-          type="button"
-          className="tb-btn flex items-center gap-1 px-1.5 py-0.5 text-[9px]"
+        <ToolbarButton
+          icon={BookmarkPlus}
+          label={t('chart.preset.save')}
+          size="sm"
+          labelVisibility="always"
+          className="px-1.5 py-0.5 text-[9px]"
           onClick={openSave}
           title={t('chart.preset.save')}
           aria-label={t('chart.preset.save')}
-          data-chart-preset-save
-        >
-          <BookmarkPlus className="h-3 w-3" aria-hidden="true" />
-          {t('chart.preset.save')}
-        </button>
+          data-chart-preset-save=""
+        />
       )}
       {available && saving && (
         <form

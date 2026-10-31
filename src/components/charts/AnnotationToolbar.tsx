@@ -1,4 +1,5 @@
 import { ArrowUpRight, Minus, MousePointer2, Square, Type } from 'lucide-react';
+import { ToolbarButton } from '../ToolbarButton';
 import { t } from '../../i18n';
 
 export type AnnotationTool = 'select' | 'text' | 'line' | 'arrow' | 'rect';
@@ -41,20 +42,20 @@ export const AnnotationToolbar = ({ tool, onChange }: AnnotationToolbarProps) =>
       const Icon = ICONS[value];
       const active = tool === value;
       return (
-        <button
+        <ToolbarButton
           key={value}
-          type="button"
-          onClick={() => onChange(value)}
-          aria-pressed={active}
-          className={`tb-btn flex items-center gap-1 px-1.5 py-0.5 text-[9px] ${
+          icon={Icon}
+          label={t(LABEL[value])}
+          size="sm"
+          labelVisibility="always"
+          className={`px-1.5 py-0.5 text-[9px] ${
             active ? 'border-accent bg-accent/10 text-text' : ''
           }`}
+          aria-pressed={active}
+          onClick={() => onChange(value)}
           title={t(LABEL[value])}
           data-annotation-tool={value}
-        >
-          <Icon className="h-3 w-3" aria-hidden="true" />
-          {t(LABEL[value])}
-        </button>
+        />
       );
     })}
     <span className="ml-auto hidden font-mono text-[8px] text-text3 sm:inline">

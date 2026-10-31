@@ -13,6 +13,7 @@ import {
 import { analysisLabel, analysisMeta } from '../../analyses/registry';
 import { AnalysisCharts } from '../../components/AnalysisCharts';
 import { AnalysisOutput } from '../../components/AnalysisOutput';
+import { ToolbarButton } from '../../components/ToolbarButton';
 import { HelpButton } from '../../help/HelpButton';
 import { topicForAnalysis } from '../../help/book';
 import { t } from '../../i18n';
@@ -169,40 +170,40 @@ export const RunReportCard = ({
           ]}
         />
         {canRerun && onRerun && (
-          <button
-            type="button"
+          <ToolbarButton
+            icon={RotateCcw}
+            label={t('output.rerun')}
+            size="sm"
+            labelVisibility="xl"
+            className="px-1.5 py-0.5"
             onClick={onRerun}
-            className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
             title={t('output.rerunTitle')}
             aria-label={t('output.rerunAria')}
-          >
-            <RotateCcw className="h-3 w-3" />
-            <span className="hidden xl:inline">{t('output.rerun')}</span>
-          </button>
+          />
         )}
         {canApply && onApplyParams && (
-          <button
-            type="button"
+          <ToolbarButton
+            icon={ClipboardCheck}
+            label={t('output.apply')}
+            size="sm"
+            labelVisibility="xl"
+            className="px-1.5 py-0.5"
             onClick={onApplyParams}
-            className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
             title={t('output.applyTitle')}
             aria-label={t('output.applyAria')}
-          >
-            <ClipboardCheck className="h-3 w-3" />
-            <span className="hidden xl:inline">{t('output.apply')}</span>
-          </button>
+          />
         )}
         {canSetup && onOpenAnalysis && (
-          <button
-            type="button"
+          <ToolbarButton
+            icon={SlidersHorizontal}
+            label={t('output.setup')}
+            size="sm"
+            labelVisibility="xl"
+            className="px-1.5 py-0.5"
             onClick={onOpenAnalysis}
-            className="tb-btn flex shrink-0 items-center gap-1 px-1.5 py-0.5 text-[10px]"
             title={t('output.setupTitle')}
             aria-label={t('output.setupAria')}
-          >
-            <SlidersHorizontal className="h-3 w-3" />
-            <span className="hidden xl:inline">{t('output.setup')}</span>
-          </button>
+          />
         )}
         <button
           type="button"

@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { RotateCcw } from 'lucide-react';
+import { ToolbarButton } from '../components/ToolbarButton';
 import { t } from '../i18n';
 import type { ThemeDefinition } from '../theme';
 import {
@@ -135,14 +136,14 @@ export const OutputAppearanceSettings = ({
         <div style={{ opacity: 0.8 }}>N = 30 · CI 95% · Aa 0123</div>
       </div>
 
-      <button
-        type="button"
-        className="tb-btn flex items-center gap-1 px-2 py-1 text-[10px]"
+      <ToolbarButton
+        icon={RotateCcw}
+        label={t('settings.outputReset')}
+        size="sm"
+        labelVisibility="always"
+        className="px-2 py-1"
         onClick={() => onChange({ ...DEFAULT_OUTPUT_APPEARANCE })}
-      >
-        <RotateCcw className="h-3 w-3" />
-        {t('settings.outputReset')}
-      </button>
+      />
     </div>
   );
 };

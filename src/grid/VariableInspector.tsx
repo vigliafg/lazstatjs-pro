@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Copy, Info, Layers, Trash2, X } from 'lucide-react';
+import { Copy, Info, Layers, Plus, Trash2, X } from 'lucide-react';
+import { ToolbarButton } from '../components/ToolbarButton';
 import {
   COL_TYPES,
   columnLevels,
@@ -285,13 +286,13 @@ export const VariableInspector = ({
               aria-label={t('inspector.addMissing')}
               className={inputClass}
             />
-            <button
-              type="button"
+            <ToolbarButton
+              icon={Plus}
+              label={t('inspector.add')}
+              size="sm"
+              labelVisibility="always"
               onClick={addMissingCode}
-              className="tb-btn shrink-0 px-2 py-1 text-[10px]"
-            >
-              {t('inspector.add')}
-            </button>
+            />
           </div>
           {codeExcluded > 0 && (
             <p className="mt-1 text-[9px] text-text3">
@@ -348,22 +349,25 @@ export const VariableInspector = ({
       </div>
 
       <div className="flex shrink-0 gap-1.5 border-t border-border p-2">
-        <button
-          type="button"
+        <ToolbarButton
+          icon={Copy}
+          label={t('inspector.duplicate')}
+          size="sm"
+          grow
+          labelVisibility="always"
           onClick={() => onDuplicate(column)}
-          className="tb-btn flex flex-1 items-center justify-center gap-1 px-2 py-1 text-[10px]"
-        >
-          <Copy className="h-3 w-3" />
-          {t('inspector.duplicate')}
-        </button>
-        <button
-          type="button"
+          className="px-2 py-1"
+        />
+        <ToolbarButton
+          icon={Trash2}
+          label={t('inspector.delete')}
+          size="sm"
+          grow
+          tone="danger"
+          labelVisibility="always"
           onClick={() => onDelete(column)}
-          className="tb-btn flex flex-1 items-center justify-center gap-1 px-2 py-1 text-[10px] text-red/90 hover:bg-red hover:text-on-accent"
-        >
-          <Trash2 className="h-3 w-3" />
-          {t('inspector.delete')}
-        </button>
+          className="px-2 py-1"
+        />
       </div>
     </aside>
   );

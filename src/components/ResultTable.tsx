@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
+import { ToolbarButton } from './ToolbarButton';
 import type { TableColumn, TableSpec } from '../stats/types';
 import { formatCell, isSignificantP } from '../stats/format';
 import { copyText } from '../io/clipboard';
@@ -27,19 +28,19 @@ const CopyTableButton: React.FC<{ spec: TableSpec }> = ({ spec }) => {
   };
   const label = state === 'ok' ? 'Copied' : state === 'fail' ? 'Copy failed' : 'Copy table as TSV';
   return (
-    <button
-      type="button"
+    <ToolbarButton
+      icon={state === 'ok' ? Check : Copy}
+      label={state === 'ok' ? 'Copied' : 'TSV'}
+      size="sm"
+      labelVisibility="always"
+      className={`ml-auto px-1.5 py-0.5 ${
+        state === 'ok' ? 'text-green border-green/50' : state === 'fail' ? 'text-red border-red/50' : ''
+      }`}
       onClick={onClick}
       title={label}
       aria-label={`${label}: ${spec.title}`}
-      data-no-print
-      className={`tb-btn ml-auto flex items-center gap-1 px-1.5 py-0.5 text-[10px] ${
-        state === 'ok' ? 'text-green border-green/50' : state === 'fail' ? 'text-red border-red/50' : ''
-      }`}
-    >
-      {state === 'ok' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-      {state === 'ok' ? 'Copied' : 'TSV'}
-    </button>
+      data-no-print=""
+    />
   );
 };
 

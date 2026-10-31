@@ -1,5 +1,6 @@
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import { Check, Clock3, FileDown, FilePlus2, FolderOpen, Save, SaveAll, Trash2 } from 'lucide-react';
+import { ToolbarButton } from '../components/ToolbarButton';
 import { savePrefs, type IoPreferences } from '../io/prefs';
 import { ChartDefaultsEditor } from '../components/charts/ChartDefaultsEditor';
 import { ChartPresetList } from '../components/charts/ChartPresetList';
@@ -139,35 +140,20 @@ export const SettingsTab = ({
         <section className="rounded-lg border border-border bg-surface p-6">
           <h2 className={sectionTitle}>{t('settings.session')}</h2>
           <div className="flex flex-wrap gap-2">
-            <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onNewDataset}>
-              <FilePlus2 className="h-3 w-3" />
-              {t('settings.newDataset')}
-            </button>
-            <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onOpenProject}>
-              <FolderOpen className="h-3 w-3" />
-              {t('settings.openProject')}
-            </button>
-            <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onSaveProject}>
-              <Save className="h-3 w-3" />
-              {t('settings.saveProject')}
-            </button>
-            <button
-              type="button"
-              className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]"
+            <ToolbarButton icon={FilePlus2} label={t('settings.newDataset')} size="md" labelVisibility="always" className="px-3" onClick={onNewDataset} />
+            <ToolbarButton icon={FolderOpen} label={t('settings.openProject')} size="md" labelVisibility="always" className="px-3" onClick={onOpenProject} />
+            <ToolbarButton icon={Save} label={t('settings.saveProject')} size="md" labelVisibility="always" className="px-3" onClick={onSaveProject} />
+            <ToolbarButton
+              icon={SaveAll}
+              label={t('data.saveAs')}
+              size="md"
+              labelVisibility="always"
+              className="px-3"
               onClick={onSaveProjectAs}
               title={t('data.saveAsHint')}
-            >
-              <SaveAll className="h-3 w-3" />
-              {t('data.saveAs')}
-            </button>
-            <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onExport}>
-              <FileDown className="h-3 w-3" />
-              {t('settings.export')}
-            </button>
-            <button type="button" className="tb-btn flex items-center gap-1 px-3 py-1.5 text-[11px]" onClick={onRestoreBackup}>
-              <Clock3 className="h-3 w-3" />
-              {t('settings.restoreBackup')}
-            </button>
+            />
+            <ToolbarButton icon={FileDown} label={t('settings.export')} size="md" labelVisibility="always" className="px-3" onClick={onExport} />
+            <ToolbarButton icon={Clock3} label={t('settings.restoreBackup')} size="md" labelVisibility="always" className="px-3" onClick={onRestoreBackup} />
           </div>
           <div className="mt-5">
             <div className="flex items-center justify-between gap-2">
@@ -176,14 +162,14 @@ export const SettingsTab = ({
                 {t('settings.recent')}
               </span>
               {recentProjects.length > 0 && (
-                <button
-                  type="button"
+                <ToolbarButton
+                  icon={Trash2}
+                  label={t('settings.clear')}
+                  size="sm"
+                  labelVisibility="always"
+                  className="px-2 py-0.5"
                   onClick={onClearRecent}
-                  className="tb-btn flex items-center gap-1 px-2 py-0.5 text-[10px]"
-                >
-                  <Trash2 className="h-3 w-3" />
-                  {t('settings.clear')}
-                </button>
+                />
               )}
             </div>
             {recentProjects.length === 0 ? (

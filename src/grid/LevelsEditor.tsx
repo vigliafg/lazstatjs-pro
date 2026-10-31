@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowDown, ArrowUp, Eraser, List, Plus, RefreshCw, Shuffle, Trash2, X } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowUp, Check, Eraser, List, Plus, RefreshCw, Shuffle, Trash2, X } from 'lucide-react';
+import { ToolbarButton } from '../components/ToolbarButton';
 import type { CategoryLevel, GridData } from './types';
 import { columnLevels, distinctColumnValues } from './types';
 import { levelsFromColumnValues, recodeColumnValues } from './ops';
@@ -213,22 +214,24 @@ export const LevelsEditor: React.FC<Props> = ({
                 </div>
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <button
-                  type="button"
-                  aria-pressed={mode === 'levels'}
-                  className={`tb-btn text-[10px] ${mode === 'levels' ? 'bg-accent/15 border-accent text-accent' : ''}`}
+                <ToolbarButton
+                  icon={List}
+                  label={t('levels.levels')}
+                  size="sm"
+                  active={mode === 'levels'}
+                  toggle
+                  labelVisibility="always"
                   onClick={() => setMode('levels')}
-                >
-                  {t('levels.levels')}
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={mode === 'recode'}
-                  className={`tb-btn flex items-center gap-1 text-[10px] ${mode === 'recode' ? 'bg-accent/15 border-accent text-accent' : ''}`}
+                />
+                <ToolbarButton
+                  icon={Shuffle}
+                  label={t('levels.recodeValues')}
+                  size="sm"
+                  active={mode === 'recode'}
+                  toggle
+                  labelVisibility="always"
                   onClick={startRecode}
-                >
-                  <Shuffle className="w-3 h-3" /> {t('levels.recodeValues')}
-                </button>
+                />
                 <button
                   type="button"
                   aria-label={t('levels.close')}
@@ -345,17 +348,21 @@ export const LevelsEditor: React.FC<Props> = ({
                         onKeyDown={(e) => { if (e.key === 'Enter') addLevel(); }}
                       />
                     </div>
-                    <button
-                      type="button"
-                      className="tb-btn flex items-center gap-1"
+                    <ToolbarButton
+                      icon={Plus}
+                      label={t('levels.add')}
+                      size="sm"
+                      labelVisibility="always"
                       onClick={addLevel}
                       disabled={newLevelValue.trim() === ''}
-                    >
-                      <Plus className="w-3 h-3" /> {t('levels.add')}
-                    </button>
-                    <button type="button" className="tb-btn flex items-center gap-1" onClick={rescan}>
-                      <RefreshCw className="w-3 h-3" /> {t('levels.readData')}
-                    </button>
+                    />
+                    <ToolbarButton
+                      icon={RefreshCw}
+                      label={t('levels.readData')}
+                      size="sm"
+                      labelVisibility="always"
+                      onClick={rescan}
+                    />
                   </div>
 
                   {missingValues && (
@@ -426,27 +433,41 @@ export const LevelsEditor: React.FC<Props> = ({
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-border">
-              <button type="button" className="tb-btn" onClick={() => changeOpen(false)}>
-                {t('levels.cancel')}
-              </button>
+            <div className="flex flex-wrap items-center justify-end gap-2 px-4 py-3 border-t border-border">
+              <ToolbarButton
+                icon={X}
+                label={t('levels.cancel')}
+                size="md"
+                labelVisibility="always"
+                onClick={() => changeOpen(false)}
+              />
               {mode === 'levels' ? (
-                <button type="button" className="tb-btn bg-accent text-on-accent border-accent" onClick={apply}>
-                  {t('levels.applyLevels')}
-                </button>
+                <ToolbarButton
+                  icon={Check}
+                  label={t('levels.applyLevels')}
+                  size="md"
+                  tone="primary"
+                  labelVisibility="always"
+                  onClick={apply}
+                />
               ) : (
                 <>
-                  <button type="button" className="tb-btn" onClick={() => setMode('levels')}>
-                    {t('levels.back')}
-                  </button>
-                  <button
-                    type="button"
-                    className="tb-btn bg-accent text-on-accent border-accent"
+                  <ToolbarButton
+                    icon={ArrowLeft}
+                    label={t('levels.back')}
+                    size="md"
+                    labelVisibility="always"
+                    onClick={() => setMode('levels')}
+                  />
+                  <ToolbarButton
+                    icon={Check}
+                    label={t('levels.applyRecode')}
+                    size="md"
+                    tone="primary"
+                    labelVisibility="always"
                     disabled={Object.keys(recodeMapping).length === 0}
                     onClick={applyRecode}
-                  >
-                    {t('levels.applyRecode')}
-                  </button>
+                  />
                 </>
               )}
             </div>
