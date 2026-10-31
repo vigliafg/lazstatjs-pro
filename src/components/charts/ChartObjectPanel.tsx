@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight, Eye, EyeOff } from 'lucide-react';
 import { t } from '../../i18n';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
@@ -17,6 +17,8 @@ interface NodeProps extends ChartObjectPanelProps {
   node: ChartObjectNode;
   depth: number;
   featureMap: Map<string, FeatureDescriptor>;
+  openState: Record<string, boolean>;
+  onOpenChange: (id: string, open: boolean) => void;
   key?: string;
 }
 
@@ -41,8 +43,18 @@ const nodeVisible = (
   Boolean(node.visibility && featureMap.get(node.visibility)) ||
   (node.children ?? []).some(child => nodeVisible(child, chart, options, featureMap));
 
-const ObjectNode = ({ node, depth, chart, options, onChange, onReset, featureMap }: NodeProps) => {
-  const [open, setOpen] = useState(true);
+const ObjectNode = ({
+  node,
+  depth,
+  chart,
+  options,
+  onChange,
+  onReset,
+  featureMap,
+  openState,
+  onOpenChange,
+}: NodeProps) => {
+  const open = openState[node.id] ?? depth === 0;
   const features = visibleFeaturesOf(node, chart, options, featureMap);
   const rawVisibility = node.visibility ? featureMap.get(node.visibility) : undefined;
   const visibilityFeature =
@@ -60,7 +72,8 @@ const ObjectNode = ({ node, depth, chart, options, onChange, onReset, featureMap
   return (
     <details
       open={open}
-      onToggle={event => setOpen(event.currentTarget.open)}
+      data-object-id={node.id}
+      onToggle={event => onOpenChange(node.id, event.currentTarget.open)}
       className={`rounded border border-border2 bg-surface2/40 ${depth > 0 ? 'ml-2' : ''}`}
     >
       <summary className="flex cursor-pointer list-none items-center gap-1.5 px-2 py-1.5 text-[10px] font-medium text-text2">
@@ -116,6 +129,8 @@ const ObjectNode = ({ node, depth, chart, options, onChange, onReset, featureMap
             onChange={onChange}
             onReset={onReset}
             featureMap={featureMap}
+            openState={openState}
+            onOpenChange={onOpenChange}
           />
         ))}
       </div>
@@ -123,12 +138,45 @@ const ObjectNode = ({ node, depth, chart, options, onChange, onReset, featureMap
   );
 };
 
+const collectObjectIds = (nodes: ChartObjectNode[]): string[] =>
+  nodes.flatMap(node => [node.id, ...collectObjectIds(node.children ?? [])]);
+
 /** Collapsible object tree used by the right-hand property panel. */
 export const ChartObjectPanel = ({ chart, options, onChange, onReset }: ChartObjectPanelProps) => {
   const featureMap = new Map(featuresFor(chart).map(feature => [feature.id, feature]));
-  const nodes = panelObjects(chart);
+  const nodes = useMemo(() => panelObjects(chart), [chart]);
+  const [openState, setOpenState] = useState<Record<string, boolean>>({});
+  const ids = useMemo(() => collectObjectIds(nodes), [nodes]);
+  useEffect(() => {
+    // A new chart starts again from the first-level default.
+    setOpenState({});
+  }, [chart.id]);
+  const setAllOpen = (open: boolean) =>
+    setOpenState(Object.fromEntries(ids.map(id => [id, open])));
+  const onOpenChange = (id: string, open: boolean) =>
+    setOpenState(previous => ({ ...previous, [id]: open }));
+
   return (
     <div className="flex flex-col gap-1.5">
+      <div className="flex items-center justify-end gap-1.5" data-no-print>
+        <button
+          type="button"
+          data-chart-tree-expand=""
+          className="font-mono text-[8px] uppercase tracking-wider text-text3 hover:text-text"
+          onClick={() => setAllOpen(true)}
+        >
+          {t('chart.expandAll')}
+        </button>
+        <span className="text-[8px] text-text3/60">·</span>
+        <button
+          type="button"
+          data-chart-tree-collapse=""
+          className="font-mono text-[8px] uppercase tracking-wider text-text3 hover:text-text"
+          onClick={() => setAllOpen(false)}
+        >
+          {t('chart.collapseAll')}
+        </button>
+      </div>
       {nodes.map(node => (
         <ObjectNode
           key={node.id}
@@ -139,6 +187,8 @@ export const ChartObjectPanel = ({ chart, options, onChange, onReset }: ChartObj
           onChange={onChange}
           onReset={onReset}
           featureMap={featureMap}
+          openState={openState}
+          onOpenChange={onOpenChange}
         />
       ))}
     </div>

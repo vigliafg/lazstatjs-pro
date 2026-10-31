@@ -175,6 +175,8 @@ export const analysisMessages = {
   "chart.resetSection": "Repor esta secção",
   "chart.resetObject": "Repor objeto",
   "chart.toggleObject": "Mostrar/ocultar objeto",
+  "chart.expandAll": "Expandir tudo",
+  "chart.collapseAll": "Recolher tudo",
   "chart.tabChart": "Gráfico",
   "chart.tabProperties": "Propriedades",
   "chart.undo": "Anular",

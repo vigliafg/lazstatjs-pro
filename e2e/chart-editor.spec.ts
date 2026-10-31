@@ -60,13 +60,15 @@ const waitCardChart = async (page: Page, id: string) => {
 const editButton = (chart: Locator): Locator =>
   chart.locator('button[aria-label^="Edit chart:"]');
 
-const openEditor = async (page: Page, id: string) => {
+const openEditor = async (page: Page, id: string, expandAll = true) => {
   const chart = await waitCardChart(page, id);
   await editButton(chart).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   const preview = dialog.locator('[data-chart-surface]');
   await expect(preview).toHaveAttribute('data-chart-state', 'ready', { timeout: 15000 });
+  // Most editor tests drive leaf controls directly; open every object branch.
+  if (expandAll) await dialog.locator('[data-chart-tree-expand]').click();
   return { chart, dialog, preview };
 };
 
@@ -389,6 +391,31 @@ test.describe('chart editor — dialog behaviour', () => {
     await expect(dialog).toHaveCount(0);
   });
 
+  test('object tree starts at the first level and expands or collapses as a whole', async ({ page }) => {
+    await runAnova(page);
+    const { dialog } = await openEditor(page, 'anova-box', false);
+
+    // Default B: root objects open, nested object groups closed.
+    for (const id of ['chart', 'axes', 'style', 'box']) {
+      await expect(dialog.locator(`details[data-object-id="${id}"]`)).toHaveJSProperty('open', true);
+    }
+    await expect(dialog.locator('details[data-object-id="box-whiskers"]')).toHaveJSProperty('open', false);
+    await expect(dialog.locator('details[data-object-id="box-mean"]')).toHaveJSProperty('open', false);
+
+    await dialog.locator('[data-chart-tree-expand]').click();
+    await expect(dialog.locator('details[data-object-id="box-whiskers"]')).toHaveJSProperty('open', true);
+    await expect(dialog.locator('details[data-object-id="box-mean"]')).toHaveJSProperty('open', true);
+
+    await dialog.locator('[data-chart-tree-collapse]').click();
+    await expect(dialog.locator('details[data-object-id="chart"]')).toHaveJSProperty('open', false);
+    await expect(dialog.locator('details[data-object-id="box-whiskers"]')).toHaveJSProperty('open', false);
+
+    // Re-opening one root does not expand its nested groups again.
+    await dialog.locator('details[data-object-id="box"] > summary').click();
+    await expect(dialog.locator('details[data-object-id="box"]')).toHaveJSProperty('open', true);
+    await expect(dialog.locator('details[data-object-id="box-whiskers"]')).toHaveJSProperty('open', false);
+  });
+
   test('opening by chart click, keyboard activation, dirty guard, Escape and focus trap', async ({ page }) => {
     await runAnova(page);
     const chart = await waitCardChart(page, 'anova-box');
@@ -473,6 +500,7 @@ test.describe('chart editor — mobile layout', () => {
     expect(box?.height).toBeCloseTo(viewport?.height ?? 0, 0);
 
     await dialog.getByRole('button', { name: 'Properties', exact: true }).click();
+    await dialog.locator('[data-chart-tree-expand]').click();
     await expect(field(dialog, 'showPoints')).toBeVisible();
     await field(dialog, 'showMean').check();
     await page.screenshot({ path: 'test-results/chart-editor-audit/anova-box-mobile-properties.png' });

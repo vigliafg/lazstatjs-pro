@@ -177,6 +177,8 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.resetSection": "Réinitialiser cette section",
   "chart.resetObject": "Réinitialiser l’objet",
   "chart.toggleObject": "Afficher/masquer l’objet",
+  "chart.expandAll": "Tout développer",
+  "chart.collapseAll": "Tout réduire",
   "chart.tabChart": "Graphique",
   "chart.tabProperties": "Propriétés",
   "chart.undo": "Annuler",

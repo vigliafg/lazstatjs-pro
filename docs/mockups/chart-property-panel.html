@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LazStats · Chart property panel — three default states</title>
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #12161f;
+    --surface2: #171c27;
+    --surface3: #1e2432;
+    --border: #242b3a;
+    --border2: #2f374a;
+    --text: #e2e8f0;
+    --text2: #a8b3c4;
+    --text3: #6b7688;
+    --accent: #4f9cf9;
+    --accent2: #38bdf8;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --line: #2b3344;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 26px 28px 30px;
+    min-width: 1480px;
+  }
+  .top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 18px;
+  }
+  .eyebrow {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 6px;
+  }
+  h1 { margin: 0; font-size: 21px; font-weight: 650; letter-spacing: -.01em; }
+  .sub { margin: 7px 0 0; color: var(--text3); font-size: 12px; }
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 9.5px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    white-space: nowrap;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .chev { width: 11px; height: 11px; display: inline-block; color: var(--text3); }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--yellow); display: inline-block; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+  .card {
+    background: linear-gradient(180deg, #141923 0%, #10141c 100%);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 18px 45px rgba(0,0,0,.28);
+  }
+  .card.recommended { border-color: rgba(79,156,249,.55); box-shadow: 0 0 0 1px rgba(79,156,249,.14), 0 18px 45px rgba(0,0,0,.3); }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(23,28,39,.75);
+  }
+  .letter {
+    width: 25px; height: 25px; flex: 0 0 auto;
+    display: grid; place-items: center;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface3);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: var(--text2);
+  }
+  .recommended .letter { border-color: rgba(79,156,249,.6); color: var(--accent); background: rgba(79,156,249,.12); }
+  .card-head h2 { margin: 0; font-size: 13px; font-weight: 600; }
+  .card-head p { margin: 2px 0 0; font-size: 10.5px; color: var(--text3); }
+  .stat {
+    margin-left: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 9px;
+    color: var(--text3);
+    white-space: nowrap;
+  }
+  .rec {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    border: 1px solid rgba(79,156,249,.4);
+    background: rgba(79,156,249,.09);
+    border-radius: 999px;
+    padding: 2px 7px;
+    margin-left: 6px;
+  }
+  .panel {
+    padding: 10px 10px 12px;
+    min-height: 620px;
+  }
+  .panel-note {
+    margin: 9px 2px 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    line-height: 1.5;
+    color: var(--text3);
+  }
+  .panel-note b { color: var(--text2); font-weight: 550; }
+
+  .tree, .tree ul { list-style: none; margin: 0; padding: 0; }
+  .tree > li + li { margin-top: 4px; }
+  .tree ul.children {
+    margin-left: 9px;
+    padding-left: 10px;
+    border-left: 1px solid var(--line);
+  }
+  .tree ul.children > li { position: relative; padding-top: 3px; }
+  .tree ul.children > li::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 14px;
+    width: 10px;
+    height: 1px;
+    background: var(--line);
+  }
+  .tree ul.children > li.prop-li { padding-top: 1px; }
+  .tree ul.children > li.prop-li::before { top: 11px; }
+
+  .obj {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 24px;
+    padding: 3px 6px 3px 5px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+  }
+  .obj.root {
+    background: var(--surface2);
+    border-color: var(--border);
+    margin-bottom: 3px;
+  }
+  .obj:hover { border-color: var(--border2); }
+  .obj .chev { flex: 0 0 auto; transition: transform .12s ease; }
+  .obj.open .chev { transform: rotate(90deg); }
+  .obj-icon {
+    width: 15px; height: 15px; flex: 0 0 auto;
+    display: grid; place-items: center;
+    color: var(--text3);
+  }
+  .obj-icon svg { width: 13px; height: 13px; }
+  .obj-label { font-size: 11px; font-weight: 540; color: var(--text2); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .obj .count {
+    margin-left: 5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 8.5px;
+    color: var(--text3);
+    border: 1px solid var(--border2);
+    border-radius: 999px;
+    padding: 0 5px;
+    line-height: 15px;
+  }
+  .obj .mods {
+    margin-left: 4px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 0 0 2px rgba(251,191,36,.12);
+  }
+  .obj .eye {
+    margin-left: auto;
+    width: 18px; height: 18px;
+    display: grid; place-items: center;
+    border-radius: 4px;
+    color: var(--text3);
+  }
+  .obj .eye svg { width: 12px; height: 12px; }
+  .obj .eye.off { color: #4c5566; }
+
+  .props { display: flex; flex-direction: column; gap: 2px; padding: 1px 2px 4px 23px; }
+  .props { display: flex; flex-direction: column; gap: 2px; padding: 1px 2px 4px 23px; }
+  .prop {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 21px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    color: var(--text3);
+  }
+  .prop:hover { background: rgba(255,255,255,.025); }
+  .prop .name { color: var(--text2); }
+  .prop .spacer { flex: 1; }
+  .prop.modified .name { color: var(--text); }
+  .prop .p-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--yellow); flex: 0 0 auto; }
+  .check {
+    width: 13px; height: 13px; flex: 0 0 auto;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    background: var(--surface3);
+    display: grid; place-items: center;
+    color: transparent;
+    font-size: 9px;
+    line-height: 1;
+  }
+  .check.on { background: var(--accent); border-color: var(--accent); color: #08101e; }
+  .select {
+    display: inline-flex; align-items: center; gap: 5px;
+    min-width: 74px;
+    padding: 1px 5px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    background: var(--surface3);
+    font-size: 9.5px;
+    color: var(--text2);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .select .caret { margin-left: auto; color: var(--text3); font-size: 8px; }
+  .range { width: 86px; display: flex; align-items: center; gap: 6px; }
+  .track { position: relative; height: 3px; flex: 1; border-radius: 999px; background: #2a3243; }
+  .track .fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; background: var(--accent); }
+  .track .thumb { position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); transform: translate(-50%, -50%); box-shadow: 0 0 0 2px rgba(79,156,249,.18); }
+  .range b { font-weight: 500; font-size: 9px; color: var(--text3); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; min-width: 26px; text-align: right; }
+
+  .empty-hint {
+    margin: 4px 2px 0;
+    padding: 8px 9px;
+    border: 1px dashed var(--border2);
+    border-radius: 6px;
+    font-size: 9.5px;
+    line-height: 1.5;
+    color: var(--text3);
+  }
+  .empty-hint b { color: var(--text2); font-weight: 550; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <div>
+      <div class="eyebrow">Chart editor · property panel</div>
+      <h1>Tre default di apertura dell’albero oggetti</h1>
+      <p class="sub">Stesso grafico ANOVA box plot. L’albero è generato dagli oggetti del chart: ogni ramo contiene le proprietà editabili dell’oggetto. Il default implementato è B; qui sotto il confronto con A e C.</p>
+    </div>
+    <div class="legend">
+      <span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg> chiuso</span>
+      <span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(90deg)"><path d="m9 18 6-6-6-6"/></svg> aperto</span>
+      <span><span class="dot"></span> non default</span>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+<script>
+  const OBJECTS = [
+    {
+      id: 'chart', label: 'Chart', icon: 'chart', props: [
+        { label: 'Title', kind: 'check', value: true },
+        { label: 'Subtitle', kind: 'check', value: true },
+        { label: 'Note', kind: 'check', value: true },
+        { label: 'Zero baseline', kind: 'check', value: false },
+        { label: 'Tooltip', kind: 'check', value: true },
+      ],
+    },
+    {
+      id: 'axes', label: 'Axes', icon: 'axes', props: [
+        { label: 'X axis title', kind: 'check', value: true },
+        { label: 'Y axis title', kind: 'check', value: true },
+        { label: 'Grid X', kind: 'check', value: true },
+        { label: 'Grid Y', kind: 'check', value: true },
+        { label: 'Grid opacity', kind: 'range', value: 45, min: 0, max: 100, changed: true, display: '0.45' },
+      ],
+    },
+    {
+      id: 'legend', label: 'Legend', icon: 'legend', props: [
+        { label: 'Show legend', kind: 'check', value: false },
+        { label: 'Position', kind: 'select', value: 'Right' },
+      ],
+    },
+    {
+      id: 'style', label: 'Style', icon: 'style', props: [
+        { label: 'Point shape', kind: 'select', value: 'Circle' },
+        { label: 'Point size', kind: 'range', value: 70, min: 10, max: 100, changed: true, display: '70' },
+        { label: 'Point opacity', kind: 'range', value: 75, min: 0, max: 100, display: '0.75' },
+        { label: 'Line width', kind: 'range', value: 35, min: 0, max: 100, display: '1.5' },
+        { label: 'Line dash', kind: 'select', value: 'Solid' },
+      ],
+    },
+    {
+      id: 'box', label: 'Box plot', icon: 'box', props: [
+        { label: 'Box type', kind: 'select', value: 'Box' },
+        { label: 'Order', kind: 'select', value: 'Original' },
+      ],
+      children: [
+        { id: 'whiskers', label: 'Whiskers and caps', visibility: true, props: [{ label: 'Show whiskers', kind: 'check', value: true }] },
+        { id: 'outliers', label: 'Outliers', visibility: true, props: [{ label: 'Show outliers', kind: 'check', value: true }] },
+        { id: 'points', label: 'Points', visibility: true, props: [{ label: 'Show points', kind: 'check', value: true }] },
+        { id: 'mean', label: 'Mean', visibility: true, changed: true, props: [{ label: 'Show mean', kind: 'check', value: true, changed: true }] },
+        { id: 'median', label: 'Median label', visibility: true, changed: true, props: [{ label: 'Label median', kind: 'check', value: true, changed: true }] },
+      ],
+    },
+  ];
+
+  const ICONS = {
+    chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+    axes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4v16h16M8 16l4-5 3 3 5-6"/></svg>',
+    legend: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="8" height="3" rx="1"/><rect x="3" y="11" width="8" height="3" rx="1"/><rect x="3" y="17" width="8" height="3" rx="1"/><path d="M15 6h6M15 12h6M15 18h6"/></svg>',
+    style: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="4"/><path d="M11 8h5M8 11v4"/></svg>',
+    box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 8h18v10H3zM8 8V5M16 8V5M12 5v14"/></svg>',
+  };
+  const EYE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 3 18 18M10.6 5.2A10.9 10.9 0 0 1 12 5c6.5 0 10 7 10 7a18.6 18.6 0 0 1-3.2 4.2M6.2 6.2C3.5 8.1 2 12 2 12s3.5 7 10 7c1.7 0 3.2-.4 4.5-1"/></svg>';
+  const CHECK = '✓';
+  const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
+
+  const STATE_META = [
+    {
+      id: 'collapsed', letter: 'A', title: 'Tutto chiuso',
+      sub: 'Si vedono solo i nomi degli oggetti',
+      note: 'Albero compatto, ma per modificare una proprietà bisogna aprire ogni oggetto.',
+    },
+    {
+      id: 'level1', letter: 'B', title: 'Primo livello aperto',
+      sub: 'Radici aperte, sottogruppi chiusi',
+      note: 'Default attuale: le proprietà delle radici sono subito visibili; i rami annidati restano chiusi.',
+      recommended: true,
+    },
+    {
+      id: 'smart', letter: 'C', title: 'Solo oggetti modificati',
+      sub: 'Si aprono solo i rami non default',
+      note: 'Il pannello evidenzia solo ciò che è stato cambiato; il resto resta chiuso.',
+    },
+  ];
+
+  const changedIn = (obj) =>
+    obj.props.some(p => p.changed) || (obj.changed === true) || (obj.children || []).some(changedIn);
+
+  const isOpen = (obj, depth, state) => {
+    if (state === 'collapsed') return false;
+    if (state === 'level1') return depth === 0;
+    return changedIn(obj);
+  };
+
+  const countProps = (obj, state, depth) => {
+    if (!isOpen(obj, depth, state)) return 0;
+    let n = obj.props.length;
+    for (const child of obj.children || []) {
+      if (isOpen(child, depth + 1, state)) n += countProps(child, depth + 1, state);
+    }
+    return n;
+  };
+
+  const renderProp = (p) => {
+    const changed = p.changed ? ' modified' : '';
+    if (p.kind === 'check') {
+      return `<div class="prop${changed}"><span class="check ${p.value ? 'on' : ''}">${p.value ? CHECK : ''}</span><span class="name">${p.label}</span>${p.changed ? '<span class="p-dot"></span>' : ''}</div>`;
+    }
+    if (p.kind === 'select') {
+      return `<div class="prop${changed}"><span class="name">${p.label}</span><span class="spacer"></span><span class="select">${p.value}<span class="caret">▾</span></span>${p.changed ? '<span class="p-dot"></span>' : ''}</div>`;
+    }
+    const pct = Math.round(((p.value - p.min) / (p.max - p.min)) * 100);
+    return `<div class="prop${changed}"><span class="name">${p.label}</span><span class="spacer"></span><span class="range"><span class="track"><span class="fill" style="width:${pct}%"></span><span class="thumb" style="left:${pct}%"></span></span><b>${p.display ?? p.value}</b></span>${p.changed ? '<span class="p-dot"></span>' : ''}</div>`;
+  };
+
+  const renderObject = (obj, depth, state) => {
+    const open = isOpen(obj, depth, state);
+    const props = open ? obj.props.map(p => `<li class="prop-li">${renderProp(p)}</li>`).join('') : '';
+    const children = open
+      ? (obj.children || []).map(child => renderObject(child, depth + 1, state)).join('')
+      : '';
+    const eye = obj.visibility
+      ? `<span class="eye ${obj.props?.some(p => p.label.toLowerCase().includes('show') && p.value === false) ? 'off' : ''}">${obj.props?.some(p => p.label.toLowerCase().includes('show') && p.value === false) ? EYE_OFF : EYE}</span>`
+      : '';
+    const mods = (obj.changed || obj.props.some(p => p.changed) || (obj.children || []).some(changedIn))
+      ? '<span class="mods" title="Valore non default"></span>'
+      : '';
+    const count = obj.props.length + (obj.children ? obj.children.length : 0);
+    return `<li>
+      <div class="obj ${depth === 0 ? 'root' : ''} ${open ? 'open' : ''}">
+        ${CHEV}
+        <span class="obj-icon">${ICONS[obj.icon] || ''}</span>
+        <span class="obj-label">${obj.label}</span>
+        <span class="count">${count}</span>
+        ${mods}
+        ${eye}
+      </div>
+      ${open && (props || children) ? `<ul class="children">${props}${children}</ul>` : ''}
+    </li>`;
+  };
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = STATE_META.map(meta => {
+    const visible = OBJECTS.reduce((sum, obj) => sum + countProps(obj, meta.id, 0), 0);
+    const tree = OBJECTS.map(obj => renderObject(obj, 0, meta.id)).join('');
+    return `<section class="card ${meta.recommended ? 'recommended' : ''}">
+      <header class="card-head">
+        <span class="letter">${meta.letter}</span>
+        <div>
+          <h2>${meta.title}${meta.recommended ? '<span class="rec">implementato</span>' : ''}</h2>
+          <p>${meta.sub}</p>
+        </div>
+        <span class="stat">${visible} proprietà visibili</span>
+      </header>
+      <div class="panel">
+        <ul class="tree">${tree}</ul>
+        ${visible === 0 ? '<div class="empty-hint"><b>Solo oggetti.</b> Nessun controllo è visibile finché non apri un ramo.</div>' : ''}
+        <p class="panel-note">${meta.note}</p>
+      </div>
+    </section>`;
+  }).join('');
+</script>
+</body>
+</html>

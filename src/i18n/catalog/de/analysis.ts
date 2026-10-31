@@ -209,6 +209,8 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.resetSection": "Diesen Abschnitt zurücksetzen",
   "chart.resetObject": "Objekt zurücksetzen",
   "chart.toggleObject": "Objekt ein-/ausblenden",
+  "chart.expandAll": "Alle ausklappen",
+  "chart.collapseAll": "Alle einklappen",
   "chart.tabChart": "Diagramm",
   "chart.tabProperties": "Eigenschaften",
   "chart.undo": "Rückgängig",
