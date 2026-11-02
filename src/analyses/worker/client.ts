@@ -3,7 +3,7 @@ import type { ProjectParams } from '../../io/project';
 import type { HeavyAnalysisId } from './heavyIds';
 import type { ReportLocale } from '../../stats/reportCopy/types';
 import type { HeavyProgressPhase, HeavyRunOutcome, HeavyWorkerMessage } from './protocol';
-import type { ChartDefaults } from '../../charts/defaults';
+import type { ChartDefaults, ChartStylePatches } from '../../charts/defaults';
 
 export interface HeavyRunOptions {
   signal?: AbortSignal;
@@ -12,6 +12,8 @@ export interface HeavyRunOptions {
   onProgress?: (phase: HeavyProgressPhase, progress: number) => void;
   /** Defaults for charts built inside the worker. */
   chartDefaults?: ChartDefaults;
+  /** Per-kind style patches chosen before the run. */
+  chartStyles?: ChartStylePatches;
   /** Test seam: lets the client run without a real browser Worker. */
   workerFactory?: () => Worker;
 }
@@ -86,6 +88,7 @@ export const runHeavyAnalysis = async (
           tables: message.tables,
           report: message.report,
           charts: message.charts,
+          ...(message.panels ? { panels: message.panels } : {}),
           ...(message.header ? { header: message.header } : {}),
           ...(message.warnings ? { warnings: message.warnings } : {}),
           ...(message.callout ? { callout: message.callout } : {}),
@@ -111,6 +114,7 @@ export const runHeavyAnalysis = async (
         ciLevel,
         reportLocale: options.reportLocale ?? 'it',
         chartDefaults: options.chartDefaults,
+        chartStyles: options.chartStyles,
       });
       options.onProgress?.(phase, progress);
     } catch (error) {

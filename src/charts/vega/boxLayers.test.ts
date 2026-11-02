@@ -46,6 +46,117 @@ test('the standard box follows the sorted category order', () => {
   assert.deepEqual(x.sort, ['A', 'B']);
 });
 
+test('the percentile whiskers use p10/p90 instead of the Tukey min/max', () => {
+  const withPercentiles = makeChart({
+    id: 'percentile-box',
+    kind: 'box',
+    title: 'Percentile box',
+    data: {
+      summary: [
+        {
+          category: 'A',
+          n: 20,
+          min: 2,
+          p10: 3,
+          q1: 4,
+          median: 5,
+          q3: 6,
+          p90: 7,
+          max: 8,
+          mean: 5,
+          meanLo: 4.5,
+          meanHi: 5.5,
+        },
+      ],
+      points: [],
+      outliers: [],
+    },
+  });
+  const layers = boxLayers(withPercentiles, options({ whisker: 'percentile' }));
+  const whisker = layers.find(
+    layer => layer.mark?.type === 'rule' && layer.encoding?.y?.field === 'p10'
+  );
+  assert.ok(whisker);
+  assert.equal(whisker!.encoding?.y2?.field, 'p90');
+  assert.equal(
+    layers.some(layer => layer.mark?.type === 'rule' && layer.encoding?.y?.field === 'min'),
+    false
+  );
+});
+
+test('the mean interval is drawn only when both bounds are finite', () => {
+  const withInterval = makeChart({
+    id: 'mean-interval',
+    kind: 'box',
+    title: 'Mean interval',
+    data: {
+      summary: [
+        {
+          category: 'A',
+          n: 20,
+          min: 1,
+          p10: 2,
+          q1: 3,
+          median: 4,
+          q3: 5,
+          p90: 6,
+          max: 7,
+          mean: 4,
+          meanLo: 3.5,
+          meanHi: 4.5,
+        },
+      ],
+      points: [],
+      outliers: [],
+    },
+  });
+  const layers = boxLayers(withInterval, options({ showMeanInterval: true }));
+  const interval = layers.find(
+    layer => layer.mark?.type === 'rule' && layer.encoding?.y?.field === 'meanLo'
+  );
+  assert.ok(interval);
+  assert.equal(interval!.encoding?.y2?.field, 'meanHi');
+
+  const missing = makeChart({
+    id: 'no-interval',
+    kind: 'box',
+    title: 'No interval',
+    data: { summary: [{ category: 'A', n: 1, min: 5, q1: 5, median: 5, q3: 5, max: 5, mean: 5 }] },
+  });
+  const missingLayers = boxLayers(missing, options({ showMeanInterval: true }));
+  assert.equal(
+    missingLayers.some(layer => layer.encoding?.y?.field === 'meanLo'),
+    false
+  );
+});
+
+test('jitter is deterministic, cycles after 101 points and is off by default', () => {
+  const repeated = makeChart({
+    id: 'jitter',
+    kind: 'box',
+    title: 'Jitter',
+    data: {
+      summary: [{ category: 'A', n: 120, min: 1, q1: 2, median: 3, q3: 4, max: 5, mean: 3 }],
+      points: Array.from({ length: 120 }, () => ({ category: 'A', value: 3 })),
+      outliers: [],
+    },
+  });
+  const jittered = boxLayers(repeated, options({ showPoints: true, jitter: true })).find(
+    layer => layer.encoding?.xOffset !== undefined
+  );
+  assert.ok(jittered);
+  const rows = jittered!.data.values as ChartRow[];
+  assert.equal(jittered!.encoding?.xOffset?.field, 'jitter');
+  assert.equal(rows[0].jitter, rows[101].jitter);
+  assert.ok(rows.every(row => Number(row.jitter) >= -0.2 && Number(row.jitter) <= 0.2));
+
+  const plain = boxLayers(repeated, options({ showPoints: true })).find(
+    layer => layer.mark?.filled === true
+  );
+  assert.ok(plain);
+  assert.equal(plain!.encoding?.xOffset, undefined);
+});
+
 test('the notched layer narrows at the median and keeps full width at Q1/Q3', () => {
   const layers = boxLayers(chart, options({ display: 'notched' }));
   const area = layers[0];

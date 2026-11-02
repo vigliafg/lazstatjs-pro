@@ -1,0 +1,64 @@
+import type { ChartKind } from '../stats/charts';
+
+/**
+ * Chart kinds each procedure can emit, declared for the run setup.
+ *
+ * The setup panel offers a style per kind *before* the first run, so it cannot
+ * read them from the last output. The lists mirror the `kind` literals of the
+ * runners; a procedure is free to emit a subset for a given dataset.
+ */
+export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
+  agreement: ['bland', 'heatmap', 'interval', 'scatter'],
+  ancova: ['bar', 'line', 'qq', 'scatter'],
+  anova: ['bar', 'box', 'forest', 'qq', 'scatter', 'diamond', 'circles'],
+  chisquare: ['bar', 'mosaic'],
+  contingency: ['bar', 'heatmap', 'mosaic', 'scatter'],
+  correlation: ['box', 'heatmap', 'scatter', 'score'],
+  countreg: ['bar', 'forest', 'qq', 'scatter'],
+  cox: ['forest', 'line', 'scatter'],
+  descriptive: [
+    'bar',
+    'box',
+    'bubble',
+    'diamond',
+    'dot',
+    'ecdf',
+    'histogram',
+    'interval',
+    'qq',
+    'scatter',
+    'scatter3d',
+    'scattermatrix',
+    'shadowgram',
+  ],
+  distfit: ['bar', 'line', 'qq'],
+  factorial: ['line'],
+  gee: ['bar', 'forest', 'interval', 'qq', 'scatter'],
+  lmm: ['bar', 'interval', 'qq', 'scatter'],
+  logistic: ['bar', 'forest', 'heatmap', 'line'],
+  mi: ['bar', 'dot', 'ecdf', 'forest', 'histogram', 'line', 'missingness'],
+  mixedanova: ['line'],
+  multivariate: ['bar', 'heatmap', 'line', 'scatter', 'score', 'scree'],
+  nonparamrm: ['bar', 'box', 'heatmap'],
+  ordinal: ['forest', 'heatmap', 'line'],
+  parametric: ['bar', 'forest', 'line', 'qq', 'survival'],
+  regression: ['box', 'qq', 'residual', 'scatter'],
+  repeatedanova: ['bar', 'interval', 'line'],
+  resampling: ['bootstrap', 'qq'],
+  samplesize: ['line', 'power'],
+  stratcox: ['forest', 'line', 'risk', 'survival'],
+  survival: ['bar', 'risk', 'survival'],
+  tdcox: ['forest'],
+  timeseries: ['acf', 'bar', 'line'],
+  tost: ['bar'],
+  ttest: ['box', 'interval', 'diamond'],
+  wizard: [],
+  partition: ['bar', 'scatter', 'tree'],
+  quality: ['box', 'histogram', 'line', 'pareto'],
+  cluster: ['bar', 'dendrogram', 'line'],
+  discriminant: ['heatmap', 'line', 'scatter'],
+  doe: ['bar', 'surface'],
+};
+
+export const chartKindsFor = (analysisId: string): ChartKind[] =>
+  ANALYSIS_CHART_KINDS[analysisId] ?? [];

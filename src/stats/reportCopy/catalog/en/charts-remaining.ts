@@ -306,4 +306,90 @@ export const remainingChartCopy: Record<string, string> = {
     "Time density per profile",
   "La densità è hazard × sopravvivenza: mostra dove si concentrano i tempi all’evento per ciascun profilo.":
     "The density is hazard × survival: it shows where event times concentrate for each profile.",
+  "Diamante delle medie":
+    "Mean diamonds",
+  "Diamante proporzionale all’intervallo di confidenza":
+    "Diamond proportional to the confidence interval",
+  "Il diamante è centrato sulla media; la sua ampiezza cresce con l’incertezza della stima.":
+    "The diamond is centred on the mean; its width grows with the uncertainty of the estimate.",
+  "Shadowgram: {s1}":
+    "Shadowgram: {s1}",
+  "Densità stimata con rug delle osservazioni":
+    "Estimated density with a rug of the observations",
+  "La silhouette mostra la densità stimata; il rug mostra dove cadono le osservazioni.":
+    "The silhouette shows the estimated density; the rug shows where the observations fall.",
+  "Matrice di dispersione":
+    "Scatter matrix",
+  "Confronto a coppie delle variabili selezionate":
+    "Pairwise comparison of the selected variables",
+  "Ogni pannello confronta due variabili; le ellissi tratteggiate riassumono la densità bivariata.":
+    "Each panel compares two variables; the dashed ellipses summarise the bivariate density.",
+  "Variabili":
+    "Variables",
+  "Grafico a bolle":
+    "Bubble plot",
+  "{s1} × {s2}, dimensione = {s3}":
+    "{s1} × {s2}, size = {s3}",
+  "La posizione mostra due variabili, la dimensione della bolla la terza: bolle grandi indicano valori alti della variabile di dimensione.":
+    "Position shows two variables and bubble size the third: large bubbles indicate high values of the size variable.",
+  "Dispersione 3D":
+    "3D scatter",
+  "{s1}, {s2}, {s3} proiettati":
+    "{s1}, {s2}, {s3} projected",
+  "La proiezione isometrica mostra tre dimensioni; l’ellisse riassume la densità proiettata, non sostituisce un test multivariato.":
+    "The isometric projection shows three dimensions; the ellipse summarises the projected density and does not replace a multivariate test.",
+  "Diamante della media":
+    "Mean diamond",
+  "IC {s1}% e stima puntuale":
+    "{s1}% CI and point estimate",
+  "Il diamante è centrato sulla media; la sua ampiezza segue l’intervallo di confidenza.":
+    "The diamond is centred on the mean; its width follows the confidence interval.",
+  "Diamanti delle medie":
+    "Mean diamonds",
+  "Ogni diamante è centrato sulla media del gruppo; l’ampiezza segue l’intervallo di confidenza.":
+    "Each diamond is centred on its group mean; its width follows the confidence interval.",
+  "Diamante della differenza media":
+    "Mean difference diamond",
+  "Il diamante è centrato sulla differenza media; l’ampiezza segue l’intervallo di confidenza.":
+    "The diamond is centred on the mean difference; its width follows the confidence interval.",
+  "Diamanti delle medie per gruppo":
+    "Mean diamonds by group",
+  "IC {s1}% entro il modello":
+    "{s1}% CI within the model",
+  "Il diamante è centrato sulla media di gruppo; l’ampiezza segue l’intervallo di confidenza del modello.":
+    "The diamond is centred on the group mean; its width follows the model confidence interval.",
+  "Cerchi di confronto tra gruppi":
+    "Comparison circles between groups",
+  "IC {s1}% · cerchi più grandi = maggiore incertezza":
+    "{s1}% CI · larger circles = greater uncertainty",
+  "La sovrapposizione dei cerchi è un indizio visivo: il test post-hoc formale resta la tabella dei confronti.":
+    "Circle overlap is a visual clue: the formal post-hoc test remains the comparison table.",
+  "Pannello Distribution: {s1}":
+    "Distribution panel: {s1}",
+  "Pannello Oneway: {s1} per {s2}":
+    "Oneway panel: {s1} by {s2}",
+  "Pannello Fit Model: {s1}":
+    "Fit Model panel: {s1}",
+  "Pannello diagnostico di regressione: {s1}":
+    "Regression diagnostic panel: {s1}",
+  "Report PCA":
+    "PCA report",
+  "Report delle serie temporali: {s1}":
+    "Time-series report: {s1}",
+  "Report di qualità":
+    "Quality report",
+  "Istogramma, box, Q-Q e shadowgram descrivono la stessa variabile: nessun grafico aggiunge un test, mostrano solo forma, centro e code.":
+    "Histogram, box, Q-Q and shadowgram describe the same variable: no plot adds a test, they only show shape, centre and tails.",
+  "I diamanti mostrano media e incertezza, i cerchi il confronto visivo tra gruppi; il test formale resta nella tabella post-hoc.":
+    "Diamonds show the mean and its uncertainty, circles the visual comparison between groups; the formal test remains in the post-hoc table.",
+  "Osservati vs stimati misura l’accordo del modello; i pannelli dei residui controllano struttura, varianza e punti influenti.":
+    "Observed vs predicted measures model agreement; the residual panels check structure, variance and influential points.",
+  "Residui senza struttura, varianza stabile e nessun punto oltre le soglie di leverage/Cook sostengono le assunzioni del modello.":
+    "Unstructured residuals, stable variance and no point beyond the leverage/Cook thresholds support the model assumptions.",
+  "Lo scree sceglie quante componenti trattenere; score e biplot mostrano i casi, i carichi mostrano come le variabili costruiscono le componenti.":
+    "The scree plot chooses how many components to retain; scores and biplot show the cases, loadings show how variables build the components.",
+  "La serie e la previsione si leggono insieme ad ACF/PACF e alla scomposizione: un residuo bianco sostiene il modello, un pattern no.":
+    "The series and forecast are read together with ACF/PACF and the decomposition: white residuals support the model, a pattern does not.",
+  "Controllo del processo, capacità, Pareto e variabilità rispondono a domande diverse: il pannello le tiene vicine senza confonderle.":
+    "Process control, capability, Pareto and variability answer different questions: the panel keeps them together without conflating them.",
 };

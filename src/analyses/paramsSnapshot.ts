@@ -33,6 +33,11 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   agreement: 'agreement',
   tost: 'tost',
   wizard: 'wizard',
+  partition: 'partition',
+  quality: 'quality',
+  cluster: 'cluster',
+  discriminant: 'discriminant',
+  doe: 'doe',
 };
 
 export const analysisParamsKey = (analysisId: string): keyof ProjectParams | undefined =>

@@ -50,12 +50,15 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
     });
   }
   if (options.showPoints) {
+    const points = rowsOf(chart, 'points');
+    const grouped = points.some(row => row.group !== undefined && row.group !== null && String(row.group).length > 0);
     layers.push({
-      data: { values: rowsOf(chart, 'points') },
+      data: { values: points },
       mark: pointMark(options, theme),
       encoding: {
         x: xEncoding(chart, options, theme),
         y: yEncoding(chart, options, theme),
+        ...(grouped ? { color: colorEncoding(chart, options, theme, 'group', points) } : {}),
       },
     });
   }
@@ -69,7 +72,11 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
       });
     }
   }
-  rowsOf(chart, 'rules').forEach((row, index) => {
+  const rules = rowsOf(chart, 'rules');
+  if (options.showMeanLine && Number.isFinite(chart.stats?.meanY)) {
+    rules.push({ y: Number(chart.stats?.meanY) });
+  }
+  rules.forEach(row => {
     layers.push({
       data: { values: [row] },
       mark: { type: 'rule', color: colorAt(options, 4), strokeDash: [4, 4], strokeWidth: 1 },
@@ -347,7 +354,7 @@ export const forestLayers = (chart: AnalysisChart, options: Extract<ChartOptions
       mark: { type: 'rule', color: colorAt(options, 0), strokeWidth: 2 },
       encoding: {
         y: { field: 'label', type: 'nominal', sort: null, axis: axis(options, theme, null, false) },
-        x: { field: 'lo', type: 'quantitative', title: options.showXTitle ? field(chart, 'xLabel', '') : null, axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX), scale: options.logScale ? { type: 'log', zero: false } : { zero: false } },
+        x: { field: 'lo', type: 'quantitative', title: options.showXTitle ? field(chart, 'xLabel', '') : null, axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX), scale: options.logScale ? { type: 'log' } : { zero: false } },
         x2: { field: 'hi' },
       },
     },
@@ -356,7 +363,7 @@ export const forestLayers = (chart: AnalysisChart, options: Extract<ChartOptions
       mark: { type: 'point', filled: true, size: options.pointSize, color: colorAt(options, 2) },
       encoding: {
         y: { field: 'label', type: 'nominal', sort: null },
-        x: { field: 'estimate', type: 'quantitative', scale: options.logScale ? { type: 'log', zero: false } : { zero: false } },
+        x: { field: 'estimate', type: 'quantitative', scale: options.logScale ? { type: 'log' } : { zero: false } },
       },
     },
   ];
@@ -573,6 +580,10 @@ export const scatterOnly = (chart: AnalysisChart, options: ChartOptions): Spec[]
     );
   }
   if (options.kind === 'residual' && !options.showZeroLine) rules = [];
+  if (options.kind === 'residual' && options.showStdBand) {
+    const sd = Number(chart.stats?.residSd);
+    if (Number.isFinite(sd) && sd > 0) rules.push({ y: -2 * sd }, { y: 2 * sd });
+  }
   if (options.kind === 'bland' && options.showIdentity) rules.push({ y: 0 });
   rules.forEach(row => {
     layers.push({

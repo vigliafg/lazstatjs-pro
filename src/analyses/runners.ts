@@ -32,6 +32,11 @@ import { buildResamplingOutput } from './resampling/run';
 import { buildGeeOutput } from './gee/run';
 import { buildStratifiedCoxOutput } from './stratcox/run';
 import { buildTdCoxOutput } from './tdcox/run';
+import { buildPartitionOutput } from './partition/run';
+import { buildQualityOutput } from './quality/run';
+import { buildClusterOutput } from './cluster/run';
+import { buildDiscriminantOutput } from './discriminant/run';
+import { buildDoeOutput } from './doe/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -114,4 +119,14 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildStratifiedCoxOutput({ grid, params: params.stratcox, ciLevel }),
   tdcox: ({ grid, params, ciLevel }) =>
     buildTdCoxOutput({ grid, params: params.tdcox, ciLevel }),
+  partition: ({ grid, params, ciLevel }) =>
+    buildPartitionOutput({ grid, params: params.partition, ciLevel }),
+  quality: ({ grid, params, ciLevel }) =>
+    buildQualityOutput({ grid, params: params.quality, ciLevel }),
+  cluster: ({ grid, params, ciLevel }) =>
+    buildClusterOutput({ grid, params: params.cluster, ciLevel }),
+  discriminant: ({ grid, params, ciLevel }) =>
+    buildDiscriminantOutput({ grid, params: params.discriminant, ciLevel }),
+  doe: ({ grid, params, ciLevel }) =>
+    buildDoeOutput({ grid, params: params.doe, ciLevel }),
 };

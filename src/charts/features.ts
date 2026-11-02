@@ -201,14 +201,17 @@ const STYLE: FeatureDescriptor[] = [
     ],
   }),
 ];
-
-const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
+const SPECIFIC: Partial<Record<ChartKind, FeatureDescriptor[]>> = {
   scatter: [
     specific('scatter', 'showPoints', 'chart.feature.points', 'checkbox', {
       section: 'chart.section.data',
     }),
     specific('scatter', 'ellipse', 'chart.feature.ellipse', 'checkbox', {
       section: 'chart.section.annotation',
+    }),
+    specific('scatter', 'showMeanLine', 'chart.feature.meanLine', 'checkbox', {
+      section: 'chart.section.annotation',
+      visible: (_options, chart) => Number.isFinite(chart.stats?.meanY),
     }),
     specific('scatter', 'fit', 'chart.feature.fit', 'select', {
       section: 'chart.section.fit',
@@ -353,6 +356,14 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
       ],
       get: options => boxDisplayOf(options),
     }),
+    specific('box', 'whisker', 'chart.feature.whiskerRule', 'select', {
+      section: 'chart.section.summary',
+      choices: [
+        choice('tukey', 'chart.whisker.tukey'),
+        choice('percentile', 'chart.whisker.percentile'),
+      ],
+      visible: options => boxDisplayOf(options) === 'box',
+    }),
     specific('box', 'showWhiskers', 'chart.feature.whiskers', 'checkbox', {
       section: 'chart.section.summary',
       visible: options => boxDisplayOf(options) === 'box',
@@ -361,6 +372,10 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
       section: 'chart.section.data',
       visible: options => boxDisplayOf(options) !== 'violin',
     }),
+    specific('box', 'jitter', 'chart.feature.jitter', 'checkbox', {
+      section: 'chart.section.data',
+      visible: options => boxDisplayOf(options) === 'box',
+    }),
     specific('box', 'showOutliers', 'chart.feature.outliers', 'checkbox', {
       section: 'chart.section.data',
       visible: options => boxDisplayOf(options) !== 'violin',
@@ -368,6 +383,16 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     specific('box', 'showMean', 'chart.feature.mean', 'checkbox', {
       section: 'chart.section.summary',
       visible: options => boxDisplayOf(options) !== 'violin',
+    }),
+    specific('box', 'showMeanInterval', 'chart.feature.meanInterval', 'checkbox', {
+      section: 'chart.section.summary',
+      visible: (options, chart) =>
+        boxDisplayOf(options) === 'box' &&
+        Boolean(
+          chart.data.summary?.some(
+            row => Number.isFinite(row.meanLo) && Number.isFinite(row.meanHi)
+          )
+        ),
     }),
     specific('box', 'labelMedian', 'chart.feature.medianLabel', 'checkbox', {
       section: 'chart.section.summary',
@@ -386,6 +411,9 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     specific('interval', 'valueLabels', 'chart.feature.valueLabels', 'checkbox', {
       section: 'chart.section.annotation',
     }),
+    specific('interval', 'showMeanDiamond', 'chart.feature.meanDiamond', 'checkbox', {
+      section: 'chart.section.summary',
+    }),
     specific('interval', 'sort', 'chart.feature.sort', 'select', {
       section: 'chart.section.order',
       choices: [
@@ -398,6 +426,14 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
   dot: [
     specific('dot', 'showMean', 'chart.feature.mean', 'checkbox', {
       section: 'chart.section.summary',
+    }),
+    specific('dot', 'jitter', 'chart.feature.jitter', 'select', {
+      section: 'chart.section.data',
+      choices: [
+        choice('none', 'chart.jitter.none'),
+        choice('strip', 'chart.jitter.strip'),
+        choice('wide', 'chart.jitter.wide'),
+      ],
     }),
     specific('dot', 'sort', 'chart.feature.sort', 'select', {
       section: 'chart.section.order',
@@ -443,6 +479,23 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
     specific('qq', 'showCI', 'chart.feature.qqCI', 'checkbox', {
       section: 'chart.section.uncertainty',
       visible: (_options, chart) => Boolean(chart.data.band?.length),
+    }),
+    specific('qq', 'ciStyle', 'chart.feature.ciStyle', 'select', {
+      section: 'chart.section.uncertainty',
+      visible: (options, chart) =>
+        Boolean(chart.data.band?.length) && options.kind === 'qq' && options.showCI,
+      choices: [
+        choice('curves', 'chart.ciStyle.curves'),
+        choice('band', 'chart.ciStyle.band'),
+      ],
+    }),
+    specific('qq', 'qqAxis', 'chart.feature.qqAxis', 'select', {
+      section: 'chart.section.axis',
+      choices: [
+        choice('both', 'chart.qqAxis.both'),
+        choice('probability', 'chart.qqAxis.probability'),
+        choice('z', 'chart.qqAxis.z'),
+      ],
     }),
     specific('qq', 'detrended', 'chart.feature.detrendedQq', 'checkbox', {
       section: 'chart.section.annotation',
@@ -507,6 +560,9 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
   residual: [
     specific('residual', 'showPoints', 'chart.feature.points', 'checkbox'),
     specific('residual', 'showZeroLine', 'chart.feature.zeroLine', 'checkbox'),
+    specific('residual', 'showStdBand', 'chart.feature.residBand', 'checkbox', {
+      visible: (_options, chart) => Number.isFinite(chart.stats?.residSd),
+    }),
   ],
   scree: [
     specific('scree', 'showKaiser', 'chart.feature.kaiser', 'checkbox'),
@@ -547,17 +603,99 @@ const SPECIFIC: Record<ChartKind, FeatureDescriptor[]> = {
       visible: (options) => options.kind === 'missingness' && options.display !== 'matrix',
     }),
   ],
+  diamond: [
+    specific('diamond', 'showLabels', 'chart.feature.labels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('diamond', 'scaleToCI', 'chart.feature.diamondScale', 'checkbox', {
+      section: 'chart.section.summary',
+    }),
+    specific('diamond', 'sort', 'chart.feature.sort', 'select', {
+      section: 'chart.section.order',
+      choices: [
+        choice('none', 'chart.sort.none'),
+        choice('asc', 'chart.sort.asc'),
+        choice('desc', 'chart.sort.desc'),
+      ],
+    }),
+  ],
+  circles: [
+    specific('circles', 'showLabels', 'chart.feature.labels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('circles', 'showIntervals', 'chart.feature.ciSegments', 'checkbox', {
+      section: 'chart.section.summary',
+    }),
+    specific('circles', 'sort', 'chart.feature.sort', 'select', {
+      section: 'chart.section.order',
+      choices: [
+        choice('none', 'chart.sort.none'),
+        choice('asc', 'chart.sort.asc'),
+        choice('desc', 'chart.sort.desc'),
+      ],
+    }),
+  ],
+  shadowgram: [
+    specific('shadowgram', 'showRug', 'chart.feature.rug', 'checkbox', {
+      section: 'chart.section.data',
+    }),
+    specific('shadowgram', 'showMeanLine', 'chart.feature.meanLine', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
+  scattermatrix: [
+    specific('scattermatrix', 'showEllipses', 'chart.feature.ellipse', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
+  bubble: [
+    specific('bubble', 'showLabels', 'chart.feature.labels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('bubble', 'showSizeLegend', 'chart.feature.sizeLegend', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
+  scatter3d: [
+    specific('scatter3d', 'showEllipsoid', 'chart.feature.ellipse', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('scatter3d', 'showPoints', 'chart.feature.points', 'checkbox', {
+      section: 'chart.section.data',
+    }),
+  ],
+  tree: [
+    specific('tree', 'showValues', 'chart.feature.valueLabels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('tree', 'showLeaves', 'chart.feature.labels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
+  pareto: [
+    specific('pareto', 'showCumulative', 'chart.feature.cumulative', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('pareto', 'valueLabels', 'chart.feature.valueLabels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
+  dendrogram: [
+    specific('dendrogram', 'showLabels', 'chart.feature.labels', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+    specific('dendrogram', 'showHeights', 'chart.feature.heights', 'checkbox', {
+      section: 'chart.section.annotation',
+    }),
+  ],
 };
-
 /** The single registry: toolbar and panel only filter/lay out these entries. */
 export const featuresFor = (chart: AnalysisChart): FeatureDescriptor[] => [
   ...GENERAL,
   ...STYLE,
   ...(SPECIFIC[chart.kind] ?? []),
 ];
-
 export const prominentFeatures = (chart: AnalysisChart): FeatureDescriptor[] =>
   featuresFor(chart).filter(feature => feature.prominent);
-
 export const specificFeatures = (chart: AnalysisChart): FeatureDescriptor[] =>
   featuresFor(chart).filter(feature => feature.group === 'specific');

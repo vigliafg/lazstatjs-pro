@@ -305,6 +305,47 @@ export const areaTopics: HelpTopic[] = [
     seeAlso: ['analysis-workflow', 'projects'],
   },
   {
+    id: 'interaction',
+    area: 'output',
+    title: 'Linking, brushing and the Data Filter',
+    summary: 'Select rows in one chart and keep the same observations highlighted in every linked chart of the session.',
+    tutorial: {
+      goal: 'Compare the same observations across the charts of one run-report.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Run an analysis that produces point charts, for example a regression or a descriptive report.',
+        'Press Link in the output toolbar: every chart that draws individual rows shows the Link chip.',
+        'Choose brush or lasso, drag on the plot to select observations, and read the N selected counter.',
+        'Open Data Filter to exclude rows by a category or a numeric threshold; hidden rows stay visible but faded.',
+        'Press Escape or Clear selection to return to the full chart; turn Link off to hide the selection layer.',
+      ],
+      expected: 'Selected rows stay opaque and the others fade; tables, statistics and exports keep every row.',
+    },
+    advanced: {
+      whenToUse: [
+        'Exploring which observations drive a pattern, and comparing the same cases across charts.',
+        'Checking whether an outlier in one chart is the same case in another.',
+      ],
+      whenNotToUse: [
+        'Testing a hypothesis: linking is an exploration tool and never changes the statistics.',
+      ],
+      reading: [
+        'A chart offers linking only when it draws observations as symbols: histograms, density curves and lines without markers have no rows to brush.',
+        'The row key is the row of the dataset used by the run, not a permanent identifier: changing dataset clears the selection.',
+        'The Data Filter dims rows in linked charts but does not remove them from the analysis, the tables or the report.',
+      ],
+      pitfalls: [
+        'Selection and hidden rows are session-only and are not saved in the .lzs project.',
+        'Exporting while a selection is active still exports the full data, without the dimming.',
+      ],
+      glossary: [
+        { term: 'Brushing', definition: 'Selecting observations by dragging a rectangle over the plot.' },
+        { term: 'Lasso', definition: 'Selecting observations by drawing a free-form polygon around them.' },
+      ],
+    },
+    seeAlso: ['output-console', 'descriptive', 'regression'],
+  },
+  {
     id: 'projects',
     area: 'output',
     title: 'Saving and reopening a project',

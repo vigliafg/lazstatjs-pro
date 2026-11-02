@@ -10,6 +10,7 @@ import { useAnalysisEmit } from './ui/analysis/useAnalysisEmit';
 import { UiModeProvider, type UiMode } from './components/UiMode';
 import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
+import { useChartLinkState } from './components/charts/ChartLinkContext';
 import { useImportExport } from './hooks/useImportExport';
 import { useProjectSession } from './hooks/useProjectSession';
 import { onDesktopCommand, type DesktopCommand } from './platform/desktop';
@@ -25,31 +26,16 @@ import {
   validateAnalysisColumnRefs,
 } from './analyses/params';
 import { assignRole, roleStates, validateRoleTypes } from './analyses/roles';
-import {
-  analysisParamsKey,
-  analysisParamsSignature,
-  withAnalysisParams,
-} from './analyses/paramsSnapshot';
+import { analysisParamsKey, analysisParamsSignature, withAnalysisParams } from './analyses/paramsSnapshot';
 const AnalysisTab = lazy(() =>
   import('./ui/AnalysisTab').then(module => ({ default: module.AnalysisTab }))
 );
 import { ANALYSIS_TABS } from './analyses/registry';
-import {
-  activeLocaleOf,
-  getLocale,
-  setLocale,
-  t,
-  translate,
-  useLocale,
-  type HelpLocale,
-  type Locale,
-} from './i18n';
+import { activeLocaleOf, getLocale, setLocale, t, translate, useLocale, type HelpLocale, type Locale } from './i18n';
 import { maskMissingCodes } from './grid/types';
 import type { CategoryLevel, ColType, GridData } from './grid/types';
 import { createDefaultGrid } from './grid/defaults';
-import {
-  findInvalid as gridFindInvalid,
-} from './grid/ops';
+import { findInvalid as gridFindInvalid } from './grid/ops';
 import { useGridHistory } from './grid/useGridHistory';
 const HelpPanel = lazy(() =>
   import('./help/HelpPanel').then(module => ({ default: module.HelpPanel }))
@@ -117,7 +103,8 @@ import {
 } from './io/project';
 import { normalizeChartDefaults, type ChartDefaults } from './charts/defaults';
 import { normalizeChartPresets, type ChartPreset } from './charts/presets';
-import { ChartPresetsProvider } from './components/charts/ChartPresetsProvider';
+import { useChartStyleLibrary } from './hooks/useChartStyleLibrary';
+import { ChartLibraryProvider } from './components/charts/ChartPresetsProvider';
 import type { ChartOutputGroup } from './charts/outputs';
 
 export default function App() {
@@ -309,6 +296,7 @@ export default function App() {
   const [chartPresets, setChartPresets] = useState<ChartPreset[]>(() =>
     normalizeChartPresets(boot?.settings.chartPresets)
   );
+  const chartLibrary = useChartStyleLibrary(boot?.settings);
   const [hiddenChartGroups, setHiddenChartGroups] = useState<Record<string, ChartOutputGroup[]>>(
     () => boot?.settings.hiddenChartGroups ?? {}
   );
@@ -316,18 +304,21 @@ export default function App() {
   // the `useLocale()` subscription below.
   useEffect(() => setLocale(activeLocaleOf(uiLocale)), [uiLocale]);
   useLocale();
+  const chartLink = useChartLinkState();
   const {
     outputs,
     setOutputs,
     pushOutput,
     updateOutputChart,
+    insertOutputChart,
+    pushBuiltChart,
     clearOutput,
     removeOutput,
     copyOutput,
     exportChartPngs,
     exportResultsXlsx, exportReportHtml, exportReportWord,
     exportRunReportHtml, exportRunReportWord,
-  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast });
+  } = useOutputConsole({ initial: boot?.outputs, grid, ciLevel, reportLocale, showToast, link: chartLink });
   useEffect(() => { outputsRef.current = outputs; }, [outputs]);
   const { applyColumnOperation, insertColumn, duplicateColumn, moveColumn, deleteColumn } =
     useColumnOperations({ grid, params, setParams, setGrid, showToast });
@@ -340,7 +331,6 @@ export default function App() {
     setParams(result.params);
     showToast(t('toast.analysis'), `${t('analysis.roleAssigned')} ${result.role}`, 'ok');
   };
-
   const assignRoleTo = (column: number, roleKey: string) => {
     const next = assignRole(activeAnalysis, params, roleKey, column);
     if (!next) {
@@ -351,13 +341,11 @@ export default function App() {
     const role = roleStates(activeAnalysis, params).find(item => item.key === roleKey);
     showToast(t('toast.analysis'), `${t('analysis.roleAssigned')} ${role?.label ?? roleKey}`, 'ok');
   };
-
   // Identità stabile: il timer di autosave non deve ripartire a ogni render.
   const settings = useMemo<ProjectSettings>(
-    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, customThemes, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance }),
-    [ciLevel, activeAnalysis, activeTab, uiMode, theme, customThemes, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, hiddenChartGroups, outputAppearance]
+    () => ({ ciLevel, activeAnalysis, activeTab, uiMode, theme, customThemes, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, ...chartLibrary.settings, hiddenChartGroups, outputAppearance }),
+    [ciLevel, activeAnalysis, activeTab, uiMode, theme, customThemes, uiLocale, reportLocale, helpLocale, chartDefaults, chartPresets, chartLibrary.settings, hiddenChartGroups, outputAppearance]
   );
-
   const roleErrors = [
     ...validateAnalysisColumnRefs(activeAnalysis, params, grid.cols.length),
     ...validateRoleTypes(activeAnalysis, params, grid),
@@ -400,6 +388,7 @@ export default function App() {
     setHelpLocale(project.settings.helpLocale);
     setChartDefaults(normalizeChartDefaults(project.settings.chartDefaults));
     setChartPresets(normalizeChartPresets(project.settings.chartPresets));
+    chartLibrary.restore(project.settings);
     setHiddenChartGroups(project.settings.hiddenChartGroups ?? {});
     setActiveAnalysis(
       ANALYSIS_TABS.some((tab) => tab.id === project.settings.activeAnalysis)
@@ -484,6 +473,7 @@ export default function App() {
     ciLevel,
     reportLocale,
     chartDefaults,
+    chartStylesFor: chartLibrary.patchesFor,
     hiddenChartGroups,
     emit,
     warn: (message) => showToast(t('toast.analysis'), message, 'warn'),
@@ -617,7 +607,11 @@ export default function App() {
         </div>
         {activeTab === 'analysis' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingAnalysis')}</div>}>
-          <ChartPresetsProvider presets={chartPresets} setPresets={setChartPresets}>
+          <ChartLibraryProvider
+            presets={chartPresets}
+            setPresets={setChartPresets}
+            {...chartLibrary.providerProps}
+          >
           <AnalysisTab
             activeAnalysis={activeAnalysis}
             setActiveAnalysis={setActiveAnalysis}
@@ -626,6 +620,8 @@ export default function App() {
             params={params}
             setParams={setParams}
             grid={grid}
+            linkGrid={analysisGrid}
+            chartLink={chartLink}
             outputs={outputs}
             dataRevision={dataRevision}
             datasetId={datasetId}
@@ -644,6 +640,8 @@ export default function App() {
             paramsSignatureFor={paramsSignatureFor}
             limitationsLabel={translate(reportLocale, 'report.limitations')}
             onUpdateChart={updateOutputChart}
+            onInsertChart={insertOutputChart}
+            onAddBuiltChart={chart => pushBuiltChart(chart, { dataRevision, datasetId, filterSignature })}
             removeOutput={removeOutput}
             clearOutput={clearOutput}
             copyOutput={copyOutput}
@@ -662,8 +660,10 @@ export default function App() {
             outputStyle={outputStyle}
             hiddenChartGroups={hiddenChartGroups}
             setHiddenChartGroups={setHiddenChartGroups}
+            chartStyleOverrides={chartLibrary.overrides}
+            setChartStyleOverrides={chartLibrary.setOverrides}
           />
-          </ChartPresetsProvider>
+          </ChartLibraryProvider>
           </Suspense>
         )}
         {activeTab === 'help' && (
@@ -699,6 +699,7 @@ export default function App() {
             chartDefaults={chartDefaults}
             setChartDefaults={setChartDefaults}
             chartPresets={chartPresets}
+            {...chartLibrary.settingsProps}
             setChartPresets={setChartPresets}
           />
         )}

@@ -15,6 +15,7 @@ import { distfitCopy } from './distfit';
 import { factorialCopy } from './factorial';
 import { geeCopy } from './gee';
 import { lmmCopy } from './lmm';
+import { l4Copy } from './l4';
 import { logisticCopy } from './logistic';
 import { miCopy } from './mi';
 import { mixedanovaCopy } from './mixedanova';
@@ -49,6 +50,7 @@ export const frReportCopy: Record<string, string> = {
   ...factorialCopy,
   ...geeCopy,
   ...lmmCopy,
+  ...l4Copy,
   ...logisticCopy,
   ...miCopy,
   ...mixedanovaCopy,

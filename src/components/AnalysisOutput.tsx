@@ -1,4 +1,4 @@
-import type { AnalysisChart, ChartOptions } from '../stats/charts';
+import type { AnalysisChart, ChartOptions, PanelChart } from '../stats/charts';
 import type { ReportSpec } from '../stats/report';
 import type { TableSpec } from '../stats/types';
 import { AnalysisReport } from './AnalysisReport';
@@ -12,6 +12,8 @@ interface AnalysisOutputProps {
   tables: TableSpec[];
   report?: ReportSpec | null;
   charts?: AnalysisChart[];
+  /** L3 composite cards rendered after the individual charts. */
+  panels?: PanelChart[];
   warnings?: string[];
   callout?: {
     title: string;
@@ -22,6 +24,7 @@ interface AnalysisOutputProps {
   limitationsLabel?: string;
   analysisName?: string;
   onChartOptionsChange?: (chartId: string, options: ChartOptions) => void;
+  onChartInsert?: (chart: AnalysisChart) => void;
 }
 
 /**
@@ -37,11 +40,13 @@ export const AnalysisOutput = ({
   tables,
   report,
   charts,
+  panels,
   warnings,
   callout,
   limitationsLabel,
   analysisName,
   onChartOptionsChange,
+  onChartInsert,
 }: AnalysisOutputProps) => (
   <div className="mb-6">
     {title && <div className="output-title">{title}</div>}
@@ -76,8 +81,10 @@ export const AnalysisOutput = ({
     {report && <AnalysisReport spec={report} limitationsLabel={limitationsLabel} />}
     <AnalysisCharts
       charts={charts}
+      panels={panels}
       analysisName={analysisName ?? title}
       onOptionsChange={onChartOptionsChange}
+      onChartInsert={onChartInsert}
     />
   </div>
 );

@@ -1,26 +1,40 @@
 import { useState } from 'react';
 import { t } from '../i18n';
-import type { AnalysisChart, ChartOptions } from '../stats/charts';
+import type { AnalysisChart, ChartOptions, PanelChart } from '../stats/charts';
 import { MAX_CHARTS_PER_OUTPUT } from '../stats/charts';
 import { ChartCard } from './charts/ChartCard';
+import { PanelCard } from './charts/PanelCard';
 
 interface AnalysisChartsProps {
   charts?: AnalysisChart[];
+  /** L3 composite cards rendered after the individual charts. */
+  panels?: PanelChart[];
   analysisName?: string;
   onOptionsChange?: (chartId: string, options: ChartOptions) => void;
+  /** Chart editor: append a copy of a chart to this run-report. */
+  onChartInsert?: (chart: AnalysisChart) => void;
 }
 
 /** Renders each chart as an editable card; beyond the cap it stays opt-in. */
-export const AnalysisCharts = ({ charts, analysisName, onOptionsChange }: AnalysisChartsProps) => {
+export const AnalysisCharts = ({
+  charts,
+  panels,
+  analysisName,
+  onOptionsChange,
+  onChartInsert,
+}: AnalysisChartsProps) => {
   const [showAll, setShowAll] = useState(false);
-  if (!charts || charts.length === 0) return null;
-  const visible = showAll ? charts : charts.slice(0, MAX_CHARTS_PER_OUTPUT);
-  const hidden = charts.length - visible.length;
+  const chartList = charts ?? [];
+  const panelList = panels ?? [];
+  if (chartList.length === 0 && panelList.length === 0) return null;
+  const visible = showAll ? chartList : chartList.slice(0, MAX_CHARTS_PER_OUTPUT);
+  const hidden = chartList.length - visible.length;
+  const total = chartList.length + panelList.length;
 
   return (
     <div className="mt-6 flex flex-wrap gap-4">
       <div className="w-full font-mono text-[9px] uppercase tracking-wider text-text3">
-        {charts.length} {t('analysis.chartCount')}
+        {total} {t('analysis.chartCount')}
       </div>
       {visible.map(chart => (
         <ChartCard
@@ -28,7 +42,18 @@ export const AnalysisCharts = ({ charts, analysisName, onOptionsChange }: Analys
           chart={chart}
           analysisName={analysisName}
           onOptionsChange={onOptionsChange}
+          onChartInsert={onChartInsert}
           className={chart.layout === 'half' ? 'w-full lg:w-[calc(50%-0.5rem)]' : 'w-full'}
+        />
+      ))}
+      {panelList.map(panel => (
+        <PanelCard
+          key={panel.id}
+          panel={panel}
+          analysisName={analysisName}
+          onOptionsChange={onOptionsChange}
+          onChartInsert={onChartInsert}
+          className="w-full"
         />
       ))}
       {hidden > 0 && (

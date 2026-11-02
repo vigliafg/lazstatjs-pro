@@ -36,6 +36,12 @@ test('multivariate builder returns PCA tables, report and a scree plot', () => {
   assert.equal((biplot?.data.vectors ?? []).length, 3);
   const loadings = (result.charts ?? []).find(chart => chart.id === 'pca-loadings');
   assert.ok((loadings?.data.cells ?? []).length >= 3);
+  const panel = result.panels?.[0];
+  assert.equal(panel?.id, 'panel-pca');
+  assert.deepEqual(
+    panel?.children.map(child => child.id),
+    ['pca-scree', 'pca-score', 'pca-loadings', 'pca-biplot']
+  );
 });
 
 test('multivariate builder supports Cronbach alpha', () => {

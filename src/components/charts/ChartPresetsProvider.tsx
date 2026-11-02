@@ -7,42 +7,88 @@ import {
   type SetStateAction,
 } from 'react';
 import type { ChartPreset } from '../../charts/presets';
+import type { UserChartStyle } from '../../charts/styles';
+import type { ChartKind } from '../../stats/charts';
 
-interface ChartPresetsValue {
+export type ChartStyleDefaults = Partial<Record<ChartKind, string>>;
+export type ChartStyleOverrides = Record<string, Partial<Record<ChartKind, string>>>;
+
+interface ChartLibraryValue {
   presets: ChartPreset[];
   setPresets: Dispatch<SetStateAction<ChartPreset[]>>;
+  styles: UserChartStyle[];
+  setStyles: Dispatch<SetStateAction<UserChartStyle[]>>;
+  styleDefaults: ChartStyleDefaults;
+  setStyleDefaults: Dispatch<SetStateAction<ChartStyleDefaults>>;
+  styleOverrides: ChartStyleOverrides;
+  setStyleOverrides: Dispatch<SetStateAction<ChartStyleOverrides>>;
   /** False outside the app shell (isolated component or test). */
   available: boolean;
 }
 
-const noop: Dispatch<SetStateAction<ChartPreset[]>> = () => undefined;
-const defaultValue: ChartPresetsValue = {
+const noop = () => undefined;
+const defaultValue: ChartLibraryValue = {
   presets: [],
   setPresets: noop,
+  styles: [],
+  setStyles: noop,
+  styleDefaults: {},
+  setStyleDefaults: noop,
+  styleOverrides: {},
+  setStyleOverrides: noop,
   available: false,
 };
 
-const ChartPresetsContext = createContext<ChartPresetsValue | null>(null);
+const ChartLibraryContext = createContext<ChartLibraryValue | null>(null);
 
 /**
- * Project-scoped chart presets, shared by the chart editor and Settings.
- * `App` owns the persisted array; the provider only exposes it and its setter.
+ * Project-scoped chart library: named presets, user styles and the per-kind
+ * style defaults. `App` owns the persisted state; the provider only exposes it
+ * and the setters.
  */
-export const ChartPresetsProvider = ({
+export const ChartLibraryProvider = ({
   presets,
   setPresets,
+  styles,
+  setStyles,
+  styleDefaults,
+  setStyleDefaults,
+  styleOverrides,
+  setStyleOverrides,
   children,
 }: {
   presets: ChartPreset[];
   setPresets: Dispatch<SetStateAction<ChartPreset[]>>;
+  styles: UserChartStyle[];
+  setStyles: Dispatch<SetStateAction<UserChartStyle[]>>;
+  styleDefaults: ChartStyleDefaults;
+  setStyleDefaults: Dispatch<SetStateAction<ChartStyleDefaults>>;
+  styleOverrides: ChartStyleOverrides;
+  setStyleOverrides: Dispatch<SetStateAction<ChartStyleOverrides>>;
   children: ReactNode;
 }) => {
   const value = useMemo(
-    () => ({ presets, setPresets, available: true }),
-    [presets, setPresets]
+    () => ({
+      presets,
+      setPresets,
+      styles,
+      setStyles,
+      styleDefaults,
+      setStyleDefaults,
+      styleOverrides,
+      setStyleOverrides,
+      available: true,
+    }),
+    [presets, setPresets, styles, setStyles, styleDefaults, setStyleDefaults, styleOverrides, setStyleOverrides]
   );
-  return <ChartPresetsContext.Provider value={value}>{children}</ChartPresetsContext.Provider>;
+  return <ChartLibraryContext.Provider value={value}>{children}</ChartLibraryContext.Provider>;
 };
 
-export const useChartPresets = (): ChartPresetsValue =>
-  useContext(ChartPresetsContext) ?? defaultValue;
+export const useChartLibrary = (): ChartLibraryValue =>
+  useContext(ChartLibraryContext) ?? defaultValue;
+
+/** Named presets only: used by the quick toolbar selector. */
+export const useChartPresets = (): Pick<ChartLibraryValue, 'presets' | 'setPresets' | 'available'> => {
+  const { presets, setPresets, available } = useChartLibrary();
+  return { presets, setPresets, available };
+};

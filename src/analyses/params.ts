@@ -109,6 +109,22 @@ export const remapParams = (
   const countIndeps = list(params.countreg.indeps, 'Count Regression: predictors');
   const tostVar1 = one(params.tost.var1, 'TOST: first variable');
   const tostVar2 = one(params.tost.var2, 'TOST: second variable');
+  const partitionResponse = one(params.partition.response, 'Partition: response');
+  const partitionPredictors = list(params.partition.predictors, 'Partition: predictors').filter(
+    value => value !== partitionResponse
+  );
+  const qualityVariable = one(params.quality.variable, 'Quality: variable');
+  const qualityCategory = one(params.quality.category, 'Quality: category');
+  const qualityGroup = optional(params.quality.group);
+  const clusterSelected = list(params.cluster.selected, 'Cluster: variables');
+  const discriminantGroup = one(params.discriminant.group, 'Discriminant: group');
+  const discriminantPredictors = list(
+    params.discriminant.predictors,
+    'Discriminant: predictors'
+  ).filter(value => value !== discriminantGroup);
+  const doeResponse = one(params.doe.response, 'DOE: response');
+  const doeFactorA = one(params.doe.factorA, 'DOE: factor A');
+  const doeFactorB = one(params.doe.factorB, 'DOE: factor B');
 
   return {
     invalidated: unique(invalidated.map(label => label)),
@@ -222,6 +238,32 @@ export const remapParams = (
         group: optional(params.wizard.group),
         second: optional(params.wizard.second),
       },
+      partition: {
+        ...params.partition,
+        response: partitionResponse,
+        predictors: partitionPredictors,
+      },
+      quality: {
+        ...params.quality,
+        variable: qualityVariable,
+        category: qualityCategory,
+        group: qualityGroup,
+      },
+      cluster: {
+        ...params.cluster,
+        selected: clusterSelected,
+      },
+      discriminant: {
+        ...params.discriminant,
+        group: discriminantGroup,
+        predictors: discriminantPredictors,
+      },
+      doe: {
+        ...params.doe,
+        response: doeResponse,
+        factorA: doeFactorA,
+        factorB: doeFactorB,
+      },
     },
   };
 };
@@ -309,6 +351,17 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.wizard.outcome, 'Wizard: outcome', width, errors, true);
   checkOne(params.wizard.group, 'Wizard: group', width, errors, true);
   checkOne(params.wizard.second, 'Wizard: second variable', width, errors, true);
+  checkOne(params.partition.response, 'Partition: response', width, errors);
+  checkList(params.partition.predictors, 'Partition: predictors', width, errors);
+  checkOne(params.quality.variable, 'Quality: variable', width, errors);
+  checkOne(params.quality.category, 'Quality: category', width, errors);
+  checkOne(params.quality.group, 'Quality: group', width, errors, true);
+  checkList(params.cluster.selected, 'Cluster: variables', width, errors);
+  checkOne(params.discriminant.group, 'Discriminant: group', width, errors);
+  checkList(params.discriminant.predictors, 'Discriminant: predictors', width, errors);
+  checkOne(params.doe.response, 'DOE: response', width, errors);
+  checkOne(params.doe.factorA, 'DOE: factor A', width, errors);
+  checkOne(params.doe.factorB, 'DOE: factor B', width, errors);
   return unique(errors);
 };
 
@@ -468,6 +521,27 @@ export const validateAnalysisColumnRefs = (
       one(params.wizard.group, 'Wizard: group', true);
       one(params.wizard.second, 'Wizard: second variable', true);
       break;
+    case 'partition':
+      one(params.partition.response, 'Partition: response');
+      list(params.partition.predictors, 'Partition: predictors');
+      break;
+    case 'quality':
+      one(params.quality.variable, 'Quality: variable');
+      one(params.quality.category, 'Quality: category');
+      one(params.quality.group, 'Quality: group', true);
+      break;
+    case 'cluster':
+      list(params.cluster.selected, 'Cluster: variables');
+      break;
+    case 'discriminant':
+      one(params.discriminant.group, 'Discriminant: group');
+      list(params.discriminant.predictors, 'Discriminant: predictors');
+      break;
+    case 'doe':
+      one(params.doe.response, 'DOE: response');
+      one(params.doe.factorA, 'DOE: factor A');
+      one(params.doe.factorB, 'DOE: factor B');
+      break;
     default:
       break;
   }
@@ -540,6 +614,37 @@ export const setPrimaryColumn = (
       return { params: { ...params, resampling: { ...params.resampling, outcome: column } }, role: 'Resampling outcome' };
     case 'wizard':
       return { params: { ...params, wizard: { ...params.wizard, outcome: column } }, role: 'Wizard outcome' };
+    case 'partition':
+      return {
+        params: { ...params, partition: { ...params.partition, response: column } },
+        role: 'Partition response',
+      };
+    case 'quality':
+      return {
+        params: { ...params, quality: { ...params.quality, variable: column } },
+        role: 'Quality variable',
+      };
+    case 'cluster':
+      return {
+        params: {
+          ...params,
+          cluster: { ...params.cluster, selected: append(params.cluster.selected) },
+        },
+        role: 'Cluster variable',
+      };
+    case 'discriminant':
+      return {
+        params: {
+          ...params,
+          discriminant: { ...params.discriminant, group: column },
+        },
+        role: 'Discriminant group',
+      };
+    case 'doe':
+      return {
+        params: { ...params, doe: { ...params.doe, response: column } },
+        role: 'DOE response',
+      };
     default:
       return null;
   }

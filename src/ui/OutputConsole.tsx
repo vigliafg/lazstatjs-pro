@@ -6,12 +6,20 @@ import { copyText } from '../io/clipboard';
 import { awaitChartsReady } from '../io/chartReady';
 import { t } from '../i18n';
 import { useContainerWidth } from '../hooks/useContainerWidth';
-import type { ChartOptions } from '../stats/charts';
+import type { AnalysisChart, ChartOptions } from '../stats/charts';
+import type { GridData } from '../grid/types';
+import {
+  ChartLinkProvider,
+  type ChartLinkValue,
+  type LinkTool,
+} from '../components/charts/ChartLinkContext';
+import { GraphBuilderDialog } from '../components/charts/GraphBuilderDialog';
 import { analysisIdsOf, isValidFilter } from './analysis/outputSelection';
 import {
   buildSessionOutline,
   outlineRunIds,
 } from './analysis/sessionOutline';
+import { DataFilterDialog } from './output/DataFilterDialog';
 import { RunReportCard } from './output/RunReportCard';
 import { SessionOutline } from './output/SessionOutline';
 import { SessionReportHeader } from './output/SessionReportHeader';
@@ -26,6 +34,10 @@ export interface OutputConsoleProps {
   id?: string;
   outputs: OutputEntry[];
   meta: SessionReportMeta;
+  /** Dataset used by the current run (already row-filtered/masked), for linking. */
+  grid: GridData;
+  /** Row state owned by the app, so exports can suspend the live dimming. */
+  chartLink: ChartLinkValue;
   onRemove: (index: number) => void;
   onClear: () => void;
   onCopy: () => void;
@@ -40,6 +52,8 @@ export interface OutputConsoleProps {
   onRerun?: (entry: OutputEntry) => void;
   onRerunAll?: () => void;
   onApplyParams?: (entry: OutputEntry) => void;
+  /** Graph Builder: append a chart built from the current dataset. */
+  onAddBuiltChart?: (chart: AnalysisChart) => void;
   /** Current signature of an analysis' parameters, for the params-stale badge. */
   paramsSignatureFor?: (analysisId: string) => string;
   currentRevision?: number;
@@ -52,6 +66,8 @@ export interface OutputConsoleProps {
   outputStyle?: Record<string, string>;
   /** Done in the chart editor: persist new options without re-running. */
   onUpdateChart?: (entryId: string, chartId: string, options: ChartOptions) => void;
+  /** Chart editor: append a copy of a chart to the same run-report. */
+  onInsertChart?: (entryId: string, chart: AnalysisChart) => void;
 }
 
 const OUTLINE_BREAKPOINT = 720;
@@ -64,6 +80,8 @@ export const OutputConsole = ({
   id,
   outputs,
   meta,
+  grid,
+  chartLink,
   onRemove,
   onClear,
   onCopy,
@@ -78,6 +96,7 @@ export const OutputConsole = ({
   onRerun,
   onRerunAll,
   onApplyParams,
+  onAddBuiltChart,
   paramsSignatureFor,
   currentRevision,
   currentDatasetId,
@@ -86,6 +105,7 @@ export const OutputConsole = ({
   limitationsLabel,
   outputStyle,
   onUpdateChart,
+  onInsertChart,
 }: OutputConsoleProps) => {
   const [rootRef, width] = useContainerWidth<HTMLDivElement>();
   const narrow = width > 0 && width < OUTLINE_BREAKPOINT;
@@ -93,6 +113,16 @@ export const OutputConsole = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [outlineOpen, setOutlineOpen] = useState(false);
+  const link = chartLink;
+  const { clearSelection, clearHidden } = link;
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [builderOpen, setBuilderOpen] = useState(false);
+
+  // A different dataset cannot reuse row indexes from the previous one.
+  useEffect(() => {
+    clearSelection();
+    clearHidden();
+  }, [meta.datasetId, clearSelection, clearHidden]);
 
   const analysisIds = analysisIdsOf(outputs);
   const {
@@ -227,7 +257,7 @@ export const OutputConsole = ({
     if (!card) return;
     await awaitChartsReady(card);
     const clone = card.cloneNode(true) as HTMLElement;
-    clone.querySelectorAll('button, [data-no-print]').forEach(node => node.remove());
+    clone.querySelectorAll('button, [data-no-print], [data-no-export]').forEach(node => node.remove());
     const ok = await copyText(clone.innerText);
     if (ok) {
       setCopiedId(entry.id);
@@ -288,6 +318,7 @@ export const OutputConsole = ({
   );
 
   return (
+    <ChartLinkProvider value={link}>
     <div
       ref={rootRef}
       id={id}
@@ -324,6 +355,15 @@ export const OutputConsole = ({
             onCopy={onCopy}
             onExportCharts={onExportCharts}
             onExportXlsx={onExportXlsx}
+            linkMode={link.linkMode}
+            linkTool={link.tool}
+            linkCount={link.selection?.keys.length ?? 0}
+            hiddenCount={link.hidden.length}
+            onToggleLink={() => link.setLinkMode(!link.linkMode)}
+            onLinkTool={(tool: LinkTool) => link.setTool(tool)}
+            onClearLink={link.clearSelection}
+            onOpenFilter={() => setFilterOpen(value => !value)}
+            onOpenBuilder={() => setBuilderOpen(true)}
           />
 
           {outputs.length === 0 ? (
@@ -394,6 +434,7 @@ export const OutputConsole = ({
                           onExportHtml={() => onExportRunHtml(output.id)}
                           onExportWord={() => onExportRunWord(output.id)}
                           onUpdateChart={onUpdateChart}
+                          onInsertChart={onInsertChart}
                         />
                       </div>
                     ))}
@@ -458,6 +499,22 @@ export const OutputConsole = ({
           </aside>
         </>
       )}
+      {filterOpen && (
+        <DataFilterDialog
+          grid={grid}
+          hidden={link.hidden}
+          onChange={link.setHidden}
+          onClose={() => setFilterOpen(false)}
+        />
+      )}
+      {builderOpen && onAddBuiltChart && (
+        <GraphBuilderDialog
+          grid={grid}
+          onAdd={chart => onAddBuiltChart(chart)}
+          onClose={() => setBuilderOpen(false)}
+        />
+      )}
     </div>
+    </ChartLinkProvider>
   );
 };

@@ -77,13 +77,33 @@ export const exportChartsAsPng = async (
   baseName = 'lazstats-chart'
 ): Promise<ChartExportResult> => {
   const ready = await awaitChartsReady(root);
-  const charts = Array.from(root.querySelectorAll<SVGSVGElement>('[data-chart-surface] svg')).filter(
-    (svg) => {
-      if (svg.closest('[data-no-export]')) return false;
+  const surfaces = Array.from(root.querySelectorAll<HTMLElement>('[data-chart-surface]'));
+  // A panel renders a copy of charts that are usually already on the page.
+  // Export each plot once: standalone surfaces win, panel copies are skipped
+  // unless that chart exists only inside the panel.
+  const standaloneIds = new Set(
+    surfaces
+      .filter(surface => !surface.closest('[data-panel-id]'))
+      .map(surface => surface.closest('[data-chart-id]')?.getAttribute('data-chart-id'))
+      .filter((id): id is string => Boolean(id))
+  );
+  const chartIdOf = (surface: HTMLElement): string => {
+    const raw = surface.closest('[data-chart-id]')?.getAttribute('data-chart-id') ?? '';
+    const separator = raw.indexOf(':');
+    return separator >= 0 ? raw.slice(separator + 1) : raw;
+  };
+  const charts = surfaces
+    .filter(surface => !surface.closest('[data-no-export]'))
+    .filter(surface => {
+      if (!surface.closest('[data-panel-id]')) return true;
+      return !standaloneIds.has(chartIdOf(surface));
+    })
+    .map(surface => surface.querySelector('svg'))
+    .filter((svg): svg is SVGSVGElement => svg !== null)
+    .filter(svg => {
       const { width, height } = svgSize(svg);
       return width >= MIN_SIZE && height >= MIN_SIZE;
-    }
-  );
+    });
 
   const rendered: { name: string; bytes: Uint8Array }[] = [];
   let failed = ready.failed;

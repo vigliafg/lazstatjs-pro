@@ -17,6 +17,7 @@ import {
 import { DEFAULT_PREFS } from './prefs';
 import { DEFAULT_CHART_DEFAULTS } from '../charts/defaults';
 import { createChartPreset } from '../charts/presets';
+import { saveUserStyle } from '../charts/styles';
 import { createCustomTheme } from '../theme/custom';
 import { DEFAULT_THEME_ID, THEMES } from '../theme/themes';
 import type { GridData } from '../grid/types';
@@ -719,3 +720,43 @@ describe('project autosave', () => {
     });
   });
 });
+
+  it('round-trips per-kind user styles, style defaults and procedure overrides', () => {
+    const base = makeSnapshot();
+    const styles = saveUserStyle([], 'Mio classico', 'qq', { ciStyle: 'band', qqAxis: 'z' });
+    const settings = {
+      ...base.settings,
+      chartStyles: styles,
+      chartStyleDefaults: { qq: styles[0].id },
+      chartStyleOverrides: { regression: { qq: styles[0].id } },
+    };
+    const restored = parseProject(serializeProject({ ...base, settings }));
+    assert.equal(restored.settings.chartStyles?.length, 1);
+    assert.equal(restored.settings.chartStyles?.[0].name, 'Mio classico');
+    assert.deepEqual(restored.settings.chartStyles?.[0].options, { ciStyle: 'band', qqAxis: 'z' });
+    assert.equal(restored.settings.chartStyleDefaults?.qq, styles[0].id);
+    assert.equal(restored.settings.chartStyleOverrides?.regression?.qq, styles[0].id);
+
+    const legacy = parseProject(serializeProject(base));
+    assert.deepEqual(legacy.settings.chartStyles, []);
+    assert.deepEqual(legacy.settings.chartStyleDefaults, {});
+    assert.deepEqual(legacy.settings.chartStyleOverrides, {});
+  });
+
+  it('drops malformed user styles and style maps without losing the project', () => {
+    const base = makeSnapshot();
+    const parsed = parseProject(
+      JSON.stringify({
+        ...base,
+        settings: {
+          ...base.settings,
+          chartStyles: [{ name: 'No kind', options: { display: 'violin' } }, null],
+          chartStyleDefaults: { qq: 42, box: 'box' },
+          chartStyleOverrides: { regression: 'nope', anova: { qq: 'prob' } },
+        },
+      })
+    );
+    assert.deepEqual(parsed.settings.chartStyles, []);
+    assert.deepEqual(parsed.settings.chartStyleDefaults, { box: 'box' });
+    assert.deepEqual(parsed.settings.chartStyleOverrides, { anova: { qq: 'prob' } });
+  });

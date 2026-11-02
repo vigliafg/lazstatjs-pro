@@ -4,6 +4,7 @@ import { capStoredOutputs, parseStoredOutputs, storedOutputChars, type StoredOut
 import { createProjectSnapshot, DEFAULT_PARAMS, DEFAULT_SETTINGS, parseProject, serializeProject } from './project';
 import { DEFAULT_PREFS } from './prefs';
 import { makeChart } from '../charts/kits/common';
+import type { PanelChart } from '../stats/charts';
 
 const chart = () =>
   makeChart({
@@ -79,6 +80,45 @@ test('a project round-trips chart annotations', () => {
   assert.equal(annotations?.[0].text, 'p = 0.03');
   assert.equal(annotations?.[1].type, 'arrow');
   assert.equal(annotations?.[1].strokeWidth, 3);
+});
+
+const panel = (): PanelChart => ({
+  version: 1,
+  id: 'panel-distribution',
+  kind: 'panel',
+  title: 'Distribution',
+  layout: 'stack',
+  children: [chart()],
+  tables: [
+    {
+      id: 'summary',
+      title: 'Summary',
+      columns: [{ key: 'mean', label: 'Mean', format: 'dec2' }],
+      rows: [{ mean: 1.5 }],
+    },
+  ],
+});
+
+test('stored outputs round-trip L3 panels and charge them to the budget', () => {
+  const saved = parseStoredOutputs([{ ...entry(0), panels: [panel()] }]);
+  assert.equal(saved[0].panels?.length, 1);
+  assert.equal(saved[0].panels?.[0].kind, 'panel');
+  assert.equal(saved[0].panels?.[0].children[0].kind, 'bar');
+  assert.equal(saved[0].panels?.[0].tables?.[0].rows[0].mean, 1.5);
+  assert.ok(storedOutputChars(saved[0]) > saved[0].html.length);
+});
+
+test('a project round-trips panels and their children', () => {
+  const snapshot = createProjectSnapshot({
+    grid: { cols: [{ name: 'X', type: 'num' }], rows: [['1'], ['2']] },
+    prefs: DEFAULT_PREFS,
+    settings: DEFAULT_SETTINGS,
+    params: DEFAULT_PARAMS,
+    outputs: [{ ...entry(0), panels: [panel()] }],
+  });
+  const parsed = parseProject(serializeProject(snapshot));
+  assert.equal(parsed.outputs[0].panels?.[0].title, 'Distribution');
+  assert.equal(parsed.outputs[0].panels?.[0].children[0].title, 'Means');
 });
 
 test('a v3 project round-trips chart models and still accepts v1/v2 files', () => {

@@ -59,7 +59,16 @@ export const intervalLayers = (
     },
     {
       data: { values: rows },
-      mark: { ...pointMark(options, theme), ...tooltip(options) },
+      mark: options.showMeanDiamond
+        ? {
+            type: 'point',
+            filled: true,
+            shape: 'diamond',
+            size: Math.max(36, options.pointSize * 1.4),
+            color: colorAt(options, 2),
+            ...tooltip(options),
+          }
+        : { ...pointMark(options, theme), ...tooltip(options) },
       encoding: { x, y: yEncoding(chart, options, theme, 'estimate') },
     },
   ];
@@ -106,10 +115,14 @@ export const dotLayers = (
       : [...categories].sort(
           (a, b) => (meanOf(a) - meanOf(b)) * (options.sort === 'asc' ? 1 : -1)
         );
-  const jittered = rows.map((row, index) => ({
-    ...row,
-    jitter: ((index % 9) - 4) * 0.04,
-  }));
+  const offsetOf = (index: number): number =>
+    options.jitter === 'wide'
+      ? ((index % 101) - 50) * 0.006
+      : ((index % 9) - 4) * 0.04;
+  const jittered =
+    options.jitter === 'none'
+      ? rows
+      : rows.map((row, index) => ({ ...row, jitter: offsetOf(index) }));
   const x = categoryAxis(chart, options, theme, ordered);
   const layers: Spec[] = [
     {
@@ -117,12 +130,16 @@ export const dotLayers = (
       mark: { ...pointMark(options, theme), opacity: options.pointOpacity },
       encoding: {
         x,
-        xOffset: {
-          field: 'jitter',
-          type: 'quantitative',
-          scale: { domain: [-0.2, 0.2] },
-          legend: null,
-        },
+        ...(options.jitter === 'none'
+          ? {}
+          : {
+              xOffset: {
+                field: 'jitter',
+                type: 'quantitative',
+                scale: { domain: options.jitter === 'wide' ? [-0.35, 0.35] : [-0.2, 0.2] },
+                legend: null,
+              },
+            }),
         y: yEncoding(chart, options, theme, 'value'),
       },
     },

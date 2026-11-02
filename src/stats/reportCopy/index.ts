@@ -1,5 +1,5 @@
 import { catalogFor, enReportCopy } from './catalog';
-import { chartCopy as enChartCopy } from './catalog/en/charts';
+import { chartCatalogFor, enChartCopy } from './catalog/charts';
 import type { ReportLocale } from './types';
 
 export { TRANSLATED_REPORT_LOCALES, isReportLocale, type ReportLocale } from './types';
@@ -47,7 +47,11 @@ export const withReportLocale = <T>(locale: ReportLocale, build: () => T): T => 
 /** Translated sentence (or the Italian source when the catalog lacks it). */
 export const copy = (message: string, params?: CopyParams): string => {
   if (active === 'it') return interpolate(message, params);
-  const translated = catalogFor(active)[message] ?? enChartCopy[message] ?? enReportCopy[message];
+  const translated =
+    catalogFor(active)[message] ??
+    chartCatalogFor(active)[message] ??
+    enChartCopy[message] ??
+    enReportCopy[message];
   return interpolate(translated ?? message, params);
 };
 

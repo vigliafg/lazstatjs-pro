@@ -8,6 +8,7 @@
  */
 
 import type { ChartAnnotation } from '../charts/annotations';
+import type { TableSpec } from './types';
 
 /** Deterministic downsample cap applied by the schema before persistence. */
 export const MAX_CHART_POINTS = 2000;
@@ -15,33 +16,51 @@ export const MAX_CHART_POINTS = 2000;
 export const MAX_CHARTS_PER_OUTPUT = 24;
 /** A single serialized model above this size is not persisted. */
 export const MAX_CHART_MODEL_CHARS = 120_000;
+/**
+ * A panel is depth 1: its children are ordinary charts, never other panels.
+ * The cap keeps one composite card readable and inside the export budget.
+ */
+export const MAX_PANEL_CHILDREN = 8;
 
 export type ChartValue = string | number | null;
 export type ChartRow = Record<string, ChartValue>;
 
-export type ChartKind =
-  | 'scatter'
-  | 'line'
-  | 'bar'
-  | 'box'
-  | 'histogram'
-  | 'interval'
-  | 'dot'
-  | 'ecdf'
-  | 'qq'
-  | 'forest'
-  | 'survival'
-  | 'risk'
-  | 'mosaic'
-  | 'acf'
-  | 'heatmap'
-  | 'residual'
-  | 'scree'
-  | 'score'
-  | 'bland'
-  | 'power'
-  | 'bootstrap'
-  | 'missingness';
+export const CHART_KINDS = [
+  'scatter',
+  'line',
+  'bar',
+  'box',
+  'histogram',
+  'interval',
+  'dot',
+  'ecdf',
+  'qq',
+  'forest',
+  'survival',
+  'risk',
+  'mosaic',
+  'acf',
+  'heatmap',
+  'residual',
+  'scree',
+  'score',
+  'bland',
+  'power',
+  'bootstrap',
+  'missingness',
+  'diamond',
+  'circles',
+  'shadowgram',
+  'scattermatrix',
+  'bubble',
+  'scatter3d',
+  'tree',
+  'pareto',
+  'dendrogram',
+  'surface',
+] as const;
+
+export type ChartKind = (typeof CHART_KINDS)[number];
 
 export type ChartLayout = 'full' | 'half';
 
@@ -88,6 +107,8 @@ export interface ScatterOptions extends CommonChartOptions {
   showN: boolean;
   pointLabels: boolean;
   ellipse: boolean;
+  /** Horizontal reference line at the mean of Y, when the model carries it. */
+  showMeanLine: boolean;
 }
 
 export interface LineOptions extends CommonChartOptions {
@@ -113,10 +134,16 @@ export interface BoxOptions extends CommonChartOptions {
   kind: 'box';
   /** Presentation: classic box, notched box or KDE violin. */
   display: 'box' | 'notched' | 'violin' | 'raincloud';
+  /** Tukey fences or the 10th–90th percentile (the JMP-like Oneway box). */
+  whisker: 'tukey' | 'percentile';
   showPoints: boolean;
   showWhiskers: boolean;
   showOutliers: boolean;
   showMean: boolean;
+  /** Mean confidence interval, drawn only when the summary carries it. */
+  showMeanInterval: boolean;
+  /** Deterministic horizontal spread of the raw points. */
+  jitter: boolean;
   labelMedian: boolean;
   sort: 'none' | 'asc' | 'desc';
 }
@@ -133,12 +160,16 @@ export interface HistogramOptions extends CommonChartOptions {
 export interface IntervalOptions extends CommonChartOptions {
   kind: 'interval';
   valueLabels: boolean;
+  /** Draw the estimate as a diamond instead of a point. */
+  showMeanDiamond: boolean;
   sort: 'none' | 'asc' | 'desc';
 }
 
 export interface DotOptions extends CommonChartOptions {
   kind: 'dot';
   showMean: boolean;
+  /** Horizontal spread of the raw observations. */
+  jitter: 'none' | 'strip' | 'wide';
   sort: 'none' | 'asc' | 'desc';
 }
 
@@ -148,10 +179,24 @@ export interface EcdfOptions extends CommonChartOptions {
   showMedian: boolean;
 }
 
+/** How the normal Q-Q uncertainty envelope is drawn. */
+export type QqCiStyle = 'band' | 'curves';
+
+/**
+ * Horizontal scale of a Q-Q plot.
+ *
+ * `z` keeps the theoretical quantiles as they are, `probability` labels the
+ * same axis with normal probabilities, and `both` shows probabilities at the
+ * bottom with z-scores repeated on the top axis (the JMP layout).
+ */
+export type QqAxis = 'z' | 'probability' | 'both';
+
 export interface QqOptions extends CommonChartOptions {
   kind: 'qq';
   showReference: boolean;
   showCI: boolean;
+  ciStyle: QqCiStyle;
+  qqAxis: QqAxis;
   detrended: boolean;
 }
 
@@ -198,6 +243,8 @@ export interface ResidualOptions extends CommonChartOptions {
   kind: 'residual';
   showPoints: boolean;
   showZeroLine: boolean;
+  /** ±2 SD reference band, drawn when the model carries the residual SD. */
+  showStdBand: boolean;
 }
 
 export interface ScreeOptions extends CommonChartOptions {
@@ -239,6 +286,80 @@ export interface MissingnessOptions extends CommonChartOptions {
   display: 'bars' | 'matrix';
 }
 
+/** JMP-like mean diamond: one estimate per category, optionally scaled by CI. */
+export interface DiamondOptions extends CommonChartOptions {
+  kind: 'diamond';
+  showLabels: boolean;
+  /** Diamond size follows the interval width instead of a fixed marker. */
+  scaleToCI: boolean;
+  sort: 'none' | 'asc' | 'desc';
+}
+
+/** Comparison circles: group estimates on a shared numeric axis. */
+export interface CirclesOptions extends CommonChartOptions {
+  kind: 'circles';
+  showLabels: boolean;
+  showIntervals: boolean;
+  sort: 'none' | 'asc' | 'desc';
+}
+
+/** Shaded distribution: a filled density silhouette with optional mean line. */
+export interface ShadowgramOptions extends CommonChartOptions {
+  kind: 'shadowgram';
+  showRug: boolean;
+  showMeanLine: boolean;
+}
+
+/** Scatterplot matrix: pairwise panels prepared by the runner. */
+export interface ScatterMatrixOptions extends CommonChartOptions {
+  kind: 'scattermatrix';
+  showEllipses: boolean;
+}
+
+/** Bubble plot: x, y and a size channel. */
+export interface BubbleOptions extends CommonChartOptions {
+  kind: 'bubble';
+  showLabels: boolean;
+  showSizeLegend: boolean;
+}
+
+/** Projected 3D scatter with a projected density ellipsoid. */
+export interface Scatter3dOptions extends CommonChartOptions {
+  kind: 'scatter3d';
+  showEllipsoid: boolean;
+  showPoints: boolean;
+}
+
+/** Binary partition tree: nodes are rules and leaves are predictions. */
+export interface TreeOptions extends CommonChartOptions {
+  kind: 'tree';
+  showValues: boolean;
+  showLeaves: boolean;
+}
+
+/** Pareto chart: sorted bars plus a cumulative percentage line. */
+export interface ParetoOptions extends CommonChartOptions {
+  kind: 'pareto';
+  showCumulative: boolean;
+  valueLabels: boolean;
+  sort: 'none' | 'asc' | 'desc';
+}
+
+/** Hierarchical cluster dendrogram with optional leaf labels. */
+export interface DendrogramOptions extends CommonChartOptions {
+  kind: 'dendrogram';
+  showLabels: boolean;
+  showHeights: boolean;
+}
+
+/** Response surface: projected 3D mesh or a contour map. */
+export interface SurfaceOptions extends CommonChartOptions {
+  kind: 'surface';
+  display: 'mesh' | 'contour';
+  showPoints: boolean;
+  showGrid: boolean;
+}
+
 export type ChartOptions =
   | ScatterOptions
   | LineOptions
@@ -261,7 +382,17 @@ export type ChartOptions =
   | BlandOptions
   | PowerOptions
   | BootstrapOptions
-  | MissingnessOptions;
+  | MissingnessOptions
+  | DiamondOptions
+  | CirclesOptions
+  | ShadowgramOptions
+  | ScatterMatrixOptions
+  | BubbleOptions
+  | Scatter3dOptions
+  | TreeOptions
+  | ParetoOptions
+  | DendrogramOptions
+  | SurfaceOptions;
 
 /** Layers are named (`points`, `fit`, `band`, `summary`, ...) so the renderer
  * and the editor never depend on the chart kind for row access. */
@@ -283,3 +414,34 @@ export interface AnalysisChart {
   /** True when the schema downsampled at least one layer. */
   sampled?: boolean;
 }
+
+/** How a composite panel arranges its children. */
+export type PanelLayout = 'grid' | 'stack';
+
+/**
+ * L3 composite card: a JMP-style report made of already-computed charts.
+ *
+ * A panel is not a chart kind and never appears in the style gallery: it owns
+ * no data kernels of its own. Its children are complete `AnalysisChart`
+ * models, so every plot keeps its own options, editor and export path.
+ * Depth is one by construction (`children` cannot contain panels).
+ */
+export interface PanelChart {
+  version: 1;
+  id: string;
+  kind: 'panel';
+  title: string;
+  subtitle?: string;
+  /** Short prose rendered below the panel (what the panel shows / caveats). */
+  note?: string;
+  layout: PanelLayout;
+  children: AnalysisChart[];
+  /** Compact tables that belong to this report, already computed by the run. */
+  tables?: TableSpec[];
+}
+
+/** Anything that can sit in a run-report card: one chart or one panel. */
+export type ReportChart = AnalysisChart | PanelChart;
+
+export const isPanelChart = (chart: ReportChart): chart is PanelChart =>
+  chart.kind === 'panel';

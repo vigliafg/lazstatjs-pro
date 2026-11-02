@@ -199,6 +199,9 @@ test('exports ready charts as PNG and in the printable report', async ({ page, i
   const png = page.waitForEvent('download', download => download.suggestedFilename().endsWith('.png'));
   await page.getByRole('button', { name: 'Download every chart as PNG' }).click();
   await expect(await png).toBeTruthy();
+  // Panels add more surfaces: wait for the PNG batch to finish before starting
+  // the HTML export, otherwise the two download batches interleave.
+  await expect(page.getByText(/exported as PNG/)).toBeVisible({ timeout: 20000 });
 
   const report = page.waitForEvent('download', download => download.suggestedFilename().endsWith('.html'));
   await page.getByRole('button', { name: 'Export session report' }).click();
@@ -210,6 +213,8 @@ test('exports ready charts as PNG and in the printable report', async ({ page, i
   const html = Buffer.concat(chunks).toString('utf8');
   expect(html).toContain('<svg');
   expect(html).toContain('data-chart-surface');
+  // The L3 panel travels with the same report: its children are real SVGs.
+  expect(html).toContain('data-panel-id="panel-oneway"');
 });
 
 test('runs an analysis on the mobile layout', async ({ page, isMobile }) => {
@@ -528,6 +533,33 @@ test('renders chart-heavy worker output for a time series', async ({ page, isMob
 
   await expect(page.locator('article.output-card')).toHaveCount(1, { timeout: 20000 });
   await expect(page.getByRole('heading', { name: 'Autocorrelazione', exact: true }).first()).toBeVisible();
+});
+
+test('composes the Oneway panel and restores it after reload', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the L3 panel is exercised on the desktop layout');
+
+  await page.goto('/');
+  await openAnova(page);
+  await page.getByRole('button', { name: 'Run analysis' }).click();
+
+  const panel = page.locator('[data-panel-id="panel-oneway"]');
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole('heading', { name: /Oneway panel|Pannello Oneway/ })).toBeVisible();
+  await expect(panel.locator('[data-panel-child]').first()).toBeVisible();
+  await expect(panel.locator('[data-chart-surface]').first()).toHaveAttribute(
+    'data-chart-state',
+    'ready',
+    { timeout: 15000 }
+  );
+
+  // Panels are persisted as their own models and rebuilt after reload.
+  await page.waitForTimeout(1200);
+  await page.reload();
+  await page.getByRole('button', { name: 'Analysis', exact: true }).click();
+  await expect(page.locator('[data-panel-id="panel-oneway"]')).toBeVisible();
+  await expect(
+    page.locator('[data-panel-id="panel-oneway"] [data-panel-child]').first()
+  ).toBeVisible();
 });
 
 test('imports a sample dataset and runs an analysis end to end', async ({ page, isMobile }) => {

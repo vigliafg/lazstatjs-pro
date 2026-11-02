@@ -4,10 +4,11 @@ import { compile } from 'vega-lite';
 import { buildVegaSpec } from './buildSpec';
 import { bandRows } from './encoding';
 import { factoryOptions } from '../defaults';
+import { stylesFor } from '../styles';
 import { makeChart } from '../kits/common';
 import type { ChartKind, ScatterOptions } from '../../stats/charts';
 
-const kinds: ChartKind[] = ['scatter', 'line', 'bar', 'box', 'histogram', 'interval', 'dot', 'ecdf', 'qq', 'forest', 'survival', 'risk', 'mosaic', 'acf', 'heatmap', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness'];
+const kinds: ChartKind[] = ['scatter', 'line', 'bar', 'box', 'histogram', 'interval', 'dot', 'ecdf', 'qq', 'forest', 'survival', 'risk', 'mosaic', 'acf', 'heatmap', 'residual', 'scree', 'score', 'bland', 'power', 'bootstrap', 'missingness', 'diamond', 'circles', 'shadowgram', 'scattermatrix', 'bubble', 'scatter3d'];
 
 const modelFor = (kind: ChartKind) =>
   makeChart({
@@ -17,7 +18,14 @@ const modelFor = (kind: ChartKind) =>
     subtitle: 'Subtitle',
     note: 'Note',
     data: {
-      points: [{ x: 1, y: 2 }, { x: 2, y: 3 }],
+      points: [{ x: 1, y: 2, z: 3, size: 4 }, { x: 2, y: 3, z: 4, size: 6 }],
+      intervals: [
+        { category: 'A', estimate: 2, lo: 1, hi: 3 },
+        { category: 'B', estimate: 3, lo: 2, hi: 5 },
+      ],
+      panels: [{ px: 0, px2: 1, py: 0, py2: 1 }],
+      ellipses: [{ x: 0.4, y: 0.5 }, { x: 0.6, y: 0.5 }],
+      labels: [{ x: 0.5, y: 1.1, label: 'A' }],
       fit: [{ x: 1, y: 1 }, { x: 2, y: 2 }],
       robust: [{ x: 1, y: 1.1 }, { x: 2, y: 2.1 }],
       series: [{ x: 1, y: 2, series: 'A' }, { x: 2, y: 3, series: 'A' }],
@@ -37,7 +45,7 @@ const modelFor = (kind: ChartKind) =>
       rows: [{ time: 0, group: 'A', atRisk: 10, events: 0 }],
     },
     fields: { xLabel: 'X', yLabel: 'Y', series: 'Series' },
-    stats: { df: 10, equation: 'y = 1 + x', r2: 0.9, n: 20 },
+    stats: { df: 10, equation: 'y = 1 + x', r2: 0.9, n: 20, dim: 2, residSd: 0.5 },
   });
 
 test('every chart kind compiles to Vega-Lite without warnings', () => {
@@ -47,6 +55,42 @@ test('every chart kind compiles to Vega-Lite without warnings', () => {
     compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
     assert.deepEqual(warnings, [], `${kind}: ${warnings.join(' · ')}`);
   }
+});
+
+test('a linked scatter compiles with the row opacity encoding', () => {
+  const chart = makeChart({
+    id: 'linked-scatter',
+    kind: 'scatter',
+    title: 'Linked scatter',
+    data: {
+      points: [
+        { x: 1, y: 2, __row: '0' },
+        { x: 2, y: 3, __row: '1' },
+      ],
+      fit: [{ x: 1, y: 1 }, { x: 2, y: 2 }],
+    },
+    fields: { xLabel: 'X', yLabel: 'Y' },
+  });
+  const warnings: string[] = [];
+  const spec = buildVegaSpec(chart, factoryOptions('scatter'), {
+    keys: ['0'],
+    hidden: ['1'],
+  });
+  const compiled = compile(spec, {
+    logger: {
+      warn: (message: string) => warnings.push(message),
+      info: () => {},
+      debug: () => {},
+      level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }),
+    } as never,
+  });
+  assert.deepEqual(warnings, []);
+  const text = JSON.stringify(compiled.spec);
+  assert.match(text, /__linkOpacity/);
+  assert.match(text, /indexof/);
+  const signals = (compiled.spec.signals ?? []).map(signal => signal.name);
+  assert.ok(signals.includes('linkKeys'), 'the selection must travel through a signal');
+  assert.ok(signals.includes('hiddenKeys'), 'the hidden rows must travel through a signal');
 });
 
 test('box, notched and violin displays compile without warnings', () => {
@@ -202,4 +246,123 @@ test('the scatter band is narrower than the prediction band and grows with the l
   assert.ok(width(pi(95)) > width(ci(95)));
   assert.ok(width(ci(99)) > width(ci(90)));
   assert.ok(width(pi(99)) > width(pi(90)));
+});
+
+test('the normal Q-Q reads as probabilities at the bottom and z at the top', () => {
+  const chart = makeChart({
+    id: 'qq-axes',
+    kind: 'qq',
+    title: 'Q-Q',
+    data: {
+      points: [{ x: -2, y: -1 }, { x: 0, y: 0.2 }, { x: 2, y: 3 }],
+      reference: [{ x: -2, y: -2 }, { x: 2, y: 2 }],
+      band: [
+        { x: -2, lo: -2.5, hi: -1.5 },
+        { x: 0, lo: -0.5, hi: 0.5 },
+        { x: 2, lo: 1.5, hi: 2.5 },
+      ],
+    },
+    fields: { xLabel: 'Theoretical quantiles', yLabel: 'Observed' },
+  });
+  const options = { ...factoryOptions('qq'), showCI: true, ciStyle: 'curves', qqAxis: 'both' } as const;
+  const spec = buildVegaSpec(chart, options as never) as unknown as {
+    resolve?: { scale?: { x?: string } };
+    layer: Array<{
+      mark?: { type?: string; strokeDash?: number[] };
+      encoding?: { x?: { axis?: { orient?: string; values?: number[]; labelExpr?: string } | null } };
+    }>;
+  };
+  assert.equal(spec.resolve?.scale?.x, 'independent');
+  const top = spec.layer.at(-1)?.encoding?.x?.axis;
+  assert.equal(top?.orient, 'top');
+  assert.deepEqual(top?.values, [-2.33, -1.64, -1.28, -0.67, 0, 0.67, 1.28, 1.64, 2.33]);
+  const bottom = spec.layer
+    .map(layer => layer.encoding?.x?.axis)
+    .find(axis => axis?.orient === undefined && axis?.labelExpr);
+  assert.ok(bottom?.labelExpr?.includes("'0.50'"));
+  assert.deepEqual(bottom?.values, top?.values);
+
+  const warnings: string[] = [];
+  compile(spec as never, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+  assert.deepEqual(warnings, []);
+});
+
+test('the Q-Q envelope switches between dotted curves and a shaded band', () => {
+  const chart = makeChart({
+    id: 'qq-envelope',
+    kind: 'qq',
+    title: 'Q-Q',
+    data: {
+      points: [{ x: -1, y: -1 }, { x: 0, y: 0 }, { x: 1, y: 1 }],
+      reference: [{ x: -1, y: -1 }, { x: 1, y: 1 }],
+      band: [
+        { x: -1, lo: -1.2, hi: -0.8 },
+        { x: 0, lo: -0.1, hi: 0.1 },
+        { x: 1, lo: 0.8, hi: 1.2 },
+      ],
+    },
+  });
+  const layersOf = (patch: Record<string, unknown>) =>
+    (buildVegaSpec(chart, { ...factoryOptions('qq'), showCI: true, ...patch } as never) as unknown as {
+      layer: Array<{ mark?: { type?: string; strokeDash?: number[] } }>;
+    }).layer;
+
+  const curves = layersOf({ ciStyle: 'curves' });
+  assert.deepEqual(curves.filter(layer => layer.mark?.strokeDash?.[0] === 2).length, 2);
+  assert.equal(curves.some(layer => layer.mark?.type === 'area'), false);
+
+  const band = layersOf({ ciStyle: 'band' });
+  assert.ok(band.some(layer => layer.mark?.type === 'area'));
+
+  // JMP draws the reference line solid, not dashed.
+  const reference = curves.find(layer => layer.mark?.type === 'line' && layer.mark?.strokeDash === undefined);
+  assert.ok(reference);
+});
+
+test('the JMP-like regression style draws the grid band and the mean line', () => {
+  const chart = makeChart({
+    id: 'jmp-regression',
+    kind: 'scatter',
+    title: 'JMP-like regression',
+    data: {
+      points: [{ x: 1, y: 2 }, { x: 2, y: 4 }, { x: 3, y: 5 }],
+      fit: [{ x: 1, y: 2 }, { x: 3, y: 5 }],
+      grid: [
+        { x: 1, yhat: 2, seMean: 0.4, sePred: 0.8 },
+        { x: 2, yhat: 3.5, seMean: 0.3, sePred: 0.7 },
+        { x: 3, yhat: 5, seMean: 0.4, sePred: 0.8 },
+      ],
+    },
+    stats: { meanY: 3.7, df: 10 },
+  });
+  const style = stylesFor('scatter').find(item => item.id === 'jmp-regression');
+  assert.ok(style);
+  const options = { ...factoryOptions('scatter'), ...style!.options } as unknown as ScatterOptions;
+  const warnings: string[] = [];
+  const spec = buildVegaSpec(chart, options);
+  compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+  assert.deepEqual(warnings, []);
+  const layers = (spec as unknown as { layer: Array<{ mark?: { type?: string }; data?: { values?: Array<Record<string, unknown>> } }> }).layer;
+  assert.ok(layers.some(layer => layer.mark?.type === 'area'));
+  assert.ok(
+    layers.some(
+      layer =>
+        layer.mark?.type === 'rule' &&
+        layer.data?.values?.some(row => row.y === 3.7)
+    )
+  );
+});
+
+test('every style-gallery entry compiles without warnings', () => {
+  for (const kind of kinds) {
+    for (const style of stylesFor(kind)) {
+      const spec = buildVegaSpec(modelFor(kind), {
+        ...factoryOptions(kind),
+        ...style.options,
+      } as never);
+      const warnings: string[] = [];
+      compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+      assert.deepEqual(warnings, [], `${kind}/${style.id}: ${warnings.join(' · ')}`);
+    }
+  }
 });

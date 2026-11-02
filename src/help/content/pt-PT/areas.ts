@@ -305,6 +305,47 @@ export const areaTopics: HelpTopic[] = [
     seeAlso: ['analysis-workflow', 'projects'],
   },
   {
+    id: 'interaction',
+    area: 'output',
+    title: 'Ligação, pincel e filtro de dados',
+    summary: 'Selecione linhas num gráfico e mantenha as mesmas observações realçadas em todos os gráficos ligados da sessão.',
+    tutorial: {
+      goal: 'Comparar as mesmas observações entre os gráficos de um mesmo run-report.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Execute uma análise que produza gráficos de pontos, por exemplo uma regressão ou um relatório descritivo.',
+        'Prima Ligar na barra de saída: cada gráfico que desenha as linhas individuais mostra a etiqueta Ligar.',
+        'Escolha pincel ou laço, arraste sobre o gráfico para selecionar observações e leia o contador N selecionados.',
+        'Abra Filtro de dados para excluir linhas por categoria ou por limite numérico; as linhas ocultas continuam visíveis mas atenuadas.',
+        'Prima Esc ou Limpar seleção para voltar ao gráfico completo; desative Ligar para ocultar a camada de seleção.',
+      ],
+      expected: 'As linhas selecionadas ficam opacas e as restantes atenuam-se; tabelas, estatísticas e exportações mantêm todas as linhas.',
+    },
+    advanced: {
+      whenToUse: [
+        'Explorar que observações conduzem um padrão e comparar os mesmos casos entre gráficos.',
+        'Verificar se um valor atípico num gráfico é o mesmo caso noutro.',
+      ],
+      whenNotToUse: [
+        'Testar uma hipótese: a ligação é uma ferramenta de exploração e nunca altera as estatísticas.',
+      ],
+      reading: [
+        'Um gráfico só oferece ligação se desenhar as observações como símbolos: histogramas, curvas de densidade e linhas sem marcadores não têm linhas para selecionar.',
+        'A chave de linha é a linha do conjunto de dados usado pela execução, não um identificador permanente: ao mudar de conjunto de dados a seleção é limpa.',
+        'O filtro de dados atenua as linhas nos gráficos ligados mas não as remove da análise, das tabelas ou do relatório.',
+      ],
+      pitfalls: [
+        'A seleção e as linhas ocultas valem apenas para a sessão e não são guardadas no projeto .lzs.',
+        'Exportar com uma seleção ativa exporta na mesma todos os dados, sem a atenuação.',
+      ],
+      glossary: [
+        { term: 'Pincel', definition: 'Selecionar observações arrastando um retângulo sobre o gráfico.' },
+        { term: 'Laço', definition: 'Selecionar observações desenhando à volta delas um polígono livre.' },
+      ],
+    },
+    seeAlso: ['output-console', 'descriptive', 'regression'],
+  },
+  {
     id: 'projects',
     area: 'output',
     title: 'Guardar e reabrir um projeto',

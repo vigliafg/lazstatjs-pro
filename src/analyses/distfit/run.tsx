@@ -92,7 +92,7 @@ export const buildDistributionFitOutput = ({
         xLabel: copy('Quantili teorici'),
         yLabel: copy('Valori osservati'),
       },
-      options: { showCI: true } as never,
+      options: { showCI: true, qqAxis: 'z' } as never,
     }),
   ];
   if (ppPoints.length > 0) {
@@ -108,7 +108,7 @@ export const buildDistributionFitOutput = ({
           xLabel: copy('Probabilità teorica'),
           yLabel: copy('Probabilità empirica'),
         },
-        options: { showReference: true } as never,
+        options: { showReference: true, qqAxis: 'z' } as never,
       })
     );
   }

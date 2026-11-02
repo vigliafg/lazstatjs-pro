@@ -64,6 +64,12 @@ describe('buildReportDocument', () => {
     assert.ok(html.includes('@page'));
   });
 
+  it('hides interactive overlays and export-only controls', () => {
+    const html = buildReportDocument('', { title: 'LazStats', generatedAt: 'now' });
+    assert.ok(html.includes('[data-no-export] { display: none !important; }'));
+    assert.ok(html.includes('button, [data-no-print], [data-no-export]'));
+  });
+
   it('uses the report language for the document', () => {
     const html = buildReportDocument('', { title: 'LazStats', generatedAt: 'adesso', lang: 'it' });
     assert.ok(html.includes('<html lang="it">'));

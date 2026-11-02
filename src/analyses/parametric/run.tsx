@@ -195,7 +195,7 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
         note: copy('I punti vicini alla diagonale indicano che i tempi osservati seguono la distribuzione fittata; deviazioni alle estremità segnalano code mal descritte.'),
         data: { points: qq, reference: [{ x: minQq, y: minQq }, { x: maxQq, y: maxQq }] },
         fields: { xLabel: copy('Tempi teorici'), yLabel: copy('Tempi osservati') },
-        options: { showReference: true } as never,
+        options: { showReference: true, qqAxis: 'z' } as never,
       })
     );
   }

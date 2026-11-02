@@ -298,6 +298,46 @@ const ANALYSIS_DEFINITIONS = [
     keywords: ['bootstrap', 'permutation', 'randomization', 'confidence interval'],
     cost: 'heavy',
   },
+  {
+    id: 'partition',
+    label: 'Partition',
+    family: 'regression',
+    description: 'Regression tree with split rules, leaf report and variable importance.',
+    keywords: ['tree', 'cart', 'decision tree', 'partition', 'split', 'leaf'],
+    cost: 'instant',
+  },
+  {
+    id: 'quality',
+    label: 'Quality (SPC)',
+    family: 'descriptive',
+    description: 'Control charts, process capability, Pareto and variability charts.',
+    keywords: ['control chart', 'spc', 'capability', 'cpk', 'pareto', 'variability', 'ewma'],
+    cost: 'instant',
+  },
+  {
+    id: 'cluster',
+    label: 'Cluster Analysis',
+    family: 'multivariate',
+    description: 'Hierarchical clustering with dendrogram and cluster profiles.',
+    keywords: ['cluster', 'dendrogram', 'hierarchical', 'ward', 'linkage', 'segmentation'],
+    cost: 'instant',
+  },
+  {
+    id: 'discriminant',
+    label: 'Discriminant / MANOVA',
+    family: 'multivariate',
+    description: 'Linear discriminant functions, canonical plot and one-way MANOVA.',
+    keywords: ['discriminant', 'canonical', 'manova', 'wilks', 'classification', 'lda'],
+    cost: 'instant',
+  },
+  {
+    id: 'doe',
+    label: 'Response Surface (DOE)',
+    family: 'design',
+    description: 'Quadratic response surface with contour plot and stationary point.',
+    keywords: ['doe', 'response surface', 'contour', 'surface', 'design of experiments', 'optimization'],
+    cost: 'instant',
+  },
 ] as const satisfies readonly AnalysisMeta[];
 
 export type AnalysisId = (typeof ANALYSIS_DEFINITIONS)[number]['id'];

@@ -35,6 +35,27 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
           })),
         }
       : {}),
+    ...(input.settings.chartStyles
+      ? {
+          chartStyles: input.settings.chartStyles.map(style => ({
+            ...style,
+            options: { ...style.options },
+          })),
+        }
+      : {}),
+    ...(input.settings.chartStyleDefaults
+      ? { chartStyleDefaults: { ...input.settings.chartStyleDefaults } }
+      : {}),
+    ...(input.settings.chartStyleOverrides
+      ? {
+          chartStyleOverrides: Object.fromEntries(
+            Object.entries(input.settings.chartStyleOverrides).map(([analysisId, map]) => [
+              analysisId,
+              { ...map },
+            ])
+          ),
+        }
+      : {}),
     ...(input.settings.customThemes
       ? {
           customThemes: input.settings.customThemes.map(theme => ({
@@ -64,6 +85,9 @@ export const createProjectSnapshot = (input: ProjectInput, savedAt = new Date().
         ...(entry.charts && entry.charts.length > 0 ? { charts: entry.charts } : {}),
         ...(entry.chartOverflow ? { chartOverflow: entry.chartOverflow } : {}),
         ...(entry.chartOmitted ? { chartOmitted: entry.chartOmitted } : {}),
+        ...(entry.panels && entry.panels.length > 0 ? { panels: entry.panels } : {}),
+        ...(entry.panelOverflow ? { panelOverflow: entry.panelOverflow } : {}),
+        ...(entry.panelOmitted ? { panelOmitted: entry.panelOmitted } : {}),
         html: entry.html,
       }))
   ),

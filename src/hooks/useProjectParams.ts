@@ -10,6 +10,11 @@ import { defaultRepeatedAnovaParams } from '../analyses/repeatedanova/defaults';
 import { defaultMultivariateParams } from '../analyses/multivariate/defaults';
 import { defaultNonParamParams } from '../analyses/nonparamrm/defaults';
 import { defaultWizardParams } from '../analyses/wizard/defaults';
+import { defaultPartitionParams } from '../analyses/partition/defaults';
+import { defaultQualityParams } from '../analyses/quality/defaults';
+import { defaultClusterParams } from '../analyses/cluster/defaults';
+import { defaultDiscriminantParams } from '../analyses/discriminant/defaults';
+import { defaultDoeParams } from '../analyses/doe/defaults';
 
 /**
  * Owns the analysis parameters and the two update helpers used by the App.
@@ -31,6 +36,11 @@ export const useProjectParams = (boot: ProjectSnapshot | null, grid: GridData) =
       multivariate: defaultMultivariateParams(grid),
       nonparamrm: defaultNonParamParams(grid),
       wizard: defaultWizardParams(grid),
+      partition: defaultPartitionParams(grid),
+      quality: defaultQualityParams(grid),
+      cluster: defaultClusterParams(grid),
+      discriminant: defaultDiscriminantParams(grid),
+      doe: defaultDoeParams(grid),
     };
   });
 

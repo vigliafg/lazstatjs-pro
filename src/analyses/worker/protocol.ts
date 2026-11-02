@@ -1,11 +1,11 @@
 import type { Dataset } from '../../grid/types';
 import type { ProjectParams } from '../../io/project';
-import type { AnalysisChart } from '../../stats/charts';
+import type { AnalysisChart, PanelChart } from '../../stats/charts';
 import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
 import type { HeavyAnalysisId } from './heavyIds';
 import type { ReportLocale } from '../../stats/reportCopy/types';
-import type { ChartDefaults } from '../../charts/defaults';
+import type { ChartDefaults, ChartStylePatches } from '../../charts/defaults';
 
 export type HeavyProgressPhase = 'starting' | 'computing' | 'finishing';
 
@@ -20,6 +20,8 @@ export interface HeavyRunRequest {
   reportLocale: ReportLocale;
   /** Chart defaults for this run. */
   chartDefaults?: ChartDefaults;
+  /** Per-kind style patches chosen before the run. */
+  chartStyles?: ChartStylePatches;
 }
 
 export type HeavyWorkerMessage =
@@ -37,6 +39,7 @@ export type HeavyWorkerMessage =
       tables: TableSpec[];
       report: ReportSpec | null;
       charts: AnalysisChart[];
+      panels?: PanelChart[];
       header?: string;
       warnings?: string[];
       callout?: {
@@ -62,6 +65,7 @@ export type HeavyRunOutcome =
       tables: TableSpec[];
       report: ReportSpec | null;
       charts: AnalysisChart[];
+      panels?: PanelChart[];
       header?: string;
       warnings?: string[];
       callout?: {

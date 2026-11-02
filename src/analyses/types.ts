@@ -1,6 +1,6 @@
 import type { ReportSpec } from '../stats/report';
 import type { TableSpec } from '../stats/types';
-import type { AnalysisChart } from '../stats/charts';
+import type { AnalysisChart, PanelChart } from '../stats/charts';
 
 /**
  * Contratto unico di esecuzione di un'analisi.
@@ -18,6 +18,8 @@ export type AnalysisRunResult =
       tables: TableSpec[];
       report: ReportSpec | null;
       charts?: AnalysisChart[];
+      /** L3 composite cards rendered after the individual charts. */
+      panels?: PanelChart[];
       header?: string;
       /** Non-blocking data-quality notes shown above the tables. */
       warnings?: string[];

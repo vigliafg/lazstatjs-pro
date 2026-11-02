@@ -1,5 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
+import {
+  chartHasRowKeys,
+  interactionPoints,
+  linkSignature,
+  HIDDEN_KEYS_SIGNAL,
+  LINK_KEYS_SIGNAL,
+  type ChartLink,
+  type LinkSelectionKind,
+} from '../../charts/interaction';
 import { chartSurfaceBackground } from '../../charts/vega/theme';
 import { buildVegaSpec } from '../../charts/vega/buildSpec';
 import {
@@ -7,19 +16,32 @@ import {
   measurePlotArea,
   type ChartPlotArea,
 } from '../../charts/annotations';
+import { ChartInteractionLayer, type VegaViewLike } from './ChartInteractionLayer';
 
 type ChartState = 'loading' | 'ready' | 'error';
+
+interface VegaChartInteraction {
+  tool: 'brush' | 'lasso';
+  onSelect: (keys: string[], kind: LinkSelectionKind) => void;
+  onClear: () => void;
+}
 
 interface VegaChartProps {
   chart: AnalysisChart;
   options: ChartOptions;
   className?: string;
+  /** Row-level linking: dims marks outside the selection/hidden rows. */
+  link?: ChartLink;
+  /** Enables the brush/lasso hit layer (only while linking is on). */
+  interaction?: VegaChartInteraction;
   /** Hide the static annotation layer and show the editing overlay instead. */
   annotationEditing?: boolean;
   /** Reports the measured plot rectangle after every render/resize. */
   onPlotArea?: (area: ChartPlotArea | null) => void;
   /** Editor overlay rendered on top of the SVG (excluded from PNG export). */
   overlay?: (area: ChartPlotArea | null) => ReactNode;
+  /** Small gallery preview: no export/readiness attributes, no annotations. */
+  thumbnail?: boolean;
 }
 
 /**
@@ -37,14 +59,18 @@ export const VegaChart = ({
   chart,
   options,
   className = '',
+  link,
+  interaction,
   annotationEditing = false,
   onPlotArea,
   overlay,
+  thumbnail = false,
 }: VegaChartProps) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<ChartState>('loading');
   const [plotArea, setPlotArea] = useState<ChartPlotArea | null>(null);
+  const [view, setView] = useState<VegaViewLike | null>(null);
   const background = chartSurfaceBackground(options);
   const annotations = options.annotations ?? [];
   const theme = options.theme;
@@ -53,21 +79,29 @@ export const VegaChart = ({
   // redraw effect always sees the latest list.
   const optionsRef = useRef(options);
   optionsRef.current = options;
+  const linkRef = useRef(link);
+  linkRef.current = link;
   const onPlotAreaRef = useRef(onPlotArea);
   onPlotAreaRef.current = onPlotArea;
 
-  // Everything except the annotations: moving a text must not recompile Vega.
+  // Everything except the annotations and the link state: moving a text or a
+  // brush must not recompile Vega.
+  const linkKey = linkSignature(link);
   const chartKey = useMemo(
     () => JSON.stringify({ ...options, annotations: undefined }),
     [options]
   );
 
+  const linkPoints = useMemo(() => interactionPoints(chart), [chart]);
+  const hasRowKeys = useMemo(() => chartHasRowKeys(chart), [chart]);
+
   useEffect(() => {
     let cancelled = false;
-    let view: { finalize: () => void } | null = null;
+    let mounted: (VegaViewLike & { finalize: () => void }) | null = null;
     let observer: ResizeObserver | null = null;
     setState('loading');
     setPlotArea(null);
+    setView(null);
     onPlotAreaRef.current?.(null);
 
     const refreshArea = () => {
@@ -86,15 +120,16 @@ export const VegaChart = ({
         const { default: embed } = await import('vega-embed');
         if (cancelled || !hostRef.current) return;
         hostRef.current.innerHTML = '';
-        const spec = buildVegaSpec(chart, optionsRef.current);
+        const spec = buildVegaSpec(chart, optionsRef.current, linkRef.current);
         const result = await embed(hostRef.current, spec, {
           actions: false,
           renderer: 'svg',
           tooltip: optionsRef.current.tooltip,
         });
-        view = result.view;
+        mounted = result.view as unknown as VegaViewLike & { finalize: () => void };
         await result.view.runAsync();
         if (cancelled) return;
+        setView(mounted);
         refreshArea();
         setState('ready');
       } catch (error) {
@@ -112,7 +147,7 @@ export const VegaChart = ({
       cancelled = true;
       observer?.disconnect();
       try {
-        view?.finalize();
+        mounted?.finalize();
       } catch {
         // A view that failed to initialise has nothing to finalize.
       }
@@ -128,12 +163,33 @@ export const VegaChart = ({
     applyAnnotationsToSvg(svg, annotations, theme);
   }, [annotations, theme, state]);
 
+  // Selection changes update the mounted view through signals. The spec always
+  // carries the link signals, so the brush does not trigger a re-embed.
+  useEffect(() => {
+    if (!view || !hasRowKeys) return;
+    const live = view as VegaViewLike & {
+      signal?: (name: string, value: unknown) => void;
+      runAsync?: () => Promise<unknown>;
+    };
+    try {
+      live.signal?.(LINK_KEYS_SIGNAL, linkRef.current?.keys ?? []);
+      live.signal?.(HIDDEN_KEYS_SIGNAL, linkRef.current?.hidden ?? []);
+      void live.runAsync?.();
+    } catch {
+      // A view finalized between the render and this effect has nothing to update.
+    }
+  }, [view, linkKey, hasRowKeys]);
+
   return (
     <div
-      data-chart-surface
-      data-chart-state={state}
-      data-chart-background={background}
-      data-annotation-editing={annotationEditing ? 'true' : undefined}
+      {...(thumbnail
+        ? { 'data-chart-thumb': true }
+        : {
+            'data-chart-surface': true,
+            'data-chart-state': state,
+            'data-chart-background': background,
+            'data-annotation-editing': annotationEditing ? 'true' : undefined,
+          })}
       className={`relative w-full overflow-x-auto rounded ${className}`}
       style={{ background }}
     >
@@ -149,6 +205,16 @@ export const VegaChart = ({
       )}
       <div ref={wrapRef} className="relative w-full">
         <div ref={hostRef} className="flex w-full justify-center" />
+        {state === 'ready' && interaction && plotArea && (
+          <ChartInteractionLayer
+            area={plotArea}
+            view={view}
+            points={linkPoints}
+            tool={interaction.tool}
+            onSelect={interaction.onSelect}
+            onClear={interaction.onClear}
+          />
+        )}
         {state === 'ready' && overlay?.(plotArea)}
       </div>
     </div>

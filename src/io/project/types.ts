@@ -13,6 +13,8 @@ import type { WizardGoal } from '../../stats/wizard';
 import type { ChartOutputGroup } from '../../charts/outputs';
 import { DEFAULT_CHART_DEFAULTS, type ChartDefaults } from '../../charts/defaults';
 import type { ChartPreset } from '../../charts/presets';
+import type { UserChartStyle } from '../../charts/styles';
+import type { ChartKind } from '../../stats/charts';
 import { DEFAULT_THEME_ID } from '../../theme/themes';
 import type { CustomTheme } from '../../theme/custom';
 import {
@@ -293,6 +295,57 @@ export interface WizardParams {
   paired: boolean;
 }
 
+/** Parametri dell'albero di regressione (Partition). */
+export interface PartitionParams {
+  response: number;
+  predictors: number[];
+  maxDepth: number;
+  minSplit: number;
+}
+
+export type QualityMode = 'control' | 'capability' | 'pareto' | 'variability';
+
+/** Parametri della piattaforma qualità. */
+export interface QualityParams {
+  mode: QualityMode;
+  /** Variabile numerica per controllo, capacità e variabilità. */
+  variable: number;
+  /** Variabile categorica per il Pareto. */
+  category: number;
+  /** -1 = nessun raggruppamento (variabilità). */
+  group: number;
+  chart: 'xbar' | 'individuals' | 'ewma';
+  subgroup: number;
+  lsl: number;
+  usl: number;
+  target: number;
+}
+
+export type ClusterMethod = 'average' | 'complete' | 'single' | 'ward';
+
+/** Parametri del clustering gerarchico. */
+export interface ClusterParams {
+  selected: number[];
+  method: ClusterMethod;
+  /** Numero di cluster da tagliare; 0 = lascia il dendrogramma intero. */
+  clusters: number;
+  standardize: boolean;
+}
+
+/** Parametri dell'analisi discriminante (con MANOVA a un fattore). */
+export interface DiscriminantParams {
+  group: number;
+  predictors: number[];
+}
+
+/** Parametri della superficie di risposta (DOE). */
+export interface DoeParams {
+  response: number;
+  factorA: number;
+  factorB: number;
+  model: 'linear' | 'quadratic';
+}
+
 export interface ProjectParams {
   descVars: number[];
   ttest: TTestParams;
@@ -325,6 +378,11 @@ export interface ProjectParams {
   agreement: AgreementParams;
   tost: TostParams;
   wizard: WizardParams;
+  partition: PartitionParams;
+  quality: QualityParams;
+  cluster: ClusterParams;
+  discriminant: DiscriminantParams;
+  doe: DoeParams;
 }
 
 export interface ProjectSettings {
@@ -347,6 +405,12 @@ export interface ProjectSettings {
   chartDefaults: ChartDefaults;
   /** Named style presets saved with this project; optional for old projects. */
   chartPresets?: ChartPreset[];
+  /** Per-kind styles saved by the user in the chart editor. */
+  chartStyles?: UserChartStyle[];
+  /** Style used by new charts of each kind, unless the procedure overrides it. */
+  chartStyleDefaults?: Partial<Record<ChartKind, string>>;
+  /** Per-procedure style overrides, keyed by analysis id then chart kind. */
+  chartStyleOverrides?: Record<string, Partial<Record<ChartKind, string>>>;
   /** Optional chart groups hidden per procedure; absent means every group. */
   hiddenChartGroups?: Record<string, ChartOutputGroup[]>;
   /** Optional overrides for the output/report window only. */
@@ -555,6 +619,39 @@ export const DEFAULT_PARAMS: ProjectParams = {
     second: -1,
     paired: false,
   },
+  partition: {
+    response: 0,
+    predictors: [1, 2],
+    maxDepth: 3,
+    minSplit: 10,
+  },
+  quality: {
+    mode: 'control',
+    variable: 0,
+    category: 1,
+    group: -1,
+    chart: 'xbar',
+    subgroup: 5,
+    lsl: 0,
+    usl: 10,
+    target: 5,
+  },
+  cluster: {
+    selected: [0, 1],
+    method: 'average',
+    clusters: 3,
+    standardize: true,
+  },
+  discriminant: {
+    group: 2,
+    predictors: [0, 1],
+  },
+  doe: {
+    response: 0,
+    factorA: 1,
+    factorB: 2,
+    model: 'quadratic',
+  },
 };
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
@@ -569,6 +666,9 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   helpLocale: 'auto',
   chartDefaults: DEFAULT_CHART_DEFAULTS,
   chartPresets: [],
+  chartStyles: [],
+  chartStyleDefaults: {},
+  chartStyleOverrides: {},
   hiddenChartGroups: {},
   outputAppearance: DEFAULT_OUTPUT_APPEARANCE,
 };

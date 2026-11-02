@@ -1,4 +1,4 @@
-import type { AnalysisChart } from '../stats/charts';
+import type { AnalysisChart, PanelChart } from '../stats/charts';
 
 /**
  * Optional chart outputs, grouped so the setup panel can keep the report lean.
@@ -16,7 +16,14 @@ interface OutputGroups {
 
 export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
   descriptive: {
-    recommended: ['desc-interval', 'desc-dot', 'desc-ecdf', 'desc-hist-*', 'desc-pair-*'],
+    recommended: [
+      'desc-interval',
+      'desc-dot',
+      'desc-ecdf',
+      'desc-hist-*',
+      'desc-pair-*',
+      'panel-distribution',
+    ],
     diagnostic: ['desc-spread-level', 'desc-qq-*'],
   },
   distfit: {
@@ -28,7 +35,7 @@ export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
     diagnostic: ['ttest-one-rank', 'ttest-ind-rank', 'ttest-dep-diff'],
   },
   anova: {
-    recommended: ['anova-posthoc-forest'],
+    recommended: ['anova-posthoc-forest', 'panel-oneway'],
     diagnostic: ['anova-residual-fitted', 'anova-residual-qq', 'anova-rank-box'],
   },
   factorial: { recommended: [], diagnostic: [] },
@@ -44,7 +51,7 @@ export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
   nonparamrm: { recommended: [], diagnostic: ['friedman-posthoc'] },
   tost: { recommended: [], diagnostic: [] },
   regression: {
-    recommended: ['reg-observed-fitted'],
+    recommended: ['reg-observed-fitted', 'panel-fit-model'],
     diagnostic: [
       'reg-residual-fitted',
       'reg-scale-location',
@@ -53,6 +60,7 @@ export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
       'reg-partial-*',
       'reg-residual-box',
       'reg-residual-qq',
+      'panel-regression-diagnostics',
     ],
   },
   correlation: {
@@ -62,6 +70,7 @@ export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
   logistic: {
     recommended: [
       'logistic-roc',
+      'logistic-lift',
       'logistic-calibration',
       'logistic-confusion',
       'logistic-or-forest',
@@ -96,6 +105,7 @@ export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
       'efa-communalities',
       'alpha-if-deleted',
       'alpha-correlations',
+      'panel-pca',
     ],
     diagnostic: [],
   },
@@ -142,6 +152,7 @@ export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
       'ts-rolling',
       'ts-arima-chart',
       'ts-simple-chart',
+      'panel-timeseries',
     ],
     diagnostic: ['ts-residual-acf'],
   },
@@ -165,6 +176,32 @@ export const OUTPUT_GROUPS: Record<string, OutputGroups> = {
     diagnostic: ['resampling-bootstrap-qq'],
   },
   wizard: { recommended: [], diagnostic: [] },
+  partition: {
+    recommended: ['partition-tree', 'partition-observed', 'partition-importance'],
+    diagnostic: [],
+  },
+  quality: {
+    recommended: [
+      'control-chart',
+      'capab-histogram',
+      'pareto-chart',
+      'variab-box',
+      'panel-quality',
+    ],
+    diagnostic: [],
+  },
+  cluster: {
+    recommended: ['cluster-dendrogram', 'cluster-profile', 'cluster-sizes'],
+    diagnostic: [],
+  },
+  discriminant: {
+    recommended: ['discriminant-canonical', 'discriminant-profile', 'discriminant-coefficients'],
+    diagnostic: [],
+  },
+  doe: {
+    recommended: ['doe-surface', 'doe-contour', 'doe-coefficients'],
+    diagnostic: [],
+  },
 };
 
 const matches = (chartId: string, patterns: string[]): boolean =>
@@ -210,3 +247,16 @@ export const countChartsByGroups = (
   charts: AnalysisChart[] | undefined,
   hidden: ChartOutputGroup[]
 ): number => filterChartsByGroups(analysisId, charts, hidden)?.length ?? 0;
+
+/** Panels follow the same optional groups as the charts they compose. */
+export const filterPanelsByGroups = (
+  analysisId: string,
+  panels: PanelChart[] | undefined,
+  hidden: ChartOutputGroup[] | undefined
+): PanelChart[] | undefined => {
+  if (!panels || !hidden || hidden.length === 0) return panels;
+  return panels.filter(panel => {
+    const group = outputGroupOf(analysisId, panel.id);
+    return !group || !hidden.includes(group);
+  });
+};

@@ -1,4 +1,5 @@
 import { jStat } from '../../stats/jstat';
+import { meanCI, percentile } from '../../stats/kernels/distributions';
 import type {
   AnalysisChart,
   ChartData,
@@ -52,9 +53,11 @@ export const makeChart = (init: ChartInit): AnalysisChart => {
 export interface BoxStats {
   n: number;
   min: number;
+  p10: number;
   q1: number;
   median: number;
   q3: number;
+  p90: number;
   max: number;
   mean: number;
   outliers: number[];
@@ -75,39 +78,73 @@ export const boxStats = (values: number[]): BoxStats | null => {
   return {
     n: clean.length,
     min: inside.length > 0 ? jStat.min(inside) : jStat.min(clean),
+    p10: percentile(clean, 0.1),
     q1,
     median,
     q3,
+    p90: percentile(clean, 0.9),
     max: inside.length > 0 ? jStat.max(inside) : jStat.max(clean),
     mean: jStat.mean(clean),
     outliers: clean.filter(value => value < lowFence || value > highFence),
   };
 };
 
-/** Build `summary`/`points`/`outliers` layers for a categorical boxplot. */
+/**
+ * Build `summary`/`points`/`outliers` layers for a categorical boxplot.
+ *
+ * The summary always carries the percentile whiskers and, when the group has
+ * at least two finite values, the descriptive confidence interval of the mean.
+ * The interval is omitted rather than stored as `NaN`: the renderer's
+ * `finiteRows` would drop the whole summary row.
+ */
 export const boxRows = (
-  groups: { category: string; values: number[] }[]
+  groups: { category: string; values: number[]; keys?: (string | number)[] }[],
+  options: { level?: number } = {}
 ): { summary: ChartRow[]; points: ChartRow[]; outliers: ChartRow[] } => {
+  const level = options.level ?? 95;
   const summary: ChartRow[] = [];
   const points: ChartRow[] = [];
   const outliers: ChartRow[] = [];
   groups.forEach(group => {
     const stats = boxStats(group.values);
     if (!stats) return;
+    const clean = group.values.filter(value => Number.isFinite(value));
+    const interval = clean.length >= 2 ? meanCI(clean, level) : null;
     summary.push({
       category: group.category,
       n: stats.n,
       min: stats.min,
+      p10: stats.p10,
       q1: stats.q1,
       median: stats.median,
       q3: stats.q3,
+      p90: stats.p90,
       max: stats.max,
       mean: stats.mean,
+      ...(interval && Number.isFinite(interval.lo) && Number.isFinite(interval.hi)
+        ? { meanLo: interval.lo, meanHi: interval.hi }
+        : {}),
     });
-    group.values
-      .filter(value => Number.isFinite(value))
-      .forEach(value => points.push({ category: group.category, value }));
-    stats.outliers.forEach(value => outliers.push({ category: group.category, value }));
+    group.values.forEach((value, index) => {
+      if (!Number.isFinite(value)) return;
+      const key = group.keys?.[index];
+      points.push({
+        category: group.category,
+        value,
+        ...(key !== undefined && key !== null && String(key).length > 0
+          ? { __row: String(key) }
+          : {}),
+      });
+      if (stats.outliers.includes(value)) {
+        outliers.push({
+          category: group.category,
+          value,
+          ...(key !== undefined && key !== null && String(key).length > 0
+            ? { __row: String(key) }
+            : {}),
+        });
+      }
+    });
   });
   return { summary, points, outliers };
 };

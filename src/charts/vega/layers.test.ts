@@ -9,6 +9,59 @@ import { factoryOptions } from '../defaults';
 import { makeChart } from '../kits/common';
 import type { ChartOptions } from '../../stats/charts';
 
+const scatterChart = makeChart({
+  id: 'scatter',
+  kind: 'scatter',
+  title: 'Scatter',
+  data: {
+    points: [{ x: 1, y: 2 }, { x: 2, y: 4 }, { x: 3, y: 5 }],
+    fit: [{ x: 1, y: 2 }, { x: 3, y: 5 }],
+    grid: [
+      { x: 1, yhat: 2, seMean: 0.4, sePred: 0.8 },
+      { x: 2, yhat: 3.5, seMean: 0.3, sePred: 0.7 },
+      { x: 3, yhat: 5, seMean: 0.4, sePred: 0.8 },
+    ],
+    rules: [{ y: 0 }],
+  },
+  stats: { meanY: 4, df: 10 },
+});
+const scatterOptions = (patch: Partial<Extract<ChartOptions, { kind: 'scatter' }>>) =>
+  ({ ...factoryOptions('scatter'), ...patch }) as Extract<ChartOptions, { kind: 'scatter' }>;
+
+test('the scatter mean line is optional and needs a finite meanY', () => {
+  const rulesAt = (chart = scatterChart) =>
+    scatterLayers(chart, scatterOptions({ showMeanLine: true }))
+      .filter(layer => layer.mark?.type === 'rule')
+      .map(layer => (layer.data.values as { y: number }[])[0].y);
+  assert.deepEqual(rulesAt(), [0, 4]);
+  const withoutMean = makeChart({
+    id: 'no-mean',
+    kind: 'scatter',
+    title: 'No mean',
+    data: { points: [{ x: 1, y: 2 }], rules: [{ y: 0 }] },
+  });
+  assert.deepEqual(rulesAt(withoutMean), [0]);
+  assert.deepEqual(
+    scatterLayers(scatterChart, scatterOptions({ showMeanLine: false }))
+      .filter(layer => layer.mark?.type === 'rule')
+      .map(layer => (layer.data.values as { y: number }[])[0].y),
+    [0]
+  );
+});
+
+test('the scatter CI band uses the precalculated grid', () => {
+  const layers = scatterLayers(
+    scatterChart,
+    scatterOptions({ fit: 'ols', band: 'ci', showBand: true, bandLevel: 95 })
+  );
+  const band = layers.find(layer => layer.mark?.type === 'area');
+  assert.ok(band);
+  assert.equal((band!.data.values as unknown[]).length, 3);
+  assert.ok(
+    (band!.data.values as { lo: number; hi: number }[]).every(row => row.hi > row.lo)
+  );
+});
+
 const barChart = makeChart({
   id: 'bar',
   kind: 'bar',
@@ -187,6 +240,59 @@ test('interval, dot and ECDF layers expose their marks and options', () => {
   assert.equal(ecdfLayersResult.some(layer => layer.mark?.type === 'line'), true);
   assert.equal(ecdfLayersResult.some(layer => layer.mark?.type === 'point'), true);
   assert.equal(ecdfLayersResult.some(layer => layer.mark?.type === 'rule'), true);
+});
+
+test('the JMP interval diamond, dot strip and residual band are opt-in', () => {
+  const interval = makeChart({
+    id: 'interval-diamond',
+    kind: 'interval',
+    title: 'Diamond interval',
+    data: { intervals: [{ category: 'A', estimate: 2, lo: 1, hi: 3 }] },
+  });
+  const diamond = intervalLayers(interval, {
+    ...factoryOptions('interval'),
+    showMeanDiamond: true,
+  } as Extract<ChartOptions, { kind: 'interval' }>);
+  assert.ok(diamond.some(layer => layer.mark?.shape === 'diamond'));
+
+  const dot = makeChart({
+    id: 'dot-strip',
+    kind: 'dot',
+    title: 'Dot strip',
+    data: {
+      points: Array.from({ length: 120 }, () => ({ category: 'A', value: 3 })),
+    },
+  });
+  const dotOptions = (jitter: 'none' | 'strip' | 'wide') =>
+    ({ ...factoryOptions('dot'), jitter }) as Extract<ChartOptions, { kind: 'dot' }>;
+  assert.equal(dotLayers(dot, dotOptions('none'))[0].encoding?.xOffset, undefined);
+  const wide = dotLayers(dot, dotOptions('wide'))[0];
+  assert.equal(wide.encoding?.xOffset?.field, 'jitter');
+  const rows = wide.data.values as Array<{ jitter?: number }>;
+  assert.equal(rows[0].jitter, rows[101].jitter);
+  assert.ok(rows.every(row => Math.abs(Number(row.jitter)) <= 0.35));
+
+  const residual = makeChart({
+    id: 'residual-band',
+    kind: 'residual',
+    title: 'Residual',
+    data: { points: [{ x: 1, y: 1 }, { x: 2, y: -1 }], rules: [{ y: 0 }] },
+    stats: { residSd: 1.5 },
+  });
+  const band = scatterOnly(residual, {
+    ...factoryOptions('residual'),
+    showStdBand: true,
+  } as Extract<ChartOptions, { kind: 'residual' }>);
+  const ruleValues = band
+    .filter(layer => layer.mark?.type === 'rule')
+    .map(layer => (layer.data.values as Array<{ y: number }>)[0].y);
+  assert.deepEqual(ruleValues, [0, -3, 3]);
+  const without = scatterOnly(residual, factoryOptions('residual') as never);
+  assert.equal(
+    without.filter(layer => layer.mark?.type === 'rule').length,
+    1,
+    'the band stays off by default'
+  );
 });
 
 test('scatter showFit/showBand remove the fit line and band layers', () => {

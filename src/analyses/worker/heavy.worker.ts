@@ -1,6 +1,6 @@
 import { HEAVY_RUNNERS } from './heavyRunners';
 import { withReportLocale } from '../../stats/reportCopy';
-import { withChartDefaults } from '../../charts/defaults';
+import { withChartDefaults, withChartStyles } from '../../charts/defaults';
 import type { HeavyRunRequest, HeavyWorkerMessage } from './protocol';
 
 /**
@@ -39,13 +39,15 @@ scope.onmessage = event => {
   post({ type: 'progress', id: request.id, phase: 'starting', progress: 0.05 });
   try {
     post({ type: 'progress', id: request.id, phase: 'computing', progress: 0.2 });
-    const result = withChartDefaults(request.chartDefaults, () =>
-      withReportLocale(request.reportLocale ?? 'it', () =>
-        runner({
-          grid: request.grid,
-          params: request.params,
-          ciLevel: request.ciLevel,
-        })
+    const result = withChartStyles(request.chartStyles, () =>
+      withChartDefaults(request.chartDefaults, () =>
+        withReportLocale(request.reportLocale ?? 'it', () =>
+          runner({
+            grid: request.grid,
+            params: request.params,
+            ciLevel: request.ciLevel,
+          })
+        )
       )
     );
     post({ type: 'progress', id: request.id, phase: 'finishing', progress: 0.92 });
@@ -62,6 +64,7 @@ scope.onmessage = event => {
       tables: result.tables,
       report: result.report,
       charts: result.charts ?? [],
+      ...(result.panels ? { panels: result.panels } : {}),
       ...(result.header ? { header: result.header } : {}),
       ...(result.warnings ? { warnings: result.warnings } : {}),
       ...(result.callout ? { callout: result.callout } : {}),

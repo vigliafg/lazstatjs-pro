@@ -1,6 +1,7 @@
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import type { AnalysisChart } from '../../stats/charts';
+import { pcaPanel } from '../../charts/panels';
 import {
   alphaReport,
   alphaTables,
@@ -260,12 +261,21 @@ export const buildMultivariateOutput = ({
       })
     );
 
+    // L3 PCA report: scree, scores, loadings and biplot in one card.
+    const pca = pcaPanel({
+      title: copy('Report PCA'),
+      subtitle: copy('{s1} componenti trattenute', { s1: result.retained }),
+      charts,
+      tables,
+    });
+
     return {
       ok: true,
       title: copy('Analisi delle componenti principali'),
       tables,
       report: pcaReport(tables, result, ciLevel),
       charts,
+      ...(pca ? { panels: [pca] } : {}),
     };
   }
 

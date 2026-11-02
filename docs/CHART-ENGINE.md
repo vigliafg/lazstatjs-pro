@@ -118,6 +118,31 @@ per-card options`: i nuovi run usano i default, le card esistenti non vengono
 toccate. `Reset chart defaults` riporta ai valori di fabbrica. Il merge avviene
 in `withChartDefaults`, che avvolge il runner sincrono e il worker.
 
+## Galleria degli stili
+
+`src/charts/styles.ts` dichiara, per tipo di grafico, gli **stili** mostrati
+nella fascia orizzontale sotto l'anteprima dell'editor. Uno stile possiede solo
+le opzioni specifiche del `kind` (visualizzazione box, asse Q-Q, sovrapposizioni
+dell'istogramma, ...), mai colori, tema o annotazioni. Per ogni kind con
+varianti esiste esattamente uno stile `isDefault`, che riproduce le opzioni di
+fabbrica (`styles.test.ts` lo verifica): le procedure continuano quindi a
+emettere il default senza modifiche.
+
+- Clic su una tile: applica lo stile alla bozza dell'editor, in un solo undo.
+- `+` sulla tile: `appendChartCopy` aggiunge una copia della card con quello
+  stile allo stesso run-report, una sotto l'altra, senza rieseguire l'analisi
+  (cap `MAX_CHARTS_PER_OUTPUT`).
+- **Salva stile…**: le opzioni specifiche correnti diventano uno stile nominato
+  del progetto (`ProjectSettings.chartStyles`, max 40, validato contro le chiavi
+  del tipo). Si rinominano/eliminano da Impostazioni → Grafici.
+- **Stile dei nuovi grafici**: `chartStyleDefaults[kind]` (globale) e
+  `chartStyleOverrides[analysisId][kind]` (procedura) scelgono lo stile usato dai
+  run successivi; `withChartStyles` lo applica con l'ordine fabbrica < default
+  comuni < stile < opzioni della card, quindi le scelte statistiche del runner
+  vincono sempre.
+- Le anteprime sono `VegaChart` in miniatura con i dati della card, marcate
+  `data-no-export` per non finire negli export PNG.
+
 ## Persistenza e limiti
 
 - `PROJECT_VERSION = 3`; `parseProject` accetta v1, v2 e v3.
@@ -143,9 +168,127 @@ PNG, report HTML e Word sono asincroni; se un grafico non è pronto si esporta i
 resto e si mostra un avviso. L'export PNG usa solo `[data-chart-surface] svg` e
 lo sfondo dichiarato da `data-chart-background`.
 
+## Pannelli compositi (L3)
+
+Un pannello è un report fatto di grafici e tabelle già calcolati; non è un
+`ChartKind` e non appare nella gallery stile. Il contratto è `PanelChart`
+(`version:1`, `kind:'panel'`, `layout:'grid' | 'stack'`, `children:
+AnalysisChart[]` a profondità 1, `tables?`), in `src/stats/charts.ts`.
+
+- I runner restituiscono `panels` accanto a `charts`; i pannelli sono additivi
+  e non sostituiscono i grafici autonomi.
+- `src/charts/panels.ts` contiene i builder (`distributionPanel`,
+  `onewayPanel`, `fitModelPanel`, `regressionDiagnosticPanel`, `pcaPanel`,
+  `timeSeriesPanel`, `qualityPanel`). Selezionano oggetti già esistenti,
+  deduplicano e degradano quando un grafico manca.
+- `PanelCard.tsx` rende i figli come `ChartCard` editabili; il loro
+  `data-chart-id` è prefissato con l'id del pannello e l'editor aggiorna sia la
+  copia autonoma sia quella nel pannello.
+- `schema.ts` valida i pannelli (`parsePanelModel`, `parsePanelModels`) e li
+  limita (`fitPanelBudget`, massimo 8 figli, nessun annidamento). Persistenza,
+  worker e `.lzs` trasportano `panels` come i `charts`.
+- HTML/Word includono il pannello intero; l'export PNG esporta ogni grafico una
+  volta sola, saltando la copia nel pannello quando esiste già la superficie
+  autonoma.
+- `qualityPanel` viene emesso dalla procedura Quality (control/capability/
+  Pareto/variability) insieme ai grafici autonomi; il builder non è cambiato.
+
+## Procedure L4 (Milestone D)
+
+Le nuove procedure vivono nel registro come le altre e producono tabelle,
+report, grafici e — dove previsto — pannelli:
+
+- **Partition** (`partition`): albero CART di regressione, report delle foglie,
+  regole di split e importanza delle variabili. Nuovo `kind: 'tree'`, layout
+  calcolato nel runner (`layoutPartitionTree`).
+- **Quality (SPC)** (`quality`): carta di controllo XBar-R/individui/EWMA,
+  capacità Cp/Cpk, Pareto e variabilità per gruppo. Emette `panel-quality`.
+  Nuovo `kind: 'pareto'`; capacità e controllo riusano `histogram`/`line`.
+- **Cluster** (`cluster`): clustering gerarchico average/complete/single/Ward,
+  dendrogramma, profili standardizzati e dimensioni. Nuovo
+  `kind: 'dendrogram'`.
+- **Discriminant / MANOVA** (`discriminant`): LDA, lambda di Wilks/Pillai,
+  test univariati, matrice di classificazione, grafico canonico e profilo delle
+  medie (copre anche il profile plot MANOVA).
+- **Response Surface (DOE)** (`doe`): modello lineare/quadratico, superficie
+  proiettata, curve di livello, coefficienti e punto stazionario. Nuovo
+  `kind: 'surface'` con `display: 'mesh' | 'contour'`.
+
+I nuovi `kind` non hanno tile nella gallery stile: sono oggetti L4, non
+varianti L1. Le firme dei report non importano i kernel: i tipi dei risultati
+stanno in `src/stats/analysisResults.ts`, così `stats/reports` legge solo
+numeri già calcolati.
+
+## Interazione e linking (L5)
+
+Lo stato di selezione è di sessione: non viene salvato in `.lzs` e non modifica
+dati, statistiche, tabelle o report.
+
+- **Chiavi di riga**: un runner che vuole partecipare al linking aggiunge
+  `__row` alle righe del layer di osservazioni. Il valore è l'indice della riga
+  nella griglia usata dal run (filtro righe e missing già applicati), quindi
+  tutti i grafici dello stesso run-report condividono lo stesso spazio di
+  chiavi. Oggi lo fanno descriptive, regressione e ANOVA.
+- **`src/charts/interaction.ts`**: tipi `ChartLink`/`LinkSelection`,
+  `rowKeyOf`, `interactionPoints`, `chartLinkable`, `applyChartLink`,
+  `linkSignature`, geometria `keysInRect`/`keysInPolygon`/`brushRect`.
+- **Opacità**: `applyChartLink` aggiunge ai soli layer a simboli un transform
+  `__linkOpacity` e un'encoding `opacity` con `scale: null`. Selezionati = 1,
+  non selezionati = 0,14, righe nascoste dal Data Filter = 0,04. Linee, bande,
+  regole e summary non cambiano.
+- **Aggiornamento senza re-embed**: le chiavi viaggiano nei segnali Vega
+  `linkKeys`/`hiddenKeys`, non nel testo dell'espressione. `VegaChart` tiene lo
+  stesso `chartKey` quando cambia solo la selezione e aggiorna la vista con
+  `view.signal(...)` + `runAsync()`: un pennello non ricompila più il grafico.
+  Misura sintetica su 2 000 punti: aggiornamento del segnale ~7 ms mediani,
+  contro il percorso di ricompilazione/embed che ricrea il DOM Vega.
+- **Overlay**: `ChartInteractionLayer` copre l'area del grafico misurata da
+  `measurePlotArea`. Pennello e lazo proiettano i punti dal scenegraph Vega
+  (`view.scenegraph()`), non dai nomi degli scale: Vega-Lite può nominare gli
+  scale per layer (Q-Q a due assi, Pareto a due assi y). L'overlay esiste solo
+  con `Link` attivo, quindi tooltip, annotazioni ed editor restano usabili.
+- **Accessibilità**: la superficie ha `role="application"`, focus visibile,
+  istruzioni `sr-only` collegate con `aria-describedby`, Invio seleziona tutti i
+  punti ed Esc annulla. Il conteggio `N selezionati` e `N nascosti` sono
+  `role="status" aria-live="polite"`; il chip `Link`/`Nessun ID riga` ha
+  `title`/`aria-label` esplicativi e contrasto più alto.
+- **Contesto**: `ChartLinkProvider` in `OutputConsole` espone `selection`,
+  `hidden`, `linkMode`, `tool`, `exporting`; ogni `ChartCard` legge lo stesso
+  stato, quindi i pannelli L3 si attenuano insieme ai grafici autonomi.
+- **Export pulito**: durante PNG/HTML/Word e copia testo `exporting` è attivo;
+  le card non ricevono il link state, quindi il report esporta tutti i dati
+  senza attenuazione. HTML/Word rimuovono anche gli elementi `data-no-export`
+  (overlay, profiler, chip) e il PNG filtra le superfici dentro `data-no-export`.
+  Data Filter e Graph Builder sono dialoghi fuori dal DOM dell'output e non
+  entrano nell'export.
+- **Data Filter**: `DataFilterDialog` deriva le chiavi `hidden` dalle righe della
+  `linkGrid`; supporta elenco di valori categorici, soglia numerica e
+  animazione sui valori ordinati. Non modifica tabelle, statistiche o report.
+- **Prediction Profiler**: il runner DOE scrive i coefficienti del modello nel
+  `stats` del grafico `surface`; `profiler.ts` valuta lo stesso polinomio e
+  `PredictionProfiler` offre due slider e due sezioni senza rieseguire
+  l'analisi.
+- **Graph Builder**: `charts/builder.ts` compone `scatter`, `line`, `bar`
+  (media per categoria), `box` e `histogram` con `makeChart`; il dialogo
+  assegna X/Y/Gruppo con drag-and-drop o click e aggiunge una card normale
+  tramite `pushBuiltChart`. Non ha `analysisId`, quindi non ha Re-run.
+- **Copy L4**: report, tabelle, grafici e pagine help delle procedure L4 sono
+  tradotti in tutte e sei le lingue. `catalog/charts.ts` sovrappone il catalogo
+  L4 della lingua attiva a quello inglese degli altri grafici; le pagine help
+  vivono in `src/help/content/l4-<locale>.ts`.
+- **Manuale L5**: la pagina `interaction` (in tutte le lingue, dopo
+  `output-console`) spiega linking, pennello, lazo, Data Filter ed export
+  pulito.
+
 ## Test
 
 - `src/charts/schema.test.ts`, `features.test.ts`, `copy.test.ts`.
+- `src/charts/interaction.test.ts`: chiavi di riga, `chartLinkable`,
+  `applyChartLink` con segnali, pennello e lazo.
+- `src/charts/copy.test.ts`: copertura delle copy L4 in tutte le lingue.
+- `src/charts/profiler.test.ts` e `src/charts/builder.test.ts`.
+- `e2e/interaction.spec.ts`: brush/lazo con dimming, Data Filter animato,
+  Prediction Profiler, Graph Builder ed export HTML pulito con selezione attiva.
 - `src/charts/kits/common.test.ts`: `n` nel summary e KDE del violin
   (simmetria, semilarghezza, gruppi singleton/costanti).
 - `src/charts/vega/boxLayers.test.ts`: notch (folded, IQR=0), ordine delle

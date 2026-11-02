@@ -4,6 +4,9 @@ import { ToolbarButton } from '../components/ToolbarButton';
 import { savePrefs, type IoPreferences } from '../io/prefs';
 import { ChartDefaultsEditor } from '../components/charts/ChartDefaultsEditor';
 import { ChartPresetList } from '../components/charts/ChartPresetList';
+import { ChartStyleSettings } from '../components/charts/ChartStyleSettings';
+import type { ChartStyleDefaults } from '../components/charts/ChartPresetsProvider';
+import type { UserChartStyle } from '../charts/styles';
 import type { ChartDefaults } from '../charts/defaults';
 import type { ChartPreset } from '../charts/presets';
 import {
@@ -59,6 +62,10 @@ export interface SettingsTabProps {
   setChartDefaults: Dispatch<SetStateAction<ChartDefaults>>;
   chartPresets: ChartPreset[];
   setChartPresets: Dispatch<SetStateAction<ChartPreset[]>>;
+  chartStyles: UserChartStyle[];
+  setChartStyles: Dispatch<SetStateAction<UserChartStyle[]>>;
+  chartStyleDefaults: ChartStyleDefaults;
+  setChartStyleDefaults: Dispatch<SetStateAction<ChartStyleDefaults>>;
 }
 
 const sectionTitle =
@@ -100,6 +107,10 @@ export const SettingsTab = ({
   setChartDefaults,
   chartPresets,
   setChartPresets,
+  chartStyles,
+  setChartStyles,
+  chartStyleDefaults,
+  setChartStyleDefaults,
   themeDefinition,
   customThemes,
   saveCustomTheme,
@@ -328,6 +339,12 @@ export const SettingsTab = ({
           <ChartPresetList
             presets={chartPresets}
             onChange={next => setChartPresets(next)}
+          />
+          <ChartStyleSettings
+            styles={chartStyles}
+            setStyles={setChartStyles}
+            defaults={chartStyleDefaults}
+            setDefaults={setChartStyleDefaults}
           />
         </section>
 

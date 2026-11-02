@@ -305,6 +305,47 @@ export const areaTopics: HelpTopic[] = [
     seeAlso: ['analysis-workflow', 'projects'],
   },
   {
+    id: 'interaction',
+    area: 'output',
+    title: 'Liaison, pinceau et filtre de données',
+    summary: 'Sélectionnez des lignes dans un graphique et retrouvez les mêmes observations mises en évidence dans chaque graphique lié de la session.',
+    tutorial: {
+      goal: 'Comparer les mêmes observations entre les graphiques d’un même run-report.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Lancez une analyse qui produit des graphiques à points, par exemple une régression ou un rapport descriptif.',
+        'Appuyez sur Lier dans la barre de sortie : chaque graphique qui dessine les lignes individuelles affiche la pastille Lier.',
+        'Choisissez pinceau ou lasso, faites glisser sur le graphique pour sélectionner des observations et lisez le compteur N sélectionnés.',
+        'Ouvrez Filtre de données pour exclure des lignes par catégorie ou par seuil numérique ; les lignes masquées restent visibles mais atténuées.',
+        'Appuyez sur Échap ou Effacer la sélection pour revenir au graphique complet ; désactivez Lier pour masquer la couche de sélection.',
+      ],
+      expected: 'Les lignes sélectionnées restent opaques et les autres s’atténuent ; tableaux, statistiques et exports conservent toutes les lignes.',
+    },
+    advanced: {
+      whenToUse: [
+        'Explorer quelles observations pilotent une tendance et comparer les mêmes cas entre graphiques.',
+        'Vérifier si une valeur aberrante dans un graphique est le même cas dans un autre.',
+      ],
+      whenNotToUse: [
+        'Tester une hypothèse : la liaison est un outil d’exploration et ne modifie jamais les statistiques.',
+      ],
+      reading: [
+        'Un graphique n’offre la liaison que s’il dessine les observations comme des symboles : histogrammes, courbes de densité et lignes sans marqueurs n’ont pas de lignes à sélectionner.',
+        'La clé de ligne est la ligne du jeu de données utilisée par l’exécution, pas un identifiant permanent : changer de jeu de données efface la sélection.',
+        'Le filtre de données atténue les lignes dans les graphiques liés mais ne les retire ni de l’analyse, ni des tableaux, ni du rapport.',
+      ],
+      pitfalls: [
+        'La sélection et les lignes masquées ne valent que pour la session et ne sont pas enregistrées dans le projet .lzs.',
+        'Exporter avec une sélection active exporte quand même toutes les données, sans l’atténuation.',
+      ],
+      glossary: [
+        { term: 'Pinceau', definition: 'Sélectionner des observations en faisant glisser un rectangle sur le graphique.' },
+        { term: 'Lasso', definition: 'Sélectionner des observations en dessinant autour d’elles un polygone libre.' },
+      ],
+    },
+    seeAlso: ['output-console', 'descriptive', 'regression'],
+  },
+  {
     id: 'projects',
     area: 'output',
     title: 'Enregistrer et rouvrir un projet',

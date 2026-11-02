@@ -136,3 +136,27 @@ test('score vectors are offered only when the chart carries them', () => {
   assert.equal(vectors!.visible?.(factoryOptions('score'), score), true);
   assert.equal(vectors!.visible?.(factoryOptions('score'), chartOf('score')), false);
 });
+
+test('the Q-Q chart exposes the envelope style and the horizontal scale', () => {
+  const chart = makeChart({
+    id: 'qq',
+    kind: 'qq',
+    title: 'Q-Q',
+    data: {
+      points: [{ x: -1, y: -1 }, { x: 0, y: 0 }, { x: 1, y: 1 }],
+      reference: [{ x: -1, y: -1 }, { x: 1, y: 1 }],
+      band: [{ x: -1, lo: -1.2, hi: -0.8 }],
+    },
+  });
+  const features = specificFeatures(chart);
+  const ciStyle = features.find(feature => feature.id === 'ciStyle');
+  const axisMode = features.find(feature => feature.id === 'qqAxis');
+  assert.ok(ciStyle);
+  assert.ok(axisMode);
+  assert.deepEqual(
+    axisMode!.choices?.map(choice => choice.value),
+    ['both', 'probability', 'z']
+  );
+  assert.equal(ciStyle!.visible?.({ ...factoryOptions('qq'), showCI: false } as never, chart), false);
+  assert.equal(ciStyle!.visible?.({ ...factoryOptions('qq'), showCI: true } as never, chart), true);
+});

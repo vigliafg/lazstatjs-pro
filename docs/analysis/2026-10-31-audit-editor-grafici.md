@@ -54,7 +54,7 @@ Il registro copre bene gli oggetti statistici:
 - box: display box/notched/violin/raincloud, punti, outlier, media, etichetta mediana, ordinamento;
 - interval/dot/ecdf: etichette, media, mediana, ordinamento;
 - histogram: bin, densità normale, KDE, rug, linea media;
-- qq: riferimento, banda, detrendizzato;
+- qq: riferimento, banda con stile banda/curve tratteggiate, scala orizzontale probabilità/z/entrambe, detrendizzato;
 - forest: scala log, riferimento, ordinamento;
 - survival: IC, censura, mediana, step;
 - mosaic/heatmap/risk/acf/scree/score/bland/power/bootstrap/missingness/residual: opzioni semantiche specifiche.

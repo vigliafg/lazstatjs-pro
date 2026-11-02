@@ -30,7 +30,13 @@ test('time-series builder returns tables, report and forecast content', () => {
   assert.ok(result.charts?.some(chart => chart.id === 'ts-pacf-chart'));
   assert.ok(result.charts?.some(chart => chart.id === 'ts-residual-acf'));
   assert.ok(result.charts?.some(chart => chart.id === 'ts-model-accuracy'));
-  assert.doesNotThrow(() => structuredClone({ tables: result.tables, charts: result.charts }));
+  const panel = result.panels?.[0];
+  assert.equal(panel?.id, 'panel-timeseries');
+  assert.ok(panel?.children.some(child => child.id === 'ts-acf-chart'));
+  assert.ok(panel?.children.some(child => child.id === 'ts-pacf-chart'));
+  assert.doesNotThrow(() =>
+    structuredClone({ tables: result.tables, charts: result.charts, panels: result.panels })
+  );
 });
 
 test('time-series builder adds the seasonal decomposition charts', () => {

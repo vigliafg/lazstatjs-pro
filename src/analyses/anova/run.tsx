@@ -10,6 +10,7 @@ import type { AnalysisRunResult } from '../types';
 import { copy } from '../../stats/reportCopy';
 import { makeChart, boxRows, qqBand, qqPoints, qqReference } from '../../charts/kits/common';
 import type { AnalysisChart } from '../../stats/charts';
+import { onewayPanel } from '../../charts/panels';
 
 export interface AnovaRunInput {
   grid: Dataset;
@@ -27,12 +28,15 @@ export interface AnovaRunInput {
 
     // Group data
     const groups: { [key: string]: number[] } = {};
-    rowsForAnalysis.forEach(row => {
+    const groupRowKeys: { [key: string]: string[] } = {};
+    rowsForAnalysis.forEach((row, rowIndex) => {
       const d = parseNum(row[dep]);
       const g = row[grp];
       if (!isNaN(d) && g !== '') {
         if (!groups[g]) groups[g] = [];
+        if (!groupRowKeys[g]) groupRowKeys[g] = [];
         groups[g].push(d);
+        groupRowKeys[g].push(String(rowIndex));
       }
     });
 
@@ -165,10 +169,10 @@ export interface AnovaRunInput {
       };
     });
 
-    const kwCombined: { val: number; gKey: string; rank: number }[] = [];
+    const kwCombined: { val: number; gKey: string; rank: number; key: string }[] = [];
     groupKeys.forEach(key => {
-      groups[key].forEach(v => {
-        kwCombined.push({ val: v, gKey: key, rank: 0 });
+      groups[key].forEach((v, index) => {
+        kwCombined.push({ val: v, gKey: key, rank: 0, key: groupRowKeys[key][index] });
       });
     });
     const kwN = kwCombined.length;
@@ -228,7 +232,10 @@ export interface AnovaRunInput {
       useNonParam,
     });
 
-    const box = boxRows(groupKeys.map(key => ({ category: key, values: groups[key] })));
+    const box = boxRows(
+      groupKeys.map(key => ({ category: key, values: groups[key], keys: groupRowKeys[key] })),
+      { level: ciLevel }
+    );
     const critical = dfWithin > 0 ? jStat.studentt.inv(1 - (1 - ciLevel / 100) / 2, dfWithin) : 1.96;
     const bars = groupKeys.map(key => {
       const values = groups[key];
@@ -245,6 +252,12 @@ export interface AnovaRunInput {
         hi: mean + critical * interval,
       };
     });
+    const meanIntervals = bars.map(row => ({
+      category: row.category,
+      estimate: row.value,
+      lo: row.lo,
+      hi: row.hi,
+    }));
     const charts: AnalysisChart[] = [
       makeChart({
         id: 'anova-box',
@@ -266,7 +279,31 @@ export interface AnovaRunInput {
         fields: { xLabel: grid.cols[grp].name, yLabel: grid.cols[dep].name },
         options: { error: 'ci', valueLabels: true } as never,
       }),
+      makeChart({
+        id: 'anova-diamond',
+        kind: 'diamond',
+        title: copy('Diamanti delle medie per gruppo'),
+        subtitle: copy('IC {s1}% entro il modello', { s1: ciLevel }),
+        note: copy('Il diamante è centrato sulla media di gruppo; l’ampiezza segue l’intervallo di confidenza del modello.'),
+        data: { intervals: meanIntervals },
+        fields: { xLabel: grid.cols[grp].name, yLabel: grid.cols[dep].name },
+        options: { scaleToCI: true, showLabels: true } as never,
+      }),
     ];
+    if (k >= 2) {
+      charts.push(
+        makeChart({
+          id: 'anova-circles',
+          kind: 'circles',
+          title: copy('Cerchi di confronto tra gruppi'),
+          subtitle: copy('IC {s1}% · cerchi più grandi = maggiore incertezza', { s1: ciLevel }),
+          note: copy('La sovrapposizione dei cerchi è un indizio visivo: il test post-hoc formale resta la tabella dei confronti.'),
+          data: { intervals: meanIntervals },
+          fields: { xLabel: grid.cols[dep].name, yLabel: grid.cols[grp].name },
+          options: { showLabels: true, showIntervals: true } as never,
+        })
+      );
+    }
     const postHocPoints = postHocResults
       .filter(row => Number.isFinite(row.lo) && Number.isFinite(row.hi))
       .map(row => ({ label: row.comp, estimate: row.diff, lo: row.lo, hi: row.hi }));
@@ -322,6 +359,7 @@ export interface AnovaRunInput {
       const rankBox = boxRows(groupKeys.map(key => ({
         category: key,
         values: kwCombined.filter(item => item.gKey === key).map(item => item.rank),
+        keys: kwCombined.filter(item => item.gKey === key).map(item => item.key),
       })));
       charts.push(
         makeChart({
@@ -336,6 +374,18 @@ export interface AnovaRunInput {
         })
       );
     }
+    // L3 Oneway report: diamonds/circles are the JMP signature, the box keeps
+    // the raw distributions and the forest shows the formal post-hoc test.
+    const oneway = onewayPanel({
+      title: copy('Pannello Oneway: {s1} per {s2}', {
+        s1: grid.cols[dep].name,
+        s2: grid.cols[grp].name,
+      }),
+      subtitle: copy('IC {s1}% entro il modello', { s1: ciLevel }),
+      charts,
+      tables,
+    });
+
     return {
       ok: true,
       title: copy('ANOVA a una via e Kruskal-Wallis: {s1} per {s2}', {
@@ -345,5 +395,6 @@ export interface AnovaRunInput {
       tables,
       report,
       charts,
+      ...(oneway ? { panels: [oneway] } : {}),
     };
   };

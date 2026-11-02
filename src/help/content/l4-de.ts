@@ -1,0 +1,180 @@
+import type { HelpTopic } from './types';
+
+/**
+ * L4 procedure pages, German edition.
+ */
+export const l4Topics: HelpTopic[] = [
+  {
+    id: "partition",
+    area: "procedures",
+    title: "Partition (Regressionsbaum)",
+    summary: "Die Daten mit einem Regressionsbaum in homogene Blätter aufteilen.",
+    tutorial: {
+      goal: "Ein numerisches Ergebnis mit wenigen Wenn-dann-Regeln erklären.",
+      steps: [
+        "Wählen Sie die numerische Ergebnisvariable und einen oder mehrere numerische Prädiktoren.",
+        "Legen Sie die maximale Tiefe und die minimale Zahl der Fälle je Teilung fest.",
+        "Führen Sie die Analyse aus und lesen Sie Baum, Teilungsliste und Blattbericht.",
+      ],
+      expected: "Ein Baumdiagramm, Teilungsregeln, Blattmittelwerte und Variablenbedeutung.",
+    },
+    advanced: {
+      assumptions: ["Die Ergebnisvariable ist numerisch; die Prädiktoren sind numerisch und vollständig."],
+      whenToUse: ["Explorative Erklärung, Segmentierung und nicht lineare Effekte."],
+      whenNotToUse: ["Formale Inferenz oder kausale Aussagen; verwenden Sie stattdessen ein Regressionsmodell."],
+      reading: [
+        "Jeder innere Knoten ist eine Schwelle; der Blattmittelwert ist die Vorhersage.",
+        "Die Variablenbedeutung summiert die jedem Prädiktor zugerechnete Fehlerreduktion.",
+      ],
+      pitfalls: [
+        "Tiefe Bäume überanpassen: Validieren Sie an einer separaten Stichprobe, bevor Sie den Regeln vertrauen.",
+        "Schwellen hängen von den Daten ab und können sich mit einer anderen Stichprobe ändern.",
+      ],
+      charts: ["Baumdiagramm", "Beobachtet vs. vorhergesagt", "Variablenbedeutung"],
+      glossary: [
+        { term: "Blatt", definition: "Eine endgültige Gruppe, deren Mittelwert die Vorhersage ist." },
+        { term: "SSE", definition: "Summe der quadrierten Differenzen zwischen beobachteten und vorhergesagten Werten." },
+      ],
+    },
+    seeAlso: ["regression", "cluster"],
+  },
+  {
+    id: "quality",
+    area: "procedures",
+    title: "Qualität (SPC)",
+    summary: "Regelkarten, Prozessfähigkeit, Pareto und Streuung in einer Plattform.",
+    tutorial: {
+      goal: "Prüfen, ob ein Prozess stabil und fähig ist.",
+      steps: [
+        "Wählen Sie den Modus: Regelkarte, Prozessfähigkeit, Pareto oder Streuung.",
+        "Wählen Sie die numerische Variable (oder die Kategorie für Pareto).",
+        "Legen Sie bei Bedarf Spezifikationsgrenzen und die Untergruppengröße fest.",
+        "Führen Sie die Analyse aus und lesen Sie Karte, Kennzahlen und Lesetext.",
+      ],
+      expected: "Eine Regelkarte mit Grenzen, Fähigkeitskennzahlen oder ein Pareto-Diagramm, dazu Tabellen.",
+    },
+    advanced: {
+      assumptions: ["Die Beobachtungen liegen in ihrer tatsächlichen zeitlichen Reihenfolge vor; die Untergruppen sind sinnvoll."],
+      whenToUse: ["Prozessüberwachung, Vergleich der Streuung zwischen Gruppen, Priorisierung von Fehlern."],
+      whenNotToUse: ["Fähigkeit vor Stabilität beurteilen; eine Fähigkeitskennzahl für einen instabilen Prozess ist irreführend."],
+      reading: [
+        "Punkte außerhalb der Eingriffsgrenzen sind Signale, kein Beweis für eine Änderung.",
+        "Cp ist der potenzielle Spielraum; Cpk berücksichtigt zusätzlich einen Mittelwert, der weit von der Spezifikationsmitte entfernt liegt.",
+        "Die kumulierte Pareto-Linie zeigt, welche Kategorien zuerst anzugehen sind.",
+      ],
+      pitfalls: [
+        "Eingriffsgrenzen sind keine Spezifikationsgrenzen.",
+        "Die Prozessfähigkeit setzt Normalität und einen stabilen Prozess voraus.",
+      ],
+      charts: ["Regelkarte", "Fähigkeitshistogramm", "Pareto-Diagramm", "Boxplot der Streuung"],
+      glossary: [
+        { term: "UCL/LCL", definition: "Obere und untere Eingriffsgrenze bei ±3 Sigma von der Mitte." },
+        { term: "Cpk", definition: "Fähigkeitskennzahl, die den Abstand zwischen Mittelwert und Spezifikationsgrenzen berücksichtigt." },
+      ],
+    },
+    seeAlso: ["descriptive", "distfit"],
+  },
+  {
+    id: "cluster",
+    area: "procedures",
+    title: "Clusteranalyse",
+    summary: "Hierarchische Gruppierung mit Dendrogramm und Clusterprofilen.",
+    tutorial: {
+      goal: "Gruppen ähnlicher Beobachtungen über mehrere numerische Variablen finden.",
+      steps: [
+        "Wählen Sie mindestens zwei numerische Variablen.",
+        "Wählen Sie die Verknüpfung und die Zahl der Cluster.",
+        "Führen Sie die Analyse aus und lesen Sie Dendrogramm, Clustermittelwerte und Profile.",
+      ],
+      expected: "Ein Dendrogramm, Clustergrößen, Clustermittelwerte und standardisierte Profile.",
+    },
+    advanced: {
+      assumptions: ["Die Variablen liegen auf vergleichbaren Skalen oder die Standardisierung ist aktiviert."],
+      whenToUse: ["Segmentierung, explorative Typologien, Auffinden natürlicher Gruppen."],
+      whenNotToUse: ["Prüfen, ob Gruppen existieren; dafür liefert Clustering keinen p-Wert."],
+      reading: [
+        "Die Höhe einer Fusion ist die Distanz zwischen den zusammengeführten Gruppen.",
+        "Standardisierte Profile zeigen, welche Variablen jeden Cluster prägen.",
+      ],
+      pitfalls: [
+        "Verschiedene Verknüpfungen oder Schnitte ergeben verschiedene Cluster.",
+        "Sehr kleine Cluster können Ausreißer statt echter Gruppen sein.",
+      ],
+      charts: ["Dendrogramm", "Clusterprofile", "Clustergrößen"],
+      glossary: [
+        { term: "Verknüpfung", definition: "Die Regel, die die Distanz zwischen zwei Clustern misst." },
+        { term: "Dendrogramm", definition: "Ein Baum, der Reihenfolge und Höhe der Fusionen zeigt." },
+      ],
+    },
+    seeAlso: ["multivariate", "partition"],
+  },
+  {
+    id: "discriminant",
+    area: "procedures",
+    title: "Diskriminanz / MANOVA",
+    summary: "Bekannte Gruppen trennen und ihren multivariaten Mittelwertunterschied testen.",
+    tutorial: {
+      goal: "Prüfen, ob sich Gruppen bei mehreren numerischen Variablen gemeinsam unterscheiden.",
+      steps: [
+        "Wählen Sie die Gruppierungsspalte und mindestens einen numerischen Prädiktor.",
+        "Führen Sie die Analyse aus und lesen Sie Wilks-Lambda, die univariaten Tests und das kanonische Diagramm.",
+        "Prüfen Sie die Klassifikationsmatrix, um zu sehen, wie gut die Gruppen klassifiziert werden.",
+      ],
+      expected: "MANOVA-Tabelle, Diskriminanzkoeffizienten, kanonisches Streudiagramm und Profildiagramm.",
+    },
+    advanced: {
+      assumptions: ["Unabhängige Beobachtungen, ähnliche Gruppenkovarianzen, kontinuierliche Prädiktoren."],
+      whenToUse: ["Bekannte Gruppen, Klassifikationsregeln, multivariater Gruppenvergleich."],
+      whenNotToUse: ["Auffinden unbekannter Gruppen (verwenden Sie Clustering) oder mehr Variablen als Fälle."],
+      reading: [
+        "Ein kleines Wilks-Lambda und ein kleines p zeigen eine Trennung der Gruppen.",
+        "Kanonische Achsen sind die Richtungen, die die Gruppen am besten trennen.",
+        "Die Genauigkeit auf den Trainingsdaten ist optimistisch verzerrt: Validieren Sie an einer separaten Stichprobe.",
+      ],
+      pitfalls: [
+        "Unausgewogene Gruppen können die Genauigkeit dominieren.",
+        "Kollineare Prädiktoren machen die Kovarianzmatrix singulär.",
+      ],
+      charts: ["Kanonisches Streudiagramm", "Gruppenprofile", "Koeffizienten-Heatmap"],
+      glossary: [
+        { term: "Wilks-Lambda", definition: "Eine multivariate Teststatistik, die bei Unterschieden zwischen den Gruppen nahe null liegt." },
+        { term: "Kanonische Funktion", definition: "Eine Linearkombination der Variablen, die die Trennung der Gruppen maximiert." },
+      ],
+    },
+    seeAlso: ["multivariate", "anova"],
+  },
+  {
+    id: "doe",
+    area: "procedures",
+    title: "Responsefläche (DOE)",
+    summary: "Quadratische Oberfläche und Konturplot für zwei kontinuierliche Faktoren.",
+    tutorial: {
+      goal: "Die Kombination zweier Faktoren finden, die eine Ergebnisvariable optimiert.",
+      steps: [
+        "Wählen Sie die numerische Ergebnisvariable und zwei numerische Faktoren.",
+        "Wählen Sie ein lineares oder quadratisches Modell.",
+        "Führen Sie die Analyse aus und lesen Sie Oberfläche, Konturen und stationären Punkt.",
+      ],
+      expected: "Eine projizierte Oberfläche, Höhenlinien, Modellkoeffizienten und ein stationärer Punkt.",
+    },
+    advanced: {
+      assumptions: ["Die Ergebnisvariable ist kontinuierlich; die Faktoren sind numerisch; die Residuen sind unabhängig."],
+      whenToUse: ["Prozessoptimierung, Krümmung und Interaktion zwischen zwei Faktoren."],
+      whenNotToUse: ["Kausale Aussagen ohne Versuchsplan, Wiederholungen und Randomisierung."],
+      reading: [
+        "Höhenlinien verbinden Faktorkombinationen mit derselben vorhergesagten Ergebnisgröße.",
+        "Ein Sattelpunkt ist kein Optimum: Er steigt in eine Richtung und fällt in die andere.",
+      ],
+      pitfalls: [
+        "Die Oberfläche gilt nur innerhalb des beobachteten Faktorbereichs.",
+        "Eine quadratische Anpassung ersetzt kein Versuchsdesign.",
+      ],
+      charts: ["Responsefläche", "Konturkarte", "Modellkoeffizienten"],
+      glossary: [
+        { term: "Stationärer Punkt", definition: "Der Punkt, an dem der Gradient der Oberfläche null ist." },
+        { term: "Höhenlinie", definition: "Eine Linie mit konstanter vorhergesagter Ergebnisgröße." },
+      ],
+    },
+    seeAlso: ["factorial", "regression"],
+  },
+];

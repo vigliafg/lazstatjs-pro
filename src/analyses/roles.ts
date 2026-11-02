@@ -3,6 +3,7 @@ import type { GridData } from '../grid/types';
 import { analysisLabel } from './registry';
 import { t, type MessageKey } from '../i18n';
 import { isContinuousColumn, isGroupColumn } from '../grid/types';
+import { L4_ROLES } from './rolesL4';
 
 export type RoleKind = 'continuous' | 'group' | 'any';
 
@@ -36,6 +37,8 @@ const append = (values: readonly number[], column: number): number[] =>
  */
 const ROLE_SUFFIX_KEYS: Record<string, MessageKey> = {
   variables: 'form.variables',
+  variable: 'form.variable1',
+  category: 'form.paretoCategory',
   'first variable': 'form.variable1',
   'second variable': 'form.variable2',
   'dependent variable': 'form.dependentVar',
@@ -614,6 +617,7 @@ const ROLES: Record<string, AnalysisRole[]> = {
       set: (p, c) => ({ ...p, wizard: { ...p.wizard, second: c } }),
     },
   ],
+  ...L4_ROLES,
 };
 
 /** Assignable column roles for an analysis, primary role first. */

@@ -69,6 +69,25 @@ L'editor (`ChartEditorDialog`) lavora su una copia delle opzioni e committa solo
 con Done; la persistenza salva i modelli, non un'immagine. Dettagli, feature e
 limiti in [`docs/CHART-ENGINE.md`](docs/CHART-ENGINE.md).
 
+### Linking e interazione
+
+`src/charts/interaction.ts` definisce lo stato di riga condiviso (`__row`,
+`ChartLink`, `LinkSelection`) e le trasformazioni di opacità; è puro e non
+importa React. `ChartLinkProvider` (in `components/charts`) lo rende disponibile
+a tutte le card di una console, pannelli L3 inclusi. `ChartInteractionLayer`
+disegna pennello e lazo sopra il grafico e proietta i punti dal scenegraph Vega;
+`DataFilterDialog`, `PredictionProfiler` e `GraphBuilderDialog` usano lo stesso
+stato senza rieseguire le analisi. Selezione e righe nascoste sono di sessione e
+non entrano nel progetto `.lzs`.
+
+La selezione viaggia nei segnali Vega `linkKeys`/`hiddenKeys`: cambiare pennello
+o lazo aggiorna la vista già montata, senza ricompilare il grafico. Durante
+PNG/HTML/Word il provider espone `exporting`, le card non ricevono il link state
+e l'export mostra tutti i dati senza attenuazione; gli elementi `data-no-export`
+(overlay, profiler, chip) vengono esclusi. La superficie di selezione ha focus
+visibile, istruzioni per screen reader, Invio per selezionare tutti i punti ed
+Esc per annullare.
+
 ## Aggiungere un'analisi
 
 Checklist minima:

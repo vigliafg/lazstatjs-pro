@@ -12,7 +12,9 @@ import { AnnotationSurface } from './AnnotationSurface';
 import { AnnotationToolbar, type AnnotationTool } from './AnnotationToolbar';
 import { ChartGeneralToolbar } from './ChartGeneralToolbar';
 import { ChartSpecificPanel } from './ChartSpecificPanel';
+import { ChartStyleGallery } from './ChartStyleGallery';
 import { VegaChart } from './VegaChart';
+import { applyChartStyle, type ChartStyle } from '../../charts/styles';
 
 interface ChartEditorDialogProps {
   chart: AnalysisChart;
@@ -20,6 +22,8 @@ interface ChartEditorDialogProps {
   analysisName?: string;
   onDone: (options: ChartOptions) => void;
   onCancel: () => void;
+  /** Insert a copy of the card into the run-report, stacked below the others. */
+  onInsert?: (chart: AnalysisChart) => void;
 }
 
 const sameOptions = (a: ChartOptions, b: ChartOptions): boolean =>
@@ -56,6 +60,7 @@ export const ChartEditorDialog = ({
   analysisName,
   onDone,
   onCancel,
+  onInsert,
 }: ChartEditorDialogProps) => {
   const [history, setHistory] = useState<{ items: ChartOptions[]; index: number }>({
     items: [initialOptions],
@@ -197,6 +202,28 @@ export const ChartEditorDialog = ({
       });
     }
     applyDraft(next as unknown as ChartOptions);
+  };
+
+  const insertStyle = (style: ChartStyle) => {
+    onInsert?.({
+      ...chart,
+      options: applyChartStyle(draft, style),
+      title: `${chart.title} · ${style.name ?? (style.labelKey ? t(style.labelKey) : style.id)}`,
+    });
+  };
+
+  /** Insert the LazStats and JMP-like variants one below the other. */
+  const insertCompare = (lazstat: ChartStyle, jmp: ChartStyle) => {
+    onInsert?.({
+      ...chart,
+      options: applyChartStyle(draft, lazstat),
+      title: `${chart.title} · ${t('chart.style.origin.lazstat')}`,
+    });
+    onInsert?.({
+      ...chart,
+      options: applyChartStyle(draft, jmp),
+      title: `${chart.title} · ${t('chart.style.origin.jmp')}`,
+    });
   };
 
   const exportPng = async () => {
@@ -364,6 +391,14 @@ export const ChartEditorDialog = ({
                   !(preview.kind === 'box' && boxDisplayOf(preview) === 'violin') && (
                     <p className="mt-1 text-[10px] text-text3">{chart.note}</p>
                   )}
+                <ChartStyleGallery
+                  chart={chart}
+                  options={draft}
+                  preview={preview}
+                  onChange={applyDraft}
+                  onInsert={onInsert ? insertStyle : undefined}
+                  onCompare={onInsert ? insertCompare : undefined}
+                />
               </>
             ) : mobileView === 'properties' ? (
               <>

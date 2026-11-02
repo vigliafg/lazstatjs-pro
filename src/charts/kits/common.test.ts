@@ -18,6 +18,43 @@ test('boxRows carries n into every summary row', () => {
   assert.equal(rows.summary[0].n, 5);
 });
 
+test('boxRows exposes percentile whiskers and a finite mean confidence interval', () => {
+  const rows = boxRows([{ category: 'A', values: values(1, 1, 10) }]);
+  const row = rows.summary[0];
+  assert.ok(Number(row.p10) > 1 && Number(row.p10) < Number(row.q1));
+  assert.ok(Number(row.p90) < 10 && Number(row.p90) > Number(row.q3));
+  assert.ok(Number.isFinite(row.meanLo) && Number.isFinite(row.meanHi));
+  assert.ok(Number(row.meanLo) < Number(row.mean) && Number(row.meanHi) > Number(row.mean));
+
+  const wide = boxRows([{ category: 'A', values: values(1, 1, 10) }], { level: 99 });
+  assert.ok(
+    Number(wide.summary[0].meanLo) < Number(row.meanLo) &&
+      Number(wide.summary[0].meanHi) > Number(row.meanHi),
+    'a higher level widens the mean interval'
+  );
+});
+
+test('a singleton stays visible but omits the mean interval instead of storing NaN', () => {
+  const rows = boxRows([{ category: 'A', values: [5] }]);
+  assert.equal(rows.summary.length, 1);
+  assert.equal(rows.summary[0].n, 1);
+  assert.equal(rows.points.length, 1);
+  assert.equal('meanLo' in rows.summary[0], false);
+  assert.equal('meanHi' in rows.summary[0], false);
+});
+
+test('a constant group keeps a zero-width mean interval and the Tukey outliers stay unchanged', () => {
+  const constant = boxRows([{ category: 'A', values: [5, 5, 5] }]).summary[0];
+  assert.equal(constant.meanLo, 5);
+  assert.equal(constant.meanHi, 5);
+
+  const stats = boxStats([1, 2, 3, 4, 100]);
+  assert.ok(stats);
+  assert.deepEqual(stats!.outliers, [100]);
+  assert.equal(stats!.min, 1);
+  assert.equal(stats!.max, 4);
+});
+
 test('qqBand widens towards the tails and contains the reference line', () => {
   const points = values(-2, 0.5, 9).map(x => ({ x, y: 2 * x + 1 }));
   const band = qqBand(points, [{ x: -2, y: -3 }, { x: 2, y: 5 }], 95);

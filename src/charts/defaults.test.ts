@@ -10,6 +10,7 @@ import {
   mergeOptions,
   normalizeChartDefaults,
   withChartDefaults,
+  withChartStyles,
 } from './defaults';
 
 test('user defaults are merged between factory and per-card options', () => {
@@ -90,4 +91,31 @@ test('normalizeChartDefaults rejects invalid values and clamps ranges', () => {
   assert.equal(parsed.pointSize, 16);
   assert.equal(parsed.palette, 'mono');
   assert.equal(parsed.size, DEFAULT_CHART_DEFAULTS.size);
+});
+
+test('run-scoped style patches sit between user defaults and card options', () => {
+  const styled = withChartStyles({ qq: { ciStyle: 'band', qqAxis: 'z' } }, () =>
+    mergeOptions('qq', undefined)
+  );
+  assert.equal(styled.kind, 'qq');
+  assert.equal(styled.kind === 'qq' ? styled.ciStyle : null, 'band');
+  assert.equal(styled.kind === 'qq' ? styled.qqAxis : null, 'z');
+
+  // The card options of the runner keep the last word.
+  const explicit = withChartStyles({ qq: { ciStyle: 'band' } }, () =>
+    mergeOptions('qq', { ciStyle: 'curves' } as never)
+  );
+  assert.equal(explicit.kind === 'qq' ? explicit.ciStyle : null, 'curves');
+
+  // A style may pin a common key (the Q-Q dashed reference), after user defaults.
+  const dashed = withChartStyles({ qq: { lineDash: 'dashed' } }, () =>
+    withChartDefaults({ ...DEFAULT_CHART_DEFAULTS, lineDash: 'dotted' }, () =>
+      mergeOptions('qq', undefined)
+    )
+  );
+  assert.equal(dashed.lineDash, 'dashed');
+
+  // Styles are run-scoped: nothing leaks outside the builder.
+  const factory = factoryOptions('qq');
+  assert.equal(factory.kind === 'qq' ? factory.ciStyle : null, 'curves');
 });

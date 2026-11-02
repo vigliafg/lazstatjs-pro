@@ -99,7 +99,7 @@ const PRINT_CSS = `
     color: #0f172a;
   }
   [role="img"], [aria-label*="chart" i] { page-break-inside: avoid; }
-  button, [data-no-print] { display: none !important; }
+  button, [data-no-print], [data-no-export] { display: none !important; }
   @media print {
     body { padding: 0; }
     a { color: inherit; text-decoration: none; }
@@ -137,7 +137,7 @@ ${bodyHtml}
  */
 export const buildReportFromElement = (root: HTMLElement, meta: ReportMeta): string => {
   const clone = root.cloneNode(true) as HTMLElement;
-  clone.querySelectorAll('button, [data-no-print]').forEach((node) => node.remove());
+  clone.querySelectorAll('button, [data-no-print], [data-no-export]').forEach((node) => node.remove());
   clone.querySelectorAll('.output-separator').forEach((node) => node.remove());
   return buildReportDocument(clone.innerHTML, meta);
 };

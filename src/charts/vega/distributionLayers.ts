@@ -5,6 +5,7 @@ import { colorAt, themeFor } from './theme';
 import {
   axis,
   field,
+  lineStyle,
   num,
   pointMark,
   rowsOf,
@@ -94,8 +95,40 @@ export const histogramLayers = (chart: AnalysisChart, options: Extract<ChartOpti
       });
     }
   }
+  // Specification, target and mean references are vertical rules. A rule is
+  // drawn per row so a capability chart can show LSL, USL and target together.
+  rowsOf(chart, 'rules').forEach(row => {
+    layers.push({
+      data: { values: [row] },
+      mark: { type: 'rule', color: colorAt(options, 4), strokeDash: [4, 4], strokeWidth: 1 },
+      encoding: { x: { field: 'value', type: 'quantitative' } },
+    });
+  });
   return layers;
 };
+
+/**
+ * Probability-paper ticks of the normal Q-Q axis. The z column is the linear
+ * position used by the data, the p column the label shown on the bottom axis
+ * (the probability of a standard normal below that z).
+ */
+const QQ_AXIS_TICKS: readonly { z: number; p: string }[] = [
+  { z: -2.33, p: '0.01' },
+  { z: -1.64, p: '0.05' },
+  { z: -1.28, p: '0.10' },
+  { z: -0.67, p: '0.25' },
+  { z: 0, p: '0.50' },
+  { z: 0.67, p: '0.75' },
+  { z: 1.28, p: '0.90' },
+  { z: 1.64, p: '0.95' },
+  { z: 2.33, p: '0.99' },
+];
+
+const QQ_Z_VALUES = QQ_AXIS_TICKS.map(tick => tick.z);
+
+/** Map the numeric tick back to its probability label inside the axis. */
+const probabilityLabelExpr = (): string =>
+  QQ_AXIS_TICKS.map(tick => `datum.value === ${tick.z} ? '${tick.p}'`).join(' : ') + " : ''";
 
 export const qqLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'qq' }>): Spec[] => {
   const theme = themeFor(options);
@@ -103,17 +136,76 @@ export const qqLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { 
   const points = options.detrended
     ? detrendedQqRows(rowsOf(chart, 'points'), reference)
     : rowsOf(chart, 'points');
+  const showProbability = options.qqAxis === 'probability' || options.qqAxis === 'both';
+  const hasSecondScale = options.qqAxis === 'both' && !options.detrended;
+  const band = rowsOf(chart, 'band');
+  // The second (z) axis needs its own scale, so every layer states the same
+  // domain explicitly: otherwise the reference line, which starts slightly
+  // outside the points, would shift the two axes apart.
+  const domainValues = hasSecondScale
+    ? [...points, ...reference, ...(options.showCI && !options.detrended ? band : [])]
+        .map(row => num(row.x))
+        .filter(Number.isFinite)
+    : [];
+  const domain: [number, number] | undefined =
+    domainValues.length > 0
+      ? [Math.min(...domainValues), Math.max(...domainValues)]
+      : undefined;
+  const scale = domain ? { scale: { domain } } : {};
+  // Probability and z are the same axis: the linear scale keeps z, only the
+  // tick labels change, so the plotted positions never move.
+  const x: Spec = showProbability
+    ? {
+        field: 'x',
+        type: 'quantitative',
+        axis: {
+          ...axis(
+            options,
+            theme,
+            options.showXTitle ? field(chart, 'xLabel', '') : null,
+            options.gridX
+          ),
+          values: QQ_Z_VALUES,
+          labelExpr: probabilityLabelExpr(),
+        },
+      }
+    : xEncoding(chart, options, theme);
   const layers: Spec[] = [];
+  // With the second (top) x scale Vega-Lite gives every layer its own axis, so
+  // only the point layer keeps the bottom axis and the invisible layer carries
+  // the z-score one. Both scales pin the same explicit domain.
+  const xMain: Spec = { ...x, ...scale };
+  const quietX: Spec = hasSecondScale ? { ...xMain, axis: null } : xMain;
   if (options.showCI && !options.detrended) {
-    layers.push({
-      data: { values: rowsOf(chart, 'band') },
-      mark: { type: 'area', opacity: 0.15, color: colorAt(options, 0), line: false },
-      encoding: {
-        x: xEncoding(chart, options, theme),
-        y: { field: 'lo', type: 'quantitative', title: null },
-        y2: { field: 'hi' },
-      },
-    });
+    if (options.ciStyle === 'band') {
+      layers.push({
+        data: { values: band },
+        mark: { type: 'area', opacity: 0.15, color: colorAt(options, 0), line: false },
+        encoding: {
+          x: quietX,
+          y: { field: 'lo', type: 'quantitative', title: null },
+          y2: { field: 'hi' },
+        },
+      });
+    } else {
+      // JMP draws the envelope as two dotted curves instead of a filled band.
+      for (const bound of ['lo', 'hi'] as const) {
+        layers.push({
+          data: { values: band },
+          mark: {
+            type: 'line',
+            color: colorAt(options, 4),
+            strokeWidth: 1.5,
+            strokeDash: [2, 3],
+            opacity: 0.85,
+          },
+          encoding: {
+            x: quietX,
+            y: { field: bound, type: 'quantitative', title: null },
+          },
+        });
+      }
+    }
   }
   if (options.detrended) {
     layers.push({
@@ -124,14 +216,36 @@ export const qqLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { 
   } else if (options.showReference) {
     layers.push({
       data: { values: reference },
-      mark: { type: 'line', color: colorAt(options, 4), strokeWidth: options.lineWidth, strokeDash: [4, 4] },
-      encoding: { x: xEncoding(chart, options, theme), y: yEncoding(chart, options, theme) },
+      mark: lineStyle(options, colorAt(options, 4)),
+      encoding: { x: quietX, y: yEncoding(chart, options, theme) },
     });
   }
   layers.push({
     data: { values: points },
     mark: pointMark(options, theme),
-    encoding: { x: xEncoding(chart, options, theme), y: yEncoding(chart, options, theme) },
+    encoding: { x: xMain, y: yEncoding(chart, options, theme) },
   });
+  if (hasSecondScale) {
+    // Second x scale with the same domain: only carries the z-score axis on
+    // top, so the linear scale can stay in z while the bottom reads as p.
+    layers.push({
+      data: { values: points },
+      mark: { type: 'point', filled: true, opacity: 0, size: 0 },
+      encoding: {
+        x: {
+          field: 'x',
+          type: 'quantitative',
+          ...scale,
+          axis: {
+            ...axis(options, theme, null, options.gridX),
+            orient: 'top',
+            values: QQ_Z_VALUES,
+            format: '.2f',
+          },
+        },
+        y: yEncoding(chart, options, theme),
+      },
+    });
+  }
   return layers;
 };

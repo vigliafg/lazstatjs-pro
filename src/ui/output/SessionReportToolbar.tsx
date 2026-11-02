@@ -1,14 +1,20 @@
 import {
+  ChartScatter,
   Copy,
   Database,
+  Filter,
   Image,
+  Link2,
   RotateCcw,
   Table2,
   Trash2,
+  Unlink,
+  X,
 } from 'lucide-react';
 import { analysisLabel } from '../../analyses/registry';
 import { ToolbarButton } from '../../components/ToolbarButton';
 import { t } from '../../i18n';
+import type { LinkTool } from '../../components/charts/ChartLinkContext';
 
 interface SessionReportToolbarProps {
   analysisIds: readonly string[];
@@ -21,6 +27,15 @@ interface SessionReportToolbarProps {
   onCopy: () => void;
   onExportCharts: () => void;
   onExportXlsx: () => void;
+  linkMode: boolean;
+  linkTool: LinkTool;
+  linkCount: number;
+  hiddenCount: number;
+  onToggleLink: () => void;
+  onLinkTool: (tool: LinkTool) => void;
+  onClearLink: () => void;
+  onOpenFilter: () => void;
+  onOpenBuilder: () => void;
 }
 
 const actionClass =
@@ -41,6 +56,15 @@ export const SessionReportToolbar = ({
   onCopy,
   onExportCharts,
   onExportXlsx,
+  linkMode,
+  linkTool,
+  linkCount,
+  hiddenCount,
+  onToggleLink,
+  onLinkTool,
+  onClearLink,
+  onOpenFilter,
+  onOpenBuilder,
 }: SessionReportToolbarProps) => (
   <div
     className="flex flex-wrap items-center gap-1 border-b border-border bg-surface/70 px-1 py-1.5"
@@ -61,6 +85,81 @@ export const SessionReportToolbar = ({
         ))}
       </select>
     )}
+    <ToolbarButton
+      icon={linkMode ? Unlink : Link2}
+      label={t('chart.link.mode')}
+      size="sm"
+      labelVisibility="2xl"
+      className={linkMode ? 'px-2 bg-accent2/15 text-accent2' : actionClass}
+      onClick={onToggleLink}
+      title={t('chart.link.modeTitle')}
+      aria-label={t('chart.link.modeTitle')}
+      aria-pressed={linkMode}
+    />
+    {linkMode && (
+      <select
+        aria-label={t('chart.link.tool')}
+        value={linkTool}
+        onChange={event => onLinkTool(event.target.value as LinkTool)}
+        className="rounded border border-border2 bg-surface3 px-1.5 py-0.5 text-[10px] text-text2"
+      >
+        <option value="brush">{t('chart.link.brush')}</option>
+        <option value="lasso">{t('chart.link.lasso')}</option>
+      </select>
+    )}
+    {linkCount > 0 && (
+      <>
+        <span
+          className="font-mono text-[9px] text-accent2"
+          data-link-count
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {linkCount} {t('chart.link.selected')}
+        </span>
+        <button
+          type="button"
+          className="flex h-5 w-5 items-center justify-center rounded text-text3 hover:bg-border hover:text-text"
+          onClick={onClearLink}
+          title={t('chart.link.clear')}
+          aria-label={t('chart.link.clear')}
+        >
+          <X className="h-3 w-3" aria-hidden="true" />
+        </button>
+      </>
+    )}
+    {hiddenCount > 0 && (
+      <span
+        className="font-mono text-[9px] text-text3"
+        data-hidden-count
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {hiddenCount} {t('chart.link.hidden')}
+      </span>
+    )}
+    <ToolbarButton
+      icon={Filter}
+      label={t('filter.open')}
+      size="sm"
+      labelVisibility="2xl"
+      className={actionClass}
+      onClick={onOpenFilter}
+      title={t('filter.openTitle')}
+      aria-label={t('filter.openTitle')}
+    />
+    <ToolbarButton
+      icon={ChartScatter}
+      label={t('builder.open')}
+      size="sm"
+      labelVisibility="2xl"
+      className={actionClass}
+      onClick={onOpenBuilder}
+      title={t('builder.openTitle')}
+      aria-label={t('builder.openTitle')}
+    />
     <ToolbarButton
       icon={RotateCcw}
       label={t('output.rerunAll')}

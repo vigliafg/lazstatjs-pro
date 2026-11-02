@@ -1,7 +1,13 @@
 {
   "version": 1,
   "generatedBy": "samples/generate.R",
-  "formats": ["csv", "sav", "dta", "xlsx", "json"],
+  "formats": [
+    "csv",
+    "sav",
+    "dta",
+    "xlsx",
+    "json"
+  ],
   "datasets": [
     {
       "id": "iris",
@@ -29,13 +35,21 @@
         "distfit",
         "correlation",
         "multivariate",
-        "wizard"
+        "wizard",
+        "partition",
+        "cluster",
+        "discriminant"
       ],
       "examples": [
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "variables": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
@@ -47,13 +61,23 @@
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "variables": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "variables": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
@@ -92,7 +116,10 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Eruptions", "Waiting"]
+            "variables": [
+              "Eruptions",
+              "Waiting"
+            ]
           }
         },
         {
@@ -125,7 +152,8 @@
       "procedures": [
         "anova",
         "descriptive",
-        "wizard"
+        "wizard",
+        "quality"
       ],
       "examples": [
         {
@@ -217,7 +245,8 @@
       "procedures": [
         "factorial",
         "anova",
-        "ancova"
+        "ancova",
+        "quality"
       ],
       "examples": [
         {
@@ -335,7 +364,11 @@
         {
           "analysis": "nonparamrm",
           "columns": {
-            "selected": ["Before", "After", "Follow_up"]
+            "selected": [
+              "Before",
+              "After",
+              "Follow_up"
+            ]
           },
           "options": {
             "mode": "cochran"
@@ -377,20 +410,41 @@
         {
           "analysis": "repeatedanova",
           "columns": {
-            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+            "conditions": [
+              "Weight_0",
+              "Weight_4",
+              "Weight_8",
+              "Weight_12",
+              "Weight_16",
+              "Weight_20"
+            ]
           }
         },
         {
           "analysis": "mixedanova",
           "columns": {
             "group": "Diet",
-            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+            "conditions": [
+              "Weight_0",
+              "Weight_4",
+              "Weight_8",
+              "Weight_12",
+              "Weight_16",
+              "Weight_20"
+            ]
           }
         },
         {
           "analysis": "nonparamrm",
           "columns": {
-            "selected": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+            "selected": [
+              "Weight_0",
+              "Weight_4",
+              "Weight_8",
+              "Weight_12",
+              "Weight_16",
+              "Weight_20"
+            ]
           }
         }
       ],
@@ -427,26 +481,43 @@
       "procedures": [
         "regression",
         "correlation",
-        "descriptive"
+        "descriptive",
+        "partition",
+        "cluster",
+        "discriminant",
+        "doe"
       ],
       "examples": [
         {
           "analysis": "regression",
           "columns": {
             "dependent": "mpg",
-            "predictors": ["wt", "hp", "disp"]
+            "predictors": [
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["mpg", "wt", "hp", "disp"]
+            "variables": [
+              "mpg",
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["mpg", "wt", "hp"]
+            "variables": [
+              "mpg",
+              "wt",
+              "hp"
+            ]
           }
         }
       ],
@@ -488,20 +559,36 @@
           "analysis": "logistic",
           "columns": {
             "outcome": "Low",
-            "predictors": ["Age", "Lwt", "Smoke", "Ptl", "Ht", "Ui", "Bwt"]
+            "predictors": [
+              "Age",
+              "Lwt",
+              "Smoke",
+              "Ptl",
+              "Ht",
+              "Ui",
+              "Bwt"
+            ]
           }
         },
         {
           "analysis": "regression",
           "columns": {
             "dependent": "Bwt",
-            "predictors": ["Age", "Lwt", "Smoke"]
+            "predictors": [
+              "Age",
+              "Lwt",
+              "Smoke"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Age", "Lwt", "Bwt"]
+            "variables": [
+              "Age",
+              "Lwt",
+              "Bwt"
+            ]
           }
         }
       ],
@@ -540,13 +627,20 @@
           "analysis": "countreg",
           "columns": {
             "dependent": "Days",
-            "predictors": ["Age_num", "Sex_male", "Lrn_SL"]
+            "predictors": [
+              "Age_num",
+              "Sex_male",
+              "Lrn_SL"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Days", "Age_num"]
+            "variables": [
+              "Days",
+              "Age_num"
+            ]
           }
         }
       ],
@@ -584,13 +678,19 @@
           "analysis": "ordinal",
           "columns": {
             "outcome": "Sat_num",
-            "predictors": ["Infl_num", "Cont_num"]
+            "predictors": [
+              "Infl_num",
+              "Cont_num"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Sat_num", "Infl_num"]
+            "variables": [
+              "Sat_num",
+              "Infl_num"
+            ]
           }
         }
       ],
@@ -641,7 +741,10 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Weight", "Time"]
+            "variables": [
+              "Weight",
+              "Time"
+            ]
           }
         }
       ],
@@ -677,13 +780,23 @@
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+            "variables": [
+              "Murder",
+              "Assault",
+              "UrbanPop",
+              "Rape"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+            "variables": [
+              "Murder",
+              "Assault",
+              "UrbanPop",
+              "Rape"
+            ]
           }
         }
       ],
@@ -721,13 +834,29 @@
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
+            "variables": [
+              "rating",
+              "complaints",
+              "privileges",
+              "learning",
+              "raises",
+              "critical",
+              "advance"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
+            "variables": [
+              "rating",
+              "complaints",
+              "privileges",
+              "learning",
+              "raises",
+              "critical",
+              "advance"
+            ]
           }
         }
       ],
@@ -761,7 +890,10 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": ["Method_A", "Method_B"]
+            "columns": [
+              "Method_A",
+              "Method_B"
+            ]
           },
           "options": {
             "mode": "icc"
@@ -770,7 +902,10 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": ["Method_A", "Method_B"]
+            "columns": [
+              "Method_A",
+              "Method_B"
+            ]
           },
           "options": {
             "mode": "bland"
@@ -779,7 +914,10 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": ["Rater_A", "Rater_B"]
+            "columns": [
+              "Rater_A",
+              "Rater_B"
+            ]
           },
           "options": {
             "mode": "kappa",
@@ -837,7 +975,11 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "covariates": ["Age", "Sex_male", "Ph_ecog"]
+            "covariates": [
+              "Age",
+              "Sex_male",
+              "Ph_ecog"
+            ]
           }
         },
         {
@@ -845,7 +987,10 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "covariates": ["Age", "Ph_ecog"],
+            "covariates": [
+              "Age",
+              "Ph_ecog"
+            ],
             "stratum": "Sex"
           }
         },
@@ -854,7 +999,11 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "predictors": ["Age", "Sex_male", "Ph_ecog"]
+            "predictors": [
+              "Age",
+              "Sex_male",
+              "Ph_ecog"
+            ]
           }
         }
       ],
@@ -895,7 +1044,11 @@
             "start": "Start",
             "stop": "Stop",
             "event": "Event",
-            "covariates": ["Age", "Surgery", "Transplant"]
+            "covariates": [
+              "Age",
+              "Surgery",
+              "Transplant"
+            ]
           }
         },
         {
@@ -983,21 +1136,40 @@
         {
           "analysis": "mi",
           "columns": {
-            "variables": ["Ozone", "Solar_R", "Wind", "Temp"],
+            "variables": [
+              "Ozone",
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ],
             "outcome": "Ozone",
-            "predictors": ["Solar_R", "Wind", "Temp"]
+            "predictors": [
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
+            "variables": [
+              "Ozone",
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
+            "variables": [
+              "Ozone",
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ]
           }
         }
       ],

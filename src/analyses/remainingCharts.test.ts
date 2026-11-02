@@ -147,15 +147,20 @@ test('agreement, TOST, ANOVA, survival and selected time-series charts expose th
   );
   assert.ok((tost[0]?.data.regions ?? []).length === 1);
 
-  const anova = chartsOf(
-    buildAnovaOutput({
-      grid: anovaGrid,
-      anovaParams: { ...DEFAULT_PARAMS.anova, grp: 1 },
-      ciLevel: 95,
-    })
-  );
+  const anovaResult = buildAnovaOutput({
+    grid: anovaGrid,
+    anovaParams: { ...DEFAULT_PARAMS.anova, grp: 1 },
+    ciLevel: 95,
+  });
+  const anova = chartsOf(anovaResult);
   assert.ok(anova.some(chart => chart.id === 'anova-posthoc-forest'));
   assert.ok(anova.some(chart => chart.id === 'anova-residual-qq'));
+  if ('ok' in anovaResult && anovaResult.ok) {
+    const panel = anovaResult.panels?.[0];
+    assert.equal(panel?.id, 'panel-oneway');
+    assert.ok(panel?.children.some(child => child.id === 'anova-diamond'));
+    assert.ok(panel?.children.some(child => child.id === 'anova-circles'));
+  }
 
   const survivalGrid2 = {
     cols: [...numeric(['T']), { name: 'E', type: 'int' as const }, { name: 'G', type: 'cat' as const }],

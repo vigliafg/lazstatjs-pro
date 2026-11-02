@@ -305,6 +305,47 @@ export const areaTopics: HelpTopic[] = [
     seeAlso: ['analysis-workflow', 'projects'],
   },
   {
+    id: 'interaction',
+    area: 'output',
+    title: 'Enlace, pincel y filtro de datos',
+    summary: 'Selecciona filas en un gráfico y mantén las mismas observaciones resaltadas en todos los gráficos enlazados de la sesión.',
+    tutorial: {
+      goal: 'Comparar las mismas observaciones entre los gráficos de un mismo run-report.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Ejecuta un análisis que produzca gráficos de puntos, por ejemplo una regresión o un informe descriptivo.',
+        'Pulsa Enlazar en la barra de salida: cada gráfico que dibuja las filas individuales muestra la etiqueta Enlazar.',
+        'Elige pincel o lazo, arrastra sobre el gráfico para seleccionar observaciones y lee el contador N seleccionados.',
+        'Abre Filtro de datos para excluir filas por categoría o por umbral numérico; las filas ocultas siguen visibles pero atenuadas.',
+        'Pulsa Esc o Borrar selección para volver al gráfico completo; desactiva Enlazar para ocultar la capa de selección.',
+      ],
+      expected: 'Las filas seleccionadas permanecen opacas y las demás se atenúan; tablas, estadísticas y exportaciones conservan todas las filas.',
+    },
+    advanced: {
+      whenToUse: [
+        'Explorar qué observaciones impulsan un patrón y comparar los mismos casos entre gráficos.',
+        'Comprobar si un valor atípico de un gráfico es el mismo caso en otro.',
+      ],
+      whenNotToUse: [
+        'Probar una hipótesis: el enlace es una herramienta de exploración y nunca cambia las estadísticas.',
+      ],
+      reading: [
+        'Un gráfico solo ofrece enlace si dibuja las observaciones como símbolos: histogramas, curvas de densidad y líneas sin marcadores no tienen filas que seleccionar.',
+        'La clave de fila es la fila del conjunto de datos usado por la ejecución, no un identificador permanente: al cambiar de conjunto de datos se borra la selección.',
+        'El filtro de datos atenúa las filas en los gráficos enlazados pero no las elimina del análisis, las tablas ni el informe.',
+      ],
+      pitfalls: [
+        'La selección y las filas ocultas solo duran la sesión y no se guardan en el proyecto .lzs.',
+        'Exportar con una selección activa exporta igualmente todos los datos, sin la atenuación.',
+      ],
+      glossary: [
+        { term: 'Pincel', definition: 'Seleccionar observaciones arrastrando un rectángulo sobre el gráfico.' },
+        { term: 'Lazo', definition: 'Seleccionar observaciones dibujando alrededor un polígono libre.' },
+      ],
+    },
+    seeAlso: ['output-console', 'descriptive', 'regression'],
+  },
+  {
     id: 'projects',
     area: 'output',
     title: 'Guardar y reabrir un proyecto',

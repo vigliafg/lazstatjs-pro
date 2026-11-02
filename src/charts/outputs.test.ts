@@ -1,11 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { makeChart } from './kits/common';
+import { makePanel } from './panels';
 import {
   filterChartsByGroups,
+  filterPanelsByGroups,
   outputGroupOf,
   outputGroupsFor,
 } from './outputs';
+import type { PanelChart } from '../stats/charts';
 
 const chart = (id: string) =>
   makeChart({ id, kind: 'line', title: id, data: { series: [{ x: 1, y: 1 }] } });
@@ -44,6 +47,22 @@ test('unknown procedures and empty choices keep every chart', () => {
   assert.equal(outputGroupOf('unknown', 'anything'), null);
   assert.deepEqual(filterChartsByGroups('unknown', charts, ['diagnostic']), charts);
   assert.deepEqual(filterChartsByGroups('descriptive', charts, undefined), charts);
+});
+
+test('panels follow the group of the report they compose', () => {
+  const child = chart('reg-cooks');
+  const panel = (id: string): PanelChart =>
+    makePanel({ id, title: id, children: [child] }) as PanelChart;
+  const panels = [panel('panel-fit-model'), panel('panel-regression-diagnostics')];
+  assert.deepEqual(
+    filterPanelsByGroups('regression', panels, ['diagnostic'])?.map(item => item.id),
+    ['panel-fit-model']
+  );
+  assert.deepEqual(
+    filterPanelsByGroups('regression', panels, ['recommended'])?.map(item => item.id),
+    ['panel-regression-diagnostics']
+  );
+  assert.deepEqual(filterPanelsByGroups('unknown', panels, ['diagnostic']), panels);
 });
 
 test('only groups with charts are offered in the setup panel', () => {

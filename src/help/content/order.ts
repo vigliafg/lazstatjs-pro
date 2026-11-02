@@ -41,7 +41,13 @@ export const TOPIC_ORDER = [
   'mi',
   'samplesize',
   'resampling',
+  'partition',
+  'quality',
+  'cluster',
+  'discriminant',
+  'doe',
   'output-console',
+  'interaction',
   'projects',
   'appearance',
 ] as const;

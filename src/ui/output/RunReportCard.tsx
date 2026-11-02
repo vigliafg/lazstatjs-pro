@@ -17,7 +17,7 @@ import { ToolbarButton } from '../../components/ToolbarButton';
 import { HelpButton } from '../../help/HelpButton';
 import { topicForAnalysis } from '../../help/book';
 import { t } from '../../i18n';
-import type { ChartOptions } from '../../stats/charts';
+import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import { ExportMenu } from './ExportMenu';
 import type { OutputEntry } from './types';
 
@@ -44,6 +44,8 @@ export interface RunReportCardProps {
   onExportHtml: () => void;
   onExportWord: () => void;
   onUpdateChart?: (entryId: string, chartId: string, options: ChartOptions) => void;
+  /** Chart editor: append a copy of a chart to this run-report. */
+  onInsertChart?: (entryId: string, chart: AnalysisChart) => void;
 }
 
 const formatTime = (iso: string): string => {
@@ -76,6 +78,7 @@ export const RunReportCard = ({
   onExportHtml,
   onExportWord,
   onUpdateChart,
+  onInsertChart,
 }: RunReportCardProps) => {
   const title = output.analysisId
     ? analysisLabel(output.analysisId)
@@ -225,10 +228,14 @@ export const RunReportCard = ({
             warnings={output.session.warnings}
             callout={output.session.callout}
             charts={output.session.charts ?? output.charts}
+            panels={output.session.panels ?? output.panels}
             limitationsLabel={limitationsLabel}
             analysisName={output.title}
             onChartOptionsChange={(chartId, options) =>
               onUpdateChart?.(output.id, chartId, options)
+            }
+            onChartInsert={
+              onInsertChart ? chart => onInsertChart(output.id, chart) : undefined
             }
           />
         ) : (
@@ -237,18 +244,25 @@ export const RunReportCard = ({
               className="restored-output"
               dangerouslySetInnerHTML={{ __html: output.html }}
             />
-            {output.charts && output.charts.length > 0 && (
+            {((output.charts?.length ?? 0) > 0 || (output.panels?.length ?? 0) > 0) && (
               <AnalysisCharts
                 charts={output.charts}
+                panels={output.panels}
                 analysisName={output.title}
                 onOptionsChange={
                   onUpdateChart
                     ? (chartId, options) => onUpdateChart(output.id, chartId, options)
                     : undefined
                 }
+                onChartInsert={
+                  onInsertChart ? chart => onInsertChart(output.id, chart) : undefined
+                }
               />
             )}
-            {((output.chartOverflow ?? 0) > 0 || (output.chartOmitted ?? 0) > 0) && (
+            {((output.chartOverflow ?? 0) > 0 ||
+              (output.chartOmitted ?? 0) > 0 ||
+              (output.panelOverflow ?? 0) > 0 ||
+              (output.panelOmitted ?? 0) > 0) && (
               <p className="mt-2 text-[10px] text-yellow">{t('chart.notStored')}</p>
             )}
           </>

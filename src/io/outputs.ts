@@ -11,8 +11,8 @@
  */
 
 import { t } from '../i18n';
-import type { AnalysisChart } from '../stats/charts';
-import { parseChartModels } from '../charts/schema';
+import type { AnalysisChart, PanelChart } from '../stats/charts';
+import { parseChartModels, parsePanelModels } from '../charts/schema';
 
 export const MAX_STORED_OUTPUTS = 20;
 /** Total HTML kept in the project file / autosave (roughly 20 charts-heavy runs). */
@@ -47,10 +47,16 @@ export interface StoredOutput {
   html: string;
   /** Editable chart models; absent on legacy static cards. */
   charts?: AnalysisChart[];
+  /** L3 composite cards; stored separately so chart code stays unchanged. */
+  panels?: PanelChart[];
   /** Charts beyond the interface cap (not stored, shown as a note). */
   chartOverflow?: number;
   /** Charts dropped by the character budget (not stored). */
   chartOmitted?: number;
+  /** Panels beyond the interface cap (not stored, shown as a note). */
+  panelOverflow?: number;
+  /** Panels dropped by the character budget (not stored). */
+  panelOmitted?: number;
 }
 
 /** Fields that decide whether a card still matches the current session. */
@@ -117,7 +123,9 @@ export const extractOutputTitle = (html: string): string => {
 
 /** Keep the newest blocks that fit the count and character budget. */
 export const storedOutputChars = (entry: StoredOutput): number =>
-  entry.html.length + (entry.charts ? JSON.stringify(entry.charts).length : 0);
+  entry.html.length +
+  (entry.charts ? JSON.stringify(entry.charts).length : 0) +
+  (entry.panels ? JSON.stringify(entry.panels).length : 0);
 
 /**
  * Next stable number for a new card: one past the highest persisted number.
@@ -165,6 +173,18 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
       }
       charts = kept;
     }
+    let panels = Array.isArray(raw.panels) ? parsePanelModels(raw.panels) : [];
+    if (panels.length > 0) {
+      const kept: typeof panels = [];
+      let used = html.length + (charts.length > 0 ? JSON.stringify(charts).length : 0);
+      for (const panel of panels) {
+        const size = JSON.stringify(panel).length;
+        if (used + size > MAX_SINGLE_OUTPUT_CHARS) break;
+        kept.push(panel);
+        used += size;
+      }
+      panels = kept;
+    }
     entries.push({
       id: text(raw.id, `run-${entries.length + 1}`),
       title: text(raw.title, t('output.untitled')),
@@ -198,7 +218,14 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
       ...(typeof raw.chartOmitted === 'number' && Number.isInteger(raw.chartOmitted) && raw.chartOmitted > 0
         ? { chartOmitted: raw.chartOmitted }
         : {}),
+      ...(typeof raw.panelOverflow === 'number' && Number.isInteger(raw.panelOverflow) && raw.panelOverflow > 0
+        ? { panelOverflow: raw.panelOverflow }
+        : {}),
+      ...(typeof raw.panelOmitted === 'number' && Number.isInteger(raw.panelOmitted) && raw.panelOmitted > 0
+        ? { panelOmitted: raw.panelOmitted }
+        : {}),
       ...(charts.length > 0 ? { charts } : {}),
+      ...(panels.length > 0 ? { panels } : {}),
       html,
     });
   });

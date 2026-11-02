@@ -7,6 +7,7 @@ import type { Dataset } from '../../grid/types';
 import type { TimeSeriesParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import type { AnalysisChart, ChartRow } from '../../stats/charts';
+import { timeSeriesPanel } from '../../charts/panels';
 import { isFiniteNumber } from '../shared/numbers';
 
 export interface TimeSeriesInput {
@@ -317,12 +318,22 @@ export const buildTimeSeriesOutput = ({
 
   const header = `Series: ${grid.cols[variable]?.name ?? 'Y'} · ${values.length} observations · period ${period >= 2 ? period : 'none'}`;
 
+  // L3 time-series report: series/forecast, ACF/PACF and decomposition.
+  const seriesName = grid.cols[variable]?.name ?? 'Y';
+  const panel = timeSeriesPanel({
+    title: copy('Report delle serie temporali: {s1}', { s1: seriesName }),
+    subtitle: copy('{s1} osservazioni', { s1: values.length }),
+    charts,
+    tables,
+  });
+
   return {
     ok: true,
-    title: copy('Serie temporale: {s1}', { s1: grid.cols[variable]?.name ?? 'Y' }),
+    title: copy('Serie temporale: {s1}', { s1: seriesName }),
     tables,
     report: timeSeriesReport(tables, ciLevel),
     charts,
+    ...(panel ? { panels: [panel] } : {}),
     header,
   };
 };

@@ -114,4 +114,19 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.resampling.label': 'Resampling',
   'meta.analysis.resampling.description':
     'Permutations- und Bootstrap-Inferenz.',
+  'meta.analysis.partition.label': 'Partition',
+  'meta.analysis.partition.description':
+    'Regressionsbaum mit Teilungsregeln, Blattbericht und Variablenbedeutung.',
+  'meta.analysis.quality.label': 'Qualität (SPC)',
+  'meta.analysis.quality.description':
+    'Regelkarten, Prozessfähigkeit, Pareto und Variabilität.',
+  'meta.analysis.cluster.label': 'Clusteranalyse',
+  'meta.analysis.cluster.description':
+    'Hierarchisches Clustering mit Dendrogramm und Clusterprofilen.',
+  'meta.analysis.discriminant.label': 'Diskriminanz / MANOVA',
+  'meta.analysis.discriminant.description':
+    'Lineare Diskriminanzfunktionen, kanonisches Diagramm und einfaktorielle MANOVA.',
+  'meta.analysis.doe.label': 'Responsefläche (DOE)',
+  'meta.analysis.doe.description':
+    'Quadratische Responsefläche mit Konturplot und stationärem Punkt.',
 };

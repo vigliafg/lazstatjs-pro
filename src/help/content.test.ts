@@ -105,3 +105,29 @@ test('every chapter has topics and filesystem-safe ids', () => {
     }
   }
 });
+
+test('the L4 pages keep the same shape in every locale', () => {
+  const ids = ['partition', 'quality', 'cluster', 'discriminant', 'doe'];
+  const shape = (topic: (typeof BOOKS)[number]['topics'][number]) => ({
+    steps: topic.tutorial.steps.length,
+    assumptions: topic.advanced.assumptions?.length ?? 0,
+    whenToUse: topic.advanced.whenToUse.length,
+    whenNotToUse: topic.advanced.whenNotToUse?.length ?? 0,
+    reading: topic.advanced.reading?.length ?? 0,
+    pitfalls: topic.advanced.pitfalls?.length ?? 0,
+    charts: topic.advanced.charts?.length ?? 0,
+    glossary: topic.advanced.glossary?.length ?? 0,
+    seeAlso: topic.seeAlso?.length ?? 0,
+  });
+  const reference = BOOKS.find(book => book.locale === 'en');
+  assert.ok(reference);
+  for (const id of ids) {
+    const expected = reference.topics.find(topic => topic.id === id);
+    assert.ok(expected, `en: missing L4 page ${id}`);
+    for (const book of BOOKS) {
+      const topic = book.topics.find(entry => entry.id === id);
+      assert.ok(topic, `${book.locale}: missing L4 page ${id}`);
+      assert.deepEqual(shape(topic), shape(expected), `${book.locale}: L4 page ${id} differs`);
+    }
+  }
+});

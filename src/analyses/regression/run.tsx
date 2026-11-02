@@ -4,8 +4,9 @@ import { regressionTables } from '../../stats/regression';
 import { regressionReport } from '../../stats/report';
 import { calcNormalityTests, calcTheilSen } from '../../stats/kernels';
 import { copy } from '../../stats/reportCopy';
-import { makeChart, boxStats, qqBand } from '../../charts/kits/common';
+import { makeChart, boxRows, qqBand } from '../../charts/kits/common';
 import type { AnalysisChart, ChartRow } from '../../stats/charts';
+import { fitModelPanel, regressionDiagnosticPanel } from '../../charts/panels';
 import type { Dataset } from '../../grid/types';
 import type { RegParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -16,13 +17,20 @@ export interface RegressionRunInput {
   ciLevel: number;
 }
 
-const qqRows = (values: number[]): ChartRow[] => {
-  const sorted = [...values].filter(value => Number.isFinite(value)).sort((a, b) => a - b);
-  const n = sorted.length;
+const qqRows = (values: number[], keys?: string[]): ChartRow[] => {
+  const entries = values
+    .map((value, index) => ({ value, key: keys?.[index] }))
+    .filter(entry => Number.isFinite(entry.value) && (keys === undefined || entry.key !== undefined))
+    .sort((a, b) => a.value - b.value);
+  const n = entries.length;
   if (n < 3) return [];
-  return sorted.map((value, index) => {
+  return entries.map((entry, index) => {
     const p = (index + 1 - 0.375) / (n + 0.25);
-    return { x: jStat.normal.inv(p, 0, 1), y: value };
+    return {
+      x: jStat.normal.inv(p, 0, 1),
+      y: entry.value,
+      ...(entry.key !== undefined ? { __row: entry.key } : {}),
+    };
   });
 };
 
@@ -50,11 +58,15 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   const { dep, indeps, useNonParam } = regParams;
   if (indeps.length === 0) return { ok: false, reason: 'Select at least one predictor' };
 
-  const validRows = grid.rows.filter(row => {
-    const y = parseNum(row[dep]);
-    if (isNaN(y)) return false;
-    return indeps.every(idx => !isNaN(parseNum(row[idx])));
-  });
+  const validated = grid.rows
+    .map((row, index) => ({ row, index }))
+    .filter(entry => {
+      const y = parseNum(entry.row[dep]);
+      if (isNaN(y)) return false;
+      return indeps.every(idx => !isNaN(parseNum(entry.row[idx])));
+    });
+  const validRows = validated.map(entry => entry.row);
+  const validIndexes = validated.map(entry => String(entry.index));
 
   if (validRows.length <= indeps.length + 1) {
     return { ok: false, reason: 'Insufficient data for regression' };
@@ -70,6 +82,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   }
 
   const Y = validRows.map(row => parseNum(row[dep]));
+  const meanY = jStat.mean(Y);
   const X = validRows.map(row => [1, ...indeps.map(idx => parseNum(row[idx]))]);
   const n = Y.length;
   const k = indeps.length;
@@ -90,13 +103,13 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
       const xs = validRows.map(row => parseNum(row[indeps[0]]));
       const ys = Y;
       meanX = jStat.mean(xs);
-      const meanY = jStat.mean(ys);
+      const meanYValue = jStat.mean(ys);
       let sumXX = 0;
       let sumYY = 0;
       let sumXY = 0;
       for (let i = 0; i < n; i++) {
         const diffX = xs[i] - meanX;
-        const diffY = ys[i] - meanY;
+        const diffY = ys[i] - meanYValue;
         sumXX += diffX * diffX;
         sumYY += diffY * diffY;
         sumXY += diffX * diffY;
@@ -112,7 +125,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
         ];
       }
       const slope = sumXY / sumXX;
-      const intercept = meanY - slope * meanX;
+      const intercept = meanYValue - slope * meanX;
       coef = [intercept, slope];
       const residuals = ys.map((y, i) => y - (intercept + slope * xs[i]));
       const rss = residuals.reduce((sum, r) => sum + r * r, 0);
@@ -144,7 +157,11 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   }
 
   const scatterData = validRows
-    .map(row => ({ x: parseNum(row[indeps[0]]), y: parseNum(row[dep]) }))
+    .map((row, index) => ({
+      x: parseNum(row[indeps[0]]),
+      y: parseNum(row[dep]),
+      __row: validIndexes[index],
+    }))
     .filter(d => !isNaN(d.x) && !isNaN(d.y));
 
   let tsSlope = NaN;
@@ -186,26 +203,27 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
     const denominator = parameters * mse * Math.pow(1 - leverage[index], 2);
     return denominator > 0 ? (residual * residual * leverage[index]) / denominator : 0;
   });
-  const olsResidStats = boxStats(olsResids);
-  const residualSummary: ChartRow[] = olsResidStats
-    ? [{ category: 'OLS', n: olsResidStats.n, min: olsResidStats.min, q1: olsResidStats.q1, median: olsResidStats.median, q3: olsResidStats.q3, max: olsResidStats.max, mean: olsResidStats.mean }]
-    : [];
-  const residualPoints: ChartRow[] = olsResids.map(value => ({ category: 'OLS', value }));
-  const residualOutliers: ChartRow[] = (olsResidStats?.outliers ?? []).map(value => ({ category: 'OLS', value }));
-
+  // One source of truth for the residual box: the same summary builder used by
+  // every other box chart, so the JMP-like fields (p10/p90, mean CI) are present.
+  const residualGroups: { category: string; values: number[]; keys?: string[] }[] = [
+    { category: 'OLS', values: olsResids, keys: validIndexes },
+  ];
   if (useNonParam && k === 1 && Number.isFinite(tsSlope)) {
     const tsResids = scatterData.map(d => d.y - (tsIntercept + tsSlope * d.x));
-    const stats = boxStats(tsResids);
-    if (stats) {
-      residualSummary.push({ category: 'Theil-Sen', n: stats.n, min: stats.min, q1: stats.q1, median: stats.median, q3: stats.q3, max: stats.max, mean: stats.mean });
-      tsResids.forEach(value => residualPoints.push({ category: 'Theil-Sen', value }));
-      stats.outliers.forEach(value => residualOutliers.push({ category: 'Theil-Sen', value }));
-    }
+    residualGroups.push({
+      category: 'Theil-Sen',
+      values: tsResids,
+      keys: scatterData.map(d => String(d.__row)),
+    });
     tsLineData = [
       { x: Math.min(...scatterData.map(d => d.x)), y: tsIntercept + tsSlope * Math.min(...scatterData.map(d => d.x)) },
       { x: Math.max(...scatterData.map(d => d.x)), y: tsIntercept + tsSlope * Math.max(...scatterData.map(d => d.x)) },
     ];
   }
+  const residualBox = boxRows(residualGroups);
+  const residualSummary = residualBox.summary;
+  const residualPoints = residualBox.points;
+  const residualOutliers = residualBox.outliers;
 
   const minX = scatterData.length ? Math.min(...scatterData.map(d => d.x)) : 0;
   const maxX = scatterData.length ? Math.max(...scatterData.map(d => d.x)) : 1;
@@ -258,16 +276,24 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
           equationShort: `y = ${coef[0].toFixed(2)} + ${coef[1].toFixed(2)}·x`,
           r2: Number(R2.toFixed(4)),
           n,
+          meanY,
         },
         options: {
           fit: useNonParam ? 'both' : 'ols',
-          band: 'none',
         } as never,
       })
     );
   } else {
-    const observedVsFitted = Y.map((value, index) => ({ x: fitted[index], y: value }));
-    const residualVsFitted = fitted.map((value, index) => ({ x: value, y: olsResids[index] }));
+    const observedVsFitted = Y.map((value, index) => ({
+      x: fitted[index],
+      y: value,
+      __row: validIndexes[index],
+    }));
+    const residualVsFitted = fitted.map((value, index) => ({
+      x: value,
+      y: olsResids[index],
+      __row: validIndexes[index],
+    }));
     const all = [...fitted, ...Y];
     const min = all.length ? Math.min(...all) : 0;
     const max = all.length ? Math.max(...all) : 1;
@@ -280,6 +306,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
         note: copy('La diagonale rappresenta la corrispondenza perfetta tra valori osservati e stimati.'),
         data: { points: observedVsFitted, fit: [{ x: min, y: min }, { x: max, y: max }] },
         fields: { xLabel: copy('Valori stimati'), yLabel: copy('Valori osservati') },
+        stats: { meanY, n },
         options: { fit: 'ols', band: 'none' } as never,
       }),
       makeChart({
@@ -290,13 +317,18 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
         note: copy('Una nuvola senza struttura è coerente con l’ipotesi di residui omoschedastici.'),
         data: { points: residualVsFitted, rules: [{ y: 0 }] },
         fields: { xLabel: copy('Valori stimati'), yLabel: copy('Residui') },
+        stats: { residSd: residualSd, n },
         options: { showPoints: true, showZeroLine: true } as never,
       })
     );
   }
 
   const scaleLocation = fitted
-    .map((value, index) => ({ x: value, y: Math.sqrt(Math.abs(standardizedResiduals[index])) }))
+    .map((value, index) => ({
+      x: value,
+      y: Math.sqrt(Math.abs(standardizedResiduals[index])),
+      __row: validIndexes[index],
+    }))
     .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
   if (scaleLocation.length > 0) {
     charts.push(
@@ -313,7 +345,11 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
     );
   }
   const leveragePoints = leverage
-    .map((value, index) => ({ x: value, y: standardizedResiduals[index] }))
+    .map((value, index) => ({
+      x: value,
+      y: standardizedResiduals[index],
+      __row: validIndexes[index],
+    }))
     .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
   if (leveragePoints.length > 0) {
     charts.push(
@@ -339,6 +375,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   const cookPoints = cookDistances.map((value, index) => ({
     x: index + 1,
     y: value,
+    __row: validIndexes[index],
     ...(labelled.has(index) ? { label: `#${index + 1}` } : {}),
   }));
   charts.push(
@@ -360,7 +397,11 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
     const points = validRows
       .map((row, index) => {
         const centered = parseNum(row[indeps[position]]) - predMeans[position];
-        return { x: centered, y: olsResids[index] + slope * centered };
+        return {
+          x: centered,
+          y: olsResids[index] + slope * centered,
+          __row: validIndexes[index],
+        };
       })
       .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
     if (points.length === 0) continue;
@@ -392,7 +433,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
     })
   );
 
-  const qqPoints = qqRows(olsResids);
+  const qqPoints = qqRows(olsResids, validIndexes);
   if (qqPoints.length > 0) {
     const qqLine = qqReference(qqPoints);
     charts.push(
@@ -409,11 +450,30 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
     );
   }
 
+  // L3 Fit Model and diagnostic reports share the same fitted model; they only
+  // arrange the already-computed plots. Missing panels degrade to the charts.
+  const fitModel = fitModelPanel({
+    title: copy('Pannello Fit Model: {s1}', { s1: depName }),
+    subtitle: copy('N = {s1}', { s1: n }),
+    charts,
+    tables,
+  });
+  const diagnostics = regressionDiagnosticPanel({
+    title: copy('Pannello diagnostico di regressione: {s1}', { s1: depName }),
+    subtitle: copy('N = {s1}', { s1: n }),
+    charts,
+    tables,
+  });
+  const panels = [fitModel, diagnostics].filter(
+    (panel): panel is NonNullable<typeof panel> => panel !== null
+  );
+
   return {
     ok: true,
     title: copy('Regressione lineare e stimatori robusti: {s1}', { s1: depName }),
     tables,
     report,
     charts,
+    ...(panels.length > 0 ? { panels } : {}),
   };
 };

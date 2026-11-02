@@ -19,7 +19,9 @@ export const awaitChartsReady = async (
   root: ParentNode,
   options: { timeoutMs?: number; intervalMs?: number } = {}
 ): Promise<ChartsReadyResult> => {
-  const timeoutMs = options.timeoutMs ?? 5000;
+  // Panels render the same charts twice (standalone and inside a composite
+  // card), so a full run has more Vega views to settle than the old flat list.
+  const timeoutMs = options.timeoutMs ?? 10_000;
   const intervalMs = options.intervalMs ?? 50;
   const surfaces = Array.from(root.querySelectorAll('[data-chart-surface]'));
   const started = Date.now();

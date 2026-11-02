@@ -14,6 +14,7 @@ import { RunControl } from './RunControl';
 import { t } from '../../i18n';
 import { AnalysisHeader } from './AnalysisHeader';
 import { ChartOutputs } from './ChartOutputs';
+import { ChartStyleOverrides } from './ChartStyles';
 import { AnalysisForm } from './AnalysisForm';
 
 const inputClass =
@@ -387,6 +388,19 @@ export const AnalysisOptions = (p: AnalysisTabProps & { paneId?: string }) => {
               p.setHiddenChartGroups(previous => {
                 const updated = { ...previous };
                 if (next.length > 0) updated[p.activeAnalysis] = next;
+                else delete updated[p.activeAnalysis];
+                return updated;
+              });
+            }}
+          />
+
+          <ChartStyleOverrides
+            analysisId={p.activeAnalysis}
+            overrides={p.chartStyleOverrides[p.activeAnalysis] ?? {}}
+            onChange={next => {
+              p.setChartStyleOverrides(previous => {
+                const updated = { ...previous };
+                if (Object.keys(next).length > 0) updated[p.activeAnalysis] = next;
                 else delete updated[p.activeAnalysis];
                 return updated;
               });

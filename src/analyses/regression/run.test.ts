@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildRegressionOutput } from './run';
+import { applyChartStyle, stylesFor } from '../../charts/styles';
 
 const grid = {
   cols: [
@@ -67,6 +68,14 @@ test('regression adds leverage, scale-location, Cook and partial residual diagno
   assert.ok(leveragePoints.every(row => Number(row.x) >= 0 && Number(row.x) <= 1));
   assert.deepEqual(leverage?.data.rules?.map(row => row.y), [-2, 2]);
 
+  const panels = result.panels ?? [];
+  assert.deepEqual(panels.map(panel => panel.id), [
+    'panel-fit-model',
+    'panel-regression-diagnostics',
+  ]);
+  assert.ok(panels[0].children.some(child => child.id === 'reg-observed-fitted'));
+  assert.ok(panels[1].children.some(child => child.id === 'reg-cooks'));
+
   const partial = (result.charts ?? []).find(chart => chart.id === 'reg-partial-1');
   assert.equal(partial?.kind, 'scatter');
   assert.ok((partial?.data.points ?? []).length > 0);
@@ -85,4 +94,25 @@ test('a single-predictor regression also exposes the full diagnostic panel', () 
   assert.ok(ids.includes('reg-scale-location'));
   assert.ok(ids.includes('reg-partial-1'));
   assert.equal(ids.includes('reg-partial-2'), false);
+
+  const scatter = (result.charts ?? []).find(chart => chart.id === 'reg-scatter');
+  assert.ok(Number.isFinite(scatter?.stats?.meanY));
+  assert.equal(scatter?.options.kind, 'scatter');
+  assert.equal(scatter?.options.kind === 'scatter' ? scatter.options.band : null, 'none');
+  assert.ok((scatter?.data.grid ?? []).every(row => Number.isFinite(row.seMean)));
+
+  const jmp = stylesFor('scatter').find(style => style.id === 'jmp-regression');
+  assert.ok(jmp);
+  const styled = applyChartStyle(scatter!.options, jmp!);
+  assert.equal(styled.kind === 'scatter' ? styled.band : null, 'ci');
+});
+
+test('observed vs fitted exposes meanY but not a k>=2 confidence band', () => {
+  const result = buildRegressionOutput(base);
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  const chart = (result.charts ?? []).find(item => item.id === 'reg-observed-fitted');
+  assert.ok(Number.isFinite(chart?.stats?.meanY));
+  assert.equal(chart?.data.grid, undefined);
+  assert.equal(chart?.options.kind === 'scatter' ? chart.options.band : null, 'none');
 });

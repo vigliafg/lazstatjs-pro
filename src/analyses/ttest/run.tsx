@@ -98,7 +98,7 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           subtitle: copy('Valore test μ = {s1}', { s1: mu }),
           note: copy('La linea tratteggiata è il valore di test; la media osservata è il punto.'),
           data: (() => {
-            const box = boxRows([{ category: grid.cols[var1].name, values: a1 }]);
+            const box = boxRows([{ category: grid.cols[var1].name, values: a1 }], { level: ciLevel });
             return { summary: box.summary, points: box.points, outliers: box.outliers, rules: [{ y: mu }] };
           })(),
           fields: { xLabel: copy('Campione'), yLabel: grid.cols[var1].name },
@@ -121,10 +121,24 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           },
           fields: { xLabel: copy('Campione'), yLabel: grid.cols[var1].name },
           options: { valueLabels: true } as never,
+        }),
+        makeChart({
+          id: 'ttest-one-diamond',
+          kind: 'diamond',
+          title: copy('Diamante della media'),
+          subtitle: copy('IC {s1}% e stima puntuale', { s1: ciLevel }),
+          note: copy('Il diamante è centrato sulla media; la sua ampiezza segue l’intervallo di confidenza.'),
+          data: {
+            intervals: [
+              { category: grid.cols[var1].name, estimate: oneCi.mean, lo: oneCi.lo, hi: oneCi.hi },
+            ],
+          },
+          fields: { xLabel: copy('Campione'), yLabel: grid.cols[var1].name },
+          options: { scaleToCI: true, showLabels: true } as never,
         })
       );
       if (useNonParam && !isNaN(wilcox.wStat)) {
-        const box = boxRows([{ category: grid.cols[var1].name, values: a1 }]);
+        const box = boxRows([{ category: grid.cols[var1].name, values: a1 }], { level: ciLevel });
         charts.push(
           makeChart({
             id: 'ttest-one-rank',
@@ -244,10 +258,13 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
         useNonParam,
       });
 
-      const box = boxRows([
-        { category: grid.cols[var1].name, values: a1 },
-        { category: grid.cols[var2].name, values: a2 },
-      ]);
+      const box = boxRows(
+        [
+          { category: grid.cols[var1].name, values: a1 },
+          { category: grid.cols[var2].name, values: a2 },
+        ],
+        { level: ciLevel }
+      );
       charts = [
         makeChart({
           id: 'ttest-ind-box',
@@ -277,13 +294,31 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           },
           fields: { xLabel: copy('Gruppo'), yLabel: copy('Media') },
           options: { valueLabels: true } as never,
+        }),
+        makeChart({
+          id: 'ttest-ind-diamond',
+          kind: 'diamond',
+          title: copy('Diamanti delle medie'),
+          subtitle: copy('IC {s1}% per gruppo', { s1: ciLevel }),
+          note: copy('Ogni diamante è centrato sulla media del gruppo; l’ampiezza segue l’intervallo di confidenza.'),
+          data: {
+            intervals: [
+              { category: grid.cols[var1].name, estimate: c1.mean, lo: c1.lo, hi: c1.hi },
+              { category: grid.cols[var2].name, estimate: c2.mean, lo: c2.lo, hi: c2.hi },
+            ],
+          },
+          fields: { xLabel: copy('Gruppo'), yLabel: copy('Media') },
+          options: { scaleToCI: true, showLabels: true } as never,
         })
       );
       if (useNonParam && !isNaN(mw.uStat)) {
-        const rankBox = boxRows([
-          { category: grid.cols[var1].name, values: ranks1 },
-          { category: grid.cols[var2].name, values: ranks2 },
-        ]);
+        const rankBox = boxRows(
+          [
+            { category: grid.cols[var1].name, values: ranks1 },
+            { category: grid.cols[var2].name, values: ranks2 },
+          ],
+          { level: ciLevel }
+        );
         charts.push(
           makeChart({
             id: 'ttest-ind-rank',
@@ -362,10 +397,13 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
         useNonParam,
       });
 
-      const box = boxRows([
-        { category: grid.cols[var1].name, values: paired.a },
-        { category: grid.cols[var2].name, values: paired.b },
-      ]);
+      const box = boxRows(
+        [
+          { category: grid.cols[var1].name, values: paired.a },
+          { category: grid.cols[var2].name, values: paired.b },
+        ],
+        { level: ciLevel }
+      );
       charts = [
         makeChart({
           id: 'ttest-dep-box',
@@ -394,10 +432,26 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           },
           fields: { xLabel: copy('Confronto'), yLabel: copy('Differenza media') },
           options: { valueLabels: true } as never,
+        }),
+        makeChart({
+          id: 'ttest-dep-diamond',
+          kind: 'diamond',
+          title: copy('Diamante della differenza media'),
+          subtitle: copy('IC {s1}% e stima puntuale', { s1: ciLevel }),
+          note: copy('Il diamante è centrato sulla differenza media; l’ampiezza segue l’intervallo di confidenza.'),
+          data: {
+            intervals: [
+              { category: copy('Differenze'), estimate: diffCi.mean, lo: diffCi.lo, hi: diffCi.hi },
+            ],
+          },
+          fields: { xLabel: copy('Confronto'), yLabel: copy('Differenza media') },
+          options: { scaleToCI: true, showLabels: true } as never,
         })
       );
       if (useNonParam && !isNaN(wilcox.wStat)) {
-        const diffBox = boxRows([{ category: copy('Differenze'), values: diffs }]);
+        const diffBox = boxRows([{ category: copy('Differenze'), values: diffs }], {
+          level: ciLevel,
+        });
         charts.push(
           makeChart({
             id: 'ttest-dep-diff',

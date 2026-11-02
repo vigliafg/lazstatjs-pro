@@ -310,6 +310,47 @@ export const areaTopics: HelpTopic[] = [
     seeAlso: ["analysis-workflow", "projects"],
   },
   {
+    id: "interaction",
+    area: "output",
+    title: "Verknüpfen, Pinsel und Datenfilter",
+    summary: "Wählen Sie Zeilen in einem Diagramm aus und behalten Sie dieselben Beobachtungen in jedem verknüpften Diagramm der Sitzung hervorgehoben.",
+    tutorial: {
+      goal: "Dieselben Beobachtungen über die Diagramme eines Ergebnisberichts hinweg vergleichen.",
+      dataset: "score-groups.csv",
+      steps: [
+        "Führen Sie eine Analyse aus, die Punktdiagramme erzeugt, zum Beispiel eine Regression oder einen deskriptiven Bericht.",
+        "Drücken Sie Verknüpfen in der Ausgabewerkzeugleiste: Jedes Diagramm, das einzelne Zeilen zeichnet, zeigt die Verknüpfen-Marke.",
+        "Wählen Sie Pinsel oder Lasso, ziehen Sie im Diagramm, um Beobachtungen auszuwählen, und lesen Sie den Zähler N ausgewählt.",
+        "Öffnen Sie Datenfilter, um Zeilen nach Kategorie oder numerischem Schwellenwert auszuschließen; ausgeblendete Zeilen bleiben sichtbar, aber blasser.",
+        "Drücken Sie Esc oder Auswahl aufheben, um zum vollständigen Diagramm zurückzukehren; schalten Sie Verknüpfen aus, um die Auswahlfläche zu verbergen.",
+      ],
+      expected: "Ausgewählte Zeilen bleiben deckend, die übrigen werden blasser; Tabellen, Statistiken und Exporte behalten alle Zeilen.",
+    },
+    advanced: {
+      whenToUse: [
+        "Untersuchen, welche Beobachtungen ein Muster prägen, und dieselben Fälle zwischen Diagrammen vergleichen.",
+        "Prüfen, ob ein Ausreißer in einem Diagramm derselbe Fall in einem anderen ist.",
+      ],
+      whenNotToUse: [
+        "Eine Hypothese testen: Verknüpfen ist ein Erkundungswerkzeug und ändert nie die Statistiken.",
+      ],
+      reading: [
+        "Ein Diagramm bietet Verknüpfen nur, wenn es Beobachtungen als Symbole zeichnet: Histogramme, Dichtekurven und Linien ohne Marker haben keine Zeilen zum Auswählen.",
+        "Der Zeilenschlüssel ist die Zeile des vom Lauf verwendeten Datensatzes, keine dauerhafte Kennung: Beim Datensatzwechsel wird die Auswahl gelöscht.",
+        "Der Datenfilter blendet Zeilen in verknüpften Diagrammen ab, entfernt sie aber nicht aus der Analyse, den Tabellen oder dem Bericht.",
+      ],
+      pitfalls: [
+        "Auswahl und ausgeblendete Zeilen gelten nur für die Sitzung und werden nicht im .lzs-Projekt gespeichert.",
+        "Beim Export mit aktiver Auswahl werden trotzdem alle Daten ohne Abdunklung exportiert.",
+      ],
+      glossary: [
+        { term: "Pinsel", definition: "Beobachtungen auswählen, indem ein Rechteck über das Diagramm gezogen wird." },
+        { term: "Lasso", definition: "Beobachtungen auswählen, indem ein freies Polygon um sie herum gezeichnet wird." },
+      ],
+    },
+    seeAlso: ["output-console", "descriptive", "regression"],
+  },
+  {
     id: "projects",
     area: "output",
     title: "Ein Projekt speichern und erneut öffnen",

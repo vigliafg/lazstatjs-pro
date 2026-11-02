@@ -1,5 +1,5 @@
 import { sanitizeOutputHtml, type StoredOutput } from '../../io/outputs';
-import type { AnalysisChart } from '../../stats/charts';
+import type { AnalysisChart, PanelChart } from '../../stats/charts';
 import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
 
@@ -11,6 +11,8 @@ export interface SessionOutputBody {
   warnings?: string[];
   /** Complete chart list for the session; persistence keeps the capped one. */
   charts?: AnalysisChart[];
+  /** L3 composite cards rendered after the individual charts. */
+  panels?: PanelChart[];
   callout?: {
     title: string;
     badge?: string;

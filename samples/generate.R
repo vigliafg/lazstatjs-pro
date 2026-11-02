@@ -85,13 +85,16 @@ write_dataset(
   "descriptive", "iris", iris_data,
   "Iris measurements",
   "datasets::iris (R)",
-  c("descriptive", "distfit", "correlation", "multivariate", "wizard"),
+  c("descriptive", "distfit", "correlation", "multivariate", "wizard", "partition", "cluster", "discriminant"),
   list(
     example("descriptive", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
     example("distfit", list(variable = "Sepal_Length")),
     example("correlation", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
     example("multivariate", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
-    example("wizard", list(outcome = "Sepal_Length", group = "Species"))
+    example("wizard", list(outcome = "Sepal_Length", group = "Species")),
+    example("partition", list(response = "Sepal_Length", predictors = c("Sepal_Width", "Petal_Length", "Petal_Width"))),
+    example("cluster", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
+    example("discriminant", list(group = "Species", predictors = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width")))
   ),
   "The canonical classification dataset: four continuous flower measurements and a three-level species label."
 )
@@ -120,11 +123,12 @@ write_dataset(
   "compare", "plantgrowth", plant_growth,
   "Plant growth by treatment",
   "datasets::PlantGrowth (R)",
-  c("anova", "descriptive", "wizard"),
+  c("anova", "descriptive", "wizard", "quality"),
   list(
     example("anova", list(dependent = "weight", group = "group")),
     example("descriptive", list(variables = "weight")),
-    example("wizard", list(outcome = "weight", group = "group"))
+    example("wizard", list(outcome = "weight", group = "group")),
+    example("quality", list(variable = "weight", group = "group"))
   ),
   "One factor with three levels (ctrl, trt1, trt2) and a continuous weight outcome."
 )
@@ -155,11 +159,12 @@ write_dataset(
   "compare", "toothgrowth", tooth_data,
   "Tooth growth by supplement and dose",
   "datasets::ToothGrowth (R)",
-  c("factorial", "anova", "ancova"),
+  c("factorial", "anova", "ancova", "quality"),
   list(
     example("factorial", list(response = "Length", factorA = "Supplement", factorB = "Dose")),
     example("anova", list(dependent = "Length", group = "Supplement")),
-    example("ancova", list(response = "Length", factor = "Supplement", covariates = "Dose_num"))
+    example("ancova", list(response = "Length", factor = "Supplement", covariates = "Dose_num")),
+    example("quality", list(variable = "Length", group = "Supplement"))
   ),
   "A two-factor design (supplement x dose) with the numeric dose kept as a covariate in Dose_num."
 )
@@ -255,11 +260,15 @@ write_dataset(
   "regression", "mtcars", mtcars_sample,
   "Motor Trend car road tests",
   "datasets::mtcars (R)",
-  c("regression", "correlation", "descriptive"),
+  c("regression", "correlation", "descriptive", "partition", "cluster", "discriminant", "doe"),
   list(
     example("regression", list(dependent = "mpg", predictors = c("wt", "hp", "disp"))),
     example("correlation", list(variables = c("mpg", "wt", "hp", "disp"))),
-    example("descriptive", list(variables = c("mpg", "wt", "hp")))
+    example("descriptive", list(variables = c("mpg", "wt", "hp"))),
+    example("partition", list(response = "mpg", predictors = c("wt", "hp", "disp"))),
+    example("cluster", list(variables = c("mpg", "wt", "hp", "disp"))),
+    example("discriminant", list(group = "am", predictors = c("mpg", "wt", "hp", "disp"))),
+    example("doe", list(response = "mpg", factorA = "hp", factorB = "wt"))
   ),
   "The classic 32-car dataset: continuous performance and design measures plus binary and count codes."
 )

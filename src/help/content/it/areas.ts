@@ -309,6 +309,47 @@ export const areaTopics: HelpTopic[] = [
     seeAlso: ['analysis-workflow', 'projects'],
   },
   {
+    id: 'interaction',
+    area: 'output',
+    title: 'Collegamento, pennello e filtro dati',
+    summary: 'Seleziona le righe in un grafico e ritrova le stesse osservazioni evidenziate in ogni grafico collegato della sessione.',
+    tutorial: {
+      goal: 'Confrontare le stesse osservazioni tra i grafici di uno stesso run-report.',
+      dataset: 'score-groups.csv',
+      steps: [
+        'Esegui un’analisi che produce grafici a punti, per esempio una regressione o un report descrittivo.',
+        'Premi Collega nella barra dell’output: ogni grafico che disegna le singole righe mostra il chip Collega.',
+        'Scegli pennello o lazo, trascina sul grafico per selezionare le osservazioni e leggi il conteggio N selezionati.',
+        'Apri Filtro dati per escludere righe per categoria o per soglia numerica; le righe nascoste restano visibili ma attenuate.',
+        'Premi Esc o Annulla selezione per tornare al grafico completo; disattiva Collega per nascondere il livello di selezione.',
+      ],
+      expected: 'Le righe selezionate restano piene e le altre si attenuano; tabelle, statistiche ed export conservano tutte le righe.',
+    },
+    advanced: {
+      whenToUse: [
+        'Per esplorare quali osservazioni guidano un andamento e confrontare gli stessi casi tra grafici.',
+        'Per verificare se un valore anomalo in un grafico è lo stesso caso in un altro.',
+      ],
+      whenNotToUse: [
+        'Per verificare un’ipotesi: il collegamento è uno strumento esplorativo e non cambia le statistiche.',
+      ],
+      reading: [
+        'Un grafico offre il collegamento solo se disegna le osservazioni come simboli: istogrammi, curve di densità e linee senza marker non hanno righe da selezionare.',
+        'La chiave di riga è la riga del dataset usata dal run, non un identificativo permanente: cambiando dataset la selezione viene azzerata.',
+        'Il filtro dati attenua le righe nei grafici collegati ma non le rimuove dall’analisi, dalle tabelle o dal report.',
+      ],
+      pitfalls: [
+        'Selezione e righe nascoste valgono solo per la sessione e non vengono salvate nel progetto .lzs.',
+        'Esportando con una selezione attiva si esportano comunque tutti i dati, senza l’attenuazione.',
+      ],
+      glossary: [
+        { term: 'Pennello', definition: 'Selezionare le osservazioni trascinando un rettangolo sul grafico.' },
+        { term: 'Lazo', definition: 'Selezionare le osservazioni disegnando intorno a esse un poligono libero.' },
+      ],
+    },
+    seeAlso: ['output-console', 'descriptive', 'regression'],
+  },
+  {
     id: 'projects',
     area: 'output',
     title: 'Salvare e riaprire un progetto',

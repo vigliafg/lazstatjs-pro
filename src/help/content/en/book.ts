@@ -3,6 +3,7 @@ import { orderTopics } from '../order';
 import { areaTopics } from './areas';
 import { coreTopics } from './procedures-core';
 import { moreTopics } from './procedures-more';
+import { l4Topics } from '../l4';
 
 import { chartGuides } from './charts';
 
@@ -47,7 +48,7 @@ export const enBook: HelpBook = {
     updated: 'Handbook aligned with the current features of the program',
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

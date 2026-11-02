@@ -9,8 +9,9 @@ import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
 import type { AnalysisRunResult } from '../types';
 import { copy } from '../../stats/reportCopy';
-import { makeChart, boxRows, qqBand } from '../../charts/kits/common';
-import type { AnalysisChart } from '../../stats/charts';
+import { makeChart, boxRows, confidenceEllipse, qqBand } from '../../charts/kits/common';
+import { distributionPanel } from '../../charts/panels';
+import type { AnalysisChart, ChartRow } from '../../stats/charts';
 
 export interface DescriptiveInput {
   rows: readonly (readonly string[])[];
@@ -32,7 +33,11 @@ export type DescriptiveOutputResult = AnalysisRunResult;
 export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutputResult => {
     const results = input.indices.map(vIdx => {
       const name = input.columnNames[vIdx] ?? `Var${vIdx + 1}`;
-      const data = input.rows.map(r => parseNum(r[vIdx])).filter(v => !isNaN(v));
+      const numeric = input.rows
+        .map((row, index) => ({ value: parseNum(row[vIdx]), index }))
+        .filter(item => !isNaN(item.value));
+      const data = numeric.map(item => item.value);
+      const dataKeys = numeric.map(item => String(item.index));
       if (data.length === 0) return null;
 
       const n = data.length;
@@ -56,13 +61,16 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
       const lilliefors = lillieforsTest(data);
 
       // Q-Q Plot calculations
-      const sortedData = [...data].sort((a, b) => a - b);
-      const qqData = sortedData.map((val, idx) => {
+      const sortedEntries = data
+        .map((value, index) => ({ value, key: dataKeys[index] }))
+        .sort((a, b) => a.value - b.value);
+      const qqData = sortedEntries.map((entry, idx) => {
         const p = (idx + 1 - 0.375) / (n + 0.25);
         const theoreticalQuantile = jStat.normal.inv(p, 0, 1);
         return {
           x: theoreticalQuantile,
-          y: val
+          y: entry.value,
+          __row: entry.key,
         };
       });
 
@@ -88,7 +96,7 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
       return { 
         name, n, mean, median, stdev, min, max, range, sum, variance, skewness, kurtosis,
         q1: quartiles[0], q3: quartiles[2], histData: histogram.data, histBins: histogram.bins,
-        normality, lilliefors, qqData, qqLineData, data
+        normality, lilliefors, qqData, qqLineData, data, dataKeys
       };
     }).filter(r => r !== null);
 
@@ -104,8 +112,8 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
     );
     const descReport = descriptiveReport(descTables, input.level);
 
-    const groups = results.map(r => ({ category: r.name, values: r.data }));
-    const boxes = boxRows(groups);
+    const groups = results.map(r => ({ category: r.name, values: r.data, keys: r.dataKeys }));
+    const boxes = boxRows(groups, { level: input.level });
     const charts: AnalysisChart[] = [
       makeChart({
         id: 'desc-means',
@@ -146,10 +154,22 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
           subtitle: copy('Valori medi delle variabili selezionate'),
           data: { intervals },
           fields: { xLabel: copy('Variabile'), yLabel: copy('Media') },
+        }),
+        makeChart({
+          id: 'desc-diamond',
+          kind: 'diamond',
+          title: copy('Diamante delle medie'),
+          subtitle: copy('Diamante proporzionale all’intervallo di confidenza'),
+          note: copy('Il diamante è centrato sulla media; la sua ampiezza cresce con l’incertezza della stima.'),
+          data: { intervals },
+          fields: { xLabel: copy('Variabile'), yLabel: copy('Media') },
+          options: { scaleToCI: true, showLabels: true } as never,
         })
       );
     }
-    const dotPoints = results.flatMap(r => r.data.map(value => ({ category: r.name, value })));    if (dotPoints.length > 0) {
+    const dotPoints = results.flatMap(r =>
+      r.data.map((value, index) => ({ category: r.name, value, __row: r.dataKeys[index] }))
+    );    if (dotPoints.length > 0) {
       charts.push(
         makeChart({
           id: 'desc-dot',
@@ -180,9 +200,10 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
       for (let i = 0; i < results.length && pairCount < 6; i++) {
         for (let j = i + 1; j < results.length && pairCount < 6; j++) {
           const points = input.rows
-            .map(row => ({
+            .map((row, index) => ({
               x: parseNum(row[input.indices[i]]),
               y: parseNum(row[input.indices[j]]),
+              __row: String(index),
             }))
             .filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
           if (points.length < 3) continue;
@@ -204,8 +225,14 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
     }
     const first = results[0];
     if (first) {
-      const sorted = [...first.data].sort((a, b) => a - b);
-      const ecdf = sorted.map((value, index) => ({ x: value, y: (index + 1) / sorted.length }));
+      const sorted = first.data
+        .map((value, index) => ({ value, key: first.dataKeys[index] }))
+        .sort((a, b) => a.value - b.value);
+      const ecdf = sorted.map((entry, index) => ({
+        x: entry.value,
+        y: (index + 1) / sorted.length,
+        __row: entry.key,
+      }));
       if (ecdf.length > 0) {
         charts.push(
           makeChart({
@@ -220,17 +247,149 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
       }
     }
     results.slice(0, 1).forEach(r => {
+      const keyedValues = r.data.map((value, index) => ({ value, __row: r.dataKeys[index] }));
       charts.push(
         makeChart({
           id: `desc-hist-${r.name}`,
           kind: 'histogram',
           title: copy('Distribuzione (istogramma): {s1}', { s1: r.name }),
           subtitle: copy('{s1} osservazioni', { s1: r.n }),
-          data: { values: r.data.map(value => ({ value })) },
+          data: { values: keyedValues },
           fields: { xLabel: r.name, yLabel: copy('Frequenza') },
         })
       );
+      if (r.data.length >= 2) {
+        charts.push(
+          makeChart({
+            id: `desc-shadow-${r.name}`,
+            kind: 'shadowgram',
+            title: copy('Shadowgram: {s1}', { s1: r.name }),
+            subtitle: copy('Densità stimata con rug delle osservazioni'),
+            note: copy('La silhouette mostra la densità stimata; il rug mostra dove cadono le osservazioni.'),
+            data: { values: keyedValues },
+            fields: { xLabel: r.name, yLabel: copy('Densità') },
+            options: { showRug: true, showMeanLine: false } as never,
+          })
+        );
+      }
     });
+
+    const matrixVars = results.slice(0, 4);
+    if (matrixVars.length >= 3 && results.length === input.indices.length) {
+      const dim = matrixVars.length;
+      const step = Math.max(1, Math.floor(input.rows.length / 200));
+      const norm = (value: number, min: number, max: number): number =>
+        max > min ? 0.1 + (0.8 * (value - min)) / (max - min) : 0.5;
+      const panels: ChartRow[] = [];
+      for (let row = 0; row < dim; row += 1) {
+        for (let column = 0; column < dim; column += 1) {
+          panels.push({ px: column, px2: column + 1, py: row, py2: row + 1 });
+        }
+      }
+      const labels: ChartRow[] = matrixVars.map((variable, index) => ({
+        x: index + 0.5,
+        y: index + 0.5,
+        label: variable.name,
+      }));
+      const points: ChartRow[] = [];
+      const ellipses: ChartRow[] = [];
+      for (let row = 0; row < dim; row += 1) {
+        for (let column = 0; column < dim; column += 1) {
+          if (row === column) continue;
+          const xi = input.indices[column];
+          const yi = input.indices[row];
+          const pairs: { x: number; y: number }[] = [];
+          for (let index = 0; index < input.rows.length; index += step) {
+            const x = parseNum(input.rows[index][xi]);
+            const y = parseNum(input.rows[index][yi]);
+            if (Number.isFinite(x) && Number.isFinite(y)) pairs.push({ x, y });
+          }
+          if (pairs.length < 3) continue;
+          const xs = pairs.map(pair => pair.x);
+          const ys = pairs.map(pair => pair.y);
+          const [xMin, xMax] = [Math.min(...xs), Math.max(...xs)];
+          const [yMin, yMax] = [Math.min(...ys), Math.max(...ys)];
+          const py = row;
+          pairs.forEach(pair =>
+            points.push({
+              x: column + norm(pair.x, xMin, xMax),
+              y: py + norm(pair.y, yMin, yMax),
+            })
+          );
+          confidenceEllipse(pairs.map(pair => ({ x: pair.x, y: pair.y }))).forEach(point =>
+            ellipses.push({
+              x: column + norm(Number(point.x), xMin, xMax),
+              y: py + norm(Number(point.y), yMin, yMax),
+            })
+          );
+        }
+      }
+      if (points.length > 0) {
+        charts.push(
+          makeChart({
+            id: 'desc-matrix',
+            kind: 'scattermatrix',
+            title: copy('Matrice di dispersione'),
+            subtitle: copy('Confronto a coppie delle variabili selezionate'),
+            note: copy('Ogni pannello confronta due variabili; le ellissi tratteggiate riassumono la densità bivariata.'),
+            data: { points, panels, ellipses, labels },
+            fields: { xLabel: copy('Variabili'), yLabel: copy('Variabili') },
+            stats: { dim },
+            options: { showEllipses: true } as never,
+          })
+        );
+      }
+    }
+
+    if (matrixVars.length >= 3 && results.length === input.indices.length) {
+      const [vx, vy, vs] = matrixVars;
+      const xi = input.indices[0];
+      const yi = input.indices[1];
+      const si = input.indices[2];
+      const step = Math.max(1, Math.floor(input.rows.length / 500));
+      const bubblePoints: ChartRow[] = [];
+      const spatialPoints: ChartRow[] = [];
+      for (let index = 0; index < input.rows.length; index += step) {
+        const x = parseNum(input.rows[index][xi]);
+        const y = parseNum(input.rows[index][yi]);
+        const size = Math.abs(parseNum(input.rows[index][si]));
+        if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(size)) continue;
+        bubblePoints.push({ x, y, size, __row: String(index) });
+        spatialPoints.push({ x, y, z: size, __row: String(index) });
+      }
+      if (bubblePoints.length > 0) {
+        charts.push(
+          makeChart({
+            id: 'desc-bubble',
+            kind: 'bubble',
+            title: copy('Grafico a bolle'),
+            subtitle: copy('{s1} × {s2}, dimensione = {s3}', {
+              s1: vx.name,
+              s2: vy.name,
+              s3: vs.name,
+            }),
+            note: copy('La posizione mostra due variabili, la dimensione della bolla la terza: bolle grandi indicano valori alti della variabile di dimensione.'),
+            data: { points: bubblePoints },
+            fields: { xLabel: vx.name, yLabel: vy.name, sizeLabel: vs.name },
+            options: { showSizeLegend: true } as never,
+          })
+        );
+      }
+      if (spatialPoints.length > 0) {
+        charts.push(
+          makeChart({
+            id: 'desc-scatter3d',
+            kind: 'scatter3d',
+            title: copy('Dispersione 3D'),
+            subtitle: copy('{s1}, {s2}, {s3} proiettati', { s1: vx.name, s2: vy.name, s3: vs.name }),
+            note: copy('La proiezione isometrica mostra tre dimensioni; l’ellisse riassume la densità proiettata, non sostituisce un test multivariato.'),
+            data: { points: spatialPoints },
+            fields: { xLabel: vx.name, yLabel: vy.name },
+            options: { showEllipsoid: true, showPoints: true } as never,
+          })
+        );
+      }
+    }
 
     results.slice(0, 8).forEach(r => {
       if (r.qqData.length === 0) return;
@@ -252,11 +411,23 @@ export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutp
       );
     });
 
+    // L3 Distribution report: the panel reuses the charts already built above
+    // and adds the descriptive tables that belong to the same variable.
+    const distribution = first
+      ? distributionPanel({
+          title: copy('Pannello Distribution: {s1}', { s1: first.name }),
+          subtitle: copy('{s1} osservazioni', { s1: first.n }),
+          charts,
+          tables: descTables,
+        })
+      : null;
+
     return {
       ok: true,
       title: copy('Statistiche descrittive'),
       tables: descTables,
       report: descReport,
       charts,
+      ...(distribution ? { panels: [distribution] } : {}),
     };
   };

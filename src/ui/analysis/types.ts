@@ -4,8 +4,10 @@ import type { RowFilter } from '../../grid/ops';
 import type { RoleState } from '../../analyses/roles';
 import type { OutputEntry } from '../output/types';
 import type { ProjectParams } from '../../io/project';
-import type { ChartOptions } from '../../stats/charts';
+import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import type { ChartOutputGroup } from '../../charts/outputs';
+import type { ChartKind } from '../../stats/charts';
+import type { ChartLinkValue } from '../../components/charts/ChartLinkContext';
 
 /**
  * State and callbacks that the analysis workspace needs.
@@ -22,6 +24,10 @@ export interface AnalysisTabProps {
   params: ProjectParams;
   setParams: Dispatch<SetStateAction<ProjectParams>>;
   grid: GridData;
+  /** Grid actually used by the runs (row filter + missing mask applied). */
+  linkGrid: GridData;
+  /** Session row state shared by the output console and its charts. */
+  chartLink: ChartLinkValue;
   outputs: OutputEntry[];
   dataRevision: number;
   datasetId: string;
@@ -44,7 +50,15 @@ export interface AnalysisTabProps {
   /** Optional chart groups hidden per procedure, persisted with the project. */
   hiddenChartGroups: Record<string, ChartOutputGroup[]>;
   setHiddenChartGroups: Dispatch<SetStateAction<Record<string, ChartOutputGroup[]>>>;
+  /** Per-procedure style overrides, keyed by analysis id then chart kind. */
+  chartStyleOverrides: Record<string, Partial<Record<ChartKind, string>>>;
+  setChartStyleOverrides: Dispatch<
+    SetStateAction<Record<string, Partial<Record<ChartKind, string>>>>
+  >;
   onUpdateChart: (entryId: string, chartId: string, options: ChartOptions) => void;
+  onInsertChart: (entryId: string, chart: AnalysisChart) => void;
+  /** Graph Builder: append a chart built from the current dataset. */
+  onAddBuiltChart: (chart: AnalysisChart) => void;
   removeOutput: (index: number) => void;
   clearOutput: () => void;
   copyOutput: () => void;

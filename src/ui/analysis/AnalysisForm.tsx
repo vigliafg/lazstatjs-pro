@@ -32,6 +32,11 @@ import { ResamplingForm } from '../../analyses/resampling/Form';
 import { GeeForm } from '../../analyses/gee/Form';
 import { StratifiedCoxForm } from '../../analyses/stratcox/Form';
 import { TdCoxForm } from '../../analyses/tdcox/Form';
+import { PartitionForm } from '../../analyses/partition/Form';
+import { QualityForm } from '../../analyses/quality/Form';
+import { ClusterForm } from '../../analyses/cluster/Form';
+import { DiscriminantForm } from '../../analyses/discriminant/Form';
+import { DoeForm } from '../../analyses/doe/Form';
 import { t } from '../../i18n';
 
 interface AnalysisFormProps {
@@ -302,6 +307,46 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
           <ContingencyForm
             contingencyParams={params.contingency}
             setContingencyParams={setSlice('contingency')}
+          />
+        );
+      case 'partition':
+        return (
+          <PartitionForm
+            grid={p.grid}
+            partitionParams={params.partition}
+            setPartitionParams={setSlice('partition')}
+          />
+        );
+      case 'quality':
+        return (
+          <QualityForm
+            grid={p.grid}
+            qualityParams={params.quality}
+            setQualityParams={setSlice('quality')}
+          />
+        );
+      case 'cluster':
+        return (
+          <ClusterForm
+            grid={p.grid}
+            clusterParams={params.cluster}
+            setClusterParams={setSlice('cluster')}
+          />
+        );
+      case 'discriminant':
+        return (
+          <DiscriminantForm
+            grid={p.grid}
+            discriminantParams={params.discriminant}
+            setDiscriminantParams={setSlice('discriminant')}
+          />
+        );
+      case 'doe':
+        return (
+          <DoeForm
+            grid={p.grid}
+            doeParams={params.doe}
+            setDoeParams={setSlice('doe')}
           />
         );
       default:

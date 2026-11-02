@@ -7,6 +7,7 @@ import type { WizardGoal } from '../../stats/wizard';
 import { isActiveLocale, isHelpLocale, isLocale } from '../../i18n/locales';
 import { normalizeChartDefaults } from '../../charts/defaults';
 import { normalizeChartPresets } from '../../charts/presets';
+import { normalizeUserStyles } from '../../charts/styles';
 import type { ChartOutputGroup } from '../../charts/outputs';
 import { normalizeCustomThemes, resolveThemeId } from '../../theme/custom';
 import { normalizeOutputAppearance } from '../../theme/outputAppearance';
@@ -282,6 +283,11 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const agreement = isRecord(raw.agreement) ? raw.agreement : {};
   const tost = isRecord(raw.tost) ? raw.tost : {};
   const wizard = isRecord(raw.wizard) ? raw.wizard : {};
+  const partition = isRecord(raw.partition) ? raw.partition : {};
+  const quality = isRecord(raw.quality) ? raw.quality : {};
+  const cluster = isRecord(raw.cluster) ? raw.cluster : {};
+  const discriminant = isRecord(raw.discriminant) ? raw.discriminant : {};
+  const doe = isRecord(raw.doe) ? raw.doe : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -519,6 +525,48 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       second: optionalIndex(wizard.second, d.wizard.second, width),
       paired: bool(wizard.paired, d.wizard.paired),
     },
+    partition: {
+      response: index(partition.response, d.partition.response, width),
+      predictors: indexList(partition.predictors, d.partition.predictors, width),
+      maxDepth: Math.max(1, Math.min(6, integer(partition.maxDepth, d.partition.maxDepth))),
+      minSplit: Math.max(2, Math.min(50, integer(partition.minSplit, d.partition.minSplit))),
+    },
+    quality: {
+      mode:
+        quality.mode === 'capability' || quality.mode === 'pareto' || quality.mode === 'variability'
+          ? quality.mode
+          : d.quality.mode,
+      variable: index(quality.variable, d.quality.variable, width),
+      category: index(quality.category, d.quality.category, width),
+      group: optionalIndex(quality.group, d.quality.group, width),
+      chart:
+        quality.chart === 'individuals' || quality.chart === 'ewma'
+          ? quality.chart
+          : d.quality.chart,
+      subgroup: Math.max(2, Math.min(10, integer(quality.subgroup, d.quality.subgroup))),
+      lsl: finite(quality.lsl, d.quality.lsl),
+      usl: finite(quality.usl, d.quality.usl),
+      target: finite(quality.target, d.quality.target),
+    },
+    cluster: {
+      selected: indexList(cluster.selected, d.cluster.selected, width),
+      method:
+        cluster.method === 'complete' || cluster.method === 'single' || cluster.method === 'ward'
+          ? cluster.method
+          : d.cluster.method,
+      clusters: Math.max(0, Math.min(20, integer(cluster.clusters, d.cluster.clusters))),
+      standardize: bool(cluster.standardize, d.cluster.standardize),
+    },
+    discriminant: {
+      group: index(discriminant.group, d.discriminant.group, width),
+      predictors: indexList(discriminant.predictors, d.discriminant.predictors, width),
+    },
+    doe: {
+      response: index(doe.response, d.doe.response, width),
+      factorA: index(doe.factorA, d.doe.factorA, width),
+      factorB: index(doe.factorB, d.doe.factorB, width),
+      model: doe.model === 'linear' ? 'linear' : d.doe.model,
+    },
   };
 };
 
@@ -545,6 +593,9 @@ export const parseSettings = (value: unknown): ProjectSettings => {
     helpLocale: isHelpLocale(raw.helpLocale) ? raw.helpLocale : DEFAULT_SETTINGS.helpLocale,
     chartDefaults: normalizeChartDefaults(raw.chartDefaults),
     chartPresets: normalizeChartPresets(raw.chartPresets),
+    chartStyles: normalizeUserStyles(raw.chartStyles),
+    chartStyleDefaults: normalizeStyleMap(raw.chartStyleDefaults),
+    chartStyleOverrides: normalizeStyleOverrides(raw.chartStyleOverrides),
     hiddenChartGroups: normalizeHiddenChartGroups(raw.hiddenChartGroups),
     outputAppearance: normalizeOutputAppearance(raw.outputAppearance),
   };
@@ -570,3 +621,25 @@ const normalizeHiddenChartGroups = (
   return result;
 };
 
+
+/** Style id per kind: a bounded string, unknown kinds are dropped. */
+const normalizeStyleMap = (value: unknown): Partial<Record<string, string>> => {
+  const result: Partial<Record<string, string>> = {};
+  if (!isRecord(value)) return result;
+  for (const [kind, styleId] of Object.entries(value)) {
+    if (typeof styleId !== 'string' || styleId.length === 0 || styleId.length > 48) continue;
+    result[kind] = styleId;
+  }
+  return result;
+};
+
+const normalizeStyleOverrides = (value: unknown): Record<string, Partial<Record<string, string>>> => {
+  if (!isRecord(value)) return {};
+  const result: Record<string, Partial<Record<string, string>>> = {};
+  for (const [analysisId, map] of Object.entries(value)) {
+    if (analysisId.length === 0 || analysisId.length > 48 || !isRecord(map)) continue;
+    const clean = normalizeStyleMap(map);
+    if (Object.keys(clean).length > 0) result[analysisId] = clean;
+  }
+  return result;
+};

@@ -257,6 +257,8 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             id="analysis-pane-output"
             outputs={props.outputs}
             meta={sessionMeta}
+            grid={props.linkGrid}
+            chartLink={props.chartLink}
             onRemove={props.removeOutput}
             onClear={props.clearOutput}
             onCopy={props.copyOutput}
@@ -274,6 +276,8 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             limitationsLabel={props.limitationsLabel}
             outputStyle={props.outputStyle}
             onUpdateChart={props.onUpdateChart}
+            onInsertChart={props.onInsertChart}
+            onAddBuiltChart={props.onAddBuiltChart}
             currentRevision={props.dataRevision}
             currentDatasetId={props.datasetId}
             currentFilterSignature={props.filterSignature}

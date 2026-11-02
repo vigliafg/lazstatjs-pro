@@ -4,6 +4,7 @@ import { timeMissingChartCopy } from './charts-time-missing';
 import { distfitTTestChartCopy } from './charts-distfit-ttest';
 import { lmmChartCopy } from './charts-lmm';
 import { remainingChartCopy } from './charts-remaining';
+import { l4ChartCopy } from './charts-l4';
 
 export const chartCopy: Record<string, string> = {
   " Con stime instabili gli intervalli non finiti sono omessi dal grafico.":
@@ -640,5 +641,6 @@ export const chartCopy: Record<string, string> = {
   ...distfitTTestChartCopy,
   ...lmmChartCopy,
   ...remainingChartCopy,
+  ...l4ChartCopy,
   ...categoricalMultivariateChartCopy,
 };

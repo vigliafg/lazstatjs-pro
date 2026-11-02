@@ -142,6 +142,44 @@ export const buildLogisticOutput = ({
       })
     );
   }
+  const liftOrder = y
+    .map((value, index) => ({ value, fitted: model.fitted[index] }))
+    .sort((a, b) => b.fitted - a.fitted);
+  const totalEvents = liftOrder.reduce((sum, row) => sum + row.value, 0);
+  if (totalEvents > 0 && liftOrder.length > 2) {
+    let captured = 0;
+    const cumulative = liftOrder.map((row, index) => {
+      captured += row.value;
+      return {
+        x: ((index + 1) / liftOrder.length) * 100,
+        y: (captured / totalEvents) * 100,
+        series: copy('Cumulata eventi'),
+      };
+    });
+    charts.push(
+      makeChart({
+        id: 'logistic-lift',
+        kind: 'line',
+        title: copy('Curva di lift cumulata'),
+        subtitle: copy('Eventi catturati ordinando per probabilità stimata'),
+        note: copy('L’asse orizzontale è la quota di casi ordinati dal rischio più alto al più basso; quello verticale è la quota di eventi già catturata. Una curva sopra la diagonale indica che il modello concentra gli eventi nei casi a rischio alto.'),
+        data: {
+          series: [
+            { x: 0, y: 0, series: copy('Cumulata eventi') },
+            ...cumulative,
+            { x: 0, y: 0, series: copy('Nessuna discriminazione') },
+            { x: 100, y: 100, series: copy('Nessuna discriminazione') },
+          ],
+        },
+        fields: {
+          xLabel: copy('Quota di casi ordinati (%)'),
+          yLabel: copy('Eventi catturati (%)'),
+          series: copy('Serie'),
+        },
+        options: { showMarkers: false, showBand: false } as never,
+      })
+    );
+  }
   const calibration = calibrationCurve(y, model.fitted);
   if (calibration.length > 0) {
     charts.push(

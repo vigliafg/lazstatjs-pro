@@ -8,8 +8,17 @@ import { isReportLocale, withReportLocale, type ReportLocale } from '../stats/re
 import { isHeavyAnalysis } from '../analyses/worker/heavyIds';
 import { runHeavyAnalysis } from '../analyses/worker/client';
 import type { HeavyProgressPhase } from '../analyses/worker/protocol';
-import { withChartDefaults, type ChartDefaults } from '../charts/defaults';
-import { filterChartsByGroups, type ChartOutputGroup } from '../charts/outputs';
+import {
+  withChartDefaults,
+  withChartStyles,
+  type ChartDefaults,
+  type ChartStylePatches,
+} from '../charts/defaults';
+import {
+  filterChartsByGroups,
+  filterPanelsByGroups,
+  type ChartOutputGroup,
+} from '../charts/outputs';
 
 interface UseAnalysisRunOptions {
   activeAnalysis: string;
@@ -20,6 +29,8 @@ interface UseAnalysisRunOptions {
   reportLocale: Locale;
   /** Defaults for charts produced by new runs (not applied to existing cards). */
   chartDefaults: ChartDefaults;
+  /** Per-kind style patches for the procedure about to run. */
+  chartStylesFor?: (analysisId: string) => ChartStylePatches;
   /** Optional chart groups hidden for each procedure. */
   hiddenChartGroups: Record<string, ChartOutputGroup[]>;
   /** Unico punto che appende alla console (o mostra il motivo del rifiuto). */
@@ -47,6 +58,7 @@ export const useAnalysisRun = ({
   ciLevel,
   reportLocale,
   chartDefaults,
+  chartStylesFor,
   hiddenChartGroups,
   emit,
   warn,
@@ -76,8 +88,10 @@ export const useAnalysisRun = ({
     const { ANALYSIS_RUNNERS } = await import('../analyses/runners');
     const runner = ANALYSIS_RUNNERS[analysisId];
     return runner
-      ? withChartDefaults(chartDefaults, () =>
-          withReportLocale(locale, () => runner({ grid, params: paramsUsed, ciLevel: level }))
+      ? withChartStyles(chartStylesFor?.(analysisId), () =>
+          withChartDefaults(chartDefaults, () =>
+            withReportLocale(locale, () => runner({ grid, params: paramsUsed, ciLevel: level }))
+          )
         )
       : null;
   };
@@ -108,6 +122,7 @@ export const useAnalysisRun = ({
         signal: controller.signal,
         reportLocale: locale,
         chartDefaults,
+        chartStyles: chartStylesFor?.(analysisId),
         onProgress: nextPhase => setPhase(nextPhase),
       });
       if (outcome.status === 'cancelled') {
@@ -122,6 +137,11 @@ export const useAnalysisRun = ({
       if (outcome.status === 'ok') {
         finishRun(token);
         if (options?.isCurrent && !options.isCurrent()) return false;
+        const panels = filterPanelsByGroups(
+          analysisId,
+          outcome.panels,
+          hiddenChartGroups[analysisId]
+        );
         return await emit(
           {
             ok: true,
@@ -133,6 +153,7 @@ export const useAnalysisRun = ({
               outcome.charts,
               hiddenChartGroups[analysisId]
             ),
+            ...(panels ? { panels } : {}),
             ...(outcome.header ? { header: outcome.header } : {}),
             ...(outcome.warnings ? { warnings: outcome.warnings } : {}),
             ...(outcome.callout ? { callout: outcome.callout } : {}),
@@ -169,6 +190,11 @@ export const useAnalysisRun = ({
               charts: filterChartsByGroups(
                 analysisId,
                 result.charts,
+                hiddenChartGroups[analysisId]
+              ),
+              panels: filterPanelsByGroups(
+                analysisId,
+                result.panels,
                 hiddenChartGroups[analysisId]
               ),
             }

@@ -18,7 +18,8 @@ barre) e **regressione lineare semplice** (scatter, box dei residui, Q–Q).
 | Barre ANOVA | barre d'errore, etichette valori, ordinamento, linea di riferimento, reset sezione |
 | Scatter regressione | punti, fit OLS/Theil–Sen/entrambi, banda CI/PI, livello 90/95/99, opacità banda, equazione short/full, R², N |
 | Box residui | punti, outlier, media, etichetta mediana, ordinamento |
-| Q–Q | linea di riferimento |
+| Q–Q | linea di riferimento, stile intervallo, scala probabilità/z |
+| Galleria stili | fascia sotto l'anteprima: stile applicato alla card, copia inserita nel report, salvataggio di uno stile utente, default globale e override della procedura (`e2e/chart-styles.spec.ts`) |
 | Dialogo | Done, Cancel, Escape, conferma modifiche non salvate, focus trap, Reset, Reset sezione |
 | Persistenza | autosave, reload, riapertura con le opzioni salvate |
 | Mobile | dialog full-screen, pannello specifico nel disclosure, nessuna duplicazione di id |

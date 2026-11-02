@@ -37,6 +37,12 @@ const P = { ...COMMON_DEFAULTS };
 /** Factory options for a chart kind. User defaults will be merged here later. */
 let activeDefaults: ChartDefaults | null = null;
 
+/** Kind-specific style patches selected for the run being built. */
+export type ChartStylePatches = Partial<
+  Record<ChartKind, Readonly<Record<string, string | number | boolean>>>
+>;
+let activeStyles: ChartStylePatches | null = null;
+
 /** Run-scoped user defaults: factory < these < per-card options. */
 export const withChartDefaults = <T>(defaults: ChartDefaults | undefined, build: () => T): T => {
   const previous = activeDefaults;
@@ -45,6 +51,17 @@ export const withChartDefaults = <T>(defaults: ChartDefaults | undefined, build:
     return build();
   } finally {
     activeDefaults = previous;
+  }
+};
+
+/** Run-scoped style gallery defaults: factory < common defaults < style < card. */
+export const withChartStyles = <T>(styles: ChartStylePatches | undefined, build: () => T): T => {
+  const previous = activeStyles;
+  activeStyles = styles ?? null;
+  try {
+    return build();
+  } finally {
+    activeStyles = previous;
   }
 };
 
@@ -145,6 +162,7 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
         showN: false,
         pointLabels: false,
         ellipse: false,
+        showMeanLine: false,
       };
     case 'line':
       return { ...P, kind, step: false, showMarkers: false, showBand: true };
@@ -165,23 +183,34 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
         ...P,
         kind,
         display: 'box',
+        whisker: 'tukey',
         showPoints: false,
         showWhiskers: true,
         showOutliers: true,
         showMean: false,
+        showMeanInterval: false,
+        jitter: false,
         labelMedian: false,
         sort: 'none',
       };
     case 'histogram':
       return { ...P, kind, showDensity: false, showKde: false, showRug: false, showMeanLine: false, bins: 16 };
     case 'interval':
-      return { ...P, kind, valueLabels: false, sort: 'none' };
+      return { ...P, kind, valueLabels: false, showMeanDiamond: false, sort: 'none' };
     case 'dot':
-      return { ...P, kind, showMean: false, sort: 'none' };
+      return { ...P, kind, showMean: false, jitter: 'strip', sort: 'none' };
     case 'ecdf':
       return { ...P, kind, showPoints: false, showMedian: false };
     case 'qq':
-      return { ...P, kind, showReference: true, showCI: false, detrended: false };
+      return {
+        ...P,
+        kind,
+        showReference: true,
+        showCI: false,
+        ciStyle: 'curves',
+        qqAxis: 'both',
+        detrended: false,
+      };
     case 'forest':
       return { ...P, kind, logScale: false, reference: 'one', sort: 'none' };
     case 'survival':
@@ -202,7 +231,7 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
     case 'heatmap':
       return { ...P, kind, showValues: false, diverging: false, sort: 'none' };
     case 'residual':
-      return { ...P, kind, showPoints: true, showZeroLine: true };
+      return { ...P, kind, showPoints: true, showZeroLine: true, showStdBand: false };
     case 'scree':
       return { ...P, kind, showKaiser: false, showValues: true };
     case 'score':
@@ -215,6 +244,26 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
       return { ...P, kind, showObserved: true, showCI: true, showDensity: false };
     case 'missingness':
       return { ...P, kind, showLabels: false, display: 'bars' };
+    case 'diamond':
+      return { ...P, kind, showLabels: false, scaleToCI: false, sort: 'none' };
+    case 'circles':
+      return { ...P, kind, showLabels: true, showIntervals: true, sort: 'none' };
+    case 'shadowgram':
+      return { ...P, kind, showRug: true, showMeanLine: false };
+    case 'scattermatrix':
+      return { ...P, kind, showEllipses: true };
+    case 'bubble':
+      return { ...P, kind, showLabels: false, showSizeLegend: true };
+    case 'scatter3d':
+      return { ...P, kind, showEllipsoid: true, showPoints: true };
+    case 'tree':
+      return { ...P, kind, showValues: true, showLeaves: true };
+    case 'pareto':
+      return { ...P, kind, showCumulative: true, valueLabels: false, sort: 'none' };
+    case 'dendrogram':
+      return { ...P, kind, showLabels: true, showHeights: false };
+    case 'surface':
+      return { ...P, kind, display: 'mesh', showPoints: true, showGrid: true };
   }
 };
 
@@ -234,9 +283,12 @@ export const mergeOptions = (
 ): ChartOptions => {
   const base = factoryOptions(kind);
   const user = activeDefaults ?? {};
-  if (!options) return { ...base, ...user, kind } as ChartOptions;
-  if (options.kind !== undefined && options.kind !== kind) return { ...base, ...user, kind } as ChartOptions;
-  const merged = { ...base, ...user, ...options, kind } as ChartOptions;
+  const style = activeStyles?.[kind];
+  if (!options) return { ...base, ...user, ...(style ?? {}), kind } as ChartOptions;
+  if (options.kind !== undefined && options.kind !== kind) {
+    return { ...base, ...user, ...(style ?? {}), kind } as ChartOptions;
+  }
+  const merged = { ...base, ...user, ...(style ?? {}), ...options, kind } as ChartOptions;
   // Annotations are a per-card list, never a global default. Normalising here
   // keeps restored projects and hand-edited .lzs files safe.
   if (options.annotations !== undefined) {

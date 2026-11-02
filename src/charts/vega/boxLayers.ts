@@ -87,13 +87,23 @@ const nominalBoxLayers = (
       axis: axis(options, theme, options.showXTitle ? field(chart, 'xLabel', '') : null, options.gridX),
     },
   };
+  const percentileWhiskers = options.whisker === 'percentile';
+  const lowField = percentileWhiskers ? 'p10' : 'min';
+  const highField = percentileWhiskers ? 'p90' : 'max';
+  const whiskerRows = summary.filter(
+    row => Number.isFinite(num(row[lowField])) && Number.isFinite(num(row[highField]))
+  );
   const layers: Spec[] = [
     ...(options.showWhiskers
       ? [
           {
-            data: { values: summary },
+            data: { values: whiskerRows },
             mark: { type: 'rule', color: colorAt(options, 4), strokeWidth: 1 },
-            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'min'), y2: { field: 'max' } },
+            encoding: {
+              ...baseEncoding,
+              y: yEncoding(chart, options, theme, lowField),
+              y2: { field: highField },
+            },
           },
         ]
       : []),
@@ -110,14 +120,14 @@ const nominalBoxLayers = (
     ...(options.showWhiskers
       ? [
           {
-            data: { values: summary },
+            data: { values: whiskerRows },
             mark: { type: 'tick', color: theme.muted, size: 8 },
-            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'min') },
+            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, lowField) },
           },
           {
-            data: { values: summary },
+            data: { values: whiskerRows },
             mark: { type: 'tick', color: theme.muted, size: 8 },
-            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'max') },
+            encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, highField) },
           },
         ]
       : []),
@@ -129,6 +139,29 @@ const nominalBoxLayers = (
       encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'mean') },
     });
   }
+  if (options.showMeanInterval) {
+    const intervalRows = summary.filter(
+      row => Number.isFinite(num(row.meanLo)) && Number.isFinite(num(row.meanHi))
+    );
+    if (intervalRows.length > 0) {
+      layers.push({
+        data: { values: intervalRows },
+        mark: { type: 'rule', color: colorAt(options, 2), strokeWidth: 1.5 },
+        encoding: {
+          ...baseEncoding,
+          y: yEncoding(chart, options, theme, 'meanLo'),
+          y2: { field: 'meanHi' },
+        },
+      });
+      (['meanLo', 'meanHi'] as const).forEach(key => {
+        layers.push({
+          data: { values: intervalRows },
+          mark: { type: 'tick', color: colorAt(options, 2), size: 8, thickness: 1.5 },
+          encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, key) },
+        });
+      });
+    }
+  }
   if (options.showOutliers) {
     layers.push({
       data: { values: rowsOf(chart, 'outliers') },
@@ -137,8 +170,16 @@ const nominalBoxLayers = (
     });
   }
   if (options.showPoints) {
+    // A deterministic 101-step cycle spreads repeated values without a new
+    // Vega transform or extra persisted data.
+    const pointRows = options.jitter
+      ? rowsOf(chart, 'points').map((row, index) => ({
+          ...row,
+          jitter: ((index % 101) - 50) * 0.004,
+        }))
+      : rowsOf(chart, 'points');
     layers.push({
-      data: { values: rowsOf(chart, 'points') },
+      data: { values: pointRows },
       mark: {
         type: 'point',
         filled: true,
@@ -148,7 +189,20 @@ const nominalBoxLayers = (
         opacity: options.pointOpacity,
         ...tooltip(options),
       },
-      encoding: { ...baseEncoding, y: yEncoding(chart, options, theme, 'value') },
+      encoding: {
+        ...baseEncoding,
+        ...(options.jitter
+          ? {
+              xOffset: {
+                field: 'jitter',
+                type: 'quantitative',
+                scale: { domain: [-0.2, 0.2] },
+                legend: null,
+              },
+            }
+          : {}),
+        y: yEncoding(chart, options, theme, 'value'),
+      },
     });
   }
   if (options.labelMedian) {
