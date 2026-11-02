@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-02 (checkpoint W0 parziale)
+**Ultimo aggiornamento**: 2026-11-02 (chiusura W0 / gate G0)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0 in corso; W0-01/02/03 chiusi, W0-09 a 3/8
-**Prossima ondata**: W0 — Fondazioni condivise e retrofit reference test
+**Stato**: W0 chiusa, gate G0 verde; prossima ondata W1
+**Prossima ondata**: W1 — Descriptive + test di base
 
 ---
 
@@ -31,17 +31,17 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W0 — Fondazioni e retrofit (in corso) |
+| Ondata corrente | W0 chiusa; prossima W1 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `9c6116a` (checkpoint W0 parziale) |
+| Ultimo commit di codice | `9c6116a` + checkpoint W0 completo (vedi `git log -1`) |
 | Ultimo commit documentale | `1ef2860` (piano v2.2) |
-| Test | `npm run lint` verde; `npm test` 850/850 verdi |
+| Test | `npm run lint` verde; `npm test` 880/880 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 0 / 73 (nessuna voce di registro ancora aggiunta) |
 | Nuove voci | 0 / 36 |
 | Estensioni | 0 / 37 |
-| Reference baseline | 30 / 35 procedure statistiche; W0-09 deve portare a 35 / 35 |
+| Reference baseline | 35 / 35 procedure statistiche (W0-09 chiuso) |
 | Blocchi | nessuno |
-| Prossimo gate | G0 — fine W0 (toolkit + 8/8 retrofit reference) |
+| Prossimo gate | G1 — fine W1 (14 metodi, help 6 lingue, sample) |
 
 ---
 
@@ -49,7 +49,7 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Ondata | Scope | Metodi | Nuove voci | Stato | Gate |
 |---|---|---:|---:|---|---|
-| W0 | Fondazioni condivise + retrofit | — | — | non iniziata | G0 |
+| W0 | Fondazioni condivise + retrofit | — | — | **chiusa** (G0 verde) | G0 |
 | W1 | Descriptive + test di base | 14 | 2 | non iniziata | G1 |
 | W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | non iniziata | G2 |
 | W3 | Regressione avanzata | 7 | 7 | non iniziata | G3 |
@@ -81,49 +81,122 @@ passi; per il resto rimandare alle sezioni del piano.
 
 ---
 
-## 5. Ondata corrente — W0
+## 5. Ondata W0 — chiusa (gate G0 verde)
 
-Obiettivo: toolkit numerico, reference harness, sample generator, i18n/help
-scaffolding, data shape adapters, performance guards e retrofit dei reference
-test sulle 8 procedure esistenti scoperte.
+Obiettivo raggiunto: toolkit numerico, reference harness, sample generator,
+i18n/help scaffolding, data shape adapters, performance guards e retrofit dei
+reference test sulle 8 procedure esistenti.
 
 | Task | Descrizione | Stato |
 |---|---|---|
 | W0-01 | `kernels/optimize.ts` (Newton, BFGS, IRLS, EM) | **fatto** |
-| W0-02 | `kernels/glm.ts` (famiglie, link, devianza) | **fatto** |
-| W0-03 | estensioni matrici (solve, Cholesky, SVD, pinv) | **fatto** (QR ancora da fare) |
-| W0-04 | reference harness R + fixture + tolleranze | da fare (script R usati ad hoc) |
-| W0-05 | estensione `samples/generate.R` e manifest | da fare |
-| W0-06 | i18n/help scaffolding per le nuove famiglie | da fare |
-| W0-07 | data shape adapters (long/wide, start-stop, matrici, testo) | da fare |
-| W0-08 | performance guards e limiti | da fare |
-| W0-09 | retrofit reference test per TOST, Quality, Cluster, Discriminant, Partition, DOE, MI, Resampling | **in corso (3/8)**: TOST, Quality, Cluster fatti |
-| G0 | gate: test toolkit, reference dimostrativa, sample test, 8/8 retrofit | da fare |
+| W0-02 | `kernels/glm.ts` (famiglie, link, devianza) | **fatto**, reference R via fixture |
+| W0-03 | estensioni matrici (solve, Cholesky, SVD, QR, pinv, rango) | **fatto** |
+| W0-04 | reference harness R + fixture + tolleranze + helper | **fatto** (`src/stats/reference/`) |
+| W0-05 | estensione `samples/generate.R` + schema manifest + validatore | **fatto** |
+| W0-06 | i18n/help scaffolding: famiglie pianificate, template pagina, README | **fatto** |
+| W0-07 | data shape adapters (long/wide, start-stop, matrici, testo) | **fatto** (`src/io/shapes.ts`) |
+| W0-08 | performance guards, benchmark, worker check | **fatto** (`kernels/guards.ts`, `bench:kernels`) |
+| W0-09 | retrofit reference test delle 8 procedure | **fatto (8/8)** |
+| G0 | gate: toolkit, reference dimostrativa, sample test, 8/8 retrofit | **verde** |
 
-### Prossimi 3 passi
+### Verifiche del gate
 
-1. Completare W0-09: Discriminant, Partition, DOE, MI, Resampling.
-2. Creare W0-04 reference harness (script R, fixture, tolleranze) e usarlo nei test.
-3. Avviare W0-05 (sample generator) e W0-06 (i18n/help scaffolding).
+- `npm run lint` verde.
+- `npm test` **880/880** verdi.
+- `npm run test:samples` **7/7** verdi (manifest + 5 formati).
+- `scripts/check-locale.mjs` verde su `en, it, fr, es, de, pt-PT`.
+- `npm run guard` verde (depcruise, madge, file size).
+- Reference baseline **35/35** procedure statistiche.
 
-### File toccati in questo checkpoint
+### W0-09 — reference test aggiunti
 
-- `src/stats/kernels/optimize.ts` + `optimize.test.ts`
-- `src/stats/kernels/glm.ts` + `glm.test.ts`
-- `src/stats/kernels/matrix.ts` + `matrix.test.ts`
-- `src/stats/kernels/tost.test.ts` (reference test)
-- `src/stats/kernels/quality.test.ts` (reference test)
-- `src/stats/kernels/cluster.ts` (fix Ward.D2) + `cluster.test.ts` (reference test)
+| Procedura | Reference | Esito |
+|---|---|---|
+| TOST | R one-sample/paired/independent | verde |
+| Quality/SPC | formula chiusa Xbar-R + Cp/Cpk | verde |
+| Cluster | R `hclust(method="ward.D2")` | verde (dopo fix) |
+| Discriminant | R `MASS::lda` (root canoniche, Wilks, confusion) | verde |
+| Partition | R `rpart` (soglie, foglie, R²) | verde |
+| DOE | R `lm` (coefficienti, SE, p, R², punto stazionario) | verde |
+| MI | forma chiusa deterministica (linea esatta) | verde (dopo fix) |
+| Resampling | p esatta 4v4, p=1 degenere, quantili R type 7 | verde |
+
+### Bug reali trovati dai reference test
+
+1. **Ward.D2** (già corretto in W0-09 3/8): fattore `nA·nB` invece di
+   `2·nA·nB`, altezze dimezzate di √2.
+2. **MI**: `imputeColumn` riempiva i valori mancanti con la media e poi
+   saltava l'imputazione perché il segnaposto non era più `null`; MICE non
+   imputava mai. Ora il modello condizionale è stimato solo sulle righe
+   osservate e i valori mancanti vengono davvero imputati.
+3. **DOE**: i p-value dei coefficienti usavano `tSF` (una coda) invece di
+   `twoSidedTP` (due code), quindi erano metà di quelli di `lm`.
+
+### Performance (W0-08)
+
+Baseline con `npm run bench:kernels`:
+
+| Caso | Prima | Dopo |
+|---|---:|---:|
+| OLS 50 000 × 2 | ~28 s (OOM a 100k) | ~0,9 s |
+| OLS 10 000 × 2 | ~4,8 s | ~0,5 s |
+| GLM binomiale 10 000 | ~35 ms | ~32 ms |
+| Ward 120 × 2 | ~133 ms | ~147 ms |
+
+Cause e rimedi:
+
+- Theil–Sen enumerava tutte le coppie (O(n²)) anche dentro 600 bootstrap:
+  ora `calcTheilSenCapped` usa al massimo `THEIL_SEN_MAX_ROWS = 100` punti
+  equispaziati.
+- Test di Lilliefors: 1000 replicazioni su tutto il campione; ora al massimo
+  `LILLIEFORS_MAX_ROWS = 1000` righe.
+- Guardie centralizzate in `kernels/guards.ts` (`quadratic`, `iterative`,
+  `linear`) con messaggi pronti per `AnalysisRunResult.reason`; il runner
+  cluster usa `sampleEvenly` invece del passo ad hoc.
+- Worker check già coperto da `src/analyses/worker/heavyIds.test.ts`.
+
+### Prossimi 3 passi (W1)
+
+1. Aprire W1: descriptive (frequenze/tally, intervallo di tolleranza) e test
+   di base (proporzioni, tasso Poisson, varianza, sign test, Mood, KS).
+2. Per ogni metodo: kernel + test + reference, voce di registro, form, help in
+   6 lingue, sample nei 5 formati.
+3. Chiudere G1 con `npm run check`, locale check e sample test.
+
+### File toccati in W0
+
+- `src/stats/kernels/optimize.ts` + test
+- `src/stats/kernels/glm.ts` + test
+- `src/stats/kernels/matrix.ts` + test (QR, rango)
+- `src/stats/kernels/guards.ts` + test
+- `src/stats/kernels/tost.test.ts`, `quality.test.ts`, `cluster.ts/.test.ts`,
+  `discriminant.test.ts`, `partition.test.ts`, `doe.ts/.test.ts`,
+  `mi.ts/.test.ts`, `resampling.test.ts`
+- `src/stats/kernels/regression.ts`, `ranks.ts`, `distributions.ts` (cap
+  performance)
+- `src/stats/reference/` (harness, fixture `glm.json`, generatore R, README)
+- `src/io/sampleManifest.ts` + `samples/manifest.schema.json` +
+  `samples/generate.R` (validazione)
+- `src/io/shapes.ts` + test
+- `src/analyses/registry.ts`, `src/i18n/catalog/*/meta.ts`,
+  `src/help/content/template.ts` + README
+- `src/analyses/cluster/run.tsx`, `src/analyses/regression/run.tsx`
+- `scripts/bench-kernels.mjs`, `package.json`
 
 ### Decisioni / deviazioni
 
-- **Bug corretto**: il linkage Ward usava il fattore `nA·nB/(nA+nB)` invece di
-  `2·nA·nB/(nA+nB)`; i dendrogrammi erano corretti in forma ma con altezze
-  dimezzate di √2. Il reference test R `hclust(method="ward.D2")` lo ha
-  rilevato.
-- Nessun worktree separato: il checkpoint è in-place sul branch
-  `feat/gap-wave-1` per non duplicare il repository.
-- `npm test` completo: **850/850 verdi**.
+- **DOE**: `rsm` non è installato; il reference usa `lm` con lo stesso modello
+  quadratico. I coefficienti, gli errori standard, i p-value e il punto
+  stazionario sono identici, quindi la copertura è equivalente.
+- **Resampling**: il p-value di permutazione del kernel è Monte-Carlo (seed
+  fisso), non enumerazione esatta. Il test confronta con l'esattezza 2/70 con
+  tolleranza dichiarata `5e-3` e verifica il caso degenere p = 1 in modo
+  esatto; l'intervallo bootstrap è confrontato con `quantile(type = 7)` di R
+  sulla stessa distribuzione.
+- **Nuove famiglie** `ml` e `advanced`: dichiarate nel registro e nei cataloghi
+  (6 lingue) ma nascoste da `groupByFamily` finché non hanno procedure.
+- `npm test` completo: **880/880 verdi**.
 
 ---
 
@@ -134,6 +207,7 @@ test sulle 8 procedure esistenti scoperte.
 | 2026-11-02 | Piano approvato | `746b558` | docs only | verde | Creato piano v2.0 e protocollo |
 | 2026-11-02 | Piano v2.2 + W0-09 | `in corso` | docs only | verde | Aggiunto retrofit reference test per 8 procedure |
 | 2026-11-02 | Checkpoint W0 parziale | `9c6116a` | `npm test` 850/850 | verde | W0-01/02/03 chiusi; W0-09 3/8; fix Ward.D2 |
+| 2026-11-02 | Chiusura W0 / G0 | `in corso` | `npm run check` + `test:samples` + locale 6/6 | verde | W0-01…09 chiusi; 880/880; fix MI e DOE; cap Theil–Sen/Lilliefors |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 

@@ -18,7 +18,9 @@ export type AnalysisFamilyId =
   | 'survival'
   | 'timeseries'
   | 'missing'
-  | 'design';
+  | 'design'
+  | 'ml'
+  | 'advanced';
 
 export interface AnalysisFamily {
   id: AnalysisFamilyId;
@@ -47,6 +49,10 @@ export const ANALYSIS_FAMILIES: readonly AnalysisFamily[] = [
   { id: 'timeseries', label: 'Time series', description: 'Trend, seasonality and forecasts' },
   { id: 'missing', label: 'Missing data', description: 'Imputation and pooling' },
   { id: 'design', label: 'Design & power', description: 'Sample size, power and resampling' },
+  // Planned families: the analyses arrive in later waves. `groupByFamily`
+  // hides a family until it has at least one procedure.
+  { id: 'ml', label: 'Machine learning', description: 'Prediction, classification and text' },
+  { id: 'advanced', label: 'Advanced & Bayesian', description: 'Meta-analysis, Bayesian and spatial models' },
 ];
 
 const ANALYSIS_DEFINITIONS = [

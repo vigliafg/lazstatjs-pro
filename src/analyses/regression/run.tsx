@@ -2,7 +2,7 @@ import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { regressionTables } from '../../stats/regression';
 import { regressionReport } from '../../stats/report';
-import { calcNormalityTests, calcTheilSen } from '../../stats/kernels';
+import { calcNormalityTests, calcTheilSenCapped } from '../../stats/kernels';
 import { copy } from '../../stats/reportCopy';
 import { makeChart, boxRows, qqBand } from '../../charts/kits/common';
 import type { AnalysisChart, ChartRow } from '../../stats/charts';
@@ -171,7 +171,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   if (k === 1 && scatterData.length > 0) {
     const xs = scatterData.map(d => d.x);
     const ys = scatterData.map(d => d.y);
-    const tsResult = calcTheilSen(xs, ys);
+    const tsResult = calcTheilSenCapped(xs, ys);
     tsSlope = tsResult.slope;
     tsIntercept = tsResult.intercept;
   }

@@ -5,7 +5,7 @@
  * for the 3D-looking mesh (the scatter3d convention: a projected 2D drawing,
  * not a WebGL scene) and extracts contour segments with marching squares.
  */
-import { tSF, fSF } from './distributions';
+import { fSF, twoSidedTP } from './distributions';
 import { invert, zeros } from './matrix';
 
 export interface DoeInput {
@@ -59,7 +59,7 @@ export const responseSurface = (input: DoeInput): DoeResult | null => {
   const terms: DoeTerm[] = termNames(model).map((name, index) => {
     const se = Math.sqrt(Math.max(0, sigma2 * inverse[index][index]));
     const t = se > 0 ? beta[index] / se : NaN;
-    return { name, estimate: beta[index], se, t, p: tSF(t, df) };
+    return { name, estimate: beta[index], se, t, p: twoSidedTP(t, df) };
   });
   const r2 = sst > 0 ? 1 - sse / sst : 0;
   const adjR2 = sst > 0 && df > 0 ? 1 - (sse / df) / (sst / (n - 1)) : r2;

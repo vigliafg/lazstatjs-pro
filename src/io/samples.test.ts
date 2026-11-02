@@ -7,39 +7,13 @@ import { ANALYSIS_TABS } from '../analyses/registry';
 import { readDelimitedTable, readJsonTable } from './readers';
 import { readStatFile } from './statfiles';
 import { readXlsxSheets, xlsxSheetToTable } from './xlsx';
+import { validateSampleManifest, type SampleExample, type SampleManifest } from './sampleManifest';
 
 /**
  * Every sample is committed in five formats and described by the manifest.
  * This suite is the safety net: if a regenerated file drifts from the index,
  * the e2e tests would otherwise fail much later and with a less clear message.
  */
-interface SampleExample {
-  analysis: string;
-  columns: Record<string, string | string[]>;
-  options?: Record<string, string | number | boolean>;
-}
-
-interface SampleDataset {
-  id: string;
-  title: string;
-  family: string;
-  dir: string;
-  source: string;
-  rows: number;
-  columns: string[];
-  formats: string[];
-  procedures: string[];
-  examples: SampleExample[];
-  notes: string;
-}
-
-interface SampleManifest {
-  version: number;
-  generatedBy: string;
-  formats: string[];
-  datasets: SampleDataset[];
-}
-
 const root = fileURLToPath(new URL('../../samples/', import.meta.url));
 const manifest = JSON.parse(
   readFileSync(join(root, 'manifest.json'), 'utf8')
@@ -50,6 +24,10 @@ const asArrayBuffer = (bytes: Buffer): ArrayBuffer =>
 
 const columnValues = (example: SampleExample): string[] =>
   Object.values(example.columns).flatMap(value => (Array.isArray(value) ? value : [value]));
+
+test('the sample manifest satisfies its schema and cross-field invariants', () => {
+  assert.deepEqual(validateSampleManifest(manifest), []);
+});
 
 test('the sample manifest is coherent with its folders', () => {
   assert.equal(manifest.version, 1);
@@ -154,3 +132,22 @@ test('binary samples preserve value labels where the source has them', async () 
     }
   }
 });
+
+test('the manifest validator rejects a drifted index', () => {
+  const broken = JSON.parse(JSON.stringify(manifest)) as SampleManifest;
+  broken.datasets[0].dir = 'wrong/folder';
+  assert.ok(validateSampleManifest(broken).some(error => error.includes('dir must be')));
+
+  const unknownColumn = JSON.parse(JSON.stringify(manifest)) as SampleManifest;
+  unknownColumn.datasets[0].examples[0].columns = { Missing_Column: 'Missing_Column' };
+  assert.ok(
+    validateSampleManifest(unknownColumn).some(error => error.includes('unknown column Missing_Column'))
+  );
+
+  assert.deepEqual(validateSampleManifest({ version: 1 }), [
+    'manifest: generatedBy must be "samples/generate.R"',
+    'manifest: formats must list the five output formats',
+    'manifest: datasets must be a non-empty array',
+  ]);
+});
+

@@ -40,3 +40,21 @@ test('regressionStats HC3 is finite and wider than OLS on these data', () => {
   assert.ok(Number.isFinite(hc3.robust.coefficients[0].se));
   assert.ok(hc3.robust.coefficients[0].se > ols.coefficients[0].se);
 });
+
+test('Theil–Sen is thinned on large grids instead of enumerating every pair', () => {
+  const large = Array.from({ length: 2500 }, (_, index) => [
+    String(10 + (index % 40) * 0.5 + (index % 7) * 0.1),
+    String(index % 40),
+    String((index * 3) % 17),
+  ]);
+  const simple = regressionStats(large, 0, [1], 95);
+  assert.ok(simple?.theilSen);
+  assert.ok(Number.isFinite(simple!.theilSen!.slope));
+  assert.ok(Number.isFinite(simple!.theilSen!.lo));
+  assert.ok(Number.isFinite(simple!.theilSen!.hi));
+
+  const multiple = regressionStats(large, 0, [1, 2], 95);
+  assert.ok(multiple);
+  assert.equal(multiple!.univariateSlopes.length, 2);
+  assert.ok(multiple!.univariateSlopes.every(value => Number.isFinite(value)));
+});

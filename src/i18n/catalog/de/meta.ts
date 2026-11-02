@@ -129,4 +129,8 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.doe.label': 'Responsefläche (DOE)',
   'meta.analysis.doe.description':
     'Quadratische Responsefläche mit Konturplot und stationärem Punkt.',
+  'meta.family.ml.label': 'Maschinelles Lernen',
+  'meta.family.ml.description': 'Vorhersage, Klassifikation und Text',
+  'meta.family.advanced.label': 'Fortgeschritten & Bayesianisch',
+  'meta.family.advanced.description': 'Metaanalyse, bayesianische und räumliche Modelle',
 };

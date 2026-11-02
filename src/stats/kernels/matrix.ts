@@ -219,3 +219,71 @@ export const pseudoInverse = (matrix: Matrix): Matrix => {
   }
   return result;
 };
+
+export interface QrResult {
+  /** Orthogonal factor (`m x m`). */
+  q: Matrix;
+  /** Upper-triangular factor (`m x n`). */
+  r: Matrix;
+}
+
+/**
+ * Householder QR decomposition. Returns the full `Q` (`m x m`) and `R`
+ * (`m x n`) so `A = Q R` holds exactly; the diagonal of `R` uses the same
+ * sign convention as NumPy/LAPACK (`R[k][k] < 0` when the column is non-zero).
+ */
+export const qr = (matrix: Matrix): QrResult | null => {
+  const rows = matrix.length;
+  const cols = matrix[0]?.length ?? 0;
+  if (rows === 0 || cols === 0) return null;
+  if (matrix.some(row => row.length !== cols)) return null;
+
+  const a = matrix.map(row => [...row]);
+  const q = identity(rows);
+  const reflectors = Math.min(rows, cols);
+
+  for (let k = 0; k < reflectors; k += 1) {
+    let norm = 0;
+    for (let i = k; i < rows; i += 1) norm += a[i][k] * a[i][k];
+    norm = Math.sqrt(norm);
+    if (!(norm > 1e-14)) continue;
+
+    const alpha = a[k][k] > 0 ? -norm : norm;
+    const v = new Array<number>(rows).fill(0);
+    for (let i = k; i < rows; i += 1) v[i] = a[i][k];
+    v[k] -= alpha;
+    let squared = 0;
+    for (let i = k; i < rows; i += 1) squared += v[i] * v[i];
+    if (!(squared > 1e-28)) continue;
+
+    for (let j = k; j < cols; j += 1) {
+      let dot = 0;
+      for (let i = k; i < rows; i += 1) dot += v[i] * a[i][j];
+      const factor = (2 * dot) / squared;
+      for (let i = k; i < rows; i += 1) a[i][j] -= factor * v[i];
+    }
+
+    for (let i = 0; i < rows; i += 1) {
+      let dot = 0;
+      for (let j = k; j < rows; j += 1) dot += q[i][j] * v[j];
+      const factor = (2 * dot) / squared;
+      for (let j = k; j < rows; j += 1) q[i][j] -= factor * v[j];
+    }
+  }
+
+  for (let i = 1; i < rows; i += 1) {
+    for (let j = 0; j < Math.min(i, cols); j += 1) a[i][j] = 0;
+  }
+  return { q, r: a };
+};
+
+/** Numerical rank from the singular values (default tolerance `1e-10`). */
+export const rank = (matrix: Matrix, tolerance = 1e-10): number => {
+  const rows = matrix.length;
+  const cols = matrix[0]?.length ?? 0;
+  if (rows === 0 || cols === 0) return 0;
+  const { s } = svd(matrix);
+  if (s.length === 0) return 0;
+  const threshold = tolerance * Math.max(rows, cols) * s[0];
+  return s.filter(value => value > threshold).length;
+};

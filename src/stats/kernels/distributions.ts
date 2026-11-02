@@ -1,4 +1,5 @@
 import { benjaminiHochberg } from './multiple';
+import { LILLIEFORS_MAX_ROWS, sampleEvenly } from './guards';
 import { jStat } from '../jstat';
 
 // ---------------------------------------------------------------------------
@@ -411,11 +412,16 @@ export const lillieforsTest = (
 ): { d: number; p: number } => {
   const n = values.length;
   if (n < 5) return { d: NaN, p: NaN };
-  const mean = jStat.mean(values);
-  const sd = jStat.stdev(values, true);
+  // The Monte-Carlo p-value sorts the sample once per replicate: evaluate it
+  // on a bounded, evenly spaced subsample instead of a 50 000-row grid.
+  const sampleValues =
+    n > LILLIEFORS_MAX_ROWS ? sampleEvenly(values, LILLIEFORS_MAX_ROWS) : values;
+  const size = sampleValues.length;
+  const mean = jStat.mean(sampleValues);
+  const sd = jStat.stdev(sampleValues, true);
   if (!(sd > 0)) return { d: NaN, p: NaN };
 
-  const sorted = [...values].sort((a, b) => a - b);
+  const sorted = [...sampleValues].sort((a, b) => a - b);
   const observed = ksDistance(sorted, mean, sd);
 
   const rnd = mulberry32(seed);
@@ -427,8 +433,8 @@ export const lillieforsTest = (
 
   let asExtreme = 0;
   for (let r = 0; r < reps; r++) {
-    const sample = new Array<number>(n);
-    for (let i = 0; i < n; i++) sample[i] = randomNormal();
+    const sample = new Array<number>(size);
+    for (let i = 0; i < size; i++) sample[i] = randomNormal();
     sample.sort((a, b) => a - b);
     const sMean = jStat.mean(sample);
     const sSd = jStat.stdev(sample, true);

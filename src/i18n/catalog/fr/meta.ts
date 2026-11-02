@@ -94,4 +94,8 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.discriminant.description': 'Fonctions discriminantes linéaires, graphique canonique et MANOVA à un facteur.',
   'meta.analysis.doe.label': 'Surface de réponse (DOE)',
   'meta.analysis.doe.description': 'Surface quadratique avec courbes de niveau et point stationnaire.',
+  'meta.family.ml.label': 'Apprentissage automatique',
+  'meta.family.ml.description': 'Prédiction, classification et texte',
+  'meta.family.advanced.label': 'Avancées et bayésiennes',
+  'meta.family.advanced.description': 'Méta-analyse, modèles bayésiens et spatiaux',
 };

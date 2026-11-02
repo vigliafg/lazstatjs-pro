@@ -2,6 +2,7 @@ import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
 import { hierarchicalClusters } from '../../stats/kernels/cluster';
+import { GUARD_LIMITS, guardDimensions, sampleEvenly } from '../../stats/kernels/guards';
 import { clusterTables } from '../../stats/tables/cluster';
 import { clusterReport } from '../../stats/reports/cluster';
 import type { AnalysisChart } from '../../stats/charts';
@@ -35,8 +36,15 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
       reason: 'Cluster analysis needs at least four complete rows: all selected variables must be numeric',
     };
   }
-  const step = Math.max(1, Math.ceil(rows.length / MAX_ROWS));
-  const sample = rows.filter((_, index) => index % step === 0).slice(0, MAX_ROWS);
+  // Clustering is quadratic in the number of rows, so the dendrogram always
+  // works on a deterministic sample even when the grid is large. The guard is
+  // checked on the sample size, not on the full grid.
+  const sample = sampleEvenly(rows, MAX_ROWS);
+  const guard = guardDimensions(
+    { rows: sample.length, columns: columns.length },
+    GUARD_LIMITS.quadratic
+  );
+  if (guard.ok === false) return { ok: false, reason: guard.message };
   const variableNames = columns.map(index => grid.cols[index]?.name ?? `V${index + 1}`);
   const k = Math.max(2, Math.min(sample.length, params.clusters || 3));
 

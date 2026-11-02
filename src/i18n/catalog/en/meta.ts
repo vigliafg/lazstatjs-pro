@@ -92,4 +92,8 @@ export const metaMessages = {
   'meta.analysis.discriminant.description': 'Linear discriminant functions, canonical plot and one-way MANOVA.',
   'meta.analysis.doe.label': 'Response Surface (DOE)',
   'meta.analysis.doe.description': 'Quadratic response surface with contour plot and stationary point.',
+  'meta.family.ml.label': 'Machine learning',
+  'meta.family.ml.description': 'Prediction, classification and text',
+  'meta.family.advanced.label': 'Advanced & Bayesian',
+  'meta.family.advanced.description': 'Meta-analysis, Bayesian and spatial models',
 } as const;

@@ -92,4 +92,8 @@ export const metaMessages = {
   'meta.analysis.discriminant.description': 'Funções discriminantes lineares, gráfico canónico e MANOVA de um fator.',
   'meta.analysis.doe.label': 'Superfície de resposta (DOE)',
   'meta.analysis.doe.description': 'Superfície quadrática com curvas de nível e ponto estacionário.',
+  'meta.family.ml.label': 'Aprendizagem automática',
+  'meta.family.ml.description': 'Previsão, classificação e texto',
+  'meta.family.advanced.label': 'Avançadas e bayesianas',
+  'meta.family.advanced.description': 'Meta-análise, modelos bayesianos e espaciais',
 } as const;

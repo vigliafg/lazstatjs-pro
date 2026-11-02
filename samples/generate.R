@@ -570,6 +570,42 @@ manifest <- list(
   formats = FORMATS,
   datasets = datasets
 )
+
+# Fail before writing so a broken index never reaches the repository. The same
+# invariants are re-checked in TypeScript by src/io/sampleManifest.ts.
+validate_manifest <- function(manifest) {
+  ids <- vapply(manifest$datasets, function(dataset) dataset$id, character(1))
+  if (anyDuplicated(ids)) stop("duplicate dataset id: ", ids[anyDuplicated(ids)])
+  dirs <- vapply(manifest$datasets, function(dataset) dataset$dir, character(1))
+  if (anyDuplicated(dirs)) stop("duplicate dataset directory: ", dirs[anyDuplicated(dirs)])
+
+  for (dataset in manifest$datasets) {
+    if (nchar(dataset$title) == 0) stop(dataset$id, ": empty title")
+    if (nchar(dataset$source) == 0) stop(dataset$id, ": empty source")
+    if (dataset$rows <= 0) stop(dataset$id, ": no rows")
+    if (length(dataset$columns) == 0) stop(dataset$id, ": no columns")
+    if (anyDuplicated(unlist(dataset$columns))) stop(dataset$id, ": duplicate columns")
+    if (dataset$dir != file.path(dataset$family, dataset$id)) {
+      stop(dataset$id, ": dir must be <family>/<id>")
+    }
+    if (length(dataset$procedures) == 0) stop(dataset$id, ": no procedure")
+    if (length(dataset$examples) == 0) stop(dataset$id, ": no example")
+
+    for (example in dataset$examples) {
+      if (!(example$analysis %in% dataset$procedures)) {
+        stop(dataset$id, ": example refers to undeclared procedure ", example$analysis)
+      }
+      columns <- unlist(example$columns)
+      unknown <- setdiff(columns, unlist(dataset$columns))
+      if (length(unknown) > 0) {
+        stop(dataset$id, ": example refers to unknown columns ", paste(unknown, collapse = ", "))
+      }
+    }
+  }
+}
+
+validate_manifest(manifest)
+
 writeLines(
   toJSON(manifest, auto_unbox = TRUE, pretty = TRUE, digits = NA),
   "manifest.json",
