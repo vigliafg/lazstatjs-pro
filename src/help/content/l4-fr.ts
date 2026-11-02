@@ -49,9 +49,9 @@ export const l4Topics: HelpTopic[] = [
     tutorial: {
       goal: 'Vérifier si un processus est stable et capable.',
       steps: [
-        'Choisissez le mode : carte de contrôle, capabilité, Pareto ou variabilité.',
+        'Choisissez le mode : carte de contrôle, capabilité, Pareto, variabilité, intervalle de tolérance ou CUSUM.',
         'Sélectionnez la variable numérique (ou la catégorie pour le Pareto).',
-        'Fixez les limites de spécification et la taille des sous-groupes si nécessaire.',
+        'Fixez les limites de spécification, la taille des sous-groupes et la proportion de population de l’intervalle de tolérance si nécessaire.',
         'Lancez l’analyse et lisez la carte, les indices et le rapport de lecture.',
       ],
       expected: 'Une carte de contrôle avec ses limites, des indices de capabilité ou un diagramme de Pareto, plus les tableaux.',
@@ -64,12 +64,13 @@ export const l4Topics: HelpTopic[] = [
         'Les points hors des limites de contrôle sont des signaux, pas la preuve d’un changement.',
         'Cp est la marge potentielle ; Cpk pénalise aussi une moyenne éloignée du centre des spécifications.',
         'La ligne cumulée du Pareto montre quelles catégories traiter en premier.',
+        'L’intervalle de tolérance couvre une part de la population, pas la moyenne ; la CUSUM accumule les petits décalages persistants.',
       ],
       pitfalls: [
         'Les limites de contrôle ne sont pas des limites de spécification.',
         'La capabilité suppose la normalité et un processus stable.',
       ],
-      charts: ['Carte de contrôle', 'Histogramme de capabilité', 'Diagramme de Pareto', 'Boîte à moustaches de variabilité'],
+      charts: ['Carte de contrôle', 'Histogramme de capabilité', 'Diagramme de Pareto', 'Boîte à moustaches de variabilité', 'Intervalle de tolérance'],
       glossary: [
         { term: 'UCL/LCL', definition: 'Limites de contrôle supérieure et inférieure à ±3 sigma du centre.' },
         { term: 'Cpk', definition: 'Indice de capabilité qui tient compte de la distance entre la moyenne et les limites de spécification.' },

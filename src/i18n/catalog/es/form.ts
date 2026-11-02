@@ -248,4 +248,8 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'hint.descriptive.frequency': 'Recuento de una columna categórica, booleana o de pocos niveles, con porcentajes e intervalos de Wilson.',
   'hint.descriptive.outliers': 'Pruebas de Grubbs y Dixon sobre la observación más extrema de cada variable seleccionada.',
   'hint.descriptive.runs': 'Cuenta las rachas por encima y por debajo de la mediana para comprobar si el orden de las filas es aleatorio.',
+  'quality.tolerance': 'Intervalo de tolerancia',
+  'form.populationProportion': 'Proporción de la población',
+  'hint.quality.tolerance': 'Intervalo que cubre la proporción indicada de la población con la confianza elegida.',
+  'quality.cusum': 'CUSUM',
 };

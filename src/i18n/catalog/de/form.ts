@@ -254,4 +254,8 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'hint.descriptive.frequency': 'Auszählung einer kategorialen, booleschen oder niveaarmen Spalte mit Prozentwerten und Wilson-Intervallen.',
   'hint.descriptive.outliers': 'Grubbs- und Dixon-Tests für die extremste Beobachtung jeder ausgewählten Variablen.',
   'hint.descriptive.runs': 'Zählt die Runs ober- und unterhalb des Medians, um zu prüfen, ob die Zeilenreihenfolge zufällig ist.',
+  'quality.tolerance': 'Toleranzintervall',
+  'form.populationProportion': 'Anteil der Grundgesamtheit',
+  'hint.quality.tolerance': 'Intervall, das den angegebenen Anteil der Grundgesamtheit mit dem gewählten Konfidenzniveau abdeckt.',
+  'quality.cusum': 'CUSUM',
 };

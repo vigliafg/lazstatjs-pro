@@ -68,9 +68,9 @@ export const l4Topics: HelpTopic[] = [
     tutorial: {
       goal: "Comprobar si un proceso es estable y capaz.",
       steps: [
-        "Elige el modo: gráfico de control, capacidad, Pareto o variabilidad.",
+        "Elige el modo: gráfico de control, capacidad, Pareto, variabilidad, intervalo de tolerancia o CUSUM.",
         "Selecciona la variable numérica (o la categoría para Pareto).",
-        "Fija los límites de especificación y el tamaño del subgrupo cuando sea necesario.",
+        "Fija los límites de especificación, el tamaño del subgrupo y la proporción de población del intervalo de tolerancia cuando sea necesario.",
         "Ejecútalo y lee el gráfico, los índices y el informe de lectura.",
       ],
       expected:
@@ -90,6 +90,7 @@ export const l4Topics: HelpTopic[] = [
         "Los puntos fuera de los límites de control son señales, no pruebas de un cambio.",
         "Cp es el margen potencial; Cpk penaliza además una media alejada del centro de las especificaciones.",
         "La línea acumulada del Pareto muestra qué categorías abordar primero.",
+        "El intervalo de tolerancia cubre una proporción de la población, no la media; la CUSUM acumula pequeños desplazamientos persistentes.",
       ],
       pitfalls: [
         "Los límites de control no son límites de especificación.",
@@ -100,6 +101,7 @@ export const l4Topics: HelpTopic[] = [
         "Histograma de capacidad",
         "Gráfico de Pareto",
         "Diagrama de caja de variabilidad",
+        "Intervalo de tolerancia",
       ],
       glossary: [
         {

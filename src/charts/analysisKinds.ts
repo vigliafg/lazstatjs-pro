@@ -55,7 +55,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   ttest: ['box', 'interval', 'diamond'],
   wizard: [],
   partition: ['bar', 'scatter', 'tree'],
-  quality: ['box', 'histogram', 'line', 'pareto'],
+  quality: ['box', 'histogram', 'interval', 'line', 'pareto'],
   cluster: ['bar', 'dendrogram', 'line'],
   discriminant: ['heatmap', 'line', 'scatter'],
   doe: ['bar', 'surface'],

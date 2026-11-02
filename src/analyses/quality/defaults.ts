@@ -17,5 +17,6 @@ export const defaultQualityParams = (grid: GridData): QualityParams => {
     lsl: 0,
     usl: 10,
     target: 5,
+    toleranceP: 0.95,
   };
 };

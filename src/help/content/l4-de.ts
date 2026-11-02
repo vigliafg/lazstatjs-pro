@@ -46,9 +46,9 @@ export const l4Topics: HelpTopic[] = [
     tutorial: {
       goal: "Prüfen, ob ein Prozess stabil und fähig ist.",
       steps: [
-        "Wählen Sie den Modus: Regelkarte, Prozessfähigkeit, Pareto oder Streuung.",
+        "Wählen Sie den Modus: Regelkarte, Prozessfähigkeit, Pareto, Streuung, Toleranzintervall oder CUSUM.",
         "Wählen Sie die numerische Variable (oder die Kategorie für Pareto).",
-        "Legen Sie bei Bedarf Spezifikationsgrenzen und die Untergruppengröße fest.",
+        "Legen Sie bei Bedarf Spezifikationsgrenzen, die Untergruppengröße und den Anteil der Grundgesamtheit für das Toleranzintervall fest.",
         "Führen Sie die Analyse aus und lesen Sie Karte, Kennzahlen und Lesetext.",
       ],
       expected: "Eine Regelkarte mit Grenzen, Fähigkeitskennzahlen oder ein Pareto-Diagramm, dazu Tabellen.",
@@ -61,12 +61,13 @@ export const l4Topics: HelpTopic[] = [
         "Punkte außerhalb der Eingriffsgrenzen sind Signale, kein Beweis für eine Änderung.",
         "Cp ist der potenzielle Spielraum; Cpk berücksichtigt zusätzlich einen Mittelwert, der weit von der Spezifikationsmitte entfernt liegt.",
         "Die kumulierte Pareto-Linie zeigt, welche Kategorien zuerst anzugehen sind.",
+        "Das Toleranzintervall deckt einen Anteil der Grundgesamtheit ab, nicht den Mittelwert; die CUSUM summiert kleine anhaltende Verschiebungen.",
       ],
       pitfalls: [
         "Eingriffsgrenzen sind keine Spezifikationsgrenzen.",
         "Die Prozessfähigkeit setzt Normalität und einen stabilen Prozess voraus.",
       ],
-      charts: ["Regelkarte", "Fähigkeitshistogramm", "Pareto-Diagramm", "Boxplot der Streuung"],
+      charts: ["Regelkarte", "Fähigkeitshistogramm", "Pareto-Diagramm", "Boxplot der Streuung", "Toleranzintervall"],
       glossary: [
         { term: "UCL/LCL", definition: "Obere und untere Eingriffsgrenze bei ±3 Sigma von der Mitte." },
         { term: "Cpk", definition: "Fähigkeitskennzahl, die den Abstand zwischen Mittelwert und Spezifikationsgrenzen berücksichtigt." },

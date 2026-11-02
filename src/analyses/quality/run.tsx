@@ -7,6 +7,12 @@ import {
   controlChart,
   paretoCounts,
 } from '../../stats/kernels/quality';
+import { toleranceInterval } from '../../stats/kernels/tolerance';
+import { cusumChart } from '../../stats/kernels/cusum';
+import { toleranceTables } from '../../stats/tables/tolerance';
+import { cusumTables } from '../../stats/tables/cusum';
+import { toleranceReport } from '../../stats/reports/tolerance';
+import { cusumReport } from '../../stats/reports/cusum';
 import {
   capabilityTables,
   controlTables,
@@ -38,6 +44,7 @@ const numericValues = (grid: Dataset, index: number): number[] =>
 export const buildQualityOutput = ({
   grid,
   params,
+  ciLevel,
 }: QualityInput): AnalysisRunResult => {
   const variableName = grid.cols[params.variable]?.name ?? 'Y';
   const performed: string[] = [];
@@ -47,8 +54,97 @@ export const buildQualityOutput = ({
   let title = 'Qualità del processo';
   let header: string | undefined;
 
-  if (params.mode === 'pareto') {
-    const categoryName = grid.cols[params.category]?.name ?? 'Categoria';
+  if (params.mode === 'tolerance') {
+    const values = numericValues(grid, params.variable);
+    const result = toleranceInterval(values, params.toleranceP, ciLevel / 100);
+    if (!result) {
+      return {
+        ok: false,
+        reason:
+          'The tolerance interval needs at least two numeric observations with a positive standard deviation and a proportion between 0 and 1',
+      };
+    }
+    tables = toleranceTables(result, values, variableName);
+    report = toleranceReport(result, variableName);
+    title = copy('Intervallo di tolleranza — {s1}', { s1: variableName });
+    header = copy('{s1}% popolazione · confidenza {s2}%', {
+      s1: (result.proportion * 100).toFixed(1),
+      s2: (result.confidence * 100).toFixed(0),
+    });
+    performed.push('tolerance');
+    charts.push(
+      makeChart({
+        id: 'tolerance-interval',
+        kind: 'interval',
+        title: copy('Intervallo di tolleranza'),
+        subtitle: copy('Copre il {s1}% della popolazione con confidenza {s2}%', {
+          s1: (result.proportion * 100).toFixed(1),
+          s2: (result.confidence * 100).toFixed(0),
+        }),
+        note: copy('La barra va dal limite inferiore al limite superiore; il punto è la media. Non è un intervallo di confidenza della media: descrive dove cadono le singole osservazioni.'),
+        data: {
+          intervals: [
+            {
+              category: variableName,
+              estimate: result.mean,
+              lo: result.lo,
+              hi: result.hi,
+            },
+          ],
+        },
+        fields: { xLabel: copy('Variabile'), yLabel: variableName },
+      })
+    );
+  } else if (params.mode === 'cusum') {
+    const values = numericValues(grid, params.variable);
+    const result = cusumChart(values);
+    if (!result) {
+      return {
+        ok: false,
+        reason: 'CUSUM needs at least four consecutive numeric observations with a positive standard deviation',
+      };
+    }
+    tables = cusumTables(result, variableName);
+    report = cusumReport(result, variableName);
+    title = copy('CUSUM — {s1}', { s1: variableName });
+    header = copy('target {s1} · h {s2}σ', {
+      s1: result.center.toFixed(2),
+      s2: result.h.toFixed(1),
+    });
+    performed.push('cusum');
+    charts.push(
+      makeChart({
+        id: 'cusum-chart',
+        kind: 'line',
+        title: copy('CUSUM'),
+        subtitle: copy('k = {s1}σ · h = {s2}σ', {
+          s1: result.k.toFixed(1),
+          s2: result.h.toFixed(1),
+        }),
+        note: copy('C+ e C− sono le somme cumulative sopra e sotto il target; la linea tratteggiata è l’intervallo di decisione. Un punto oltre la linea è il segnale.'),
+        data: {
+          series: [
+            ...result.points.map(point => ({
+              x: point.index,
+              y: point.cplus,
+              series: copy('C+'),
+            })),
+            ...result.points.map(point => ({
+              x: point.index,
+              y: point.cminus,
+              series: copy('C−'),
+            })),
+          ],
+          rules: [
+            { value: result.upper, label: 'h' },
+            { value: 0, label: '0' },
+          ],
+        },
+        fields: { xLabel: copy('Osservazione'), yLabel: copy('Somma cumulata'), series: copy('Lato') },
+        options: { showMarkers: true, showBand: false, showLegend: true } as never,
+      })
+    );
+  } else if (params.mode === 'pareto') {    const categoryName = grid.cols[params.category]?.name ?? 'Categoria';
     const labels = grid.rows.map(row => String(row[params.category] ?? ''));
     const result = paretoCounts(labels);
     if (!result) {

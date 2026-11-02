@@ -298,4 +298,98 @@ export const descriptiveCopy: Record<string, string> = {
     'Beobachtungen gleich dem Trennwert zählen zur unteren Seite: bei vielen Gleichständen wird der Test konservativ.',
   'Il test assume che le osservazioni siano altrimenti identicamente distribuite: un cambiamento di livello a metà serie lo fa rifiutare anche senza vera dipendenza. Il livello usato è {s1}.':
     'Der Test setzt voraus, dass die Beobachtungen ansonsten identisch verteilt sind: ein Niveauwechsel in der Mitte der Reihe lässt ihn auch ohne echte Abhängigkeit verwerfen. Das verwendete Niveau ist {s1}.',
+  'Intervallo di tolleranza':
+    'Toleranzintervall',
+  'Population proportion':
+    'Anteil der Grundgesamtheit',
+  'Confidence':
+    'Konfidenz',
+  'Factor k':
+    'Faktor k',
+  'Lower bound':
+    'Untere Grenze',
+  'Upper bound':
+    'Obere Grenze',
+  'Observed coverage':
+    'Beobachtete Abdeckung',
+  'x̄ ± k·s: l’intervallo contiene la proporzione indicata della popolazione, non della media.':
+    'x̄ ± k·s: Das Intervall enthält den angegebenen Anteil der Grundgesamtheit, nicht des Mittelwerts.',
+  'Fattore calcolato con l’approssimazione di Howe; il metodo esatto basato sulla t non centrale differisce di circa lo 0,1% per n = 10.':
+    'Faktor mit Howes Näherung berechnet; die exakte Methode über die nichtzentrale t weicht bei n = 10 um etwa 0,1 % ab.',
+  'Report di lettura — Intervallo di tolleranza':
+    'Lesebeitrag — Toleranzintervall',
+  '{s1}% della popolazione di {s2} è compreso tra {s3} e {s4}, con confidenza {s5}%.':
+    '{s1} % der Grundgesamtheit von {s2} liegt zwischen {s3} und {s4}, bei {s5} % Konfidenz.',
+  'Intervallo':
+    'Intervall',
+  'L’intervallo di tolleranza risponde a una domanda diversa dal CI della media: non dove sta la media, ma quale intervallo coprirà una quota della popolazione.':
+    'Das Toleranzintervall beantwortet eine andere Frage als das KI des Mittelwerts: nicht wo der Mittelwert liegt, sondern welches Intervall einen Anteil der Grundgesamtheit abdeckt.',
+  'Serve per specifiche, limiti di accettazione e valori di riferimento, dove conta la dispersione individuale e non l’incertezza della stima.':
+    'Er dient Spezifikationen, Annahmegrenzen und Referenzwerten, bei denen die individuelle Streuung zählt und nicht die Unsicherheit der Schätzung.',
+  'Risultato':
+    'Ergebnis',
+  'Media {s1}, deviazione standard {s2}, fattore k = {s3}.':
+    'Mittelwert {s1}, Standardabweichung {s2}, Faktor k = {s3}.',
+  'Intervallo: da {s1} a {s2}; copre il {s3}% della popolazione con confidenza {s4}%.':
+    'Intervall: von {s1} bis {s2}; es deckt {s3} % der Grundgesamtheit bei {s4} % Konfidenz ab.',
+  'Ampiezza dell’intervallo: {s1}. Si restringe aumentando n o riducendo la confidenza richiesta.':
+    'Intervallbreite: {s1}. Sie nimmt ab, wenn n wächst oder die geforderte Konfidenz sinkt.',
+  'La confidenza riguarda la procedura: se ripetessi il campionamento, una quota pari alla confidenza degli intervalli costruiti coprirebbe davvero la proporzione richiesta.':
+    'Die Konfidenz betrifft das Verfahren: Bei wiederholter Stichprobenziehung würde der der Konfidenz entsprechende Anteil der Intervalle den geforderten Anteil tatsächlich abdecken.',
+  'Con pochi casi k è grande: un intervallo di tolleranza al 95/95 su dieci osservazioni è largo oltre tre deviazioni standard per lato.':
+    'Bei wenigen Fällen ist k groß: Ein 95/95-Toleranzintervall bei zehn Beobachtungen reicht je Seite über drei Standardabweichungen.',
+  'La copertura osservata nel campione non è la copertura della popolazione: con n piccolo è quasi sempre vicina al 100%.':
+    'Die im Sample beobachtete Abdeckung ist nicht die der Grundgesamtheit: bei kleinem n liegt sie fast immer nahe 100 %.',
+  'L’intervallo assume una popolazione normale e osservazioni indipendenti: con distribuzioni asimmetriche va usato un metodo non parametrico.':
+    'Das Intervall setzt eine normalverteilte Grundgesamtheit und unabhängige Beobachtungen voraus: bei schiefen Verteilungen ist eine nicht parametrische Methode nötig.',
+  'Non sostituisce un’analisi di capacità: Cp/Cpk confrontano la dispersione con le specifiche, l’intervallo di tolleranza stima dove cadono le unità.':
+    'Es ersetzt keine Fähigkeitsanalyse: Cp/Cpk vergleichen die Streuung mit den Spezifikationen, das Toleranzintervall schätzt, wo die Einheiten liegen.',
+  'Con campioni molto piccoli l’approssimazione di Howe può differire leggermente dal fattore esatto della t non centrale.':
+    'Bei sehr kleinen Stichproben kann Howes Näherung leicht vom exakten Faktor der nichtzentralen t abweichen.',
+  'Observation':
+    'Beobachtung',
+  'C+':
+    'C+',
+  'C−':
+    'C−',
+  'Signal':
+    'Signal',
+  'C+ accumula gli scostamenti sopra il target, C− quelli sotto: entrambi partono da zero e non scendono mai sotto zero.':
+    'C+ summiert Abweichungen über dem Ziel, C− die darunter: beide starten bei null und fallen nie darunter.',
+  'k = {s1}·σ (allowance), h = {s2}·σ (intervallo di decisione); il primo punto oltre h è il segnale.':
+    'k = {s1}·σ (Allowance), h = {s2}·σ (Entscheidungsintervall); der erste Punkt jenseits von h ist das Signal.',
+  'Report di lettura — CUSUM':
+    'Lesebeitrag — CUSUM',
+  'CUSUM di {s1}: {s2}':
+    'CUSUM von {s1}: {s2}',
+  'Il primo segnale è al punto {s1} verso l’alto e al punto {s2} verso il basso.':
+    'Das erste Signal liegt bei Punkt {s1} nach oben und bei Punkt {s2} nach unten.',
+  'Il primo segnale è al punto {s1}, verso l’alto.':
+    'Das erste Signal liegt bei Punkt {s1} nach oben.',
+  'Il primo segnale è al punto {s1}, verso il basso.':
+    'Das erste Signal liegt bei Punkt {s1} nach unten.',
+  'Nessun punto supera l’intervallo di decisione: il processo resta sotto controllo.':
+    'Kein Punkt überschreitet das Entscheidungsintervall: Der Prozess bleibt unter Kontrolle.',
+  'La CUSUM somma gli scostamenti dal target: piccoli spostamenti persistenti si accumulano e superano il limite anche quando nessun punto singolo esce dai limiti di una carta Shewhart.':
+    'Die CUSUM summiert die Abweichungen vom Ziel: Kleine anhaltende Verschiebungen summieren sich und überschreiten die Grenze, auch wenn kein einzelner Punkt die Grenzen einer Shewhart-Karte verlässt.',
+  'È la carta giusta per turni, lotti e processi continui, dove conta la deriva lenta e non il singolo valore anomalo.':
+    'Sie ist die richtige Karte für Schichten, Lose und kontinuierliche Prozesse, bei denen die langsame Drift zählt und nicht der einzelne Ausreißer.',
+  'Target {s1}, σ {s2}; allowance k = {s3}·σ, intervallo h = {s4}·σ (limite {s5}).':
+    'Ziel {s1}, σ {s2}; Allowance k = {s3}·σ, Intervall h = {s4}·σ (Grenze {s5}).',
+  'Valore finale di C+: {s1}; di C−: {s2}.':
+    'Endwert von C+: {s1}; von C−: {s2}.',
+  'C+ misura quanto il processo è stato sopra il target, C− quanto è stato sotto; i due lati si leggono separatamente.':
+    'C+ misst, wie weit der Prozess über dem Ziel lag, C− wie weit darunter; beide Seiten werden getrennt gelesen.',
+  'Dopo un segnale la carta va azzerata o ricalcolata: la somma continua a crescere e non dice più quando è avvenuto il cambiamento.':
+    'Nach einem Signal muss die Karte zurückgesetzt oder neu berechnet werden: Die Summe wächst weiter und sagt nicht mehr, wann die Änderung eintrat.',
+  'k = 0,5σ è la scelta classica per uno spostamento di 1σ; h = 4σ dà pochi falsi allarmi, h = 5σ è ancora più prudente.':
+    'k = 0,5σ ist die klassische Wahl für eine Verschiebung um 1σ; h = 4σ erzeugt wenige Fehlalarme, h = 5σ ist noch vorsichtiger.',
+  'La CUSUM assume osservazioni indipendenti e in ordine cronologico: con autocorrelazione i falsi allarmi aumentano.':
+    'Die CUSUM setzt unabhängige Beobachtungen in chronologischer Reihenfolge voraus: Bei Autokorrelation steigen die Fehlalarme.',
+  'Non stima il punto di cambiamento: per quello servono metodi di change-point o la lettura congiunta con la carta di controllo.':
+    'Er schätzt den Wechselpunkt nicht: dafür braucht es Change-Point-Methoden oder die gemeinsame Lesart mit der Regelkarte.',
+  'Target e σ devono venire da una fase stabile: usarli da un processo fuori controllo rende il grafico fuorviante.':
+    'Ziel und σ müssen aus einer stabilen Phase stammen: Aus einem außer Kontrolle geratenen Prozess entnommen, wird die Karte irreführend.',
+  'CUSUM':
+    'CUSUM',
 };

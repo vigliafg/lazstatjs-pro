@@ -303,12 +303,18 @@ export interface PartitionParams {
   minSplit: number;
 }
 
-export type QualityMode = 'control' | 'capability' | 'pareto' | 'variability';
+export type QualityMode =
+  | 'control'
+  | 'capability'
+  | 'pareto'
+  | 'variability'
+  | 'tolerance'
+  | 'cusum';
 
 /** Parametri della piattaforma qualità. */
 export interface QualityParams {
   mode: QualityMode;
-  /** Variabile numerica per controllo, capacità e variabilità. */
+  /** Variabile numerica per controllo, capacità, variabilità e tolleranza. */
   variable: number;
   /** Variabile categorica per il Pareto. */
   category: number;
@@ -319,6 +325,8 @@ export interface QualityParams {
   lsl: number;
   usl: number;
   target: number;
+  /** Quota di popolazione coperta dall’intervallo di tolleranza (0–1). */
+  toleranceP: number;
 }
 
 export type ClusterMethod = 'average' | 'complete' | 'single' | 'ward';
@@ -651,6 +659,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     lsl: 0,
     usl: 10,
     target: 5,
+    toleranceP: 0.95,
   },
   cluster: {
     selected: [0, 1],

@@ -49,9 +49,9 @@ export const l4Topics: HelpTopic[] = [
     tutorial: {
       goal: 'Verificar se um processo é estável e capaz.',
       steps: [
-        'Escolha o modo: carta de controlo, capacidade, Pareto ou variabilidade.',
+        'Escolha o modo: carta de controlo, capacidade, Pareto, variabilidade, intervalo de tolerância ou CUSUM.',
         'Selecione a variável numérica (ou a categoria, para o Pareto).',
-        'Defina os limites de especificação e a dimensão do subgrupo, quando necessário.',
+        'Defina os limites de especificação, a dimensão do subgrupo e a proporção da população do intervalo de tolerância, quando necessário.',
         'Execute e leia a carta, os índices e o relatório de leitura.',
       ],
       expected: 'Uma carta de controlo com limites, índices de capacidade ou um gráfico de Pareto, além das tabelas.',
@@ -64,12 +64,13 @@ export const l4Topics: HelpTopic[] = [
         'Os pontos fora dos limites de controlo são sinais, não prova de uma mudança.',
         'O Cp é a margem potencial; o Cpk penaliza também uma média afastada do centro das especificações.',
         'A linha acumulada do Pareto mostra quais as categorias a atacar primeiro.',
+        'O intervalo de tolerância cobre uma proporção da população, não a média; a CUSUM acumula pequenos deslocamentos persistentes.',
       ],
       pitfalls: [
         'Os limites de controlo não são limites de especificação.',
         'A capacidade assume normalidade e um processo estável.',
       ],
-      charts: ['Carta de controlo', 'Histograma de capacidade', 'Gráfico de Pareto', 'Diagrama de caixa da variabilidade'],
+      charts: ['Carta de controlo', 'Histograma de capacidade', 'Gráfico de Pareto', 'Diagrama de caixa da variabilidade', 'Intervalo de tolerância'],
       glossary: [
         { term: 'UCL/LCL', definition: 'Limites de controlo superior e inferior a ±3 sigma do centro.' },
         { term: 'Cpk', definition: 'Índice de capacidade que tem em conta a distância entre a média e os limites de especificação.' },

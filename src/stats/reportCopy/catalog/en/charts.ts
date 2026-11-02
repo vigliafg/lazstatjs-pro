@@ -647,8 +647,6 @@ export const chartCopy: Record<string, string> = {
     "Row",
   "Run length":
     "Run length",
-  "Frequenza":
-    "Frequency",
   "Frequenze: {s1}":
     "Frequencies: {s1}",
   "{s1} osservazioni, {s2} modalità":
@@ -674,4 +672,18 @@ export const chartCopy: Record<string, string> = {
   "Variable": "Variable",
   "Value": "Value",
   "Test delle sequenze": "Runs test",
+  "Intervallo di tolleranza": "Tolerance interval",
+  "C+ e C− sono le somme cumulative sopra e sotto il target; la linea tratteggiata è l’intervallo di decisione. Un punto oltre la linea è il segnale.": "C+ and C− are the cumulative sums above and below the target; the dashed line is the decision interval. A point beyond the line is the signal.",
+  "CUSUM": "CUSUM",
+  "CUSUM — {s1}": "CUSUM — {s1}",
+  "Lato": "Side",
+  "Somma cumulata": "Cumulative sum",
+  "k = {s1}σ · h = {s2}σ": "k = {s1}σ · h = {s2}σ",
+  "target {s1} · h {s2}σ": "target {s1} · h {s2}σ",
+  "Intervallo di tolleranza — {s1}": "Tolerance interval — {s1}",
+  "{s1}% popolazione · confidenza {s2}%": "{s1}% population · {s2}% confidence",
+  "Copre il {s1}% della popolazione con confidenza {s2}%": "Covers {s1}% of the population with {s2}% confidence",
+  "La barra va dal limite inferiore al limite superiore; il punto è la media. Non è un intervallo di confidenza della media: descrive dove cadono le singole osservazioni.": "The bar runs from the lower to the upper bound; the point is the mean. It is not a confidence interval for the mean: it describes where individual observations fall.",
+  "C+": "C+",
+  "C−": "C−",
 };

@@ -246,4 +246,8 @@ export const formMessages = {
   'hint.descriptive.frequency': 'Tally of a categorical, boolean or low-cardinality column, with percentages and Wilson intervals.',
   'hint.descriptive.outliers': 'Grubbs and Dixon tests for the most extreme observation of each selected variable.',
   'hint.descriptive.runs': 'Counts the runs above and below the median to check whether the row order is random.',
+  'quality.tolerance': 'Tolerance interval',
+  'form.populationProportion': 'Population proportion',
+  'hint.quality.tolerance': 'Interval that covers the stated share of the population with the chosen confidence.',
+  'quality.cusum': 'CUSUM',
 } as const;

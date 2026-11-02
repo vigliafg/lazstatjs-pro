@@ -50,9 +50,9 @@ export const l4Topics: HelpTopic[] = [
     tutorial: {
       goal: 'Check whether a process is stable and capable.',
       steps: [
-        'Choose the mode: control chart, capability, Pareto or variability.',
+        'Choose the mode: control chart, capability, Pareto, variability, tolerance interval or CUSUM.',
         'Select the numeric variable (or the category for Pareto).',
-        'Set specification limits and the subgroup size when needed.',
+        'Set specification limits, the subgroup size and the population proportion for the tolerance interval when needed.',
         'Run it and read the chart, the indices and the reading report.',
       ],
       expected: 'A control chart with limits, capability indices or a Pareto chart, plus tables.',
@@ -65,12 +65,13 @@ export const l4Topics: HelpTopic[] = [
         'Points outside the control limits are signals, not proof of a change.',
         'Cp is potential margin; Cpk also penalises a mean far from the specification centre.',
         'The Pareto cumulative line shows which categories to tackle first.',
+        'The tolerance interval covers a share of the population, not the mean; CUSUM accumulates small persistent shifts.',
       ],
       pitfalls: [
         'Control limits are not specification limits.',
         'Capability assumes normality and a stable process.',
       ],
-      charts: ['Control chart', 'Capability histogram', 'Pareto chart', 'Variability box plot'],
+      charts: ['Control chart', 'Capability histogram', 'Pareto chart', 'Variability box plot', 'Tolerance interval'],
       glossary: [
         { term: 'UCL/LCL', definition: 'Upper and lower control limits at ±3 sigma from the centre.' },
         { term: 'Cpk', definition: 'Capability index that accounts for the distance between the mean and the specification limits.' },

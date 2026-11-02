@@ -123,6 +123,26 @@ test('quality runner emits one chart per mode and the L3 quality panel', () => {
     })
   );
   assert.equal(variability[0].id, 'variab-box');
+
+  const tolerance = chartsOf(
+    buildQualityOutput({
+      grid: qualityGrid,
+      params: { ...DEFAULT_PARAMS.quality, mode: 'tolerance', variable: 0, toleranceP: 0.95 },
+      ciLevel: 95,
+    })
+  );
+  assert.equal(tolerance[0].id, 'tolerance-interval');
+  assert.equal(tolerance[0].kind, 'interval');
+
+  const cusum = chartsOf(
+    buildQualityOutput({
+      grid: qualityGrid,
+      params: { ...DEFAULT_PARAMS.quality, mode: 'cusum', variable: 0 },
+      ciLevel: 95,
+    })
+  );
+  assert.equal(cusum[0].id, 'cusum-chart');
+  assert.equal(cusum[0].kind, 'line');
 });
 
 test('cluster runner emits dendrogram, profiles and sizes', () => {

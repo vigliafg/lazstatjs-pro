@@ -340,4 +340,98 @@ export const descriptiveCopy: Record<string, string> = {
     'Observations equal to the cut point go to the lower side: with many ties the test becomes conservative.',
   'Il test assume che le osservazioni siano altrimenti identicamente distribuite: un cambiamento di livello a metà serie lo fa rifiutare anche senza vera dipendenza. Il livello usato è {s1}.':
     'The test assumes the observations are otherwise identically distributed: a level shift halfway through the series makes it reject even without true dependence. The level used is {s1}.',
+  'Intervallo di tolleranza':
+    'Tolerance interval',
+  'Population proportion':
+    'Population proportion',
+  'Confidence':
+    'Confidence',
+  'Factor k':
+    'Factor k',
+  'Lower bound':
+    'Lower bound',
+  'Upper bound':
+    'Upper bound',
+  'Observed coverage':
+    'Observed coverage',
+  'x̄ ± k·s: l’intervallo contiene la proporzione indicata della popolazione, non della media.':
+    'x̄ ± k·s: the interval contains the stated proportion of the population, not of the mean.',
+  'Fattore calcolato con l’approssimazione di Howe; il metodo esatto basato sulla t non centrale differisce di circa lo 0,1% per n = 10.':
+    'Factor computed with Howe’s approximation; the exact noncentral-t method differs by about 0.1% at n = 10.',
+  'Report di lettura — Intervallo di tolleranza':
+    'Reading report — Tolerance interval',
+  '{s1}% della popolazione di {s2} è compreso tra {s3} e {s4}, con confidenza {s5}%.':
+    '{s1}% of the {s2} population lies between {s3} and {s4}, with {s5}% confidence.',
+  'Intervallo':
+    'Interval',
+  'L’intervallo di tolleranza risponde a una domanda diversa dal CI della media: non dove sta la media, ma quale intervallo coprirà una quota della popolazione.':
+    'A tolerance interval answers a different question from the mean CI: not where the mean lies, but which interval will cover a share of the population.',
+  'Serve per specifiche, limiti di accettazione e valori di riferimento, dove conta la dispersione individuale e non l’incertezza della stima.':
+    'It is used for specifications, acceptance limits and reference values, where individual spread matters rather than the uncertainty of the estimate.',
+  'Risultato':
+    'Result',
+  'Media {s1}, deviazione standard {s2}, fattore k = {s3}.':
+    'Mean {s1}, standard deviation {s2}, factor k = {s3}.',
+  'Intervallo: da {s1} a {s2}; copre il {s3}% della popolazione con confidenza {s4}%.':
+    'Interval: from {s1} to {s2}; it covers {s3}% of the population with {s4}% confidence.',
+  'Ampiezza dell’intervallo: {s1}. Si restringe aumentando n o riducendo la confidenza richiesta.':
+    'Interval width: {s1}. It narrows as n grows or the requested confidence decreases.',
+  'La confidenza riguarda la procedura: se ripetessi il campionamento, una quota pari alla confidenza degli intervalli costruiti coprirebbe davvero la proporzione richiesta.':
+    'Confidence concerns the procedure: if sampling were repeated, the share of intervals equal to the confidence would truly cover the requested proportion.',
+  'Con pochi casi k è grande: un intervallo di tolleranza al 95/95 su dieci osservazioni è largo oltre tre deviazioni standard per lato.':
+    'With few cases k is large: a 95/95 tolerance interval on ten observations is more than three standard deviations wide on each side.',
+  'La copertura osservata nel campione non è la copertura della popolazione: con n piccolo è quasi sempre vicina al 100%.':
+    'The coverage observed in the sample is not the population coverage: with small n it is almost always close to 100%.',
+  'L’intervallo assume una popolazione normale e osservazioni indipendenti: con distribuzioni asimmetriche va usato un metodo non parametrico.':
+    'The interval assumes a normal population and independent observations: with skewed distributions a non-parametric method is needed.',
+  'Non sostituisce un’analisi di capacità: Cp/Cpk confrontano la dispersione con le specifiche, l’intervallo di tolleranza stima dove cadono le unità.':
+    'It does not replace a capability analysis: Cp/Cpk compare spread with specifications, the tolerance interval estimates where the units fall.',
+  'Con campioni molto piccoli l’approssimazione di Howe può differire leggermente dal fattore esatto della t non centrale.':
+    'With very small samples Howe’s approximation can differ slightly from the exact noncentral-t factor.',
+  'Observation':
+    'Observation',
+  'C+':
+    'C+',
+  'C−':
+    'C−',
+  'Signal':
+    'Signal',
+  'C+ accumula gli scostamenti sopra il target, C− quelli sotto: entrambi partono da zero e non scendono mai sotto zero.':
+    'C+ accumulates deviations above the target, C− those below: both start at zero and never go below it.',
+  'k = {s1}·σ (allowance), h = {s2}·σ (intervallo di decisione); il primo punto oltre h è il segnale.':
+    'k = {s1}·σ (allowance), h = {s2}·σ (decision interval); the first point beyond h is the signal.',
+  'Report di lettura — CUSUM':
+    'Reading report — CUSUM',
+  'CUSUM di {s1}: {s2}':
+    'CUSUM of {s1}: {s2}',
+  'Il primo segnale è al punto {s1} verso l’alto e al punto {s2} verso il basso.':
+    'The first signal is at point {s1} upwards and at point {s2} downwards.',
+  'Il primo segnale è al punto {s1}, verso l’alto.':
+    'The first signal is at point {s1}, upwards.',
+  'Il primo segnale è al punto {s1}, verso il basso.':
+    'The first signal is at point {s1}, downwards.',
+  'Nessun punto supera l’intervallo di decisione: il processo resta sotto controllo.':
+    'No point crosses the decision interval: the process stays in control.',
+  'La CUSUM somma gli scostamenti dal target: piccoli spostamenti persistenti si accumulano e superano il limite anche quando nessun punto singolo esce dai limiti di una carta Shewhart.':
+    'CUSUM sums the deviations from the target: small persistent shifts accumulate and cross the limit even when no single point leaves the limits of a Shewhart chart.',
+  'È la carta giusta per turni, lotti e processi continui, dove conta la deriva lenta e non il singolo valore anomalo.':
+    'It is the right chart for shifts, batches and continuous processes, where slow drift matters rather than a single odd value.',
+  'Target {s1}, σ {s2}; allowance k = {s3}·σ, intervallo h = {s4}·σ (limite {s5}).':
+    'Target {s1}, σ {s2}; allowance k = {s3}·σ, interval h = {s4}·σ (limit {s5}).',
+  'Valore finale di C+: {s1}; di C−: {s2}.':
+    'Final C+ value: {s1}; C−: {s2}.',
+  'C+ misura quanto il processo è stato sopra il target, C− quanto è stato sotto; i due lati si leggono separatamente.':
+    'C+ measures how far the process has been above the target, C− how far below; the two sides are read separately.',
+  'Dopo un segnale la carta va azzerata o ricalcolata: la somma continua a crescere e non dice più quando è avvenuto il cambiamento.':
+    'After a signal the chart must be reset or recomputed: the sum keeps growing and no longer says when the change happened.',
+  'k = 0,5σ è la scelta classica per uno spostamento di 1σ; h = 4σ dà pochi falsi allarmi, h = 5σ è ancora più prudente.':
+    'k = 0.5σ is the classic choice for a 1σ shift; h = 4σ gives few false alarms, h = 5σ is even more conservative.',
+  'La CUSUM assume osservazioni indipendenti e in ordine cronologico: con autocorrelazione i falsi allarmi aumentano.':
+    'CUSUM assumes independent observations in chronological order: with autocorrelation false alarms increase.',
+  'Non stima il punto di cambiamento: per quello servono metodi di change-point o la lettura congiunta con la carta di controllo.':
+    'It does not estimate the change point: change-point methods or reading it together with the control chart are needed.',
+  'Target e σ devono venire da una fase stabile: usarli da un processo fuori controllo rende il grafico fuorviante.':
+    'Target and σ must come from a stable phase: taking them from an out-of-control process makes the chart misleading.',
+  'CUSUM':
+    'CUSUM',
 };

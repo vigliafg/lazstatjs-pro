@@ -246,4 +246,8 @@ export const formMessages = {
   'hint.descriptive.frequency': 'Contagem de uma coluna categórica, booleana ou com poucos níveis, com percentagens e intervalos de Wilson.',
   'hint.descriptive.outliers': 'Testes de Grubbs e Dixon sobre a observação mais extrema de cada variável selecionada.',
   'hint.descriptive.runs': 'Conta as sequências acima e abaixo da mediana para verificar se a ordem das linhas é aleatória.',
+  'quality.tolerance': 'Intervalo de tolerância',
+  'form.populationProportion': 'Proporção da população',
+  'hint.quality.tolerance': 'Intervalo que cobre a proporção indicada da população com a confiança escolhida.',
+  'quality.cusum': 'CUSUM',
 } as const;

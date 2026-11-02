@@ -537,7 +537,11 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
     },
     quality: {
       mode:
-        quality.mode === 'capability' || quality.mode === 'pareto' || quality.mode === 'variability'
+        quality.mode === 'capability' ||
+        quality.mode === 'pareto' ||
+        quality.mode === 'variability' ||
+        quality.mode === 'tolerance' ||
+        quality.mode === 'cusum'
           ? quality.mode
           : d.quality.mode,
       variable: index(quality.variable, d.quality.variable, width),
@@ -551,6 +555,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       lsl: finite(quality.lsl, d.quality.lsl),
       usl: finite(quality.usl, d.quality.usl),
       target: finite(quality.target, d.quality.target),
+      toleranceP: Math.max(0.5, Math.min(0.9999, finite(quality.toleranceP, d.quality.toleranceP))),
     },
     cluster: {
       selected: indexList(cluster.selected, d.cluster.selected, width),

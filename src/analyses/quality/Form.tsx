@@ -36,6 +36,8 @@ export const QualityForm = ({ grid, qualityParams, setQualityParams }: QualityFo
         <option value="capability">{t('quality.capability')}</option>
         <option value="pareto">{t('quality.pareto')}</option>
         <option value="variability">{t('quality.variability')}</option>
+        <option value="tolerance">{t('quality.tolerance')}</option>
+        <option value="cusum">{t('quality.cusum')}</option>
       </select>
     </Field>
 
@@ -101,6 +103,28 @@ export const QualityForm = ({ grid, qualityParams, setQualityParams }: QualityFo
             />
           </Field>
         )}
+      </Advanced>
+    )}
+
+    {qualityParams.mode === 'tolerance' && (
+      <Advanced>
+        <Field label={t('form.populationProportion')}>
+          <input
+            type="number"
+            step="0.01"
+            min={0.5}
+            max={0.9999}
+            className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+            value={qualityParams.toleranceP}
+            onChange={event =>
+              setQualityParams(previous => ({
+                ...previous,
+                toleranceP: Math.max(0.5, Math.min(0.9999, Number(event.target.value) || 0.95)),
+              }))
+            }
+          />
+        </Field>
+        <p className="text-[11px] text-muted">{t('hint.quality.tolerance')}</p>
       </Advanced>
     )}
 

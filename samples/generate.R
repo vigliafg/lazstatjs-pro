@@ -129,7 +129,9 @@ write_dataset(
     example("anova", list(dependent = "weight", group = "group")),
     example("descriptive", list(variables = "weight")),
     example("wizard", list(outcome = "weight", group = "group")),
-    example("quality", list(variable = "weight", group = "group"))
+    example("quality", list(variable = "weight", group = "group")),
+    example("quality", list(variable = "weight"), mode = "tolerance"),
+    example("quality", list(variable = "weight"), mode = "cusum")
   ),
   "One factor with three levels (ctrl, trt1, trt2) and a continuous weight outcome."
 )

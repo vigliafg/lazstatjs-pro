@@ -184,6 +184,24 @@
             "outcome": "weight",
             "group": "group"
           }
+        },
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "weight"
+          },
+          "options": {
+            "mode": "tolerance"
+          }
+        },
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "weight"
+          },
+          "options": {
+            "mode": "cusum"
+          }
         }
       ],
       "notes": "One factor with three levels (ctrl, trt1, trt2) and a continuous weight outcome."
