@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         "Wählen Sie die numerischen Variablen (Score, Age) und lassen Sie das Konfidenzniveau bei 95 %.",
         "Drücken Sie „Analyse ausführen“ und lesen Sie die Zeile jeder Variable.",
         "Prüfen Sie die Spalte der fehlenden Werte und den Normalitätstest, bevor Sie Gruppen vergleichen.",
+        "Wechseln Sie den Auswahlschalter Verfahren auf Häufigkeiten für eine kategoriale Spalte, auf Ausreißer für Grubbs/Dixon oder auf Runs, um die Zeilenreihenfolge zu prüfen.",
       ],
       expected: "Eine Zeile pro Variable mit N, Mittelwert, Standardabweichung, Median, Quartilen, Minimum und Maximum sowie dem Ergebnis der Normalitätsprüfung.",
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         "Ein weit vom Median entfernter Mittelwert deutet auf Schiefe oder extreme Werte hin.",
         "Normalitätstests sind hinweisend: Bei großem N sind sie überempfindlich, bei kleinem N zu schwach.",
+        "Häufigkeiten beschreiben die Ausprägungen einer kategorialen Variablen; der Runs-Test prüft, ob die Zeilenreihenfolge zufällig ist; Grubbs und Dixon melden die extremste Beobachtung.",
       ],
       pitfalls: [
         "Geben Sie die Standardabweichung niemals als Standardfehler aus: Es sind verschiedene Größen.",

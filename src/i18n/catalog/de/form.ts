@@ -245,4 +245,13 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'chart.feature.heights': 'Fusionshöhen',
   'chart.surface.mesh': 'Oberfläche',
   'chart.surface.contour': 'Konturen',
+
+  'form.noColumns': 'Keine Spalten',
+  'descriptive.summary': 'Übersicht',
+  'descriptive.frequency': 'Häufigkeiten',
+  'descriptive.outliers': 'Ausreißer (Grubbs/Dixon)',
+  'descriptive.runs': 'Runs-Test',
+  'hint.descriptive.frequency': 'Auszählung einer kategorialen, booleschen oder niveaarmen Spalte mit Prozentwerten und Wilson-Intervallen.',
+  'hint.descriptive.outliers': 'Grubbs- und Dixon-Tests für die extremste Beobachtung jeder ausgewählten Variablen.',
+  'hint.descriptive.runs': 'Zählt die Runs ober- und unterhalb des Medians, um zu prüfen, ob die Zeilenreihenfolge zufällig ist.',
 };

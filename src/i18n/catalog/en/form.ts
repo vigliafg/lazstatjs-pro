@@ -237,4 +237,13 @@ export const formMessages = {
   'chart.feature.heights': 'Merge heights',
   'chart.surface.mesh': 'Surface',
   'chart.surface.contour': 'Contours',
+
+  'form.noColumns': 'No columns',
+  'descriptive.summary': 'Summary',
+  'descriptive.frequency': 'Frequencies',
+  'descriptive.outliers': 'Outliers (Grubbs/Dixon)',
+  'descriptive.runs': 'Runs test',
+  'hint.descriptive.frequency': 'Tally of a categorical, boolean or low-cardinality column, with percentages and Wilson intervals.',
+  'hint.descriptive.outliers': 'Grubbs and Dixon tests for the most extreme observation of each selected variable.',
+  'hint.descriptive.runs': 'Counts the runs above and below the median to check whether the row order is random.',
 } as const;

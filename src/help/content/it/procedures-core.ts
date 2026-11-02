@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Seleziona le variabili numeriche (Score, Age) e lascia il livello di confidenza al 95%.',
         'Premi Esegui analisi e leggi la riga di ogni variabile.',
         'Controlla la colonna dei mancanti e il test di normalità prima di passare ai confronti.',
+        'Cambia il selettore Procedura su Frequenze per una colonna categorica, su Valori anomali per Grubbs/Dixon o su Sequenze per controllare l’ordine delle righe.',
       ],
       expected: 'Una riga per variabile con N, media, deviazione standard, mediana, quartili, minimo e massimo, più l’esito dei controlli di normalità.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Media molto diversa dalla mediana suggerisce asimmetria o valori estremi.',
         'Il test di normalità è indicativo: con N grande diventa iper-sensibile, con N piccolo ha poca potenza.',
+        'Le frequenze descrivono i livelli di una categorica; il test delle sequenze controlla se l’ordine delle righe è casuale; Grubbs e Dixon segnalano l’osservazione più estrema.',
       ],
       pitfalls: [
         'Non riportare la deviazione standard come errore standard: sono grandezze diverse.',

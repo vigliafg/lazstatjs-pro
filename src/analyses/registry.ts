@@ -69,7 +69,10 @@ const ANALYSIS_DEFINITIONS = [
     label: 'Descriptive',
     family: 'descriptive',
     description: 'Means, spread, quantiles and per-variable summaries.',
-    keywords: ['summary', 'mean', 'median', 'sd', 'skewness', 'kurtosis'],
+    keywords: [
+      'summary', 'mean', 'median', 'sd', 'skewness', 'kurtosis',
+      'frequency', 'tally', 'count', 'outlier', 'grubbs', 'dixon', 'runs', 'randomness',
+    ],
     cost: 'instant',
   },
   {

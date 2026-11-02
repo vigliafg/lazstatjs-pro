@@ -12,7 +12,7 @@ import type { ChartOutputGroup } from '../../charts/outputs';
 import { normalizeCustomThemes, resolveThemeId } from '../../theme/custom';
 import { normalizeOutputAppearance } from '../../theme/outputAppearance';
 import {
-  DEFAULT_PARAMS, DEFAULT_SETTINGS,
+  DEFAULT_PARAMS, DEFAULT_SETTINGS, DESCRIPTIVE_MODES,
   type ProjectParams, type ProjectSettings,
   type TimeSeriesDifferenceMode, type TimeSeriesSeasonalDifferenceMode,
 } from './types';
@@ -303,6 +303,10 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
 
   return {
     descVars: indexList(raw.descVars, d.descVars, width),
+    descMode:
+      typeof raw.descMode === 'string' && (DESCRIPTIVE_MODES as readonly string[]).includes(raw.descMode)
+        ? (raw.descMode as ProjectParams['descMode'])
+        : d.descMode,
     ttest: {
       type: ttest.type === 'ind' || ttest.type === 'dep' || ttest.type === 'one' ? ttest.type : d.ttest.type,
       var1: index(ttest.var1, d.ttest.var1, width),

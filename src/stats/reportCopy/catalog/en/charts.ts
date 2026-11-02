@@ -643,4 +643,35 @@ export const chartCopy: Record<string, string> = {
   ...remainingChartCopy,
   ...l4ChartCopy,
   ...categoricalMultivariateChartCopy,
+  "Row":
+    "Row",
+  "Run length":
+    "Run length",
+  "Frequenza":
+    "Frequency",
+  "Frequenze: {s1}":
+    "Frequencies: {s1}",
+  "{s1} osservazioni, {s2} modalità":
+    "{s1} observations, {s2} levels",
+  "Distribuzione e valori estremi":
+    "Distribution and extreme values",
+  "Scatola e baffi delle variabili selezionate":
+    "Box plot of the selected variables",
+  "Valori anomali":
+    "Outliers",
+  "Sequenza osservata: {s1}":
+    "Observed sequence: {s1}",
+  "Valori nell’ordine delle righe, punto di taglio {s1}":
+    "Values in row order, cut point {s1}",
+  "Una tendenza o un ciclo visibile spiega perché il test rifiuta la casualità; il test non localizza il punto di rottura.":
+    "A visible trend or cycle explains why the test rejects randomness; the test does not locate the break point.",
+  "Lunghezza delle sequenze: {s1}":
+    "Run lengths: {s1}",
+  "{s1} sequenze osservate":
+    "{s1} observed runs",
+  "Count": "Count",
+  "Frequenze": "Frequencies",
+  "Variable": "Variable",
+  "Value": "Value",
+  "Test delle sequenze": "Runs test",
 };

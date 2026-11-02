@@ -239,4 +239,13 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'chart.feature.heights': 'Alturas de fusión',
   'chart.surface.mesh': 'Superficie',
   'chart.surface.contour': 'Curvas de nivel',
+
+  'form.noColumns': 'Ninguna columna',
+  'descriptive.summary': 'Resumen',
+  'descriptive.frequency': 'Frecuencias',
+  'descriptive.outliers': 'Valores atípicos (Grubbs/Dixon)',
+  'descriptive.runs': 'Prueba de rachas',
+  'hint.descriptive.frequency': 'Recuento de una columna categórica, booleana o de pocos niveles, con porcentajes e intervalos de Wilson.',
+  'hint.descriptive.outliers': 'Pruebas de Grubbs y Dixon sobre la observación más extrema de cada variable seleccionada.',
+  'hint.descriptive.runs': 'Cuenta las rachas por encima y por debajo de la mediana para comprobar si el orden de las filas es aleatorio.',
 };

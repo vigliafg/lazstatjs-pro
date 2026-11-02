@@ -88,6 +88,7 @@ write_dataset(
   c("descriptive", "distfit", "correlation", "multivariate", "wizard", "partition", "cluster", "discriminant"),
   list(
     example("descriptive", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
+    example("descriptive", list(variables = "Species"), mode = "frequency"),
     example("distfit", list(variable = "Sepal_Length")),
     example("correlation", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
     example("multivariate", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
@@ -265,6 +266,7 @@ write_dataset(
     example("regression", list(dependent = "mpg", predictors = c("wt", "hp", "disp"))),
     example("correlation", list(variables = c("mpg", "wt", "hp", "disp"))),
     example("descriptive", list(variables = c("mpg", "wt", "hp"))),
+    example("descriptive", list(variables = c("mpg", "wt", "hp")), mode = "outliers"),
     example("partition", list(response = "mpg", predictors = c("wt", "hp", "disp"))),
     example("cluster", list(variables = c("mpg", "wt", "hp", "disp"))),
     example("discriminant", list(group = "am", predictors = c("mpg", "wt", "hp", "disp"))),
@@ -535,6 +537,7 @@ write_dataset(
   list(
     example("mi", list(variables = c("Ozone", "Solar_R", "Wind", "Temp"), outcome = "Ozone", predictors = c("Solar_R", "Wind", "Temp"))),
     example("descriptive", list(variables = c("Ozone", "Solar_R", "Wind", "Temp"))),
+    example("descriptive", list(variables = "Ozone"), mode = "runs"),
     example("correlation", list(variables = c("Ozone", "Solar_R", "Wind", "Temp")))
   ),
   "153 daily observations with genuine missing values in Ozone (37) and Solar_R (7)."

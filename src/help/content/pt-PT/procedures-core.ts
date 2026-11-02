@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Selecione as variáveis numéricas (Score, Age) e mantenha o nível de confiança em 95%.',
         'Prima Executar análise e leia a linha de cada variável.',
         'Verifique a coluna dos omissos e o teste de normalidade antes de comparar grupos.',
+        'Mude o seletor Procedimento para Frequências numa coluna categórica, para Valores atípicos em Grubbs/Dixon, ou para Sequências para verificar a ordem das linhas.',
       ],
       expected: 'Uma linha por variável com N, média, desvio-padrão, mediana, quartis, mínimo e máximo, mais o resultado da normalidade.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Uma média longe da mediana sugere assimetria ou valores extremos.',
         'Os testes de normalidade são indicativos: com N grande são demasiado sensíveis, com N pequeno têm pouca potência.',
+        'As frequências descrevem as categorias de uma variável categórica; o teste de sequências verifica se a ordem das linhas é aleatória; Grubbs e Dixon assinalam a observação mais extrema.',
       ],
       pitfalls: [
         'Nunca apresente o desvio-padrão como erro padrão: são quantidades diferentes.',

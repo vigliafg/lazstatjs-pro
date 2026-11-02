@@ -25,6 +25,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
     'ecdf',
     'histogram',
     'interval',
+    'line',
     'qq',
     'scatter',
     'scatter3d',

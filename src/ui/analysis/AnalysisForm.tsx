@@ -50,7 +50,15 @@ interface AnalysisFormProps {
 export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
     switch (p.activeAnalysis) {
       case 'descriptive':
-        return <DescriptiveForm grid={p.grid} descVars={params.descVars} setDescVars={setSlice('descVars')} />;
+        return (
+          <DescriptiveForm
+            grid={p.grid}
+            descVars={params.descVars}
+            descMode={params.descMode}
+            setDescVars={setSlice('descVars')}
+            setDescMode={setSlice('descMode')}
+          />
+        );
       case 'ttest':
         return (
           <TTestForm

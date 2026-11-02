@@ -53,6 +53,15 @@
           }
         },
         {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Species"
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        },
+        {
           "analysis": "distfit",
           "columns": {
             "variable": "Sepal_Length"
@@ -518,6 +527,19 @@
               "wt",
               "hp"
             ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "mpg",
+              "wt",
+              "hp"
+            ]
+          },
+          "options": {
+            "mode": "outliers"
           }
         }
       ],
@@ -1159,6 +1181,15 @@
               "Wind",
               "Temp"
             ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Ozone"
+          },
+          "options": {
+            "mode": "runs"
           }
         },
         {

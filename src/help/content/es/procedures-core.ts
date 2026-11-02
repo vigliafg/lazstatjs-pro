@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Selecciona las variables numéricas (Score, Age) y mantén el nivel de confianza en el 95 %.',
         'Pulsa Ejecutar análisis y lee la fila de cada variable.',
         'Comprueba la columna de ausentes y la prueba de normalidad antes de comparar grupos.',
+        'Cambia el selector Procedimiento a Frecuencias para una columna categórica, a Valores atípicos para Grubbs/Dixon o a Rachas para comprobar el orden de las filas.',
       ],
       expected: 'Una fila por variable con N, media, desviación estándar, mediana, cuartiles, mínimo y máximo, además del resultado de normalidad.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Una media muy alejada de la mediana sugiere asimetría o valores extremos.',
         'Las pruebas de normalidad son orientativas: con N grande son demasiado sensibles y con N pequeño tienen poca potencia.',
+        'Las frecuencias describen los niveles de una categórica; la prueba de rachas comprueba si el orden de las filas es aleatorio; Grubbs y Dixon señalan la observación más extrema.',
       ],
       pitfalls: [
         'Nunca presentes la desviación estándar como error estándar: son cantidades distintas.',

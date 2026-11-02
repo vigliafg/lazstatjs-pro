@@ -239,4 +239,13 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'chart.feature.heights': 'Hauteurs de fusion',
   'chart.surface.mesh': 'Surface',
   'chart.surface.contour': 'Courbes de niveau',
+
+  'form.noColumns': 'Aucune colonne',
+  'descriptive.summary': 'Synthèse',
+  'descriptive.frequency': 'Fréquences',
+  'descriptive.outliers': 'Valeurs aberrantes (Grubbs/Dixon)',
+  'descriptive.runs': 'Test des séquences',
+  'hint.descriptive.frequency': 'Décompte d’une colonne catégorielle, booléenne ou à peu de niveaux, avec pourcentages et intervalles de Wilson.',
+  'hint.descriptive.outliers': 'Tests de Grubbs et Dixon sur l’observation la plus extrême de chaque variable sélectionnée.',
+  'hint.descriptive.runs': 'Compte les séquences au-dessus et au-dessous de la médiane pour vérifier si l’ordre des lignes est aléatoire.',
 };

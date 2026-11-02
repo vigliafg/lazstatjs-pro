@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Select the numeric variables (Score, Age) and keep the confidence level at 95%.',
         'Press Run analysis and read the row of each variable.',
         'Check the missing column and the normality test before comparing groups.',
+        'Switch the Procedure selector to Frequencies for a categorical column, to Outliers for Grubbs/Dixon, or to Runs to check the row order.',
       ],
       expected: 'One row per variable with N, mean, standard deviation, median, quartiles, min and max, plus the normality outcome.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'A mean far from the median suggests skewness or extreme values.',
         'Normality tests are indicative: with large N they are over-sensitive, with small N underpowered.',
+        'Frequencies describe categorical levels; the runs test checks whether the row order is random; Grubbs and Dixon flag the most extreme observation.',
       ],
       pitfalls: [
         'Never report the standard deviation as a standard error: they are different quantities.',

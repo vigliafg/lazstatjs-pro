@@ -59,6 +59,7 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
       columnNames: grid.cols.map(col => col.name),
       indices: params.descVars,
       level: ciLevel,
+      mode: params.descMode,
     }),
   ttest: ({ grid, params, ciLevel }) =>
     buildTTestOutput({ grid, ttestParams: params.ttest, ciLevel }),

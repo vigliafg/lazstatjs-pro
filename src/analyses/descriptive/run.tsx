@@ -1,12 +1,24 @@
 import { jStat } from '../../stats/jstat';
 import { buildHistogram, parseNum } from '../../stats/core';
 import { calcNormalityTests } from '../../stats/kernels';
+import { frequencyTable } from '../../stats/kernels/frequency';
+import { dixonTest, grubbsTest } from '../../stats/kernels/outliers';
+import { runsTest } from '../../stats/kernels/runs';
+import { frequencyTables, type NamedFrequency } from '../../stats/tables/frequency';
+import { outlierTables, type NamedOutliers } from '../../stats/tables/outliers';
+import { runsTables, type NamedRuns } from '../../stats/tables/runs';
+import {
+  frequencyReport,
+  outliersReport,
+  runsReport,
+} from '../../stats/reports/descriptiveModes';
 import { lillieforsTest, meanCI } from '../../stats/distributions';
 import { descriptiveTables } from '../../stats/descriptive';
 import { descriptiveReport } from '../../stats/report';
 import { fmtEst } from '../../stats/format';
 import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
+import type { DescriptiveMode } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
 import { copy } from '../../stats/reportCopy';
 import { makeChart, boxRows, confidenceEllipse, qqBand } from '../../charts/kits/common';
@@ -20,6 +32,8 @@ export interface DescriptiveInput {
   indices: number[];
   /** Livello di confidenza (90, 95, 99). */
   level: number;
+  /** Which view of the procedure to build (default: the classic summary). */
+  mode?: DescriptiveMode;
 }
 
 export type DescriptiveOutputResult = AnalysisRunResult;
@@ -31,6 +45,192 @@ export type DescriptiveOutputResult = AnalysisRunResult;
  * identico a quello che l'app mostrava prima (vedi golden test `descriptive`).
  */
 export const buildDescriptiveOutput = (input: DescriptiveInput): DescriptiveOutputResult => {
+  switch (input.mode ?? 'summary') {
+    case 'frequency':
+      return buildFrequencyOutput(input);
+    case 'outliers':
+      return buildOutliersOutput(input);
+    case 'runs':
+      return buildRunsOutput(input);
+    default:
+      return buildSummaryOutput(input);
+  }
+};
+
+const selectedNames = (input: DescriptiveInput): string[] =>
+  input.indices.map(index => input.columnNames[index] ?? `Var${index + 1}`);
+
+/** Tally of one or more categorical / low-cardinality columns. */
+const buildFrequencyOutput = (input: DescriptiveInput): DescriptiveOutputResult => {
+  const entries: NamedFrequency[] = [];
+  input.indices.forEach((index, position) => {
+    const result = frequencyTable(
+      input.rows.map(row => row[index]),
+      input.level
+    );
+    if (result) entries.push({ name: selectedNames(input)[position], result });
+  });
+  if (entries.length === 0) {
+    return {
+      ok: false,
+      reason:
+        'No column with countable values: the frequency view accepts categorical, boolean and low-cardinality columns (max 100 distinct values).',
+    };
+  }
+
+  const tables = frequencyTables(entries, input.level);
+  const charts = entries.slice(0, 4).map((entry, index) =>
+    makeChart({
+      id: `freq-bar-${index + 1}`,
+      kind: 'bar',
+      title: copy('Frequenze: {s1}', { s1: entry.name }),
+      subtitle: copy('{s1} osservazioni, {s2} modalità', {
+        s1: entry.result.total,
+        s2: entry.result.distinct,
+      }),
+      data: {
+        bars: entry.result.rows.map(row => ({ category: row.value, value: row.count })),
+      },
+      fields: { xLabel: entry.name, yLabel: copy('Count') },
+      options: { valueLabels: true } as never,
+    })
+  );
+
+  return {
+    ok: true,
+    title: copy('Frequenze'),
+    tables,
+    report: frequencyReport(entries, input.level),
+    charts,
+  };
+};
+
+const numericColumns = (
+  input: DescriptiveInput
+): { name: string; values: number[]; keys: string[] }[] =>
+  input.indices.map((index, position) => {
+    const rows = input.rows
+      .map((row, rowIndex) => ({ value: parseNum(row[index]), rowIndex }))
+      .filter(entry => Number.isFinite(entry.value));
+    return {
+      name: selectedNames(input)[position],
+      values: rows.map(entry => entry.value),
+      keys: rows.map(entry => String(entry.rowIndex)),
+    };
+  });
+
+/** Grubbs and Dixon tests for the most extreme observation. */
+const buildOutliersOutput = (input: DescriptiveInput): DescriptiveOutputResult => {
+  const entries: NamedOutliers[] = numericColumns(input).map(column => ({
+    name: column.name,
+    grubbs: grubbsTest(column.values, input.level),
+    dixon: dixonTest(column.values, input.level),
+  }));
+  const usable = entries.filter(entry => entry.grubbs || entry.dixon);
+  if (usable.length === 0) {
+    return {
+      ok: false,
+      reason:
+        'No variable with enough valid observations: Grubbs needs at least 3 values with a positive SD and Dixon between 3 and 30.',
+    };
+  }
+
+  const boxes = boxRows(
+    numericColumns(input)
+      .filter(column => column.values.length >= 2)
+      .map(column => ({ category: column.name, values: column.values, keys: column.keys })),
+    { level: input.level }
+  );
+  const charts: AnalysisChart[] = [
+    makeChart({
+      id: 'outliers-box',
+      kind: 'box',
+      title: copy('Distribuzione e valori estremi'),
+      subtitle: copy('Scatola e baffi delle variabili selezionate'),
+      data: { summary: boxes.summary, points: boxes.points, outliers: boxes.outliers },
+      fields: { xLabel: copy('Variable'), yLabel: copy('Value') },
+    }),
+  ];
+
+  return {
+    ok: true,
+    title: copy('Valori anomali'),
+    tables: outlierTables(usable, input.level),
+    report: outliersReport(usable, input.level),
+    charts,
+  };
+};
+
+/** Wald–Wolfowitz runs test around the median. */
+const buildRunsOutput = (input: DescriptiveInput): DescriptiveOutputResult => {
+  const entries: NamedRuns[] = numericColumns(input)
+    .map(column => ({ name: column.name, result: runsTest(column.values) }))
+    .filter((entry): entry is NamedRuns => entry.result !== null);
+  if (entries.length === 0) {
+    return {
+      ok: false,
+      reason:
+        'No variable with a usable sequence: the runs test needs at least 4 valid observations on both sides of the median.',
+    };
+  }
+
+  const charts: AnalysisChart[] = entries.slice(0, 2).flatMap((entry, index) => {
+    const column = numericColumns(input).find(candidate => candidate.name === entry.name)!;
+    const sides = column.values.map(value => (value > entry.result.cut ? 1 : 0));
+    const lengths: number[] = [];
+    let length = 1;
+    for (let position = 1; position < sides.length; position += 1) {
+      if (sides[position] === sides[position - 1]) {
+        length += 1;
+      } else {
+        lengths.push(length);
+        length = 1;
+      }
+    }
+    lengths.push(length);
+    const counts = new Map<number, number>();
+    lengths.forEach(value => counts.set(value, (counts.get(value) ?? 0) + 1));
+    return [
+      makeChart({
+        id: `runs-sequence-${index + 1}`,
+        kind: 'line',
+        title: copy('Sequenza osservata: {s1}', { s1: entry.name }),
+        subtitle: copy('Valori nell’ordine delle righe, punto di taglio {s1}', {
+          s1: entry.result.cut,
+        }),
+        note: copy('Una tendenza o un ciclo visibile spiega perché il test rifiuta la casualità; il test non localizza il punto di rottura.'),
+        data: {
+          series: column.values.map((value, position) => ({ x: position + 1, y: value })),
+        },
+        fields: { xLabel: copy('Row'), yLabel: entry.name },
+        options: { showMarkers: true } as never,
+      }),
+      makeChart({
+        id: `runs-lengths-${index + 1}`,
+        kind: 'bar',
+        title: copy('Lunghezza delle sequenze: {s1}', { s1: entry.name }),
+        subtitle: copy('{s1} sequenze osservate', { s1: entry.result.runs }),
+        data: {
+          bars: [...counts.entries()]
+            .sort((left, right) => left[0] - right[0])
+            .map(([value, count]) => ({ category: String(value), value: count })),
+        },
+        fields: { xLabel: copy('Run length'), yLabel: copy('Count') },
+        options: { valueLabels: true } as never,
+      }),
+    ];
+  });
+
+  return {
+    ok: true,
+    title: copy('Test delle sequenze'),
+    tables: runsTables(entries, input.level),
+    report: runsReport(entries, input.level),
+    charts,
+  };
+};
+
+const buildSummaryOutput = (input: DescriptiveInput): DescriptiveOutputResult => {
     const results = input.indices.map(vIdx => {
       const name = input.columnNames[vIdx] ?? `Var${vIdx + 1}`;
       const numeric = input.rows

@@ -346,8 +346,23 @@ export interface DoeParams {
   model: 'linear' | 'quadratic';
 }
 
+/**
+ * Descriptive views: the classic per-variable summary, a frequency tally,
+ * outlier tests (Grubbs/Dixon) and the runs test.
+ */
+export type DescriptiveMode = 'summary' | 'frequency' | 'outliers' | 'runs';
+
+export const DESCRIPTIVE_MODES: readonly DescriptiveMode[] = [
+  'summary',
+  'frequency',
+  'outliers',
+  'runs',
+];
+
 export interface ProjectParams {
   descVars: number[];
+  /** Which view of the Descriptive procedure the form and runner use. */
+  descMode: DescriptiveMode;
   ttest: TTestParams;
   anova: AnovaParams;
   reg: RegParams;
@@ -445,6 +460,7 @@ export interface ProjectInput {
 
 export const DEFAULT_PARAMS: ProjectParams = {
   descVars: [0, 1],
+  descMode: 'summary',
   ttest: { type: 'ind', var1: 0, var2: 1, mu: 0, useNonParam: true, equalVar: true },
   anova: { dep: 0, grp: 2, posthoc: 'holm', useNonParam: true, kwPosthoc: 'bonferroni' },
   reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen', robustSE: 'none' },

@@ -237,4 +237,13 @@ export const formMessages = {
   'chart.feature.heights': 'Alturas de fusão',
   'chart.surface.mesh': 'Superfície',
   'chart.surface.contour': 'Curvas de nível',
+
+  'form.noColumns': 'Nenhuma coluna',
+  'descriptive.summary': 'Resumo',
+  'descriptive.frequency': 'Frequências',
+  'descriptive.outliers': 'Valores atípicos (Grubbs/Dixon)',
+  'descriptive.runs': 'Teste de sequências',
+  'hint.descriptive.frequency': 'Contagem de uma coluna categórica, booleana ou com poucos níveis, com percentagens e intervalos de Wilson.',
+  'hint.descriptive.outliers': 'Testes de Grubbs e Dixon sobre a observação mais extrema de cada variável selecionada.',
+  'hint.descriptive.runs': 'Conta as sequências acima e abaixo da mediana para verificar se a ordem das linhas é aleatória.',
 } as const;
