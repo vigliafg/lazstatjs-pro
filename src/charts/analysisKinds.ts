@@ -54,7 +54,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   tdcox: ['forest'],
   timeseries: ['acf', 'bar', 'line'],
   tost: ['bar'],
-  ttest: ['box', 'interval', 'diamond'],
+  ttest: ['box', 'diamond', 'histogram', 'interval'],
   wizard: [],
   partition: ['bar', 'scatter', 'tree'],
   quality: ['box', 'histogram', 'interval', 'line', 'pareto'],

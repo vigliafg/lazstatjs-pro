@@ -188,6 +188,7 @@ write_dataset(
   c("ttest", "tost", "nonparamrm"),
   list(
     example("ttest", list(var1 = "Extra_1", var2 = "Extra_2"), type = "dep"),
+    example("ttest", list(var1 = "Extra_1", var2 = "Extra_2"), type = "sign"),
     example("tost", list(var1 = "Extra_1", var2 = "Extra_2")),
     example("nonparamrm", list(left = "Extra_1", right = "Extra_2"))
   ),

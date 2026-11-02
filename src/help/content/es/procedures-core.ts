@@ -100,6 +100,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'El valor p responde a «qué compatible es esto con la ausencia de diferencia», no a la probabilidad de que la hipótesis nula sea cierta.',
         'El intervalo de confianza también muestra qué tamaño podría tener la diferencia: valora la relevancia práctica.',
+        'Con datos emparejados no normales, la prueba de los signos usa solo la dirección de las diferencias.',
       ],
       pitfalls: [
         'Comparar muchas parejas sin corrección infla los falsos positivos.',

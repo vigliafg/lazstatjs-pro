@@ -31,7 +31,7 @@ export const MAX_AUTOSAVE_CHARS = 4_000_000;
 export type ProjectTab = 'data' | 'analysis' | 'settings' | 'help';
 
 export interface TTestParams {
-  type: 'ind' | 'dep' | 'one';
+  type: 'ind' | 'dep' | 'one' | 'sign';
   var1: number;
   var2: number;
   mu: number;

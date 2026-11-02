@@ -333,7 +333,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       exposure: Math.max(1e-9, finite(proportions.exposure, d.proportions.exposure)),
     },
     ttest: {
-      type: ttest.type === 'ind' || ttest.type === 'dep' || ttest.type === 'one' ? ttest.type : d.ttest.type,
+      type:
+        ttest.type === 'ind' ||
+        ttest.type === 'dep' ||
+        ttest.type === 'one' ||
+        ttest.type === 'sign'
+          ? ttest.type
+          : d.ttest.type,
       var1: index(ttest.var1, d.ttest.var1, width),
       var2: index(ttest.var2, d.ttest.var2, width),
       mu: finite(ttest.mu, d.ttest.mu),

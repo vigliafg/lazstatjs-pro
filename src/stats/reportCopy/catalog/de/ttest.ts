@@ -253,4 +253,46 @@ export const ttestCopy: Record<string, string> = {
   'Wilcoxon signed-rank (non parametrico)':
     'Wilcoxon signed-rank (nicht parametrisch)',
   z: 'z',
+  'Con molte coppie l’approssimazione normale è adeguata; con poche coppie leggi il p esatto.':
+    'Bei vielen Paaren ist die Normalapproximation ausreichend; bei wenigen Paaren lies das exakte p.',
+  'Differenze {s1} − {s2}: {s3} positive e {s4} negative su {s5} coppie, p = {s6}.':
+    'Differenzen {s1} − {s2}: {s3} positiv und {s4} negativ bei {s5} Paaren, p = {s6}.',
+  'Gli zeri non contano: riducono il campione e possono rendere il test molto conservativo.':
+    'Nullen zählen nicht: Sie verkleinern die Stichprobe und können den Test sehr konservativ machen.',
+  'Il test dei segni usa solo la direzione delle differenze: è robusto agli outlier e alle distribuzioni asimmetriche.':
+    'Der Vorzeichentest nutzt nur die Richtung der Differenzen: Er ist robust gegen Ausreißer und schiefe Verteilungen.',
+  'Il test ignora la grandezza delle differenze: una differenza enorme e una minima contano uguale.':
+    'Der Test ignoriert die Größe der Differenzen: Eine riesige und eine winzige Differenz zählen gleich.',
+  'Le coppie devono essere indipendenti tra loro.':
+    'Die Paare müssen voneinander unabhängig sein.',
+  'L’approssimazione normale con correzione di continuità è usata per il p asintotico.':
+    'Die Normalapproximation mit Stetigkeitskorrektur wird für das asymptotische p verwendet.',
+  'L’ipotesi nulla è che metà delle differenze sia positiva: il p esatto è un binomiale con p = 0,5.':
+    'Die Nullhypothese ist, dass die Hälfte der Differenzen positiv ist: Das exakte p ist binomial mit p = 0,5.',
+  'Median difference':
+    'Mediane Differenz',
+  'Mediana delle differenze: {s1}.':
+    'Median der Differenzen: {s1}.',
+  'N (non-zero)':
+    'N (nicht null)',
+  'Negative':
+    'Negativ',
+  'Positive':
+    'Positiv',
+  'Report di lettura — Test dei segni':
+    'Lesebeitrag — Vorzeichentest',
+  'Test dei segni':
+    'Vorzeichentest',
+  'Un risultato non significativo non dimostra l’assenza di effetto: guarda la mediana delle differenze.':
+    'Ein nicht signifikantes Ergebnis beweist nicht die Abwesenheit eines Effekts: Betrachte die mediane Differenz.',
+  'Zeros':
+    'Nullen',
+  'p esatto da binom.test sul numero di differenze positive; le differenze nulle sono escluse.':
+    'Exaktes p aus binom.test über die Zahl positiver Differenzen; Nulldifferenzen sind ausgeschlossen.',
+  'p esatto {s1}; p asintotico {s2} (z = {s3}).':
+    'Exaktes p {s1}; asymptotisches p {s2} (z = {s3}).',
+  '{s1} differenze non nulle: {s2} positive, {s3} negative; {s4} zeri esclusi.':
+    '{s1} nicht-null Differenzen: {s2} positiv, {s3} negativ; {s4} Nullen ausgeschlossen.',
+  'È la scelta quando la normalità è dubbia e le differenze non possono essere trasformate; in cambio ha meno potenza del t-test.':
+    'Er ist die Wahl, wenn die Normalität fraglich ist und die Differenzen nicht transformiert werden können; dafür hat er weniger Power als der t-Test.',
 };

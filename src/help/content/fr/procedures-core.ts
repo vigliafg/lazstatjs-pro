@@ -104,6 +104,7 @@ export const coreTopics: HelpTopic[] = [
       pitfalls: [
         'Comparer de nombreuses paires sans correction gonfle les faux positifs.',
         'Un résultat non significatif ne prouve pas l’égalité : regardez l’intervalle.',
+        'Avec des données appariées non normales, le test des signes n’utilise que la direction des différences.',
       ],
       glossary: [
         { term: 'Welch', definition: 'La variante du test t qui ne suppose pas des variances égales.' },

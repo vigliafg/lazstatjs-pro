@@ -3,6 +3,9 @@ import { pairedValues, parseNum, pooledTTest, welchTTest } from '../../stats/cor
 import { ttestTables } from '../../stats/ttest';
 import { ttestReport } from '../../stats/report';
 import { calcMannWhitneyU, calcWilcoxonSignedRank } from '../../stats/kernels';
+import { signTest } from '../../stats/kernels/sign';
+import { signTestTables } from '../../stats/tables/signTest';
+import { signTestReport } from '../../stats/reports/signTest';
 import type { TableSpec } from '../../stats/types';
 import type { ReportSpec } from '../../stats/report';
 import type { Dataset } from '../../grid/types';
@@ -43,7 +46,31 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
     let reportSpec: ReportSpec | null = null;
     let tables: TableSpec[] = [];
 
-    if (type === 'one') {
+    if (type === 'sign') {
+      const differences = paired.a.map((value, index) => value - paired.b[index]);
+      const result = signTest(differences);
+      if (!result) {
+        return { ok: false, reason: 'The sign test needs at least one non-zero paired difference' };
+      }
+      tables = signTestTables(result, grid.cols[var1].name, grid.cols[var2].name);
+      reportSpec = signTestReport(result, grid.cols[var1].name, grid.cols[var2].name, ciLevel);
+      title = copy('Test dei segni');
+      charts.push(
+        makeChart({
+          id: 'sign-differences',
+          kind: 'histogram',
+          title: copy('Differenze appaiate'),
+          subtitle: copy('{s1} coppie, {s2} zeri esclusi', { s1: result.n + result.zeros, s2: result.zeros }),
+          note: copy('Il test dei segni guarda solo da che parte cadono le differenze: la forma della distribuzione non conta.'),
+          data: {
+            values: differences.map(value => ({ value })),
+            rules: [{ value: 0, label: copy('Zero') }],
+          },
+          fields: { xLabel: copy('{s1} − {s2}', { s1: grid.cols[var1].name, s2: grid.cols[var2].name }), yLabel: copy('Frequenza') },
+          options: { showDensity: false, bins: 14, showRug: true } as never,
+        })
+      );
+    } else if (type === 'one') {
       const n = a1.length;
       const mean = jStat.mean(a1);
       const sd = jStat.stdev(a1, true);

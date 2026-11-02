@@ -368,6 +368,16 @@
           }
         },
         {
+          "analysis": "ttest",
+          "columns": {
+            "var1": "Extra_1",
+            "var2": "Extra_2"
+          },
+          "options": {
+            "type": "sign"
+          }
+        },
+        {
           "analysis": "tost",
           "columns": {
             "var1": "Extra_1",

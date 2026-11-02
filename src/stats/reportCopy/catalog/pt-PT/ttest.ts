@@ -350,4 +350,46 @@ export const ttestCopy: Record<string, string> = {
     'Wilcoxon signed-rank (não paramétrico)',
   'z':
     'z',
+  'Con molte coppie l’approssimazione normale è adeguata; con poche coppie leggi il p esatto.':
+    'Com muitos pares a aproximação normal é adequada; com poucos pares leia o p exato.',
+  'Differenze {s1} − {s2}: {s3} positive e {s4} negative su {s5} coppie, p = {s6}.':
+    'Diferenças {s1} − {s2}: {s3} positivas e {s4} negativas em {s5} pares, p = {s6}.',
+  'Gli zeri non contano: riducono il campione e possono rendere il test molto conservativo.':
+    'Os zeros não contam: reduzem a amostra e podem tornar o teste muito conservador.',
+  'Il test dei segni usa solo la direzione delle differenze: è robusto agli outlier e alle distribuzioni asimmetriche.':
+    'O teste dos sinais usa apenas a direção das diferenças: é robusto a valores atípicos e distribuições assimétricas.',
+  'Il test ignora la grandezza delle differenze: una differenza enorme e una minima contano uguale.':
+    'O teste ignora a magnitude das diferenças: uma diferença enorme e uma mínima contam o mesmo.',
+  'Le coppie devono essere indipendenti tra loro.':
+    'Os pares devem ser independentes entre si.',
+  'L’approssimazione normale con correzione di continuità è usata per il p asintotico.':
+    'A aproximação normal com correção de continuidade é usada para o p assintótico.',
+  'L’ipotesi nulla è che metà delle differenze sia positiva: il p esatto è un binomiale con p = 0,5.':
+    'A hipótese nula é que metade das diferenças seja positiva: o p exato é binomial com p = 0,5.',
+  'Median difference':
+    'Diferença mediana',
+  'Mediana delle differenze: {s1}.':
+    'Mediana das diferenças: {s1}.',
+  'N (non-zero)':
+    'N (não nulo)',
+  'Negative':
+    'Negativas',
+  'Positive':
+    'Positivas',
+  'Report di lettura — Test dei segni':
+    'Relatório de leitura — Teste dos sinais',
+  'Test dei segni':
+    'Teste dos sinais',
+  'Un risultato non significativo non dimostra l’assenza di effetto: guarda la mediana delle differenze.':
+    'Um resultado não significativo não prova a ausência de efeito: veja a diferença mediana.',
+  'Zeros':
+    'Zeros',
+  'p esatto da binom.test sul numero di differenze positive; le differenze nulle sono escluse.':
+    'p exato de binom.test sobre o número de diferenças positivas; as diferenças nulas são excluídas.',
+  'p esatto {s1}; p asintotico {s2} (z = {s3}).':
+    'p exato {s1}; p assintótico {s2} (z = {s3}).',
+  '{s1} differenze non nulle: {s2} positive, {s3} negative; {s4} zeri esclusi.':
+    '{s1} diferenças não nulas: {s2} positivas, {s3} negativas; {s4} zeros excluídos.',
+  'È la scelta quando la normalità è dubbia e le differenze non possono essere trasformate; in cambio ha meno potenza del t-test.':
+    'É a escolha quando a normalidade é duvidosa e as diferenças não podem ser transformadas; em troca tem menos potência do que o teste t.',
 };

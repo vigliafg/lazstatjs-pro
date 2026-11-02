@@ -31,6 +31,7 @@ export const TTestForm = ({ grid, ttestParams, setTTestParams }: TTestFormProps)
           <option value="ind">{t('form.independentSamples')}</option>
           <option value="dep">{t('form.pairedSamples')}</option>
           <option value="one">{t('form.oneSample')}</option>
+          <option value="sign">{t('form.signTest')}</option>
         </select>
       </Field>
       <VariableSelect

@@ -105,6 +105,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         "Der p-Wert beantwortet „wie vereinbar ist das mit keiner Differenz“, nicht die Wahrscheinlichkeit, dass die Nullhypothese wahr ist.",
         "Das Konfidenzintervall zeigt auch, wie groß die Differenz sein könnte: Beurteilen Sie die praktische Relevanz.",
+        "Bei nicht normalen gepaarten Daten nutzt der Vorzeichentest nur die Richtung der Differenzen.",
       ],
       pitfalls: [
         "Viele Paare ohne Korrektur zu vergleichen bläht falsch positive Ergebnisse auf.",

@@ -100,6 +100,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'O valor p responde a «quão compatível é isto com a ausência de diferença», não à probabilidade de a hipótese nula ser verdadeira.',
         'O intervalo de confiança também mostra a dimensão possível da diferença: avalie a relevância prática.',
+        'Com dados emparelhados não normais, o teste dos sinais usa apenas a direção das diferenças.',
       ],
       pitfalls: [
         'Comparar muitos pares sem correção inflaciona os falsos positivos.',

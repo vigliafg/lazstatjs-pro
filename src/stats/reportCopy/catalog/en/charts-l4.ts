@@ -140,4 +140,10 @@ export const l4ChartCopy: Record<string, string> = {
   "Varianza — {s1}": "Variance — {s1}",
   "Varianze — {s1} per {s2}": "Variances — {s1} by {s2}",
   "Variance": "Variance",
+  "Differenze appaiate": "Paired differences",
+  "Il test dei segni guarda solo da che parte cadono le differenze: la forma della distribuzione non conta.": "The sign test only looks at which side the differences fall on: the shape of the distribution does not matter.",
+  "Test dei segni": "Sign test",
+  "Zero": "Zero",
+  "{s1} coppie, {s2} zeri esclusi": "{s1} pairs, {s2} zeros excluded",
+  "{s1} − {s2}": "{s1} − {s2}",
 };

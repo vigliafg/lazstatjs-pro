@@ -256,4 +256,46 @@ export const ttestCopy: Record<string, string> = {
     'Normal approximation with continuity correction and tied-rank correction; zero differences excluded.',
   'CI bootstrap con 500 repliche e seed fisso.':
     'Bootstrap CI with 500 replicates and fixed seed.',
+  'Con molte coppie l’approssimazione normale è adeguata; con poche coppie leggi il p esatto.':
+    'With many pairs the normal approximation is adequate; with few pairs read the exact p.',
+  'Differenze {s1} − {s2}: {s3} positive e {s4} negative su {s5} coppie, p = {s6}.':
+    'Differences {s1} − {s2}: {s3} positive and {s4} negative out of {s5} pairs, p = {s6}.',
+  'Gli zeri non contano: riducono il campione e possono rendere il test molto conservativo.':
+    'Zeros do not count: they reduce the sample and can make the test very conservative.',
+  'Il test dei segni usa solo la direzione delle differenze: è robusto agli outlier e alle distribuzioni asimmetriche.':
+    'The sign test uses only the direction of the differences: it is robust to outliers and skewed distributions.',
+  'Il test ignora la grandezza delle differenze: una differenza enorme e una minima contano uguale.':
+    'The test ignores the size of the differences: a huge and a tiny difference count the same.',
+  'Le coppie devono essere indipendenti tra loro.':
+    'Pairs must be independent of each other.',
+  'L’approssimazione normale con correzione di continuità è usata per il p asintotico.':
+    'The normal approximation with continuity correction is used for the asymptotic p.',
+  'L’ipotesi nulla è che metà delle differenze sia positiva: il p esatto è un binomiale con p = 0,5.':
+    'The null hypothesis is that half the differences are positive: the exact p is binomial with p = 0.5.',
+  'Median difference':
+    'Median difference',
+  'Mediana delle differenze: {s1}.':
+    'Median of the differences: {s1}.',
+  'N (non-zero)':
+    'N (non-zero)',
+  'Negative':
+    'Negative',
+  'Positive':
+    'Positive',
+  'Report di lettura — Test dei segni':
+    'Reading report — Sign test',
+  'Test dei segni':
+    'Sign test',
+  'Un risultato non significativo non dimostra l’assenza di effetto: guarda la mediana delle differenze.':
+    'A non-significant result does not prove the absence of an effect: look at the median difference.',
+  'Zeros':
+    'Zeros',
+  'p esatto da binom.test sul numero di differenze positive; le differenze nulle sono escluse.':
+    'Exact p from binom.test on the number of positive differences; zero differences are excluded.',
+  'p esatto {s1}; p asintotico {s2} (z = {s3}).':
+    'Exact p {s1}; asymptotic p {s2} (z = {s3}).',
+  '{s1} differenze non nulle: {s2} positive, {s3} negative; {s4} zeri esclusi.':
+    '{s1} non-zero differences: {s2} positive, {s3} negative; {s4} zeros excluded.',
+  'È la scelta quando la normalità è dubbia e le differenze non possono essere trasformate; in cambio ha meno potenza del t-test.':
+    'It is the choice when normality is doubtful and the differences cannot be transformed; in exchange it has less power than the t-test.',
 };

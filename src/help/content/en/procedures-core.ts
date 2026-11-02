@@ -104,6 +104,7 @@ export const coreTopics: HelpTopic[] = [
       pitfalls: [
         'Comparing many pairs without correction inflates false positives.',
         'A non-significant result does not prove equality: look at the interval.',
+        'With paired data that are not normal, the sign test uses only the direction of the differences.',
       ],
       glossary: [
         { term: 'Welch', definition: 'The t-test variant that does not assume equal variances.' },

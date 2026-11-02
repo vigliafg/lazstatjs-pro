@@ -104,6 +104,7 @@ export const coreTopics: HelpTopic[] = [
       pitfalls: [
         'Confrontare molte coppie di gruppi senza correzione aumenta i falsi positivi.',
         'Un risultato non significativo non dimostra l’uguaglianza: guarda l’intervallo.',
+        'Con dati appaiati non normali, il test dei segni usa solo la direzione delle differenze.',
       ],
       glossary: [
         { term: 'Welch', definition: 'Versione del test t che non assume varianze uguali.' },
