@@ -33,7 +33,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W0 — Fondazioni e retrofit (in corso) |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | checkpoint W0 parziale (vedi `git log -1`) |
+| Ultimo commit di codice | `9c6116a` (checkpoint W0 parziale) |
 | Ultimo commit documentale | `1ef2860` (piano v2.2) |
 | Test | `npm run lint` verde; `npm test` 850/850 verdi |
 | Item chiusi | 0 / 73 (nessuna voce di registro ancora aggiunta) |
@@ -133,7 +133,7 @@ test sulle 8 procedure esistenti scoperte.
 |---|---|---|---|---|---|
 | 2026-11-02 | Piano approvato | `746b558` | docs only | verde | Creato piano v2.0 e protocollo |
 | 2026-11-02 | Piano v2.2 + W0-09 | `in corso` | docs only | verde | Aggiunto retrofit reference test per 8 procedure |
-| 2026-11-02 | Checkpoint W0 parziale | `in corso` | `npm test` 850/850 | verde | W0-01/02/03 chiusi; W0-09 3/8; fix Ward.D2 |
+| 2026-11-02 | Checkpoint W0 parziale | `9c6116a` | `npm test` 850/850 | verde | W0-01/02/03 chiusi; W0-09 3/8; fix Ward.D2 |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
