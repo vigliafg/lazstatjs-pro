@@ -48,7 +48,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Heavy procedures run in a Web Worker**: LMM, GEE, Cox (all variants), parametric survival, time series, multiple imputation and resampling keep the UI responsive, show phase/elapsed time and can be cancelled; the synchronous runner remains the fallback
 - **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear; the outline tree groups runs by family and analysis with search and stale/warning filters
 - **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
-- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 31 procedures, with static UI chrome centralised in `src/i18n/` (six complete catalogs: English, Italian, French, Spanish, German and European Portuguese); catalogue metadata, help book and report prose are content modules
+- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 36 procedures, with static UI chrome centralised in `src/i18n/` (six complete catalogs: English, Italian, French, Spanish, German and European Portuguese); catalogue metadata, help book and report prose are content modules
 
 ### Help handbook
 - **HELP tab** hosts the generated handbook (plain HTML + CSS + JS) in an iframe: cover, contents, search, previous/next navigation and a printable edition of the whole book

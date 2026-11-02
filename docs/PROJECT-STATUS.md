@@ -12,7 +12,7 @@
 
 LazStats è oggi un **workbench statistico locale per un singolo dataset**, pensato per ricercatore/studente. Non è un clone di SPSS: l’identità è “dato unico, analisi guidata, risultati spiegati, tutto locale”.
 
-La struttura è matura: 31 procedure, 31 form, 31 runner, store dei parametri, snapshot delle card, stale, griglia tipizzata, import/export, report e **Web Worker per le 9 procedure pesanti**. Le fondamenta sono solide; restano debiti su **reshape, model comparison, diagnostica aggregata e scala dei dataset**.
+La struttura è matura: 36 procedure, 36 form, 36 runner, store dei parametri, snapshot delle card, stale, griglia tipizzata, import/export, report e **Web Worker per le 9 procedure pesanti**. Le fondamenta sono solide; restano debiti su **reshape, model comparison, diagnostica aggregata e scala dei dataset**.
 
 ---
 
@@ -29,10 +29,10 @@ La struttura è matura: 31 procedure, 31 form, 31 runner, store dei parametri, s
 - Limiti: 50.000 righe, 500 colonne; autosave localStorage ~4 MB; 20 card output; 1,5 MB HTML.
 
 ### Analisi
-31 procedure in 10 famiglie:
+36 procedure in 10 famiglie:
 Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power.
 
-Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repeated/mixed ANOVA, non-parametric RM, TOST, regression, correlation, logistic, count regression, ordinal, LMM, GEE, PCA/alpha/EFA, chi-square, contingency, agreement, Kaplan–Meier, Cox, stratified Cox, time-dependent Cox, parametric survival, ARIMA/SARIMA, multiple imputation, sample size, resampling.
+Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repeated/mixed ANOVA, non-parametric RM, TOST, regression, correlation, logistic, count regression, ordinal, LMM, GEE, PCA/alpha/EFA, chi-square, contingency, agreement, Kaplan–Meier, Cox, stratified Cox, time-dependent Cox, parametric survival, ARIMA/SARIMA, multiple imputation, sample size, resampling, partition (regression tree), quality/SPC, cluster analysis, discriminant/MANOVA, response surface (DOE).
 
 ### Workbench
 - Tre zone: Library, Setup, Output.
@@ -78,7 +78,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 ## 4. Punti di forza
 
 - Kernel puri e report che non ricalcolano: la parte statisticamente più solida.
-- 31 procedure con form coerenti e runner separati.
+- 36 procedure con form coerenti e runner separati.
 - Snapshot parametri, stale e re-run: il ciclo di lavoro è chiuso.
 - Local-first: nessun dato inviato a un server.
 - Griglia tipizzata, livelli, missing code e formule: buona base per dati reali.
@@ -88,7 +88,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 
 ## 5. Limiti e debito tecnico
 
-1. **Worker limitato alle procedure heavy**: le 22 procedure instant restano sincrone; il clone della griglia verso il worker è O(righe×colonne) e non è ancora trasferibile con `ArrayBuffer`.
+1. **Worker limitato alle procedure heavy**: le 27 procedure instant restano sincrone; il clone della griglia verso il worker è O(righe×colonne) e non è ancora trasferibile con `ArrayBuffer`.
 2. **Import binario senza `.zsav`**: `.sav` e `.dta` sono supportati; i file SPSS compressi `.zsav` richiedono zlib nel browser e sono rifiutati con un messaggio esplicito.
 3. **Nessun reshape long/wide** guidato: dataset longitudinali reali restano fuori.
 4. **Nessun model comparison** né diagnostics dashboard aggregata.
@@ -145,7 +145,7 @@ npm run bench:grid       # benchmark griglia/formule
 | `src/ui/analysis/AnalysisOptions.tsx` | Setup, preset, code export, run |
 | `src/ui/OutputConsole.tsx` | Card, outline, stale, export |
 | `src/ui/analysis/store.tsx` | Store parametri |
-| `src/analyses/registry.ts` | 31 procedure e famiglie |
+| `src/analyses/registry.ts` | 36 procedure e famiglie |
 | `src/analyses/runners.ts` | Registro runner |
 | `src/grid/DataGrid.tsx` | Griglia, editing, tastiera |
 | `src/io/project/index.ts` | `.lzs`, autosave, migrazione |

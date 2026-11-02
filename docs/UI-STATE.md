@@ -8,7 +8,7 @@
 
 ## 1. Sintesi
 
-La UI non è più una barra di 31 schede con i form in un'unica riga. È un
+La UI non è più una barra di 36 schede con i form in un'unica riga. È un
 workbench in tre zone:
 
 1. **Library** — ricerca e famiglie di analisi.
@@ -41,7 +41,7 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 
 **Library**
 
-- 31 procedure raggruppate in 10 famiglie: Guided, Descriptive, Compare
+- 36 procedure raggruppate in 10 famiglie: Guided, Descriptive, Compare
   groups, Regression, Multivariate, Categorical, Survival, Time series,
   Missing data, Design & power.
 - Ricerca su etichetta, descrizione, keyword e nome della famiglia.
@@ -55,7 +55,7 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 
 - Famiglia, titolo, descrizione e badge `heavy computation`.
 - CI globale (90/95/99%).
-- Form esistente, riusato senza riscrivere i 31 pannelli.
+- Form esistente, riusato senza riscrivere i 36 pannelli.
 - Titoli di sezione contestuali (`Variables & model`, `Table & options`,
   `Design & precision`, `Missing data & pooling`, ...).
 - Run sticky in basso; `Ctrl/Cmd + Enter` esegue.
@@ -133,7 +133,7 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 |---|---|---|
 | `src/ui/AnalysisTab.tsx` | Shell del workbench, pane, focus, scorciatoie, metadati di sessione | 297 |
 | `src/ui/analysis/AnalysisLibrary.tsx` | Libreria, ricerca, famiglie, recenti, badge | 404 |
-| `src/ui/analysis/AnalysisOptions.tsx` | Setup, CI, switch sui 31 form, Run | 645 |
+| `src/ui/analysis/AnalysisOptions.tsx` | Setup, CI, switch sui 36 form, Run | 645 |
 | `src/ui/analysis/types.ts` | Contratto `AnalysisTabProps` | 62 |
 | `src/ui/analysis/useRecentAnalyses.ts` | Recenti in `localStorage` | ~39 |
 | `src/ui/analysis/sessionOutline.ts` | Modello puro dell'outline (famiglia → analisi → run) | 219 |
@@ -154,7 +154,7 @@ accorciate (`Data`, `Analysis`, `Settings`, `Help`).
 | `src/index.css` | Card output, Run, focus ring, header | modificato |
 | `src/help/helpContent.ts` | Help allineato al workbench | aggiornato |
 
-I 31 form sono stati migrati alle primitive condivise, senza riscrivere i
+I 36 form sono stati migrati alle primitive condivise, senza riscrivere i
 kernel: il pannello Setup resta lo stesso contenitore e il rischio è rimasto
 basso.
 
@@ -194,7 +194,7 @@ basso.
 
 ### 5.1 Punti di forza
 
-- **La scoperta è risolta.** 31 procedure non sono più un catalogo da scorrere.
+- **La scoperta è risolta.** 36 procedure non sono più un catalogo da scorrere.
 - **Il Setup è prevedibile.** La cornice è la stessa per tutte le analisi; cambia
   solo il contenuto.
 - **L'output è un documento.** Card, outline e collapse sono il modello giusto.
@@ -211,7 +211,7 @@ basso.
 2. **Contratto del workspace ancora ampio.** `AnalysisTabProps` è sceso da 88 a
    38 props e le slice passano dal reducer, ma griglia, output e ruoli restano
    props esplicite.
-3. **Form system completo.** Tutti i 31 pannelli usano le primitive condivise
+3. **Form system completo.** Tutti i 36 pannelli usano le primitive condivise
    (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`,
    `CheckboxField`).
 4. **i18n della chrome statica.** Shell, form, editor dati, dialoghi e
@@ -249,7 +249,7 @@ Priorità:
 | **UI-03** | P1 | Suite Playwright analisi | **Fatto** | 17 scenari: ricerca/run, collapse/Setup, reload, mobile, live-run, output workspace, libreria, CI/stale, filtro rimosso, live off, label form, predittori categorici, breakpoint |
 | **UI-04** | P2 | Live-run `instant` con debounce e stato | **Fatto** | Toggle Live, 500 ms, card unica sostituita, indicatore “syncing” |
 | **UI-05** | P2 | Output workspace: filtro, pin, copia, conferma Clear | **Fatto** | Filtro per analisi, pin in cima, copia card, conferma su Clear |
-| **UI-06** | P2 | Form system condiviso | **Fatto** | `Field`, `Section`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`; **tutti i 31 form** migrati |
+| **UI-06** | P2 | Form system condiviso | **Fatto** | `Field`, `Section`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`; **tutti i 36 form** migrati |
 | **UI-07** | P2 | Responsive/a11y | **Fatto** | Footer mobile, focus dei pannelli, `aria-live`, libreria nascosta sotto 1280 px |
 | **UI-08** | P3 | Ricerca con ranking, preferiti, A–Z, tastiera | **Fatto** | Punteggio per label/keyword/descrizione, preferiti, indice piatto, frecce/Home/End |
 | **UI-09** | P3 | Settings e progetto | **Fatto** | Rimossi i controlli demo; azioni di sessione; elenco progetti recenti |
@@ -264,7 +264,7 @@ restano locali al browser per scelta.
 
 ## 7. Criteri di accettazione
 
-- Trovare una qualsiasi delle 31 procedure in **≤ 2 interazioni** (ricerca o
+- Trovare una qualsiasi delle 36 procedure in **≤ 2 interazioni** (ricerca o
   famiglia).
 - Eseguire una procedura in **≤ 3 click** da Analysis.
 - Rilanciare un risultato storico con i suoi parametri in **≤ 2 click**.
@@ -346,7 +346,7 @@ La scheda Data ha già:
 
 ### 9.4 Domande da chiudere
 
-1. **Una griglia o più tabelle?** Le 31 analisi leggono un solo `GridData`;
+1. **Una griglia o più tabelle?** Le 36 analisi leggono un solo `GridData`;
    Prism dimostra il valore di più tabelle, ma il costo architetturale è alto.
 2. **Variable View dedicata o metadati inline?** Oggi tutto sta nell'header e
    nel modale dei livelli. Una vista variabili scala meglio, ma aggiunge un

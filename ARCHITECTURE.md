@@ -118,7 +118,7 @@ Una voce in più è un errore: la lista delle analisi vive solo in
 famiglie, recenti), `AnalysisOptions` (CI, form, Run sticky) e `OutputConsole`
 (documento a schede, outline, collapse). Sotto `lg` il segmented control mostra
 un pannello alla volta; *Focus output* nasconde libreria e setup. Le schede
-mantengono il contratto `AnalysisTabProps` per non duplicare i 31 slice di
+mantengono il contratto `AnalysisTabProps` per non duplicare i 36 slice di
 parametri dentro ogni componente.
 
 Stato, valutazione e backlog: [`docs/UI-STATE.md`](docs/UI-STATE.md).
