@@ -65,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Un AIC/BIC más bajo indica un mejor ajuste.',
         'Un valor p de bondad de ajuste no demuestra la normalidad: solo mide la evidencia en contra.',
+        'El modo KS de dos muestras compara dos grupos sin suponer una familia de distribuciones.',
       ],
       pitfalls: ['Elegir la distribución a partir de los datos y luego probarla con los mismos datos sobreestima el ajuste.'],
       glossary: [

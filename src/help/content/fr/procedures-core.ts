@@ -65,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Un AIC/BIC plus bas signifie un meilleur ajustement.',
         'Une p-value d’adéquation ne prouve pas la normalité : elle mesure seulement la preuve contre elle.',
+        'Le mode KS à deux échantillons compare deux groupes sans supposer une famille de distributions.',
       ],
       pitfalls: ['Choisir la distribution à partir des données puis la tester sur ces mêmes données surestime l’ajustement.'],
       glossary: [

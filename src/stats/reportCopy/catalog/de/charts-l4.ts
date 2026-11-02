@@ -146,4 +146,9 @@ export const l4ChartCopy: Record<string, string> = {
   "Zero": "Null",
   "{s1} coppie, {s2} zeri esclusi": "{s1} Paare, {s2} Nullen ausgeschlossen",
   "{s1} − {s2}": "{s1} − {s2}",
+  "Cumulative proportion": "Kumulierter Anteil",
+  "Distribuzioni cumulative": "Kumulierte Verteilungen",
+  "Kolmogorov–Smirnov — {s1}": "Kolmogorov–Smirnov — {s1}",
+  "La distanza verticale massima tra le due curve è la statistica D; più le curve sono vicine, più le distribuzioni sono simili.": "Der maximale vertikale Abstand zwischen den beiden Kurven ist die D-Statistik; je näher die Kurven, desto ähnlicher die Verteilungen.",
+  "{s1} vs {s2}": "{s1} vs {s2}",
 };

@@ -68,6 +68,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         "Ein niedrigeres AIC/BIC bedeutet eine bessere Anpassung.",
         "Ein p-Wert der Anpassungsgüte beweist keine Normalität: Er misst nur die Evidenz dagegen.",
+        "Der Zweistichproben-KS-Modus vergleicht zwei Gruppen, ohne eine Verteilungsfamilie vorauszusetzen.",
       ],
       pitfalls: [
         "Die Verteilung aus den Daten zu wählen und sie dann an denselben Daten zu prüfen, überschätzt die Anpassung.",

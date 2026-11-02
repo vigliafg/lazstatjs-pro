@@ -1209,6 +1209,7 @@
       ],
       "procedures": [
         "proportions",
+        "distfit",
         "descriptive"
       ],
       "examples": [
@@ -1243,6 +1244,16 @@
           "options": {
             "mode": "twoRate",
             "exposure": 1
+          }
+        },
+        {
+          "analysis": "distfit",
+          "columns": {
+            "variable": "Events",
+            "group": "Group"
+          },
+          "options": {
+            "mode": "ks"
           }
         },
         {

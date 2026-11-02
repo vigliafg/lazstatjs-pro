@@ -95,7 +95,10 @@ export interface SampleSizeParams {
 
 /** Parametri del fit delle distribuzioni. */
 export interface DistributionFitParams {
+  mode: 'fit' | 'ks';
   variable: number;
+  /** Group column for the two-sample KS mode; -1 otherwise. */
+  group: number;
   selected: DistributionName[];
 }
 
@@ -547,7 +550,9 @@ export const DEFAULT_PARAMS: ProjectParams = {
     eventRate: 0.5,
   },
   distfit: {
+    mode: 'fit',
     variable: 0,
+    group: -1,
     selected: ['normal', 'lognormal', 'exponential', 'gamma', 'weibull'],
   },
   logistic: {

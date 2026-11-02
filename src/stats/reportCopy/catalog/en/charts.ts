@@ -711,4 +711,8 @@ export const chartCopy: Record<string, string> = {
   "Zero": "Zero",
   "{s1} coppie, {s2} zeri esclusi": "{s1} pairs, {s2} zeros excluded",
   "{s1} − {s2}": "{s1} − {s2}",
+  "Distribuzioni cumulative": "Cumulative distributions",
+  "Kolmogorov–Smirnov — {s1}": "Kolmogorov–Smirnov — {s1}",
+  "La distanza verticale massima tra le due curve è la statistica D; più le curve sono vicine, più le distribuzioni sono simili.": "The maximum vertical distance between the two curves is the D statistic; the closer the curves, the more similar the distributions.",
+  "{s1} vs {s2}": "{s1} vs {s2}",
 };

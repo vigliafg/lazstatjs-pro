@@ -589,11 +589,12 @@ write_dataset(
   "compare", "two_groups_binary", two_groups_binary,
   "Two independent groups with a binary outcome and event counts",
   "Synthetic, seeded with set.seed(20261103)",
-  c("proportions", "descriptive"),
+  c("proportions", "distfit", "descriptive"),
   list(
     example("proportions", list(outcome = "Outcome"), mode = "oneProp", successLevel = "Yes", nullP = 0.5),
     example("proportions", list(outcome = "Outcome", group = "Group"), mode = "twoProp", successLevel = "Yes"),
     example("proportions", list(count = "Events", group = "Group"), mode = "twoRate", exposure = 1),
+    example("distfit", list(variable = "Events", group = "Group"), mode = "ks"),
     example("descriptive", list(variables = "Events"))
   ),
   "120 subjects: Control has a lower success proportion and a lower event rate than Treatment."

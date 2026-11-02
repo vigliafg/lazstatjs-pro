@@ -264,4 +264,6 @@ export const formMessages = {
   'variances.two': 'Two or more variances',
   'form.nullVariance': 'Null variance',
   'form.signTest': 'Sign test',
+  'distfit.fit': 'Distribution fit',
+  'distfit.ks': 'Two-sample KS',
 } as const;

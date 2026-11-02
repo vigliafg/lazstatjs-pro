@@ -10,6 +10,9 @@ import {
 import { copy } from '../../stats/reportCopy';
 import { parseNum } from '../../stats/core';
 import { makeChart, qqBand } from '../../charts/kits/common';
+import { twoSampleKs } from '../../stats/kernels/ks';
+import { ksTables } from '../../stats/tables/ks';
+import { ksReport } from '../../stats/reports/ks';
 import type { Dataset } from '../../grid/types';
 import type { DistributionFitParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -26,6 +29,7 @@ export const buildDistributionFitOutput = ({
   params,
   ciLevel,
 }: DistributionFitInput): AnalysisRunResult => {
+  if (params.mode === 'ks') return buildKsOutput({ grid, params, ciLevel });
   const values = grid.rows
     .map(row => parseNum(row[params.variable]))
     .filter(value => Number.isFinite(value));
@@ -147,5 +151,60 @@ export const buildDistributionFitOutput = ({
     tables,
     report: distributionFitReport(tables, ciLevel),
     charts,
+  };
+};
+
+/** Two-sample Kolmogorov–Smirnov mode. */
+const buildKsOutput = ({ grid, params, ciLevel }: DistributionFitInput): AnalysisRunResult => {
+  if (params.group < 0 || params.group >= grid.cols.length) {
+    return { ok: false, reason: 'The two-sample KS test needs a group column' };
+  }
+  const variableName = grid.cols[params.variable]?.name ?? 'Y';
+  const groupName = grid.cols[params.group]?.name ?? 'Group';
+  const buckets = new Map<string, number[]>();
+  grid.rows.forEach(row => {
+    const label = String(row[params.group] ?? '').trim();
+    const value = parseNum(row[params.variable]);
+    if (label === '' || !Number.isFinite(value)) return;
+    const bucket = buckets.get(label) ?? [];
+    bucket.push(value);
+    buckets.set(label, bucket);
+  });
+  const groups = [...buckets.entries()].sort((left, right) =>
+    left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0
+  );
+  if (groups.length !== 2) {
+    return { ok: false, reason: 'The two-sample KS test needs exactly two groups' };
+  }
+  const result = twoSampleKs(groups[0][1], groups[1][1]);
+  if (!result) {
+    return { ok: false, reason: 'Each group needs at least two numeric observations' };
+  }
+  const firstName = groups[0][0];
+  const secondName = groups[1][0];
+  const ecdf = (values: number[], label: string) => {
+    const sorted = [...values].sort((left, right) => left - right);
+    return sorted.map((value, index) => ({ x: value, y: (index + 1) / sorted.length, series: label }));
+  };
+
+  return {
+    ok: true,
+    title: copy('Kolmogorov–Smirnov — {s1}', { s1: variableName }),
+    tables: ksTables(result, variableName, groupName, firstName, secondName),
+    report: ksReport(result, variableName, groupName, firstName, secondName, ciLevel),
+    charts: [
+      makeChart({
+        id: 'ks-ecdf',
+        kind: 'line',
+        title: copy('Distribuzioni cumulative'),
+        subtitle: copy('{s1} vs {s2}', { s1: firstName, s2: secondName }),
+        note: copy('La distanza verticale massima tra le due curve è la statistica D; più le curve sono vicine, più le distribuzioni sono simili.'),
+        data: {
+          series: [...ecdf(groups[0][1], firstName), ...ecdf(groups[1][1], secondName)],
+        },
+        fields: { xLabel: variableName, yLabel: copy('Cumulative proportion'), series: groupName },
+        options: { showMarkers: false, showBand: false, showLegend: true } as never,
+      }),
+    ],
   };
 };

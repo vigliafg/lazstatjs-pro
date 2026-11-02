@@ -266,4 +266,6 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'variances.two': 'Deux variances ou plus',
   'form.nullVariance': 'Variance nulle',
   'form.signTest': 'Test des signes',
+  'distfit.fit': 'Ajustement',
+  'distfit.ks': 'KS deux échantillons',
 };

@@ -396,7 +396,9 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       eventRate: finite(samplesize.eventRate, d.samplesize.eventRate),
     },
     distfit: {
+      mode: distfit.mode === 'ks' ? 'ks' : d.distfit.mode,
       variable: index(distfit.variable, d.distfit.variable, width),
+      group: optionalIndex(distfit.group, d.distfit.group, width),
       selected: parseDistributionList(distfit.selected, d.distfit.selected),
     },
     logistic: {

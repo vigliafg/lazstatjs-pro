@@ -65,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Lower AIC/BIC means a better fit.',
         'A goodness-of-fit p-value does not prove normality: it only measures evidence against it.',
+        'The two-sample KS mode compares two groups without assuming a distribution family.',
       ],
       pitfalls: ['Choosing the distribution from the data and then testing it on the same data overstates the fit.'],
       glossary: [

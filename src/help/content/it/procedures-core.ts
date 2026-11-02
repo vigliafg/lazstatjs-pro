@@ -65,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Valori più bassi di AIC/BIC indicano adattamento migliore.',
         'Il p-value di un test di adattamento non «prova» la normalità: misura solo l’evidenza contraria.',
+        'La modalità KS a due campioni confronta due gruppi senza assumere una famiglia di distribuzioni.',
       ],
       pitfalls: ['Scegliere la distribuzione guardando i dati e poi testarla sugli stessi dati gonfia l’ottimismo.'],
       glossary: [
