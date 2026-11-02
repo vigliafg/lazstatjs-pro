@@ -1182,7 +1182,13 @@ Ogni incarico deve dichiarare:
 - perimetro esatto dei file (nessun altro file);
 - reference indipendente e tolleranza attesa;
 - test che devono passare;
-- criterio di stop (quando fermarsi e riportare, senza allargare il perimetro).
+- criterio di stop (quando fermarsi e riportare, senza allargare il perimetro);
+- **modello esplicito**: i subagenti che scrivono kernel/tabelle/report usano lo
+  stesso modello dell'agente principale (`opencode-go/deepseek-v4.1-flash`),
+  passato nel campo `model`. Non si eredita il default dei subagenti.
+  `explore` resta sul modello veloce (sola lettura); `council-luna` e
+  `council-glm` restano sui loro modelli, per garantire una revisione
+  indipendente.
 
 Un subagente **non chiude un item**: la chiusura richiede il gate dell'agente
 principale (`npm run check` + reference + help/i18n + sample).

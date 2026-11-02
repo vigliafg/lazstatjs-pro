@@ -67,7 +67,11 @@ Quando i compiti sono separabili, usare **2–3 subagenti in parallelo**. Regole
 4. Se due compiti toccano lo stesso file, si serializzano: niente merge
    creativo.
 5. Ogni incarico dichiara perimetro file, reference, tolleranza, test e
-   criterio di stop.
+   criterio di stop, e **il modello esplicito**: i subagenti che scrivono
+   kernel/tabelle/report usano lo stesso modello dell'agente principale
+   (`opencode-go/deepseek-v4.1-flash`), non il default dei subagenti.
+   `explore` resta sul modello veloce; i `council-*` restano sui loro modelli
+   per la revisione indipendente.
 6. Un subagente non chiude un item: la chiusura passa dal gate dell'agente
    principale (`npm run check`, help/i18n, sample).
 7. Non delegare decisioni di prodotto/architettura, azioni distruttive, bump di
@@ -76,4 +80,3 @@ Quando i compiti sono separabili, usare **2–3 subagenti in parallelo**. Regole
    albero con file ownership.
 
 Dettagli nel piano, §17.
-
