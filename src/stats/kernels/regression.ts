@@ -26,7 +26,7 @@ const multiplyVector = (matrix: Matrix, vector: number[]): number[] =>
 const dot = (a: number[], b: number[]): number =>
   a.reduce((sum, value, i) => sum + value * b[i], 0);
 
-interface OlsFit {
+export interface OlsFit {
   coef: number[];
   fitted: number[];
   residuals: number[];
@@ -46,7 +46,7 @@ interface OlsFit {
   k: number;
 }
 
-const fitOls = (Y: number[], X: Matrix): OlsFit | null => {
+export const fitOls = (Y: number[], X: Matrix): OlsFit | null => {
   const n = Y.length;
   const p = X[0].length;
   const k = p - 1;

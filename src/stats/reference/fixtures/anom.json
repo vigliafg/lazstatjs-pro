@@ -1,0 +1,43 @@
+{
+  "source": "R aov() plus the Bonferroni-t ANOM decision lines",
+  "generatedBy": "src/stats/reference/r/anom.R",
+  "cases": [
+    {
+      "name": "PlantGrowth weight by group",
+      "y": [4.17, 5.58, 5.18, 6.11, 4.5, 4.61, 5.17, 4.53, 5.33, 5.14, 4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69, 6.31, 5.12, 5.54, 5.5, 5.37, 5.29, 4.92, 6.15, 5.8, 5.26],
+      "group": ["ctrl", "ctrl", "ctrl", "ctrl", "ctrl", "ctrl", "ctrl", "ctrl", "ctrl", "ctrl", "trt1", "trt1", "trt1", "trt1", "trt1", "trt1", "trt1", "trt1", "trt1", "trt1", "trt2", "trt2", "trt2", "trt2", "trt2", "trt2", "trt2", "trt2", "trt2", "trt2"],
+      "alpha": 0.05,
+      "grandMean": 5.073,
+      "msWithin": 0.3885959259259264,
+      "dfWithin": 27,
+      "k": 3,
+      "h": 2.552458805791156,
+      "groups": [
+        {
+          "group": "ctrl",
+          "n": 10,
+          "mean": 5.032,
+          "lower": 4.662169920329217,
+          "upper": 5.483830079670784,
+          "outside": false
+        },
+        {
+          "group": "trt1",
+          "n": 10,
+          "mean": 4.661,
+          "lower": 4.662169920329217,
+          "upper": 5.483830079670784,
+          "outside": true
+        },
+        {
+          "group": "trt2",
+          "n": 10,
+          "mean": 5.526,
+          "lower": 4.662169920329217,
+          "upper": 5.483830079670784,
+          "outside": true
+        }
+      ]
+    }
+  ]
+}
