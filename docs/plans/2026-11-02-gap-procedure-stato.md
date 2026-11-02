@@ -1,9 +1,9 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (chiusura W1 / gate G1)
+**Ultimo aggiornamento**: 2026-11-03 (handoff pre-compattazione, W1 chiusa / W2 pronta)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0 e W1 chiuse, gate G0 e G1 verdi; prossima ondata W2
+**Stato**: W0 e W1 chiuse, gate G0 e G1 verdi; W2 pronta a partire (nessun file W2 ancora scritto)
 **Prossima ondata**: W2 — ANOVA/GLMM + Regressione nucleo
 
 ---
@@ -33,15 +33,15 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W1 chiusa; prossima W2 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `vedi git log -1` (chiusura W1) |
-| Ultimo commit documentale | `1ef2860` (piano v2.2) |
+| Ultimo commit di codice | `e10684a` (chiusura W1) |
+| Ultimo commit documentale | `bccd8bd` (regole subagenti + modello) |
 | Test | `npm run check` verde; `npm test` 957/957 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 14 / 73 |
 | Nuove voci | 2 / 36 (`proportions`, `variances`) |
 | Estensioni | 12 / 37 |
 | Reference baseline | 35 / 35 procedure statistiche (W0-09 chiuso) |
 | Blocchi | nessuno |
-| Prossimo gate | G2 — fine W2 (12 metodi, GLM/GLMM reference) |
+| Prossimo gate | W2-mid (dopo R-05) e G2 — fine W2 (12 metodi, GLM/GLMM reference) |
 
 ---
 
@@ -265,6 +265,60 @@ help in 6 lingue, sample nei 5 formati e reference test.
 
 ---
 
+## 5c. Ondata W2 — piano di partenza (non iniziata)
+
+Obiettivo: ANOVA/GLMM + nucleo regressione, **12 metodi, 5 nuove voci**.
+
+Scope dedotto dal piano (§6.3, §7.2, §7.3, checkpoint W2-mid dopo R-05):
+
+| ID | Metodo | Tipo |
+|---|---|---|
+| C-08 | ANOVA nested | mode `anova` |
+| C-09 | MANCOVA | mode `discriminant` |
+| C-10 | Pendenze casuali / GLMM | **new `glmm`** |
+| C-11 | ANOM | mode `anova` |
+| R-01 | Stepwise / best subsets | mode `regression` |
+| R-02 | Polinomiale / curve | mode `regression` |
+| R-03 | Non lineare | **new `nonlinear`** |
+| R-04 | Multinomiale | **new `multinomial`** |
+| R-05 | Probit | mode `logistic` |
+| R-06 | GLM gamma/Tweedie | **new `glm`** |
+| R-07 | Quantile | **new `quantile`** |
+| R-08 | Ridge/LASSO/elastic net | mode `regression` |
+
+### Parallelizzazione prevista (piano §17)
+
+Batch 1, tre `general` sullo stesso modello dell'agente principale, file
+disgiunti:
+
+1. **R-03 nonlinear**: `kernels/nonlinear.ts` + test + `reference/r/nonlinear.R`
+   + `fixtures/nonlinear.json`.
+2. **R-04 multinomial**: `kernels/multinomial.ts` + test + fixture R
+   (`nnet::multinom`).
+3. **R-07 quantile**: `kernels/quantile.ts` + test + fixture R
+   (`quantreg::rq`).
+
+Agente principale in parallelo: contratti in `analysisResults.ts` e lavoro sui
+file condivisi (C-08, C-11, R-01, R-02, R-05), poi integrazione, help/i18n,
+sample, `npm run check`.
+
+Batch 2 (dopo il primo merge): C-09, C-10, R-06, R-08; C-09 e R-08 estendono
+kernel esistenti (`discriminant.ts`, `regression.ts`) e restano all'agente
+principale, C-10 e R-06 sono voci nuove e possono essere delegate.
+
+### Disponibilità R verificata
+
+Presenti: `nnet`, `glmnet`, `quantreg`, `earth`, `pls`, `AER`, `plm`,
+`MatchIt`, `lme4`, `car`. Assenti: `sampleSelection`, `mediation` (servono per
+W3, non per W2).
+
+### Nota operativa
+
+I lanci dei subagenti sono stati interrotti prima di produrre file: nessun
+lavoro W2 è in corso e l'albero è pulito.
+
+---
+
 ## 6. Registro checkpoint
 
 | Data | Checkpoint | Commit | Test | Esito | Note |
@@ -273,7 +327,8 @@ help in 6 lingue, sample nei 5 formati e reference test.
 | 2026-11-02 | Piano v2.2 + W0-09 | `in corso` | docs only | verde | Aggiunto retrofit reference test per 8 procedure |
 | 2026-11-02 | Checkpoint W0 parziale | `9c6116a` | `npm test` 850/850 | verde | W0-01/02/03 chiusi; W0-09 3/8; fix Ward.D2 |
 | 2026-11-02 | Chiusura W0 / G0 | `ab0c26a` | `npm run check` + `test:samples` + locale 6/6 | verde | W0-01…09 chiusi; 880/880; fix MI e DOE; cap Theil–Sen/Lilliefors |
-| 2026-11-03 | Chiusura W1 / G1 | `vedi git log -1` | `npm run check` + `test:samples` + locale 6/6 | verde | 14 metodi (D-01…D-04, Q-04, C-01…C-07, P-01/P-02); 957/957; 2 nuove voci |
+| 2026-11-03 | Chiusura W1 / G1 | `e10684a` | `npm run check` + `test:samples` + locale 6/6 | verde | 14 metodi (D-01…D-04, Q-04, C-01…C-07, P-01/P-02); 957/957; 2 nuove voci |
+| 2026-11-03 | Handoff pre-compattazione | `bccd8bd` | `npm run check` verde (ultima esecuzione) | verde | W1 chiusa; W2 pianificata con batch di 3 subagenti; nessun file W2 scritto |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -283,47 +338,53 @@ help in 6 lingue, sample nei 5 formati e reference test.
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
 
-### Handoff — 2026-11-03 / W1 chiusa
+### Handoff — 2026-11-03 / pre-compattazione, W2 pronta
 
-- Ondata: W1 conclusa, gate G1 verde; prossima W2.
+- Ondata: W1 chiusa (G1 verde); W2 non iniziata, pronta a partire.
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: `vedi git log -1` (codice W1); handoff in questo file.
-- Item chiusi (ID): D-01, D-02, D-03, D-04, Q-04, C-01, C-02, C-03, C-04,
-  C-05, C-06, C-07, P-01, P-02; gate G1.
-- Item in corso (ID): nessuno; W2 non ancora aperta.
+- Ultimo commit: `bccd8bd` (documenti); codice W1 `e10684a`.
+- Item chiusi (ID): W1 completa — D-01…D-04, Q-04, C-01…C-07, P-01/P-02;
+  gate G0 e G1.
+- Item in corso (ID): nessuno. I lanci dei subagenti per W2 sono stati
+  interrotti prima di scrivere file.
 - Item bloccati (ID + motivo): nessuno.
-- Test eseguiti e risultato: `npm run check` verde (lint, **957/957** test,
-  depcruise/madge/filesize); `npm run test:samples` 7/7; locale check 6/6;
-  reference test W1 tutti verdi.
-- File/moduli toccati: vedi §5b.
-- Decisioni prese / deviazioni dal piano: Dixon con Beta esatta; tolleranza
-  con Howe (tolInt non installato); KS esatto su reticolo fino a 200k coppie;
-  Mood con correzione (N−1)/N di coin; sample `two_groups_binary` e
-  `categorical_gof`; `PROJECT_VERSION` invariato.
+- Test eseguiti e risultato: ultima esecuzione `npm run check` verde
+  (lint, **957/957** test, depcruise/madge/filesize); `npm run test:samples`
+  7/7; locale check 6/6. Albero pulito.
+- File/moduli toccati: nessuno dopo `bccd8bd`.
+- Decisioni prese: piano §17 e `AGENTS.md` — 2–3 subagenti in parallelo con
+  proprietario unico dei file; kernel/tabelle/report sullo stesso modello
+  dell'agente principale (`opencode-go/deepseek-v4.1-flash`); `explore` veloce;
+  `council-*` su modelli indipendenti.
+- Scope W2 dedotto dal piano: C-08, C-09, C-10 (`glmm`), C-11, R-01, R-02,
+  R-03 (`nonlinear`), R-04 (`multinomial`), R-05, R-06 (`glm`), R-07
+  (`quantile`), R-08. Dettaglio in §5c.
 - Prossimi 3 passi:
-  1. Aprire W2 con C-10 (pendenze casuali/GLMM) e il nucleo GLM condiviso.
-  2. Implementare R-01…R-05 (multinomiale, ordinale, probit, count, mediazione)
-     riusando `glm.ts`.
-  3. Per ogni metodo: help 6 lingue, sample 5 formati, reference e
-     `npm run check`; usare 2–3 subagenti con file ownership (piano §17).
-- Domande aperte: nessuna.
-- Rischi attivi: W2 tocca GLM/GLMM e la persistenza di nuovi parametri;
-  procedere per metodo e mantenere i reference in fixture R.
+  1. Batch 1 con tre `general`: R-03 nonlinear, R-04 multinomial, R-07
+     quantile (kernel + test + fixture R), perimetro file chiuso.
+  2. In parallelo l'agente principale prepara i contratti in
+     `analysisResults.ts` e implementa C-08, C-11, R-01, R-02, R-05.
+  3. Integrare, help/i18n 6 lingue, sample, `npm run check`; poi batch 2
+     (C-09, C-10, R-06, R-08).
+- Domande aperte: lo scope W2 è dedotto dal piano (12 metodi, 5 voci nuove).
+  Se l'utente intende un insieme diverso, correggere §5c prima del batch 1.
+- Rischi attivi: C-09 e R-08 estendono kernel esistenti (seriali); C-10 GLMM
+  richiede `lme4`/`glmmTMB` come reference; R-07 quantile richiede `quantreg`.
+  Le fixture R vanno committate, non ricalcolate nei test.
 
 ### Riassunto di 10 righe
 
-1. Ondata e obiettivo: W1 chiusa — 14 metodi tra Descriptive, Compare e
-   Design & power.
-2. Cosa è chiuso: D-01…D-04, Q-04, C-01…C-07, P-01/P-02; gate G1; 14/73.
-3. Cosa è in corso: nulla; W2 da aprire.
+1. Ondata e obiettivo: W1 chiusa; W2 pronta (ANOVA/GLMM + regressione nucleo).
+2. Cosa è chiuso: 14 metodi W1, gate G0 e G1, 14/73.
+3. Cosa è in corso: nulla; nessun file W2 scritto.
 4. Cosa è bloccato: nulla.
-5. Ultimo commit: chiusura W1 su `feat/gap-wave-1`.
-6. Test: `npm run check` verde, 957/957; sample 7/7; locale 6/6.
-7. Decisioni: Dixon Beta, Howe per tolleranza, KS esatto su reticolo,
-   correzione Mood di coin.
-8. Prossimi 3 passi: W2 GLMM/GLM, R-01…R-05, reference/help/sample.
-9. Domande: nessuna.
-10. Rischi: GLM/GLMM e nuovi parametri persistiti; procedere per metodo.
+5. Ultimo commit: `bccd8bd`; codice `e10684a` su `feat/gap-wave-1`.
+6. Test: ultima esecuzione verde, 957/957; sample 7/7; locale 6/6.
+7. Decisioni: subagenti 2–3 con file ownership e stesso modello per i kernel.
+8. Prossimi 3 passi: batch 1 (nonlinear, multinomial, quantile), contratti +
+   C-08/C-11/R-01/R-02/R-05, integrazione e check.
+9. Domande: conferma dello scope W2 dedotto (12 metodi, 5 voci nuove).
+10. Rischi: kernel condivisi (C-09, R-08) seriali; reference R da committare.
 
 ```md
 ## Handoff — YYYY-MM-DD / W?
