@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Observaciones independientes; frecuencias esperadas suficientemente grandes para el chi-cuadrado.'],
       whenToUse: ['Dos variables categóricas con dos niveles cada una.'],
       whenNotToUse: ['Tablas mayores (usa R×C) o medidas emparejadas (McNemar).'],
-      reading: ['Con frecuencias esperadas bajas, el valor p de Fisher es más fiable que el chi-cuadrado.'],
+      reading: [
+        'Con frecuencias esperadas bajas, el valor p de Fisher es más fiable que el chi-cuadrado.',
+        'El modo de bondad de ajuste compara una variable categórica con proporciones planificadas.',
+      ],
       pitfalls: ['Porcentajes calculados sobre el margen equivocado llevan a conclusiones invertidas.'],
       glossary: [
         { term: 'Frecuencia esperada', definition: 'El recuento que se vería si las dos variables fueran independientes.' },

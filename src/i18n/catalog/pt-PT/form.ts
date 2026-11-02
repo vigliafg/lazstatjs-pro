@@ -268,4 +268,9 @@ export const formMessages = {
   'distfit.ks': 'KS duas amostras',
   'anova.oneway': 'ANOVA de uma via',
   'anova.median': 'Teste da mediana de Mood',
+  'chisq.modeTable': 'Tabela de contingência',
+  'chisq.modeGof': 'Ajustamento',
+  'chisq.gofVariable': 'Variável categórica',
+  'chisq.expectedProportions': 'Proporções esperadas (opcional)',
+  'hint.chisq.gof': 'Deixe vazio para quotas iguais; caso contrário, uma proporção positiva por categoria, por exemplo 0.2, 0.3, 0.5.',
 } as const;

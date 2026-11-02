@@ -110,7 +110,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ["Unabhängige Beobachtungen; für Chi-Quadrat ausreichend große erwartete Häufigkeiten."],
       whenToUse: ["Zwei kategoriale Variablen mit je zwei Stufen."],
       whenNotToUse: ["Größere Tabellen (verwenden Sie R×C) oder gepaarte Messungen (McNemar)."],
-      reading: ["Bei niedrigen erwarteten Häufigkeiten ist Fishers p zuverlässiger als Chi-Quadrat."],
+      reading: [
+        "Bei niedrigen erwarteten Häufigkeiten ist Fishers p zuverlässiger als Chi-Quadrat.",
+        "Der Anpassungsmodus vergleicht eine kategoriale Variable mit geplanten Anteilen.",
+      ],
       pitfalls: [
         "Prozentsätze, die auf der falschen Randverteilung berechnet werden, führen zu umgekehrten Schlussfolgerungen.",
       ],

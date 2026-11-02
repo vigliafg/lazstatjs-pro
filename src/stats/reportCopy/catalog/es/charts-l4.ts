@@ -180,4 +180,7 @@ export const l4ChartCopy: Record<string, string> = {
   "La linea centrale di ogni scatola è la mediana del gruppo; il test confronta quante osservazioni cadono sopra e sotto la mediana comune.": "La línea central de cada caja es la mediana del grupo; la prueba compara cuántas observaciones caen por encima y por debajo de la mediana común.",
   "Mediana comune {s1}": "Mediana común {s1}",
   "Test della mediana — {s1} per {s2}": "Prueba de la mediana — {s1} por {s2}",
+  "Bontà di adattamento — {s1}": "Bondad de ajuste — {s1}",
+  "Frequenze osservate": "Frecuencias observadas",
+  "Le barre sono i conteggi osservati; confrontali con le attese riportate nella tabella.": "Las barras son los recuentos observados; compáralos con los esperados de la tabla.",
 };

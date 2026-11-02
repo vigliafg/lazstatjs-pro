@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Independent observations; expected frequencies large enough for chi-square.'],
       whenToUse: ['Two categorical variables with two levels each.'],
       whenNotToUse: ['Larger tables (use R×C) or paired measures (McNemar).'],
-      reading: ['With low expected frequencies Fisher’s p is more reliable than chi-square.'],
+      reading: [
+        'With low expected frequencies Fisher’s p is more reliable than chi-square.',
+        'The goodness-of-fit mode compares one categorical variable with planned proportions.',
+      ],
       pitfalls: ['Percentages computed on the wrong margin lead to reversed conclusions.'],
       glossary: [
         { term: 'Expected frequency', definition: 'The count you would see if the two variables were independent.' },

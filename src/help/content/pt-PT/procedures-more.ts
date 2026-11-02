@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Observações independentes; frequências esperadas suficientemente grandes para o qui-quadrado.'],
       whenToUse: ['Duas variáveis categóricas com dois níveis cada.'],
       whenNotToUse: ['Tabelas maiores (use R×C) ou medidas emparelhadas (McNemar).'],
-      reading: ['Com frequências esperadas baixas, o p de Fisher é mais fiável do que o qui-quadrado.'],
+      reading: [
+        'Com frequências esperadas baixas, o p de Fisher é mais fiável do que o qui-quadrado.',
+        'O modo de ajustamento compara uma variável categórica com proporções planeadas.',
+      ],
       pitfalls: ['Percentagens calculadas na margem errada levam a conclusões invertidas.'],
       glossary: [
         { term: 'Frequência esperada', definition: 'A contagem que se veria se as duas variáveis fossem independentes.' },

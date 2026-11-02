@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Observations indépendantes ; effectifs attendus assez grands pour le khi-deux.'],
       whenToUse: ['Deux variables catégorielles à deux niveaux chacune.'],
       whenNotToUse: ['Tableaux plus grands (utilisez R×C) ou mesures appariées (McNemar).'],
-      reading: ['Avec de faibles effectifs attendus, la p de Fisher est plus fiable que le khi-deux.'],
+      reading: [
+        'Avec de faibles effectifs attendus, la p de Fisher est plus fiable que le khi-deux.',
+        'Le mode ajustement compare une variable catégorielle à des proportions planifiées.',
+      ],
       pitfalls: ['Des pourcentages calculés sur la mauvaise marge conduisent à des conclusions inversées.'],
       glossary: [
         { term: 'Effectif attendu', definition: 'L’effectif que l’on observerait si les deux variables étaient indépendantes.' },

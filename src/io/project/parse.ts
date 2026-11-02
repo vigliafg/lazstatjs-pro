@@ -371,6 +371,9 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       showKendall: bool(corr.showKendall, d.corr.showKendall),
     },
     chisq: {
+      mode: chisq.mode === 'gof' ? 'gof' : d.chisq.mode,
+      gofVariable: index(chisq.gofVariable, d.chisq.gofVariable, width),
+      gofExpected: text(chisq.gofExpected, d.chisq.gofExpected),
       row1col1: finite(chisq.row1col1, d.chisq.row1col1),
       row1col2: finite(chisq.row1col2, d.chisq.row1col2),
       row2col1: finite(chisq.row2col1, d.chisq.row2col1),

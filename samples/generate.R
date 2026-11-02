@@ -602,6 +602,24 @@ write_dataset(
 )
 
 ## ---------------------------------------------------------------------------
+## Categorical goodness of fit
+## ---------------------------------------------------------------------------
+
+gof_data <- data.frame(
+  Category = rep(c("A", "B", "C", "D", "E"), times = c(30, 20, 25, 15, 10))
+)
+write_dataset(
+  "categorical", "categorical_gof", gof_data,
+  "Five categories with unequal observed frequencies",
+  "Synthetic, fixed counts",
+  c("chisquare"),
+  list(
+    example("chisquare", list(variable = "Category"), mode = "gof")
+  ),
+  "100 observations in five categories, designed to show a goodness-of-fit test against equal shares."
+)
+
+## ---------------------------------------------------------------------------
 ## Manifest
 ## ---------------------------------------------------------------------------
 

@@ -268,4 +268,9 @@ export const formMessages = {
   'distfit.ks': 'Two-sample KS',
   'anova.oneway': 'One-way ANOVA',
   'anova.median': 'Mood median test',
+  'chisq.modeTable': 'Contingency table',
+  'chisq.modeGof': 'Goodness of fit',
+  'chisq.gofVariable': 'Categorical variable',
+  'chisq.expectedProportions': 'Expected proportions (optional)',
+  'hint.chisq.gof': 'Leave empty for equal shares; otherwise one positive proportion per category, e.g. 0.2, 0.3, 0.5.',
 } as const;

@@ -1274,6 +1274,39 @@
         }
       ],
       "notes": "120 subjects: Control has a lower success proportion and a lower event rate than Treatment."
+    },
+    {
+      "id": "categorical_gof",
+      "title": "Five categories with unequal observed frequencies",
+      "family": "categorical",
+      "dir": "categorical/categorical_gof",
+      "source": "Synthetic, fixed counts",
+      "rows": 100,
+      "columns": [
+        "Category"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "chisquare"
+      ],
+      "examples": [
+        {
+          "analysis": "chisquare",
+          "columns": {
+            "variable": "Category"
+          },
+          "options": {
+            "mode": "gof"
+          }
+        }
+      ],
+      "notes": "100 observations in five categories, designed to show a goodness-of-fit test against equal shares."
     }
   ]
 }

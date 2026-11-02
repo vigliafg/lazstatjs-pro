@@ -270,4 +270,9 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'distfit.ks': 'KS due campioni',
   'anova.oneway': 'ANOVA a una via',
   'anova.median': 'Test della mediana di Mood',
+  'chisq.modeTable': 'Tabella di contingenza',
+  'chisq.modeGof': 'Bontà di adattamento',
+  'chisq.gofVariable': 'Variabile categorica',
+  'chisq.expectedProportions': 'Proporzioni attese (opzionale)',
+  'hint.chisq.gof': 'Lascia vuoto per quote uguali; altrimenti una proporzione positiva per categoria, ad esempio 0.2, 0.3, 0.5.',
 };

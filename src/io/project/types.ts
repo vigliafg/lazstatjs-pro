@@ -64,7 +64,14 @@ export interface CorrParams {
   showKendall: boolean;
 }
 
+export type ChiSqMode = 'table' | 'gof';
+
 export interface ChiSqParams {
+  mode: ChiSqMode;
+  /** Categorical variable for the goodness-of-fit mode. */
+  gofVariable: number;
+  /** Comma-separated expected proportions; empty means equal shares. */
+  gofExpected: string;
   row1col1: number;
   row1col2: number;
   row2col1: number;
@@ -533,6 +540,9 @@ export const DEFAULT_PARAMS: ProjectParams = {
   reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen', robustSE: 'none' },
   corr: { vars: [0, 1], method: 'pearson', showSpearman: true, showKendall: true },
   chisq: {
+    mode: 'table',
+    gofVariable: 0,
+    gofExpected: '',
     row1col1: 30,
     row1col2: 20,
     row2col1: 15,

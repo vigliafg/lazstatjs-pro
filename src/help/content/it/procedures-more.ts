@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Osservazioni indipendenti; frequenze attese sufficienti per il chi-quadro.'],
       whenToUse: ['Due variabili categoriche con due livelli ciascuna.'],
       whenNotToUse: ['Tabelle più grandi (usa R×C) o misure appaiate (McNemar).'],
-      reading: ['Con frequenze attese basse il p di Fisher è più affidabile del chi-quadro.'],
+      reading: [
+        'Con frequenze attese basse il p di Fisher è più affidabile del chi-quadro.',
+        'La modalità bontà di adattamento confronta una variabile categorica con proporzioni pianificate.',
+      ],
       pitfalls: ['Percentuali calcolate sulla colonna sbagliata portano a conclusioni invertite.'],
       glossary: [
         { term: 'Frequenza attesa', definition: 'Il conteggio che si osserverebbe se le due variabili fossero indipendenti.' },
