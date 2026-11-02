@@ -127,6 +127,7 @@ write_dataset(
   c("anova", "descriptive", "wizard", "quality", "variances"),
   list(
     example("anova", list(dependent = "weight", group = "group")),
+    example("anova", list(dependent = "weight", group = "group"), mode = "median"),
     example("variances", list(variable = "weight", group = "group"), mode = "two"),
     example("variances", list(variable = "weight"), mode = "one"),
     example("descriptive", list(variables = "weight")),

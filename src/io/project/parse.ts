@@ -347,6 +347,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       equalVar: bool(ttest.equalVar, d.ttest.equalVar),
     },
     anova: {
+      mode: anova.mode === 'median' ? 'median' : d.anova.mode,
       dep: index(anova.dep, d.anova.dep, width),
       grp: index(anova.grp, d.anova.grp, width),
       posthoc: text(anova.posthoc, d.anova.posthoc),

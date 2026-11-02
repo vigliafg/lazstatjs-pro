@@ -16,6 +16,22 @@ export interface AnovaFormProps {
 export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecode }: AnovaFormProps) => {
   return (
     <>
+      <Field label={t('form.procedure')}>
+        <select
+          aria-label={t('form.procedure')}
+          className="min-w-[160px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={anovaParams.mode}
+          onChange={event =>
+            setAnovaParams(previous => ({
+              ...previous,
+              mode: event.target.value as AnovaParams['mode'],
+            }))
+          }
+        >
+          <option value="oneway">{t('anova.oneway')}</option>
+          <option value="median">{t('anova.median')}</option>
+        </select>
+      </Field>
       <VariableSelect
         label={t('form.dependentVar')}
         ariaLabel="ANOVA dependent variable"

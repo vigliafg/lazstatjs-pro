@@ -134,6 +134,7 @@ export const coreTopics: HelpTopic[] = [
       whenToUse: ['Un fattore tra soggetti con tre o più livelli.'],
       whenNotToUse: ['Misure ripetute (usa ANOVA per misure ripetute) o due soli gruppi (test t è equivalente).'],
       reading: [
+        'Il test della mediana di Mood confronta le mediane senza assumere la normalità: usalo quando outlier o asimmetria rendono la media inaffidabile.',
         'Un p significativo dice che almeno una media differisce: i post-hoc dicono quale.',
         'Levene significativo suggerisce varianze diverse: preferisci Welch o Kruskal-Wallis.',
       ],

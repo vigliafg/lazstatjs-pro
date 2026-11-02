@@ -40,6 +40,8 @@ export interface TTestParams {
 }
 
 export interface AnovaParams {
+  /** One-way ANOVA/Kruskal–Wallis or the Mood median test. */
+  mode: 'oneway' | 'median';
   dep: number;
   grp: number;
   posthoc: string;
@@ -520,7 +522,14 @@ export const DEFAULT_PARAMS: ProjectParams = {
     exposure: 1,
   },
   ttest: { type: 'ind', var1: 0, var2: 1, mu: 0, useNonParam: true, equalVar: true },
-  anova: { dep: 0, grp: 2, posthoc: 'holm', useNonParam: true, kwPosthoc: 'bonferroni' },
+  anova: {
+    mode: 'oneway',
+    dep: 0,
+    grp: 2,
+    posthoc: 'holm',
+    useNonParam: true,
+    kwPosthoc: 'bonferroni',
+  },
   reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen', robustSE: 'none' },
   corr: { vars: [0, 1], method: 'pearson', showSpearman: true, showKendall: true },
   chisq: {

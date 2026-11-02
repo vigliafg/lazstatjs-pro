@@ -266,4 +266,6 @@ export const formMessages = {
   'form.signTest': 'Sign test',
   'distfit.fit': 'Distribution fit',
   'distfit.ks': 'Two-sample KS',
+  'anova.oneway': 'One-way ANOVA',
+  'anova.median': 'Mood median test',
 } as const;

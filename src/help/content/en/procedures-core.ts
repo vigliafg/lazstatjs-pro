@@ -134,6 +134,7 @@ export const coreTopics: HelpTopic[] = [
       whenToUse: ['One between-subject factor with three or more levels.'],
       whenNotToUse: ['Repeated measures (use repeated-measures ANOVA) or two groups (the t-test is equivalent).'],
       reading: [
+        'The Mood median test compares medians without assuming normality; use it when outliers or skewness make the mean unreliable.',
         'A significant p says at least one mean differs: the post-hoc says which.',
         'A significant Levene suggests unequal variances: prefer Welch or Kruskal-Wallis.',
       ],

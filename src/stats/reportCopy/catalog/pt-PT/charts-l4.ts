@@ -151,4 +151,8 @@ export const l4ChartCopy: Record<string, string> = {
   "Kolmogorov–Smirnov — {s1}": "Kolmogorov–Smirnov — {s1}",
   "La distanza verticale massima tra le due curve è la statistica D; più le curve sono vicine, più le distribuzioni sono simili.": "A distância vertical máxima entre as duas curvas é a estatística D; quanto mais próximas as curvas, mais semelhantes as distribuições.",
   "{s1} vs {s2}": "{s1} vs {s2}",
+  "Distribuzione per gruppo": "Distribuição por grupo",
+  "La linea centrale di ogni scatola è la mediana del gruppo; il test confronta quante osservazioni cadono sopra e sotto la mediana comune.": "A linha central de cada caixa é a mediana do grupo; o teste compara quantas observações caem acima e abaixo da mediana comum.",
+  "Mediana comune {s1}": "Mediana comum {s1}",
+  "Test della mediana — {s1} per {s2}": "Teste da mediana — {s1} por {s2}",
 };

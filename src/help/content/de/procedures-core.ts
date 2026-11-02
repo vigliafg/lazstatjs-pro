@@ -141,6 +141,7 @@ export const coreTopics: HelpTopic[] = [
         "Wiederholte Messungen (verwenden Sie die Messwiederholungs-ANOVA) oder zwei Gruppen (der t-Test ist äquivalent).",
       ],
       reading: [
+        'Der Mood-Median-Test vergleicht Mediane ohne Normalitätsannahme: Verwenden Sie ihn, wenn Ausreißer oder Schiefe den Mittelwert unzuverlässig machen.',
         "Ein signifikantes p sagt, dass mindestens ein Mittelwert abweicht: Der Post-hoc-Test sagt, welcher.",
         "Ein signifikanter Levene-Test deutet auf ungleiche Varianzen hin: Bevorzugen Sie Welch oder Kruskal-Wallis.",
       ],

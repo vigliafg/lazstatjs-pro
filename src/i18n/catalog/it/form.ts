@@ -268,4 +268,6 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'form.signTest': 'Test dei segni',
   'distfit.fit': 'Adattamento',
   'distfit.ks': 'KS due campioni',
+  'anova.oneway': 'ANOVA a una via',
+  'anova.median': 'Test della mediana di Mood',
 };

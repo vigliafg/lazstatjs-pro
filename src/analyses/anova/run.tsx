@@ -11,6 +11,9 @@ import { copy } from '../../stats/reportCopy';
 import { makeChart, boxRows, qqBand, qqPoints, qqReference } from '../../charts/kits/common';
 import type { AnalysisChart } from '../../stats/charts';
 import { onewayPanel } from '../../charts/panels';
+import { moodMedianTest } from '../../stats/kernels/mood';
+import { moodTables } from '../../stats/tables/mood';
+import { moodReport } from '../../stats/reports/mood';
 
 export interface AnovaRunInput {
   grid: Dataset;
@@ -21,6 +24,7 @@ export interface AnovaRunInput {
 /** ANOVA a una via (e Kruskal-Wallis): tabelle, grafici e report. Estratto da App.tsx. */
   export const buildAnovaOutput = (input: AnovaRunInput): AnalysisRunResult => {
   const { grid, anovaParams, ciLevel } = input;
+    if (anovaParams.mode === 'median') return buildMoodOutput(input);
     const { dep, grp, posthoc, useNonParam, kwPosthoc } = anovaParams;
 
     // Group labels are what tables and charts show; the codes stay in the grid.
@@ -398,3 +402,67 @@ export interface AnovaRunInput {
       ...(oneway ? { panels: [oneway] } : {}),
     };
   };
+
+/** Mood median test mode. */
+const buildMoodOutput = ({ grid, anovaParams, ciLevel }: AnovaRunInput): AnalysisRunResult => {
+  const { dep, grp } = anovaParams;
+  if (dep < 0 || grp < 0 || dep >= grid.cols.length || grp >= grid.cols.length) {
+    return { ok: false, reason: 'Select a numeric dependent variable and a group variable' };
+  }
+  const rowsForAnalysis = analysisRows(grid, [grp]);
+  const groups: { name: string; values: number[] }[] = [];
+  const byName = new Map<string, number[]>();
+  rowsForAnalysis.forEach(row => {
+    const value = parseNum(row[dep]);
+    const label = String(row[grp] ?? '').trim();
+    if (!Number.isFinite(value) || label === '') return;
+    const bucket = byName.get(label) ?? [];
+    bucket.push(value);
+    byName.set(label, bucket);
+  });
+  const declaredOrder = orderedColumnLevels(grid.cols[grp], grid.rows, grp).map(level =>
+    levelLabel(grid.cols[grp], level.value)
+  );
+  const names = [...byName.keys()].sort((left, right) => {
+    const li = declaredOrder.indexOf(left);
+    const ri = declaredOrder.indexOf(right);
+    if (li >= 0 && ri >= 0) return li - ri;
+    if (li >= 0) return -1;
+    if (ri >= 0) return 1;
+    return naturalCompare(left, right);
+  });
+  names.forEach(name => groups.push({ name, values: byName.get(name)! }));
+
+  const result = moodMedianTest(groups);
+  if (!result) {
+    return {
+      ok: false,
+      reason: 'The Mood median test needs at least two groups with observations on both sides of the median',
+    };
+  }
+  const depName = grid.cols[dep].name;
+  const groupName = grid.cols[grp].name;
+  const boxes = boxRows(
+    groups.map(group => ({ category: group.name, values: group.values })),
+    { level: ciLevel }
+  );
+
+  return {
+    ok: true,
+    title: copy('Test della mediana — {s1} per {s2}', { s1: depName, s2: groupName }),
+    tables: moodTables(result, depName, groupName),
+    report: moodReport(result, depName, groupName, ciLevel),
+    charts: [
+      makeChart({
+        id: 'mood-box',
+        kind: 'box',
+        title: copy('Distribuzione per gruppo'),
+        subtitle: copy('Mediana comune {s1}', { s1: result.median.toFixed(3) }),
+        note: copy('La linea centrale di ogni scatola è la mediana del gruppo; il test confronta quante osservazioni cadono sopra e sotto la mediana comune.'),
+        data: { summary: boxes.summary, points: boxes.points, outliers: boxes.outliers },
+        fields: { xLabel: groupName, yLabel: depName },
+        options: { showPoints: true, showMean: false } as never,
+      }),
+    ],
+  };
+};

@@ -266,4 +266,6 @@ export const formMessages = {
   'form.signTest': 'Teste dos sinais',
   'distfit.fit': 'Ajustamento',
   'distfit.ks': 'KS duas amostras',
+  'anova.oneway': 'ANOVA de uma via',
+  'anova.median': 'Teste da mediana de Mood',
 } as const;
