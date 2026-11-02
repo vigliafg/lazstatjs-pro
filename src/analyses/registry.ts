@@ -92,6 +92,14 @@ const ANALYSIS_DEFINITIONS = [
     cost: 'instant',
   },
   {
+    id: 'variances',
+    label: 'Variances',
+    family: 'compare',
+    description: 'One variance, F test, Bartlett and Levene for equality of variances.',
+    keywords: ['variance', 'var.test', 'bartlett', 'levene', 'homoscedasticity', 'spread'],
+    cost: 'instant',
+  },
+  {
     id: 'ttest',
     label: 'T-Test',
     family: 'compare',

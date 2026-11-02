@@ -33,6 +33,7 @@ import { tostCopy } from './tost';
 import { ttestCopy } from './ttest';
 import { wizardCopy } from './wizard';
 import { proportionsCopy as deProportionsCopy } from './proportions';
+import { variancesCopy as deVariancesCopy } from './variances';
 
 export const deReportCopy: Record<string, string> = {
   ...agreementCopy,
@@ -69,4 +70,5 @@ export const deReportCopy: Record<string, string> = {
   ...ttestCopy,
   ...wizardCopy,
   ...deProportionsCopy,
+  ...deVariancesCopy,
 };

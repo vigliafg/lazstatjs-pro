@@ -100,4 +100,6 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.family.advanced.description': 'Metaanálisis, modelos bayesianos y espaciales',
   'meta.analysis.proportions.label': 'Proporciones y tasas',
   'meta.analysis.proportions.description': 'Pruebas de una y dos muestras para proporciones y tasas de Poisson.',
+  'meta.analysis.variances.label': 'Varianzas',
+  'meta.analysis.variances.description': 'Una varianza, prueba F, Bartlett y Levene para la igualdad de varianzas.',
 };

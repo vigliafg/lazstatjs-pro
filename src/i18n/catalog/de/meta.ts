@@ -135,4 +135,6 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.family.advanced.description': 'Metaanalyse, bayesianische und räumliche Modelle',
   'meta.analysis.proportions.label': 'Anteile und Raten',
   'meta.analysis.proportions.description': 'Ein- und Zweistichprobentests für Anteile und Poisson-Raten.',
+  'meta.analysis.variances.label': 'Varianzen',
+  'meta.analysis.variances.description': 'Eine Varianz, F-Test, Bartlett und Levene für die Gleichheit der Varianzen.',
 };

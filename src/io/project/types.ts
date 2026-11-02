@@ -363,6 +363,18 @@ export type DescriptiveMode = 'summary' | 'frequency' | 'outliers' | 'runs';
 /** One- and two-sample tests for proportions and Poisson rates. */
 export type ProportionMode = 'oneProp' | 'twoProp' | 'oneRate' | 'twoRate';
 
+export type VarianceMode = 'one' | 'two';
+
+export interface VarianceParams {
+  mode: VarianceMode;
+  /** Numeric variable whose variance is tested. */
+  variable: number;
+  /** Group column for the two-sample modes; -1 for one sample. */
+  group: number;
+  /** Null variance for the one-sample test. */
+  nullVariance: number;
+}
+
 export interface ProportionParams {
   mode: ProportionMode;
   /** Binary outcome (proportions) or count column (rates). */
@@ -390,6 +402,7 @@ export interface ProjectParams {
   /** Which view of the Descriptive procedure the form and runner use. */
   descMode: DescriptiveMode;
   proportions: ProportionParams;
+  variances: VarianceParams;
   ttest: TTestParams;
   anova: AnovaParams;
   reg: RegParams;
@@ -488,6 +501,12 @@ export interface ProjectInput {
 export const DEFAULT_PARAMS: ProjectParams = {
   descVars: [0, 1],
   descMode: 'summary',
+  variances: {
+    mode: 'one',
+    variable: 0,
+    group: -1,
+    nullVariance: 1,
+  },
   proportions: {
     mode: 'oneProp',
     variable: 0,

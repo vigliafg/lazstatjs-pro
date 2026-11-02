@@ -222,4 +222,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ['chisquare', 'ttest'],
   },
+  {
+    id: 'variances',
+    area: 'procedures',
+    title: 'Variances',
+    summary: 'One variance, the F test and Bartlett/Levene for equality of spreads.',
+    tutorial: {
+      goal: 'Check whether a variance differs from a target or between groups.',
+      dataset: 'plantgrowth.csv',
+      steps: [
+        'Choose one variance or two or more variances.',
+        'Select the numeric variable and, for two or more, the group column.',
+        'Enter the null variance for the one-sample test.',
+        'Run it and compare F, Bartlett and Levene before choosing a test for the means.',
+      ],
+      expected: 'A variance table with an exact interval, and F/Bartlett/Levene p-values when there are groups.',
+    },
+    advanced: {
+      assumptions: [
+        'Observations are independent and, for the chi-square and F intervals, normally distributed.',
+        'Levene on medians is more robust but still needs independent groups.',
+      ],
+      whenToUse: ['Checking homoscedasticity before a t-test or ANOVA, or comparing process spread.'],
+      whenNotToUse: ['With very small groups the tests have little power; prefer Welch procedures regardless.'],
+      reading: [
+        'The F test covers two groups; with more groups use Bartlett or Levene.',
+        'Bartlett is powerful under normality but distorted by outliers and heavy tails.',
+        'Levene on medians reduces the influence of extremes and is the safer default.',
+      ],
+      pitfalls: [
+        'A non-significant test does not prove equal variances: look at the interval and the boxes.',
+        'Variance is on the squared scale: report the standard deviation for interpretability.',
+      ],
+      charts: ['Box plot', 'Interval plot'],
+      glossary: [
+        { term: 'Homoscedasticity', definition: 'Equality of variances across groups, an assumption of pooled t and ANOVA.' },
+        { term: 'Levene test', definition: 'ANOVA on absolute deviations from a group centre; the median version is Brown–Forsythe.' },
+      ],
+    },
+    seeAlso: ['ttest', 'anova'],
+  },
 ];

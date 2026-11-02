@@ -262,4 +262,7 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'proportions.nullProportion': 'Proporción nula',
   'proportions.nullRate': 'Tasa nula',
   'proportions.exposure': 'Exposición por fila',
+  'variances.one': 'Una varianza',
+  'variances.two': 'Dos o más varianzas',
+  'form.nullVariance': 'Varianza nula',
 };

@@ -125,6 +125,8 @@ export const remapParams = (
   const doeResponse = one(params.doe.response, 'DOE: response');
   const doeFactorA = one(params.doe.factorA, 'DOE: factor A');
   const doeFactorB = one(params.doe.factorB, 'DOE: factor B');
+  const varianceVariable = one(params.variances.variable, 'Variances: variable');
+  const varianceGroup = optional(params.variances.group);
   const proportionVariable = one(params.proportions.variable, 'Proportions: variable');
   const proportionGroup = optional(params.proportions.group);
 
@@ -266,6 +268,11 @@ export const remapParams = (
         factorA: doeFactorA,
         factorB: doeFactorB,
       },
+      variances: {
+        ...params.variances,
+        variable: varianceVariable,
+        group: varianceGroup,
+      },
       proportions: {
         ...params.proportions,
         variable: proportionVariable,
@@ -294,6 +301,8 @@ const checkList = (values: readonly number[], label: string, width: number, erro
 export const validateColumnRefs = (params: ProjectParams, width: number): string[] => {
   const errors: string[] = [];
   checkList(params.descVars, 'Descriptive: variables', width, errors);
+  checkOne(params.variances.variable, 'Variances: variable', width, errors);
+  checkOne(params.variances.group, 'Variances: group', width, errors, true);
   checkOne(params.proportions.variable, 'Proportions: variable', width, errors);
   checkOne(params.proportions.group, 'Proportions: group', width, errors, true);
   checkOne(params.ttest.var1, 'T-Test: first variable', width, errors);
@@ -411,6 +420,10 @@ export const validateAnalysisColumnRefs = (
   switch (analysisId) {
     case 'descriptive':
       list(params.descVars, 'Descriptive: variables');
+      break;
+    case 'variances':
+      one(params.variances.variable, 'Variances: variable');
+      if (params.variances.mode === 'two') one(params.variances.group, 'Variances: group');
       break;
     case 'proportions':
       one(params.proportions.variable, 'Proportions: variable');
@@ -577,6 +590,14 @@ export const setPrimaryColumn = (
   switch (analysisId) {
     case 'descriptive':
       return { params: { ...params, descVars: append(params.descVars) }, role: 'Descriptive variable' };
+    case 'variances':
+      return {
+        params: {
+          ...params,
+          variances: { ...params.variances, variable: column },
+        },
+        role: 'Variances: variable',
+      };
     case 'proportions':
       return {
         params: {

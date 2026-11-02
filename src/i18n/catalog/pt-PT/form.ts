@@ -260,4 +260,7 @@ export const formMessages = {
   'proportions.nullProportion': 'Proporção nula',
   'proportions.nullRate': 'Tasa nula',
   'proportions.exposure': 'Exposição por linha',
+  'variances.one': 'Uma variância',
+  'variances.two': 'Duas ou mais variâncias',
+  'form.nullVariance': 'Variância nula',
 } as const;

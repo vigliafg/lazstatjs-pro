@@ -98,4 +98,6 @@ export const metaMessages = {
   'meta.family.advanced.description': 'Meta-análise, modelos bayesianos e espaciais',
   'meta.analysis.proportions.label': 'Proporções e taxas',
   'meta.analysis.proportions.description': 'Testes de uma e duas amostras para proporções e taxas de Poisson.',
+  'meta.analysis.variances.label': 'Variâncias',
+  'meta.analysis.variances.description': 'Uma variância, teste F, Bartlett e Levene para a igualdade de variâncias.',
 } as const;

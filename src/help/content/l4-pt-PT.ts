@@ -221,4 +221,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ['chisquare', 'ttest'],
   },
+  {
+    id: 'variances',
+    area: 'procedures',
+    title: 'Variâncias',
+    summary: 'Uma variância, teste F e Bartlett/Levene para a igualdade de dispersões.',
+    tutorial: {
+      goal: 'Verificar se uma variância difere de um alvo ou entre grupos.',
+      dataset: 'plantgrowth.csv',
+      steps: [
+        'Escolha uma variância ou duas ou mais variâncias.',
+        'Selecione a variável numérica e, para dois ou mais grupos, a coluna de grupo.',
+        'Introduza a variância nula para o teste de uma amostra.',
+        'Execute e compare F, Bartlett e Levene antes de escolher um teste para as médias.',
+      ],
+      expected: 'Uma tabela de variâncias com intervalo exato e valores p de F/Bartlett/Levene quando há grupos.',
+    },
+    advanced: {
+      assumptions: [
+        'As observações são independentes e, para o χ² e os intervalos F, normais.',
+        'Levene sobre medianas é mais robusto mas exige grupos independentes.',
+      ],
+      whenToUse: ['Verificar homocedasticidade antes de um teste t ou ANOVA, ou comparar a dispersão de um processo.'],
+      whenNotToUse: ['Com grupos muito pequenos os testes têm pouca potência; prefira procedimentos de Welch.'],
+      reading: [
+        'O teste F abrange dois grupos; com mais grupos use Bartlett ou Levene.',
+        'Bartlett é potente sob normalidade mas distorcido por valores atípicos e caudas pesadas.',
+        'Levene sobre medianas reduz a influência dos extremos e é a opção segura por omissão.',
+      ],
+      pitfalls: [
+        'Um teste não significativo não prova igualdade de variâncias: veja o intervalo e as caixas.',
+        'A variância está na escala quadrática: apresente o desvio-padrão para interpretar.',
+      ],
+      charts: ['Diagrama de caixa', 'Gráfico de intervalo'],
+      glossary: [
+        { term: 'Homocedasticidade', definition: 'Igualdade de variâncias entre grupos, pressuposto do t agrupado e da ANOVA.' },
+        { term: 'Teste de Levene', definition: 'ANOVA sobre desvios absolutos em relação a um centro de grupo; a versão da mediana é Brown–Forsythe.' },
+      ],
+    },
+    seeAlso: ['ttest', 'anova'],
+  },
 ];

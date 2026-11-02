@@ -158,7 +158,8 @@
         "anova",
         "descriptive",
         "wizard",
-        "quality"
+        "quality",
+        "variances"
       ],
       "examples": [
         {
@@ -166,6 +167,25 @@
           "columns": {
             "dependent": "weight",
             "group": "group"
+          }
+        },
+        {
+          "analysis": "variances",
+          "columns": {
+            "variable": "weight",
+            "group": "group"
+          },
+          "options": {
+            "mode": "two"
+          }
+        },
+        {
+          "analysis": "variances",
+          "columns": {
+            "variable": "weight"
+          },
+          "options": {
+            "mode": "one"
           }
         },
         {

@@ -124,9 +124,11 @@ write_dataset(
   "compare", "plantgrowth", plant_growth,
   "Plant growth by treatment",
   "datasets::PlantGrowth (R)",
-  c("anova", "descriptive", "wizard", "quality"),
+  c("anova", "descriptive", "wizard", "quality", "variances"),
   list(
     example("anova", list(dependent = "weight", group = "group")),
+    example("variances", list(variable = "weight", group = "group"), mode = "two"),
+    example("variances", list(variable = "weight"), mode = "one"),
     example("descriptive", list(variables = "weight")),
     example("wizard", list(outcome = "weight", group = "group")),
     example("quality", list(variable = "weight", group = "group")),

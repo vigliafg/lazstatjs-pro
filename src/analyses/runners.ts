@@ -3,6 +3,7 @@ import type { Dataset } from '../grid/types';
 import type { ProjectParams } from '../io/project';
 import { buildDescriptiveOutput } from './descriptive/run';
 import { buildProportionsOutput } from './proportions/run';
+import { buildVariancesOutput } from './variances/run';
 import { buildTTestOutput } from './ttest/run';
 import { buildAnovaOutput } from './anova/run';
 import { buildRegressionOutput } from './regression/run';
@@ -62,6 +63,8 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
       level: ciLevel,
       mode: params.descMode,
     }),
+  variances: ({ grid, params, ciLevel }) =>
+    buildVariancesOutput({ grid, params: params.variances, ciLevel }),
   proportions: ({ grid, params, ciLevel }) =>
     buildProportionsOutput({ grid, params: params.proportions, ciLevel }),
   ttest: ({ grid, params, ciLevel }) =>

@@ -286,6 +286,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const partition = isRecord(raw.partition) ? raw.partition : {};
   const quality = isRecord(raw.quality) ? raw.quality : {};
   const proportions = isRecord(raw.proportions) ? raw.proportions : {};
+  const variances = isRecord(raw.variances) ? raw.variances : {};
   const cluster = isRecord(raw.cluster) ? raw.cluster : {};
   const discriminant = isRecord(raw.discriminant) ? raw.discriminant : {};
   const doe = isRecord(raw.doe) ? raw.doe : {};
@@ -308,6 +309,12 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       typeof raw.descMode === 'string' && (DESCRIPTIVE_MODES as readonly string[]).includes(raw.descMode)
         ? (raw.descMode as ProjectParams['descMode'])
         : d.descMode,
+    variances: {
+      mode: variances.mode === 'two' ? 'two' : d.variances.mode,
+      variable: index(variances.variable, d.variances.variable, width),
+      group: optionalIndex(variances.group, d.variances.group, width),
+      nullVariance: Math.max(1e-9, finite(variances.nullVariance, d.variances.nullVariance)),
+    },
     proportions: {
       mode:
         proportions.mode === 'twoProp' ||

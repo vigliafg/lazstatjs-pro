@@ -14,6 +14,7 @@ import { countregCopy } from './en/countreg';
 import { coxCopy } from './en/cox';
 import { descriptiveCopy } from './en/descriptive';
 import { proportionsCopy as enProportionsCopy } from './en/proportions';
+import { variancesCopy as enVariancesCopy } from './en/variances';
 import { distfitCopy } from './en/distfit';
 import { factorialCopy } from './en/factorial';
 import { geeCopy } from './en/gee';
@@ -78,6 +79,7 @@ export const enReportCopy: Record<string, string> = {
   ...ttestCopy,
   ...wizardCopy,
   ...enProportionsCopy,
+  ...enVariancesCopy,
 };
 
 const CATALOGS: Partial<Record<ReportLocale, Record<string, string>>> = {

@@ -49,6 +49,7 @@ const SOURCE_IDS = [
   ...idsOf('src/analyses/ancova'),
   ...idsOf('src/analyses/descriptive'),
   ...idsOf('src/analyses/proportions'),
+  ...idsOf('src/analyses/variances'),
   ...idsOf('src/analyses/ttest'),
   ...idsOf('src/analyses/anova'),
   ...idsOf('src/analyses/correlation'),

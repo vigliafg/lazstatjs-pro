@@ -218,4 +218,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ["chisquare", "ttest"],
   },
+  {
+    id: "variances",
+    area: "procedures",
+    title: "Varianzen",
+    summary: "Eine Varianz, F-Test und Bartlett/Levene für die Gleichheit der Streuungen.",
+    tutorial: {
+      goal: "Prüfen, ob eine Varianz von einem Zielwert oder zwischen Gruppen abweicht.",
+      dataset: "plantgrowth.csv",
+      steps: [
+        "Wählen Sie eine Varianz oder zwei bzw. mehr Varianzen.",
+        "Wählen Sie die numerische Variable und bei zwei oder mehr Gruppen die Gruppenspalte.",
+        "Geben Sie für den Einstichprobentest die Nullvarianz ein.",
+        "Führen Sie die Analyse aus und vergleichen Sie F, Bartlett und Levene, bevor Sie einen Mittelwerttest wählen.",
+      ],
+      expected: "Eine Varianztabelle mit exaktem Intervall sowie F-/Bartlett-/Levene-p-Werten bei Gruppen.",
+    },
+    advanced: {
+      assumptions: [
+        "Die Beobachtungen sind unabhängig und für χ² und F-Intervalle normalverteilt.",
+        "Levene auf Medianen ist robuster, setzt aber unabhängige Gruppen voraus.",
+      ],
+      whenToUse: ["Homoskedastizität vor t-Test oder ANOVA prüfen oder die Streuung eines Prozesses vergleichen."],
+      whenNotToUse: ["Bei sehr kleinen Gruppen haben die Tests wenig Power; bevorzugen Sie Welch-Verfahren."],
+      reading: [
+        "Der F-Test gilt für zwei Gruppen; bei mehr Gruppen Bartlett oder Levene verwenden.",
+        "Bartlett ist unter Normalität leistungsfähig, wird aber durch Ausreißer und schwere Ränder verzerrt.",
+        "Levene auf Medianen verringert den Einfluss von Extremen und ist die sichere Standardwahl.",
+      ],
+      pitfalls: [
+        "Ein nicht signifikanter Test beweist keine gleichen Varianzen: Betrachten Sie Intervall und Boxplots.",
+        "Die Varianz liegt auf der quadrierten Skala: Berichten Sie die Standardabweichung.",
+      ],
+      charts: ["Boxplot", "Intervallplot"],
+      glossary: [
+        { term: "Homoskedastizität", definition: "Gleichheit der Varianzen zwischen Gruppen, Voraussetzung von gepooltem t-Test und ANOVA." },
+        { term: "Levene-Test", definition: "ANOVA über absolute Abweichungen von einem Gruppenmaß; die Medianvariante ist Brown–Forsythe." },
+      ],
+    },
+    seeAlso: ["ttest", "anova"],
+  },
 ];

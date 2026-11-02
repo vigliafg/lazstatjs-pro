@@ -699,4 +699,10 @@ export const chartCopy: Record<string, string> = {
   "Tasso osservato": "Observed rate",
   "{s1} eventi su esposizione {s2}": "{s1} events over exposure {s2}",
   "“{s1}” in {s2}": "“{s1}” in {s2}",
+  "Confronta l’altezza delle scatole e la lunghezza dei baffi: varianze uguali danno dispersioni simili.": "Compare the box heights and whisker lengths: equal variances give similar spreads.",
+  "Dispersione per gruppo": "Spread by group",
+  "Varianza e intervallo": "Variance and interval",
+  "Varianza — {s1}": "Variance — {s1}",
+  "Varianze — {s1} per {s2}": "Variances — {s1} by {s2}",
+  "Variance": "Variance",
 };

@@ -98,4 +98,6 @@ export const metaMessages = {
   'meta.family.advanced.description': 'Meta-analysis, Bayesian and spatial models',
   'meta.analysis.proportions.label': 'Proportions & rates',
   'meta.analysis.proportions.description': 'One- and two-sample tests for proportions and Poisson rates.',
+  'meta.analysis.variances.label': 'Variances',
+  'meta.analysis.variances.description': 'One variance, F test, Bartlett and Levene for equality of variances.',
 } as const;

@@ -82,6 +82,22 @@ const ROLES: Record<string, AnalysisRole[]> = {
       set: (p, c) => ({ ...p, descVars: append(p.descVars, c) }),
     },
   ],
+  variances: [
+    {
+      key: 'variable',
+      label: 'Variances: variable',
+      kind: 'continuous',
+      get: p => [p.variances.variable],
+      set: (p, c) => ({ ...p, variances: { ...p.variances, variable: c } }),
+    },
+    {
+      key: 'group',
+      label: 'Variances: group',
+      kind: 'group',
+      get: p => (p.variances.group < 0 ? [] : [p.variances.group]),
+      set: (p, c) => ({ ...p, variances: { ...p.variances, group: c } }),
+    },
+  ],
   proportions: [
     {
       key: 'variable',

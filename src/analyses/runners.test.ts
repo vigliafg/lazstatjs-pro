@@ -41,6 +41,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'timeseries',
     'tost',
     'ttest',
+    'variances',
     'wizard',
   ]);
 });

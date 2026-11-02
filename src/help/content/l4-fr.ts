@@ -221,4 +221,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ['chisquare', 'ttest'],
   },
+  {
+    id: 'variances',
+    area: 'procedures',
+    title: 'Variances',
+    summary: 'Une variance, le test F et Bartlett/Levene pour l’égalité des dispersions.',
+    tutorial: {
+      goal: 'Vérifier si une variance diffère d’une cible ou entre groupes.',
+      dataset: 'plantgrowth.csv',
+      steps: [
+        'Choisissez une variance ou deux variances ou plus.',
+        'Sélectionnez la variable numérique et, pour deux groupes ou plus, la colonne de groupe.',
+        'Saisissez la variance nulle pour le test à un échantillon.',
+        'Lancez l’analyse et comparez F, Bartlett et Levene avant de choisir un test sur les moyennes.',
+      ],
+      expected: 'Un tableau de variance avec intervalle exact et les p de F/Bartlett/Levene en présence de groupes.',
+    },
+    advanced: {
+      assumptions: [
+        'Les observations sont indépendantes et, pour le χ² et les intervalles F, normalement distribuées.',
+        'Levene sur les médianes est plus robuste mais exige des groupes indépendants.',
+      ],
+      whenToUse: ['Vérifier l’homoscédasticité avant un t-test ou une ANOVA, ou comparer la dispersion d’un processus.'],
+      whenNotToUse: ['Avec de très petits groupes les tests ont peu de puissance ; préférez les procédures de Welch.'],
+      reading: [
+        'Le test F concerne deux groupes ; avec plus de groupes utilisez Bartlett ou Levene.',
+        'Bartlett est puissant sous normalité mais faussé par les valeurs aberrantes et les queues épaisses.',
+        'Levene sur les médianes réduit l’influence des extrêmes et constitue le choix par défaut le plus sûr.',
+      ],
+      pitfalls: [
+        'Un test non significatif ne prouve pas l’égalité des variances : regardez l’intervalle et les boîtes.',
+        'La variance est sur l’échelle au carré : rapportez l’écart-type pour l’interprétation.',
+      ],
+      charts: ['Boîte à moustaches', 'Graphique d’intervalle'],
+      glossary: [
+        { term: 'Homoscédasticité', definition: 'Égalité des variances entre groupes, une hypothèse du t pooled et de l’ANOVA.' },
+        { term: 'Test de Levene', definition: 'ANOVA sur les écarts absolus à un centre de groupe ; la version médiane est Brown–Forsythe.' },
+      ],
+    },
+    seeAlso: ['ttest', 'anova'],
+  },
 ];

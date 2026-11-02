@@ -4,6 +4,7 @@ import type { ProjectParams } from '../io/project';
 const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   descriptive: 'descVars',
   proportions: 'proportions',
+  variances: 'variances',
   ttest: 'ttest',
   anova: 'anova',
   regression: 'reg',

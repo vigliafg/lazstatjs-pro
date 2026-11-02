@@ -134,4 +134,10 @@ export const l4ChartCopy: Record<string, string> = {
   "Tasso osservato": "Beobachtete Rate",
   "{s1} eventi su esposizione {s2}": "{s1} Ereignisse bei Exposition {s2}",
   "“{s1}” in {s2}": "„{s1}“ in {s2}",
+  "Confronta l’altezza delle scatole e la lunghezza dei baffi: varianze uguali danno dispersioni simili.": "Vergleichen Sie Boxhöhe und Whiskerlänge: Gleiche Varianzen ergeben ähnliche Streuungen.",
+  "Dispersione per gruppo": "Streuung je Gruppe",
+  "Varianza e intervallo": "Varianz und Intervall",
+  "Varianza — {s1}": "Varianz — {s1}",
+  "Varianze — {s1} per {s2}": "Varianzen — {s1} nach {s2}",
+  "Variance": "Varianz",
 };
