@@ -36,3 +36,20 @@ l'agente deve:
 
 La conferma di proseguimento va quindi considerata **implicita** nell'approvazione
 iniziale: non ripetere domande tipo "procedo con lo step 2?".
+
+## Checkpoint, handoff e compattazione
+
+Prima di ogni compattazione del contesto e alla fine di ogni ondata/checkpoint,
+l'agente deve:
+
+1. Aggiornare `docs/plans/2026-11-02-gap-procedure-stato.md` con: ondata
+   corrente, branch/worktree, ultimo commit, item chiusi/in corso/bloccati,
+   test eseguiti, decisioni, prossimi 3 passi, domande aperte e rischi.
+2. Aggiornare le checkbox e lo stato nel piano
+   `docs/plans/2026-11-02-gap-procedure-piano.md`.
+3. Non compattare a metà di una modifica senza WIP commit e non dichiarare
+   verde un checkpoint con test rossi.
+4. Considerare il documento di stato, i commit e i test come fonte di verità:
+   non affidarsi alla memoria della chat.
+
+Il protocollo completo è nel piano, §16.

@@ -5,7 +5,7 @@
 **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 **Baseline**: `main` @ `1042c61` (36 voci di registro, 10 famiglie, `npm run check` verde)
 **Documento precedente**: v1.0, piano strategico del 2026-11-02 (superato da questa versione)
-**Stato**: pronto per l’esecuzione; nessuna voce è ancora stata implementata
+**Stato**: pronto per l’esecuzione; protocollo di checkpoint e handoff definito
 
 ---
 
@@ -15,6 +15,7 @@
 |---|---|---|
 | 1.0 | 2026-11-02 | Perimetro, 73 metodi, 11 famiglie, ondate, stime |
 | 2.0 | 2026-11-02 | WBS, dipendenze, Definition of Ready/Done, work package per famiglia, matrice di tracciabilità, piano test, release plan, primi 4 sprint |
+| 2.1 | 2026-11-02 | Protocollo di checkpoint, handoff e compattazione; documento di stato `gap-procedure-stato.md` |
 
 ---
 
@@ -969,9 +970,135 @@ Termini da aggiungere prima della traduzione:
 
 ## 15. Prossimo passo operativo
 
-1. Aprire un worktree `gap-wave-1`.
-2. Creare il branch `feat/gap-wave-1`.
-3. Implementare W0-01, W0-02 e i primi due item (D-01, D-02).
-4. Aggiornare il backlog in questo documento man mano che gli item passano
+1. Leggere `docs/plans/2026-11-02-gap-procedure-stato.md` (fonte di ripresa).
+2. Aprire un worktree `gap-wave-1`.
+3. Creare il branch `feat/gap-wave-1`.
+4. Implementare W0-01, W0-02 e i primi due item (D-01, D-02).
+5. Aggiornare il backlog in questo documento man mano che gli item passano
    il gate.
-5. Non aggiornare i conteggi globali (36→72) fino alla chiusura di W1.
+6. Non aggiornare i conteggi globali (36→72) fino alla chiusura di W1.
+
+---
+
+## 16. Protocollo di checkpoint, handoff e compattazione
+
+### 16.1 Regola generale
+
+**Nessuna compattazione senza handoff aggiornato.** Il documento di stato è:
+
+`docs/plans/2026-11-02-gap-procedure-stato.md`
+
+Va aggiornato:
+
+- alla fine di ogni checkpoint;
+- **prima** di ogni compattazione del contesto;
+- prima di cambiare famiglia, fondazione o sessione;
+- dopo un commit che cambia lo stato del piano.
+
+La chat non è la fonte di verità: lo sono il documento di stato, i commit e i
+test. Se il contesto viene compattato senza handoff, la ripresa è considerata
+non valida.
+
+### 16.2 Trigger
+
+**Obbligatori**
+
+1. Fine di ogni ondata (G0–G9).
+2. Metà delle ondate lunghe:
+   - W2 dopo R-05;
+   - W5 dopo M-04;
+   - W9 dopo L-01.
+3. Cambio di famiglia o di fondazione (es. Regression → Multivariate).
+4. Intervento rischioso su un kernel condiviso, sul registry o sulla persistenza.
+
+**Consigliati**
+
+5. Ogni 2-3 item chiusi o ogni ~2 settimane.
+6. Quando il contesto si avvicina al limite.
+7. Prima di una pausa lunga o di un cambio di sessione.
+
+### 16.3 Checkpoint verde
+
+Un checkpoint è “verde” quando:
+
+- i test rilevanti passano;
+- il codice è committato (anche WIP su branch dedicato);
+- `gap-procedure-stato.md` è aggiornato;
+- i prossimi 3 passi sono scritti;
+- le domande aperte sono elencate.
+
+Rituale:
+
+1. Eseguire i test mirati; alla fine ondata `npm run check`.
+2. Committare (o WIP commit sul branch).
+3. Aggiornare `gap-procedure-stato.md`.
+4. Aggiornare le checkbox del piano.
+5. Produrre un riassunto di 10 righe: stato, commit, test, decisioni,
+   prossimi 3 passi, domande.
+6. L’utente compatta.
+
+### 16.4 Fine ondata
+
+In aggiunta al checkpoint verde:
+
+- `npm run check` completo;
+- aggiornamento conteggi (`README.md`, `docs/PROJECT-STATUS.md`,
+  `docs/UI-STATE.md`);
+- tag/release (`v0.13`, …);
+- note di rilascio e demo;
+- handoff esplicito per l’ondata successiva;
+- aggiornamento della dashboard in `gap-procedure-stato.md`.
+
+### 16.5 Contenuto minimo dell’handoff
+
+- data e ondata corrente;
+- branch, worktree e ultimo commit;
+- item chiusi / in corso / bloccati;
+- test eseguiti e risultato;
+- file toccati e moduli nuovi;
+- decisioni prese e deviazioni dal piano;
+- prossimi 3 passi;
+- domande aperte;
+- rischi attivi.
+
+### 16.6 Checkpoint pianificati
+
+Oltre ai 10 gate di ondata:
+
+| Checkpoint | Momento | Tipo |
+|---|---|---|
+| G0 | fine W0 | obbligatorio |
+| G1 | fine W1 | obbligatorio |
+| W2-mid | dopo R-05 | obbligatorio |
+| G2 | fine W2 | obbligatorio |
+| G3 | fine W3 | obbligatorio |
+| G4 | fine W4 | obbligatorio |
+| W5-mid | dopo M-04 | obbligatorio |
+| G5 | fine W5 | obbligatorio |
+| W6-mid | dopo S-04 | consigliato |
+| G6 | fine W6 | obbligatorio |
+| G7 | fine W7 | obbligatorio |
+| G8 | fine W8 | obbligatorio |
+| W9-mid | dopo L-01 | obbligatorio |
+| G9 | fine W9 | obbligatorio |
+
+Totale: **14 checkpoint obbligatori** + checkpoint liberi ogni 2-3 item.
+
+### 16.7 Responsabilità
+
+- **Agente**: aggiorna il documento di stato prima di ogni compattazione e non
+  si affida alla memoria della chat; non dichiara “fatto” un item senza gate.
+- **Utente**: decide quando compattare; può chiedere un checkpoint in qualsiasi
+  momento.
+- **Repo**: commit e test sono la prova dello stato; il documento di stato è la
+  mappa per riprendere.
+
+### 16.8 Cosa non fare
+
+- Non compattare a metà di una modifica senza WIP commit.
+- Non compattare con test rossi senza dichiararlo esplicitamente.
+- Non cancellare il registro dei checkpoint: si aggiungono righe, non si
+  riscrive la storia.
+- Non aggiornare i conteggi globali prima del gate di ondata.
+- Non usare il documento di stato per duplicare il piano: deve rimandare alle
+  sezioni del piano, non ricopiarle.
