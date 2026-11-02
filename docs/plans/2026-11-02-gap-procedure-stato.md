@@ -217,6 +217,43 @@ Cause e rimedi:
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
 
+### Handoff — 2026-11-02 / W0 chiusa
+
+- Ondata: W0 conclusa, gate G0 verde; prossima W1.
+- Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
+- Ultimo commit: `ab0c26a` (codice) + `152b1cb` (documenti).
+- Item chiusi (ID): W0-01…W0-09; G0.
+- Item in corso (ID): nessuno; W1 non ancora aperta.
+- Item bloccati (ID + motivo): nessuno.
+- Test eseguiti e risultato: `npm run check` verde (lint, 880/880 test,
+  depcruise/madge/filesize); `npm run test:samples` 7/7; locale check 6/6;
+  `npm run bench:kernels` registrato.
+- File/moduli toccati: vedi §5.
+- Decisioni prese / deviazioni dal piano: DOE reference con `lm` (rsm non
+  installato); resampling p Monte-Carlo con tolleranza dichiarata; famiglie
+  `ml`/`advanced` dichiarate ma nascoste.
+- Prossimi 3 passi:
+  1. Aprire W1 con D-01 frequenze/tally come modalità di `descriptive`.
+  2. Aggiungere D-02 Grubbs/Dixon e D-03 runs test come righe di output.
+  3. Aggiornare help 6 lingue, sample e coverage a ogni metodo.
+- Domande aperte: nessuna.
+- Rischi attivi: W1 tocca persistenza (`descMode`) e help in 6 lingue; farlo
+  per metodo, con `npm run check` a ogni passo.
+
+### Riassunto di 10 righe
+
+1. Ondata e obiettivo: W0 chiusa — fondazioni numeriche, reference, sample,
+   i18n/help, shape adapter, performance guard.
+2. Cosa è chiuso: W0-01…W0-09 e gate G0; reference baseline 35/35.
+3. Cosa è in corso: nulla; W1 da aprire.
+4. Cosa è bloccato: nulla.
+5. Ultimo commit: `ab0c26a`, documenti `152b1cb` su `feat/gap-wave-1`.
+6. Test: `npm run check` verde, 880/880; sample 7/7; locale 6/6.
+7. Decisioni: DOE con `lm`, resampling MC con tolleranza, famiglie pianificate.
+8. Prossimi 3 passi: D-01, D-02/D-03, help/sample/coverage per metodo.
+9. Domande: nessuna.
+10. Rischi: persistenza dei nuovi parametri e traduzioni; procedere per metodo.
+
 ```md
 ## Handoff — YYYY-MM-DD / W?
 
@@ -236,19 +273,6 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 - Domande aperte:
 - Rischi attivi:
 ```
-
-### Riassunto di 10 righe
-
-1. Ondata e obiettivo:
-2. Cosa è chiuso:
-3. Cosa è in corso:
-4. Cosa è bloccato:
-5. Ultimo commit:
-6. Test:
-7. Decisioni:
-8. Prossimi 3 passi:
-9. Domande:
-10. Rischi:
 
 ---
 
