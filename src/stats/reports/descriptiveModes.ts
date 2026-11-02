@@ -9,7 +9,6 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { alphaText, isDecided, show, showInt } from './shared';
-import { equalShareChiSquare } from '../kernels/frequency';
 import type { NamedFrequency } from '../tables/frequency';
 import type { NamedOutliers } from '../tables/outliers';
 import type { NamedRuns } from '../tables/runs';
@@ -18,9 +17,9 @@ const PERCENT = (value: number): string => `${show(value, 2)}%`;
 
 export const frequencyReport = (entries: NamedFrequency[], level: number): ReportSpec => {
   const totalLevels = entries.reduce((sum, entry) => sum + entry.result.distinct, 0);
-  const bullets = entries.map(({ name, result }) => {
+  const bullets = entries.map(({ name, result, gof: presetGof }) => {
     const top = result.rows.reduce((best, row) => (row.count > best.count ? row : best), result.rows[0]);
-    const gof = equalShareChiSquare(result);
+    const gof = presetGof ?? null;
     const shares = copy('{s1} modalità su {s2} osservazioni non mancanti', {
       s1: result.distinct,
       s2: showInt(result.total),
@@ -63,10 +62,7 @@ export const frequencyReport = (entries: NamedFrequency[], level: number): Repor
             s2: showInt(totalLevels),
           }),
     badge: copy('Conteggi'),
-    tone: entries.some(entry => {
-      const gof = equalShareChiSquare(entry.result);
-      return gof !== null && isDecided(gof.p, level);
-    })
+    tone: entries.some(entry => entry.gof && isDecided(entry.gof.p, level))
       ? 'caution'
       : 'neutral',
     intro: [

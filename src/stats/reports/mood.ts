@@ -1,7 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { describeP, isDecided, show } from './shared';
-import type { MoodResult } from '../kernels/mood';
+import type { MoodResult } from '../analysisResults';
 
 export const moodReport = (
   result: MoodResult,

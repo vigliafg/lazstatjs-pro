@@ -9,26 +9,8 @@
  */
 import { jStat } from '../jstat';
 import { zCrit } from './distributions';
-
-export interface FrequencyRow {
-  value: string;
-  count: number;
-  /** Percentage of the non-missing observations. */
-  percent: number;
-  cumCount: number;
-  cumPercent: number;
-  /** Wilson score interval on the proportion, in percent. */
-  ciLo: number;
-  ciHi: number;
-}
-
-export interface FrequencyResult {
-  total: number;
-  missing: number;
-  distinct: number;
-  mode: string | null;
-  rows: FrequencyRow[];
-}
+import type { FrequencyRow, FrequencyResult } from '../analysisResults';
+export type { FrequencyRow, FrequencyResult } from '../analysisResults';
 
 /** More levels than this is a continuous variable, not a tally. */
 export const FREQUENCY_MAX_LEVELS = 100;

@@ -1,7 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { describeP, isDecided, show, showCI } from './shared';
-import type { OneVarianceResult, TwoVarianceResult } from '../kernels/variances';
+import type { OneVarianceResult, TwoVarianceResult } from '../analysisResults';
 
 export type VarianceReportInput =
   | { mode: 'one'; result: OneVarianceResult; variableName: string; level: number }

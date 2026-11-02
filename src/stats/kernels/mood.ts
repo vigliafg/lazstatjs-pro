@@ -8,29 +8,12 @@
  * the uncorrected Pearson statistic.
  */
 import { chi2SF } from './distributions';
+import type { MoodGroupCount, MoodResult } from '../analysisResults';
+export type { MoodGroupCount, MoodResult } from '../analysisResults';
 
 export interface MoodGroup {
   name: string;
   values: number[];
-}
-
-export interface MoodGroupCount {
-  name: string;
-  n: number;
-  above: number;
-  below: number;
-}
-
-export interface MoodResult {
-  median: number;
-  /** Observations strictly above the grand median. */
-  above: number;
-  /** Observations at or below the grand median. */
-  below: number;
-  groups: MoodGroupCount[];
-  chi2: number;
-  df: number;
-  p: number;
 }
 
 const median = (values: number[]): number => {

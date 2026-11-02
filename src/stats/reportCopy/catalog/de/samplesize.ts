@@ -76,4 +76,20 @@ export const samplesizeCopy: Record<string, string> = {
   'Una media': 'Ein Mittelwert',
   Valore: 'Wert',
   Voce: 'Posten',
+  'Proporzione alternativa':
+    'Alternativer Anteil',
+  'Proporzione nulla':
+    'Nullanteil',
+  'Rapporto tra varianze':
+    'Varianzverhältnis',
+  'Tasso alternativo':
+    'Alternative Rate',
+  'Tasso nullo':
+    'Nullrate',
+  'Un tasso di Poisson':
+    'Eine Poisson-Rate',
+  'Una proporzione':
+    'Ein Anteil',
+  'Una varianza':
+    'Eine Varianz',
 };

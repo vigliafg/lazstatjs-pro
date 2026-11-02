@@ -421,7 +421,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ["Differenz und Streuung sind Designhypothesen, keine Ergebnisse."],
       whenToUse: ["Vor der Datenerhebung; um die Power einer bereits durchgeführten Studie zu beurteilen."],
       whenNotToUse: ["Verwenden Sie die beobachtete Post-hoc-Power nicht als Beweis für die Validität."],
-      reading: ["Kleinere erwartete Differenzen oder eine höhere geforderte Power erhöhen n deutlich."],
+      reading: [
+        "Kleinere erwartete Differenzen oder eine höhere geforderte Power erhöhen n deutlich.",
+        "Der Planer deckt Mittelwerte, Anteile, Varianzen und Poisson-Raten ab: Wählen Sie das Design des Tests, den Sie ausführen werden.",
+      ],
       pitfalls: ["Eine zu hoch angesetzte erwartete Differenz erzeugt eine unterpowerte Studie."],
       glossary: [
         { term: "Power", definition: "Die Wahrscheinlichkeit, einen tatsächlich vorhandenen Effekt zu entdecken." },

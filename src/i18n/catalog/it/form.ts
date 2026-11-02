@@ -275,4 +275,12 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'chisq.gofVariable': 'Variabile categorica',
   'chisq.expectedProportions': 'Proporzioni attese (opzionale)',
   'hint.chisq.gof': 'Lascia vuoto per quote uguali; altrimenti una proporzione positiva per categoria, ad esempio 0.2, 0.3, 0.5.',
+  'samplesize.oneProportion': 'Una proporzione',
+  'samplesize.variance': 'Una varianza',
+  'samplesize.oneRate': 'Un tasso di Poisson',
+  'samplesize.propAlternative': 'Proporzione alternativa',
+  'samplesize.propNull': 'Proporzione nulla',
+  'samplesize.rateAlternative': 'Tasso alternativo',
+  'samplesize.rateNull': 'Tasso nullo',
+  'samplesize.varianceRatio': 'Rapporto tra varianze',
 };

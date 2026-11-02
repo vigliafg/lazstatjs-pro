@@ -1,7 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { describeP, isDecided, show } from './shared';
-import type { GofResult } from '../kernels/goodness';
+import type { GofResult } from '../analysisResults';
 
 export const goodnessReport = (result: GofResult, variableName: string, level: number): ReportSpec => {
   const top = result.observed.reduce(

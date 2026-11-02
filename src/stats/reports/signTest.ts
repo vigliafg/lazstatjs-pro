@@ -1,7 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { describeP, isDecided, show } from './shared';
-import type { SignTestResult } from '../kernels/sign';
+import type { SignTestResult } from '../analysisResults';
 
 export const signTestReport = (
   result: SignTestResult,

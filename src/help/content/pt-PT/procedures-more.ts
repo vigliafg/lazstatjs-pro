@@ -392,7 +392,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['A diferença e a variabilidade são hipóteses de delineamento, não resultados.'],
       whenToUse: ['Antes de recolher dados; para avaliar a potência de um estudo já feito.'],
       whenNotToUse: ['Não use a potência observada a posteriori como prova de validade.'],
-      reading: ['Diferenças esperadas menores ou potência exigida maior aumentam n de forma acentuada.'],
+      reading: [
+        'Diferenças esperadas menores ou potência exigida maior aumentam n de forma acentuada.',
+        'O planeador cobre médias, proporções, variâncias e taxas de Poisson: escolha o desenho do teste que vai executar.',
+      ],
       pitfalls: ['Uma diferença esperada inflacionada produz um estudo com pouca potência.'],
       glossary: [
         { term: 'Potência', definition: 'A probabilidade de detetar um efeito que realmente existe.' },

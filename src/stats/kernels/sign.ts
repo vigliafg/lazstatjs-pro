@@ -8,20 +8,8 @@
  */
 import { zTwoSidedP } from './distributions';
 import { exactBinomialP } from './proportions';
-
-export interface SignTestResult {
-  /** Non-zero differences actually used. */
-  n: number;
-  zeros: number;
-  positive: number;
-  negative: number;
-  /** Exact two-sided binomial p-value with p = 0.5. */
-  exactP: number;
-  /** Normal approximation with continuity correction. */
-  z: number;
-  asymptoticP: number;
-  median: number;
-}
+import type { SignTestResult } from '../analysisResults';
+export type { SignTestResult } from '../analysisResults';
 
 export const signTest = (differences: number[]): SignTestResult | null => {
   const finite = differences.filter(value => Number.isFinite(value));

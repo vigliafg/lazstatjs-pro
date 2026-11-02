@@ -9,19 +9,49 @@ export interface SampleSizeFormProps {
   setSamplesizeParams: Dispatch<SetStateAction<SampleSizeParams>>;
 }
 
-const DESIGNS: { id: SampleSizeDesign; key: Parameters<typeof t>[0] }[] = [
-  { id: 'twoMeans', key: 'samplesize.twoMeans' },
-  { id: 'oneMean', key: 'samplesize.oneMean' },
-  { id: 'paired', key: 'samplesize.paired' },
-  { id: 'twoProportions', key: 'samplesize.twoProportions' },
-  { id: 'correlation', key: 'samplesize.correlation' },
-  { id: 'anova', key: 'samplesize.anova' },
-  { id: 'tost', key: 'samplesize.tost' },
-  { id: 'survival', key: 'samplesize.survival' },
+const designLabel = (design: SampleSizeDesign): string => {
+  switch (design) {
+    case 'oneMean':
+      return t('samplesize.oneMean');
+    case 'paired':
+      return t('samplesize.paired');
+    case 'twoProportions':
+      return t('samplesize.twoProportions');
+    case 'correlation':
+      return t('samplesize.correlation');
+    case 'anova':
+      return t('samplesize.anova');
+    case 'tost':
+      return t('samplesize.tost');
+    case 'survival':
+      return t('samplesize.survival');
+    case 'oneProportion':
+      return t('samplesize.oneProportion');
+    case 'variance':
+      return t('samplesize.variance');
+    case 'oneRate':
+      return t('samplesize.oneRate');
+    default:
+      return t('samplesize.twoMeans');
+  }
+};
+
+const DESIGNS: SampleSizeDesign[] = [
+  'twoMeans',
+  'oneMean',
+  'paired',
+  'twoProportions',
+  'correlation',
+  'anova',
+  'tost',
+  'survival',
+  'oneProportion',
+  'variance',
+  'oneRate',
 ];
 
 export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: SampleSizeFormProps) => {
-  const { design, alpha, power, delta, sd, p1, p2, r, groups, f, margin, hazardRatio, eventRate } =
+  const { design, alpha, power, delta, sd, p1, p2, r, groups, f, margin, hazardRatio, eventRate, ratio } =
     samplesizeParams;
   const meanDesign = design === 'twoMeans' || design === 'oneMean' || design === 'paired';
   const tostDesign = design === 'tost';
@@ -39,8 +69,8 @@ export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: Sample
           onChange={e => update({ design: e.target.value as SampleSizeDesign })}
         >
           {DESIGNS.map(item => (
-            <option key={item.id} value={item.id}>
-              {t(item.key)}
+            <option key={item} value={item}>
+              {designLabel(item)}
             </option>
           ))}
         </select>
@@ -110,6 +140,35 @@ export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: Sample
               onChange={value => update({ eventRate: value })}
             />
           </>
+        )}
+
+        {(design === 'oneProportion' || design === 'oneRate') && (
+          <>
+            <NumberField
+              label={design === 'oneRate' ? t('samplesize.rateAlternative') : t('samplesize.propAlternative')}
+              value={p1}
+              step="0.01"
+              min="0"
+              onChange={value => update({ p1: value })}
+            />
+            <NumberField
+              label={design === 'oneRate' ? t('samplesize.rateNull') : t('samplesize.propNull')}
+              value={p2}
+              step="0.01"
+              min="0"
+              onChange={value => update({ p2: value })}
+            />
+          </>
+        )}
+
+        {design === 'variance' && (
+          <NumberField
+            label={t('samplesize.varianceRatio')}
+            value={ratio}
+            step="0.05"
+            min="0.01"
+            onChange={value => update({ ratio: value })}
+          />
         )}
 
         {design === 'twoProportions' && (

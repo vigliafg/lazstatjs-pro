@@ -392,7 +392,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['La diferencia y la variabilidad son hipótesis de diseño, no resultados.'],
       whenToUse: ['Antes de recoger datos; para juzgar la potencia de un estudio ya hecho.'],
       whenNotToUse: ['No uses la potencia observada a posteriori como prueba de validez.'],
-      reading: ['Diferencias esperadas más pequeñas o una potencia requerida mayor aumentan n de forma marcada.'],
+      reading: [
+        'Diferencias esperadas más pequeñas o una potencia requerida mayor aumentan n de forma marcada.',
+        'El planificador cubre medias, proporciones, varianzas y tasas de Poisson: elige el diseño de la prueba que ejecutarás.',
+      ],
       pitfalls: ['Una diferencia esperada inflada produce un estudio con poca potencia.'],
       glossary: [
         { term: 'Potencia', definition: 'La probabilidad de detectar un efecto que realmente existe.' },

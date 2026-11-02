@@ -1,7 +1,7 @@
 import { jStat } from '../../stats/jstat';
 import { buildHistogram, parseNum } from '../../stats/core';
 import { calcNormalityTests } from '../../stats/kernels';
-import { frequencyTable } from '../../stats/kernels/frequency';
+import { equalShareChiSquare, frequencyTable } from '../../stats/kernels/frequency';
 import { dixonTest, grubbsTest } from '../../stats/kernels/outliers';
 import { runsTest } from '../../stats/kernels/runs';
 import { frequencyTables, type NamedFrequency } from '../../stats/tables/frequency';
@@ -68,7 +68,13 @@ const buildFrequencyOutput = (input: DescriptiveInput): DescriptiveOutputResult 
       input.rows.map(row => row[index]),
       input.level
     );
-    if (result) entries.push({ name: selectedNames(input)[position], result });
+    if (result) {
+      entries.push({
+        name: selectedNames(input)[position],
+        result,
+        gof: equalShareChiSquare(result),
+      });
+    }
   });
   if (entries.length === 0) {
     return {

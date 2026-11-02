@@ -66,6 +66,11 @@ const SAMPLE_SIZE_DESIGNS: readonly SampleSizeDesign[] = [
   'twoProportions',
   'correlation',
   'anova',
+  'tost',
+  'survival',
+  'oneProportion',
+  'variance',
+  'oneRate',
 ];
 
 const parseSampleSizeDesign = (value: unknown, fallback: SampleSizeDesign): SampleSizeDesign =>
@@ -397,6 +402,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       f: finite(samplesize.f, d.samplesize.f),
       margin: finite(samplesize.margin, d.samplesize.margin),
       hazardRatio: finite(samplesize.hazardRatio, d.samplesize.hazardRatio),
+      ratio: Math.max(1e-9, finite(samplesize.ratio, d.samplesize.ratio)),
       eventRate: finite(samplesize.eventRate, d.samplesize.eventRate),
     },
     distfit: {

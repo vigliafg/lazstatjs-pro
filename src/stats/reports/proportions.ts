@@ -1,8 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { describeP, isDecided, show, showCI } from './shared';
-import type { OneProportionResult, TwoProportionsResult } from '../kernels/proportions';
-import type { PoissonRateResult, TwoPoissonResult } from '../kernels/poissonTests';
+import type { OneProportionResult, PoissonRateResult, TwoPoissonResult, TwoProportionsResult } from '../analysisResults';
 
 export type ProportionReportInput =
   | {

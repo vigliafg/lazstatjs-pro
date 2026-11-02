@@ -5,13 +5,15 @@ import { equalShareChiSquare, type FrequencyResult } from '../kernels/frequency'
 export interface NamedFrequency {
   name: string;
   result: FrequencyResult;
+  /** Equal-share goodness of fit, when the caller already computed it. */
+  gof?: { chi2: number; df: number; p: number } | null;
 }
 
 const percent = (value: number): string => (Number.isFinite(value) ? value.toFixed(2) : '');
 
 /** One tally table per variable, plus its equal-share goodness of fit. */
 export const frequencyTables = (entries: NamedFrequency[], level = 95): TableSpec[] =>
-  entries.flatMap(({ name, result }, index) => {
+  entries.flatMap(({ name, result, gof: presetGof }, index) => {
     const tables: TableSpec[] = [
       {
         id: `freq-${index + 1}`,
@@ -47,7 +49,7 @@ export const frequencyTables = (entries: NamedFrequency[], level = 95): TableSpe
       },
     ];
 
-    const gof = equalShareChiSquare(result);
+    const gof = presetGof ?? equalShareChiSquare(result);
     if (gof) {
       tables.push({
         id: `freq-gof-${index + 1}`,

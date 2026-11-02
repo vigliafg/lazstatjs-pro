@@ -114,4 +114,20 @@ export const samplesizeCopy: Record<string, string> = {
     'Valor',
   'Voce':
     'Concepto',
+  'Proporzione alternativa':
+    'Proporción alternativa',
+  'Proporzione nulla':
+    'Proporción nula',
+  'Rapporto tra varianze':
+    'Cociente de varianzas',
+  'Tasso alternativo':
+    'Tasa alternativa',
+  'Tasso nullo':
+    'Tasa nula',
+  'Un tasso di Poisson':
+    'Una tasa de Poisson',
+  'Una proporzione':
+    'Una proporción',
+  'Una varianza':
+    'Una varianza',
 };

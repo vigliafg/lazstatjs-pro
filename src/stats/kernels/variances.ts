@@ -11,6 +11,8 @@
  */
 import { jStat } from '../jstat';
 import { chi2SF, fSF } from './distributions';
+import type { OneVarianceResult, VarianceGroupSummary, TwoVarianceResult } from '../analysisResults';
+export type { OneVarianceResult, VarianceGroupSummary, TwoVarianceResult } from '../analysisResults';
 
 const alphaOf = (level: number): number => 1 - level / 100;
 
@@ -28,20 +30,6 @@ const median = (values: number[]): number => {
   const middle = Math.floor(sorted.length / 2);
   return sorted.length % 2 === 1 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
 };
-
-export interface OneVarianceResult {
-  n: number;
-  variance: number;
-  sd: number;
-  nullVariance: number;
-  /** (n − 1) s² / σ₀². */
-  chi2: number;
-  df: number;
-  p: number;
-  lo: number;
-  hi: number;
-  level: number;
-}
 
 export const oneVariance = (
   values: number[],
@@ -73,28 +61,6 @@ export const oneVariance = (
 export interface VarianceGroup {
   name: string;
   values: number[];
-}
-
-export interface VarianceGroupSummary {
-  name: string;
-  n: number;
-  variance: number;
-  sd: number;
-}
-
-export interface TwoVarianceResult {
-  groups: VarianceGroupSummary[];
-  /** s₁² / s₂² for the F test (first two groups only). */
-  ratio: number;
-  df1: number;
-  df2: number;
-  /** F test p-value (two-sided). */
-  fP: number;
-  fLo: number;
-  fHi: number;
-  bartlett: { statistic: number; df: number; p: number };
-  levene: { statistic: number; df1: number; df2: number; p: number };
-  level: number;
 }
 
 const oneWayF = (groups: { values: number[] }[]): { f: number; df1: number; df2: number } | null => {

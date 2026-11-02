@@ -8,14 +8,8 @@
  * coefficient never overflows) and divided by C(n + m, n). For large samples
  * the asymptotic Kolmogorov series is used instead and the result says so.
  */
-export interface TwoSampleKsResult {
-  n1: number;
-  n2: number;
-  d: number;
-  p: number;
-  method: 'exact' | 'asymptotic';
-}
-
+import type { TwoSampleKsResult } from '../analysisResults';
+export type { TwoSampleKsResult } from '../analysisResults';
 /** Largest ECDF gap on the pooled ordered sample. */
 export const ksDistance = (a: number[], b: number[]): number => {
   const sortedA = [...a].sort((left, right) => left - right);

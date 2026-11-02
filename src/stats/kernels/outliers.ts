@@ -21,35 +21,8 @@
  */
 import { jStat } from '../jstat';
 import { tSF } from './distributions';
-
-export interface GrubbsResult {
-  n: number;
-  /** G = max |x - mean| / SD. */
-  statistic: number;
-  /** Critical value at the requested level (two-sided, α / (2n)). */
-  critical: number;
-  p: number;
-  outlier: number | null;
-  side: 'low' | 'high' | null;
-  mean: number;
-  sd: number;
-}
-
-export type DixonType = 'r10' | 'r11' | 'r21' | 'r22';
-
-export interface DixonResult {
-  n: number;
-  type: DixonType;
-  /** Q statistic of the more extreme side. */
-  statistic: number;
-  /** Critical value at the requested level. */
-  critical: number;
-  p: number;
-  outlier: number | null;
-  side: 'low' | 'high' | null;
-  /** Beta parameters of the null distribution. */
-  beta: { a: number; b: number };
-}
+import type { GrubbsResult, DixonResult, DixonType } from '../analysisResults';
+export type { GrubbsResult, DixonResult, DixonType } from '../analysisResults';
 
 const mean = (values: number[]): number =>
   values.reduce((sum, value) => sum + value, 0) / values.length;

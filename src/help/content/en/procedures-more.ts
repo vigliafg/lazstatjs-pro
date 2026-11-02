@@ -392,7 +392,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Difference and variability are design hypotheses, not results.'],
       whenToUse: ['Before collecting data; to judge the power of a study already done.'],
       whenNotToUse: ['Do not use observed post-hoc power as proof of validity.'],
-      reading: ['Smaller expected differences or higher required power increase n sharply.'],
+      reading: [
+        'Smaller expected differences or higher required power increase n sharply.',
+        'The planner covers means, proportions, variances and Poisson rates: pick the design that matches the test you will run.',
+      ],
       pitfalls: ['An inflated expected difference produces an underpowered study.'],
       glossary: [
         { term: 'Power', definition: 'The probability of detecting an effect that truly exists.' },

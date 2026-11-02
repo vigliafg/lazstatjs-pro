@@ -6,18 +6,8 @@
  * same as `chisq.test(observed, p = proportions)`.
  */
 import { chi2SF } from './distributions';
-
-export interface GofResult {
-  labels: string[];
-  observed: number[];
-  expected: number[];
-  /** Proportions actually used, normalised to sum to one. */
-  proportions: number[];
-  total: number;
-  chi2: number;
-  df: number;
-  p: number;
-}
+import type { GofResult } from '../analysisResults';
+export type { GofResult } from '../analysisResults';
 
 export const goodnessOfFit = (
   labels: string[],

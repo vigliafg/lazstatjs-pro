@@ -17,21 +17,8 @@
  * entry, and the procedure labels the method so the difference is visible.
  */
 import { jStat } from '../jstat';
-
-export interface ToleranceInterval {
-  n: number;
-  mean: number;
-  sd: number;
-  /** Population proportion covered, 0–1. */
-  proportion: number;
-  /** Confidence that the interval covers it, 0–1. */
-  confidence: number;
-  /** Tolerance factor k. */
-  k: number;
-  lo: number;
-  hi: number;
-  method: string;
-}
+import type { ToleranceInterval } from '../analysisResults';
+export type { ToleranceInterval } from '../analysisResults';
 
 const mean = (values: number[]): number =>
   values.reduce((sum, value) => sum + value, 0) / values.length;

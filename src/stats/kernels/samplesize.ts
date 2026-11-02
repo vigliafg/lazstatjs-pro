@@ -328,6 +328,16 @@ export const powerAt = (options: SampleSizeOptions, nPerGroup: number): number =
       const logHr = Math.log(Math.max(1e-12, options.hazardRatio ?? 1));
       return normalPower(Math.sqrt(nPerGroup) * Math.abs(logHr), zAlpha(alpha, 2));
     }
+    case 'oneProportion': {
+      const effect = Math.abs(
+        2 * Math.asin(Math.sqrt(options.p1 ?? 0)) - 2 * Math.asin(Math.sqrt(options.p2 ?? 0))
+      );
+      return normalPower(effect * Math.sqrt(nPerGroup), zAlpha(alpha, 2));
+    }
+    case 'variance':
+      return variancePower(nPerGroup, options.ratio ?? 1, alpha, options.tails);
+    case 'oneRate':
+      return ratePower(nPerGroup, options.p1 ?? 1, options.p2 ?? 1, alpha, options.tails);
     default:
       return NaN;
   }
@@ -394,5 +404,145 @@ export const sampleSizeSurvival = (
     critical: zA,
     effectSize: Math.abs(logHr),
     method: 'Log-rank (Freedman)',
+  };
+};
+
+/** One proportion against a null value, via the arcsine transformation. */
+export const sampleSizeOneProportion = (
+  p1: number,
+  p0: number,
+  alpha = 0.05,
+  power = 0.8,
+  tails: 1 | 2 = 2
+): SampleSizeResult => {
+  const effectSize = Math.abs(2 * Math.asin(Math.sqrt(p1)) - 2 * Math.asin(Math.sqrt(p0)));
+  if (!(p1 > 0 && p1 < 1) || !(p0 > 0 && p0 < 1) || !(effectSize > 0)) {
+    return { design: 'oneProportion', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize, method: '' };
+  }
+  const zA = zAlpha(alpha, tails);
+  const zB = zPower(power);
+  const n = Math.max(2, Math.ceil(Math.pow((zA + zB) / effectSize, 2)));
+  return {
+    design: 'oneProportion',
+    nPerGroup: n,
+    total: n,
+    achievedPower: normalPower(effectSize * Math.sqrt(n), zA),
+    critical: zA,
+    effectSize,
+    method: 'proporzione singola, trasformazione arcoseno (pwr.p.test)',
+  };
+};
+
+/** Power of the chi-square test for one variance at n observations. */
+export const variancePower = (n: number, ratio: number, alpha: number, tails: 1 | 2 = 2): number => {
+  const df = n - 1;
+  if (df < 1 || !(ratio > 0)) return Number.NaN;
+  const lower = jStat.chisquare.inv(alpha / (tails === 2 ? 2 : 1), df);
+  const upper = jStat.chisquare.inv(1 - alpha / (tails === 2 ? 2 : 1), df);
+  const below = jStat.chisquare.cdf(lower / ratio, df);
+  const above = 1 - jStat.chisquare.cdf(upper / ratio, df);
+  return Math.min(1, Math.max(0, (tails === 2 ? below : 0) + above));
+};
+
+/** Sample size for detecting a variance ratio with the exact chi-square test. */
+export const sampleSizeVariance = (
+  ratio: number,
+  alpha = 0.05,
+  power = 0.8,
+  tails: 1 | 2 = 2
+): SampleSizeResult => {
+  if (!(ratio > 0) || ratio === 1) {
+    return { design: 'variance', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize: ratio, method: '' };
+  }
+  const target = Math.min(0.999, Math.max(0.001, power));
+  const maxN = 200000;
+  let n = 2;
+  while (n < maxN && variancePower(n, ratio, alpha, tails) < target) n += 1;
+  if (n >= maxN) {
+    return { design: 'variance', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize: ratio, method: '' };
+  }
+  return {
+    design: 'variance',
+    nPerGroup: n,
+    total: n,
+    achievedPower: variancePower(n, ratio, alpha, tails),
+    critical: jStat.chisquare.inv(1 - alpha / (tails === 2 ? 2 : 1), n - 1),
+    effectSize: ratio,
+    method: 'varianza singola, potenza esatta della χ²',
+  };
+};
+
+const poissonCritical = (lambda: number, alpha: number, tails: 1 | 2): { lo: number; hi: number } => {
+  const limit = Math.ceil(lambda + 12 * Math.sqrt(lambda + 1) + 20);
+  let lo = limit;
+  let hi = limit;
+  for (let k = 0; k <= limit; k += 1) {
+    const cdf = jStat.poisson.cdf(k, lambda);
+    if (cdf >= alpha / (tails === 2 ? 2 : 1)) {
+      lo = k;
+      break;
+    }
+  }
+  for (let k = 0; k <= limit; k += 1) {
+    if (jStat.poisson.cdf(k, lambda) >= 1 - alpha / (tails === 2 ? 2 : 1)) {
+      hi = k;
+      break;
+    }
+  }
+  return { lo, hi };
+};
+
+/** Power of the exact Poisson test for one rate at n units of exposure. */
+export const ratePower = (
+  n: number,
+  lambda1: number,
+  lambda0: number,
+  alpha = 0.05,
+  tails: 1 | 2 = 2
+): number => {
+  if (!(lambda0 > 0) || !(lambda1 > 0) || n <= 0) return Number.NaN;
+  const { lo, hi } = poissonCritical(lambda0 * n, alpha, tails);
+  const expected = lambda1 * n;
+  const limit = Math.ceil(expected + 12 * Math.sqrt(expected + 1) + 20);
+  let power = 0;
+  for (let k = 0; k <= limit; k += 1) {
+    if (k <= lo - 1 || k >= hi + 1) power += jStat.poisson.pdf(k, expected);
+  }
+  return Math.min(1, Math.max(0, power));
+};
+
+/** Sample size for detecting a Poisson rate against a null rate. */
+export const sampleSizeOneRate = (
+  lambda1: number,
+  lambda0: number,
+  alpha = 0.05,
+  power = 0.8,
+  tails: 1 | 2 = 2
+): SampleSizeResult => {
+  if (!(lambda0 > 0) || !(lambda1 > 0) || lambda1 === lambda0) {
+    return { design: 'oneRate', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize: lambda1 / lambda0, method: '' };
+  }
+  const target = Math.min(0.999, Math.max(0.001, power));
+  const zA = zAlpha(alpha, tails);
+  const zB = zPower(power);
+  const start = Math.max(
+    1,
+    Math.floor(Math.pow((zA * Math.sqrt(lambda0) + zB * Math.sqrt(lambda1)) / Math.abs(lambda1 - lambda0), 2) * 0.5)
+  );
+  const maxN = 200000;
+  let n = start;
+  while (n < maxN && ratePower(n, lambda1, lambda0, alpha, tails) < target) n += 1;
+  if (n >= maxN) {
+    return { design: 'oneRate', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize: lambda1 / lambda0, method: '' };
+  }
+  const critical = poissonCritical(lambda0 * n, alpha, tails);
+  return {
+    design: 'oneRate',
+    nPerGroup: n,
+    total: n,
+    achievedPower: ratePower(n, lambda1, lambda0, alpha, tails),
+    critical: critical.hi,
+    effectSize: lambda1 / lambda0,
+    method: 'tasso di Poisson singolo, potenza esatta',
   };
 };

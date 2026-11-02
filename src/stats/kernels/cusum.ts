@@ -13,30 +13,8 @@
  * the scale of the measurement.
  */
 
-export interface CusumPoint {
-  /** 1-based position in the series. */
-  index: number;
-  value: number;
-  cplus: number;
-  cminus: number;
-  signal: 'high' | 'low' | null;
-}
-
-export interface CusumResult {
-  center: number;
-  sigma: number;
-  /** Allowance in sigma units. */
-  k: number;
-  /** Decision interval in sigma units. */
-  h: number;
-  /** Decision limits on the raw scale. */
-  upper: number;
-  lower: number;
-  points: CusumPoint[];
-  firstHigh: number | null;
-  firstLow: number | null;
-}
-
+import type { CusumPoint, CusumResult } from '../analysisResults';
+export type { CusumPoint, CusumResult } from '../analysisResults';
 export interface CusumOptions {
   /** Target mean; the sample mean when omitted. */
   target?: number;

@@ -392,7 +392,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['La différence et la variabilité sont des hypothèses de plan, pas des résultats.'],
       whenToUse: ['Avant de collecter des données ; pour juger la puissance d’une étude déjà réalisée.'],
       whenNotToUse: ['N’utilisez pas la puissance post-hoc observée comme preuve de validité.'],
-      reading: ['Des différences attendues plus petites ou une puissance requise plus élevée augmentent fortement n.'],
+      reading: [
+        'Des différences attendues plus petites ou une puissance requise plus élevée augmentent fortement n.',
+        'Le planificateur couvre moyennes, proportions, variances et taux de Poisson : choisissez le design du test que vous exécuterez.',
+      ],
       pitfalls: ['Une différence attendue gonflée produit une étude sous-dimensionnée.'],
       glossary: [
         { term: 'Puissance', definition: 'La probabilité de détecter un effet qui existe réellement.' },

@@ -392,7 +392,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Differenza e variabilità sono ipotesi di disegno, non risultati.'],
       whenToUse: ['Prima di raccogliere dati; per valutare la potenza di uno studio già fatto.'],
       whenNotToUse: ['Non usare la potenza osservata a posteriori come prova di validità.'],
-      reading: ['Ridurre la differenza attesa o la potenza richiesta aumenta molto N.'],
+      reading: [
+        'Ridurre la differenza attesa o la potenza richiesta aumenta molto N.',
+        'Il pianificatore copre medie, proporzioni, varianze e tassi di Poisson: scegli il disegno del test che eseguirai.',
+      ],
       pitfalls: ['Una differenza attesa gonfiata produce uno studio sottodimensionato.'],
       glossary: [
         { term: 'Potenza', definition: 'Probabilità di trovare un effetto quando esiste davvero.' },

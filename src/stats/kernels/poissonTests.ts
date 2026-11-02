@@ -11,6 +11,8 @@
  */
 import { jStat } from '../jstat';
 import { exactBinomialP } from './proportions';
+import type { PoissonRateResult, TwoPoissonResult } from '../analysisResults';
+export type { PoissonRateResult, TwoPoissonResult } from '../analysisResults';
 
 const alphaOf = (level: number): number => 1 - level / 100;
 
@@ -45,17 +47,6 @@ export const exactPoissonP = (events: number, expected: number): number => {
   return poissonCdf(count - 1, expected) + (1 - poissonCdf(events - 1, expected));
 };
 
-export interface PoissonRateResult {
-  events: number;
-  exposure: number;
-  rate: number;
-  nullRate: number;
-  exactP: number;
-  lo: number;
-  hi: number;
-  level: number;
-}
-
 export const onePoissonRate = (
   events: number,
   exposure: number,
@@ -76,17 +67,6 @@ export const onePoissonRate = (
     level,
   };
 };
-
-export interface TwoPoissonResult {
-  first: { events: number; exposure: number; rate: number };
-  second: { events: number; exposure: number; rate: number };
-  /** rate₁ / rate₂. */
-  ratio: number;
-  exactP: number;
-  lo: number;
-  hi: number;
-  level: number;
-}
 
 export const twoPoissonRates = (
   events1: number,

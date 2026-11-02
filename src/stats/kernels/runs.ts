@@ -13,25 +13,8 @@
  * also returned, so the approximation can be checked instead of trusted.
  */
 import { zTwoSidedP } from './distributions';
-
-export interface RunsResult {
-  n: number;
-  /** Observations above the cut point. */
-  above: number;
-  /** Observations at or below the cut point. */
-  below: number;
-  cut: number;
-  runs: number;
-  expected: number;
-  sd: number;
-  z: number;
-  /** Asymptotic two-sided p-value with continuity correction. */
-  p: number;
-  /** Exact two-sided p-value; `null` when n > 50. */
-  exactP: number | null;
-  /** 1 when the first observation is above the cut point, 0 otherwise. */
-  firstSide: 0 | 1;
-}
+import type { RunsResult } from '../analysisResults';
+export type { RunsResult } from '../analysisResults';
 
 const medianOf = (values: number[]): number => {
   const sorted = [...values].sort((left, right) => left - right);

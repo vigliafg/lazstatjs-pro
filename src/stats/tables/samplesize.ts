@@ -13,6 +13,9 @@ import {
   sampleSizeTwoProportions,
   sampleSizeTost,
   sampleSizeSurvival,
+  sampleSizeOneProportion,
+  sampleSizeVariance,
+  sampleSizeOneRate,
 } from '../kernels/samplesize';
 
 /** Main entry point used by the planner tab: validates, solves and tabulates. */
@@ -62,6 +65,27 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
         options.tails
       );
       break;
+    case 'oneProportion':
+      result = sampleSizeOneProportion(
+        options.p1 ?? 0,
+        options.p2 ?? 0,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
+    case 'variance':
+      result = sampleSizeVariance(options.ratio ?? 1, options.alpha, options.power, options.tails);
+      break;
+    case 'oneRate':
+      result = sampleSizeOneRate(
+        options.p1 ?? 1,
+        options.p2 ?? 1,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
     default:
       result = sampleSizeTwoMeans(0, 0);
   }
@@ -91,6 +115,9 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
     anova: copy('ANOVA a una via'),
     tost: copy('TOST (equivalenza)'),
     survival: copy('Sopravvivenza (log-rank)'),
+    oneProportion: copy('Una proporzione'),
+    variance: copy('Una varianza'),
+    oneRate: copy('Un tasso di Poisson'),
   };
 
   const inputRows = [
@@ -109,6 +136,17 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
   } else if (options.design === 'twoMeans' || options.design === 'oneMean' || options.design === 'paired') {
     inputRows.push({ parameter: copy('Differenza da rilevare'), value: fmtEst(options.delta ?? NaN, 4) });
     inputRows.push({ parameter: copy('SD (dei differenziali se appaiato)'), value: fmtEst(options.sd ?? NaN, 4) });
+  }
+  if (options.design === 'oneProportion') {
+    inputRows.push({ parameter: copy('Proporzione alternativa'), value: fmtEst(options.p1 ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Proporzione nulla'), value: fmtEst(options.p2 ?? NaN, 4) });
+  }
+  if (options.design === 'variance') {
+    inputRows.push({ parameter: copy('Rapporto tra varianze'), value: fmtEst(options.ratio ?? NaN, 4) });
+  }
+  if (options.design === 'oneRate') {
+    inputRows.push({ parameter: copy('Tasso alternativo'), value: fmtEst(options.p1 ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Tasso nullo'), value: fmtEst(options.p2 ?? NaN, 4) });
   }
   if (options.design === 'twoProportions') {
     inputRows.push({ parameter: copy('Proporzione gruppo 1'), value: fmtEst(options.p1 ?? NaN, 4) });

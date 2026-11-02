@@ -1,7 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { show } from './shared';
-import type { CusumResult } from '../kernels/cusum';
+import type { CusumResult } from '../analysisResults';
 
 export const cusumReport = (result: CusumResult, variableName: string): ReportSpec => {
   const high = result.firstHigh;

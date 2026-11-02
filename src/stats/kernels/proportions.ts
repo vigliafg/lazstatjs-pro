@@ -10,6 +10,8 @@
 import { jStat } from '../jstat';
 import { chi2SF } from './distributions';
 import { logFactorial } from './exact';
+import type { ProportionInterval, OneProportionResult, TwoProportionsResult } from '../analysisResults';
+export type { ProportionInterval, OneProportionResult, TwoProportionsResult } from '../analysisResults';
 
 const alphaOf = (level: number): number => 1 - level / 100;
 
@@ -35,14 +37,6 @@ export const exactBinomialP = (successes: number, trials: number, p0: number): n
   return Math.min(1, total);
 };
 
-export interface ProportionInterval {
-  estimate: number;
-  wilsonLo: number;
-  wilsonHi: number;
-  clopperLo: number;
-  clopperHi: number;
-}
-
 /** Wilson score interval and Clopper–Pearson exact interval for x / n. */
 export const proportionInterval = (
   successes: number,
@@ -66,20 +60,6 @@ export const proportionInterval = (
       successes === trials ? 1 : jStat.beta.inv(1 - alpha / 2, successes + 1, trials - successes),
   };
 };
-
-export interface OneProportionResult {
-  successes: number;
-  trials: number;
-  estimate: number;
-  nullValue: number;
-  exactP: number;
-  /** Pearson chi-square statistic against the null proportion. */
-  chi2: number;
-  /** Normal-approximation p-value (same as the chi-square with 1 df). */
-  asymptoticP: number;
-  level: number;
-  interval: ProportionInterval;
-}
 
 export const oneProportion = (
   successes: number,
@@ -105,21 +85,6 @@ export const oneProportion = (
     interval: proportionInterval(successes, trials, level),
   };
 };
-
-export interface TwoProportionsResult {
-  first: { successes: number; trials: number; estimate: number };
-  second: { successes: number; trials: number; estimate: number };
-  difference: number;
-  standardError: number;
-  lo: number;
-  hi: number;
-  /** Pooled z / Pearson chi-square statistic with 1 df. */
-  chi2: number;
-  pValue: number;
-  riskRatio: number;
-  oddsRatio: number;
-  level: number;
-}
 
 export const twoProportions = (
   successes1: number,

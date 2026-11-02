@@ -100,6 +100,8 @@ export interface SampleSizeParams {
   margin: number;
   hazardRatio: number;
   eventRate: number;
+  /** Rapporto tra varianze da rilevare (disegno 'variance'). */
+  ratio: number;
 }
 
 /** Parametri del fit delle distribuzioni. */
@@ -567,6 +569,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     margin: 0,
     hazardRatio: 0.7,
     eventRate: 0.5,
+    ratio: 2,
   },
   distfit: {
     mode: 'fit',

@@ -273,4 +273,12 @@ export const formMessages = {
   'chisq.gofVariable': 'Categorical variable',
   'chisq.expectedProportions': 'Expected proportions (optional)',
   'hint.chisq.gof': 'Leave empty for equal shares; otherwise one positive proportion per category, e.g. 0.2, 0.3, 0.5.',
+  'samplesize.oneProportion': 'One proportion',
+  'samplesize.variance': 'One variance',
+  'samplesize.oneRate': 'One Poisson rate',
+  'samplesize.propAlternative': 'Alternative proportion',
+  'samplesize.propNull': 'Null proportion',
+  'samplesize.rateAlternative': 'Alternative rate',
+  'samplesize.rateNull': 'Null rate',
+  'samplesize.varianceRatio': 'Variance ratio',
 } as const;

@@ -1,7 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { show } from './shared';
-import type { ToleranceInterval } from '../kernels/tolerance';
+import type { ToleranceInterval } from '../analysisResults';
 
 const percent = (value: number): string => `${show(value * 100, 1)}%`;
 

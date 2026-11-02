@@ -1,7 +1,7 @@
 import { copy } from '../reportCopy';
 import type { ReportSpec } from './shared';
 import { describeP, isDecided, show } from './shared';
-import type { TwoSampleKsResult } from '../kernels/ks';
+import type { TwoSampleKsResult } from '../analysisResults';
 
 export const ksReport = (
   result: TwoSampleKsResult,
