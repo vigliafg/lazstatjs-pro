@@ -305,7 +305,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
   2. Implementare R-01…R-05 (multinomiale, ordinale, probit, count, mediazione)
      riusando `glm.ts`.
   3. Per ogni metodo: help 6 lingue, sample 5 formati, reference e
-     `npm run check`.
+     `npm run check`; usare 2–3 subagenti con file ownership (piano §17).
 - Domande aperte: nessuna.
 - Rischi attivi: W2 tocca GLM/GLMM e la persistenza di nuovi parametri;
   procedere per metodo e mantenere i reference in fixture R.
@@ -361,6 +361,9 @@ Rimandare al piano §3. Decisioni già prese:
 - D8: dataset di esempio nei 5 formati.
 - D9: rilascio a ondate, niente feature flag.
 - D10: nessun bump di `PROJECT_VERSION` per campi opzionali.
+- D11: usare 2–3 subagenti in parallelo quando i compiti sono separabili, con
+  proprietario unico dei file; i file condivisi restano all’agente principale
+  (piano §17, `AGENTS.md`).
 
 ---
 

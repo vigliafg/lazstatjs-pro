@@ -1131,3 +1131,72 @@ Totale: **14 checkpoint obbligatori** + checkpoint liberi ogni 2-3 item.
 - Non aggiornare i conteggi globali prima del gate di ondata.
 - Non usare il documento di stato per duplicare il piano: deve rimandare alle
   sezioni del piano, non ricopiarle.
+
+---
+
+## 17. Uso dei subagenti (regole vincolanti)
+
+Obiettivo: usare **2–3 subagenti in parallelo quando i compiti sono davvero
+separabili**, senza scaricare sull'utente il costo dei conflitti.
+
+### 17.1 Regola del proprietario unico
+
+Ogni file ha **un solo scrittore per sessione**. I file condivisi sono di
+competenza esclusiva dell'agente principale:
+
+- `src/analyses/registry.ts`;
+- `src/io/project/{types,parse}.ts`;
+- `src/analyses/{params,roles,runners,paramsSnapshot}.ts`;
+- `src/ui/analysis/AnalysisForm.tsx`;
+- cataloghi `src/i18n/catalog/*` e `src/stats/reportCopy/catalog/*`;
+- help book (`src/help/content/*`, `order.ts`);
+- `package.json`, `AGENTS.md`, documenti di piano.
+
+I subagenti lavorano solo su **file nuovi o dedicati**:
+
+- `src/stats/kernels/<metodo>.ts` + test;
+- `src/stats/tables/<metodo>.ts`;
+- `src/stats/reports/<metodo>.ts`;
+- `src/stats/reference/r/*.R` e `fixtures/*.json`;
+- `src/analyses/<nuova-voce>/run.tsx` e `Form.tsx` (solo per voci nuove, mai
+  per estendere una procedura esistente).
+
+Se due compiti toccano lo stesso file, **si serializzano**: niente merge
+creativo.
+
+### 17.2 Schema per ondata
+
+1. `explore` in parallelo: mappa di impatto (quali file tocca ogni item) e
+   ricognizione dei pattern; sola lettura.
+2. 2–3 `general` in parallelo: un metodo per agente sui file isolati, con
+   perimetro esplicito.
+3. `council-luna` / `council-glm` in sola lettura: revisione dei kernel e dei
+   reference prima del merge.
+4. Agente principale, in serie: integrazione nei file condivisi, help e i18n,
+   `npm run check`, aggiornamento dello stato, commit.
+
+### 17.3 Contratto per ogni subagente
+
+Ogni incarico deve dichiarare:
+
+- perimetro esatto dei file (nessun altro file);
+- reference indipendente e tolleranza attesa;
+- test che devono passare;
+- criterio di stop (quando fermarsi e riportare, senza allargare il perimetro).
+
+Un subagente **non chiude un item**: la chiusura richiede il gate dell'agente
+principale (`npm run check` + reference + help/i18n + sample).
+
+### 17.4 Cosa non delegare
+
+- Decisioni di prodotto o architettura.
+- Modifiche distruttive o irreversibili.
+- Bump di versione e release.
+- Aggiornamento del documento di stato e del registro checkpoint.
+- Merge di worktree sovrapposti.
+
+### 17.5 Worktree
+
+Worktree separati solo per rami davvero indipendenti. Per le ondate normali si
+usa lo stesso albero con la regola del proprietario unico: meno merge, meno
+conflitti, stessa velocità.

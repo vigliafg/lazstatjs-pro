@@ -53,3 +53,27 @@ l'agente deve:
    non affidarsi alla memoria della chat.
 
 Il protocollo completo è nel piano, §16.
+
+## Subagenti
+
+Quando i compiti sono separabili, usare **2–3 subagenti in parallelo**. Regole:
+
+1. **Proprietario unico**: ogni file ha un solo scrittore per sessione.
+2. I file condivisi (registry, tipi/parse dei parametri, `params.ts`,
+   `roles.ts`, `runners.ts`, `AnalysisForm.tsx`, cataloghi i18n, help, piano)
+   sono **solo dell'agente principale**.
+3. I subagenti lavorano su file nuovi o dedicati: kernel + test, tabelle,
+   report, script/fixture R, nuova voce di analisi.
+4. Se due compiti toccano lo stesso file, si serializzano: niente merge
+   creativo.
+5. Ogni incarico dichiara perimetro file, reference, tolleranza, test e
+   criterio di stop.
+6. Un subagente non chiude un item: la chiusura passa dal gate dell'agente
+   principale (`npm run check`, help/i18n, sample).
+7. Non delegare decisioni di prodotto/architettura, azioni distruttive, bump di
+   versione, aggiornamento dello stato.
+8. Worktree separati solo per rami davvero indipendenti; altrimenti stesso
+   albero con file ownership.
+
+Dettagli nel piano, §17.
+
