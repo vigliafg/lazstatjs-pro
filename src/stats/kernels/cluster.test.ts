@@ -47,6 +47,42 @@ test('cluster profiles are standardized and the tree is monotone in its merge co
   assert.equal(result!.leafOrder.length, twoGroups.length);
 });
 
+test('ward.D2 heights match the R hclust reference', () => {
+  const data = [
+    [0, 0],
+    [0.1, 0.1],
+    [0.2, 0.2],
+    [0.3, 0.3],
+    [10, 10],
+    [10.1, 10.1],
+    [10.2, 10.2],
+    [10.3, 10.3],
+  ];
+  const result = hierarchicalClusters({
+    data,
+    method: 'ward',
+    clusters: 2,
+    standardize: false,
+    variableNames: ['X', 'Y'],
+  });
+  assert.ok(result);
+  const expected = [
+    0.141421356237309,
+    0.14142135623730948,
+    0.14142135623730953,
+    0.14142135623731153,
+    0.4,
+    0.4000000000000003,
+    28.284271247461902,
+  ];
+  assert.equal(result!.heights.length, expected.length);
+  result!.heights.forEach((height, index) => {
+    assert.ok(Math.abs(height - expected[index]) < 1e-8, `${height} != ${expected[index]}`);
+  });
+  assert.equal(new Set(result!.assignment.slice(0, 4)).size, 1);
+  assert.equal(new Set(result!.assignment.slice(4)).size, 1);
+});
+
 test('constant variables are rejected when standardisation is requested', () => {
   const result = hierarchicalClusters({
     data: [

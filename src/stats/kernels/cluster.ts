@@ -67,7 +67,7 @@ const linkage = (
   if (method === 'ward') {
     const meanA = a[0].data.map((_, column) => mean(a.map(item => item.data[column])));
     const meanB = b[0].data.map((_, column) => mean(b.map(item => item.data[column])));
-    const factor = (a.length * b.length) / (a.length + b.length);
+    const factor = (2 * a.length * b.length) / (a.length + b.length);
     return Math.sqrt(factor * Math.pow(distance(meanA, meanB), 2));
   }
   let sum = 0;
