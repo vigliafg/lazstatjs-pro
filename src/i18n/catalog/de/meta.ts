@@ -133,4 +133,6 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.family.ml.description': 'Vorhersage, Klassifikation und Text',
   'meta.family.advanced.label': 'Fortgeschritten & Bayesianisch',
   'meta.family.advanced.description': 'Metaanalyse, bayesianische und räumliche Modelle',
+  'meta.analysis.proportions.label': 'Anteile und Raten',
+  'meta.analysis.proportions.description': 'Ein- und Zweistichprobentests für Anteile und Poisson-Raten.',
 };

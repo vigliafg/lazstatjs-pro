@@ -84,6 +84,14 @@ const ANALYSIS_DEFINITIONS = [
     cost: 'instant',
   },
   {
+    id: 'proportions',
+    label: 'Proportions & rates',
+    family: 'compare',
+    description: 'One- and two-sample tests for proportions and Poisson rates.',
+    keywords: ['proportion', 'percentage', 'binomial', 'poisson', 'rate', 'prop.test', 'binom.test'],
+    cost: 'instant',
+  },
+  {
     id: 'ttest',
     label: 'T-Test',
     family: 'compare',

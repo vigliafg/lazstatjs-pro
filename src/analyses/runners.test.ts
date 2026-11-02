@@ -29,6 +29,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'ordinal',
     'parametric',
     'partition',
+    'proportions',
     'quality',
     'regression',
     'repeatedanova',

@@ -3,6 +3,7 @@ import type { ProjectParams } from '../io/project';
 /** Project-parameter slot owned by each analysis. */
 const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   descriptive: 'descVars',
+  proportions: 'proportions',
   ttest: 'ttest',
   anova: 'anova',
   regression: 'reg',

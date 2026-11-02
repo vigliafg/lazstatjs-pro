@@ -35,6 +35,7 @@ import { timeseriesCopy } from './timeseries';
 import { tostCopy } from './tost';
 import { ttestCopy } from './ttest';
 import { wizardCopy } from './wizard';
+import { proportionsCopy as frProportionsCopy } from './proportions';
 
 export const frReportCopy: Record<string, string> = {
   ...agreementCopy,
@@ -70,4 +71,5 @@ export const frReportCopy: Record<string, string> = {
   ...tostCopy,
   ...ttestCopy,
   ...wizardCopy,
+  ...frProportionsCopy,
 };

@@ -31,6 +31,7 @@ import { timeseriesCopy } from './timeseries';
 import { tostCopy } from './tost';
 import { ttestCopy } from './ttest';
 import { wizardCopy } from './wizard';
+import { proportionsCopy as esProportionsCopy } from './proportions';
 
 /** Spanish report and table prose, merged from the per-procedure files. */
 export const esReportCopy: Record<string, string> = {
@@ -67,4 +68,5 @@ export const esReportCopy: Record<string, string> = {
   ...tostCopy,
   ...ttestCopy,
   ...wizardCopy,
+  ...esProportionsCopy,
 };

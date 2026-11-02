@@ -50,6 +50,7 @@ export const TOPIC_ORDER = [
   'interaction',
   'projects',
   'appearance',
+  'proportions',
 ] as const;
 
 export const orderTopics = <T extends { id: string }>(topics: T[]): T[] => {

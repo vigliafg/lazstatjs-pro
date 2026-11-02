@@ -181,4 +181,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ['factorial', 'regression'],
   },
+  {
+    id: 'proportions',
+    area: 'procedures',
+    title: 'Proporções e taxas',
+    summary: 'Testes de uma e duas amostras para proporções e taxas de Poisson.',
+    tutorial: {
+      goal: 'Decidir se uma proporção ou uma taxa de eventos difere de um alvo ou entre dois grupos.',
+      dataset: 'two_groups_binary.csv',
+      steps: [
+        'Escolha uma ou duas proporções, ou uma ou duas taxas de Poisson.',
+        'Selecione o resultado binário (ou a coluna de contagem) e a coluna de grupo para os modos de duas amostras.',
+        'Escolha o nível de sucesso, o valor nulo e a exposição por linha, quando necessário.',
+        'Execute a análise e leia o teste exato, o intervalo e a dimensão do efeito.',
+      ],
+      expected: 'Uma tabela com sucessos, ensaios, estimativa, p exato e intervalo, além da diferença ou do rácio de taxas para dois grupos.',
+    },
+    advanced: {
+      assumptions: [
+        'As observações são independentes dentro e entre os grupos.',
+        'As contagens de Poisson são eventos inteiros com exposição conhecida e variância igual à média.',
+      ],
+      whenToUse: ['Comparar taxas de conversão, defeitos, incidência ou contagens por unidade de exposição.'],
+      whenNotToUse: ['Medidas repetidas ou dados agrupados: a independência é violada.'],
+      reading: [
+        'O p exato é a referência com contagens pequenas; o p assintótico é uma aproximação normal.',
+        'O intervalo de Wilson é mais estável do que o de Wald; Clopper–Pearson garante a cobertura nominal.',
+        'O risco relativo e o odds ratio não substituem a diferença absoluta.',
+      ],
+      pitfalls: [
+        'Um odds ratio elevado pode esconder uma diferença absoluta mínima quando os eventos são raros.',
+        'A exposição tem de ser declarada: a mesma contagem sobre exposições diferentes dá taxas diferentes.',
+      ],
+      charts: ['Gráfico de intervalo'],
+      glossary: [
+        { term: 'p exato', definition: 'Probabilidade de todos os resultados pelo menos tão improváveis como o observado sob a hipótese nula.' },
+        { term: 'Rácio de taxas', definition: 'Rácio entre duas taxas de eventos; 1 significa taxas iguais.' },
+      ],
+    },
+    seeAlso: ['chisquare', 'ttest'],
+  },
 ];

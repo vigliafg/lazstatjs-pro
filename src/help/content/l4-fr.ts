@@ -181,4 +181,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ['factorial', 'regression'],
   },
+  {
+    id: 'proportions',
+    area: 'procedures',
+    title: 'Proportions et taux',
+    summary: 'Tests à un ou deux échantillons pour proportions et taux de Poisson.',
+    tutorial: {
+      goal: 'Décider si une proportion ou un taux d’événements diffère d’une cible ou entre deux groupes.',
+      dataset: 'two_groups_binary.csv',
+      steps: [
+        'Choisissez une ou deux proportions, ou un ou deux taux de Poisson.',
+        'Sélectionnez l’issue binaire (ou la colonne de comptage) et la colonne de groupe pour les modes à deux échantillons.',
+        'Choisissez le niveau de succès, la valeur nulle et l’exposition par ligne si nécessaire.',
+        'Lancez l’analyse et lisez le test exact, l’intervalle et la taille d’effet.',
+      ],
+      expected: 'Un tableau avec succès, essais, estimation, p exact et intervalle, plus la différence ou le rapport de taux pour deux groupes.',
+    },
+    advanced: {
+      assumptions: [
+        'Les observations sont indépendantes dans et entre les groupes.',
+        'Les comptages de Poisson sont des événements entiers avec une exposition connue et une variance égale à la moyenne.',
+      ],
+      whenToUse: ['Comparer des taux de conversion, de défauts, d’incidence ou des comptages par unité d’exposition.'],
+      whenNotToUse: ['Mesures répétées ou données en grappes : l’indépendance est violée.'],
+      reading: [
+        'Le p exact est la référence avec de petits effectifs ; le p asymptotique est une approximation normale.',
+        'L’intervalle de Wilson est plus stable que celui de Wald ; Clopper–Pearson garantit la couverture nominale.',
+        'Le risque relatif et l’odds ratio ne remplacent pas la différence absolue.',
+      ],
+      pitfalls: [
+        'Un odds ratio élevé peut masquer une différence absolue minime quand les événements sont rares.',
+        'L’exposition doit être déclarée : le même nombre d’événements sur des expositions différentes donne des taux différents.',
+      ],
+      charts: ['Graphique d’intervalle'],
+      glossary: [
+        { term: 'p exact', definition: 'Probabilité de tous les résultats au moins aussi improbables que celui observé sous l’hypothèse nulle.' },
+        { term: 'Rapport de taux', definition: 'Rapport entre deux taux d’événements ; 1 signifie des taux égaux.' },
+      ],
+    },
+    seeAlso: ['chisquare', 'ttest'],
+  },
 ];

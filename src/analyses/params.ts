@@ -125,6 +125,8 @@ export const remapParams = (
   const doeResponse = one(params.doe.response, 'DOE: response');
   const doeFactorA = one(params.doe.factorA, 'DOE: factor A');
   const doeFactorB = one(params.doe.factorB, 'DOE: factor B');
+  const proportionVariable = one(params.proportions.variable, 'Proportions: variable');
+  const proportionGroup = optional(params.proportions.group);
 
   return {
     invalidated: unique(invalidated.map(label => label)),
@@ -264,6 +266,11 @@ export const remapParams = (
         factorA: doeFactorA,
         factorB: doeFactorB,
       },
+      proportions: {
+        ...params.proportions,
+        variable: proportionVariable,
+        group: proportionGroup,
+      },
     },
   };
 };
@@ -287,6 +294,8 @@ const checkList = (values: readonly number[], label: string, width: number, erro
 export const validateColumnRefs = (params: ProjectParams, width: number): string[] => {
   const errors: string[] = [];
   checkList(params.descVars, 'Descriptive: variables', width, errors);
+  checkOne(params.proportions.variable, 'Proportions: variable', width, errors);
+  checkOne(params.proportions.group, 'Proportions: group', width, errors, true);
   checkOne(params.ttest.var1, 'T-Test: first variable', width, errors);
   checkOne(params.ttest.var2, 'T-Test: second variable', width, errors);
   checkOne(params.anova.dep, 'ANOVA: dependent variable', width, errors);
@@ -402,6 +411,12 @@ export const validateAnalysisColumnRefs = (
   switch (analysisId) {
     case 'descriptive':
       list(params.descVars, 'Descriptive: variables');
+      break;
+    case 'proportions':
+      one(params.proportions.variable, 'Proportions: variable');
+      if (params.proportions.mode === 'twoProp' || params.proportions.mode === 'twoRate') {
+        one(params.proportions.group, 'Proportions: group');
+      }
       break;
     case 'ttest':
       one(params.ttest.var1, 'T-Test: first variable');
@@ -562,6 +577,14 @@ export const setPrimaryColumn = (
   switch (analysisId) {
     case 'descriptive':
       return { params: { ...params, descVars: append(params.descVars) }, role: 'Descriptive variable' };
+    case 'proportions':
+      return {
+        params: {
+          ...params,
+          proportions: { ...params.proportions, variable: column },
+        },
+        role: 'Proportions: variable',
+      };
     case 'distfit':
       return { params: { ...params, distfit: { ...params.distfit, variable: column } }, role: 'Distribution variable' };
     case 'ttest':

@@ -98,4 +98,6 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.family.ml.description': 'Prédiction, classification et texte',
   'meta.family.advanced.label': 'Avancées et bayésiennes',
   'meta.family.advanced.description': 'Méta-analyse, modèles bayésiens et spatiaux',
+  'meta.analysis.proportions.label': 'Proportions et taux',
+  'meta.analysis.proportions.description': 'Tests à un ou deux échantillons pour proportions et taux de Poisson.',
 };

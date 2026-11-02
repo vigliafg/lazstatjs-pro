@@ -360,6 +360,24 @@ export interface DoeParams {
  */
 export type DescriptiveMode = 'summary' | 'frequency' | 'outliers' | 'runs';
 
+/** One- and two-sample tests for proportions and Poisson rates. */
+export type ProportionMode = 'oneProp' | 'twoProp' | 'oneRate' | 'twoRate';
+
+export interface ProportionParams {
+  mode: ProportionMode;
+  /** Binary outcome (proportions) or count column (rates). */
+  variable: number;
+  /** Group column for the two-sample modes; -1 for one sample. */
+  group: number;
+  /** Level counted as a success in the proportion modes. */
+  successLevel: string;
+  /** Null proportion (oneProp) or null rate (oneRate). */
+  nullP: number;
+  nullRate: number;
+  /** Exposure per row for the rate modes (default 1). */
+  exposure: number;
+}
+
 export const DESCRIPTIVE_MODES: readonly DescriptiveMode[] = [
   'summary',
   'frequency',
@@ -371,6 +389,7 @@ export interface ProjectParams {
   descVars: number[];
   /** Which view of the Descriptive procedure the form and runner use. */
   descMode: DescriptiveMode;
+  proportions: ProportionParams;
   ttest: TTestParams;
   anova: AnovaParams;
   reg: RegParams;
@@ -469,6 +488,15 @@ export interface ProjectInput {
 export const DEFAULT_PARAMS: ProjectParams = {
   descVars: [0, 1],
   descMode: 'summary',
+  proportions: {
+    mode: 'oneProp',
+    variable: 0,
+    group: -1,
+    successLevel: '',
+    nullP: 0.5,
+    nullRate: 1,
+    exposure: 1,
+  },
   ttest: { type: 'ind', var1: 0, var2: 1, mu: 0, useNonParam: true, equalVar: true },
   anova: { dep: 0, grp: 2, posthoc: 'holm', useNonParam: true, kwPosthoc: 'bonferroni' },
   reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen', robustSE: 'none' },

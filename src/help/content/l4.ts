@@ -182,4 +182,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ['factorial', 'regression'],
   },
+  {
+    id: 'proportions',
+    area: 'procedures',
+    title: 'Proportions & rates',
+    summary: 'One- and two-sample tests for proportions and Poisson rates.',
+    tutorial: {
+      goal: 'Decide whether a proportion or an event rate differs from a target or between two groups.',
+      dataset: 'two_groups_binary.csv',
+      steps: [
+        'Choose one or two proportions, or one or two Poisson rates.',
+        'Select the binary outcome (or the count column) and the group column for the two-sample modes.',
+        'Pick the success level, the null value and the exposure per row when needed.',
+        'Run it and read the exact test, the interval and the effect size.',
+      ],
+      expected: 'A table with successes, trials, estimate, exact p and interval, plus the difference or rate ratio when there are two groups.',
+    },
+    advanced: {
+      assumptions: [
+        'Observations are independent within and between groups.',
+        'Poisson counts are integer events with a known exposure and variance equal to the mean.',
+      ],
+      whenToUse: ['Comparing conversion rates, defect rates, incidence or event counts per unit of exposure.'],
+      whenNotToUse: ['Repeated measures or clustered data: the independence assumption is violated.'],
+      reading: [
+        'The exact p-value is the reference with small counts; the asymptotic p is a normal approximation.',
+        'The Wilson interval is more stable than the Wald interval; Clopper–Pearson guarantees nominal coverage.',
+        'The risk ratio and the odds ratio do not replace the absolute difference.',
+      ],
+      pitfalls: [
+        'A large odds ratio can hide a tiny absolute difference when events are rare.',
+        'The exposure must be declared: the same count over different exposure gives different rates.',
+      ],
+      charts: ['Interval plot'],
+      glossary: [
+        { term: 'Exact p-value', definition: 'Probability of every outcome at least as unlikely as the observed one under the null.' },
+        { term: 'Rate ratio', definition: 'Ratio between two event rates; 1 means equal rates.' },
+      ],
+    },
+    seeAlso: ['chisquare', 'ttest'],
+  },
 ];

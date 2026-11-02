@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { ProjectParams } from '../../io/project';
 import type { AnalysisTabProps } from './types';
 import { DescriptiveForm } from '../../analyses/descriptive/Form';
+import { ProportionsForm } from '../../analyses/proportions/Form';
 import { TTestForm } from '../../analyses/ttest/Form';
 import { AnovaForm } from '../../analyses/anova/Form';
 import { RegressionForm } from '../../analyses/regression/Form';
@@ -49,6 +50,14 @@ interface AnalysisFormProps {
 
 export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
     switch (p.activeAnalysis) {
+      case 'proportions':
+        return (
+          <ProportionsForm
+            grid={p.grid}
+            params={params.proportions}
+            setParams={setSlice('proportions')}
+          />
+        );
       case 'descriptive':
         return (
           <DescriptiveForm

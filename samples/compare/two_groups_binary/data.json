@@ -1,0 +1,602 @@
+[
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 3
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 4
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 4
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 3
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 3
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 3
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 4
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 3
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 3
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 3
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Control",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Control",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 3
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 3
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 5
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 5
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 3
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 3
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 0
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 0
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 3
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 4
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 1
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 3
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "No",
+    "Events": 2
+  },
+  {
+    "Group": "Treatment",
+    "Outcome": "Yes",
+    "Events": 2
+  }
+]

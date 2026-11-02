@@ -96,4 +96,6 @@ export const metaMessages = {
   'meta.family.ml.description': 'Prediction, classification and text',
   'meta.family.advanced.label': 'Advanced & Bayesian',
   'meta.family.advanced.description': 'Meta-analysis, Bayesian and spatial models',
+  'meta.analysis.proportions.label': 'Proportions & rates',
+  'meta.analysis.proportions.description': 'One- and two-sample tests for proportions and Poisson rates.',
 } as const;

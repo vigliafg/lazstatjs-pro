@@ -285,6 +285,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const wizard = isRecord(raw.wizard) ? raw.wizard : {};
   const partition = isRecord(raw.partition) ? raw.partition : {};
   const quality = isRecord(raw.quality) ? raw.quality : {};
+  const proportions = isRecord(raw.proportions) ? raw.proportions : {};
   const cluster = isRecord(raw.cluster) ? raw.cluster : {};
   const discriminant = isRecord(raw.discriminant) ? raw.discriminant : {};
   const doe = isRecord(raw.doe) ? raw.doe : {};
@@ -307,6 +308,23 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       typeof raw.descMode === 'string' && (DESCRIPTIVE_MODES as readonly string[]).includes(raw.descMode)
         ? (raw.descMode as ProjectParams['descMode'])
         : d.descMode,
+    proportions: {
+      mode:
+        proportions.mode === 'twoProp' ||
+        proportions.mode === 'oneRate' ||
+        proportions.mode === 'twoRate'
+          ? proportions.mode
+          : d.proportions.mode,
+      variable: index(proportions.variable, d.proportions.variable, width),
+      group: optionalIndex(proportions.group, d.proportions.group, width),
+      successLevel:
+        typeof proportions.successLevel === 'string'
+          ? proportions.successLevel
+          : d.proportions.successLevel,
+      nullP: Math.max(0.0001, Math.min(0.9999, finite(proportions.nullP, d.proportions.nullP))),
+      nullRate: Math.max(1e-9, finite(proportions.nullRate, d.proportions.nullRate)),
+      exposure: Math.max(1e-9, finite(proportions.exposure, d.proportions.exposure)),
+    },
     ttest: {
       type: ttest.type === 'ind' || ttest.type === 'dep' || ttest.type === 'one' ? ttest.type : d.ttest.type,
       var1: index(ttest.var1, d.ttest.var1, width),

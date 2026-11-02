@@ -277,4 +277,48 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ["factorial", "regression"],
   },
+  {
+    id: "proportions",
+    area: "procedures",
+    title: "Proporciones y tasas",
+    summary: "Pruebas de una y dos muestras para proporciones y tasas de Poisson.",
+    tutorial: {
+      goal: "Decidir si una proporción o una tasa de eventos difiere de un objetivo o entre dos grupos.",
+      dataset: "two_groups_binary.csv",
+      steps: [
+        "Elige una o dos proporciones, o una o dos tasas de Poisson.",
+        "Selecciona el resultado binario (o la columna de recuento) y la columna de grupo para los modos de dos muestras.",
+        "Elige el nivel de éxito, el valor nulo y la exposición por fila cuando sea necesario.",
+        "Ejecuta el análisis y lee la prueba exacta, el intervalo y el tamaño del efecto.",
+      ],
+      expected: "Una tabla con éxitos, ensayos, estimación, p exacto e intervalo, más la diferencia o el cociente de tasas para dos grupos.",
+    },
+    advanced: {
+      assumptions: [
+        "Las observaciones son independientes dentro y entre los grupos.",
+        "Los recuentos de Poisson son eventos enteros con exposición conocida y varianza igual a la media.",
+      ],
+      whenToUse: [
+        "Comparar tasas de conversión, defectos, incidencia o recuentos por unidad de exposición.",
+      ],
+      whenNotToUse: [
+        "Medidas repetidas o datos agrupados: se viola la independencia.",
+      ],
+      reading: [
+        "El p exacto es la referencia con recuentos pequeños; el p asintótico es una aproximación normal.",
+        "El intervalo de Wilson es más estable que el de Wald; Clopper–Pearson garantiza la cobertura nominal.",
+        "El riesgo relativo y la odds ratio no sustituyen a la diferencia absoluta.",
+      ],
+      pitfalls: [
+        "Una odds ratio grande puede ocultar una diferencia absoluta mínima cuando los eventos son raros.",
+        "La exposición debe declararse: el mismo recuento sobre exposiciones distintas da tasas distintas.",
+      ],
+      charts: ["Gráfico de intervalo"],
+      glossary: [
+        { term: "p exacto", definition: "Probabilidad de todos los resultados al menos tan improbables como el observado bajo la hipótesis nula." },
+        { term: "Cociente de tasas", definition: "Cociente entre dos tasas de eventos; 1 significa tasas iguales." },
+      ],
+    },
+    seeAlso: ["chisquare", "ttest"],
+  },
 ];

@@ -16,6 +16,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   correlation: ['box', 'heatmap', 'scatter', 'score'],
   countreg: ['bar', 'forest', 'qq', 'scatter'],
   cox: ['forest', 'line', 'scatter'],
+  proportions: ['bar', 'interval'],
   descriptive: [
     'bar',
     'box',

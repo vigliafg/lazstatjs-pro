@@ -178,4 +178,44 @@ export const l4Topics: HelpTopic[] = [
     },
     seeAlso: ["factorial", "regression"],
   },
+  {
+    id: "proportions",
+    area: "procedures",
+    title: "Anteile und Raten",
+    summary: "Ein- und Zweistichprobentests für Anteile und Poisson-Raten.",
+    tutorial: {
+      goal: "Entscheiden, ob ein Anteil oder eine Ereignisrate von einem Zielwert oder zwischen zwei Gruppen abweicht.",
+      dataset: "two_groups_binary.csv",
+      steps: [
+        "Wählen Sie einen oder zwei Anteile oder eine bzw. zwei Poisson-Raten.",
+        "Wählen Sie das binäre Ergebnis (oder die Zählspalte) und die Gruppenspalte für die Zweistichprobenmodi.",
+        "Legen Sie Erfolgsausprägung, Nullwert und Exposition je Zeile fest, wenn nötig.",
+        "Führen Sie die Analyse aus und lesen Sie exakten Test, Intervall und Effektstärke.",
+      ],
+      expected: "Eine Tabelle mit Erfolgen, Versuchen, Schätzung, exaktem p und Intervall sowie Differenz oder Ratenverhältnis bei zwei Gruppen.",
+    },
+    advanced: {
+      assumptions: [
+        "Die Beobachtungen sind innerhalb und zwischen den Gruppen unabhängig.",
+        "Poisson-Zählungen sind ganzzahlige Ereignisse mit bekannter Exposition und Varianz gleich dem Mittelwert.",
+      ],
+      whenToUse: ["Vergleich von Konversions-, Fehler- oder Inzidenzraten bzw. Zählungen je Expositionseinheit."],
+      whenNotToUse: ["Wiederholte Messungen oder geclusterte Daten: Die Unabhängigkeit ist verletzt."],
+      reading: [
+        "Bei kleinen Zählungen ist das exakte p der Referenzwert; das asymptotische p ist eine Normalapproximation.",
+        "Das Wilson-Intervall ist stabiler als das Wald-Intervall; Clopper–Pearson garantiert die nominale Abdeckung.",
+        "Relatives Risiko und Odds Ratio ersetzen nicht die absolute Differenz.",
+      ],
+      pitfalls: [
+        "Ein großes Odds Ratio kann bei seltenen Ereignissen eine winzige absolute Differenz verbergen.",
+        "Die Exposition muss angegeben werden: Dieselbe Zählung bei unterschiedlicher Exposition ergibt unterschiedliche Raten.",
+      ],
+      charts: ["Intervallplot"],
+      glossary: [
+        { term: "Exaktes p", definition: "Wahrscheinlichkeit aller Ergebnisse, die unter der Nullhypothese mindestens so unwahrscheinlich sind wie das beobachtete." },
+        { term: "Ratenverhältnis", definition: "Verhältnis zweier Ereignisraten; 1 bedeutet gleiche Raten." },
+      ],
+    },
+    seeAlso: ["chisquare", "ttest"],
+  },
 ];

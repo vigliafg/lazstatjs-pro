@@ -82,6 +82,22 @@ const ROLES: Record<string, AnalysisRole[]> = {
       set: (p, c) => ({ ...p, descVars: append(p.descVars, c) }),
     },
   ],
+  proportions: [
+    {
+      key: 'variable',
+      label: 'Proportions: variable',
+      kind: 'any',
+      get: p => [p.proportions.variable],
+      set: (p, c) => ({ ...p, proportions: { ...p.proportions, variable: c } }),
+    },
+    {
+      key: 'group',
+      label: 'Proportions: group',
+      kind: 'any',
+      get: p => (p.proportions.group < 0 ? [] : [p.proportions.group]),
+      set: (p, c) => ({ ...p, proportions: { ...p.proportions, group: c } }),
+    },
+  ],
   ttest: [
     {
       key: 'var1',
