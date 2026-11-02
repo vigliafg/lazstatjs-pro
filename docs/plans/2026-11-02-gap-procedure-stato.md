@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-02
+**Ultimo aggiornamento**: 2026-11-02 (piano v2.2)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
-**Baseline documentale**: `main` @ `746b558` (piano v2.0)
+**Baseline documentale**: `main` @ `746b558` (piano v2.0), aggiornato a v2.2
 **Stato**: piano approvato, protocollo di checkpoint definito, implementazione non iniziata
-**Prossima ondata**: W0 — Fondazioni condivise
+**Prossima ondata**: W0 — Fondazioni condivise e retrofit reference test
 
 ---
 
@@ -31,16 +31,17 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W0 — Fondazioni |
+| Ondata corrente | W0 — Fondazioni e retrofit |
 | Branch/worktree | da creare: `feat/gap-wave-1` / worktree `gap-wave-1` |
 | Ultimo commit di codice | nessuno |
-| Ultimo commit documentale | `746b558` (piano v2.0) |
+| Ultimo commit documentale | `746b558` (piano v2.0); in corso commit v2.2 |
 | Test | non eseguiti dopo l’ultimo commit; ultimo `npm run check` noto verde su `1042c61` |
 | Item chiusi | 0 / 73 |
 | Nuove voci | 0 / 36 |
 | Estensioni | 0 / 37 |
+| Reference baseline | 27 / 35 procedure statistiche; W0-09 deve portare a 35 / 35 |
 | Blocchi | nessuno |
-| Prossimo gate | G0 — fine W0 |
+| Prossimo gate | G0 — fine W0 (toolkit + 8/8 retrofit reference) |
 
 ---
 
@@ -48,7 +49,7 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Ondata | Scope | Metodi | Nuove voci | Stato | Gate |
 |---|---|---:|---:|---|---|
-| W0 | Fondazioni condivise | — | — | non iniziata | G0 |
+| W0 | Fondazioni condivise + retrofit | — | — | non iniziata | G0 |
 | W1 | Descriptive + test di base | 14 | 2 | non iniziata | G1 |
 | W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | non iniziata | G2 |
 | W3 | Regressione avanzata | 7 | 7 | non iniziata | G3 |
@@ -83,7 +84,8 @@ passi; per il resto rimandare alle sezioni del piano.
 ## 5. Ondata corrente — W0
 
 Obiettivo: toolkit numerico, reference harness, sample generator, i18n/help
-scaffolding, data shape adapters, performance guards.
+scaffolding, data shape adapters, performance guards e retrofit dei reference
+test sulle 8 procedure esistenti scoperte.
 
 | Task | Descrizione | Stato |
 |---|---|---|
@@ -95,13 +97,14 @@ scaffolding, data shape adapters, performance guards.
 | W0-06 | i18n/help scaffolding per le nuove famiglie | da fare |
 | W0-07 | data shape adapters (long/wide, start-stop, matrici, testo) | da fare |
 | W0-08 | performance guards e limiti | da fare |
-| G0 | gate: test toolkit, reference dimostrativa, sample test | da fare |
+| W0-09 | retrofit reference test per TOST, Quality, Cluster, Discriminant, Partition, DOE, MI, Resampling | da fare |
+| G0 | gate: test toolkit, reference dimostrativa, sample test, 8/8 retrofit | da fare |
 
 ### Prossimi 3 passi
 
 1. Aprire worktree `gap-wave-1` e branch `feat/gap-wave-1`.
 2. Implementare W0-01 con test su funzioni note e reference R.
-3. Implementare W0-02 (scheletro GLM) e D-01 (frequenze).
+3. Avviare W0-09: i primi due retrofit (TOST, Quality) e D-01 frequenze.
 
 ---
 
@@ -110,6 +113,7 @@ scaffolding, data shape adapters, performance guards.
 | Data | Checkpoint | Commit | Test | Esito | Note |
 |---|---|---|---|---|---|
 | 2026-11-02 | Piano approvato | `746b558` | docs only | verde | Creato piano v2.0 e protocollo |
+| 2026-11-02 | Piano v2.2 + W0-09 | `in corso` | docs only | verde | Aggiunto retrofit reference test per 8 procedure |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 

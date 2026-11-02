@@ -16,6 +16,7 @@
 | 1.0 | 2026-11-02 | Perimetro, 73 metodi, 11 famiglie, ondate, stime |
 | 2.0 | 2026-11-02 | WBS, dipendenze, Definition of Ready/Done, work package per famiglia, matrice di tracciabilità, piano test, release plan, primi 4 sprint |
 | 2.1 | 2026-11-02 | Protocollo di checkpoint, handoff e compattazione; documento di stato `gap-procedure-stato.md` |
+| 2.2 | 2026-11-02 | W0-09: retrofit dei reference test sulle 8 procedure esistenti senza confronto indipendente |
 
 ---
 
@@ -29,8 +30,8 @@ metodi** oggi assenti rispetto a Minitab, SPSS, Stata e JMP:
 - **0** nuove famiglie obbligatorie, **2** famiglie nuove consigliate
   (`Machine Learning`, `Advanced & Bayesian`);
 - **10 ondate** di rilascio, ciascuna verificabile con `npm run check`;
-- **~585 giornate/uomo** a lordo (511 item + 30 W0 + 44 fondazioni JIT),
-  ~615 con overhead, riducibili a ~540 con il riuso dei moduli condivisi;
+- **~599 giornate/uomo** a lordo (511 item + 44 W0 + 44 fondazioni JIT),
+  ~629 con overhead, riducibili a ~550 con il riuso dei moduli condivisi;
 - **~9-11 mesi** con 3 sviluppatori, **~14-16 mesi** con 2, **~26-30 mesi** con 1.
 
 La prima ondata (14 metodi, di cui 2 nuove voci) è realizzabile in **6-8
@@ -229,7 +230,7 @@ cartella della procedura madre; il form aggiunge un selettore di modalità.
 
 ## 6. Work breakdown structure e dipendenze
 
-### 6.1 Ondata 0 — fondazioni condivise (30 giornate)
+### 6.1 Ondata 0 — fondazioni condivise e retrofit (44 giornate)
 
 | ID | Task | Output | Giorni | Gate |
 |---|---|---|---:|---|
@@ -241,6 +242,7 @@ cartella della procedura madre; il form aggiunge un selettore di modalità.
 | W0-06 | i18n/help scaffolding | nuove famiglie, glossario, template pagina | 2 | `check-locale` verde |
 | W0-07 | Data shape adapters | long/wide, start-stop, matrici, testo | 2 | test unitari |
 | W0-08 | Performance guards | limiti righe/colonne, messaggi, worker check | 3 | benchmark baseline |
+| W0-09 | Retrofit reference test | reference indipendenti per TOST, Quality, Cluster, Discriminant, Partition, DOE, MI, Resampling | 14 | 8/8 reference verdi, tolleranze dichiarate |
 
 ### 6.2 Fondazioni just-in-time
 
@@ -255,7 +257,7 @@ cartella della procedura madre; il form aggiunge un selettore di modalità.
 
 | Ondata | Scope | Metodi | Nuove voci | Giorni | Gate |
 |---|---|---|---:|---:|---|
-| 0 | Fondazioni | — | — | 30 | G0: toolkit numerico verde |
+| 0 | Fondazioni e retrofit | — | — | 44 | G0: toolkit numerico e 8 reference verdi |
 | 1 | Descriptive + test di base (Compare) | 14 | 2 | 36 | G1: 14 metodi, help 6 lingue |
 | 2 | ANOVA/GLMM + Regression nucleo | 12 | 5 | 74 | G2: GLM/GLMM reference verdi |
 | 3 | Regression avanzata | 7 | 7 | 53 | G3: 7 modelli su dati reali |
@@ -266,7 +268,7 @@ cartella della procedura madre; il form aggiunge un selettore di modalità.
 | 8 | Quality/DOE/power restanti | 5 | 0 | 25 | G8: DOE builder |
 | 9 | Survey + ML + Advanced | 7 | 7 | 111 | G9: copertura 73/73 |
 | JIT | F4-F8 (fondazioni just-in-time) | — | — | 44 | gate per ondata |
-| **Totale** |  | **73** | **36** | **585** |  |
+| **Totale** |  | **73** | **36** | **599** |  |
 
 ### 6.4 Percorso critico e parallelizzazione
 
@@ -673,6 +675,33 @@ Regole:
 - MCMC/ML: metriche diagnostiche e intervalli, non confronto puntuale.
 - Ogni test reference dichiara dataset, versione R/pacchetto e tolleranza.
 
+### 9.4 Retrofit del baseline esistente (W0-09)
+
+Prima di aggiungere nuove procedure, le 8 procedure esistenti che oggi hanno
+solo test di proprietà/decisione ricevono un reference test indipendente.
+
+| Procedura | Cosa verificare | Reference | Tolleranza |
+|---|---|---|---|
+| TOST | t, p TOST, IC, decisione | R `TOSTER` | 1e-6 |
+| Quality/SPC | limiti Xbar-R, CUSUM, Cp/Cpk | R `qcc` | 1e-6 |
+| Cluster | merge, altezze, assegnazione | R `hclust` | 1e-8 |
+| Discriminant/MANOVA | coefficienti LDA, Wilks, accuracy | R `MASS::lda`, `candisc` | 1e-6 |
+| Partition | split, soglie, R², importanza | R `rpart` | 1e-4 |
+| DOE | coefficienti, R², punto stazionario | R `rsm` | 1e-6 |
+| MI | medie/SD pooled, coefficienti pooled | R `mice` (seed fisso) | 1e-3 |
+| Resampling | p permutation esatta, IC bootstrap | R `coin` / calcolo esatto | 1e-9 / 1e-3 |
+
+Regole:
+
+- test aggiunti ai file esistenti (`kernels/*.test.ts` o `*.test.ts`);
+- dataset deterministico e seed fisso per MI/resampling;
+- per i metodi stocastici si confrontano media e tolleranza su più repliche,
+  non un singolo valore;
+- il gate G0 richiede **8/8 reference verdi** e tolleranze documentate.
+
+Dopo W0-09, ogni procedura del registro ha almeno un test di correttezza
+numerica, salvo il Wizard che non è una procedura statistica.
+
 ---
 
 ## 10. Release plan
@@ -708,12 +737,12 @@ Ogni release:
 | L | 9 | 23 | 207 |
 | XL | 17 | 10 | 170 |
 | **Subtotale** |  | **73** | **511** |
-| Fondazioni W0 | 30 | — | 30 |
+| Fondazioni W0 (incl. W0-09) | 44 | — | 44 |
 | Fondazioni JIT (F4-F8) | 44 | — | 44 |
-| **Totale** |  |  | **585** |
+| **Totale** |  |  | **599** |
 
 Le stime includono test, help e documentazione. Aggiungendo ~5% per traduzioni
-e gate di ondata: **~615 giornate/uomo** a lordo, **~540** con il riuso dei
+e gate di ondata: **~629 giornate/uomo** a lordo, **~550** con il riuso dei
 moduli condivisi.
 
 ### 11.2 Calendario
@@ -973,7 +1002,7 @@ Termini da aggiungere prima della traduzione:
 1. Leggere `docs/plans/2026-11-02-gap-procedure-stato.md` (fonte di ripresa).
 2. Aprire un worktree `gap-wave-1`.
 3. Creare il branch `feat/gap-wave-1`.
-4. Implementare W0-01, W0-02 e i primi due item (D-01, D-02).
+4. Implementare W0-01, W0-02, W0-09 e i primi due item (D-01, D-02).
 5. Aggiornare il backlog in questo documento man mano che gli item passano
    il gate.
 6. Non aggiornare i conteggi globali (36→72) fino alla chiusura di W1.
