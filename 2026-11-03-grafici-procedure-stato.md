@@ -541,9 +541,9 @@ sotto-blocco aperto):
   della coppia heatmap/loading plot (nessun grafico eliminato) e delle
   sezioni EFA e alpha.
 - **File toccati**: `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`;
-  inventario statico rigenerato.
+  inventario statico rigenerato: **342 modelli** in 71 analisi, 32 kind.
 - **Test**: `npm run check` verde; `locales:check` verde sulle 6 lingue;
-  `npm run chart:inventory` rigenerato.
+  `npm run chart:inventory` rieseguito sul codice finale di O5.
 - **Commit**: `feat(charts): F5.3 guide di PCA, EFA e alpha`
 
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,

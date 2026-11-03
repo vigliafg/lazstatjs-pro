@@ -6,7 +6,7 @@ Comando: `npm run chart:inventory`.
 ## Totali
 
 - Analisi con almeno un grafico: **71**
-- Modelli `AnalysisChart` emessi: **329**
+- Modelli `AnalysisChart` emessi: **342**
 - Kind distinti: **32**
 
 ## Grafici per analisi
@@ -16,12 +16,12 @@ Comando: `npm run chart:inventory`.
 | `agreement` | 6 |
 | `alt` | 2 |
 | `ancova` | 4 |
-| `anova` | 11 |
+| `anova` | 13 |
 | `bayes` | 4 |
-| `canonical` | 2 |
-| `chisquare` | 3 |
+| `canonical` | 3 |
+| `chisquare` | 4 |
 | `choice` | 4 |
-| `cluster` | 3 |
+| `cluster` | 5 |
 | `competing` | 2 |
 | `conjoint` | 2 |
 | `contingency` | 8 |
@@ -38,9 +38,9 @@ Comando: `npm run chart:inventory`.
 | `gee` | 6 |
 | `glm` | 3 |
 | `glmm` | 4 |
-| `irt` | 2 |
-| `iv` | 2 |
-| `latentclass` | 2 |
+| `irt` | 3 |
+| `iv` | 3 |
+| `latentclass` | 3 |
 | `lmm` | 8 |
 | `logistic` | 7 |
 | `loglinear` | 2 |
@@ -51,7 +51,7 @@ Comando: `npm run chart:inventory`.
 | `mi` | 13 |
 | `mixedanova` | 2 |
 | `ml` | 5 |
-| `multinomial` | 2 |
+| `multinomial` | 3 |
 | `multivariate` | 12 |
 | `nonlinear` | 2 |
 | `nonparamrm` | 5 |
@@ -59,19 +59,19 @@ Comando: `npm run chart:inventory`.
 | `panel` | 3 |
 | `parametric` | 7 |
 | `partition` | 3 |
-| `pls` | 2 |
+| `pls` | 3 |
 | `propensity` | 4 |
 | `proportions` | 4 |
 | `quality` | 11 |
 | `quantile` | 2 |
 | `recurrent` | 2 |
-| `regression` | 14 |
+| `regression` | 15 |
 | `reliability` | 2 |
 | `repeatedanova` | 3 |
 | `resampling` | 3 |
 | `samplesize` | 3 |
 | `selection` | 4 |
-| `sem` | 2 |
+| `sem` | 3 |
 | `spatial` | 3 |
 | `statespace` | 3 |
 | `stratcox` | 4 |
@@ -91,7 +91,7 @@ Comando: `npm run chart:inventory`.
 |---|---:|
 | `'dendrogram' as const` | 1 |
 | `acf` | 4 |
-| `bar` | 61 |
+| `bar` | 67 |
 | `bland` | 1 |
 | `bootstrap` | 3 |
 | `box` | 16 |
@@ -101,18 +101,18 @@ Comando: `npm run chart:inventory`.
 | `dot` | 4 |
 | `ecdf` | 2 |
 | `forest` | 23 |
-| `heatmap` | 17 |
+| `heatmap` | 19 |
 | `histogram` | 9 |
-| `interval` | 30 |
-| `line` | 59 |
+| `interval` | 31 |
+| `line` | 60 |
 | `missingness` | 3 |
 | `mosaic` | 2 |
-| `pareto` | 2 |
+| `pareto` | 3 |
 | `power` | 1 |
 | `qq` | 11 |
 | `residual` | 8 |
 | `risk` | 2 |
-| `scatter` | 47 |
+| `scatter` | 49 |
 | `scatter3d` | 1 |
 | `scattermatrix` | 1 |
 | `score` | 3 |
@@ -149,21 +149,23 @@ Comando: `npm run chart:inventory`.
 | `ancova-residual-fitted` | `scatter` | `src/analyses/ancova/run.tsx:172` |
 | `ancova-residual-qq` | `qq` | `src/analyses/ancova/run.tsx:187` |
 
-### `anova` (11)
+### `anova` (13)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `anom-decision-lines` | `interval` | `src/analyses/anova/anom.ts:48` |
 | `nested-anova-means` | `interval` | `src/analyses/anova/nested.ts:58` |
-| `anova-box` | `box` | `src/analyses/anova/run.tsx:270` |
-| `anova-means` | `bar` | `src/analyses/anova/run.tsx:280` |
-| `anova-diamond` | `diamond` | `src/analyses/anova/run.tsx:290` |
-| `anova-circles` | `circles` | `src/analyses/anova/run.tsx:303` |
-| `anova-posthoc-forest` | `forest` | `src/analyses/anova/run.tsx:320` |
-| `anova-residual-fitted` | `scatter` | `src/analyses/anova/run.tsx:338` |
-| `anova-residual-qq` | `qq` | `src/analyses/anova/run.tsx:354` |
-| `anova-rank-box` | `box` | `src/analyses/anova/run.tsx:373` |
-| `mood-box` | `box` | `src/analyses/anova/run.tsx:460` |
+| `nested-variance` | `bar` | `src/analyses/anova/nested.ts:70` |
+| `anova-box` | `box` | `src/analyses/anova/run.tsx:271` |
+| `anova-means` | `bar` | `src/analyses/anova/run.tsx:281` |
+| `anova-diamond` | `diamond` | `src/analyses/anova/run.tsx:291` |
+| `anova-circles` | `circles` | `src/analyses/anova/run.tsx:304` |
+| `anova-posthoc-forest` | `forest` | `src/analyses/anova/run.tsx:321` |
+| `anova-residual-fitted` | `scatter` | `src/analyses/anova/run.tsx:339` |
+| `anova-residual-qq` | `qq` | `src/analyses/anova/run.tsx:355` |
+| `anova-rank-box` | `box` | `src/analyses/anova/run.tsx:374` |
+| `mood-box` | `box` | `src/analyses/anova/run.tsx:467` |
+| `mood-median-ci` | `interval` | `src/analyses/anova/run.tsx:479` |
 
 ### `bayes` (4)
 
@@ -174,20 +176,22 @@ Comando: `npm run chart:inventory`.
 | `bayes-groups` | `interval` | `src/analyses/bayes/run.tsx:113` |
 | `bayes-joint` | `scatter` | `src/analyses/bayes/run.tsx:136` |
 
-### `canonical` (2)
+### `canonical` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `canonical-scores` | `scatter` | `src/analyses/canonical/run.tsx:49` |
-| `canonical-loadings` | `bar` | `src/analyses/canonical/run.tsx:64` |
+| `canonical-corr` | `bar` | `src/analyses/canonical/run.tsx:64` |
+| `canonical-loadings` | `bar` | `src/analyses/canonical/run.tsx:84` |
 
-### `chisquare` (3)
+### `chisquare` (4)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `chisq-observed-expected` | `bar` | `src/analyses/chisquare/run.tsx:123` |
 | `chisq-mosaic` | `mosaic` | `src/analyses/chisquare/run.tsx:149` |
-| `gof-bar` | `bar` | `src/analyses/chisquare/run.tsx:214` |
+| `gof-bar` | `bar` | `src/analyses/chisquare/run.tsx:229` |
+| `gof-contribution` | `pareto` | `src/analyses/chisquare/run.tsx:247` |
 
 ### `choice` (4)
 
@@ -198,13 +202,15 @@ Comando: `npm run chart:inventory`.
 | `choice-coefficients` | `forest` | `src/analyses/choice/run.tsx:120` |
 | `choice-shares` | `bar` | `src/analyses/choice/run.tsx:137` |
 
-### `cluster` (3)
+### `cluster` (5)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `cluster-dendrogram` | `'dendrogram' as const` | `src/analyses/cluster/run.tsx:93` |
-| `cluster-profile` | `line` | `src/analyses/cluster/run.tsx:107` |
-| `cluster-sizes` | `bar` | `src/analyses/cluster/run.tsx:122` |
+| `cluster-dendrogram` | `'dendrogram' as const` | `src/analyses/cluster/run.tsx:120` |
+| `cluster-profile` | `line` | `src/analyses/cluster/run.tsx:134` |
+| `cluster-silhouette` | `bar` | `src/analyses/cluster/run.tsx:151` |
+| `cluster-scatter` | `scatter` | `src/analyses/cluster/run.tsx:165` |
+| `cluster-sizes` | `bar` | `src/analyses/cluster/run.tsx:177` |
 
 ### `competing` (2)
 
@@ -370,26 +376,29 @@ Comando: `npm run chart:inventory`.
 | `glmm-residual-fitted` | `residual` | `src/analyses/glmm/run.tsx:145` |
 | `glmm-random-slopes` | `interval` | `src/analyses/glmm/run.tsx:171` |
 
-### `irt` (2)
+### `irt` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `irt-items` | `bar` | `src/analyses/irt/run.tsx:43` |
-| `irt-information` | `line` | `src/analyses/irt/run.tsx:55` |
+| `irt-icc` | `line` | `src/analyses/irt/run.tsx:55` |
+| `irt-information` | `line` | `src/analyses/irt/run.tsx:75` |
 
-### `iv` (2)
-
-| Grafico | Kind | File |
-|---|---|---|
-| `iv-observed-fitted` | `scatter` | `src/analyses/iv/run.tsx:93` |
-| `iv-residuals` | `residual` | `src/analyses/iv/run.tsx:109` |
-
-### `latentclass` (2)
+### `iv` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `latentclass-proportions` | `bar` | `src/analyses/latentclass/run.tsx:66` |
-| `latentclass-probabilities` | `line` | `src/analyses/latentclass/run.tsx:81` |
+| `iv-observed-fitted` | `scatter` | `src/analyses/iv/run.tsx:100` |
+| `iv-residuals` | `residual` | `src/analyses/iv/run.tsx:116` |
+| `iv-first-stage` | `scatter` | `src/analyses/iv/run.tsx:133` |
+
+### `latentclass` (3)
+
+| Grafico | Kind | File |
+|---|---|---|
+| `latentclass-proportions` | `bar` | `src/analyses/latentclass/run.tsx:77` |
+| `latentclass-probabilities` | `line` | `src/analyses/latentclass/run.tsx:92` |
+| `latentclass-entropy` | `bar` | `src/analyses/latentclass/run.tsx:110` |
 
 ### `lmm` (8)
 
@@ -408,13 +417,13 @@ Comando: `npm run chart:inventory`.
 
 | Grafico | Kind | File |
 |---|---|---|
-| `logistic-curve` | `line` | `src/analyses/logistic/run.tsx:98` |
-| `logistic-roc` | `line` | `src/analyses/logistic/run.tsx:119` |
-| `logistic-lift` | `line` | `src/analyses/logistic/run.tsx:160` |
-| `logistic-calibration` | `line` | `src/analyses/logistic/run.tsx:186` |
-| `logistic-confusion` | `heatmap` | `src/analyses/logistic/run.tsx:224` |
-| `logistic-or-forest` | `forest` | `src/analyses/logistic/run.tsx:259` |
-| `logistic-marginal` | `bar` | `src/analyses/logistic/run.tsx:279` |
+| `logistic-curve` | `line` | `src/analyses/logistic/run.tsx:101` |
+| `logistic-roc` | `line` | `src/analyses/logistic/run.tsx:124` |
+| `logistic-lift` | `line` | `src/analyses/logistic/run.tsx:165` |
+| `logistic-calibration` | `line` | `src/analyses/logistic/run.tsx:191` |
+| `logistic-confusion` | `heatmap` | `src/analyses/logistic/run.tsx:229` |
+| `logistic-or-forest` | `forest` | `src/analyses/logistic/run.tsx:264` |
+| `logistic-marginal` | `bar` | `src/analyses/logistic/run.tsx:284` |
 
 ### `loglinear` (2)
 
@@ -488,12 +497,13 @@ Comando: `npm run chart:inventory`.
 | `ml-residuals` | `scatter` | `src/analyses/ml/run.tsx:143` |
 | `ml-importance` | `bar` | `src/analyses/ml/run.tsx:161` |
 
-### `multinomial` (2)
+### `multinomial` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `multinomial-probabilities` | `bar` | `src/analyses/multinomial/run.tsx:110` |
-| `multinomial-accuracy` | `bar` | `src/analyses/multinomial/run.tsx:133` |
+| `multinomial-probabilities` | `bar` | `src/analyses/multinomial/run.tsx:121` |
+| `multinomial-accuracy` | `bar` | `src/analyses/multinomial/run.tsx:144` |
+| `multinomial-confusion` | `heatmap` | `src/analyses/multinomial/run.tsx:164` |
 
 ### `multivariate` (12)
 
@@ -566,12 +576,13 @@ Comando: `npm run chart:inventory`.
 | `partition-observed` | `scatter` | `src/analyses/partition/run.tsx:91` |
 | `partition-importance` | `bar` | `src/analyses/partition/run.tsx:107` |
 
-### `pls` (2)
+### `pls` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `pls-observed-fitted` | `scatter` | `src/analyses/pls/run.tsx:93` |
-| `pls-cumulative-r2` | `line` | `src/analyses/pls/run.tsx:118` |
+| `pls-observed-fitted` | `scatter` | `src/analyses/pls/run.tsx:100` |
+| `pls-cumulative-r2` | `line` | `src/analyses/pls/run.tsx:125` |
+| `pls-loadings` | `heatmap` | `src/analyses/pls/run.tsx:144` |
 
 ### `propensity` (4)
 
@@ -621,7 +632,7 @@ Comando: `npm run chart:inventory`.
 | `recurrent-forest` | `forest` | `src/analyses/recurrent/run.tsx:94` |
 | `recurrent-mcf` | `line` | `src/analyses/recurrent/run.tsx:115` |
 
-### `regression` (14)
+### `regression` (15)
 
 | Grafico | Kind | File |
 |---|---|---|
@@ -638,7 +649,8 @@ Comando: `npm run chart:inventory`.
 | `reg-partial-${position + 1}` | `scatter` | `src/analyses/regression/run.tsx:418` |
 | `reg-residual-box` | `box` | `src/analyses/regression/run.tsx:432` |
 | `reg-residual-qq` | `qq` | `src/analyses/regression/run.tsx:447` |
-| `selection-criterion` | `line` | `src/analyses/regression/selection.ts:61` |
+| `selection-criterion` | `line` | `src/analyses/regression/selection.ts:69` |
+| `selection-coefficients` | `bar` | `src/analyses/regression/selection.ts:86` |
 
 ### `reliability` (2)
 
@@ -680,12 +692,13 @@ Comando: `npm run chart:inventory`.
 | `heckman-observed-fitted` | `scatter` | `src/analyses/selection/run.tsx:253` |
 | `heckman-imr` | `histogram` | `src/analyses/selection/run.tsx:272` |
 
-### `sem` (2)
+### `sem` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `sem-loadings` | `bar` | `src/analyses/sem/run.tsx:52` |
-| `sem-residuals` | `heatmap` | `src/analyses/sem/run.tsx:68` |
+| `sem-fit` | `bar` | `src/analyses/sem/run.tsx:62` |
+| `sem-loadings` | `bar` | `src/analyses/sem/run.tsx:79` |
+| `sem-residuals` | `heatmap` | `src/analyses/sem/run.tsx:95` |
 
 ### `spatial` (3)
 
