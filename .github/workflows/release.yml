@@ -49,7 +49,7 @@ jobs:
             # The macOS runner currently fails while creating the DMG
             # (hdiutil "Device not configured"). Ship the signed-ready .zip
             # from CI and leave the DMG to a local/manual build.
-            npx electron-builder --mac zip --publish never
+            npx electron-builder --mac zip --x64 --arm64 --publish never
           else
             npx electron-builder --${{ matrix.target }} --publish never
           fi
