@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F3.2 chiusa)
-- **Fase corrente**: F3.3 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F3.3 chiusa, ondata O3 chiusa)
+- **Fase corrente**: F4.1 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -64,7 +64,7 @@ con motivo.
 | F2.2 | `quality`: profilo operatore, contributi carta | 60 | ✅ | `feat(charts): F2.2 profilo parte per operatore` | 9 test + `check` verdi |
 | F3.1 | varianze, sign, KS | 60 | ✅ | `feat(charts): F3.1 forest varianze, mediana e KS` | 15 test + help verdi |
 | F3.2 | Mood, GOF, nested | 60 | ✅ | `feat(charts): F3.2 mediane Mood, componenti gerarchiche e contributi GOF` | 9 test + `check` e `locales:check` verdi |
-| F3.3 | GLMM/GEE/LMM polish | 45 | ⬜ | — | — |
+| F3.3 | GLMM/GEE/LMM polish | 45 | ✅ | `feat(charts): F3.3 guide caterpillar per LMM, GLMM e GEE` | `check` + `locales:check` verdi |
 | F4.1 | stepwise, polynomial, penalized | 60 | ⬜ | — | — |
 | F4.2 | multinomial, IV, PLS | 60 | ⬜ | — | — |
 | F4.3 | logistica, conteggi, ordinale | 45 | ⬜ | — | — |
@@ -150,6 +150,7 @@ sotto-blocco aperto):
 | 2026-11-03 | F3.2 | `mood-median-ci` applica `medianCI` alle osservazioni di ogni gruppo, non alla mediana comune | il test Mood confronta i conteggi sopra/sotto la mediana comune; l’intervallo descrive la mediana del gruppo |
 | 2026-11-03 | F3.2 | `nested-variance` legge `varianceComponents` del kernel `nestedAnova` | nessun nuovo calcolo né modifica kernel |
 | 2026-11-03 | F3.2 | `gof-contribution` calcola (O−E)²/E nel runner e ordina le barre in modo decrescente | il kernel `goodnessOfFit` espone già observed/expected; con `sort: 'none'` il layer Pareto non riordina |
+| 2026-11-03 | F3.3 | Nessun nuovo grafico: i caterpillar avevano già `sort: 'asc'`, IC e linea dello zero | il polish richiesto è la lettura corretta nelle guide, non un altro kind |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -340,6 +341,22 @@ sotto-blocco aperto):
   `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F3.2 mediane Mood, componenti gerarchiche e contributi GOF`
 
+### F3.3 — GLMM/GEE/LMM: polish e caterpillar
+
+- **Stato**: ✅ chiusa (2026-11-03); ondata O3 chiusa con gate verde
+- **Verificato**: `lmm-random-effects`, `lmm-random-slopes`,
+  `lmm-random-intercepts`, `glmm-random-effects`, `glmm-random-slopes` e
+  `gee-cluster-residuals` sono già caterpillar: `sort: 'asc'` sull’effetto,
+  IC approssimato e `rules: [{ value: 0 }]` disegnato dal layer `interval`.
+  Nessuna modifica ai runner.
+- **Fatto**: `chartGuides` allineate nelle 6 lingue per `lmm` e `gee` (ora
+  citano caterpillar, residui per cluster e forest dei rapporti di incidenza)
+  e nuova guida `glmm`, che prima mancava in tutte le lingue.
+- **File toccati**: `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: `npm run check` verde (exit 0); `locales:check` verde sulle 6
+  lingue.
+- **Commit**: `feat(charts): F3.3 guide caterpillar per LMM, GLMM e GEE`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -368,11 +385,10 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F3.3: polish dei random effects LMM/GLMM/GEE (caterpillar, ICC/varianze,
-   diagnostica residua) senza nuovi kind.
-2. Gate di fine ondata O3: `npm run check` + `locales:check` sulle 6 lingue e
-   aggiornamento dell’inventario statico.
-3. F4.1: stepwise, polinomiale e penalizzata (`regression`).
+1. F4.1: stepwise, polinomiale e penalizzata in `regression` (#11).
+2. F4.2: `multinomial` (#12), `iv` (#13), `pls` (#14).
+3. Gate di fine ondata O4 con `npm run check`, `locales:check` e inventario
+   statico aggiornato.
 
 ---
 
