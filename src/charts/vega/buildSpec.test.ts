@@ -364,14 +364,15 @@ test('the interval layer draws the TOST equivalence region behind the margins', 
       regions: [{ lo: -0.5, hi: 0.5 }],
     },
   });
-  const spec = buildVegaSpec(chart) as unknown as {
+  const built = buildVegaSpec(chart);
+  const spec = built as unknown as {
     layer: Array<{ mark?: { type?: string }; data?: { values?: Array<Record<string, unknown>> } }>;
   };
   const regions = spec.layer.filter(layer => layer.mark?.type === 'rect');
   assert.equal(regions.length, 1);
   assert.deepEqual(regions[0].data?.values?.[0], { lo: -0.5, hi: 0.5 });
   const warnings: string[] = [];
-  compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+  compile(built, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
   assert.deepEqual(warnings, []);
 });
 

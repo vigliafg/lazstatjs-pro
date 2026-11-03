@@ -22,4 +22,8 @@ export const w10ChartCopy: Record<string, string> = {
   "{s1} osservazioni · valore segnalato {s2}": "{s1} observations · flagged value {s2}",
   "Ogni punto è un’osservazione, disposta in orizzontale per ridurre la sovrapposizione; i valori segnalati dal test di Grubbs o Dixon sono riportati nella tabella.":
     "Each point is an observation, spread horizontally to reduce overlap; values flagged by the Grubbs or Dixon test are reported in the table.",
+  "Profilo parte × operatore": "Part × operator profile",
+  "{s1} parti · {s2} operatori": "{s1} parts · {s2} operators",
+  "Ogni linea è un operatore: linee parallele indicano che gli operatori ordinano i pezzi allo stesso modo; scostamenti sistematici suggeriscono un effetto operatore.":
+    "Each line is an operator: parallel lines mean the operators rank the parts the same way; systematic shifts suggest an operator effect.",
 };

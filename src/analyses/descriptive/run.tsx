@@ -109,12 +109,7 @@ const buildFrequencyOutput = (input: DescriptiveInput): DescriptiveOutputResult 
     .sort((left, right) => right.count - left.count)
     .map(row => {
       running += row.count;
-      return {
-        category: row.value,
-        value: row.count,
-        pct: (row.count / total) * 100,
-        cumulative: (running / total) * 100,
-      };
+      return { category: row.value, value: row.count, pct: (row.count / total) * 100, cumulative: (running / total) * 100 };
     });
   if (paretoBars.length > 1) {
     charts.push(
@@ -122,10 +117,7 @@ const buildFrequencyOutput = (input: DescriptiveInput): DescriptiveOutputResult 
         id: 'freq-cumulative',
         kind: 'pareto',
         title: copy('Pareto delle frequenze: {s1}', { s1: primary.name }),
-        subtitle: copy('{s1} modalità · {s2} osservazioni', {
-          s1: primary.result.distinct,
-          s2: primary.result.total,
-        }),
+        subtitle: copy('{s1} modalità · {s2} osservazioni', { s1: primary.result.distinct, s2: primary.result.total }),
         note: copy('Le barre sono i conteggi in ordine decrescente; la linea è la percentuale cumulata. Poche modalità spiegano la maggior parte dei casi.'),
         data: {
           bars: paretoBars,

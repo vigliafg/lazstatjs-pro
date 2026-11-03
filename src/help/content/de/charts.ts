@@ -1,10 +1,12 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
-  "descriptive": ["Balken der Mittelwerte; Box-Plot mit Rohpunkten und Ausreißern; Histogramm der ersten Variablen mit Klassen, Dichte, Rug und Mittellinie; Normal-Q-Q für die ersten acht Variablen."],
+  "descriptive": ["Balken der Mittelwerte; Box-Plot mit Rohpunkten und Ausreißern; Histogramm der ersten Variablen mit Klassen, Dichte, Rug und Mittellinie; Normal-Q-Q für die ersten acht Variablen.", "Ansicht Häufigkeiten: Balken der Anzahlen und Pareto mit kumulativem Prozentsatz für die erste kategoriale Variable.", "Ansicht Ausreißer: Strip der beobachteten Werte, wobei der von Grubbs oder Dixon markierte Wert in der Notiz genannt wird."],
+  "recurrent": ["Diagramm: mittlere kumulative Funktion der Ereignisse, mit den Ereignissen geteilt durch die zu jedem Zeitpunkt gefährdeten Subjekte."],
+  "quality": ["Diagramm: Gage R&R mit Varianzkomponenten und Profil Teil × Bediener; Regelkarte, CUSUM, Fähigkeit und Pareto in den anderen Modi."],
   "distfit": ["Diagramm: Wahrscheinlichkeitsplot der beobachteten gegen die theoretischen Quantile der besten Verteilung, mit Referenzdiagonale."],
   "ttest": ["Einstichproben-Box mit Testwert; Wilcoxon-Box; Box für unabhängige Gruppen und Mann-Whitney-Rangbox; gepaarte Box und Box der Differenzen."],
   "anova": ["Box-Plots je Gruppe; Mittelwerte mit Konfidenzintervallen; Kruskal-Wallis-Rangbox."],
-  "factorial": ["Diagramm: Interaktionsplot der Zellmittelwerte mit einer Linie je Stufe des ersten Faktors."],
+  "factorial": ["Diagramm: Interaktionsplot der Zellmittelwerte mit einer Linie je Stufe des ersten Faktors.", "Diagramm: Zellmittelwerte mit Konfidenzintervall; nützlich, wenn die Interaktion nicht im Mittelpunkt steht."],
   "ancova": ["Diagramm: rohe und adjustierte Mittelwerte je Gruppe mit Wertbeschriftungen."],
   "repeatedanova": ["Diagramm: Mittelwerte je Bedingung mit Wertbeschriftungen."],
   "mixedanova": ["Gruppe × Bedingung-Interaktion und Subjektverläufe."],

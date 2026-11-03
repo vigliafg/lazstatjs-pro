@@ -291,6 +291,43 @@ export const buildQualityOutput = ({
         options: { valueLabels: true, referenceLine: 'none' } as never,
       })
     );
+    const parts = Array.from(new Set(rows.map(row => row.part)));
+    const operators = Array.from(new Set(rows.map(row => row.operator)));
+    const profile = operators.flatMap(operator =>
+      parts
+        .map(part => {
+          const cell = rows.filter(row => row.part === part && row.operator === operator);
+          if (cell.length === 0) return null;
+          return {
+            x: part,
+            y: cell.reduce((sum, row) => sum + row.value, 0) / cell.length,
+            series: operator,
+          };
+        })
+        .filter((row): row is { x: string; y: number; series: string } => row !== null)
+    );
+    if (profile.length > 0) {
+      charts.push(
+        makeChart({
+          id: 'msa-operator-profile',
+          kind: 'line',
+          title: copy('Profilo parte × operatore'),
+          subtitle: copy('{s1} parti · {s2} operatori', {
+            s1: result.parts,
+            s2: result.operators,
+          }),
+          note: copy('Ogni linea è un operatore: linee parallele indicano che gli operatori ordinano i pezzi allo stesso modo; scostamenti sistematici suggeriscono un effetto operatore.'),
+          data: { series: profile },
+          fields: {
+            xType: 'nominal',
+            xLabel: partName,
+            yLabel: variableName,
+            series: operatorName,
+          },
+          options: { showMarkers: true, showBand: false } as never,
+        })
+      );
+    }
   } else if (params.mode === 'acceptance') {
     const result = acceptancePlan({
       n: params.planN,

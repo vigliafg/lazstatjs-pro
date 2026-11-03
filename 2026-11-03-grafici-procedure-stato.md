@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F2.1 chiusa)
-- **Fase corrente**: F2.2 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F2.2 chiusa, ondata O2 verde)
+- **Fase corrente**: F3.1 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -61,7 +61,7 @@ con motivo.
 | F1.1b | `recurrent`: mean cumulative function | 45 | ✅ | `feat(charts): F1.1b funzione cumulata media` | 11 test verdi |
 | F1.2 | `tost` e chiusura ampiezza | 45 | ✅ | `feat(charts): F1.2 TOST a intervallo` | 22 test + inventory verdi |
 | F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ✅ | `feat(charts): F2.1 Pareto e strip outlier` | 17 test verdi |
-| F2.2 | `quality`: profilo operatore, contributi carta | 60 | ⬜ | — | — |
+| F2.2 | `quality`: profilo operatore, contributi carta | 60 | ✅ | `feat(charts): F2.2 profilo parte per operatore` | 9 test + `check` verdi |
 | F3.1 | varianze, sign, KS | 60 | ⬜ | — | — |
 | F3.2 | Mood, GOF, nested | 60 | ⬜ | — | — |
 | F3.3 | GLMM/GEE/LMM polish | 45 | ⬜ | — | — |
@@ -144,6 +144,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F1.2 | `tost` resta a 1 grafico (sostituzione, non aggiunta) | §6.2 lo elenca come ♻️; il DoD F1.2 chiede solo `factorial`/`recurrent` a 2 e `tdcox` documentato |
 | 2026-11-03 | F2.1 | La cumulata del Pareto si calcola nel runner dai conteggi del tally | il kernel di frequenza non espone la cumulata e il renderer non deve calcolarla |
 | 2026-11-03 | F2.1 | Lo strip marca il valore segnalato con `flag: 1` nei dati e lo nomina nella nota | il layer `dot` non ha un colore per punto; niente nuovo kind né layer ad hoc |
+| 2026-11-03 | F2.2 | `msa-operator-profile` usa le righe parte/operatore già nel ramo MSA | nessuna modifica al kernel `msa` |
+| 2026-11-03 | F2.2 | `mcontrol-contribution` spostato a F2.3 | il kernel `mcontrol` non espone i contributi per variabile: serve una modifica kernel > 30 min |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -282,6 +284,23 @@ sotto-blocco aperto):
   colore); il flag resta nei dati e la nota rimanda alla tabella.
 - **Commit**: `feat(charts): F2.1 Pareto e strip outlier`
 
+### F2.2 — `quality`: profilo parte × operatore
+
+- **Stato**: ✅ chiusa (2026-11-03); ondata O2 chiusa con `npm run check` verde
+- **Fatto**: `msa-operator-profile` [line] con una serie per operatore e le medie
+  parte × operatore già calcolate nel ramo MSA; help IT/EN.
+- **Rinviato**: `mcontrol-contribution` [bar] a F2.3 — il kernel `mcontrol`
+  restituisce solo `points.t2/out` e i contributi per variabile richiedono una
+  modifica kernel (oltre il budget di 30 min previsto dal piano).
+- **Verificato**: `cusum-chart` mostra già i limiti `h` e 0 via `rules`;
+  `quality` dichiara già `line`, nessuna modifica a `analysisKinds`.
+- **File toccati**: `src/analyses/quality/run.tsx`,
+  `src/analyses/quality/charts.test.ts` (nuovo),
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{it,en}/charts.ts`.
+- **Test**: quality + copy + analysisKinds → 9/9 verdi; `npm run check` verde.
+- **Commit**: `feat(charts): F2.2 profilo parte per operatore`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -296,6 +315,7 @@ sotto-blocco aperto):
 | F1.2 | `tost-difference` ♻️ | `tost` | `interval` | JMP | `tost/charts.test.ts` | ✅ |
 | F2.1 | `freq-cumulative` | `descriptive` | `pareto` | JMP | `descriptive/modes.test.ts` | ✅ |
 | F2.1 | `outliers-strip` | `descriptive` | `dot` | JMP | `descriptive/modes.test.ts` | ✅ |
+| F2.2 | `msa-operator-profile` | `quality` | `line` | JMP | `quality/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -303,11 +323,12 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F2.2: `msa-operator-profile` [line] dalle medie parte × operatore già nel
-   runner di `quality`.
-2. Valutare `mcontrol-contribution` [bar]: se il kernel non espone i contributi
-   entro 30 minuti, spostarlo in F2.3 e annotarlo.
-3. Aggiornare help IT/EN di `quality` e committare la fase.
+1. F3.1: `var-ratio-forest` [forest] su scala log, `sign-ci` [interval] e
+   `ks-diff` [line].
+2. F3.2: `mood-median-ci` [interval], `nested-variance` [bar] e
+   `gof-contribution` [pareto].
+3. F2.3 (contingenza): contributi per variabile della carta multivariata nel
+   kernel `mcontrol`, con test numerico.
 
 ---
 

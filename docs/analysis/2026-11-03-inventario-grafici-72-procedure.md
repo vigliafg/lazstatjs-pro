@@ -6,7 +6,7 @@ Comando: `npm run chart:inventory`.
 ## Totali
 
 - Analisi con almeno un grafico: **71**
-- Modelli `AnalysisChart` emessi: **325**
+- Modelli `AnalysisChart` emessi: **326**
 - Kind distinti: **32**
 
 ## Grafici per analisi
@@ -62,7 +62,7 @@ Comando: `npm run chart:inventory`.
 | `pls` | 2 |
 | `propensity` | 4 |
 | `proportions` | 4 |
-| `quality` | 10 |
+| `quality` | 11 |
 | `quantile` | 2 |
 | `recurrent` | 2 |
 | `regression` | 14 |
@@ -104,7 +104,7 @@ Comando: `npm run chart:inventory`.
 | `heatmap` | 17 |
 | `histogram` | 9 |
 | `interval` | 29 |
-| `line` | 57 |
+| `line` | 58 |
 | `missingness` | 3 |
 | `mosaic` | 2 |
 | `pareto` | 2 |
@@ -279,25 +279,25 @@ Comando: `npm run chart:inventory`.
 | Grafico | Kind | File |
 |---|---|---|
 | `freq-bar-${index + 1}` | `bar` | `src/analyses/descriptive/run.tsx:89` |
-| `freq-cumulative` | `pareto` | `src/analyses/descriptive/run.tsx:121` |
-| `outliers-box` | `box` | `src/analyses/descriptive/run.tsx:190` |
-| `outliers-strip-${index + 1}` | `dot` | `src/analyses/descriptive/run.tsx:206` |
-| `runs-sequence-${index + 1}` | `line` | `src/analyses/descriptive/run.tsx:267` |
-| `runs-lengths-${index + 1}` | `bar` | `src/analyses/descriptive/run.tsx:281` |
-| `desc-means` | `bar` | `src/analyses/descriptive/run.tsx:391` |
-| `desc-box` | `box` | `src/analyses/descriptive/run.tsx:400` |
-| `desc-interval` | `interval` | `src/analyses/descriptive/run.tsx:423` |
-| `desc-diamond` | `diamond` | `src/analyses/descriptive/run.tsx:431` |
-| `desc-dot` | `dot` | `src/analyses/descriptive/run.tsx:447` |
-| `desc-spread-level` | `scatter` | `src/analyses/descriptive/run.tsx:459` |
-| `desc-pair-${i + 1}-${j + 1}` | `scatter` | `src/analyses/descriptive/run.tsx:484` |
-| `desc-ecdf` | `ecdf` | `src/analyses/descriptive/run.tsx:511` |
-| `desc-hist-${r.name}` | `histogram` | `src/analyses/descriptive/run.tsx:525` |
-| `desc-shadow-${r.name}` | `shadowgram` | `src/analyses/descriptive/run.tsx:536` |
-| `desc-matrix` | `scattermatrix` | `src/analyses/descriptive/run.tsx:602` |
-| `desc-bubble` | `bubble` | `src/analyses/descriptive/run.tsx:635` |
-| `desc-scatter3d` | `scatter3d` | `src/analyses/descriptive/run.tsx:653` |
-| `desc-qq-${r.name}` | `qq` | `src/analyses/descriptive/run.tsx:670` |
+| `freq-cumulative` | `pareto` | `src/analyses/descriptive/run.tsx:116` |
+| `outliers-box` | `box` | `src/analyses/descriptive/run.tsx:182` |
+| `outliers-strip-${index + 1}` | `dot` | `src/analyses/descriptive/run.tsx:198` |
+| `runs-sequence-${index + 1}` | `line` | `src/analyses/descriptive/run.tsx:259` |
+| `runs-lengths-${index + 1}` | `bar` | `src/analyses/descriptive/run.tsx:273` |
+| `desc-means` | `bar` | `src/analyses/descriptive/run.tsx:383` |
+| `desc-box` | `box` | `src/analyses/descriptive/run.tsx:392` |
+| `desc-interval` | `interval` | `src/analyses/descriptive/run.tsx:415` |
+| `desc-diamond` | `diamond` | `src/analyses/descriptive/run.tsx:423` |
+| `desc-dot` | `dot` | `src/analyses/descriptive/run.tsx:439` |
+| `desc-spread-level` | `scatter` | `src/analyses/descriptive/run.tsx:451` |
+| `desc-pair-${i + 1}-${j + 1}` | `scatter` | `src/analyses/descriptive/run.tsx:476` |
+| `desc-ecdf` | `ecdf` | `src/analyses/descriptive/run.tsx:503` |
+| `desc-hist-${r.name}` | `histogram` | `src/analyses/descriptive/run.tsx:517` |
+| `desc-shadow-${r.name}` | `shadowgram` | `src/analyses/descriptive/run.tsx:528` |
+| `desc-matrix` | `scattermatrix` | `src/analyses/descriptive/run.tsx:594` |
+| `desc-bubble` | `bubble` | `src/analyses/descriptive/run.tsx:627` |
+| `desc-scatter3d` | `scatter3d` | `src/analyses/descriptive/run.tsx:645` |
+| `desc-qq-${r.name}` | `qq` | `src/analyses/descriptive/run.tsx:662` |
 
 ### `discriminant` (4)
 
@@ -590,7 +590,7 @@ Comando: `npm run chart:inventory`.
 | `rate-one-interval` | `interval` | `src/analyses/proportions/run.tsx:212` |
 | `rate-two-interval` | `interval` | `src/analyses/proportions/run.tsx:276` |
 
-### `quality` (10)
+### `quality` (11)
 
 | Grafico | Kind | File |
 |---|---|---|
@@ -599,11 +599,12 @@ Comando: `npm run chart:inventory`.
 | `pareto-chart` | `pareto` | `src/analyses/quality/run.tsx:171` |
 | `variab-box` | `box` | `src/analyses/quality/run.tsx:233` |
 | `msa-variance` | `bar` | `src/analyses/quality/run.tsx:275` |
-| `accept-oc` | `line` | `src/analyses/quality/run.tsx:317` |
-| `accept-aoq` | `line` | `src/analyses/quality/run.tsx:333` |
-| `mcontrol-chart` | `line` | `src/analyses/quality/run.tsx:380` |
-| `capab-histogram` | `histogram` | `src/analyses/quality/run.tsx:422` |
-| `control-chart` | `line` | `src/analyses/quality/run.tsx:483` |
+| `msa-operator-profile` | `line` | `src/analyses/quality/run.tsx:311` |
+| `accept-oc` | `line` | `src/analyses/quality/run.tsx:354` |
+| `accept-aoq` | `line` | `src/analyses/quality/run.tsx:370` |
+| `mcontrol-chart` | `line` | `src/analyses/quality/run.tsx:417` |
+| `capab-histogram` | `histogram` | `src/analyses/quality/run.tsx:459` |
+| `control-chart` | `line` | `src/analyses/quality/run.tsx:520` |
 
 ### `quantile` (2)
 

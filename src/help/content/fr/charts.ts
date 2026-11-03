@@ -1,10 +1,12 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
-  "descriptive": ["Barres des moyennes ; boîte à moustaches avec points bruts et valeurs aberrantes ; histogramme de la première variable avec classes, densité, rug et ligne de moyenne ; Q-Q normal pour les huit premières variables."],
+  "descriptive": ["Barres des moyennes ; boîte à moustaches avec points bruts et valeurs aberrantes ; histogramme de la première variable avec classes, densité, rug et ligne de moyenne ; Q-Q normal pour les huit premières variables.", "Vue fréquences : barres des effectifs et Pareto avec pourcentage cumulé pour la première variable catégorielle.", "Vue valeurs aberrantes : strip des valeurs observées, la valeur signalée par Grubbs ou Dixon étant nommée dans la note."],
+  "recurrent": ["Graphique : fonction cumulée moyenne des événements, avec les événements divisés par les sujets à risque à chaque temps."],
+  "quality": ["Graphique : Gage R&R avec composantes de variance et profil pièce × opérateur ; carte de contrôle, CUSUM, capabilité et Pareto dans les autres modes."],
   "distfit": ["Graphique : diagramme de probabilité des quantiles observés contre théoriques pour la meilleure distribution, avec la diagonale de référence."],
   "ttest": ["Boîte à un échantillon avec valeur de test ; boîte Wilcoxon ; boîte pour groupes indépendants et boîte des rangs Mann-Whitney ; boîte appariée et boîte des différences."],
   "anova": ["Boîtes par groupe ; moyennes avec intervalles de confiance ; boîte des rangs Kruskal-Wallis."],
-  "factorial": ["Graphique : interaction des moyennes de cellule, avec une ligne par niveau du premier facteur."],
+  "factorial": ["Graphique : interaction des moyennes de cellule, avec une ligne par niveau du premier facteur.", "Graphique : moyennes de cellule avec intervalle de confiance ; utile quand l’interaction n’est pas le point principal."],
   "ancova": ["Graphique : moyennes brutes et ajustées par groupe, avec étiquettes de valeurs."],
   "repeatedanova": ["Graphique : moyennes par condition avec étiquettes de valeurs."],
   "mixedanova": ["Interaction groupe × condition et trajectoires des sujets."],
