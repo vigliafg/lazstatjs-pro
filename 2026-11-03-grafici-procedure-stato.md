@@ -20,8 +20,9 @@
   madge senza cicli, filesize con le 5 eccezioni abbassate).
 - **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
   moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
-- **Da riprendere**: nessuna fase aperta. Backlog: debiti §9 e note copy ancora
-  solo in inglese, già elencate nel documento.
+- **Da riprendere**: nessuna fase aperta. Backlog: debiti §9 (cap 24 grafici,
+  eccezioni di dimensione). Le note di `alt`, `timeseries`, ANOM, canonical e
+  ICC ora sono tradotte; restano in inglese solo le voci storiche fuori perimetro.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -813,6 +814,28 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### Post-piano — Cataloghi divisi e note EN-only
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `charts-extra.ts` di fr/es/de/pt-PT (925 voci, 927 righe) diviso in
+    `charts-extra-a.ts` e `charts-extra-b.ts` (466 righe ciascuno), con
+    `charts-extra.ts` ridotto ad aggregatore di 5 righe.
+  - Nuovo `charts-extra-notes.ts` per lingua: 31 voci che restavano in
+    fallback inglese per `timeseries` (ADF/KPSS), `anova` (ANOM, ANOVA
+    gerarchica), `canonical` (punteggi e correlazioni di struttura) e
+    `agreement` (ICC), più le etichette condivise (`Coefficiente`,
+    `Regressore`, `Varianza`, `Mediana`, `IC`).
+- **Verificato**: su quelle procedure non resta alcuna nota discorsiva in
+  inglese; i soli testi ancora uguali all'inglese sono sigle, formule e
+  prestiti (`Kappa`, `N = {s1}`, `ICC(2,1)`, `Trend`, `Median`, espressioni
+  `Holt–Winters`). `copy.test`, i sei `check-locale`, `help:build` e `tsc`
+  verdi dopo lo split.
+- **Eccezioni filesize**: rimosse le quattro voci di `charts-extra.ts` in
+  `scripts/check-file-size.mjs` (i file sono aggregatori di 6 righe); il guard
+  scende da 14 a 10 eccezioni.
+- **Commit**: `fix(charts): split dei cataloghi e note di canonical, ANOM e ICC`
+
 ### F11.3 — Gate finale e release
 
 - **Stato**: ✅ chiusa (2026-11-03) — piano completato
@@ -1079,9 +1102,9 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. Manutenzione: chiudere i debiti §9 (cap grafici, file al limite).
-2. Tradurre le note copy rimaste in inglese nei cataloghi `charts-extra`.
-3. Ripetere il gate completo prima di un merge su `main`.
+1. Manutenzione: cap 24 grafici per output e restanti eccezioni di dimensione.
+2. Ripetere il gate completo prima di un merge su `main`.
+3. Revisione a campione delle note tradotte in fr/es/de/pt-PT.
 
 ---
 
@@ -1100,7 +1123,7 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 | Rischio | Stato | Mitigazione in corso |
 |---|---|---|
 | Copy EN mancante nei sub-runner | chiuso in F0.1 | `copy.test.ts` esteso; 211 stringhe EN aggiunte in `en/charts-f0.ts` |
-| File al limite di 700 righe | aperto | file per ondata, split |
+| File al limite di 700 righe | ridotto | `charts-extra` diviso in due parti per lingua; restano 10 eccezioni |
 | Forest log con IC ≤ 0 | chiuso in F10.1 | il layer `forest` scarta le righe non positive quando `logScale` è attivo |
 | Cap 24 grafici per `mi` | aperto | conteggio in F9.2a |
 | Fase che sfora l'ora | ricorrente | split e commit |
