@@ -186,6 +186,18 @@ const buildKsOutput = ({ grid, params, ciLevel }: DistributionFitInput): Analysi
     const sorted = [...values].sort((left, right) => left - right);
     return sorted.map((value, index) => ({ x: value, y: (index + 1) / sorted.length, series: label }));
   };
+  const pooled = [...new Set([...groups[0][1], ...groups[1][1]])].sort((left, right) => left - right);
+  const fraction = (values: number[], x: number): number =>
+    values.filter(value => value <= x).length / values.length;
+  const differences = pooled.map(x => ({
+    x,
+    y: fraction(groups[0][1], x) - fraction(groups[1][1], x),
+    series: copy('Differenza'),
+  }));
+  const peak = differences.reduce(
+    (best, row) => (Math.abs(row.y) > Math.abs(best.y) ? row : best),
+    differences[0]
+  );
 
   return {
     ok: true,
@@ -203,6 +215,19 @@ const buildKsOutput = ({ grid, params, ciLevel }: DistributionFitInput): Analysi
           series: [...ecdf(groups[0][1], firstName), ...ecdf(groups[1][1], secondName)],
         },
         fields: { xLabel: variableName, yLabel: copy('Cumulative proportion'), series: groupName },
+        options: { showMarkers: false, showBand: false, showLegend: true } as never,
+      }),
+      makeChart({
+        id: 'ks-diff',
+        kind: 'line',
+        title: copy('Differenza tra le cumulative'),
+        subtitle: copy('D = {s1}', { s1: result.d.toFixed(3) }),
+        note: copy('La curva è F₁(x) − F₂(x); il massimo in valore assoluto è la statistica D del test.'),
+        data: {
+          series: differences,
+          markers: [{ x: peak.x, y: peak.y, series: copy('Massimo') }],
+        },
+        fields: { xLabel: variableName, yLabel: copy('Differenza'), series: groupName },
         options: { showMarkers: false, showBand: false, showLegend: true } as never,
       }),
     ],

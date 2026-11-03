@@ -1,8 +1,9 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
   "descriptive": ["Means bar; box-and-whisker with raw points and outliers; histogram of the first variable with bins, density, rug and mean line; normal Q-Q for the first eight variables.", "Frequency view: count bars and a Pareto chart with the cumulative percentage for the first categorical variable.", "Outlier view: strip of the observed values, with the value flagged by Grubbs or Dixon named in the note."],
-  "distfit": ["Chart: probability plot of observed vs theoretical quantiles for the best-fitting distribution, with the reference diagonal."],
-  "ttest": ["One-sample box with the test value; Wilcoxon box; independent-groups box and Mann-Whitney rank box; paired box and box of differences."],
+  "distfit": ["Chart: probability plot of observed vs theoretical quantiles for the best-fitting distribution, with the reference diagonal.", "Chart: difference between the two ECDFs with the maximum point highlighted."],
+  "ttest": ["One-sample box with the test value; Wilcoxon box; independent-groups box and Mann-Whitney rank box; paired box and box of differences.", "Chart: paired differences and the median difference with an order-statistic interval."],
+  "variances": ["Chart: box per group, variance interval, and the variance-ratio forest on a log scale with reference 1."],
   "anova": ["Group box plots; means with confidence intervals; Kruskal-Wallis rank box."],
   "factorial": ["Chart: interaction plot of cell means, with one line per level of the first factor.", "Chart: cell means with confidence intervals; useful when the interaction is not the main point."],
   "ancova": ["Chart: raw and adjusted means per group, with value labels."],

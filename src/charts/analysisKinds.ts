@@ -18,7 +18,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   countreg: ['bar', 'forest', 'qq', 'scatter'],
   cox: ['bar', 'forest', 'line', 'scatter'],
   proportions: ['bar', 'interval'],
-  variances: ['box', 'interval'],
+  variances: ['box', 'interval', 'forest'],
   descriptive: [
     'bar',
     'box',

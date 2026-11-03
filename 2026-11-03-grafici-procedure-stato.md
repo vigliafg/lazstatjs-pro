@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F2.2 chiusa, ondata O2 verde)
-- **Fase corrente**: F3.1 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F3.1 chiusa)
+- **Fase corrente**: F3.2 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -62,7 +62,7 @@ con motivo.
 | F1.2 | `tost` e chiusura ampiezza | 45 | ✅ | `feat(charts): F1.2 TOST a intervallo` | 22 test + inventory verdi |
 | F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ✅ | `feat(charts): F2.1 Pareto e strip outlier` | 17 test verdi |
 | F2.2 | `quality`: profilo operatore, contributi carta | 60 | ✅ | `feat(charts): F2.2 profilo parte per operatore` | 9 test + `check` verdi |
-| F3.1 | varianze, sign, KS | 60 | ⬜ | — | — |
+| F3.1 | varianze, sign, KS | 60 | ✅ | `feat(charts): F3.1 forest varianze, mediana e KS` | 15 test + help verdi |
 | F3.2 | Mood, GOF, nested | 60 | ⬜ | — | — |
 | F3.3 | GLMM/GEE/LMM polish | 45 | ⬜ | — | — |
 | F4.1 | stepwise, polynomial, penalized | 60 | ⬜ | — | — |
@@ -146,6 +146,7 @@ sotto-blocco aperto):
 | 2026-11-03 | F2.1 | Lo strip marca il valore segnalato con `flag: 1` nei dati e lo nomina nella nota | il layer `dot` non ha un colore per punto; niente nuovo kind né layer ad hoc |
 | 2026-11-03 | F2.2 | `msa-operator-profile` usa le righe parte/operatore già nel ramo MSA | nessuna modifica al kernel `msa` |
 | 2026-11-03 | F2.2 | `mcontrol-contribution` spostato a F2.3 | il kernel `mcontrol` non espone i contributi per variabile: serve una modifica kernel > 30 min |
+| 2026-11-03 | F3.1 | Riuso `medianCI` di `stats/kernels/distributions` invece di un nuovo helper in `kits/common` | il piano chiedeva un helper nuovo, ma esiste già con test |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -301,6 +302,21 @@ sotto-blocco aperto):
 - **Test**: quality + copy + analysisKinds → 9/9 verdi; `npm run check` verde.
 - **Commit**: `feat(charts): F2.2 profilo parte per operatore`
 
+### F3.1 — Varianze, segni, KS
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `var-ratio-forest` [forest] su scala log con riferimento 1
+  (`ratio`, `fLo`, `fHi` del kernel); `sign-ci` [interval] con mediana delle
+  differenze e IC per ordine-statistiche (`medianCI` riusato); `ks-diff` [line]
+  con la differenza F₁ − F₂ e il punto di massimo evidenziato.
+- **File toccati**: `src/analyses/variances/run.tsx`, `src/analyses/ttest/run.tsx`,
+  `src/analyses/distfit/run.tsx`, i rispettivi test, `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: variances + sign + ks + copy + analysisKinds → 15/15 verdi; help
+  allineato nelle 6 lingue.
+- **Commit**: `feat(charts): F3.1 forest varianze, mediana e KS`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -316,6 +332,9 @@ sotto-blocco aperto):
 | F2.1 | `freq-cumulative` | `descriptive` | `pareto` | JMP | `descriptive/modes.test.ts` | ✅ |
 | F2.1 | `outliers-strip` | `descriptive` | `dot` | JMP | `descriptive/modes.test.ts` | ✅ |
 | F2.2 | `msa-operator-profile` | `quality` | `line` | JMP | `quality/charts.test.ts` | ✅ |
+| F3.1 | `var-ratio-forest` | `variances` | `forest` | JMP | `variances/run.test.ts` | ✅ |
+| F3.1 | `sign-ci` | `ttest` | `interval` | JMP | `ttest/sign.test.ts` | ✅ |
+| F3.1 | `ks-diff` | `distfit` | `line` | JMP | `distfit/ks.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -323,12 +342,11 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F3.1: `var-ratio-forest` [forest] su scala log, `sign-ci` [interval] e
-   `ks-diff` [line].
-2. F3.2: `mood-median-ci` [interval], `nested-variance` [bar] e
+1. F3.2: `mood-median-ci` [interval], `nested-variance` [bar] e
    `gof-contribution` [pareto].
-3. F2.3 (contingenza): contributi per variabile della carta multivariata nel
-   kernel `mcontrol`, con test numerico.
+2. Verificare che `nested-variance` usi `varianceComponents` del kernel senza
+   duplicare i grafici di `anova`.
+3. F3.3: polish dei random effects LMM/GLMM/GEE; poi gate di fine ondata O3.
 
 ---
 

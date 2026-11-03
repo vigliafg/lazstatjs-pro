@@ -39,7 +39,12 @@ test('the sign mode runs the paired test and emits the differences chart', () =>
   assert.equal(row.positive, 9);
   assert.equal(row.negative, 2);
   assert.equal(row.zeros, 1);
-  assert.equal(result.charts?.[0].kind, 'histogram');
+  assert.deepEqual(result.charts?.map(chart => chart.kind), ['histogram', 'interval']);
+  const ci = result.charts?.[1];
+  assert.equal(ci?.id, 'sign-ci');
+  const band = (ci?.data.intervals ?? [])[0];
+  assert.ok(Number(band.lo) <= Number(band.estimate));
+  assert.ok(Number(band.estimate) <= Number(band.hi));
 });
 
 test('the sign mode rejects all-zero differences', () => {

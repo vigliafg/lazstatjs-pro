@@ -6,7 +6,7 @@ Comando: `npm run chart:inventory`.
 ## Totali
 
 - Analisi con almeno un grafico: **71**
-- Modelli `AnalysisChart` emessi: **326**
+- Modelli `AnalysisChart` emessi: **329**
 - Kind distinti: **32**
 
 ## Grafici per analisi
@@ -31,7 +31,7 @@ Comando: `npm run chart:inventory`.
 | `cox` | 8 |
 | `descriptive` | 20 |
 | `discriminant` | 4 |
-| `distfit` | 5 |
+| `distfit` | 6 |
 | `doe` | 4 |
 | `factorial` | 2 |
 | `garch` | 2 |
@@ -81,9 +81,9 @@ Comando: `npm run chart:inventory`.
 | `text` | 4 |
 | `timeseries` | 14 |
 | `tost` | 1 |
-| `ttest` | 13 |
+| `ttest` | 14 |
 | `var` | 3 |
-| `variances` | 2 |
+| `variances` | 3 |
 
 ## Kind usati
 
@@ -100,11 +100,11 @@ Comando: `npm run chart:inventory`.
 | `diamond` | 5 |
 | `dot` | 4 |
 | `ecdf` | 2 |
-| `forest` | 22 |
+| `forest` | 23 |
 | `heatmap` | 17 |
 | `histogram` | 9 |
-| `interval` | 29 |
-| `line` | 58 |
+| `interval` | 30 |
+| `line` | 59 |
 | `missingness` | 3 |
 | `mosaic` | 2 |
 | `pareto` | 2 |
@@ -308,7 +308,7 @@ Comando: `npm run chart:inventory`.
 | `discriminant-profile` | `line` | `src/analyses/discriminant/run.tsx:113` |
 | `discriminant-coefficients` | `heatmap` | `src/analyses/discriminant/run.tsx:128` |
 
-### `distfit` (5)
+### `distfit` (6)
 
 | Grafico | Kind | File |
 |---|---|---|
@@ -316,7 +316,8 @@ Comando: `npm run chart:inventory`.
 | `distfit-pp` | `qq` | `src/analyses/distfit/run.tsx:104` |
 | `distfit-density` | `line` | `src/analyses/distfit/run.tsx:121` |
 | `distfit-criteria` | `bar` | `src/analyses/distfit/run.tsx:135` |
-| `ks-ecdf` | `line` | `src/analyses/distfit/run.tsx:196` |
+| `ks-ecdf` | `line` | `src/analyses/distfit/run.tsx:208` |
+| `ks-diff` | `line` | `src/analyses/distfit/run.tsx:220` |
 
 ### `doe` (4)
 
@@ -770,23 +771,24 @@ Comando: `npm run chart:inventory`.
 |---|---|---|
 | `tost-difference` | `interval` | `src/analyses/tost/run.tsx:37` |
 
-### `ttest` (13)
+### `ttest` (14)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `sign-differences` | `histogram` | `src/analyses/ttest/run.tsx:59` |
-| `ttest-one-box` | `box` | `src/analyses/ttest/run.tsx:121` |
-| `ttest-one-mean` | `interval` | `src/analyses/ttest/run.tsx:137` |
-| `ttest-one-diamond` | `diamond` | `src/analyses/ttest/run.tsx:152` |
-| `ttest-one-rank` | `box` | `src/analyses/ttest/run.tsx:170` |
-| `ttest-ind-box` | `box` | `src/analyses/ttest/run.tsx:296` |
-| `ttest-ind-means` | `interval` | `src/analyses/ttest/run.tsx:310` |
-| `ttest-ind-diamond` | `diamond` | `src/analyses/ttest/run.tsx:325` |
-| `ttest-ind-rank` | `box` | `src/analyses/ttest/run.tsx:350` |
-| `ttest-dep-box` | `box` | `src/analyses/ttest/run.tsx:435` |
-| `ttest-dep-mean` | `interval` | `src/analyses/ttest/run.tsx:448` |
-| `ttest-dep-diamond` | `diamond` | `src/analyses/ttest/run.tsx:463` |
-| `ttest-dep-diff` | `box` | `src/analyses/ttest/run.tsx:483` |
+| `sign-differences` | `histogram` | `src/analyses/ttest/run.tsx:60` |
+| `sign-ci` | `interval` | `src/analyses/ttest/run.tsx:77` |
+| `ttest-one-box` | `box` | `src/analyses/ttest/run.tsx:147` |
+| `ttest-one-mean` | `interval` | `src/analyses/ttest/run.tsx:163` |
+| `ttest-one-diamond` | `diamond` | `src/analyses/ttest/run.tsx:178` |
+| `ttest-one-rank` | `box` | `src/analyses/ttest/run.tsx:196` |
+| `ttest-ind-box` | `box` | `src/analyses/ttest/run.tsx:322` |
+| `ttest-ind-means` | `interval` | `src/analyses/ttest/run.tsx:336` |
+| `ttest-ind-diamond` | `diamond` | `src/analyses/ttest/run.tsx:351` |
+| `ttest-ind-rank` | `box` | `src/analyses/ttest/run.tsx:376` |
+| `ttest-dep-box` | `box` | `src/analyses/ttest/run.tsx:461` |
+| `ttest-dep-mean` | `interval` | `src/analyses/ttest/run.tsx:474` |
+| `ttest-dep-diamond` | `diamond` | `src/analyses/ttest/run.tsx:489` |
+| `ttest-dep-diff` | `box` | `src/analyses/ttest/run.tsx:509` |
 
 ### `var` (3)
 
@@ -796,10 +798,11 @@ Comando: `npm run chart:inventory`.
 | `var-irf-chart` | `line` | `src/analyses/var/run.tsx:84` |
 | `var-fevd-chart` | `bar` | `src/analyses/var/run.tsx:97` |
 
-### `variances` (2)
+### `variances` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `var-one-interval` | `interval` | `src/analyses/variances/run.tsx:45` |
 | `var-box` | `box` | `src/analyses/variances/run.tsx:101` |
+| `var-ratio-forest` | `forest` | `src/analyses/variances/run.tsx:111` |
 

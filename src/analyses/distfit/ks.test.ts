@@ -25,7 +25,11 @@ test('the KS mode compares two groups and emits the ECDF chart', () => {
   assert.ok('ok' in result && result.ok);
   if (!('ok' in result) || !result.ok) return;
   assert.deepEqual(result.tables?.map(table => table.id), ['ks-two', 'ks-stat']);
-  assert.equal(result.charts?.[0].kind, 'line');
+  assert.deepEqual(result.charts?.map(chart => chart.kind), ['line', 'line']);
+  const diff = result.charts?.[1];
+  assert.equal(diff?.id, 'ks-diff');
+  assert.equal((diff?.data.markers ?? []).length, 1);
+  assert.ok((diff?.data.series ?? []).length > 0);
   const p = Number(result.tables![1].rows[0].p);
   assert.ok(Math.abs(p - 0.3571428571428571) < 1e-9);
 });

@@ -26,4 +26,17 @@ export const w10ChartCopy: Record<string, string> = {
   "{s1} parti · {s2} operatori": "{s1} parts · {s2} operators",
   "Ogni linea è un operatore: linee parallele indicano che gli operatori ordinano i pezzi allo stesso modo; scostamenti sistematici suggeriscono un effetto operatore.":
     "Each line is an operator: parallel lines mean the operators rank the parts the same way; systematic shifts suggest an operator effect.",
+  "Rapporto delle varianze": "Variance ratio",
+  "IC {s1}% · scala log · riferimento 1": "CI {s1}% · log scale · reference 1",
+  "Il punto è il rapporto tra le varianze dei due gruppi; la scala log rende il rapporto moltiplicativo e la linea a 1 indica varianze uguali.":
+    "The point is the ratio of the two group variances; the log scale makes the ratio multiplicative and the line at 1 means equal variances.",
+  "Mediana delle differenze e intervallo": "Median difference and interval",
+  "IC {s1}% · {s2} coppie": "CI {s1}% · {s2} pairs",
+  "L’intervallo è per ordine-statistiche: non richiede la normalità. Se contiene lo zero la mediana delle differenze è compatibile con zero.":
+    "The interval uses order statistics: it does not assume normality. If it contains zero, the median difference is compatible with zero.",
+  "Differenza tra le cumulative": "Difference between ECDFs",
+  "D = {s1}": "D = {s1}",
+  "La curva è F₁(x) − F₂(x); il massimo in valore assoluto è la statistica D del test.":
+    "The curve is F₁(x) − F₂(x); the largest absolute value is the D statistic of the test.",
+  "Massimo": "Maximum",
 };

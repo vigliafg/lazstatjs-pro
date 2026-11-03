@@ -1,8 +1,9 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
   "descriptive": ["Barre delle medie; scatola e baffi con punti grezzi e outlier; istogramma della prima variabile con classi, densità, rug e linea della media; Q-Q normale per le prime otto variabili.", "Vista frequenze: barre dei conteggi e Pareto con percentuale cumulata sulla prima variabile categorica.", "Vista valori anomali: strip dei valori osservati con il valore segnalato da Grubbs o Dixon riportato nella nota."],
-  "distfit": ["Grafico: probability plot dei quantili osservati contro quelli teorici della distribuzione migliore, con la diagonale di riferimento."],
-  "ttest": ["Box a un campione con valore di test; box Wilcoxon; box per gruppi indipendenti e box dei ranghi Mann-Whitney; box appaiato e box delle differenze."],
+  "distfit": ["Grafico: probability plot dei quantili osservati contro quelli teorici della distribuzione migliore, con la diagonale di riferimento.", "Grafico: differenza tra le due ECDF con il punto di massimo evidenziato."],
+  "ttest": ["Box a un campione con valore di test; box Wilcoxon; box per gruppi indipendenti e box dei ranghi Mann-Whitney; box appaiato e box delle differenze.", "Grafico: differenze appaiate e mediana delle differenze con intervallo per ordine-statistiche."],
+  "variances": ["Grafico: box per gruppo, intervallo della varianza e forest del rapporto delle varianze su scala log con riferimento 1."],
   "anova": ["Box per gruppo; medie con intervalli di confidenza; box dei ranghi Kruskal-Wallis."],
   "factorial": ["Grafico: interazione delle medie di cella, con una linea per livello del primo fattore.", "Grafico: medie di cella con intervallo di confidenza; utile quando l’interazione non è il punto principale."],
   "ancova": ["Grafico: medie grezze e aggiustate per gruppo, con etichette dei valori."],

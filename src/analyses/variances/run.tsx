@@ -108,6 +108,25 @@ export const buildVariancesOutput = ({
         fields: { xLabel: groupName, yLabel: variableName },
         options: { showPoints: true, showMean: true } as never,
       }),
+      makeChart({
+        id: 'var-ratio-forest',
+        kind: 'forest',
+        title: copy('Rapporto delle varianze'),
+        subtitle: copy('IC {s1}% · scala log · riferimento 1', { s1: ciLevel }),
+        note: copy('Il punto è il rapporto tra le varianze dei due gruppi; la scala log rende il rapporto moltiplicativo e la linea a 1 indica varianze uguali.'),
+        data: {
+          points: [
+            {
+              label: `${result.groups[0].name} / ${result.groups[1].name}`,
+              estimate: result.ratio,
+              lo: result.fLo,
+              hi: result.fHi,
+            },
+          ],
+        },
+        fields: { xLabel: copy('Rapporto delle varianze'), yLabel: copy('Gruppi') },
+        options: { logScale: true, reference: 'one', sort: 'none' } as never,
+      }),
     ],
   };
 };

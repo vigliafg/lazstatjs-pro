@@ -39,7 +39,13 @@ test('two or more variances emit the group table, the tests and a box plot', () 
   if (!('ok' in result) || !result.ok) return;
   assert.deepEqual(result.tables?.map(table => table.id), ['var-groups', 'var-tests']);
   assert.equal(result.tables![1].rows.length, 3);
-  assert.equal(result.charts?.[0].kind, 'box');
+  assert.deepEqual(result.charts?.map(chart => chart.kind), ['box', 'forest']);
+  const ratio = result.charts?.[1];
+  assert.equal(ratio?.id, 'var-ratio-forest');
+  assert.equal((ratio?.options as { logScale?: boolean }).logScale, true);
+  const point = (ratio?.data.points ?? [])[0];
+  assert.ok(Number(point.lo) < Number(point.estimate));
+  assert.ok(Number(point.estimate) < Number(point.hi));
 });
 
 test('variances reject missing groups and constant columns', () => {

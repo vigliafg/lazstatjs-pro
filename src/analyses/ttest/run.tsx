@@ -15,6 +15,7 @@ import { isFiniteNumber } from '../shared/numbers';
 import { copy } from '../../stats/reportCopy';
 import { makeChart, boxRows } from '../../charts/kits/common';
 import { meanCI } from '../../stats/distributions';
+import { medianCI } from '../../stats/kernels/distributions';
 import type { AnalysisChart } from '../../stats/charts';
 
 export interface TTestRunInput {
@@ -70,6 +71,31 @@ export const buildTTestOutput = (input: TTestRunInput): AnalysisRunResult => {
           options: { showDensity: false, bins: 14, showRug: true } as never,
         })
       );
+      const medianInterval = medianCI(differences, ciLevel);
+      if (Number.isFinite(medianInterval.lo) && Number.isFinite(medianInterval.hi)) {
+        charts.push(
+          makeChart({
+            id: 'sign-ci',
+            kind: 'interval',
+            title: copy('Mediana delle differenze e intervallo'),
+            subtitle: copy('IC {s1}% · {s2} coppie', { s1: ciLevel, s2: result.n + result.zeros }),
+            note: copy('L’intervallo è per ordine-statistiche: non richiede la normalità. Se contiene lo zero la mediana delle differenze è compatibile con zero.'),
+            data: {
+              intervals: [
+                {
+                  category: copy('Differenze'),
+                  estimate: medianInterval.median,
+                  lo: medianInterval.lo,
+                  hi: medianInterval.hi,
+                },
+              ],
+              rules: [{ value: 0 }],
+            },
+            fields: { xLabel: copy('Confronto'), yLabel: copy('Differenza') },
+            options: { valueLabels: true, sort: 'none' } as never,
+          })
+        );
+      }
     } else if (type === 'one') {
       const n = a1.length;
       const mean = jStat.mean(a1);
