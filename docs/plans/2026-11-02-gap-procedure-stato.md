@@ -1,9 +1,9 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W4: 5/5 item con test verdi; gate G4 da dichiarare)
+**Ultimo aggiornamento**: 2026-11-03 (W4 chiusa: 5/5 item, gate G4 verde)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0–W3 chiuse; W4 completa con test verdi; gate G0, G1, G2 e G3 verdi
+**Stato**: W0–W4 chiuse; gate G0, G1, G2, G3 e G4 verdi
 **Ondata corrente**: W4 — Categorical + MI categorica (5 item)
 
 ---
@@ -31,7 +31,7 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W4 completa (gate G4 da dichiarare); prossima W5 |
+| Ondata corrente | W4 chiusa (gate G4 verde); prossima W5 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
 | Ultimo commit di codice | `e2ec8cc` (chiusura W4) |
 | Ultimo commit documentale | `3cae69d` (allineamento hash W4) |
@@ -41,7 +41,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | Estensioni | 24 / 37 |
 | Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 |
 | Blocchi | nessuno |
-| Prossimo gate | G4 — fine W4 (categorical + MI categorica) |
+| Prossimo gate | G5 — fine W5 (multivariate avanzata) |
 
 ---
 
@@ -53,7 +53,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | W1 | Descriptive + test di base | 14 | 2 | **chiusa** (G1 verde) | G1 |
 | W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | **chiusa** (G2 verde) | G2 |
 | W3 | Regressione avanzata | 7 | 7 | **chiusa** (G3 verde) | G3 |
-| W4 | Categorical + MI categorica | 5 | 1 | **chiusa** (G4 da dichiarare) | G4 |
+| W4 | Categorical + MI categorica | 5 | 1 | **chiusa** (G4 verde) | G4 |
 | W5 | Multivariate avanzata | 8 | 7 | non iniziata | G5 |
 | W6 | Survival e affidabilità | 8 | 4 | non iniziata | G6 |
 | W7 | Time series | 7 | 3 | non iniziata | G7 |
