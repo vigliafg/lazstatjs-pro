@@ -416,6 +416,14 @@ const GALLERY: Partial<Record<ChartKind, readonly ChartStyle[]>> = {
     style('line', 'plain', PLAIN, { step: false, showMarkers: false }, true),
     style('line', 'step', 'chart.feature.step', { step: true, showMarkers: false }),
     style('line', 'markers', 'chart.feature.markers', { step: false, showMarkers: true }),
+    style(
+      'line',
+      'jmp-connected',
+      'chart.style.jmpLineConnected',
+      { step: false, showMarkers: true },
+      false,
+      { origin: 'jmp', descriptionKey: 'chart.style.jmpLineConnectedHint' }
+    ),
   ],
   interval: [
     style('interval', 'plain', PLAIN, { valueLabels: false }, true),
@@ -470,10 +478,26 @@ const GALLERY: Partial<Record<ChartKind, readonly ChartStyle[]>> = {
   survival: [
     style('survival', 'plain', PLAIN, { showMedian: false, step: true }, true),
     style('survival', 'median', 'chart.feature.median', { showMedian: true, step: true }),
+    style(
+      'survival',
+      'jmp-km',
+      'chart.style.jmpSurvivalKm',
+      { step: true, showCI: true, showCensoring: true, showMedian: true },
+      false,
+      { origin: 'jmp', descriptionKey: 'chart.style.jmpSurvivalKmHint' }
+    ),
   ],
   forest: [
     style('forest', 'linear', PLAIN, { logScale: false }, true),
     style('forest', 'log', 'chart.feature.logScale', { logScale: true }),
+    style(
+      'forest',
+      'jmp-ratio',
+      'chart.style.jmpForestRatio',
+      { logScale: true, reference: 'one' },
+      false,
+      { origin: 'jmp', descriptionKey: 'chart.style.jmpForestRatioHint' }
+    ),
   ],
   heatmap: [
     style('heatmap', 'sequential', PLAIN, { diverging: false, showValues: false }, true),

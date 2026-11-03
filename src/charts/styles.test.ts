@@ -180,6 +180,24 @@ test('the Milestone B JMP styles pin the documented options', () => {
   assert.deepEqual(outlier?.requires, ['meanCI']);
 });
 
+test('the F0.2 JMP styles pin the documented options', () => {
+  const find = (kind: ChartKind, id: string) => stylesFor(kind).find(style => style.id === id);
+  const ratio = find('forest', 'jmp-ratio');
+  assert.deepEqual(ratio?.options, { logScale: true, reference: 'one' });
+  assert.equal(ratio?.origin, 'jmp');
+  const km = find('survival', 'jmp-km');
+  assert.deepEqual(km?.options, {
+    step: true,
+    showCI: true,
+    showCensoring: true,
+    showMedian: true,
+  });
+  assert.equal(km?.origin, 'jmp');
+  const connected = find('line', 'jmp-connected');
+  assert.deepEqual(connected?.options, { step: false, showMarkers: true });
+  assert.equal(connected?.origin, 'jmp');
+});
+
 test('user styles stay outside the built-in families', () => {
   const user = saveUserStyle([], 'Mio box', 'box', { display: 'violin' });
   const saved = stylesFor('box', user).at(-1);

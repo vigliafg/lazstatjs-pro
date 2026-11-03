@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F0.1 chiusa)
-- **Fase corrente**: F0.2 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F0.2 chiusa)
+- **Fase corrente**: F1.1a — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -56,7 +56,7 @@ con motivo.
 | Fase | Contenuto | Tempo | Stato | Commit | Test |
 |---|---|---:|---|---|---|
 | F0.1 | Inventario, guardrail, stato | 60 | ✅ | `feat(charts): F0.1 inventario grafici e guardrail su sub-runner` | 8 test mirati + `npm run check` verdi |
-| F0.2 | 3 varianti JMP (`forest`, `survival`, `line`) | 60 | ⬜ | — | — |
+| F0.2 | 3 varianti JMP (`forest`, `survival`, `line`) | 60 | ✅ | `feat(charts): F0.2 tre varianti JMP` | 25 test + `locales:check` verdi |
 | F1.1a | `factorial`: medie di cella | 45 | ⬜ | — | — |
 | F1.1b | `recurrent`: mean cumulative function | 45 | ⬜ | — | — |
 | F1.2 | `tost` e chiusura ampiezza | 45 | ⬜ | — | — |
@@ -136,6 +136,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F0.1 | `enChartCopy` include `en/charts-l4.ts` e il nuovo `en/charts-f0.ts` | senza il merge le card L4 in inglese ricadevano sull'italiano |
 | 2026-11-03 | F0.1 | `copy.test.ts` verifica la catena reale di `copy()` (`enChartCopy` → `enReportCopy`) | molte stringhe dei runner sono già tradotte nel catalogo del report |
 | 2026-11-03 | F0.1 | Le 211 stringhe EN mancanti stanno in un file per ondata (`en/charts-f0.ts`) | i cataloghi esistenti sono già al limite di 700 righe |
+| 2026-11-03 | F0.2 | Tre varianti JMP opt-in: `forest.jmp-ratio`, `survival.jmp-km`, `line.jmp-connected` | convenzioni documentate, nessun cambio di default né di dati |
+| 2026-11-03 | F0.2 | `line.jmp-connected` ha lo stesso patch di `markers` | il contratto del piano è quello; `matchingChartStyle` evidenzia `markers` come primo match |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -175,6 +177,34 @@ sotto-blocco aperto):
   sub-runner, nessuna modifica ai grafici.
 - **Commit**: `feat(charts): F0.1 inventario grafici e guardrail su sub-runner`
 
+### F0.2 — Tre varianti JMP (`forest`, `survival`, `line`)
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `forest.jmp-ratio`: `{ logScale: true, reference: 'one' }`, origine `jmp`.
+  - `survival.jmp-km`: `{ step: true, showCI: true, showCensoring: true, showMedian: true }`.
+  - `line.jmp-connected`: `{ step: false, showMarkers: true }`.
+  - Etichette e hint `chart.style.jmp*` nelle 6 lingue.
+  - Test pin in `styles.test.ts`; la gallery compila tutte le tile in
+    `buildSpec.test.ts`.
+- **File toccati**: `src/charts/styles.ts`, `src/charts/styles.test.ts`,
+  `src/i18n/catalog/{en,it,fr,es,de,pt-PT}/analysis.ts`, documento di stato,
+  piano §5.3.
+- **Test**: `styles.test.ts` + `buildSpec.test.ts` → 25/25 verdi;
+  `locales:check` verde sulle 6 lingue.
+- **Nota**: `jmp-connected` condivide il patch con lo stile generico
+  `markers`; la tile è selezionabile ma la gallery evidenzia `markers` come
+  primo match (stesse opzioni, nessuna ambiguità di dati).
+- **Commit**: `feat(charts): F0.2 tre varianti JMP`
+
+**Mappa "procedura → stile JMP"** (applicazione in F10.1):
+
+| Uso | Stile | Procedure |
+|---|---|---|
+| Forest dei rapporti (HR, OR, RR, IRR) | `jmp-ratio` | `cox`, `stratcox`, `tdcox`, `countreg`, `logistic`, `ordinal`, `gee`, `meta` |
+| Curve di sopravvivenza | `jmp-km` | `survival`, `stratcox`, `parametric` (`survival-life-curve`) |
+| Serie osservate con marker | `jmp-connected` | `timeseries` (`ts-arima-chart`, `hw-series`), `var` (`var-irf-chart`) |
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -192,12 +222,12 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. Aprire F0.2: `forest.jmp-ratio`, `survival.jmp-km`, `line.jmp-connected` in
-   `src/charts/styles.ts` con etichette nelle 6 lingue.
-2. Aggiungere i test "pin" in `styles.test.ts` e verificare che
-   `buildSpec.test.ts` compili le tre nuove tile della gallery.
-3. Documentare la mappa "procedura → stile JMP" e aggiornare lo stato prima di
-   passare a F1.1a (`factorial`).
+1. F1.1a: `factorial-cells` [interval] dalle medie di cella già in `series`
+   (`factorial/run.tsx`).
+2. Aggiungere `interval` a `analysisKinds.ts` per `factorial` e il test
+   `src/analyses/factorial/charts.test.ts`.
+3. F1.1b: `meanCumulativeFunction` nel kernel `recurrent` con test numerico,
+   poi `recurrent-mcf` [line].
 
 ---
 

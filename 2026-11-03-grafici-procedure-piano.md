@@ -316,9 +316,9 @@ Non si salva l'id dello stile.
 | `interval` | diamante della media | esistente (`jmp-mean-diamond`) |
 | `dot` | strip jitter | esistente (`jmp-strip`) |
 | `residual` | banda ±2 SD | esistente (`jmp-residual`) |
-| `forest` | scala log per rapporti, riferimento 1 | **nuovo** (`jmp-ratio`) |
-| `survival` | step + censure + IC + mediana | **nuovo** (`jmp-km`) |
-| `line` | punti osservati con marker | **nuovo** (`jmp-connected`) |
+| `forest` | scala log per rapporti, riferimento 1 | esistente (`jmp-ratio`, F0.2) |
+| `survival` | step + censure + IC + mediana | esistente (`jmp-km`, F0.2) |
+| `line` | punti osservati con marker | esistente (`jmp-connected`, F0.2) |
 | `bar` | categorie ordinate + etichette | opzioni esistenti (`sort`, `valueLabels`) |
 | `pareto` | barre decrescenti + cumulata | factory + sort del runner |
 | `mosaic` | valori + colore per residuo | factory |
