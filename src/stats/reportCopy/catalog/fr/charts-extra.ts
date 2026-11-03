@@ -253,7 +253,6 @@ export const extraChartCopy: Record<string, string> = {
   'La curva è la probabilità stimata dall’esito (0–100%); i punti in alto sono le osservazioni con esito = 1, quelli in basso con esito = 0.': 'La courbe représente la probabilité estimée du résultat (0 à 100 %) ; les points supérieurs sont des observations avec un résultat = 1, les points inférieurs avec un résultat = 0.',
   'La diagonale rappresenta la corrispondenza perfetta tra valori osservati e stimati.': 'La diagonale représente un accord parfait entre les valeurs observées et ajustées.',
   'La linea centrale è il bias medio; le linee tratteggiate sono i limiti di accordo (bias ± 1,96·SD).': 'La ligne centrale est le biais moyen ; les lignes pointillées représentent les limites de l\'accord (biais ± 1,96·SD).',
-  'La linea centrale è la mediana; i baffi arrivano ai valori non outlier.': 'La ligne centrale est la médiane ; les moustaches atteignent les valeurs non aberrantes.',
   'La linea tratteggiata è il valore di test; la media osservata è il punto.': 'La ligne pointillée est la valeur de test ; la moyenne observée est le point.',
   'La linea tratteggiata è lo zero; il test non parametrico confronta le differenze con zero.': 'La ligne pointillée est zéro ; le test non paramétrique compare les différences à zéro.',
   'La mediana dei residui dovrebbe essere vicina a zero e le due distribuzioni simili.': 'La médiane résiduelle doit être proche de zéro et les deux distributions similaires.',

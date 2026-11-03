@@ -31,7 +31,6 @@ export const l4ChartCopy: Record<string, string> = {
   "{s1} gruppi · {s2} osservazioni": "{s1} grupos · {s2} observações",
   "Variabilità per gruppo": "Variabilidade por grupo",
   "{s1} gruppi": "{s1} grupos",
-  "Ogni scatola mostra mediana, quartili e baffi Tukey; i punti sono le osservazioni. Serve a vedere se la variabilità cambia tra gruppi, non solo la media.": "Cada caixa mostra a mediana, os quartis e os bigodes de Tukey; os pontos são as observações. Serve para ver se a variabilidade muda entre grupos, não apenas a média.",
   "Capacità — {s1}": "Capacidade — {s1}",
   "LSL {s1} · USL {s2} · target {s3}": "LSL {s1} · USL {s2} · alvo {s3}",
   "Distribuzione e specifiche": "Distribuição e especificações",

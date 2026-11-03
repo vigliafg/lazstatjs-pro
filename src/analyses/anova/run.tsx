@@ -273,10 +273,10 @@ export interface AnovaRunInput {
         kind: 'box',
         title: copy('ANOVA a una via: {s1} per {s2}', { s1: grid.cols[dep].name, s2: grid.cols[grp].name }),
         subtitle: copy('Confronto delle distribuzioni per gruppo'),
-        note: copy('La linea centrale è la mediana; i baffi arrivano ai valori non outlier.'),
+        note: copy('La linea centrale è la mediana; i baffi arrivano al 10° e 90° percentile e il punto con la barra è la media con il suo IC.'),
         data: { summary: box.summary, points: box.points, outliers: box.outliers },
         fields: { xLabel: grid.cols[grp].name, yLabel: grid.cols[dep].name },
-        options: { showPoints: true } as never,
+        options: { showPoints: true, whisker: 'percentile', showMean: true, showMeanInterval: true, jitter: true } as never,
       }),
       makeChart({
         id: 'anova-means',
@@ -379,7 +379,7 @@ export interface AnovaRunInput {
           note: copy('Il test confronta i ranghi medi dei gruppi.'),
           data: { summary: rankBox.summary, points: rankBox.points, outliers: rankBox.outliers },
           fields: { xLabel: grid.cols[grp].name, yLabel: copy('Rango') },
-          options: { showPoints: true } as never,
+          options: { showPoints: true, whisker: 'percentile', showMean: true, showMeanInterval: true, jitter: true } as never,
         })
       );
     }
@@ -472,7 +472,7 @@ const buildMoodOutput = ({ grid, anovaParams, ciLevel }: AnovaRunInput): Analysi
         note: copy('La linea centrale di ogni scatola è la mediana del gruppo; il test confronta quante osservazioni cadono sopra e sotto la mediana comune.'),
         data: { summary: boxes.summary, points: boxes.points, outliers: boxes.outliers },
         fields: { xLabel: groupName, yLabel: depName },
-        options: { showPoints: true, showMean: false } as never,
+        options: { showPoints: true, whisker: 'percentile', showMean: true, showMeanInterval: true, jitter: true } as never,
       }),
       ...(medianIntervals.length > 0
         ? [

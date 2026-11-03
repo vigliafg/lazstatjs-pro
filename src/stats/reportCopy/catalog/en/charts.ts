@@ -135,8 +135,6 @@ export const chartCopy: Record<string, string> = {
     "The diagonal is perfect agreement between observed and fitted values.",
   "La linea centrale è il bias medio; le linee tratteggiate sono i limiti di accordo (bias ± 1,96·SD).":
     "The central line is the mean bias; dashed lines are the limits of agreement (bias ± 1.96·SD).",
-  "La linea centrale è la mediana; i baffi arrivano ai valori non outlier.":
-    "The central line is the median; whiskers reach the non-outlier values.",
   "La linea tratteggiata è il valore di test; la media osservata è il punto.":
     "The dashed line is the test value; the observed mean is the point.",
   "La linea tratteggiata è lo zero; il test non parametrico confronta le differenze con zero.":

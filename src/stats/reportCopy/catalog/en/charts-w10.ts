@@ -174,4 +174,8 @@ export const w10ChartCopy: Record<string, string> = {
   "Ogni punto è la semivarianza media delle coppie in una classe di distanza, calcolata solo fino a metà della distanza massima: oltre, le coppie sono troppo poche e la stima instabile.":
     "Each point is the mean semivariance of the pairs in one distance class, computed only up to half the maximum distance: beyond that, pairs are too few and the estimate unstable.",
   "Semivarianza": "Semivariance",
+  "La linea centrale è la mediana; i baffi arrivano al 10° e 90° percentile e il punto con la barra è la media con il suo IC.":
+    "The centre line is the median; the whiskers reach the 10th and 90th percentile and the dot with its bar is the mean with its CI.",
+  "Ogni scatola mostra mediana, quartili e baffi al 10°–90° percentile; il punto con la barra è la media con il suo IC. Serve a vedere se la variabilità cambia tra gruppi, non solo la media.":
+    "Each box shows the median, the quartiles and 10th–90th percentile whiskers; the dot with its bar is the mean with its CI. It shows whether variability changes across groups, not only the mean.",
 };

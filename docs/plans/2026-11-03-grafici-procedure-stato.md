@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b, F9.3a, F9.3b, F10.1 e F10.2 chiuse)
-- **Fase corrente**: F10.3 — default box, scatter e Q-Q per procedura
+- **Ultimo aggiornamento**: 2026-11-03 (ondata O10 chiusa: F10.1, F10.2 e F10.3)
+- **Fase corrente**: F11.1a — traduzioni fr/es dei cataloghi grafici
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,14 +12,13 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `fix(charts): F10.2 frequenze e pesi ordinati dal valore più alto`.
-- **Chiuso**: F0.1 → F10.2. F10.1 e F10.2 con gate mirato verde (layers,
-  styles, descriptive, chisquare, meta, quality, copy, analysisKinds),
+- **Ultimo commit**: `feat(charts): F10.3 box stile JMP per i confronti tra gruppi`.
+- **Chiuso**: F0.1 → F10.3. Ondata O10 completa. Gate mirato verde (box
+  layers, layers, styles, copy, analysisKinds, anova, nonparamrm, quality),
   `tsc --noEmit` exit 0, `check-locale` 6/6, `help:build` verde.
 - **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
   moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
-- **Da riprendere**: **F10.3** (default box/scatter/Q-Q per procedura), poi
-  F11.1a.
+- **Da riprendere**: **F11.1a** (traduzioni fr/es), poi F11.1b.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -106,7 +105,7 @@ con motivo.
 | F9.3b | spatial variogram | 45 | ✅ | `feat(charts): F9.3b variogramma sperimentale spaziale` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ✅ | `feat(charts): F10.1 forest a rapporto, curve KM e serie con marker` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F10.2 | bar, Pareto, mosaico, heatmap, interval, dot | 45 | ✅ | `fix(charts): F10.2 frequenze e pesi ordinati dal valore più alto` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
-| F10.3 | box, scatter, Q-Q: default per procedura | 45 | ⬜ | — | — |
+| F10.3 | box, scatter, Q-Q: default per procedura | 45 | ✅ | `feat(charts): F10.3 box stile JMP per i confronti tra gruppi` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F11.1a | traduzioni fr/es | 45 | ⬜ | — | — |
 | F11.1b | traduzioni de/pt-PT | 45 | ⬜ | — | — |
 | F11.2 | help, manuale, inventario | 60 | ⬜ | — | — |
@@ -227,6 +226,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F10.2 | Gli heatmap con celle con segno restano `diverging` | carichi e coefficienti hanno segno: con una scala sequenziale i valori negativi finirebbero sul colore più chiaro e perderebbero significato; il piano prevedeva `sequential` per i loadings, si deroga con motivo |
 | 2026-11-03 | F10.2 | Frequenze, GOF e pesi meta ordinati `desc` | stesse tabelle JMP: il valore più grande per primo rende immediata la lettura delle code |
 | 2026-11-03 | F10.2 | Nessun cambio a `interval`/`dot` | `jmp-mean-diamond` è già attivo dove la media ha senso (ANOM, Oneway) ed è spento per proporzioni, varianze e mediane, come deve essere |
+| 2026-11-03 | F10.3 | Box JMP per i confronti tra gruppi: `anova-box`, Kruskal-Wallis, Mood, ordinato non parametrico e `variab-box` | sono le letture Oneway: baffi 10–90, media con IC e punti con jitter; le opzioni stanno nel runner, il default del kind resta Tukey |
+| 2026-11-03 | F10.3 | Box LazStats per diagnostica e distribuzioni (descriptive, correlation, ttest, regression, variances) | lì serve la coda Tukey e l’outlier, non la media con IC |
+| 2026-11-03 | F10.3 | `scatter` resta LazStats anche in `regression` | il grafico ha già OLS, Theil–Sen e banda opzionale: nessuna convenzione JMP aggiunge informazione; la Q-Q era già JMP |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -801,6 +803,32 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### F10.3 — Box, scatter, Q-Q: default per procedura
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - Box JMP (`whisker: 'percentile'`, `showMean`, `showMeanInterval`,
+    `jitter`) emesso dai runner di confronto: `anova-box`, box di
+    Kruskal-Wallis e di Mood, box ordinato di `nonparamrm`, `variab-box` di
+    quality.
+  - Note aggiornate dove i baffi non sono più Tukey (anova e quality); le
+    voci di copy inglesi e delle altre lingue, ormai inutilizzate, sono state
+    rimosse da tutti i cataloghi per non lasciare orfani.
+  - Box LazStats (Tukey) confermato per diagnostica e distribuzioni:
+    descriptive, correlation, ttest, regression, variances.
+  - `scatter` invariato (regression ha già OLS + Theil–Sen + banda); `qq`
+    già JMP.
+- **Tabella delle scelte**: JMP = anova, nonparamrm, quality (gruppi);
+  LazStats = descriptive, correlation, ttest, regression, variances.
+- **File toccati**: `src/analyses/anova/run.tsx`,
+  `src/analyses/nonparamrm/run.tsx`, `src/analyses/quality/run.tsx` e i
+  cataloghi `src/stats/reportCopy/catalog/*/charts-{w10,l4,extra}.ts`
+  ripuliti dalle voci ormai inutilizzate.
+- **Test**: box layers + layers + styles + copy + analysisKinds + anova +
+  nonparamrm + quality verdi; `tsc --noEmit` exit 0; `check-locale` 6/6;
+  `help:build` verde.
+- **Commit**: `feat(charts): F10.3 box stile JMP per i confronti tra gruppi`
+
 ### F10.2 — Bar, Pareto, mosaico, heatmap, interval, dot
 
 - **Stato**: ✅ chiusa (2026-11-03)
@@ -964,8 +992,8 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F10.3: default box/scatter/Q-Q per procedura.
-2. F11.1a: traduzioni fr/es dei cataloghi `charts-w10`.
+1. F11.1a: traduzioni fr/es dei cataloghi `charts-w10` e delle guide.
+2. F11.1b: traduzioni de/pt-PT.
 3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH,
    matrice di alias, DEFF survey, text mining, PPC bayesiano e variogramma.
 

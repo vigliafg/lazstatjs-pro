@@ -278,7 +278,7 @@ const buildJonckheere = (
         note: copy('Il test cerca un aumento monotono dell’esito lungo l’ordine dei gruppi.'),
         data: { summary: box.summary, points: box.points, outliers: box.outliers },
         fields: { xLabel: copy('Gruppo'), yLabel: grid.cols[outcome]?.name ?? 'Y' },
-        options: { showPoints: true } as never,
+        options: { showPoints: true, whisker: 'percentile', showMean: true, showMeanInterval: true, jitter: true } as never,
       }),
     ],
   };

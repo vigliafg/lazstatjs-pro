@@ -235,10 +235,10 @@ export const buildQualityOutput = ({
         kind: 'box',
         title: copy('Variabilità per gruppo'),
         subtitle: copy('{s1} gruppi', { s1: entries.length }),
-        note: copy('Ogni scatola mostra mediana, quartili e baffi Tukey; i punti sono le osservazioni. Serve a vedere se la variabilità cambia tra gruppi, non solo la media.'),
+        note: copy('Ogni scatola mostra mediana, quartili e baffi al 10°–90° percentile; il punto con la barra è la media con il suo IC. Serve a vedere se la variabilità cambia tra gruppi, non solo la media.'),
         data: { summary: boxes.summary, points: boxes.points, outliers: boxes.outliers },
         fields: { xLabel: groupName, yLabel: variableName },
-        options: { showPoints: true, showMean: true } as never,
+        options: { showPoints: true, whisker: 'percentile', showMean: true, showMeanInterval: true, jitter: true } as never,
       })
     );
   } else if (params.mode === 'msa') {

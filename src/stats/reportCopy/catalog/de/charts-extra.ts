@@ -253,7 +253,6 @@ export const extraChartCopy: Record<string, string> = {
   'La curva è la probabilità stimata dall’esito (0–100%); i punti in alto sono le osservazioni con esito = 1, quelli in basso con esito = 0.': 'Die Kurve ist die geschätzte Wahrscheinlichkeit des Ergebnisses (0–100 %); obere Punkte sind Beobachtungen mit Ergebnis = 1, untere Punkte mit Ergebnis = 0.',
   'La diagonale rappresenta la corrispondenza perfetta tra valori osservati e stimati.': 'Die Diagonale ist die perfekte Übereinstimmung zwischen beobachteten und angepassten Werten.',
   'La linea centrale è il bias medio; le linee tratteggiate sono i limiti di accordo (bias ± 1,96·SD).': 'Die Mittellinie ist der mittlere Bias; gestrichelte Linien sind die Grenzen der Übereinstimmung (Bias ± 1,96·SD).',
-  'La linea centrale è la mediana; i baffi arrivano ai valori non outlier.': 'Die Mittellinie ist der Median; Whiskers erreichen die Nicht-Ausreißerwerte.',
   'La linea tratteggiata è il valore di test; la media osservata è il punto.': 'Die gestrichelte Linie ist der Testwert; Der beobachtete Mittelwert ist der Punkt.',
   'La linea tratteggiata è lo zero; il test non parametrico confronta le differenze con zero.': 'Die gestrichelte Linie ist Null; Der nichtparametrische Test vergleicht die Unterschiede mit Null.',
   'La mediana dei residui dovrebbe essere vicina a zero e le due distribuzioni simili.': 'Der Restmedian sollte nahe Null liegen und die beiden Verteilungen ähnlich sein.',
