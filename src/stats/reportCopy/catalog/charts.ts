@@ -6,7 +6,9 @@ import { l4ChartCopy as enL4ChartCopy } from './en/charts-l4';
 import { w9ChartCopy } from './en/charts-w9';
 import { l4ChartCopy as deL4ChartCopy } from './de/charts-l4';
 import { l4ChartCopy as esL4ChartCopy } from './es/charts-l4';
+import { w10ChartCopy as esW10ChartCopy } from './es/charts-w10';
 import { l4ChartCopy as frL4ChartCopy } from './fr/charts-l4';
+import { w10ChartCopy as frW10ChartCopy } from './fr/charts-w10';
 import { l4ChartCopy as ptPTL4ChartCopy } from './pt-PT/charts-l4';
 import { extraChartCopy as deExtraChartCopy } from './de/charts-extra';
 import { extraChartCopy as esExtraChartCopy } from './es/charts-extra';
@@ -26,6 +28,11 @@ const L4_BY_LOCALE: Partial<Record<ReportLocale, Record<string, string>>> = {
   es: esL4ChartCopy,
   de: deL4ChartCopy,
   'pt-PT': ptPTL4ChartCopy,
+};
+
+const W10_BY_LOCALE: Partial<Record<ReportLocale, Record<string, string>>> = {
+  fr: frW10ChartCopy,
+  es: esW10ChartCopy,
 };
 
 const EXTRA_BY_LOCALE: Partial<Record<ReportLocale, Record<string, string>>> = {
@@ -49,6 +56,7 @@ export const chartCatalogFor = (locale: ReportLocale): Record<string, string> =>
     : {
         ...enChartCopy,
         ...(EXTRA_BY_LOCALE[locale] ?? {}),
+        ...(W10_BY_LOCALE[locale] ?? {}),
         ...(L4_BY_LOCALE[locale] ?? {}),
       };
 
