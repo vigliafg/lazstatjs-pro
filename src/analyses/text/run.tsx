@@ -48,7 +48,7 @@ export const buildTextOutput = ({ grid, params }: TextInput): AnalysisRunResult 
       kind: 'bar',
       title: copy('Termini più frequenti'),
       subtitle: copy('Prime {s1} voci del vocabolario', { s1: Math.min(20, result.terms.length) }),
-      note: copy('La frequenza conta tutte le occorrenze; il colore distingue i termini presenti in molti documenti.'),
+      note: copy('La barra conta tutte le occorrenze del termine nel corpus; i termini rari restano fuori dalle prime venti voci.'),
       data: {
         bars: result.terms.slice(0, 20).map(item => ({
           category: item.term,
@@ -110,7 +110,7 @@ export const buildTextOutput = ({ grid, params }: TextInput): AnalysisRunResult 
         kind: 'heatmap',
         title: copy('Similarità tra documenti'),
         subtitle: copy('Coseno TF-IDF sui primi {s1} documenti', { s1: shown }),
-        note: copy('Celle più scure indicano documenti con vocabolario e pesi simili; la diagonale vale 1.'),
+        note: copy('Celle più scure indicano documenti con vocabolario e pesi simili; la matrice è simmetrica e la diagonale (un documento con sé stesso) non è disegnata.'),
         data: {
           cells: result.similarity
             .filter(item => item.first < shown && item.second < shown)

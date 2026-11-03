@@ -47,4 +47,7 @@ export const chartGuides: Record<string, string[]> = {
   "garch": ["Series and conditional SD, autocorrelation of the standardised residuals and their Q-Q plot with the envelope: if GARCH explains the volatility the points stay close to the diagonal."],
   "statespace": ["Filtered and smoothed latent level with the forecast; in Markov switching, the series with its forecast and the probability of regime 2."],
   "doe": ["Design map in the first two factors (corners, axial points, centre) and the alias matrix: the correlation between the design terms shows which effects the fraction confounds (±1) and which stay orthogonal (0)."],
+  "ml": ["Observed vs predicted with residuals (or a confusion matrix and recall per class), plus variable importance as a share of the error reduction."],
+  "text": ["Most frequent terms, topic prevalence and the document × topic map in the topic model, cosine similarity heat map in the similarity mode."],
+  "choice": ["MaxDiff scores and shares with intervals; in the conditional logit, the coefficient forest and observed/predicted shares per alternative."],
 };

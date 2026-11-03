@@ -47,4 +47,7 @@ export const chartGuides: Record<string, string[]> = {
   "garch": ["Serie e DS condizionale, autocorrelazione dei residui standardizzati e Q-Q degli stessi residui con envelope: se il GARCH spiega la volatilità i punti restano vicini alla diagonale."],
   "statespace": ["Livello latente filtrato e smussato con la previsione; nel Markov switching, serie con previsione e probabilità del regime 2."],
   "doe": ["Mappa del disegno nei primi due fattori (vertici, assiali, centro) e matrice di alias: la correlazione tra i termini del disegno mostra quali effetti la frazione confonde (±1) e quali restano ortogonali (0)."],
+  "ml": ["Osservato e predetto con residui (o matrice di confusione e sensibilità per classe), più l’importanza delle variabili come quota sulla riduzione dell’errore."],
+  "text": ["Termini più frequenti, prevalenza degli argomenti e mappa documenti × argomenti nel modello a topic, heatmap di similarità coseno nel modo similarità."],
+  "choice": ["Punteggi MaxDiff e quote con intervallo; nel logit condizionale forest dei coefficienti e quote osservate/previste per alternativa."],
 };

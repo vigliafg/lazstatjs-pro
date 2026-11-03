@@ -47,4 +47,7 @@ export const chartGuides: Record<string, string[]> = {
   "garch": ["Reihe und bedingte SD, Autokorrelation der standardisierten Residuen und deren Q-Q-Diagramm mit Hülle: Erklärt das GARCH die Volatilität, bleiben die Punkte nahe der Diagonale."],
   "statespace": ["Gefiltertes und geglättetes latentes Niveau mit Prognose; beim Markov-Switching die Reihe mit Prognose und der Wahrscheinlichkeit von Regime 2."],
   "doe": ["Versuchsplan in den ersten beiden Faktoren (Eck-, Achsen- und Mittelpunkte) und Alias-Matrix: Die Korrelation zwischen den Termen zeigt, welche Effekte die Fraktion vermengt (±1) und welche orthogonal bleiben (0)."],
+  "ml": ["Beobachtet und vorhergesagt mit Residuen (oder Konfusionsmatrix und Sensitivität je Klasse), dazu Variablenwichtigkeit als Anteil der Fehlerreduktion."],
+  "text": ["Häufigste Terme, Themenprävalenz und Dokument-×-Themen-Karte im Themenmodell, Kosinus-Ähnlichkeits-Heatmap im Ähnlichkeitsmodus."],
+  "choice": ["MaxDiff-Scores und Anteile mit Intervallen; im konditionalen Logit Koeffizienten-Forest und beobachtete/vorhergesagte Anteile je Alternative."],
 };

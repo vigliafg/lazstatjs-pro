@@ -156,4 +156,8 @@ export const w10ChartCopy: Record<string, string> = {
   "correlazione tra i termini del disegno": "correlation between the terms of the design",
   "Valori vicini a ±1 indicano termini confusi tra loro: la metà frazione non li distingue. Lo zero indica termini ortogonali; con più di quattro fattori la matrice si limita agli effetti principali.":
     "Values close to ±1 mean the terms are confounded: the half fraction does not separate them. Zero means orthogonal terms; beyond four factors the matrix is limited to the main effects.",
+  "La barra conta tutte le occorrenze del termine nel corpus; i termini rari restano fuori dalle prime venti voci.":
+    "The bar counts every occurrence of the term in the corpus; rare terms stay out of the first twenty entries.",
+  "Celle più scure indicano documenti con vocabolario e pesi simili; la matrice è simmetrica e la diagonale (un documento con sé stesso) non è disegnata.":
+    "Darker cells indicate documents with similar vocabulary and weights; the matrix is symmetric and the diagonal (a document with itself) is not drawn.",
 };

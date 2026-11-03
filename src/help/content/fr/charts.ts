@@ -47,4 +47,7 @@ export const chartGuides: Record<string, string[]> = {
   "garch": ["Série et écart-type conditionnel, autocorrélation des résidus standardisés et Q-Q de ces résidus avec l’enveloppe : si le GARCH explique la volatilité, les points restent proches de la diagonale."],
   "statespace": ["Niveau latent filtré et lissé avec la prévision ; en Markov switching, la série avec sa prévision et la probabilité du régime 2."],
   "doe": ["Carte du plan dans les deux premiers facteurs (sommets, points axiaux, centre) et matrice d’alias : la corrélation entre les termes du plan montre quels effets la fraction confond (±1) et lesquels restent orthogonaux (0)."],
+  "ml": ["Observé et prédit avec les résidus (ou matrice de confusion et sensibilité par classe), plus l’importance des variables en part de la réduction de l’erreur."],
+  "text": ["Termes les plus fréquents, prévalence des thèmes et carte documents × thèmes dans le modèle de topics, heatmap de similarité cosinus dans le mode similarité."],
+  "choice": ["Scores MaxDiff et parts avec intervalles ; dans le logit conditionnel, forêt des coefficients et parts observées/prévues par alternative."],
 };

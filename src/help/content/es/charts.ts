@@ -47,4 +47,7 @@ export const chartGuides: Record<string, string[]> = {
   "garch": ["Serie y SD condicional, autocorrelación de los residuos estandarizados y Q-Q de esos residuos con la envolvente: si el GARCH explica la volatilidad, los puntos quedan cerca de la diagonal."],
   "statespace": ["Nivel latente filtrado y suavizado con el pronóstico; en Markov switching, la serie con su pronóstico y la probabilidad del régimen 2."],
   "doe": ["Mapa del diseño en los dos primeros factores (vértices, axiales, centro) y matriz de alias: la correlación entre los términos del diseño muestra qué efectos confunde la fracción (±1) y cuáles quedan ortogonales (0)."],
+  "ml": ["Observado y predicho con residuos (o matriz de confusión y sensibilidad por clase), más la importancia de las variables como parte de la reducción del error."],
+  "text": ["Términos más frecuentes, prevalencia de temas y mapa documentos × temas en el modelo de temas, heatmap de similitud coseno en el modo similitud."],
+  "choice": ["Puntuaciones MaxDiff y cuotas con intervalo; en el logit condicional, bosque de coeficientes y cuotas observadas/previstas por alternativa."],
 };

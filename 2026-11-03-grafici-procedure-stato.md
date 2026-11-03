@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1 e F9.2a chiuse)
-- **Fase corrente**: F9.2b — coerenza ML, text, choice
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a e F9.2b chiuse)
+- **Fase corrente**: F9.3a — Bayes PPC e verifica meta
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,11 +12,11 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F9.2a effetto del disegno survey`.
-- **Chiuso**: F0.1 → F9.2a. Gate mirato: 31 test (survey, mi, copy,
-  analysisKinds, buildSpec), `tsc --noEmit` exit 0, `check-locale` verde su
+- **Ultimo commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`.
+- **Chiuso**: F0.1 → F9.2b. Gate mirato: 35 test (ml, text, choice, copy,
+  analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
   it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
-- **Da riprendere**: **F9.2b** (coerenza ML, text e choice), poi F9.3a.
+- **Da riprendere**: **F9.3a** (Bayes PPC e verifica meta), poi F9.3b.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -98,7 +98,7 @@ con motivo.
 | F8.2 | VAR, GARCH, state-space | 60 | ✅ | `feat(charts): F8.2 Q-Q dei residui GARCH` | 23 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.1 | sample size, resampling, DOE | 60 | ✅ | `feat(charts): F9.1 matrice di alias del disegno DOE` | 30 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.2a | survey, MI | 45 | ✅ | `feat(charts): F9.2a effetto del disegno survey` | 31 test + `lint` + `locales:check` + `help:build` verdi |
-| F9.2b | ML, text, choice | 30 | ⬜ | — | — |
+| F9.2b | ML, text, choice | 30 | ✅ | `fix(charts): F9.2b note di text, kind dichiarati e guide ML` | 35 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.3a | Bayes PPC, meta | 45 | ⬜ | — | — |
 | F9.3b | spatial variogram | 45 | ⬜ | — | — |
 | F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ⬜ | — | — |
@@ -207,6 +207,10 @@ sotto-blocco aperto):
 | 2026-11-03 | F9.2a | `survey-deff` è un bar delle stime con linea a 1, non un forest | il DEFF è un rapporto rispetto a 1: la barra rende immediato “meno efficiente / più efficiente” e non richiede un intervallo |
 | 2026-11-03 | F9.2a | Nel modo regressione non c’è `survey-deff` | il kernel riporta i coefficienti, non le stime con DEFF: il grafico resterebbe vuoto |
 | 2026-11-03 | F9.2a | `mi` resta a 8 grafici nel percorso descrittivo e 4 nel categorico | il cap di 24 non è sfiorato: nessun Q-Q o pannello da tagliare |
+| 2026-11-03 | F9.2b | La nota di `text-terms` non promette più un colore che i dati non hanno | il runner passa solo frequenze: la vecchia nota descriveva un’estetica inesistente |
+| 2026-11-03 | F9.2b | La nota di `text-similarity` dice che la diagonale non è disegnata | il kernel genera solo le coppie con first < second, specchiate: la diagonale non esiste nei dati |
+| 2026-11-03 | F9.2b | `analysisKinds` toglie `line` da `ml` e `scatter` da `text` | nessuno dei due runner emette quei kind: la dichiarazione ora descrive il codice |
+| 2026-11-03 | F9.2b | Guide `ml`, `text` e `choice` aggiunte nelle 6 lingue | le tre procedure non ne avevano nessuna; la fase chiede coerenza anche nell’help |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -755,6 +759,32 @@ sotto-blocco aperto):
   proporzione); la regressione ponderata mantiene il forest dei coefficienti.
 - **Commit**: `feat(charts): F9.2a effetto del disegno survey`
 
+### F9.2b — ML, text, choice
+
+- **Stato**: ✅ chiusa (2026-11-03, verifica con due correzioni)
+- **Verificato**: `ml-*` (osservato/predetto + residui o confusione + sensibilità,
+  importanza), `text-*` (termini, prevalenza, mappa documenti × argomenti,
+  similarità) e `choice-*` (punteggi e quote MaxDiff, forest e quote del logit
+  condizionale): assi ed elenco coerenti, nessun gap di grafici.
+- **Corretto**:
+  - nota di `text-terms`: via l’affermazione sul colore (i dati hanno solo
+    frequenze).
+  - nota di `text-similarity`: dichiarata l’assenza della diagonale, che il
+    kernel non calcola.
+  - `analysisKinds`: rimossi `line` da `ml` e `scatter` da `text`, mai emessi.
+  - guide `ml`, `text`, `choice` nelle 6 lingue, prima assenti.
+- **File toccati**: `src/analyses/text/run.tsx`,
+  `src/analyses/{ml,text,choice}/charts.test.ts` (nuovi),
+  `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w9.ts` (voci obsolete rimosse) e
+  `charts-w10.ts`, `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: ml + text + choice + copy + analysisKinds → 35/35 verdi;
+  `tsc --noEmit` exit 0; `check-locale` verde sulle 6 lingue;
+  `help:build` verde (498 topic).
+- **Nota**: gli intervalli di `choice` restano al 95% fisso (il runner non
+  riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
+- **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
+
 ### F7.3b — Parametric e reliability
 
 - **Stato**: ✅ chiusa (2026-11-03, solo verifica)
@@ -817,17 +847,17 @@ sotto-blocco aperto):
 
 *(compilare a ogni fase; una riga per grafico)*
 
-F3.3, F4.3 e F4.4 sono fasi di allineamento: nessun nuovo id, solo opzioni dei
-runner, guide e test sugli stili esistenti.
+F3.3, F4.3, F4.4 e F9.2b sono fasi di allineamento: nessun nuovo id, solo
+opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ---
 
 ## 7. Prossimi 3 passi
 
-1. F9.2b: coerenza di ML, text e choice (solo verifica).
-2. F9.3a: `bayes-ppc` e verifica meta.
+1. F9.3a: `bayes-ppc` (normal e proportion) e verifica meta.
+2. F9.3b: variogramma spaziale con funzione pura testata.
 3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH,
-   matrice di alias e DEFF survey.
+   matrice di alias, DEFF survey e text mining.
 
 ---
 
