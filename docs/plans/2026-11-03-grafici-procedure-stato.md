@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F7.3a e F7.3b chiuse)
-- **Fase corrente**: F8.1 — Holt-Winters, radici unitarie, spettrale
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1 chiusa)
+- **Fase corrente**: F8.2 — VAR, GARCH, state-space
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,16 +12,16 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `67ecc38` — `feat(charts): F7.3a life-stress plot e verifica
-  parametriche` (preceduto da `a7260fa`, F7.1–F7.2).
-- **Chiuso**: F0.1 → F7.3b. Gate verde all’ultimo checkpoint: `npm run check`
-  exit 0, `check-locale` verde su it/en/fr/es/de/pt-PT, 17 test mirati
-  sopravvivenza + 8 test ALT.
-- **Da riprendere**: **F8.1** (Holt-Winters, radici unitarie, analisi spettrale),
-  poi F8.2 (VAR, GARCH, state-space) e F9.1.
-- **Debito aperto e noto**: le note/etichette nuove di `alt-life-stress`
-  esistono solo in inglese; le altre lingue ricadono su EN e vanno chiuse in
-  F11.1a–b (una riga per lingua nei cataloghi `catalog/<locale>/charts*.ts`).
+- **Ultimo commit**: `feat(charts): F8.1 Holt-Winters, radici unitarie e
+  spettrale`.
+- **Chiuso**: F0.1 → F8.1. Gate mirato verde: 16 test (timeseries, copy,
+  analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
+  it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
+- **Da riprendere**: **F8.2** (VAR, GARCH, state-space), poi F9.1.
+- **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
+  modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
+  EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
+  restano le voci vecchie delle note riscritte, ora non più usate).
 - **Non committato di proposito**: `AVVIO-AGENTE-GRAFICI.md` e i PDF `jmp*.pdf`
   restano fuori dal versionamento (istruzione del file di avvio).
 - **Albero di lavoro**: pulito tranne quei file non tracciati; branch
@@ -95,7 +95,7 @@ con motivo.
 | F7.2 | Cox, stratified, time-dependent | 45 | ✅ | idem (commit unico: i cataloghi sono condivisi) | 17 test + `check` e `locales:check` verdi |
 | F7.3a | ALT: life-stress plot | 45 | ✅ | `feat(charts): F7.3a life-stress plot e verifica parametriche` | 8 test + `check` verdi |
 | F7.3b | parametric, reliability | 30 | ✅ | idem (solo verifica, nessuna modifica) | `check` verde, 7 grafici parametrici coerenti |
-| F8.1 | Holt-Winters, unit root, spettrale | 45 | ⬜ | — | — |
+| F8.1 | Holt-Winters, unit root, spettrale | 45 | ✅ | `feat(charts): F8.1 Holt-Winters, radici unitarie e spettrale` | 16 test + `lint` + `locales:check` + `help:build` verdi |
 | F8.2 | VAR, GARCH, state-space | 60 | ⬜ | — | — |
 | F9.1 | sample size, resampling, DOE | 60 | ⬜ | — | — |
 | F9.2a | survey, MI | 45 | ⬜ | — | — |
@@ -195,6 +195,10 @@ sotto-blocco aperto):
 | 2026-11-03 | F7.3a | Il life-stress plot usa coordinate trasformate, non un asse log del grafico | lo scatter non espone una scala log sull’asse: x è la trasformazione del modello e y è log10 del tempo, così la relazione AFT diventa retta |
 | 2026-11-03 | F7.3a | La retta è ancorata alla media dei punti, non all’intercetta del modello | il fit non espone le medie delle covariati: con l’ancoraggio la pendenza resta quella stimata e la nota dichiara che le covariati spostano solo l’intercetta |
 | 2026-11-03 | F7.3a | Nuove stringhe di copy solo in inglese | il test L4 controlla le locale dei report, non le note di questo grafico; le altre lingue ricadono sull’inglese, da tradurre in F11.1a–b |
+| 2026-11-03 | F8.1 | Il trend di `unitroot-series` è calcolato nel runner da `linearTrendLine` (funzione pura esportata), non nel kernel | `unitRootTests` non espone la retta usata dall’ADF/KPSS e una modifica kernel sarebbe fuori budget; i due estremi della retta bastano al layer `line` |
+| 2026-11-03 | F8.1 | La nota di `unitroot-series` riporta ADF, valore critico 5% e p | il piano chiede la statistica nella nota; con il critico il lettore vede subito se la serie è borderline |
+| 2026-11-03 | F8.1 | La nota di `spectral-density` nomina periodo di picco, Fisher g e p | una nota generica non dice dove guardare: il picco dominante è il dato che il grafico deve comunicare |
+| 2026-11-03 | F8.1 | `hw-series` marca le osservazioni con i marker e tiene la banda sul solo forecast | le tre serie sono altrimenti indistinguibili; la banda resta l’intervallo di previsione (il kernel fornisce `lo`/`hi` solo per il forecast) |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -644,6 +648,31 @@ sotto-blocco aperto):
   `ChartRow` (`Record<string, ChartValue>`).
 - **Commit**: `feat(charts): F7.3a life-stress plot e verifica parametriche`
 
+### F8.1 — Holt-Winters, radici unitarie, spettrale
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `hw-series`: le osservazioni diventano marker, la linea adattata resta la
+    seconda serie e il forecast (x = n + passo) disegna la banda `lo`/`hi`;
+    nota riscritta per dire cosa sono punti, linea e banda.
+  - `unitroot-series`: nuova serie «Trend lineare» calcolata da
+    `linearTrendLine` (minimi quadrati su t, due estremi); nota con
+    ADF, valore critico 5% e p.
+  - `spectral-density`: nota con periodo di picco, Fisher g e p; sottotitolo
+    invariato (periodogramma, Daniell, spettro AR).
+- **File toccati**: `src/analyses/timeseries/modes.tsx`,
+  `src/analyses/timeseries/charts.test.ts` (nuovo),
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w7.ts` (voci obsolete rimosse),
+  `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: timeseries charts + run + copy + analysisKinds → 16/16 verdi;
+  `tsc --noEmit` exit 0; `check-locale` verde sulle 6 lingue;
+  `help:build` verde (498 topic).
+- **Nota**: il forecast non è stato corretto: il kernel `fitHoltWinters`
+  restituisce già `step` assoluto (`values.length + passo`), quindi i punti
+  futuri cadono dopo la serie osservata.
+- **Commit**: `feat(charts): F8.1 Holt-Winters, radici unitarie e spettrale`
+
 ### F7.3b — Parametric e reliability
 
 - **Stato**: ✅ chiusa (2026-11-03, solo verifica)
@@ -697,6 +726,9 @@ sotto-blocco aperto):
 | F7.2 | `stratcox-forest` ♻️ | `stratcox` | `forest` | JMP | `stratcox/run.test.ts` | ✅ |
 | F7.2 | `tdcox-forest` ♻️ | `tdcox` | `forest` | JMP | `tdcox/charts.test.ts` | ✅ |
 | F7.3a | `alt-life-stress` | `alt` | `scatter` | JMP | `alt/charts.test.ts` | ✅ |
+| F8.1 | `hw-series` ♻️ | `timeseries` | `line` | JMP | `timeseries/charts.test.ts` | ✅ |
+| F8.1 | `unitroot-series` ♻️ | `timeseries` | `line` | LZ | `timeseries/charts.test.ts` | ✅ |
+| F8.1 | `spectral-density` ♻️ | `timeseries` | `line` | LZ | `timeseries/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -707,9 +739,10 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F8.1: Holt-Winters, radici unitarie, analisi spettrale.
-2. F8.2: VAR, GARCH e state-space.
-3. Tradurre in F11.1a–b le nuove note del life-stress plot.
+1. F8.2: VAR, GARCH e state-space (`garch-qq` e verifica degli altri grafici).
+2. F9.1: sample size, resampling, DOE (`doe-alias`).
+3. Tradurre in F11.1a–b le nuove note del life-stress plot e delle modalità
+   `timeseries`.
 
 ---
 

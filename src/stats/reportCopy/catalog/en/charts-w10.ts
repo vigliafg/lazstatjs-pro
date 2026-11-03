@@ -136,4 +136,12 @@ export const w10ChartCopy: Record<string, string> = {
   " Con il link probit la curva usa Φ(η) invece della funzione logistica.":
     " With the probit link the curve uses Φ(η) instead of the logistic function.",
   "IC {s1}% · link {s2} · riferimento OR = 1": "CI {s1}% · link {s2} · reference OR = 1",
+  "I punti sono le osservazioni; la linea adattata segue livello e stagionalità stimati e la banda grigia è l’intervallo di previsione.":
+    "The points are the observations; the fitted line follows the estimated level and seasonality and the grey band is the forecast interval.",
+  "{s1} osservazioni · trend lineare": "{s1} observations · linear trend",
+  "Trend lineare": "Linear trend",
+  "La serie è disegnata con il suo trend lineare: ADF = {s1}, valore critico 5% = {s2}, p = {s3}. Un trend ripido rende i test di radice unitaria meno informativi.":
+    "The series is drawn with its linear trend: ADF = {s1}, 5% critical value = {s2}, p = {s3}. A steep trend makes the unit-root tests less informative.",
+  "Ogni picco è una frequenza dominante: qui il massimo cade al periodo {s1} osservazioni (Fisher g = {s2}, p = {s3}); un picco alla frequenza 1/periodo corrisponde a un ciclo di quel periodo.":
+    "Each peak is a dominant frequency: here the maximum falls at a period of {s1} observations (Fisher g = {s2}, p = {s3}); a peak at frequency 1/period corresponds to a cycle of that period.",
 };

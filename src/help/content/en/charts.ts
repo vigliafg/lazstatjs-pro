@@ -38,7 +38,7 @@ export const chartGuides: Record<string, string[]> = {
   "stratcox": ["Chart: forest of the shared hazard ratios on a log scale, with HR = 1 reference, plus Kaplan–Meier, baseline cumulative hazard and the number-at-risk table by stratum."],
   "tdcox": ["Chart: forest of time-dependent hazard ratios on a log scale, with HR = 1 reference. The kernel reports only per-interval estimates, not β(t): there is no plot of the effect over time."],
   "parametric": ["Survival, hazard and cumulative hazard curves for profiles at mean ± 1 SD of the first predictor."],
-  "timeseries": ["ACF bars with confidence band; ARIMA/SARIMA observed and forecast curves with prediction interval; simple-model forecast."],
+  "timeseries": ["ACF bars with confidence band; ARIMA/SARIMA observed and forecast curves with prediction interval; simple-model forecast; Holt–Winters observed, fitted and forecast with a band; the series with its linear trend for the unit-root tests (ADF and KPSS in the note); spectral density with periodogram, Daniell smoothing and AR spectrum, with the peak period and Fisher g in the note."],
   "mi": ["Observed/missing counts per variable; observed and completed distributions of the first variable."],
   "samplesize": ["Chart: power curve with target line and design point."],
   "resampling": ["Bootstrap distribution of the difference with percentile CI; permutation null distribution with observed difference."],

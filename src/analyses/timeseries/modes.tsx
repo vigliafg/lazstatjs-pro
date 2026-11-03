@@ -15,6 +15,26 @@ interface ModeInput {
   ciLevel: number;
 }
 
+/** Least-squares straight line through the series, returned as two endpoints. */
+export const linearTrendLine = (values: number[]): ChartRow[] => {
+  const n = values.length;
+  if (n < 2) return [];
+  const meanT = (n + 1) / 2;
+  const meanY = values.reduce((sum, value) => sum + value, 0) / n;
+  let numerator = 0;
+  let denominator = 0;
+  values.forEach((value, index) => {
+    numerator += (index + 1 - meanT) * (value - meanY);
+    denominator += Math.pow(index + 1 - meanT, 2);
+  });
+  const slope = denominator > 0 ? numerator / denominator : 0;
+  const intercept = meanY - slope * meanT;
+  return [
+    { x: 1, y: intercept + slope },
+    { x: n, y: intercept + slope * n },
+  ];
+};
+
 export const buildHoltWintersOutput = ({ grid, params, ciLevel }: ModeInput): AnalysisRunResult => {
   const values = numericColumnValues(grid, params.variable);
   if (values.length < 4) {
@@ -53,10 +73,13 @@ export const buildHoltWintersOutput = ({ grid, params, ciLevel }: ModeInput): An
     kind: 'line',
     title: copy('Serie, adattamento e previsione'),
     subtitle: copy('Holt–Winters · {s1} passi · IC {s2}%', { s1: fit.forecast.length, s2: ciLevel }),
-    note: copy('La linea adattata segue il livello e la stagionalità stimati; la banda grigia è l’intervallo di previsione.'),
-    data: { series },
+    note: copy('I punti sono le osservazioni; la linea adattata segue livello e stagionalità stimati e la banda grigia è l’intervallo di previsione.'),
+    data: {
+      series,
+      markers: values.map((value, index) => ({ x: index + 1, y: value, series: copy('Osservato') })),
+    },
     fields: { xLabel: 't', yLabel: copy('Valore'), series: copy('Serie') },
-    options: { showMarkers: false, showBand: true } as never,
+    options: { showMarkers: true, showBand: true } as never,
   });
   return {
     ok: true,
@@ -82,13 +105,26 @@ export const buildUnitRootOutput = ({ grid, params, ciLevel }: ModeInput): Analy
     return { ok: false, reason: 'The unit-root tests could not be computed on this series' };
   }
   const tables = unitRootTables(result, ciLevel);
+  const trend = linearTrendLine(values).map(point => ({ ...point, series: copy('Trend lineare') }));
+  const adfStat = Number.isFinite(result.adf.stat) ? result.adf.stat.toFixed(3) : '—';
+  const adfCritical = Number.isFinite(result.adf.cv5) ? result.adf.cv5.toFixed(3) : '—';
+  const adfP = Number.isFinite(result.adf.p) ? result.adf.p.toFixed(3) : '—';
   const chart = makeChart({
     id: 'unitroot-series',
     kind: 'line',
     title: copy('Serie analizzata'),
-    subtitle: copy('{s1} osservazioni', { s1: values.length }),
-    note: copy('Trend e cambi di livello cambiano la lettura dei test: controlla sempre il grafico prima di differenziare.'),
-    data: { series: values.map((value, index) => ({ x: index + 1, y: value, series: copy('Osservato') })) },
+    subtitle: copy('{s1} osservazioni · trend lineare', { s1: values.length }),
+    note: copy('La serie è disegnata con il suo trend lineare: ADF = {s1}, valore critico 5% = {s2}, p = {s3}. Un trend ripido rende i test di radice unitaria meno informativi.', {
+      s1: adfStat,
+      s2: adfCritical,
+      s3: adfP,
+    }),
+    data: {
+      series: [
+        ...values.map((value, index) => ({ x: index + 1, y: value, series: copy('Osservato') })),
+        ...trend,
+      ],
+    },
     fields: { xLabel: 't', yLabel: copy('Valore'), series: copy('Serie') },
     options: { showMarkers: false, showBand: false } as never,
   });
@@ -121,12 +157,19 @@ export const buildSpectralOutput = ({ grid, params }: ModeInput): AnalysisRunRes
     ...result.smoothed.map(point => ({ x: point.frequency, y: point.power, series: copy('Densità smussata') })),
     ...(result.ar ? result.ar.points.map(point => ({ x: point.frequency, y: point.power, series: copy('Spettro AR') })) : []),
   ];
+  const peakPeriod = Number.isFinite(result.fisher.period) ? result.fisher.period.toFixed(2) : '—';
+  const fisherG = Number.isFinite(result.fisher.g) ? result.fisher.g.toFixed(3) : '—';
+  const fisherP = Number.isFinite(result.fisher.p) ? result.fisher.p.toFixed(3) : '—';
   const chart = makeChart({
     id: 'spectral-density',
     kind: 'line',
     title: copy('Densità spettrale'),
     subtitle: copy('periodogramma, versione Daniell e spettro AR'),
-    note: copy('I picchi indicano le frequenze dominanti: un picco a 1/periodo corrisponde a un ciclo di quel periodo.'),
+    note: copy('Ogni picco è una frequenza dominante: qui il massimo cade al periodo {s1} osservazioni (Fisher g = {s2}, p = {s3}); un picco alla frequenza 1/periodo corrisponde a un ciclo di quel periodo.', {
+      s1: peakPeriod,
+      s2: fisherG,
+      s3: fisherP,
+    }),
     data: { series },
     fields: { xLabel: copy('Frequenza'), yLabel: copy('Potenza'), series: copy('Stima') },
     options: { showMarkers: false, showBand: false } as never,

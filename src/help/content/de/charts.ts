@@ -38,7 +38,7 @@ export const chartGuides: Record<string, string[]> = {
   "stratcox": ["Diagramm: Forest der gemeinsamen Hazard Ratios auf logarithmischer Skala mit HR = 1-Referenz, dazu Kaplan–Meier, kumulativer Basis-Hazard und Risikotabelle je Schicht."],
   "tdcox": ["Diagramm: Forest der zeitabhängigen Hazard Ratios auf logarithmischer Skala mit HR = 1-Referenz. Der Kernel liefert nur Schätzungen je Intervall, nicht β(t): ein Diagramm des Effekts über die Zeit ist nicht verfügbar."],
   "parametric": ["Überlebens-, Hazard- und kumulative Hazard-Kurven für Profile bei Mittelwert ± 1 SD des ersten Prädiktors."],
-  "timeseries": ["ACF-Balken mit Konfidenzband; beobachtete und ARIMA/SARIMA-Prognosekurven mit Vorhersageintervall; Prognose des einfachen Modells."],
+  "timeseries": ["ACF-Balken mit Konfidenzband; beobachtete und ARIMA/SARIMA-Prognosekurven mit Vorhersageintervall; Prognose des einfachen Modells; Holt–Winters mit beobachteter Reihe, Anpassung und Prognose samt Band; Reihe mit linearer Trendgeraden für die Einheitswurzeltests (ADF und KPSS in der Notiz); spektrale Dichte mit Periodogramm, Daniell-Version und AR-Spektrum, mit Peak-Periode und Fisher-g in der Notiz."],
   "mi": ["Beobachtete/fehlende Werte je Variable; beobachtete und vervollständigte Verteilung der ersten Variablen."],
   "samplesize": ["Diagramm: Power-Kurve mit Ziellinie und Designpunkt."],
   "resampling": ["Bootstrap-Verteilung der Differenz mit Perzentil-KI; Permutations-Nullverteilung mit beobachteter Differenz."],

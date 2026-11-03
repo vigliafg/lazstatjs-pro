@@ -38,7 +38,7 @@ export const chartGuides: Record<string, string[]> = {
   "stratcox": ["Grafico: forest plot degli hazard ratio condivisi su scala log, con riferimento HR = 1, più Kaplan–Meier, rischio cumulato di base e tavola dei soggetti a rischio per strato."],
   "tdcox": ["Grafico: forest plot degli hazard ratio tempo-dipendenti su scala log, con riferimento HR = 1. Il kernel riporta solo le stime per intervallo, non β(t): non c’è un grafico dell’effetto nel tempo."],
   "parametric": ["Curve di sopravvivenza, hazard e hazard cumulativo per profili a media ± 1 DS del primo predittore."],
-  "timeseries": ["Barre ACF con banda di confidenza; curve osservate e previsione ARIMA/SARIMA con intervallo di previsione; previsione del modello semplice."],
+  "timeseries": ["Barre ACF con banda di confidenza; curve osservate e previsione ARIMA/SARIMA con intervallo di previsione; previsione del modello semplice; Holt–Winters con osservato, adattato e previsione con banda; serie con trend lineare per i test di radice unitaria (ADF e KPSS nella nota); densità spettrale con periodogramma, versione Daniell e spettro AR, con periodo di picco e Fisher g nella nota."],
   "mi": ["Conteggi osservati/mancanti per variabile; distribuzione osservata e completata della prima variabile."],
   "samplesize": ["Grafico: curva di potenza con linea obiettivo e punto del disegno."],
   "resampling": ["Distribuzione bootstrap della differenza con IC percentile; distribuzione nulla di permutazione con differenza osservata."],

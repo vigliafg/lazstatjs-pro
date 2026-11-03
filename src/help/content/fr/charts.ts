@@ -38,7 +38,7 @@ export const chartGuides: Record<string, string[]> = {
   "stratcox": ["Graphique : forest plot des rapports de risque partagés en échelle log, avec référence HR = 1, plus Kaplan–Meier, risque cumulé de base et table des sujets à risque par strate."],
   "tdcox": ["Graphique : forest plot des rapports de risque dépendants du temps en échelle log, avec référence HR = 1. Le noyau ne fournit que les estimations par intervalle, pas β(t) : aucun graphique de l’effet au cours du temps n’est disponible."],
   "parametric": ["Courbes de survie, risque et risque cumulé pour des profils à moyenne ± 1 écart-type du premier prédicteur."],
-  "timeseries": ["Barres ACF avec bande de confiance ; courbes observées et prévision ARIMA/SARIMA avec intervalle de prédiction ; prévision du modèle simple."],
+  "timeseries": ["Barres ACF avec bande de confiance ; courbes observées et prévision ARIMA/SARIMA avec intervalle de prédiction ; prévision du modèle simple ; Holt–Winters avec observé, ajusté et prévision avec bande ; série avec sa tendance linéaire pour les tests de racine unitaire (ADF et KPSS dans la note) ; densité spectrale avec périodogramme, version Daniell et spectre AR, avec la période du pic et le g de Fisher dans la note."],
   "mi": ["Comptes observés/manquants par variable ; distributions observée et complétée de la première variable."],
   "samplesize": ["Graphique : courbe de puissance avec ligne cible et point du plan."],
   "resampling": ["Distribution bootstrap de la différence avec IC percentile ; distribution nulle de permutation avec différence observée."],
