@@ -77,10 +77,10 @@ const ROLE_SUFFIX_KEYS: Record<string, MessageKey> = {
   treatment: 'form.treatment',
   indicators: 'form.variables',
   items: 'form.variables',
-  attributes: 'form.variables',
-  rating: 'form.variable1',
-  'x variables': 'form.variables',
-  'y variables': 'form.variables',
+  attributes: 'form.factor',
+  rating: 'form.responseY',
+  'x variables': 'form.variables2',
+  'y variables': 'form.variables3',
 };
 
 /** Localised role label: "ANOVA: dependent variable" becomes the active UI language. */
