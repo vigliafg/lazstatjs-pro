@@ -33,7 +33,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W3 chiusa (gate G3 verde); prossima W4 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | commit W3 su `feat/gap-wave-1` (vedi registro §6) |
+| Ultimo commit di codice | `8f8298f` (chiusura W3) |
 | Ultimo commit documentale | `3b5284d` (fallback reference W3) |
 | Test | `npm run check` verde; `npm test` 1161/1161 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 33 / 73; W3 chiusa |
@@ -434,7 +434,7 @@ rigenerata sui dati reali e i 18 test selection restano verdi.
 | 2026-11-03 | Handoff pre-compattazione | `bccd8bd` | `npm run check` verde (ultima esecuzione) | verde | W1 chiusa; W2 pianificata con batch di 3 subagenti; nessun file W2 scritto |
 | 2026-11-03 | Checkpoint W2 (11/12) | `7bf4e84` | `npm run check` 1052/1052 + `test:samples` 7/7 + locale 6/6 | verde | C-08/C-09/C-11, R-01…R-08 tranne C-10; 4 nuove voci; 10 reference; G2 non dichiarato |
 | 2026-11-03 | Chiusura W2 / G2 | `863029b` + `3ff1b34` + `7bfb8f4` | `npm run check` 1068/1068 + `test:samples` 7/7 + locale 6/6 | verde | C-10 GLMM Laplace + `lmm` random slope; 26/73 metodi, 7/36 voci, 20/37 estensioni |
-| 2026-11-03 | Chiusura W3 / G3 | commit W3 (hash in allineamento) | `npm run check` 1161/1161 + `test:samples` 7/7 + locale 6/6 | verde | R-09…R-15 (7/7); 33/73 metodi, 14/36 voci; traduzioni reportCopy 5 lingue complete |
+| 2026-11-03 | Chiusura W3 / G3 | `8f8298f` | `npm run check` 1161/1161 + `test:samples` 7/7 + locale 6/6 | verde | R-09…R-15 (7/7); 33/73 metodi, 14/36 voci; traduzioni reportCopy 5 lingue complete |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -448,8 +448,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 
 - Ondata: W3 chiusa, gate G3 verde; prossima W4 (categorical + MI categorica).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: commit W3 su `feat/gap-wave-1` (hash in allineamento);
-  base documentale `3b5284d`.
+- Ultimo commit: `8f8298f` (chiusura W3); base documentale `3b5284d`.
 - Item chiusi (ID): W1, W2 complete; W3 completa — R-09 PLS, R-10 MARS,
   R-11 IV/2SLS, R-12 panel FE/RE, R-13 Tobit/selection, R-14 mediazione,
   R-15 propensity score.
@@ -491,7 +490,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 2. Cosa è chiuso: 33 metodi, 14 voci nuove, 20 estensioni.
 3. Cosa è in corso: nulla; W4 pronta a partire.
 4. Cosa è bloccato: nulla.
-5. Ultimo commit: commit W3 su `feat/gap-wave-1`.
+5. Ultimo commit: `8f8298f` su `feat/gap-wave-1`.
 6. Test: `npm run check` 1161/1161; sample 7/7; locale 6/6.
 7. Decisioni: nessuna installazione R; Heckman two-step; mediazione/propensity
    con reference disponibili e limiti dichiarati.
