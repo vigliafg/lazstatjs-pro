@@ -3,6 +3,7 @@ export const chartGuides: Record<string, string[]> = {
   "cluster": ["Dendrogramme, profils et tailles des clusters, silhouette moyenne par cluster et nuage des deux premières variables (ce n’est pas une ACP)."],
   "sem": ["Saturations factorielles, résidus de covariance et indices d’ajustement (CFI, RMSEA, SRMR) comparés à leurs seuils."],
   "latentclass": ["Taille des classes, profils des probabilités conditionnelles et certitude de classification par classe."],
+  "irt": ["Difficultés des items, information du test et courbes caractéristiques des items (probabilité de réponse correcte selon l’aptitude)."],
   "canonical": ["Scores canoniques, corrélations canoniques et corrélations de structure de la première fonction."],
   "multinomial": ["Distribution des classes prédites, exactitude par classe et matrice de confusion observé × prédit."],
   "iv": ["Observés vs ajustés, résidus et premier stade : instruments contre variable endogène, une série par instrument."],

@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F5.2a chiusa)
-- **Fase corrente**: F5.2b — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F5.2b chiusa)
+- **Fase corrente**: F5.3 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -71,7 +71,7 @@ con motivo.
 | F4.4 | diagnostica di regressione | 45 | ✅ | `feat(charts): F4.4 verifica stili JMP della regressione` | 8 test + `check` e `locales:check` verdi |
 | F5.1 | cluster, canonical, MDS, correspondence | 60 | ✅ | `feat(charts): F5.1 silhouette, scatter dei cluster e correlazioni canoniche` | 3 test + `check` e `locales:check` verdi (MDS/correspondence già a 2 grafici) |
 | F5.2a | SEM, latent class | 45 | ✅ | `feat(charts): F5.2a adeguamento SEM e certezza delle classi latenti` | 2 test + `check` e `locales:check` verdi |
-| F5.2b | IRT ICC, conjoint | 30 | ⬜ | — | — |
+| F5.2b | IRT ICC, conjoint | 30 | ✅ | `feat(charts): F5.2b curve caratteristiche degli item` | 2 test + `check` e `locales:check` verdi (conjoint già a 2 grafici) |
 | F5.3 | PCA/EFA/alpha e pannelli | 45 | ⬜ | — | — |
 | F6.1 | esatti, trend, verifica MH | 45 | ⬜ | — | — |
 | F7.1 | life table, competing, frailty, recurrent | 45 | ⬜ | — | — |
@@ -166,6 +166,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F5.1 | `cluster-scatter` usa le prime due variabili, non le componenti principali | il piano esclude una PCA; la nota lo dichiara esplicitamente |
 | 2026-11-03 | F5.2a | `sem-fit` affianca modello e soglia per indice, invece di una linea di riferimento | CFI (≥0,95) e RMSEA (≤0,06) hanno soglie su scale diverse: la coppia di barre le rende confrontabili |
 | 2026-11-03 | F5.2a | `latentclass-entropy` mostra per classe la quota di casi con posterior ≥ 0,80; l’entropia va nel sottotitolo | un indice globale in un grafico a barre avrebbe una sola barra, senza informazione per classe |
+| 2026-11-03 | F5.2b | La ICC è `iccProbability(a, b, θ)` nel kernel, con test su soglia 0,5 e monotonia | il piano chiede una funzione pura testata; il grafico deve usare la stessa formula del kernel |
+| 2026-11-03 | F5.2b | Nessun cambio a `conjoint`: utilità per attributo e importanza % sono già ordinate e spiegate | la fase chiedeva solo la verifica |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -510,6 +512,22 @@ sotto-blocco aperto):
   `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F5.2a adeguamento SEM e certezza delle classi latenti`
 
+### F5.2b — IRT e conjoint
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `iccProbability(a, b, θ)` nel kernel `irt` (Rasch = a 1) e
+  `irt-icc` [line] con una curva per item sullo stesso reticolo di θ.
+- **Verificato**: `conjoint-utilities` (utilità per livello, raggruppate per
+  attributo) e `conjoint-importance` (quota % sul totale) sono già ordinate e
+  con note corrette: nessun intervento.
+- **File toccati**: `src/stats/kernels/irt.ts`, `src/analyses/irt/run.tsx`,
+  `src/analyses/irt/charts.test.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts` (nuova guida `irt`).
+- **Test**: irt → 2/2 verdi; `npm run check` verde; `locales:check` verde
+  sulle 6 lingue.
+- **Commit**: `feat(charts): F5.2b curve caratteristiche degli item`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -540,6 +558,7 @@ sotto-blocco aperto):
 | F5.1 | `canonical-corr` | `canonical` | `bar` | LZ | `canonical/charts.test.ts` | ✅ |
 | F5.2a | `sem-fit` | `sem` | `bar` | LZ | `sem/charts.test.ts` | ✅ |
 | F5.2a | `latentclass-entropy` | `latentclass` | `bar` | LZ | `latentclass/charts.test.ts` | ✅ |
+| F5.2b | `irt-icc` | `irt` | `line` | LZ | `irt/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -550,9 +569,10 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F5.2b: curva ICC di IRT e utility/conjoint.
-2. F5.3: PCA/EFA/alpha e pannelli.
-3. Gate di fine ondata O5 e aggiornamento dell’inventario statico.
+1. F5.3: verifica di `pca-scree`/`pca-score`/`pca-biplot`, del pannello
+   `pcaPanel` e delle guide di PCA/EFA/alpha.
+2. Gate di fine ondata O5 con inventario statico aggiornato.
+3. F6.1: test esatti, trend e verifica Mantel-Haenszel.
 
 ---
 

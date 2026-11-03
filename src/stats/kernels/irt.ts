@@ -106,6 +106,17 @@ const itemStandardErrors = (
   return { seAlpha, seB };
 };
 
+/**
+ * Item characteristic curve: probability of a correct response at ability
+ * `theta` for a logistic item with the given discrimination and difficulty.
+ * Rasch is the special case `discrimination = 1`.
+ */
+export const iccProbability = (
+  discrimination: number,
+  difficulty: number,
+  theta: number
+): number => 1 / (1 + Math.exp(-discrimination * (theta - difficulty)));
+
 export const irtAnalysis = (input: IrtInput): IrtResult | null => {
   const n = input.data.length;
   const items = input.variableNames.length;

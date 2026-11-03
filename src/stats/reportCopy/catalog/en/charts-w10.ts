@@ -88,6 +88,11 @@ export const w10ChartCopy: Record<string, string> = {
   "Entropia vicina a 1 significa classi ben distinte; vicina a 0 significa posterior ambigue. Le barre sono la quota di casi di ciascuna classe assegnati con probabilità almeno 0,80: barre basse segnalano casi al confine tra classi.":
     "Entropy near 1 means well-separated classes; near 0 means ambiguous posteriors. The bars are the share of each class assigned with probability at least 0.80: low bars flag cases on the boundary between classes.",
   "Casi certi (%)": "Certain cases (%)",
+  "Curve caratteristiche degli item": "Item characteristic curves",
+  "Probabilità di risposta corretta per abilità": "Probability of a correct response by ability",
+  "Ogni curva è un item: più è ripida, più l’item discrimina; il punto in cui la curva vale 0,5 è la difficoltà b. Curve sovrapposte indicano item con lo stesso profilo.":
+    "Each curve is an item: the steeper it is, the more the item discriminates; the point where the curve equals 0.5 is the difficulty b. Overlapping curves indicate items with the same profile.",
+  "P(corretta)": "P(correct)",
   "Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.":
     "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
   "Predittore": "Predictor",

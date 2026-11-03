@@ -1,6 +1,6 @@
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
-import { irtAnalysis } from '../../stats/kernels/irt';
+import { iccProbability, irtAnalysis } from '../../stats/kernels/irt';
 import { GUARD_LIMITS, guardDimensions } from '../../stats/kernels/guards';
 import { irtTables } from '../../stats/tables/irt';
 import { irtReport } from '../../stats/reports/irt';
@@ -51,6 +51,26 @@ export const buildIrtOutput = ({ grid, params }: IrtInput): AnalysisRunResult =>
       },
       fields: { xLabel: copy('Item'), yLabel: copy('Difficoltà b') },
       options: { valueLabels: true, referenceLine: 'zero' } as never,
+    }),
+    makeChart({
+      id: 'irt-icc',
+      kind: 'line',
+      title: copy('Curve caratteristiche degli item'),
+      subtitle: copy('Probabilità di risposta corretta per abilità'),
+      note: copy(
+        'Ogni curva è un item: più è ripida, più l’item discrimina; il punto in cui la curva vale 0,5 è la difficoltà b. Curve sovrapposte indicano item con lo stesso profilo.'
+      ),
+      data: {
+        series: result.thetaGrid.flatMap(theta =>
+          result.items.map(item => ({
+            x: theta,
+            y: iccProbability(item.discrimination, item.difficulty, theta),
+            series: item.variable,
+          }))
+        ),
+      },
+      fields: { xLabel: copy('Abilità θ'), yLabel: copy('P(corretta)'), series: copy('Item') },
+      options: { showMarkers: false, showBand: false } as never,
     }),
     makeChart({
       id: 'irt-information',
