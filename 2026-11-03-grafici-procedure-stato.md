@@ -10,6 +10,23 @@
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
 - **Versione**: `0.19.0`
 
+## Ripresa rapida (2026-11-03, fine sessione)
+
+- **Ultimo commit**: `67ecc38` — `feat(charts): F7.3a life-stress plot e verifica
+  parametriche` (preceduto da `a7260fa`, F7.1–F7.2).
+- **Chiuso**: F0.1 → F7.3b. Gate verde all’ultimo checkpoint: `npm run check`
+  exit 0, `check-locale` verde su it/en/fr/es/de/pt-PT, 17 test mirati
+  sopravvivenza + 8 test ALT.
+- **Da riprendere**: **F8.1** (Holt-Winters, radici unitarie, analisi spettrale),
+  poi F8.2 (VAR, GARCH, state-space) e F9.1.
+- **Debito aperto e noto**: le note/etichette nuove di `alt-life-stress`
+  esistono solo in inglese; le altre lingue ricadono su EN e vanno chiuse in
+  F11.1a–b (una riga per lingua nei cataloghi `catalog/<locale>/charts*.ts`).
+- **Non committato di proposito**: `AVVIO-AGENTE-GRAFICI.md` e i PDF `jmp*.pdf`
+  restano fuori dal versionamento (istruzione del file di avvio).
+- **Albero di lavoro**: pulito tranne quei file non tracciati; branch
+  `grafici-procedure`.
+
 ---
 
 ## 0. Regola d'uso (vincolante)
