@@ -709,7 +709,7 @@ numerica, salvo il Wizard che non è una procedura statistica.
 | Release | Contenuto | Criterio di uscita |
 |---|---|---|
 | v0.13 | W0 + W1 (14 metodi) | G1 verde, help 6 lingue, 2 nuove voci |
-| v0.14 | W2 (12 metodi) | GLM/GLMM reference, 5 nuove voci |
+| v0.14 | W2 (12 metodi) — **chiuso 2026-11-03, G2 verde** | GLM/GLMM reference, 5 nuove voci |
 | v0.15 | W3 (7 metodi) | 7 modelli avanzati, 7 nuove voci |
 | v0.16 | W4 + W5 (13 metodi) | Categorical, MI, SEM/IRT/latent |
 | v0.17 | W6 + W7 (15 metodi) | Survival e time series |
