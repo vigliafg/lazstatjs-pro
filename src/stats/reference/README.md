@@ -69,3 +69,4 @@ the test file and in `docs/plans/2026-11-02-gap-procedure-stato.md`.
 | `nestedAnova.json` | `r/nestedAnova.R` | `kernels/nestedAnova.ts` |
 | `anom.json` | `r/anom.R` | `kernels/anom.ts` |
 | `mancova.json` | `r/mancova.R` | `kernels/mancova.ts` |
+| `glmm.json` | `r/glmm.R` | `kernels/glmm.ts` |

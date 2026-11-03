@@ -13,10 +13,10 @@ const EXCEPTIONS = new Map([
   ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
   ['src/App.tsx', 754], // composizione root: preset, salvataggio, temi, comandi desktop e row state L5
   ['src/charts/features.ts', 701], // registro unico dei controlli: una riga in più dopo gli oggetti L4
-  ['src/io/project/types.ts', 873], // tipi di tutti i parametri persistiti: un blocco per procedura
-  ['src/io/project/parse.ts', 782], // parsing difensivo di tutti i parametri persistiti
-  ['src/analyses/params.ts', 778], // normalizzazione/validazione di tutte le procedure
-  ['src/analyses/roles.ts', 773], // mappa ruoli/colonne di tutte le procedure
+  ['src/io/project/types.ts', 896], // tipi di tutti i parametri persistiti: un blocco per procedura
+  ['src/io/project/parse.ts', 804], // parsing difensivo di tutti i parametri persistiti
+  ['src/analyses/params.ts', 825], // normalizzazione/validazione di tutte le procedure
+  ['src/analyses/roles.ts', 803], // mappa ruoli/colonne di tutte le procedure
   ['src/stats/reportCopy/catalog/en/charts.ts', 725], // catalogo inglese dei grafici, un blocco per famiglia
 ]);
 

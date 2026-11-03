@@ -56,6 +56,8 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.ordinal.description': 'Logit cumulativo per esiti ordinati.',
   'meta.analysis.lmm.label': 'Modello misto (LMM)',
   'meta.analysis.lmm.description': 'Modello lineare misto con intercetta casuale.',
+  'meta.analysis.glmm.label': 'GLMM',
+  'meta.analysis.glmm.description': 'Modello lineare generalizzato misto con intercetta e pendenza casuali.',
   'meta.analysis.gee.label': 'GEE',
   'meta.analysis.gee.description': 'Effetti marginali con errori standard robusti per cluster.',
   'meta.analysis.multivariate.label': 'Multivariate',

@@ -326,4 +326,7 @@ export const formMessages = {
   'form.binomial': 'Binomial',
   'discriminant.modeClassic': 'Discriminant analysis',
   'discriminant.modeMancova': 'MANCOVA',
+  'form.randomSlope': 'Random slope',
+  'form.randomInterceptOnly': 'Random intercept only',
+  'form.randomInterceptSlope': 'Random intercept and slope',
 } as const;

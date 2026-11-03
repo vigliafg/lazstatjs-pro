@@ -646,6 +646,36 @@ const ROLES: Record<string, AnalysisRole[]> = {
       set: (p, c) => ({ ...p, lmm: { ...p.lmm, group: c } }),
     },
   ],
+  glmm: [
+    {
+      key: 'dep',
+      label: 'GLMM: outcome',
+      kind: 'continuous',
+      get: p => [p.glmm.dep],
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'GLMM: predictors',
+      kind: 'continuous',
+      get: p => p.glmm.indeps,
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, indeps: append(p.glmm.indeps, c) } }),
+    },
+    {
+      key: 'group',
+      label: 'GLMM: group',
+      kind: 'group',
+      get: p => [p.glmm.group],
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, group: c } }),
+    },
+    {
+      key: 'slope',
+      label: 'GLMM: random slope',
+      kind: 'continuous',
+      get: p => (p.glmm.slope >= 0 ? [p.glmm.slope] : []),
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, slope: c } }),
+    },
+  ],
   countreg: [
     {
       key: 'dep',

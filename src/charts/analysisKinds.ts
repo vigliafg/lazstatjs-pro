@@ -38,6 +38,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   factorial: ['line'],
   gee: ['bar', 'forest', 'interval', 'qq', 'scatter'],
   lmm: ['bar', 'interval', 'qq', 'scatter'],
+  glmm: ['bar', 'interval', 'residual', 'scatter'],
   logistic: ['bar', 'forest', 'heatmap', 'line'],
   mi: ['bar', 'dot', 'ecdf', 'forest', 'histogram', 'line', 'missingness'],
   mixedanova: ['line'],

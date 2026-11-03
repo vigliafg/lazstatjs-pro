@@ -7,6 +7,7 @@ import type { AnalysisChart } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { LmmParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { buildLmmRandomSlopeOutput } from './randomSlope';
 
 export interface LmmInput {
   grid: Dataset;
@@ -15,7 +16,9 @@ export interface LmmInput {
 }
 
 /** Modello lineare misto con intercetta casuale (REML). */
-export const buildLmmOutput = ({ grid, params, ciLevel }: LmmInput): AnalysisRunResult => {
+export const buildLmmOutput = (input: LmmInput): AnalysisRunResult => {
+  const { grid, params, ciLevel } = input;
+  if (params.randomSlope) return buildLmmRandomSlopeOutput(input);
   if (params.indeps.length === 0) {
     return { ok: false, reason: 'Select at least one fixed predictor' };
   }

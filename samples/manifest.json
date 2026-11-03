@@ -844,7 +844,8 @@
       "procedures": [
         "logistic",
         "regression",
-        "descriptive"
+        "descriptive",
+        "glmm"
       ],
       "examples": [
         {
@@ -895,6 +896,20 @@
           "options": {
             "link": "probit"
           }
+        },
+        {
+          "analysis": "glmm",
+          "columns": {
+            "dependent": "Low",
+            "predictors": [
+              "Age",
+              "Lwt"
+            ],
+            "group": "Race"
+          },
+          "options": {
+            "family": "binomial"
+          }
         }
       ],
       "notes": "189 births with a binary low-weight outcome and a mix of continuous and binary risk factors."
@@ -925,7 +940,8 @@
       ],
       "procedures": [
         "countreg",
-        "descriptive"
+        "descriptive",
+        "glmm"
       ],
       "examples": [
         {
@@ -946,6 +962,19 @@
               "Days",
               "Age_num"
             ]
+          }
+        },
+        {
+          "analysis": "glmm",
+          "columns": {
+            "dependent": "Days",
+            "predictors": [
+              "Age_num"
+            ],
+            "group": "Eth"
+          },
+          "options": {
+            "family": "poisson"
           }
         }
       ],
@@ -1024,7 +1053,8 @@
       "procedures": [
         "lmm",
         "gee",
-        "descriptive"
+        "descriptive",
+        "glmm"
       ],
       "examples": [
         {
@@ -1050,6 +1080,32 @@
               "Weight",
               "Time"
             ]
+          }
+        },
+        {
+          "analysis": "glmm",
+          "columns": {
+            "dependent": "Weight",
+            "predictors": [
+              "Time"
+            ],
+            "group": "Chick"
+          },
+          "options": {
+            "family": "gaussian"
+          }
+        },
+        {
+          "analysis": "lmm",
+          "columns": {
+            "dependent": "Weight",
+            "predictors": [
+              "Time"
+            ],
+            "group": "Chick"
+          },
+          "options": {
+            "randomSlope": true
           }
         }
       ],

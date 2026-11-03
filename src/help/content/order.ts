@@ -31,6 +31,7 @@ export const TOPIC_ORDER = [
   'countreg',
   'ordinal',
   'lmm',
+  'glmm',
   'gee',
   'multivariate',
   'chisquare',

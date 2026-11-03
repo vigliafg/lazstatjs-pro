@@ -239,8 +239,16 @@ const ANALYSIS_DEFINITIONS = [
     id: 'lmm',
     label: 'Mixed Model (LMM)',
     family: 'regression',
-    description: 'Linear mixed model with a random intercept.',
-    keywords: ['mixed', 'random intercept', 'multilevel', 'icc', 'reml'],
+    description: 'Linear mixed model with a random intercept or slope.',
+    keywords: ['mixed', 'random intercept', 'random slope', 'multilevel', 'icc', 'reml'],
+    cost: 'heavy',
+  },
+  {
+    id: 'glmm',
+    label: 'GLMM',
+    family: 'regression',
+    description: 'Generalized linear mixed model with random intercept and slope.',
+    keywords: ['glmm', 'mixed', 'laplace', 'random effects', 'binomial', 'poisson', 'icc'],
     cost: 'heavy',
   },
   {

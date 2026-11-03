@@ -325,6 +325,19 @@ export interface LmmParams {
   dep: number;
   indeps: number[];
   group: number;
+  /** Add a random slope for the first fixed predictor (default false). */
+  randomSlope?: boolean;
+}
+
+/** Generalized linear mixed model with random intercept and optional slope. */
+export interface GlmmParams {
+  dep: number;
+  indeps: number[];
+  group: number;
+  family: 'gaussian' | 'binomial' | 'poisson';
+  link: 'identity' | 'logit' | 'log';
+  /** Column used as random slope; -1 keeps a random intercept only. */
+  slope: number;
 }
 
 /** Parametri della regressione per conteggi. */
@@ -505,6 +518,7 @@ export interface ProjectParams {
   mi: MiParams;
   ordinal: OrdinalParams;
   lmm: LmmParams;
+  glmm: GlmmParams;
   countreg: CountParams;
   agreement: AgreementParams;
   tost: TostParams;
@@ -789,6 +803,15 @@ export const DEFAULT_PARAMS: ProjectParams = {
     dep: 0,
     indeps: [1],
     group: 2,
+    randomSlope: false,
+  },
+  glmm: {
+    dep: 0,
+    indeps: [1],
+    group: 2,
+    family: 'gaussian',
+    link: 'identity',
+    slope: -1,
   },
   countreg: {
     dep: 0,

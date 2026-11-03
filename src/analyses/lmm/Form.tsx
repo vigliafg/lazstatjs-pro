@@ -4,6 +4,7 @@ import type { LmmParams } from '../../io/project';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
+  CheckboxField,
   GroupSelect,
   VariableList,
   VariableSelect,
@@ -54,6 +55,12 @@ export const LmmForm = ({ grid, onLevels, onRecode, lmmParams, setLmmParams }: L
         onChange={value => setLmmParams(prev => ({ ...prev, group: value }))}
         onLevels={onLevels}
         onRecode={onRecode}
+      />
+      <CheckboxField
+        label={t('form.randomSlope')}
+        checked={lmmParams.randomSlope ?? false}
+        onChange={checked => setLmmParams(prev => ({ ...prev, randomSlope: checked }))}
+        hint={t('form.randomInterceptSlope')}
       />
     </div>
   );

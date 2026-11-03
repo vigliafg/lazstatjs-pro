@@ -288,6 +288,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const mi = isRecord(raw.mi) ? raw.mi : {};
   const ordinal = isRecord(raw.ordinal) ? raw.ordinal : {};
   const lmm = isRecord(raw.lmm) ? raw.lmm : {};
+  const glmm = isRecord(raw.glmm) ? raw.glmm : {};
   const countreg = isRecord(raw.countreg) ? raw.countreg : {};
   const agreement = isRecord(raw.agreement) ? raw.agreement : {};
   const tost = isRecord(raw.tost) ? raw.tost : {};
@@ -620,7 +621,28 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       dep: index(lmm.dep, d.lmm.dep, width),
       indeps: indexList(lmm.indeps, d.lmm.indeps, width),
       group: index(lmm.group, d.lmm.group, width),
+      randomSlope: bool(lmm.randomSlope, d.lmm.randomSlope ?? false),
     },
+    glmm: (() => {
+      const family =
+        glmm.family === 'binomial' || glmm.family === 'poisson' ? glmm.family : 'gaussian';
+      const dep = index(glmm.dep, d.glmm.dep, width);
+      const group = index(glmm.group, d.glmm.group, width);
+      const rawSlope = optionalIndex(glmm.slope, d.glmm.slope, width);
+      return {
+        dep,
+        indeps: indexList(glmm.indeps, d.glmm.indeps, width).filter(
+          (value) => value !== dep && value !== group
+        ),
+        group,
+        family,
+        link: (family === 'binomial' ? 'logit' : family === 'poisson' ? 'log' : 'identity') as
+          | 'identity'
+          | 'logit'
+          | 'log',
+        slope: rawSlope === dep || rawSlope === group ? -1 : rawSlope,
+      };
+    })(),
     countreg: {
       dep: index(countreg.dep, d.countreg.dep, width),
       indeps: indexList(countreg.indeps, d.countreg.indeps, width),

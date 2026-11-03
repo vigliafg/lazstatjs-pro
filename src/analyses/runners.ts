@@ -11,6 +11,7 @@ import { buildGlmOutput } from './glm/run';
 import { buildQuantileOutput } from './quantile/run';
 import { buildNonlinearOutput } from './nonlinear/run';
 import { buildMultinomialOutput } from './multinomial/run';
+import { buildGlmmOutput } from './glmm/run';
 import { buildCorrelationOutput } from './correlation/run';
 import { buildChiSquareOutput } from './chisquare/run';
 import { buildSampleSizeOutput } from './samplesize/run';
@@ -85,6 +86,8 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildNonlinearOutput({ grid, params: params.nonlinear, ciLevel }),
   multinomial: ({ grid, params, ciLevel }) =>
     buildMultinomialOutput({ grid, params: params.multinomial, ciLevel }),
+  glmm: ({ grid, params, ciLevel }) =>
+    buildGlmmOutput({ grid, params: params.glmm, ciLevel }),
   correlation: ({ grid, params, ciLevel }) =>
     buildCorrelationOutput({ grid, corrParams: params.corr, ciLevel }),
   chisquare: ({ grid, params, ciLevel }) =>

@@ -328,4 +328,7 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'form.binomial': 'Binomiale',
   'discriminant.modeClassic': 'Analyse discriminante',
   'discriminant.modeMancova': 'MANCOVA',
+  'form.randomSlope': 'Pente aléatoire',
+  'form.randomInterceptOnly': 'Ordonnée aléatoire seule',
+  'form.randomInterceptSlope': 'Ordonnée et pente aléatoires',
 };

@@ -12,6 +12,7 @@ import { buildResamplingOutput } from '../resampling/run';
 import { buildQuantileOutput } from '../quantile/run';
 import { buildNonlinearOutput } from '../nonlinear/run';
 import { buildMultinomialOutput } from '../multinomial/run';
+import { buildGlmmOutput } from '../glmm/run';
 import type { HeavyAnalysisId } from './heavyIds';
 
 /**
@@ -46,4 +47,6 @@ export const HEAVY_RUNNERS: Record<
     buildNonlinearOutput({ grid, params: params.nonlinear, ciLevel }),
   multinomial: ({ grid, params, ciLevel }) =>
     buildMultinomialOutput({ grid, params: params.multinomial, ciLevel }),
+  glmm: ({ grid, params, ciLevel }) =>
+    buildGlmmOutput({ grid, params: params.glmm, ciLevel }),
 };

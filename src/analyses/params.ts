@@ -117,6 +117,11 @@ export const remapParams = (
   const lmmDep = one(params.lmm.dep, 'Mixed Model: outcome');
   const lmmIndeps = list(params.lmm.indeps, 'Mixed Model: predictors');
   const lmmGroup = one(params.lmm.group, 'Mixed Model: group');
+  const glmmDep = one(params.glmm.dep, 'GLMM: outcome');
+  const glmmGroup = one(params.glmm.group, 'GLMM: group');
+  const glmmIndeps = list(params.glmm.indeps, 'GLMM: predictors').filter(
+    value => value !== glmmDep && value !== glmmGroup
+  );
   const countDep = one(params.countreg.dep, 'Count Regression: outcome');
   const countIndeps = list(params.countreg.indeps, 'Count Regression: predictors');
   const tostVar1 = one(params.tost.var1, 'TOST: first variable');
@@ -270,7 +275,38 @@ export const remapParams = (
         predictors: miPredictors,
       },
       ordinal: { ...params.ordinal, dep: ordinalDep, indeps: ordinalIndeps },
-      lmm: { ...params.lmm, dep: lmmDep, indeps: lmmIndeps, group: lmmGroup },
+      lmm: {
+        ...params.lmm,
+        dep: lmmDep,
+        indeps: lmmIndeps,
+        group: lmmGroup,
+        randomSlope: params.lmm.randomSlope ?? false,
+      },
+      glmm: (() => {
+        const family =
+          params.glmm.family === 'binomial' || params.glmm.family === 'poisson'
+            ? params.glmm.family
+            : 'gaussian';
+        const slope =
+          Number.isInteger(params.glmm.slope) &&
+          params.glmm.slope >= 0 &&
+          params.glmm.slope !== glmmDep &&
+          params.glmm.slope !== glmmGroup
+            ? params.glmm.slope
+            : -1;
+        return {
+          ...params.glmm,
+          dep: glmmDep,
+          indeps: glmmIndeps,
+          group: glmmGroup,
+          family,
+          link: (family === 'binomial' ? 'logit' : family === 'poisson' ? 'log' : 'identity') as
+            | 'identity'
+            | 'logit'
+            | 'log',
+          slope,
+        };
+      })(),
       countreg: { ...params.countreg, dep: countDep, indeps: countIndeps },
       agreement: {
         ...params.agreement,
@@ -415,6 +451,10 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.lmm.dep, 'Mixed Model: outcome', width, errors);
   checkList(params.lmm.indeps, 'Mixed Model: predictors', width, errors);
   checkOne(params.lmm.group, 'Mixed Model: group', width, errors);
+  checkOne(params.glmm.dep, 'GLMM: outcome', width, errors);
+  checkList(params.glmm.indeps, 'GLMM: predictors', width, errors);
+  checkOne(params.glmm.group, 'GLMM: group', width, errors);
+  checkOne(params.glmm.slope, 'GLMM: random slope', width, errors, true);
   checkOne(params.countreg.dep, 'Count Regression: outcome', width, errors);
   checkList(params.countreg.indeps, 'Count Regression: predictors', width, errors);
   checkList(params.agreement.columns, 'Agreement: measurements', width, errors);
@@ -605,6 +645,11 @@ export const validateAnalysisColumnRefs = (
       list(params.lmm.indeps, 'Mixed Model: predictors');
       one(params.lmm.group, 'Mixed Model: group');
       break;
+    case 'glmm':
+      one(params.glmm.dep, 'GLMM: outcome');
+      list(params.glmm.indeps, 'GLMM: predictors');
+      one(params.glmm.group, 'GLMM: group');
+      break;
     case 'countreg':
       one(params.countreg.dep, 'Count Regression: outcome');
       list(params.countreg.indeps, 'Count Regression: predictors');
@@ -717,6 +762,8 @@ export const setPrimaryColumn = (
       return { params: { ...params, ordinal: { ...params.ordinal, dep: column } }, role: 'Ordinal Logistic outcome' };
     case 'lmm':
       return { params: { ...params, lmm: { ...params.lmm, dep: column } }, role: 'Mixed Model outcome' };
+    case 'glmm':
+      return { params: { ...params, glmm: { ...params.glmm, dep: column } }, role: 'GLMM outcome' };
     case 'gee':
       return { params: { ...params, gee: { ...params.gee, dep: column } }, role: 'GEE outcome' };
     case 'multivariate':

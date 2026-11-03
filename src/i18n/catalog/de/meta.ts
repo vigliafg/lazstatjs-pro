@@ -73,8 +73,9 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.ordinal.description':
     'Kumulatives Logit für geordnete Ergebnisse.',
   'meta.analysis.lmm.label': 'Gemischtes Modell (LMM)',
-  'meta.analysis.lmm.description':
-    'Lineares gemischtes Modell mit zufälligem Achsenabschnitt.',
+  'meta.analysis.lmm.description': 'Lineares gemischtes Modell mit zufälligem Achsenabschnitt.',
+  'meta.analysis.glmm.label': 'GLMM',
+  'meta.analysis.glmm.description': 'Verallgemeinertes lineares gemischtes Modell mit zufälligem Achsenabschnitt und Steigung.',
   'meta.analysis.gee.label': 'GEE',
   'meta.analysis.gee.description':
     'Marginale Effekte mit clustergerobusten Standardfehlern.',

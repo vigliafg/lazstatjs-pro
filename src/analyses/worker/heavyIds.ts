@@ -17,6 +17,7 @@ export const HEAVY_ANALYSIS_IDS = [
   'quantile',
   'nonlinear',
   'multinomial',
+  'glmm',
 ] as const;
 
 export type HeavyAnalysisId = (typeof HEAVY_ANALYSIS_IDS)[number];

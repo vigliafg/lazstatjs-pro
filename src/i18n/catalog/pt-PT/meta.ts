@@ -54,6 +54,8 @@ export const metaMessages = {
   'meta.analysis.ordinal.description': 'Logit cumulativo para resultados ordenados.',
   'meta.analysis.lmm.label': 'Modelo misto (LMM)',
   'meta.analysis.lmm.description': 'Modelo linear misto com intercepto aleatório.',
+  'meta.analysis.glmm.label': 'GLMM',
+  'meta.analysis.glmm.description': 'Modelo linear generalizado misto com intercepto e declive aleatórios.',
   'meta.analysis.gee.label': 'GEE',
   'meta.analysis.gee.description': 'Efeitos marginais com erros padrão robustos por cluster.',
   'meta.analysis.multivariate.label': 'Multivariada',

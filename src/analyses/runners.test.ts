@@ -21,6 +21,7 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'factorial',
     'gee',
     'glm',
+    'glmm',
     'lmm',
     'logistic',
     'mi',

@@ -34,3 +34,40 @@ test('lmm adds the random-effects caterpillar', () => {
     )
   );
 });
+
+const slopeGrid = {
+  cols: [
+    { name: 'Y', type: 'num' as const },
+    { name: 'Time', type: 'num' as const },
+    { name: 'Group', type: 'cat' as const },
+  ],
+  rows: Array.from({ length: 48 }, (_, index) => {
+    const group = Math.floor(index / 8);
+    const time = index % 8;
+    const y = 5 + group * 1.5 + (1 + group * 0.2) * time + 0.1 * Math.sin(index);
+    return [String(y), String(time), `G${group}`];
+  }),
+};
+
+test('lmm random-slope mode reports the slope variance and the BLUPs', () => {
+  const result = buildLmmOutput({
+    grid: slopeGrid,
+    params: { dep: 0, indeps: [1], group: 2, randomSlope: true },
+    ciLevel: 95,
+  });
+  assert.ok('ok' in result && result.ok, 'reason' in result ? result.reason : 'failed');
+  if (!('ok' in result) || !result.ok) return;
+
+  assert.deepEqual(
+    (result.tables ?? []).map(table => table.id),
+    ['lmm-summary', 'lmm-fixed', 'lmm-random-effects']
+  );
+  const summary = result.tables!.find(table => table.id === 'lmm-summary')!.rows;
+  assert.ok(summary.some(row => String(row.metric) === 'Varianza pendenza'));
+  assert.deepEqual((result.charts ?? []).map(chart => chart.id), [
+    'lmm-observed-fitted',
+    'lmm-random-slopes',
+    'lmm-random-intercepts',
+  ]);
+  assert.equal(result.report?.id, 'lmm');
+});

@@ -11,6 +11,7 @@ import { GlmForm } from '../../analyses/glm/Form';
 import { QuantileForm } from '../../analyses/quantile/Form';
 import { NonlinearForm } from '../../analyses/nonlinear/Form';
 import { MultinomialForm } from '../../analyses/multinomial/Form';
+import { GlmmForm } from '../../analyses/glmm/Form';
 import { CorrelationForm } from '../../analyses/correlation/Form';
 import { ChiSquareForm } from '../../analyses/chisquare/Form';
 import { SampleSizeForm } from '../../analyses/samplesize/Form';
@@ -137,6 +138,16 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
             grid={p.grid}
             multinomialParams={params.multinomial}
             setMultinomialParams={setSlice('multinomial')}
+          />
+        );
+      case 'glmm':
+        return (
+          <GlmmForm
+            grid={p.grid}
+            glmmParams={params.glmm}
+            setGlmmParams={setSlice('glmm')}
+            onLevels={p.updateColumnLevels}
+            onRecode={p.updateColumnRecode}
           />
         );
       case 'correlation':
