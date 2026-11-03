@@ -84,6 +84,7 @@ test('GLMM matches lme4::lmer and lme4::glmer (Laplace) fixtures', () => {
   let worstAic = 0;
   let worstFitted = 0;
   let worstRandomEffect = 0;
+  let worstRandomEffectSe = 0;
 
   for (const reference of fixture.cases) {
     const fit = fitGlmm({
@@ -167,8 +168,16 @@ test('GLMM matches lme4::lmer and lme4::glmer (Laplace) fixtures', () => {
         Math.abs(actual!.intercept - expected.intercept),
         Math.abs(actual!.slope - expected.slope)
       );
+      worstRandomEffectSe = Math.max(
+        worstRandomEffectSe,
+        Math.abs(actual!.interceptSe - expected.interceptSe),
+        Math.abs(actual!.slopeSe - expected.slopeSe)
+      );
       assertClose(actual!.intercept, expected.intercept, 2e-3, `${reference.name} BLUP ${expected.group}`);
       assertClose(actual!.slope, expected.slope, 2e-3, `${reference.name} BLUP slope ${expected.group}`);
+      // lme4 reports the same `sqrt(diag(H_g^-1))` posterior standard errors.
+      assertClose(actual!.interceptSe, expected.interceptSe, 2e-3, `${reference.name} BLUP se ${expected.group}`);
+      assertClose(actual!.slopeSe, expected.slopeSe, 2e-3, `${reference.name} BLUP slope se ${expected.group}`);
     }
   }
 
@@ -181,4 +190,5 @@ test('GLMM matches lme4::lmer and lme4::glmer (Laplace) fixtures', () => {
   assert.ok(worstAic < 1e-2, `AIC drift ${worstAic}`);
   assert.ok(worstFitted < 1e-3, `fitted drift ${worstFitted}`);
   assert.ok(worstRandomEffect < 2e-3, `BLUP drift ${worstRandomEffect}`);
+  assert.ok(worstRandomEffectSe < 2e-3, `BLUP SE drift ${worstRandomEffectSe}`);
 });
