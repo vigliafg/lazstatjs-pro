@@ -33,9 +33,9 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W9 chiusa (gate G9 verde); piano completato |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `fd4858d` (chiusura W9) |
+| Ultimo commit di codice | `9367952` (chiusura debiti W9) |
 | Ultimo commit documentale | questo aggiornamento |
-| Test | `npm run check` verde; `npm test` 1295/1295 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Test | `npm run check` verde; `npm test` 1298/1298 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 73 / 73; W9 chiusa |
 | Nuove voci | 36 / 36 (W1–W7 + 7 voci W9) |
 | Estensioni | 29 / 37 (cluster k-means/k-medians, life table, frailty, censoring a intervallo, parametriche extra) |
@@ -716,7 +716,7 @@ Copertura finale: **73/73 metodi**, **36/36 nuove voci**.
 
 - Ondata: W9 chiusa, gate G9 verde; piano completato.
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: `fd4858d` (chiusura W9) su `feat/gap-wave-1`.
+- Ultimo commit: `9367952` (chiusura debiti W9) su `feat/gap-wave-1`.
 - Item chiusi (ID): N-02, L-01, L-02, L-03, A-01, A-02, A-03.
 - Item in corso (ID): nessuno.
 - Item bloccati (ID + motivo): nessuno.
@@ -756,6 +756,7 @@ Copertura finale: **73/73 metodi**, **36/36 nuove voci**.
 | 2026-11-03 | Chiusura W7 / G7 | `994a5d4` + `515062c` | `npm run check` 1241/1241 + `test:samples` 7/7 + locale 6/6 | verde | T-01…T-07 (7/7); 61/73 metodi, 29/36 voci; 7 reference W7 |
 | 2026-11-03 | Chiusura W8 / G8 | `f1a93dc` + docs | `npm run check` 1266/1266 + `test:samples` 7/7 + locale 6/6 | verde | Q-01…Q-03, P-03, Q-05 (5/5); 66/73 metodi, 29/36 voci; 5 reference W8, 3 sample nuovi |
 | 2026-11-03 | Chiusura W9 / G9 | `fd4858d` + docs | `npm run check` 1295/1295 + `test:samples` 7/7 + locale 6/6 | verde | N-02, L-01…L-03, A-01…A-03 (7/7); 73/73 metodi, 36/36 voci; 7 reference W9, 8 sample nuovi |
+| 2026-11-03 | Debiti W9 chiusi | `9367952` | `npm run check` 1298/1298 + `test:samples` 7/7 + locale 6/6 | verde | Classificazione ML, Bayes gerarchico, LDA, copy W6–W9 in 4 lingue; reference W9 9/9 |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
