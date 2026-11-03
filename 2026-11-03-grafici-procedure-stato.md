@@ -834,6 +834,9 @@ sotto-blocco aperto):
 - **Eccezioni filesize**: rimosse le quattro voci di `charts-extra.ts` in
   `scripts/check-file-size.mjs` (i file sono aggregatori di 6 righe); il guard
   scende da 14 a 10 eccezioni.
+- Anche `en/charts.ts` (752 righe) è diviso in `charts-part-a.ts` e
+  `charts-part-b.ts`, con `charts.ts` ridotto ad aggregatore: le eccezioni
+  scendono a 9.
 - **Commit**: `fix(charts): split dei cataloghi e note di canonical, ANOM e ICC`
 
 ### F11.3 — Gate finale e release
@@ -1123,7 +1126,7 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 | Rischio | Stato | Mitigazione in corso |
 |---|---|---|
 | Copy EN mancante nei sub-runner | chiuso in F0.1 | `copy.test.ts` esteso; 211 stringhe EN aggiunte in `en/charts-f0.ts` |
-| File al limite di 700 righe | ridotto | `charts-extra` diviso in due parti per lingua; restano 10 eccezioni |
+| File al limite di 700 righe | ridotto | `charts-extra` e `en/charts` divisi in parti; restano 9 eccezioni |
 | Forest log con IC ≤ 0 | chiuso in F10.1 | il layer `forest` scarta le righe non positive quando `logScale` è attivo |
 | Cap 24 grafici per `mi` | aperto | conteggio in F9.2a |
 | Fase che sfora l'ora | ricorrente | split e commit |
