@@ -31,6 +31,7 @@ import { timeseriesCopy } from './timeseries';
 import { tostCopy } from './tost';
 import { ttestCopy } from './ttest';
 import { wizardCopy } from './wizard';
+import { w2Copy } from './w2';
 import { proportionsCopy as esProportionsCopy } from './proportions';
 import { variancesCopy as esVariancesCopy } from './variances';
 
@@ -71,4 +72,5 @@ export const esReportCopy: Record<string, string> = {
   ...wizardCopy,
   ...esProportionsCopy,
   ...esVariancesCopy,
+  ...w2Copy,
 };

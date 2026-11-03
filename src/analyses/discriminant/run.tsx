@@ -8,6 +8,7 @@ import type { AnalysisChart } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { DiscriminantParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { buildMancovaOutput } from './mancova';
 
 export interface DiscriminantInput {
   grid: Dataset;
@@ -16,10 +17,9 @@ export interface DiscriminantInput {
 }
 
 /** LDA with canonical plot, profile plot and the one-way MANOVA table. */
-export const buildDiscriminantOutput = ({
-  grid,
-  params,
-}: DiscriminantInput): AnalysisRunResult => {
+export const buildDiscriminantOutput = (input: DiscriminantInput): AnalysisRunResult => {
+  if ((input.params.mode ?? 'classic') === 'mancova') return buildMancovaOutput(input);
+  const { grid, params } = input;
   const group = params.group;
   const predictors = Array.from(new Set(params.predictors)).filter(index => index !== group);
   if (predictors.length === 0) {

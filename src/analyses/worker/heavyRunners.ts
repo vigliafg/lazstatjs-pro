@@ -9,6 +9,9 @@ import { buildParametricOutput } from '../parametric/run';
 import { buildTimeSeriesOutput } from '../timeseries/run';
 import { buildMiOutput } from '../mi/run';
 import { buildResamplingOutput } from '../resampling/run';
+import { buildQuantileOutput } from '../quantile/run';
+import { buildNonlinearOutput } from '../nonlinear/run';
+import { buildMultinomialOutput } from '../multinomial/run';
 import type { HeavyAnalysisId } from './heavyIds';
 
 /**
@@ -38,4 +41,9 @@ export const HEAVY_RUNNERS: Record<
     buildMiOutput({ grid, params: params.mi, ciLevel }),
   resampling: ({ grid, params, ciLevel }) =>
     buildResamplingOutput({ grid, params: params.resampling, ciLevel }),
+  quantile: ({ grid, params }) => buildQuantileOutput({ grid, params: params.quantile }),
+  nonlinear: ({ grid, params, ciLevel }) =>
+    buildNonlinearOutput({ grid, params: params.nonlinear, ciLevel }),
+  multinomial: ({ grid, params, ciLevel }) =>
+    buildMultinomialOutput({ grid, params: params.multinomial, ciLevel }),
 };

@@ -14,6 +14,8 @@ import { onewayPanel } from '../../charts/panels';
 import { moodMedianTest } from '../../stats/kernels/mood';
 import { moodTables } from '../../stats/tables/mood';
 import { moodReport } from '../../stats/reports/mood';
+import { buildNestedAnovaOutput } from './nested';
+import { buildAnomOutput } from './anom';
 
 export interface AnovaRunInput {
   grid: Dataset;
@@ -25,6 +27,8 @@ export interface AnovaRunInput {
   export const buildAnovaOutput = (input: AnovaRunInput): AnalysisRunResult => {
   const { grid, anovaParams, ciLevel } = input;
     if (anovaParams.mode === 'median') return buildMoodOutput(input);
+    if (anovaParams.mode === 'nested') return buildNestedAnovaOutput(input);
+    if (anovaParams.mode === 'anom') return buildAnomOutput(input);
     const { dep, grp, posthoc, useNonParam, kwPosthoc } = anovaParams;
 
     // Group labels are what tables and charts show; the codes stay in the grid.

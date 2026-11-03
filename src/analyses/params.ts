@@ -53,6 +53,18 @@ export const remapParams = (
   const anovaGrp = one(params.anova.grp, 'ANOVA: group variable');
   const regDep = one(params.reg.dep, 'Regression: dependent variable');
   const regIndeps = list(params.reg.indeps, 'Regression: predictors');
+  const glmDep = one(params.glm.dep, 'GLM: dependent variable');
+  const glmIndeps = list(params.glm.indeps, 'GLM: predictors').filter(value => value !== glmDep);
+  const quantileDep = one(params.quantile.dep, 'Quantile: dependent variable');
+  const quantileIndeps = list(params.quantile.indeps, 'Quantile: predictors').filter(
+    value => value !== quantileDep
+  );
+  const nonlinearDep = one(params.nonlinear.dep, 'Nonlinear: dependent variable');
+  const nonlinearPredictor = one(params.nonlinear.predictor, 'Nonlinear: predictor');
+  const multinomialOutcome = one(params.multinomial.outcome, 'Multinomial: outcome');
+  const multinomialPredictors = list(params.multinomial.predictors, 'Multinomial: predictors').filter(
+    value => value !== multinomialOutcome
+  );
   const corrVars = list(params.corr.vars, 'Correlation: variables');
   const distfitVariable = one(params.distfit.variable, 'Distribution Fit: variable');
   const logisticOutcome = one(params.logistic.outcome, 'Logistic: outcome');
@@ -136,14 +148,43 @@ export const remapParams = (
       ...params,
       descVars,
       ttest: { ...params.ttest, var1: ttestVar1, var2: ttestVar2 },
-      anova: { ...params.anova, dep: anovaDep, grp: anovaGrp },
-      reg: { ...params.reg, dep: regDep, indeps: regIndeps },
+      anova: {
+        ...params.anova,
+        dep: anovaDep,
+        grp: anovaGrp,
+        inner: Number.isInteger(params.anova.inner) ? params.anova.inner! : -1,
+        alpha:
+          Number.isFinite(params.anova.alpha) && (params.anova.alpha ?? 0) > 0 && (params.anova.alpha ?? 0) < 0.5
+            ? params.anova.alpha!
+            : 0.05,
+      },
+      reg: {
+        ...params.reg,
+        dep: regDep,
+        indeps: regIndeps,
+        mode: params.reg.mode ?? 'linear',
+        degree: params.reg.degree ?? 2,
+        selectionDirection: params.reg.selectionDirection ?? 'both',
+        selectionCriterion: params.reg.selectionCriterion ?? 'bic',
+        penalty: params.reg.penalty ?? 'lasso',
+        lambda: Math.max(0, params.reg.lambda ?? 0.1),
+        penaltyAlpha: Math.min(1, Math.max(0, params.reg.penaltyAlpha ?? 0.5)),
+      },
+      glm: { ...params.glm, dep: glmDep, indeps: glmIndeps },
+      quantile: { ...params.quantile, dep: quantileDep, indeps: quantileIndeps },
+      nonlinear: { ...params.nonlinear, dep: nonlinearDep, predictor: nonlinearPredictor },
+      multinomial: {
+        ...params.multinomial,
+        outcome: multinomialOutcome,
+        predictors: multinomialPredictors,
+      },
       corr: { ...params.corr, vars: corrVars },
       distfit: { ...params.distfit, variable: distfitVariable },
       logistic: {
         ...params.logistic,
         outcome: logisticOutcome,
         predictors: logisticPredictors,
+        link: params.logistic.link === 'probit' ? 'probit' : 'logit',
       },
       cox: {
         ...params.cox,
@@ -259,8 +300,12 @@ export const remapParams = (
       },
       discriminant: {
         ...params.discriminant,
+        mode: params.discriminant.mode ?? 'classic',
         group: discriminantGroup,
         predictors: discriminantPredictors,
+        covariates: (params.discriminant.covariates ?? []).filter(
+          value => value !== discriminantGroup && !discriminantPredictors.includes(value)
+        ),
       },
       doe: {
         ...params.doe,
@@ -309,8 +354,17 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.ttest.var2, 'T-Test: second variable', width, errors);
   checkOne(params.anova.dep, 'ANOVA: dependent variable', width, errors);
   checkOne(params.anova.grp, 'ANOVA: group variable', width, errors);
+  checkOne(params.anova.inner ?? -1, 'ANOVA: inner factor', width, errors, true);
   checkOne(params.reg.dep, 'Regression: dependent variable', width, errors);
   checkList(params.reg.indeps, 'Regression: predictors', width, errors);
+  checkOne(params.glm.dep, 'GLM: dependent variable', width, errors);
+  checkList(params.glm.indeps, 'GLM: predictors', width, errors);
+  checkOne(params.quantile.dep, 'Quantile: dependent variable', width, errors);
+  checkList(params.quantile.indeps, 'Quantile: predictors', width, errors);
+  checkOne(params.nonlinear.dep, 'Nonlinear: dependent variable', width, errors);
+  checkOne(params.nonlinear.predictor, 'Nonlinear: predictor', width, errors);
+  checkOne(params.multinomial.outcome, 'Multinomial: outcome', width, errors);
+  checkList(params.multinomial.predictors, 'Multinomial: predictors', width, errors);
   checkList(params.corr.vars, 'Correlation: variables', width, errors);
   checkOne(params.distfit.variable, 'Distribution Fit: variable', width, errors);
   checkOne(params.logistic.outcome, 'Logistic: outcome', width, errors);
@@ -377,6 +431,7 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkList(params.cluster.selected, 'Cluster: variables', width, errors);
   checkOne(params.discriminant.group, 'Discriminant: group', width, errors);
   checkList(params.discriminant.predictors, 'Discriminant: predictors', width, errors);
+  checkList(params.discriminant.covariates ?? [], 'Discriminant: covariates', width, errors);
   checkOne(params.doe.response, 'DOE: response', width, errors);
   checkOne(params.doe.factorA, 'DOE: factor A', width, errors);
   checkOne(params.doe.factorB, 'DOE: factor B', width, errors);
@@ -438,6 +493,23 @@ export const validateAnalysisColumnRefs = (
     case 'anova':
       one(params.anova.dep, 'ANOVA: dependent variable');
       one(params.anova.grp, 'ANOVA: group variable');
+      if (params.anova.mode === 'nested') one(params.anova.inner ?? -1, 'ANOVA: inner factor');
+      break;
+    case 'glm':
+      one(params.glm.dep, 'GLM: dependent variable');
+      list(params.glm.indeps, 'GLM: predictors');
+      break;
+    case 'quantile':
+      one(params.quantile.dep, 'Quantile: dependent variable');
+      list(params.quantile.indeps, 'Quantile: predictors');
+      break;
+    case 'nonlinear':
+      one(params.nonlinear.dep, 'Nonlinear: dependent variable');
+      one(params.nonlinear.predictor, 'Nonlinear: predictor');
+      break;
+    case 'multinomial':
+      one(params.multinomial.outcome, 'Multinomial: outcome');
+      list(params.multinomial.predictors, 'Multinomial: predictors');
       break;
     case 'regression':
       one(params.reg.dep, 'Regression: dependent variable');
@@ -564,6 +636,9 @@ export const validateAnalysisColumnRefs = (
     case 'discriminant':
       one(params.discriminant.group, 'Discriminant: group');
       list(params.discriminant.predictors, 'Discriminant: predictors');
+      if (params.discriminant.mode === 'mancova') {
+        list(params.discriminant.covariates ?? [], 'Discriminant: covariates');
+      }
       break;
     case 'doe':
       one(params.doe.response, 'DOE: response');
@@ -624,6 +699,14 @@ export const setPrimaryColumn = (
       return { params: { ...params, nonparamrm: { ...params.nonparamrm, outcome: column } }, role: 'Non-parametric outcome' };
     case 'tost':
       return { params: { ...params, tost: { ...params.tost, var1: column } }, role: 'TOST first variable' };
+    case 'glm':
+      return { params: { ...params, glm: { ...params.glm, dep: column } }, role: 'GLM outcome' };
+    case 'quantile':
+      return { params: { ...params, quantile: { ...params.quantile, dep: column } }, role: 'Quantile outcome' };
+    case 'nonlinear':
+      return { params: { ...params, nonlinear: { ...params.nonlinear, predictor: column } }, role: 'Nonlinear predictor' };
+    case 'multinomial':
+      return { params: { ...params, multinomial: { ...params.multinomial, outcome: column } }, role: 'Multinomial outcome' };
     case 'regression':
       return { params: { ...params, reg: { ...params.reg, dep: column } }, role: 'Regression outcome' };
     case 'logistic':

@@ -4,6 +4,7 @@ import { areaTopics } from './areas';
 import { coreTopics } from './procedures-core';
 import { moreTopics } from './procedures-more';
 import { l4Topics } from '../l4-pt-PT';
+import { w2Topics } from '../w2-pt-PT';
 
 import { chartGuides } from './charts';
 
@@ -48,7 +49,7 @@ export const ptPTBook: HelpBook = {
     updated: 'Manual alinhado com as funcionalidades atuais do programa',
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

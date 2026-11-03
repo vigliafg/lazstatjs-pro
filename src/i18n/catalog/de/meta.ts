@@ -137,4 +137,12 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.proportions.description': 'Ein- und Zweistichprobentests für Anteile und Poisson-Raten.',
   'meta.analysis.variances.label': 'Varianzen',
   'meta.analysis.variances.description': 'Eine Varianz, F-Test, Bartlett und Levene für die Gleichheit der Varianzen.',
+  'meta.analysis.glm.label': 'Verallgemeinertes lineares Modell (GLM)',
+  'meta.analysis.glm.description': 'Verallgemeinerte lineare Modelle mit Gauß-, Binomial-, Poisson- und Gamma-Familie.',
+  'meta.analysis.quantile.label': 'Quantilsregression',
+  'meta.analysis.quantile.description': 'Regression auf ein bedingtes Quantil statt auf den Mittelwert.',
+  'meta.analysis.nonlinear.label': 'Nichtlineare Regression',
+  'meta.analysis.nonlinear.description': 'Exponentielle, logistische, Gompertz-, Potenz- und Michaelis–Menten-Kurven.',
+  'meta.analysis.multinomial.label': 'Multinomiale Logistik',
+  'meta.analysis.multinomial.description': 'Nominales Ergebnis mit mehr als zwei Klassen.',
 };

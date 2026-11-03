@@ -4,6 +4,7 @@ import { areaTopics } from "./areas";
 import { coreTopics } from "./procedures-core";
 import { moreTopics } from "./procedures-more";
 import { l4Topics } from '../l4-de';
+import { w2Topics } from '../w2-de';
 
 import { chartGuides } from './charts';
 
@@ -71,7 +72,7 @@ export const deBook: HelpBook = {
     updated: "Handbuch abgestimmt auf die aktuellen Funktionen des Programms",
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

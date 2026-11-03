@@ -102,4 +102,12 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.proportions.description': 'Tests à un ou deux échantillons pour proportions et taux de Poisson.',
   'meta.analysis.variances.label': 'Variances',
   'meta.analysis.variances.description': 'Une variance, test F, Bartlett et Levene pour l’égalité des variances.',
+  'meta.analysis.glm.label': 'Modèle linéaire généralisé (GLM)',
+  'meta.analysis.glm.description': 'Modèles linéaires généralisés avec familles gaussienne, binomiale, Poisson et gamma.',
+  'meta.analysis.quantile.label': 'Régression quantile',
+  'meta.analysis.quantile.description': 'Régression sur un quantile conditionnel au lieu de la moyenne.',
+  'meta.analysis.nonlinear.label': 'Régression non linéaire',
+  'meta.analysis.nonlinear.description': 'Courbes exponentielle, logistique, Gompertz, puissance et Michaelis–Menten.',
+  'meta.analysis.multinomial.label': 'Logistique multinomiale',
+  'meta.analysis.multinomial.description': 'Résultat nominal avec plus de deux classes.',
 };

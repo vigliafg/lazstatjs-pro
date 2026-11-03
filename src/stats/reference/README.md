@@ -59,3 +59,13 @@ the test file and in `docs/plans/2026-11-02-gap-procedure-stato.md`.
 | Fixture | Generator | Kernel |
 |---|---|---|
 | `glm.json` | `r/glm.R` | `kernels/glm.ts` |
+| `probit.json` | `r/probit.R` | `kernels/logistic.ts` (probit link) |
+| `polynomial.json` | `r/polynomial.R` | `kernels/polynomial.ts` |
+| `selection.json` | `r/selection.R` | `kernels/selection.ts` |
+| `penalized.json` | `r/penalized.R` | `kernels/penalized.ts` |
+| `quantile.json` | `r/quantile.R` | `kernels/quantile.ts` |
+| `nonlinear.json` | `r/nonlinear.R` | `kernels/nonlinear.ts` |
+| `multinomial.json` | `r/multinomial.R` | `kernels/multinomial.ts` |
+| `nestedAnova.json` | `r/nestedAnova.R` | `kernels/nestedAnova.ts` |
+| `anom.json` | `r/anom.R` | `kernels/anom.ts` |
+| `mancova.json` | `r/mancova.R` | `kernels/mancova.ts` |

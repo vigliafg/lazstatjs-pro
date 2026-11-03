@@ -40,14 +40,52 @@ export interface TTestParams {
 }
 
 export interface AnovaParams {
-  /** One-way ANOVA/Kruskal–Wallis or the Mood median test. */
-  mode: 'oneway' | 'median';
+  /** One-way ANOVA/Kruskal–Wallis, Mood median, nested ANOVA or ANOM. */
+  mode: 'oneway' | 'median' | 'nested' | 'anom';
   dep: number;
   grp: number;
   posthoc: string;
   useNonParam: boolean;
   kwPosthoc: 'none' | 'bonferroni' | 'holm' | 'fdr';
+  /** Inner factor for the nested mode; -1 when unused. */
+  inner?: number;
+  /** Significance level for the ANOM decision lines. */
+  alpha?: number;
 }
+
+/** Generalized linear model with an explicit family and link. */
+export interface GlmParams {
+  dep: number;
+  indeps: number[];
+  family: 'gaussian' | 'binomial' | 'poisson' | 'gamma';
+  link: 'identity' | 'log' | 'logit' | 'probit' | 'inverse';
+}
+
+/** Quantile regression at a single target quantile. */
+export interface QuantileParams {
+  dep: number;
+  indeps: number[];
+  tau: number;
+}
+
+export type NonlinearModelType = 'exponential' | 'logistic' | 'gompertz' | 'power' | 'michaelis';
+
+/** Nonlinear least squares with a named growth/decay model. */
+export interface NonlinearParams {
+  dep: number;
+  predictor: number;
+  model: NonlinearModelType;
+}
+
+/** Multinomial logistic regression for a categorical outcome. */
+export interface MultinomialParams {
+  outcome: number;
+  predictors: number[];
+}
+
+export type RegressionMode = 'linear' | 'selection' | 'polynomial' | 'penalized';
+export type SelectionDirection = 'forward' | 'backward' | 'both';
+export type SelectionCriterion = 'aic' | 'bic' | 'adjR2' | 'r2' | 'cp' | 'p';
 
 export interface RegParams {
   dep: number;
@@ -55,6 +93,20 @@ export interface RegParams {
   useNonParam: boolean;
   robustEstimator: string;
   robustSE: 'none' | 'HC1' | 'HC3';
+  /** Linear OLS (default), variable selection, polynomial curve or penalized fit. */
+  mode?: RegressionMode;
+  /** Polynomial degree for the polynomial mode. */
+  degree?: number;
+  /** Search direction for the selection mode. */
+  selectionDirection?: SelectionDirection;
+  /** Optimality criterion for the selection mode. */
+  selectionCriterion?: SelectionCriterion;
+  /** Penalty for the penalized mode. */
+  penalty?: 'ridge' | 'lasso' | 'elasticnet';
+  /** Penalization strength for the penalized mode (glmnet scale). */
+  lambda?: number;
+  /** Elastic-net mixing: 0 = ridge, 1 = LASSO. */
+  penaltyAlpha?: number;
 }
 
 export interface CorrParams {
@@ -119,6 +171,8 @@ export interface LogisticParams {
   predictors: number[];
   cutoff: number;
   penalized: boolean;
+  /** Link for the binary model: logit (odds) or probit (normal latent scale). */
+  link?: 'logit' | 'probit';
 }
 
 /** Parametri del modello di Cox. */
@@ -356,8 +410,12 @@ export interface ClusterParams {
 
 /** Parametri dell'analisi discriminante (con MANOVA a un fattore). */
 export interface DiscriminantParams {
+  /** Classic discriminant analysis or MANCOVA (predictors are outcomes). */
+  mode?: 'classic' | 'mancova';
   group: number;
   predictors: number[];
+  /** Continuous covariates for the MANCOVA mode. */
+  covariates?: number[];
 }
 
 /** Parametri della superficie di risposta (DOE). */
@@ -415,6 +473,10 @@ export interface ProjectParams {
   descVars: number[];
   /** Which view of the Descriptive procedure the form and runner use. */
   descMode: DescriptiveMode;
+  glm: GlmParams;
+  quantile: QuantileParams;
+  nonlinear: NonlinearParams;
+  multinomial: MultinomialParams;
   proportions: ProportionParams;
   variances: VarianceParams;
   ttest: TTestParams;
@@ -515,6 +577,26 @@ export interface ProjectInput {
 export const DEFAULT_PARAMS: ProjectParams = {
   descVars: [0, 1],
   descMode: 'summary',
+  glm: {
+    dep: 1,
+    indeps: [0],
+    family: 'gamma',
+    link: 'log',
+  },
+  quantile: {
+    dep: 1,
+    indeps: [0],
+    tau: 0.5,
+  },
+  nonlinear: {
+    dep: 1,
+    predictor: 0,
+    model: 'logistic',
+  },
+  multinomial: {
+    outcome: 2,
+    predictors: [0, 1],
+  },
   variances: {
     mode: 'one',
     variable: 0,
@@ -538,8 +620,23 @@ export const DEFAULT_PARAMS: ProjectParams = {
     posthoc: 'holm',
     useNonParam: true,
     kwPosthoc: 'bonferroni',
+    inner: -1,
+    alpha: 0.05,
   },
-  reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen', robustSE: 'none' },
+  reg: {
+    dep: 1,
+    indeps: [0],
+    useNonParam: true,
+    robustEstimator: 'theilsen',
+    robustSE: 'none',
+    mode: 'linear',
+    degree: 2,
+    selectionDirection: 'both',
+    selectionCriterion: 'bic',
+    penalty: 'lasso',
+    lambda: 0.1,
+    penaltyAlpha: 0.5,
+  },
   corr: { vars: [0, 1], method: 'pearson', showSpearman: true, showKendall: true },
   chisq: {
     mode: 'table',
@@ -582,6 +679,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     predictors: [1],
     cutoff: 0.5,
     penalized: false,
+    link: 'logit',
   },
   cox: {
     timeVariable: 0,
@@ -742,8 +840,10 @@ export const DEFAULT_PARAMS: ProjectParams = {
     standardize: true,
   },
   discriminant: {
+    mode: 'classic',
     group: 2,
     predictors: [0, 1],
+    covariates: [],
   },
   doe: {
     response: 0,

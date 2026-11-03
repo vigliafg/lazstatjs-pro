@@ -18,7 +18,7 @@ test('L4 parameters parse, clamp and fall back safely', () => {
         target: 5,
       },
       cluster: { selected: [0, 1], method: 'ward', clusters: 4, standardize: false },
-      discriminant: { group: 2, predictors: [0, 1] },
+      discriminant: { mode: 'classic', group: 2, predictors: [0, 1], covariates: [] },
       doe: { response: 0, factorA: 1, factorB: 2, model: 'linear' },
     },
     3
@@ -30,7 +30,7 @@ test('L4 parameters parse, clamp and fall back safely', () => {
   assert.equal(parsed.cluster.method, 'ward');
   assert.equal(parsed.cluster.clusters, 4);
   assert.equal(parsed.cluster.standardize, false);
-  assert.deepEqual(parsed.discriminant, { group: 2, predictors: [0, 1] });
+  assert.deepEqual(parsed.discriminant, { mode: 'classic', group: 2, predictors: [0, 1], covariates: [] });
   assert.equal(parsed.doe.model, 'linear');
 });
 

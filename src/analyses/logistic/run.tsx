@@ -28,7 +28,7 @@ export const buildLogisticOutput = ({
   params,
   ciLevel,
 }: LogisticInput): AnalysisRunResult => {
-  const { outcome, predictors, cutoff, penalized } = params;
+  const { outcome, predictors, cutoff, penalized, link } = params;
 
   if (!isFiniteNumber(cutoff) || cutoff <= 0 || cutoff >= 1) {
     return { ok: false, reason: 'Cut-off must be a number between 0 and 1' };
@@ -76,7 +76,7 @@ export const buildLogisticOutput = ({
     values: rows.map(row => row.values[position]),
   }));
 
-  const model = fitLogistic(y, predictorData, ciLevel, cutoff, penalized);
+  const model = fitLogistic(y, predictorData, ciLevel, cutoff, penalized, link ?? 'logit');
   if (!model) {
     return {
       ok: false,
@@ -293,7 +293,7 @@ export const buildLogisticOutput = ({
     title: copy('Regressione logistica: {s1}', { s1: outcomeName }),
     header,
     tables,
-    report: logisticReport(tables, ciLevel),
+    report: logisticReport(tables, ciLevel, link ?? 'logit'),
     charts,
   };
 };

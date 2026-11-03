@@ -260,6 +260,10 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const raw = isRecord(value) ? value : {};
   const ttest = isRecord(raw.ttest) ? raw.ttest : {};
   const anova = isRecord(raw.anova) ? raw.anova : {};
+  const glm = isRecord(raw.glm) ? raw.glm : {};
+  const quantile = isRecord(raw.quantile) ? raw.quantile : {};
+  const nonlinear = isRecord(raw.nonlinear) ? raw.nonlinear : {};
+  const multinomial = isRecord(raw.multinomial) ? raw.multinomial : {};
   const reg = isRecord(raw.reg) ? raw.reg : {};
   const corr = isRecord(raw.corr) ? raw.corr : {};
   const chisq = isRecord(raw.chisq) ? raw.chisq : {};
@@ -320,6 +324,52 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       group: optionalIndex(variances.group, d.variances.group, width),
       nullVariance: Math.max(1e-9, finite(variances.nullVariance, d.variances.nullVariance)),
     },
+    glm: {
+      dep: index(glm.dep, d.glm.dep, width),
+      indeps: indexList(glm.indeps, d.glm.indeps, width).filter(
+        (value) => value !== index(glm.dep, d.glm.dep, width)
+      ),
+      family:
+        glm.family === 'gaussian' ||
+        glm.family === 'binomial' ||
+        glm.family === 'poisson' ||
+        glm.family === 'gamma'
+          ? glm.family
+          : d.glm.family,
+      link:
+        glm.link === 'identity' ||
+        glm.link === 'log' ||
+        glm.link === 'logit' ||
+        glm.link === 'probit' ||
+        glm.link === 'inverse'
+          ? glm.link
+          : d.glm.link,
+    },
+    quantile: {
+      dep: index(quantile.dep, d.quantile.dep, width),
+      indeps: indexList(quantile.indeps, d.quantile.indeps, width).filter(
+        (value) => value !== index(quantile.dep, d.quantile.dep, width)
+      ),
+      tau: Math.min(0.99, Math.max(0.01, finite(quantile.tau, d.quantile.tau))),
+    },
+    nonlinear: {
+      dep: index(nonlinear.dep, d.nonlinear.dep, width),
+      predictor: index(nonlinear.predictor, d.nonlinear.predictor, width),
+      model:
+        nonlinear.model === 'exponential' ||
+        nonlinear.model === 'logistic' ||
+        nonlinear.model === 'gompertz' ||
+        nonlinear.model === 'power' ||
+        nonlinear.model === 'michaelis'
+          ? nonlinear.model
+          : d.nonlinear.model,
+    },
+    multinomial: {
+      outcome: index(multinomial.outcome, d.multinomial.outcome, width),
+      predictors: indexList(multinomial.predictors, d.multinomial.predictors, width).filter(
+        (value) => value !== index(multinomial.outcome, d.multinomial.outcome, width)
+      ),
+    },
     proportions: {
       mode:
         proportions.mode === 'twoProp' ||
@@ -352,7 +402,10 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       equalVar: bool(ttest.equalVar, d.ttest.equalVar),
     },
     anova: {
-      mode: anova.mode === 'median' ? 'median' : d.anova.mode,
+      mode:
+        anova.mode === 'median' || anova.mode === 'nested' || anova.mode === 'anom'
+          ? anova.mode
+          : d.anova.mode,
       dep: index(anova.dep, d.anova.dep, width),
       grp: index(anova.grp, d.anova.grp, width),
       posthoc: text(anova.posthoc, d.anova.posthoc),
@@ -361,6 +414,8 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
         anova.kwPosthoc === 'none' || anova.kwPosthoc === 'bonferroni' || anova.kwPosthoc === 'holm' || anova.kwPosthoc === 'fdr'
           ? anova.kwPosthoc
           : d.anova.kwPosthoc,
+      inner: optionalIndex(anova.inner, d.anova.inner ?? -1, width),
+      alpha: Math.min(0.5, Math.max(1e-6, finite(anova.alpha, d.anova.alpha ?? 0.05))),
     },
     reg: {
       dep: index(reg.dep, d.reg.dep, width),
@@ -368,6 +423,29 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       useNonParam: bool(reg.useNonParam, d.reg.useNonParam),
       robustEstimator: text(reg.robustEstimator, d.reg.robustEstimator),
       robustSE: reg.robustSE === 'HC1' || reg.robustSE === 'HC3' ? reg.robustSE : d.reg.robustSE,
+      mode:
+        reg.mode === 'selection' || reg.mode === 'polynomial' || reg.mode === 'penalized'
+          ? reg.mode
+          : 'linear',
+      degree: Math.min(12, Math.max(1, Math.round(finite(reg.degree, d.reg.degree ?? 2)))),
+      selectionDirection:
+        reg.selectionDirection === 'forward' || reg.selectionDirection === 'backward'
+          ? reg.selectionDirection
+          : d.reg.selectionDirection ?? 'both',
+      selectionCriterion:
+        reg.selectionCriterion === 'aic' ||
+        reg.selectionCriterion === 'adjR2' ||
+        reg.selectionCriterion === 'r2' ||
+        reg.selectionCriterion === 'cp' ||
+        reg.selectionCriterion === 'p'
+          ? reg.selectionCriterion
+          : d.reg.selectionCriterion ?? 'bic',
+      penalty:
+        reg.penalty === 'ridge' || reg.penalty === 'elasticnet' || reg.penalty === 'lasso'
+          ? reg.penalty
+          : d.reg.penalty ?? 'lasso',
+      lambda: Math.max(0, finite(reg.lambda, d.reg.lambda ?? 0.1)),
+      penaltyAlpha: Math.min(1, Math.max(0, finite(reg.penaltyAlpha, d.reg.penaltyAlpha ?? 0.5))),
     },
     corr: {
       vars: indexList(corr.vars, d.corr.vars, width),
@@ -418,6 +496,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       ),
       cutoff: finite(logistic.cutoff, d.logistic.cutoff),
       penalized: bool(logistic.penalized, d.logistic.penalized),
+      link: logistic.link === 'probit' ? 'probit' : 'logit',
     },
     cox: {
       timeVariable: coxTime,
@@ -610,8 +689,14 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       standardize: bool(cluster.standardize, d.cluster.standardize),
     },
     discriminant: {
+      mode: discriminant.mode === 'mancova' ? 'mancova' : 'classic',
       group: index(discriminant.group, d.discriminant.group, width),
       predictors: indexList(discriminant.predictors, d.discriminant.predictors, width),
+      covariates: indexList(
+        discriminant.covariates,
+        d.discriminant.covariates ?? [],
+        width
+      ),
     },
     doe: {
       response: index(doe.response, d.doe.response, width),

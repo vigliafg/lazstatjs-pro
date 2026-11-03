@@ -7,6 +7,10 @@ import { buildVariancesOutput } from './variances/run';
 import { buildTTestOutput } from './ttest/run';
 import { buildAnovaOutput } from './anova/run';
 import { buildRegressionOutput } from './regression/run';
+import { buildGlmOutput } from './glm/run';
+import { buildQuantileOutput } from './quantile/run';
+import { buildNonlinearOutput } from './nonlinear/run';
+import { buildMultinomialOutput } from './multinomial/run';
 import { buildCorrelationOutput } from './correlation/run';
 import { buildChiSquareOutput } from './chisquare/run';
 import { buildSampleSizeOutput } from './samplesize/run';
@@ -73,6 +77,14 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildAnovaOutput({ grid, anovaParams: params.anova, ciLevel }),
   regression: ({ grid, params, ciLevel }) =>
     buildRegressionOutput({ grid, regParams: params.reg, ciLevel }),
+  glm: ({ grid, params, ciLevel }) =>
+    buildGlmOutput({ grid, params: params.glm, ciLevel }),
+  quantile: ({ grid, params }) =>
+    buildQuantileOutput({ grid, params: params.quantile }),
+  nonlinear: ({ grid, params, ciLevel }) =>
+    buildNonlinearOutput({ grid, params: params.nonlinear, ciLevel }),
+  multinomial: ({ grid, params, ciLevel }) =>
+    buildMultinomialOutput({ grid, params: params.multinomial, ciLevel }),
   correlation: ({ grid, params, ciLevel }) =>
     buildCorrelationOutput({ grid, corrParams: params.corr, ciLevel }),
   chisquare: ({ grid, params, ciLevel }) =>

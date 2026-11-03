@@ -146,6 +146,73 @@ const ROLES: Record<string, AnalysisRole[]> = {
       set: (p, c) => ({ ...p, anova: { ...p.anova, grp: c } }),
     },
   ],
+  glm: [
+    {
+      key: 'dep',
+      label: 'GLM: dependent variable',
+      kind: 'continuous',
+      get: p => [p.glm.dep],
+      set: (p, c) => ({ ...p, glm: { ...p.glm, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'GLM: predictors',
+      kind: 'continuous',
+      get: p => p.glm.indeps,
+      set: (p, c) => ({ ...p, glm: { ...p.glm, indeps: append(p.glm.indeps, c) } }),
+    },
+  ],
+  quantile: [
+    {
+      key: 'dep',
+      label: 'Quantile: dependent variable',
+      kind: 'continuous',
+      get: p => [p.quantile.dep],
+      set: (p, c) => ({ ...p, quantile: { ...p.quantile, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'Quantile: predictors',
+      kind: 'continuous',
+      get: p => p.quantile.indeps,
+      set: (p, c) => ({ ...p, quantile: { ...p.quantile, indeps: append(p.quantile.indeps, c) } }),
+    },
+  ],
+  nonlinear: [
+    {
+      key: 'dep',
+      label: 'Nonlinear: dependent variable',
+      kind: 'continuous',
+      get: p => [p.nonlinear.dep],
+      set: (p, c) => ({ ...p, nonlinear: { ...p.nonlinear, dep: c } }),
+    },
+    {
+      key: 'predictor',
+      label: 'Nonlinear: predictor',
+      kind: 'continuous',
+      get: p => [p.nonlinear.predictor],
+      set: (p, c) => ({ ...p, nonlinear: { ...p.nonlinear, predictor: c } }),
+    },
+  ],
+  multinomial: [
+    {
+      key: 'outcome',
+      label: 'Multinomial: outcome',
+      kind: 'any',
+      get: p => [p.multinomial.outcome],
+      set: (p, c) => ({ ...p, multinomial: { ...p.multinomial, outcome: c } }),
+    },
+    {
+      key: 'predictors',
+      label: 'Multinomial: predictors',
+      kind: 'continuous',
+      get: p => p.multinomial.predictors,
+      set: (p, c) => ({
+        ...p,
+        multinomial: { ...p.multinomial, predictors: append(p.multinomial.predictors, c) },
+      }),
+    },
+  ],
   regression: [
     {
       key: 'dep',

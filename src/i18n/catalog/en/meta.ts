@@ -100,4 +100,12 @@ export const metaMessages = {
   'meta.analysis.proportions.description': 'One- and two-sample tests for proportions and Poisson rates.',
   'meta.analysis.variances.label': 'Variances',
   'meta.analysis.variances.description': 'One variance, F test, Bartlett and Levene for equality of variances.',
+  'meta.analysis.glm.label': 'GLM',
+  'meta.analysis.glm.description': 'Generalized linear models with Gaussian, binomial, Poisson and Gamma families.',
+  'meta.analysis.quantile.label': 'Quantile Regression',
+  'meta.analysis.quantile.description': 'Regress a conditional quantile instead of the mean.',
+  'meta.analysis.nonlinear.label': 'Nonlinear Regression',
+  'meta.analysis.nonlinear.description': 'Exponential, logistic, Gompertz, power and Michaelis–Menten curves.',
+  'meta.analysis.multinomial.label': 'Multinomial Logistic',
+  'meta.analysis.multinomial.description': 'Nominal outcome with more than two classes.',
 } as const;

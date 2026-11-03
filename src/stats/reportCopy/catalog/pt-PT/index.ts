@@ -35,6 +35,7 @@ import { timeseriesCopy } from './timeseries';
 import { tostCopy } from './tost';
 import { ttestCopy } from './ttest';
 import { wizardCopy } from './wizard';
+import { w2Copy } from './w2';
 import { proportionsCopy as ptProportionsCopy } from './proportions';
 import { variancesCopy as ptVariancesCopy } from './variances';
 
@@ -74,4 +75,5 @@ export const ptPTReportCopy: Record<string, string> = {
   ...wizardCopy,
   ...ptProportionsCopy,
   ...ptVariancesCopy,
+  ...w2Copy,
 };

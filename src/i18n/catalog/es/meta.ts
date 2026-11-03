@@ -102,4 +102,12 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.proportions.description': 'Pruebas de una y dos muestras para proporciones y tasas de Poisson.',
   'meta.analysis.variances.label': 'Varianzas',
   'meta.analysis.variances.description': 'Una varianza, prueba F, Bartlett y Levene para la igualdad de varianzas.',
+  'meta.analysis.glm.label': 'Modelo lineal generalizado (GLM)',
+  'meta.analysis.glm.description': 'Modelos lineales generalizados con familias gaussiana, binomial, Poisson y gamma.',
+  'meta.analysis.quantile.label': 'Regresión cuantil',
+  'meta.analysis.quantile.description': 'Regresión sobre un cuantil condicional en lugar de la media.',
+  'meta.analysis.nonlinear.label': 'Regresión no lineal',
+  'meta.analysis.nonlinear.description': 'Curvas exponenciales, logísticas, Gompertz, potencia y Michaelis–Menten.',
+  'meta.analysis.multinomial.label': 'Logística multinomial',
+  'meta.analysis.multinomial.description': 'Resultado nominal con más de dos clases.',
 };

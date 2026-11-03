@@ -100,4 +100,12 @@ export const metaMessages = {
   'meta.analysis.proportions.description': 'Testes de uma e duas amostras para proporções e taxas de Poisson.',
   'meta.analysis.variances.label': 'Variâncias',
   'meta.analysis.variances.description': 'Uma variância, teste F, Bartlett e Levene para a igualdade de variâncias.',
+  'meta.analysis.glm.label': 'Modelo linear generalizado (GLM)',
+  'meta.analysis.glm.description': 'Modelos lineares generalizados com famílias gaussiana, binomial, Poisson e gama.',
+  'meta.analysis.quantile.label': 'Regressão quantílica',
+  'meta.analysis.quantile.description': 'Regressão sobre um quantil condicional em vez da média.',
+  'meta.analysis.nonlinear.label': 'Regressão não linear',
+  'meta.analysis.nonlinear.description': 'Curvas exponencial, logística, Gompertz, potência e Michaelis–Menten.',
+  'meta.analysis.multinomial.label': 'Logística multinomial',
+  'meta.analysis.multinomial.description': 'Resultado nominal com mais de duas classes.',
 } as const;

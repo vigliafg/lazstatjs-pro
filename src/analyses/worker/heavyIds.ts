@@ -14,6 +14,9 @@ export const HEAVY_ANALYSIS_IDS = [
   'timeseries',
   'mi',
   'resampling',
+  'quantile',
+  'nonlinear',
+  'multinomial',
 ] as const;
 
 export type HeavyAnalysisId = (typeof HEAVY_ANALYSIS_IDS)[number];

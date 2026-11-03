@@ -10,6 +10,9 @@ import { fitModelPanel, regressionDiagnosticPanel } from '../../charts/panels';
 import type { Dataset } from '../../grid/types';
 import type { RegParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { buildPolynomialOutput } from './polynomial';
+import { buildSelectionOutput } from './selection';
+import { buildPenalizedOutput } from './penalized';
 
 export interface RegressionRunInput {
   grid: Dataset;
@@ -55,6 +58,10 @@ const qqReference = (points: ChartRow[]): ChartRow[] => {
 /** Regressione lineare multipla: tabelle, diagnostica, grafici e report. */
 export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunResult => {
   const { grid, regParams, ciLevel } = input;
+  const mode = regParams.mode ?? 'linear';
+  if (mode === 'polynomial') return buildPolynomialOutput(input);
+  if (mode === 'selection') return buildSelectionOutput(input);
+  if (mode === 'penalized') return buildPenalizedOutput(input);
   const { dep, indeps, useNonParam } = regParams;
   if (indeps.length === 0) return { ok: false, reason: 'Select at least one predictor' };
 

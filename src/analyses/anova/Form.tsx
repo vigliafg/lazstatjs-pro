@@ -30,6 +30,8 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
         >
           <option value="oneway">{t('anova.oneway')}</option>
           <option value="median">{t('anova.median')}</option>
+          <option value="nested">{t('anova.nested')}</option>
+          <option value="anom">{t('anova.anom')}</option>
         </select>
       </Field>
       <VariableSelect
@@ -49,7 +51,34 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
         onLevels={onLevels}
         onRecode={onRecode}
       />
-      <Field label={t('form.postHoc')}>
+      {anovaParams.mode === 'nested' && (
+        <GroupSelect
+          label={t('form.innerFactor')}
+          ariaLabel="ANOVA inner factor"
+          grid={grid}
+          value={anovaParams.inner ?? -1}
+          onChange={value => setAnovaParams(previous => ({ ...previous, inner: value }))}
+          onLevels={onLevels}
+          onRecode={onRecode}
+        />
+      )}
+      {anovaParams.mode === 'anom' && (
+        <Field label={t('form.alpha')}>
+          <input
+            type="number"
+            step="0.01"
+            min="0.001"
+            max="0.49"
+            className="w-24 rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+            value={anovaParams.alpha ?? 0.05}
+            onChange={event =>
+              setAnovaParams(previous => ({ ...previous, alpha: Number(event.target.value) }))
+            }
+          />
+        </Field>
+      )}
+      {(anovaParams.mode === 'oneway' || anovaParams.mode === 'median') && (
+        <Field label={t('form.postHoc')}>
         <select
           aria-label={t('form.postHoc')}
           className="min-w-[120px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
@@ -64,7 +93,9 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
           <option value="holm">{t('posthoc.holm')}</option>
           <option value="gameshowell">{t('posthoc.gameshowell')}</option>
         </select>
-      </Field>
+        </Field>
+      )}
+      {(anovaParams.mode === 'oneway' || anovaParams.mode === 'median') && (
       <Advanced>
         <CheckboxField
           label={t('form.kruskalWallis')}
@@ -93,6 +124,7 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
           </Field>
         )}
       </Advanced>
+      )}
     </>
   );
 };

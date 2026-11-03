@@ -7,6 +7,10 @@ import { VariancesForm } from '../../analyses/variances/Form';
 import { TTestForm } from '../../analyses/ttest/Form';
 import { AnovaForm } from '../../analyses/anova/Form';
 import { RegressionForm } from '../../analyses/regression/Form';
+import { GlmForm } from '../../analyses/glm/Form';
+import { QuantileForm } from '../../analyses/quantile/Form';
+import { NonlinearForm } from '../../analyses/nonlinear/Form';
+import { MultinomialForm } from '../../analyses/multinomial/Form';
 import { CorrelationForm } from '../../analyses/correlation/Form';
 import { ChiSquareForm } from '../../analyses/chisquare/Form';
 import { SampleSizeForm } from '../../analyses/samplesize/Form';
@@ -101,6 +105,38 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
             grid={p.grid}
             regParams={params.reg}
             setRegParams={setSlice('reg')}
+          />
+        );
+      case 'glm':
+        return (
+          <GlmForm
+            grid={p.grid}
+            glmParams={params.glm}
+            setGlmParams={setSlice('glm')}
+          />
+        );
+      case 'quantile':
+        return (
+          <QuantileForm
+            grid={p.grid}
+            params={params.quantile}
+            setParams={setSlice('quantile')}
+          />
+        );
+      case 'nonlinear':
+        return (
+          <NonlinearForm
+            grid={p.grid}
+            params={params.nonlinear}
+            setParams={setSlice('nonlinear')}
+          />
+        );
+      case 'multinomial':
+        return (
+          <MultinomialForm
+            grid={p.grid}
+            multinomialParams={params.multinomial}
+            setMultinomialParams={setSlice('multinomial')}
           />
         );
       case 'correlation':
