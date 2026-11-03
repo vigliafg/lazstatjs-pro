@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b, F9.3a, F9.3b e F10.1 chiuse)
-- **Fase corrente**: F10.2 — bar, Pareto, mosaico, heatmap, interval, dot
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b, F9.3a, F9.3b, F10.1 e F10.2 chiuse)
+- **Fase corrente**: F10.3 — default box, scatter e Q-Q per procedura
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,14 +12,14 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F10.1 forest a rapporto, curve KM e serie con marker`.
-- **Chiuso**: F0.1 → F10.1. Ondata O9 completa con `npm run check` verde;
-  F10.1 con gate mirato verde (layers, styles, survival, stratcox, copy,
-  analysisKinds), `tsc --noEmit` exit 0, `check-locale` 6/6, `help:build` verde.
+- **Ultimo commit**: `fix(charts): F10.2 frequenze e pesi ordinati dal valore più alto`.
+- **Chiuso**: F0.1 → F10.2. F10.1 e F10.2 con gate mirato verde (layers,
+  styles, descriptive, chisquare, meta, quality, copy, analysisKinds),
+  `tsc --noEmit` exit 0, `check-locale` 6/6, `help:build` verde.
 - **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
   moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
-- **Da riprendere**: **F10.2** (bar, Pareto, mosaico, heatmap, interval, dot),
-  poi F10.3.
+- **Da riprendere**: **F10.3** (default box/scatter/Q-Q per procedura), poi
+  F11.1a.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -105,7 +105,7 @@ con motivo.
 | F9.3a | Bayes PPC, meta | 45 | ✅ | `feat(charts): F9.3a controllo predittivo bayesiano e funnel` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F9.3b | spatial variogram | 45 | ✅ | `feat(charts): F9.3b variogramma sperimentale spaziale` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ✅ | `feat(charts): F10.1 forest a rapporto, curve KM e serie con marker` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
-| F10.2 | bar, Pareto, mosaico, heatmap, interval, dot | 45 | ⬜ | — | — |
+| F10.2 | bar, Pareto, mosaico, heatmap, interval, dot | 45 | ✅ | `fix(charts): F10.2 frequenze e pesi ordinati dal valore più alto` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F10.3 | box, scatter, Q-Q: default per procedura | 45 | ⬜ | — | — |
 | F11.1a | traduzioni fr/es | 45 | ⬜ | — | — |
 | F11.1b | traduzioni de/pt-PT | 45 | ⬜ | — | — |
@@ -224,6 +224,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F10.1 | `meta-forest` resta in scala lineare | `MetaParams` non ha un measure: senza sapere se l’effetto è un rapporto non si può passare al log, e la meta-analisi su log-OR è già lineare |
 | 2026-11-03 | F10.1 | `parametric-survival` non usa `step: true` | la curva parametrica è analitica, non una Kaplan–Meier a gradini: si applicano solo mediana e opzioni di lettura |
 | 2026-11-03 | F10.1 | Il filtro delle righe non positive vive nel layer `forest` | un solo punto di guardia per tutti i forest a rapporto, invece di una nota per runner |
+| 2026-11-03 | F10.2 | Gli heatmap con celle con segno restano `diverging` | carichi e coefficienti hanno segno: con una scala sequenziale i valori negativi finirebbero sul colore più chiaro e perderebbero significato; il piano prevedeva `sequential` per i loadings, si deroga con motivo |
+| 2026-11-03 | F10.2 | Frequenze, GOF e pesi meta ordinati `desc` | stesse tabelle JMP: il valore più grande per primo rende immediata la lettura delle code |
+| 2026-11-03 | F10.2 | Nessun cambio a `interval`/`dot` | `jmp-mean-diamond` è già attivo dove la media ha senso (ANOM, Oneway) ed è spento per proporzioni, varianze e mediane, come deve essere |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -798,6 +801,31 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### F10.2 — Bar, Pareto, mosaico, heatmap, interval, dot
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `bar`: `freq-bar` (descriptive), `gof-bar` (chisquare) e `meta-weights`
+    ordinano dal valore più alto (`sort: 'desc'`), con etichette già attive.
+  - `pareto`: verificato — barre decrescenti dal kernel, cumulata su asse
+    destro con dominio 0–100, `showCumulative: true` in quality e chisquare.
+  - `mosaic`: chisquare e contingency passano già
+    `{ showValues: true, residualColor: true }`: etichette di cella, riga e
+    colonna, colore sul residuo standardizzato.
+  - `heatmap`: i residui (contingency, loglinear) e le correlazioni
+    (correlation, sem) sono `diverging`; probabilità, conteggi e confusion
+    matrix sono sequenziali.
+  - `interval`/`dot`: `jmp-mean-diamond` in ANOM/Oneway, `jmp-strip` (jitter
+    largo senza media) nel dot descrittivo; nessuna modifica necessaria.
+- **Verificato**: `bar sort` continua a ordinare l'asse nominale per valore;
+  pareto e mosaico coperti dai test di layers.
+- **File toccati**: `src/analyses/descriptive/run.tsx`,
+  `src/analyses/chisquare/run.tsx`, `src/analyses/meta/run.tsx`.
+- **Test**: layers + styles + descriptive + chisquare + meta + quality + copy +
+  analysisKinds verdi; `tsc --noEmit` exit 0; `check-locale` 6/6;
+  `help:build` verde.
+- **Commit**: `fix(charts): F10.2 frequenze e pesi ordinati dal valore più alto`
+
 ### F10.1 — Forest, survival, line in stile JMP
 
 - **Stato**: ✅ chiusa (2026-11-03)
@@ -936,8 +964,8 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F10.2: bar, Pareto, mosaico, heatmap, interval, dot.
-2. F10.3: default box/scatter/Q-Q per procedura.
+1. F10.3: default box/scatter/Q-Q per procedura.
+2. F11.1a: traduzioni fr/es dei cataloghi `charts-w10`.
 3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH,
    matrice di alias, DEFF survey, text mining, PPC bayesiano e variogramma.
 

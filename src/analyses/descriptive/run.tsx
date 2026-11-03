@@ -98,7 +98,7 @@ const buildFrequencyOutput = (input: DescriptiveInput): DescriptiveOutputResult 
         bars: entry.result.rows.map(row => ({ category: row.value, value: row.count })),
       },
       fields: { xLabel: entry.name, yLabel: copy('Count') },
-      options: { valueLabels: true } as never,
+      options: { valueLabels: true, sort: 'desc' } as never,
     })
   );
 

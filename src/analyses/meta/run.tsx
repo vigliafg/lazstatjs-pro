@@ -91,7 +91,8 @@ export const buildMetaOutput = ({ grid, params, ciLevel }: MetaInput): AnalysisR
         })),
       },
       fields: { xLabel: copy('Studio'), yLabel: copy('Peso %') },
-      options: { valueLabels: true } as never,
+      // Same order as the forest: the most precise study first.
+      options: { valueLabels: true, sort: 'desc' } as never,
     }),
   ];
 

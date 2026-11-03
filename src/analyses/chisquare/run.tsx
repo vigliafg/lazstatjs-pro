@@ -242,7 +242,7 @@ const buildGoodnessOutput = ({ grid, chisqParams, ciLevel }: ChiSquareRunInput):
           })),
         },
         fields: { xLabel: variableName, yLabel: copy('Count') },
-        options: { valueLabels: true } as never,
+        options: { valueLabels: true, sort: 'desc' } as never,
       }),
       makeChart({
         id: 'gof-contribution',
