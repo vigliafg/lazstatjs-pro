@@ -33,7 +33,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W5 chiusa (gate G5 verde); prossima W6 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `09c67cc` (chiusura W5) |
+| Ultimo commit di codice | `a0055dd` (etichette ruolo W5) |
 | Ultimo commit documentale | `7541e2d` (regole economia del contesto) |
 | Test | `npm run check` verde; `npm test` 1206/1206 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 46 / 73; W5 chiusa |
@@ -577,7 +577,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 
 - Ondata: W5 chiusa, gate G5 verde; prossima W6 (survival e affidabilità).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: `09c67cc` (chiusura W5).
+- Ultimo commit: `a0055dd` (etichette ruolo W5; gate su `09c67cc`).
 - Item chiusi (ID): M-01 k-means/k-medians, M-02 correlazione canonica,
   M-03 MDS, M-04 corrispondenze, M-05 SEM/CFA, M-06 classi latenti,
   M-07 IRT, M-08 conjoint.
