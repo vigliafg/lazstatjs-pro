@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (handoff pre-compattazione, W1 chiusa / W2 pronta)
+**Ultimo aggiornamento**: 2026-11-03 (checkpoint W2: 11/12 metodi chiusi, C-10 aperta)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0 e W1 chiuse, gate G0 e G1 verdi; W2 pronta a partire (nessun file W2 ancora scritto)
-**Prossima ondata**: W2 — ANOVA/GLMM + Regressione nucleo
+**Stato**: W0 e W1 chiuse; W2 a 11/12 metodi, gate non ancora dichiarato per C-10 (GLMM/pendenze casuali)
+**Prossima ondata**: chiusura C-10, poi W3
 
 ---
 
@@ -31,17 +31,17 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W1 chiusa; prossima W2 |
+| Ondata corrente | W2 quase chiusa: 11/12 metodi |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `e10684a` (chiusura W1) |
-| Ultimo commit documentale | `bccd8bd` (regole subagenti + modello) |
-| Test | `npm run check` verde; `npm test` 957/957 verdi; `npm run test:samples` 7/7; locale check 6/6 |
-| Item chiusi | 14 / 73 |
-| Nuove voci | 2 / 36 (`proportions`, `variances`) |
-| Estensioni | 12 / 37 |
+| Ultimo commit di codice | `7bf4e84` (W2, 11 metodi) |
+| Ultimo commit documentale | `39feca4` (handoff pre-compattazione) |
+| Test | `npm run check` verde; `npm test` 1052/1052 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Item chiusi | 25 / 73 |
+| Nuove voci | 6 / 36 (`proportions`, `variances`, `glm`, `quantile`, `nonlinear`, `multinomial`) |
+| Estensioni | 19 / 37 |
 | Reference baseline | 35 / 35 procedure statistiche (W0-09 chiuso) |
 | Blocchi | nessuno |
-| Prossimo gate | W2-mid (dopo R-05) e G2 — fine W2 (12 metodi, GLM/GLMM reference) |
+| Prossimo gate | G2 — fine W2, bloccato da C-10 (GLMM/pendenze casuali) |
 
 ---
 
@@ -51,7 +51,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|---:|---:|---|---|
 | W0 | Fondazioni condivise + retrofit | — | — | **chiusa** (G0 verde) | G0 |
 | W1 | Descriptive + test di base | 14 | 2 | **chiusa** (G1 verde) | G1 |
-| W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | non iniziata | G2 |
+| W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | **in corso** (11/12; C-10 aperta) | G2 |
 | W3 | Regressione avanzata | 7 | 7 | non iniziata | G3 |
 | W4 | Categorical + MI categorica | 5 | 1 | non iniziata | G4 |
 | W5 | Multivariate avanzata | 8 | 7 | non iniziata | G5 |
@@ -265,57 +265,54 @@ help in 6 lingue, sample nei 5 formati e reference test.
 
 ---
 
-## 5c. Ondata W2 — piano di partenza (non iniziata)
+## 5c. Ondata W2 — stato al checkpoint (11/12)
 
 Obiettivo: ANOVA/GLMM + nucleo regressione, **12 metodi, 5 nuove voci**.
 
-Scope dedotto dal piano (§6.3, §7.2, §7.3, checkpoint W2-mid dopo R-05):
+### Chiusi in W2 (11)
 
-| ID | Metodo | Tipo |
-|---|---|---|
-| C-08 | ANOVA nested | mode `anova` |
-| C-09 | MANCOVA | mode `discriminant` |
-| C-10 | Pendenze casuali / GLMM | **new `glmm`** |
-| C-11 | ANOM | mode `anova` |
-| R-01 | Stepwise / best subsets | mode `regression` |
-| R-02 | Polinomiale / curve | mode `regression` |
-| R-03 | Non lineare | **new `nonlinear`** |
-| R-04 | Multinomiale | **new `multinomial`** |
-| R-05 | Probit | mode `logistic` |
-| R-06 | GLM gamma/Tweedie | **new `glm`** |
-| R-07 | Quantile | **new `quantile`** |
-| R-08 | Ridge/LASSO/elastic net | mode `regression` |
+| ID | Metodo | Tipo | Note |
+|---|---|---|---|
+| C-08 | ANOVA nested | mode `anova` | `kernels/nestedAnova.ts`, reference `aov` |
+| C-09 | MANCOVA | mode `discriminant` | `kernels/mancova.ts`, reference `car::Anova` |
+| C-11 | ANOM | mode `anova` | `kernels/anom.ts`, limite Bonferroni-t documentato |
+| R-01 | Stepwise / best subsets | mode `regression` | `kernels/selection.ts`, reference `leaps`/`step` |
+| R-02 | Polinomiale | mode `regression` | `kernels/polynomial.ts`, reference `lm(poly raw)` |
+| R-03 | Non lineare | voce `nonlinear` | `kernels/nonlinear.ts`, reference `nls` |
+| R-04 | Multinomiale | voce `multinomial` | `kernels/multinomial.ts`, reference `nnet::multinom` |
+| R-05 | Probit | mode `logistic` | link `probit` in `kernels/logistic.ts`, reference `glm(probit)` |
+| R-06 | GLM | voce `glm` | famiglie gaussiana/binomiale/Poisson/Gamma; Tweedie non inclusa |
+| R-07 | Quantile | voce `quantile` | `kernels/quantile.ts` (Barrodale–Roberts), reference `quantreg` |
+| R-08 | Ridge/LASSO/elastic net | mode `regression` | `kernels/penalized.ts`, reference `glmnet` |
 
-### Parallelizzazione prevista (piano §17)
+### Aperto (1)
 
-Batch 1, tre `general` sullo stesso modello dell'agente principale, file
-disgiunti:
+- **C-10 — Pendenze casuali / GLMM**: richiede un kernel GLMM (Laplace o PQL) e
+  l'estensione dell'LMM a pendenze casuali. È l'unico item che impedisce G2.
+  Decisione consigliata: trattarlo come primo item della sessione successiva,
+  con reference `lme4::lmer/glmer` e tolleranze Monte Carlo/Laplace dichiarate.
 
-1. **R-03 nonlinear**: `kernels/nonlinear.ts` + test + `reference/r/nonlinear.R`
-   + `fixtures/nonlinear.json`.
-2. **R-04 multinomial**: `kernels/multinomial.ts` + test + fixture R
-   (`nnet::multinom`).
-3. **R-07 quantile**: `kernels/quantile.ts` + test + fixture R
-   (`quantreg::rq`).
+### Reference aggiunte in W2
 
-Agente principale in parallelo: contratti in `analysisResults.ts` e lavoro sui
-file condivisi (C-08, C-11, R-01, R-02, R-05), poi integrazione, help/i18n,
-sample, `npm run check`.
+`probit`, `polynomial`, `selection`, `penalized`, `quantile`, `nonlinear`,
+`multinomial`, `nestedAnova`, `anom`, `mancova` (script R + fixture committate;
+nessun R richiesto a test-time).
 
-Batch 2 (dopo il primo merge): C-09, C-10, R-06, R-08; C-09 e R-08 estendono
-kernel esistenti (`discriminant.ts`, `regression.ts`) e restano all'agente
-principale, C-10 e R-06 sono voci nuove e possono essere delegate.
+### Parallelizzazione usata
 
-### Disponibilità R verificata
+Batch 1: tre `general` su kernel `nonlinear`, `multinomial`, `quantile`.
+Batch 2: tre `general` sulle voci complete `quantile`, `nonlinear`,
+`multinomial` (form, runner, tabelle, report, test).
+Batch 3: due `general` sui cataloghi reportCopy (en/de e es/fr/pt-PT) e uno
+sulle pagine help 6 lingue. Agente principale: contratti condivisi, GLM,
+MANCOVA, modalità ANOVA/regressione/logistica, integrazione e gate.
 
-Presenti: `nnet`, `glmnet`, `quantreg`, `earth`, `pls`, `AER`, `plm`,
-`MatchIt`, `lme4`, `car`. Assenti: `sampleSelection`, `mediation` (servono per
-W3, non per W2).
+### Debito residuo noto
 
-### Nota operativa
-
-I lanci dei subagenti sono stati interrotti prima di produrre file: nessun
-lavoro W2 è in corso e l'albero è pulito.
+- C-10 GLMM/pendenze casuali.
+- R-06: Tweedie non implementata (solo Gamma); documentato nel report.
+- ANOM: linee di decisione con approssimazione Bonferroni-t, non SMM esatta.
+- La fixture MANCOVA usa i valori stampati da `car` (7 cifre): tolleranza 1e-6.
 
 ---
 
@@ -328,7 +325,7 @@ lavoro W2 è in corso e l'albero è pulito.
 | 2026-11-02 | Checkpoint W0 parziale | `9c6116a` | `npm test` 850/850 | verde | W0-01/02/03 chiusi; W0-09 3/8; fix Ward.D2 |
 | 2026-11-02 | Chiusura W0 / G0 | `ab0c26a` | `npm run check` + `test:samples` + locale 6/6 | verde | W0-01…09 chiusi; 880/880; fix MI e DOE; cap Theil–Sen/Lilliefors |
 | 2026-11-03 | Chiusura W1 / G1 | `e10684a` | `npm run check` + `test:samples` + locale 6/6 | verde | 14 metodi (D-01…D-04, Q-04, C-01…C-07, P-01/P-02); 957/957; 2 nuove voci |
-| 2026-11-03 | Handoff pre-compattazione | `bccd8bd` | `npm run check` verde (ultima esecuzione) | verde | W1 chiusa; W2 pianificata con batch di 3 subagenti; nessun file W2 scritto |
+| 2026-11-03 | Handoff pre-compattazione | `bccd8bd` | `npm run check` verde (ultima esecuzione) | verde | W1 chiusa; W2 pianificata con batch di 3 subagenti; nessun file W2 scritto |\n| 2026-11-03 | Checkpoint W2 (11/12) | `7bf4e84` | `npm run check` 1052/1052 + `test:samples` 7/7 + locale 6/6 | verde | C-08/C-09/C-11, R-01…R-08 tranne C-10; 4 nuove voci; 10 reference; G2 non dichiarato |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -338,53 +335,53 @@ lavoro W2 è in corso e l'albero è pulito.
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
 
-### Handoff — 2026-11-03 / pre-compattazione, W2 pronta
+### Handoff — 2026-11-03 / checkpoint W2 (11/12)
 
-- Ondata: W1 chiusa (G1 verde); W2 non iniziata, pronta a partire.
+- Ondata: W2 a 11/12 metodi; G2 non dichiarato per C-10 aperta.
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: `bccd8bd` (documenti); codice W1 `e10684a`.
-- Item chiusi (ID): W1 completa — D-01…D-04, Q-04, C-01…C-07, P-01/P-02;
-  gate G0 e G1.
-- Item in corso (ID): nessuno. I lanci dei subagenti per W2 sono stati
-  interrotti prima di scrivere file.
-- Item bloccati (ID + motivo): nessuno.
-- Test eseguiti e risultato: ultima esecuzione `npm run check` verde
-  (lint, **957/957** test, depcruise/madge/filesize); `npm run test:samples`
-  7/7; locale check 6/6. Albero pulito.
-- File/moduli toccati: nessuno dopo `bccd8bd`.
-- Decisioni prese: piano §17 e `AGENTS.md` — 2–3 subagenti in parallelo con
-  proprietario unico dei file; kernel/tabelle/report sullo stesso modello
-  dell'agente principale (`opencode-go/deepseek-v4.1-flash`); `explore` veloce;
-  `council-*` su modelli indipendenti.
-- Scope W2 dedotto dal piano: C-08, C-09, C-10 (`glmm`), C-11, R-01, R-02,
-  R-03 (`nonlinear`), R-04 (`multinomial`), R-05, R-06 (`glm`), R-07
-  (`quantile`), R-08. Dettaglio in §5c.
+- Ultimo commit: codice `7bf4e84`; documenti aggiornati in questo commit.
+- Item chiusi (ID): W1 completa (D-01…D-04, Q-04, C-01…C-07, P-01/P-02);
+  W2: C-08, C-09, C-11, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08.
+- Item in corso (ID): C-10 — pendenze casuali / GLMM.
+- Item bloccati (ID + motivo): C-10 richiede un kernel GLMM (Laplace/PQL) e
+  l'estensione dell'LMM a pendenze casuali; decisione architetturale rinviata
+  a inizio sessione successiva.
+- Test eseguiti e risultato: `npm run check` **verde** (lint, 1052/1052 test,
+  depcruise, madge, file size); `npm run test:samples` 7/7; locale check 6/6.
+- File/moduli toccati: contratti `types/parse/params/roles/registry/runners`,
+  Form/run di anova, regression, logistic, discriminant; nuove voci `glm`,
+  `quantile`, `nonlinear`, `multinomial`; kernel `nestedAnova`, `anom`,
+  `polynomial`, `selection`, `penalized`, `mancova`, `quantile`, `nonlinear`,
+  `multinomial`; 10 reference R; help 6 lingue; manifest sample.
+- Decisioni prese / deviazioni dal piano:
+  - R-06 copre Gaussiana/Binomiale/Poisson/Gamma; Tweedie non inclusa.
+  - ANOM usa l'approssimazione Bonferroni-t (documentata) invece della SMM.
+  - C-09 è implementata come modalità `mancova` di `discriminant`.
+  - 4 voci nuove effettive in W2 (`glm`, `quantile`, `nonlinear`,
+    `multinomial`), la quinta (`glmm`) dipende da C-10.
 - Prossimi 3 passi:
-  1. Batch 1 con tre `general`: R-03 nonlinear, R-04 multinomial, R-07
-     quantile (kernel + test + fixture R), perimetro file chiuso.
-  2. In parallelo l'agente principale prepara i contratti in
-     `analysisResults.ts` e implementa C-08, C-11, R-01, R-02, R-05.
-  3. Integrare, help/i18n 6 lingue, sample, `npm run check`; poi batch 2
-     (C-09, C-10, R-06, R-08).
-- Domande aperte: lo scope W2 è dedotto dal piano (12 metodi, 5 voci nuove).
-  Se l'utente intende un insieme diverso, correggere §5c prima del batch 1.
-- Rischi attivi: C-09 e R-08 estendono kernel esistenti (seriali); C-10 GLMM
-  richiede `lme4`/`glmmTMB` come reference; R-07 quantile richiede `quantreg`.
-  Le fixture R vanno committate, non ricalcolate nei test.
+  1. Implementare C-10: kernel GLMM random-intercept (Laplace) + pendenze
+     casuali per LMM gaussiano, reference `lme4`/`glmmTMB`.
+  2. Integrare la voce `glmm` e la modalità pendenze casuali in `lmm`; help,
+     sample, worker e 6 lingue.
+  3. Eseguire `npm run check` e dichiarare G2; aggiornare i conteggi globali.
+- Domande aperte: confermare se C-10 va chiuso con GLMM completo (Laplace)
+  o con solo pendenze casuali gaussiane come primo passo.
+- Rischi attivi: il Laplace GLMM è numericamente delicato; le reference
+  `lme4`/`glmmTMB` richiedono tolleranze dichiarate e fixture committate.
 
 ### Riassunto di 10 righe
 
-1. Ondata e obiettivo: W1 chiusa; W2 pronta (ANOVA/GLMM + regressione nucleo).
-2. Cosa è chiuso: 14 metodi W1, gate G0 e G1, 14/73.
-3. Cosa è in corso: nulla; nessun file W2 scritto.
-4. Cosa è bloccato: nulla.
-5. Ultimo commit: `bccd8bd`; codice `e10684a` su `feat/gap-wave-1`.
-6. Test: ultima esecuzione verde, 957/957; sample 7/7; locale 6/6.
-7. Decisioni: subagenti 2–3 con file ownership e stesso modello per i kernel.
-8. Prossimi 3 passi: batch 1 (nonlinear, multinomial, quantile), contratti +
-   C-08/C-11/R-01/R-02/R-05, integrazione e check.
-9. Domande: conferma dello scope W2 dedotto (12 metodi, 5 voci nuove).
-10. Rischi: kernel condivisi (C-09, R-08) seriali; reference R da committare.
+1. Ondata e obiettivo: W2 a 11/12; resta C-10 (GLMM/pendenze casuali).
+2. Cosa è chiuso: 25 metodi totali (14 W1 + 11 W2); 6 voci nuove; 19 estensioni.
+3. Cosa è in corso: C-10, non iniziato.
+4. Cosa è bloccato: C-10 per decisione architetturale sul motore GLMM.
+5. Ultimo commit: `7bf4e84` su `feat/gap-wave-1`.
+6. Test: `npm run check` verde, 1052/1052; sample 7/7; locale 6/6.
+7. Decisioni: 3 batch di subagenti; Tweedie esclusa; ANOM Bonferroni-t.
+8. Prossimi 3 passi: C-10 kernel, voce `glmm` + pendenze casuali, G2.
+9. Domande: GLMM completo o solo pendenze casuali gaussiane?
+10. Rischi: stabilità numerica del Laplace; reference R da committare.
 
 ```md
 ## Handoff — YYYY-MM-DD / W?
