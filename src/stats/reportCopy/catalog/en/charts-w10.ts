@@ -108,6 +108,12 @@ export const w10ChartCopy: Record<string, string> = {
   "Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. La scala è logaritmica, quindi HR protettivi e di rischio occupano lo stesso spazio.":
     "Point: HR estimate. Segment: confidence interval. Dashed line: HR = 1, that is, no effect. The scale is logarithmic, so protective and risk HRs take the same space.",
   "IC {s1}% · scala log": "CI {s1}% · log scale",
+  "Life-stress plot: {s1}": "Life-stress plot: {s1}",
+  "Vita su scala log10 · stress trasformato ({s1})": "Life on the log10 scale · transformed stress ({s1})",
+  "Ogni punto è un tempo osservato, censurati inclusi, riportato su scala log10; l’asse orizzontale usa la trasformazione richiesta dal modello. La retta ha la pendenza dello stress stimata dal modello Weibull ed è ancorata alla media dei punti: le covariati aggiuntive spostano l’intercetta, non la pendenza.":
+    "Each point is an observed time, censored ones included, on the log10 scale; the horizontal axis uses the transform the model requires. The line has the stress slope estimated by the Weibull model and is anchored at the mean of the points: additional covariates shift the intercept, not the slope.",
+  "Stress trasformato": "Transformed stress",
+  "Vita (log10)": "Life (log10)",
   "Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.":
     "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
   "Predittore": "Predictor",

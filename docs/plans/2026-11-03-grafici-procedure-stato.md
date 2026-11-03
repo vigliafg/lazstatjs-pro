@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F7.1 e F7.2 chiuse)
-- **Fase corrente**: F7.3a — ALT life-stress plot
+- **Ultimo aggiornamento**: 2026-11-03 (F7.3a e F7.3b chiuse)
+- **Fase corrente**: F8.1 — Holt-Winters, radici unitarie, spettrale
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -76,8 +76,8 @@ con motivo.
 | F6.1 | esatti, trend, verifica MH | 45 | ✅ | `feat(charts): F6.1 osservati e attesi nel test esatto` | 2 test + `check` e `locales:check` verdi |
 | F7.1 | life table, competing, frailty, recurrent | 45 | ✅ | `feat(charts): F7.1–F7.2 sopravvivenza, rischi competitivi e foreste su scala log` | 17 test + `check` e `locales:check` verdi |
 | F7.2 | Cox, stratified, time-dependent | 45 | ✅ | idem (commit unico: i cataloghi sono condivisi) | 17 test + `check` e `locales:check` verdi |
-| F7.3a | ALT: life-stress plot | 45 | ⬜ | — | — |
-| F7.3b | parametric, reliability | 30 | ⬜ | — | — |
+| F7.3a | ALT: life-stress plot | 45 | ✅ | `feat(charts): F7.3a life-stress plot e verifica parametriche` | 8 test + `check` verdi |
+| F7.3b | parametric, reliability | 30 | ✅ | idem (solo verifica, nessuna modifica) | `check` verde, 7 grafici parametrici coerenti |
 | F8.1 | Holt-Winters, unit root, spettrale | 45 | ⬜ | — | — |
 | F8.2 | VAR, GARCH, state-space | 60 | ⬜ | — | — |
 | F9.1 | sample size, resampling, DOE | 60 | ⬜ | — | — |
@@ -175,6 +175,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F7.2 | `cox-forest`, `stratcox-forest`, `tdcox-forest` e `frailty-forest` passano a `logScale: true` con riferimento 1 | su scala lineare gli HR protettivi si comprimono attorno allo zero, come già valeva per logistica e conteggi |
 | 2026-11-03 | F7.2 | `tdcox` resta a un grafico: nessun β(t) | il kernel riporta solo le stime per intervallo; un grafico dell’effetto nel tempo richiederebbe un β(t) che non esiste (dichiarato in help e nella nota) |
 | 2026-11-03 | F7.1–F7.2 | Commit unico per le due fasi | i cataloghi `en/charts*.ts` contengono voci di entrambe: separarle lascerebbe un commit con traduzioni non usate e il test del copy rosso |
+| 2026-11-03 | F7.3a | Il life-stress plot usa coordinate trasformate, non un asse log del grafico | lo scatter non espone una scala log sull’asse: x è la trasformazione del modello e y è log10 del tempo, così la relazione AFT diventa retta |
+| 2026-11-03 | F7.3a | La retta è ancorata alla media dei punti, non all’intercetta del modello | il fit non espone le medie delle covariati: con l’ancoraggio la pendenza resta quella stimata e la nota dichiara che le covariati spostano solo l’intercetta |
+| 2026-11-03 | F7.3a | Nuove stringhe di copy solo in inglese | il test L4 controlla le locale dei report, non le note di questo grafico; le altre lingue ricadono sull’inglese, da tradurre in F11.1a–b |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -608,6 +611,35 @@ sotto-blocco aperto):
   documentato.
 - **Commit**: `feat(charts): F7.1–F7.2 sopravvivenza, rischi competitivi e foreste su scala log`
 
+### F7.3a — ALT: life-stress plot
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: nuovo `alt-life-stress` [scatter] con i tempi osservati su log10
+  contro lo stress trasformato dal modello (1/S, log S o S) e la retta con la
+  pendenza β dello stress; helper puro `altStressTransform` e
+  `altLifeStressLine` in `src/stats/alt/lifeStress.ts`.
+- **File toccati**: `src/analyses/alt/{run.tsx,charts.test.ts}`,
+  `src/stats/alt/lifeStress.ts`, `src/stats/reportCopy/catalog/en/charts-w10.ts`.
+- **Test**: 8/8 (trasformazione, pendenza e centroide, campione degenere,
+  grafico presente con punti e retta, test del copy).
+- **Nota sul tipo**: `LifeStressPoint` è un type alias e non un’interfaccia:
+  solo gli alias ottengono la index signature implicita richiesta da
+  `ChartRow` (`Record<string, ChartValue>`).
+- **Commit**: `feat(charts): F7.3a life-stress plot e verifica parametriche`
+
+### F7.3b — Parametric e reliability
+
+- **Stato**: ✅ chiusa (2026-11-03, solo verifica)
+- **Verificato**: `parametric-*` — sette grafici (sopravvivenza, hazard, hazard
+  cumulativo, densità, rapporti, mediana, Q-Q) con note coerenti: le altre
+  covariati restano alla media e ogni nota dice cosa rappresenta l’asse;
+  `reliability-growth` mostra i punti osservati come serie «Osservati» e la
+  curva attesa Crow–AMSAA come seconda serie; `reliability-rbd` ordina gli
+  stadi per affidabilità con le etichette dei valori.
+- **Modifiche**: nessuna, la fase chiedeva la verifica.
+- **Test**: `npm run check` verde (parametric e reliability inclusi nella suite).
+- **Commit**: `feat(charts): F7.3a life-stress plot e verifica parametriche`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -647,6 +679,7 @@ sotto-blocco aperto):
 | F7.2 | `frailty-forest` ♻️ | `cox` | `forest` | JMP | `cox/run.test.ts` | ✅ |
 | F7.2 | `stratcox-forest` ♻️ | `stratcox` | `forest` | JMP | `stratcox/run.test.ts` | ✅ |
 | F7.2 | `tdcox-forest` ♻️ | `tdcox` | `forest` | JMP | `tdcox/charts.test.ts` | ✅ |
+| F7.3a | `alt-life-stress` | `alt` | `scatter` | JMP | `alt/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -657,9 +690,9 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F7.3a: ALT — life-stress plot (relazione stress–vita su scala log).
-2. F7.3b: parametriche e affidabilità — verifica delle curve e note.
-3. F8.1: Holt-Winters, radici unitarie, analisi spettrale.
+1. F8.1: Holt-Winters, radici unitarie, analisi spettrale.
+2. F8.2: VAR, GARCH e state-space.
+3. Tradurre in F11.1a–b le nuove note del life-stress plot.
 
 ---
 

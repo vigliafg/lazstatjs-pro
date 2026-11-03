@@ -1,4 +1,5 @@
 import { altReport, altTables, fitAlt } from '../../stats/alt';
+import { altLifeStressLine, altStressTransform } from '../../stats/alt/lifeStress';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
@@ -71,6 +72,16 @@ export const buildAltOutput = ({ grid, params, ciLevel }: AltInput): AnalysisRun
   }
 
   const tables = altTables(fit, ciLevel);
+  const lifePoints = times
+    .map((time, index) => {
+      const z = altStressTransform(stresses[index], model);
+      return z === null ? null : { x: z, y: Math.log10(time) };
+    })
+    .filter((point): point is { x: number; y: number } => point !== null);
+  const lifeLine = altLifeStressLine(
+    fit,
+    stresses.map((entry, index) => ({ stress: entry, time: times[index] }))
+  );
   return {
     ok: true,
     title: copy('Test di vita accelerata: {s1}', {
@@ -113,6 +124,19 @@ export const buildAltOutput = ({ grid, params, ciLevel }: AltInput): AnalysisRun
         },
         fields: { xLabel: copy('Condizione'), yLabel: copy('Fattore') },
         options: { referenceLine: 'one' } as never,
+      }),
+      makeChart({
+        id: 'alt-life-stress',
+        kind: 'scatter',
+        title: copy('Life-stress plot: {s1}', { s1: grid.cols[stress]?.name ?? 'S' }),
+        subtitle: copy('Vita su scala log10 · stress trasformato ({s1})', { s1: fit.transformedName }),
+        note: copy(
+          'Ogni punto è un tempo osservato, censurati inclusi, riportato su scala log10; l’asse orizzontale usa la trasformazione richiesta dal modello. La retta ha la pendenza dello stress stimata dal modello Weibull ed è ancorata alla media dei punti: le covariati aggiuntive spostano l’intercetta, non la pendenza.'
+        ),
+        data: { points: lifePoints, fit: lifeLine },
+        fields: { xLabel: copy('Stress trasformato'), yLabel: copy('Vita (log10)') },
+        stats: { n: lifePoints.length },
+        options: { fit: 'ols', band: 'none', equation: 'none', showR2: false, showN: false } as never,
       }),
     ],
   };
