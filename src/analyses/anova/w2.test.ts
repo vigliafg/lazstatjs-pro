@@ -33,6 +33,13 @@ test('nested mode emits the hierarchical table, report and interval chart', () =
   assert.equal(Number(table[1].df), 3);
   assert.ok(Math.abs(Number(table[0].f) - 0.25) < 1e-9);
   assert.equal(result.charts?.[0].kind, 'interval');
+  const components = result.charts?.find(chart => chart.id === 'nested-variance');
+  assert.ok(components);
+  assert.equal(components.kind, 'bar');
+  const bars = components.data.bars ?? [];
+  assert.equal(bars.length, 3);
+  assert.ok(bars.every(row => Number.isFinite(Number(row.value))));
+  assert.ok(bars.some(row => Number(row.value) > 0));
   assert.equal(result.report?.id, 'report-nested-anova');
 });
 

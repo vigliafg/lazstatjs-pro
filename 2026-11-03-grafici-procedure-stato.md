@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F3.1 chiusa)
-- **Fase corrente**: F3.2 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F3.2 chiusa)
+- **Fase corrente**: F3.3 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -63,7 +63,7 @@ con motivo.
 | F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ✅ | `feat(charts): F2.1 Pareto e strip outlier` | 17 test verdi |
 | F2.2 | `quality`: profilo operatore, contributi carta | 60 | ✅ | `feat(charts): F2.2 profilo parte per operatore` | 9 test + `check` verdi |
 | F3.1 | varianze, sign, KS | 60 | ✅ | `feat(charts): F3.1 forest varianze, mediana e KS` | 15 test + help verdi |
-| F3.2 | Mood, GOF, nested | 60 | ⬜ | — | — |
+| F3.2 | Mood, GOF, nested | 60 | ✅ | `feat(charts): F3.2 mediane Mood, componenti gerarchiche e contributi GOF` | 9 test + `check` e `locales:check` verdi |
 | F3.3 | GLMM/GEE/LMM polish | 45 | ⬜ | — | — |
 | F4.1 | stepwise, polynomial, penalized | 60 | ⬜ | — | — |
 | F4.2 | multinomial, IV, PLS | 60 | ⬜ | — | — |
@@ -147,6 +147,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F2.2 | `msa-operator-profile` usa le righe parte/operatore già nel ramo MSA | nessuna modifica al kernel `msa` |
 | 2026-11-03 | F2.2 | `mcontrol-contribution` spostato a F2.3 | il kernel `mcontrol` non espone i contributi per variabile: serve una modifica kernel > 30 min |
 | 2026-11-03 | F3.1 | Riuso `medianCI` di `stats/kernels/distributions` invece di un nuovo helper in `kits/common` | il piano chiedeva un helper nuovo, ma esiste già con test |
+| 2026-11-03 | F3.2 | `mood-median-ci` applica `medianCI` alle osservazioni di ogni gruppo, non alla mediana comune | il test Mood confronta i conteggi sopra/sotto la mediana comune; l’intervallo descrive la mediana del gruppo |
+| 2026-11-03 | F3.2 | `nested-variance` legge `varianceComponents` del kernel `nestedAnova` | nessun nuovo calcolo né modifica kernel |
+| 2026-11-03 | F3.2 | `gof-contribution` calcola (O−E)²/E nel runner e ordina le barre in modo decrescente | il kernel `goodnessOfFit` espone già observed/expected; con `sort: 'none'` il layer Pareto non riordina |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -317,6 +320,26 @@ sotto-blocco aperto):
   allineato nelle 6 lingue.
 - **Commit**: `feat(charts): F3.1 forest varianze, mediana e KS`
 
+### F3.2 — Mood, GOF, nested
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `mood-median-ci` [interval]: mediane di gruppo con IC per
+    ordine-statistiche (`medianCI`), accanto al box del test Mood.
+  - `nested-variance` [bar]: componenti esterno/interno/residuo da
+    `varianceComponents` del kernel `nestedAnova`.
+  - `gof-contribution` [pareto]: (O − E)² / E per categoria, con cumulata
+    calcolata nel runner, nel test di bontà di adattamento.
+- **File toccati**: `src/analyses/anova/run.tsx`, `src/analyses/anova/nested.ts`,
+  `src/analyses/anova/mood.test.ts`, `src/analyses/anova/w2.test.ts`,
+  `src/analyses/chisquare/run.tsx`, `src/analyses/chisquare/gof.test.ts`,
+  `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: mood + nested + gof → 9/9 verdi; `npm run check` verde;
+  `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F3.2 mediane Mood, componenti gerarchiche e contributi GOF`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -335,6 +358,9 @@ sotto-blocco aperto):
 | F3.1 | `var-ratio-forest` | `variances` | `forest` | JMP | `variances/run.test.ts` | ✅ |
 | F3.1 | `sign-ci` | `ttest` | `interval` | JMP | `ttest/sign.test.ts` | ✅ |
 | F3.1 | `ks-diff` | `distfit` | `line` | JMP | `distfit/ks.test.ts` | ✅ |
+| F3.2 | `mood-median-ci` | `anova` | `interval` | JMP | `anova/mood.test.ts` | ✅ |
+| F3.2 | `nested-variance` | `anova` | `bar` | LZ | `anova/w2.test.ts` | ✅ |
+| F3.2 | `gof-contribution` | `chisquare` | `pareto` | JMP | `chisquare/gof.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -342,11 +368,11 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F3.2: `mood-median-ci` [interval], `nested-variance` [bar] e
-   `gof-contribution` [pareto].
-2. Verificare che `nested-variance` usi `varianceComponents` del kernel senza
-   duplicare i grafici di `anova`.
-3. F3.3: polish dei random effects LMM/GLMM/GEE; poi gate di fine ondata O3.
+1. F3.3: polish dei random effects LMM/GLMM/GEE (caterpillar, ICC/varianze,
+   diagnostica residua) senza nuovi kind.
+2. Gate di fine ondata O3: `npm run check` + `locales:check` sulle 6 lingue e
+   aggiornamento dell’inventario statico.
+3. F4.1: stepwise, polinomiale e penalizzata (`regression`).
 
 ---
 

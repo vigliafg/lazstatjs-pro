@@ -14,6 +14,7 @@ import { onewayPanel } from '../../charts/panels';
 import { moodMedianTest } from '../../stats/kernels/mood';
 import { moodTables } from '../../stats/tables/mood';
 import { moodReport } from '../../stats/reports/mood';
+import { medianCI } from '../../stats/distributions';
 import { buildNestedAnovaOutput } from './nested';
 import { buildAnomOutput } from './anom';
 
@@ -450,6 +451,12 @@ const buildMoodOutput = ({ grid, anovaParams, ciLevel }: AnovaRunInput): Analysi
     groups.map(group => ({ category: group.name, values: group.values })),
     { level: ciLevel }
   );
+  const medianIntervals = groups
+    .map(group => {
+      const interval = medianCI(group.values, ciLevel);
+      return { category: group.name, estimate: interval.median, lo: interval.lo, hi: interval.hi };
+    })
+    .filter(row => Number.isFinite(row.lo) && Number.isFinite(row.hi));
 
   return {
     ok: true,
@@ -467,6 +474,22 @@ const buildMoodOutput = ({ grid, anovaParams, ciLevel }: AnovaRunInput): Analysi
         fields: { xLabel: groupName, yLabel: depName },
         options: { showPoints: true, showMean: false } as never,
       }),
+      ...(medianIntervals.length > 0
+        ? [
+            makeChart({
+              id: 'mood-median-ci',
+              kind: 'interval',
+              title: copy('Mediane per gruppo con IC {s1}%', { s1: ciLevel }),
+              subtitle: copy('{s1} · {s2} gruppi', { s1: depName, s2: groups.length }),
+              note: copy(
+                'L’intervallo è per ordine-statistiche: si basa sui ranghi delle osservazioni e non richiede la normalità. Il test della mediana confronta invece quante osservazioni cadono sopra e sotto la mediana comune.'
+              ),
+              data: { intervals: medianIntervals },
+              fields: { xLabel: groupName, yLabel: copy('Mediana') },
+              options: { valueLabels: true, showMeanDiamond: false, sort: 'none' } as never,
+            }),
+          ]
+        : []),
     ],
   };
 };

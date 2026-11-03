@@ -28,6 +28,13 @@ test('the GOF mode counts a categorical column and matches chisq.test', () => {
   const testRow = result.tables![1].rows[0];
   assert.ok(Math.abs(Number(testRow.chi2) - 12.5) < 1e-9);
   assert.equal(result.charts?.[0].kind, 'bar');
+  const contributions = result.charts?.find(chart => chart.id === 'gof-contribution');
+  assert.ok(contributions);
+  assert.equal(contributions.kind, 'pareto');
+  const bars = contributions.data.bars ?? [];
+  assert.equal(bars.length, 5);
+  assert.ok(Math.abs(bars.reduce((sum, row) => sum + Number(row.value), 0) - 12.5) < 1e-9);
+  assert.ok(Number(bars[0].value) >= Number(bars[1].value));
 });
 
 test('the GOF mode accepts custom expected proportions', () => {

@@ -39,4 +39,21 @@ export const w10ChartCopy: Record<string, string> = {
   "La curva è F₁(x) − F₂(x); il massimo in valore assoluto è la statistica D del test.":
     "The curve is F₁(x) − F₂(x); the largest absolute value is the D statistic of the test.",
   "Massimo": "Maximum",
+  "Mediane per gruppo con IC {s1}%": "Medians per group with CI {s1}%",
+  "{s1} · {s2} gruppi": "{s1} · {s2} groups",
+  "L’intervallo è per ordine-statistiche: si basa sui ranghi delle osservazioni e non richiede la normalità. Il test della mediana confronta invece quante osservazioni cadono sopra e sotto la mediana comune.":
+    "The interval uses order statistics: it is based on the ranks of the observations and does not assume normality. The median test instead compares how many observations fall above and below the common median.",
+  "Mediana": "Median",
+  "Componenti di varianza": "Variance components",
+  "Scomposizione gerarchica di {s1}": "Hierarchical decomposition of {s1}",
+  "Le barre scompongono la variabilità totale: il componente esterno misura l’effetto del fattore gerarchico, quello interno la variabilità tra sottogruppi e il residuo quella entro cella.":
+    "The bars split the total variability: the outer component measures the effect of the hierarchical factor, the inner one the variability between subgroups and the residual the variability within cells.",
+  "Componente": "Component",
+  "Varianza": "Variance",
+  "Contributo al χ² per categoria": "Contribution to χ² by category",
+  "χ² = {s1} · {s2} categorie": "χ² = {s1} · {s2} categories",
+  "Ogni barra è (O − E)² / E: le categorie con il contributo maggiore sono quelle che allontanano di più i dati dalle attese.":
+    "Each bar is (O − E)² / E: the categories with the largest contribution are those that push the data furthest from the expectations.",
+  "Contributo al χ²": "Contribution to χ²",
+  "Cumulata (%)": "Cumulative (%)",
 };

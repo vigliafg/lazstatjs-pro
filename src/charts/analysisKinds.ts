@@ -11,7 +11,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   agreement: ['bland', 'heatmap', 'interval', 'scatter'],
   ancova: ['bar', 'line', 'qq', 'scatter'],
   anova: ['bar', 'box', 'forest', 'qq', 'scatter', 'diamond', 'circles', 'interval'],
-  chisquare: ['bar', 'mosaic'],
+  chisquare: ['bar', 'mosaic', 'pareto'],
   contingency: ['bar', 'forest', 'heatmap', 'line', 'mosaic', 'scatter'],
   loglinear: ['bar', 'heatmap'],
   correlation: ['box', 'heatmap', 'scatter', 'score'],

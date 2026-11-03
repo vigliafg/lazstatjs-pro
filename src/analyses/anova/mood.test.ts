@@ -29,6 +29,12 @@ test('the median mode runs the Mood test and emits the box plot', () => {
   const testRow = result.tables![1].rows[0];
   assert.ok(Math.abs(Number(testRow.chi2) - 11.333333333333334) < 1e-9);
   assert.equal(result.charts?.[0].kind, 'box');
+  const medians = result.charts?.find(chart => chart.id === 'mood-median-ci');
+  assert.ok(medians);
+  assert.equal(medians.kind, 'interval');
+  assert.equal(medians.data.intervals?.length, 3);
+  const first = medians.data.intervals![0];
+  assert.ok(Number.isFinite(first.lo) && first.lo <= first.estimate && first.estimate <= first.hi);
 });
 
 test('the median mode rejects a degenerate split', () => {

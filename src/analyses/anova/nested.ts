@@ -67,6 +67,24 @@ export const buildNestedAnovaOutput = ({ grid, anovaParams, ciLevel }: NestedAno
       fields: { xLabel: `${outerName} · ${innerName}`, yLabel: depName },
       options: { valueLabels: true, showMeanDiamond: false, sort: 'none' } as never,
     }),
+    makeChart({
+      id: 'nested-variance',
+      kind: 'bar',
+      title: copy('Componenti di varianza'),
+      subtitle: copy('Scomposizione gerarchica di {s1}', { s1: depName }),
+      note: copy(
+        'Le barre scompongono la variabilità totale: il componente esterno misura l’effetto del fattore gerarchico, quello interno la variabilità tra sottogruppi e il residuo quella entro cella.'
+      ),
+      data: {
+        bars: [
+          { category: outerName, value: result.varianceComponents.outer },
+          { category: innerName, value: result.varianceComponents.inner },
+          { category: copy('Residuo'), value: result.varianceComponents.error },
+        ],
+      },
+      fields: { xLabel: copy('Componente'), yLabel: copy('Varianza') },
+      options: { valueLabels: true } as never,
+    }),
   ];
 
   return {

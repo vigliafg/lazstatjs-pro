@@ -205,6 +205,21 @@ const buildGoodnessOutput = ({ grid, chisqParams, ciLevel }: ChiSquareRunInput):
     };
   }
   const variableName = grid.cols[index].name;
+  const contributions = result.labels
+    .map((label, position) => ({
+      category: label,
+      value: Math.pow(result.observed[position] - result.expected[position], 2) / result.expected[position],
+    }))
+    .sort((left, right) => right.value - left.value);
+  const contributionTotal = contributions.reduce((sum, row) => sum + row.value, 0);
+  let running = 0;
+  const cumulative = contributions.map(row => {
+    running += row.value;
+    return {
+      x: row.category,
+      y: contributionTotal > 0 ? (running / contributionTotal) * 100 : 0,
+    };
+  });
   return {
     ok: true,
     title: copy('Bontà di adattamento — {s1}', { s1: variableName }),
@@ -228,6 +243,25 @@ const buildGoodnessOutput = ({ grid, chisqParams, ciLevel }: ChiSquareRunInput):
         },
         fields: { xLabel: variableName, yLabel: copy('Count') },
         options: { valueLabels: true } as never,
+      }),
+      makeChart({
+        id: 'gof-contribution',
+        kind: 'pareto',
+        title: copy('Contributo al χ² per categoria'),
+        subtitle: copy('χ² = {s1} · {s2} categorie', {
+          s1: fmtEst(result.chi2, 3),
+          s2: result.labels.length,
+        }),
+        note: copy(
+          'Ogni barra è (O − E)² / E: le categorie con il contributo maggiore sono quelle che allontanano di più i dati dalle attese.'
+        ),
+        data: { bars: contributions, cumulative },
+        fields: {
+          xLabel: variableName,
+          yLabel: copy('Contributo al χ²'),
+          series: copy('Cumulata (%)'),
+        },
+        options: { showCumulative: true, valueLabels: false, sort: 'none' } as never,
       }),
     ],
   };
