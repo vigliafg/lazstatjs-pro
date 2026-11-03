@@ -1,7 +1,13 @@
 {
   "version": 1,
   "generatedBy": "samples/generate.R",
-  "formats": ["csv", "sav", "dta", "xlsx", "json"],
+  "formats": [
+    "csv",
+    "sav",
+    "dta",
+    "xlsx",
+    "json"
+  ],
   "datasets": [
     {
       "id": "iris",
@@ -39,7 +45,12 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "variables": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
@@ -60,13 +71,23 @@
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "variables": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "variables": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
@@ -80,27 +101,47 @@
           "analysis": "partition",
           "columns": {
             "response": "Sepal_Length",
-            "predictors": ["Sepal_Width", "Petal_Length", "Petal_Width"]
+            "predictors": [
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
           "analysis": "cluster",
           "columns": {
-            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "variables": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
           "analysis": "canonical",
           "columns": {
-            "x": ["Sepal_Length", "Sepal_Width"],
-            "y": ["Petal_Length", "Petal_Width"]
+            "x": [
+              "Sepal_Length",
+              "Sepal_Width"
+            ],
+            "y": [
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         },
         {
           "analysis": "discriminant",
           "columns": {
             "group": "Species",
-            "predictors": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+            "predictors": [
+              "Sepal_Length",
+              "Sepal_Width",
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         }
       ],
@@ -132,7 +173,10 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Eruptions", "Waiting"]
+            "variables": [
+              "Eruptions",
+              "Waiting"
+            ]
           }
         },
         {
@@ -449,7 +493,11 @@
         {
           "analysis": "nonparamrm",
           "columns": {
-            "selected": ["Before", "After", "Follow_up"]
+            "selected": [
+              "Before",
+              "After",
+              "Follow_up"
+            ]
           },
           "options": {
             "mode": "cochran"
@@ -491,20 +539,41 @@
         {
           "analysis": "repeatedanova",
           "columns": {
-            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+            "conditions": [
+              "Weight_0",
+              "Weight_4",
+              "Weight_8",
+              "Weight_12",
+              "Weight_16",
+              "Weight_20"
+            ]
           }
         },
         {
           "analysis": "mixedanova",
           "columns": {
             "group": "Diet",
-            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+            "conditions": [
+              "Weight_0",
+              "Weight_4",
+              "Weight_8",
+              "Weight_12",
+              "Weight_16",
+              "Weight_20"
+            ]
           }
         },
         {
           "analysis": "nonparamrm",
           "columns": {
-            "selected": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
+            "selected": [
+              "Weight_0",
+              "Weight_4",
+              "Weight_8",
+              "Weight_12",
+              "Weight_16",
+              "Weight_20"
+            ]
           }
         }
       ],
@@ -560,25 +629,42 @@
           "analysis": "regression",
           "columns": {
             "dependent": "mpg",
-            "predictors": ["wt", "hp", "disp"]
+            "predictors": [
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["mpg", "wt", "hp", "disp"]
+            "variables": [
+              "mpg",
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["mpg", "wt", "hp"]
+            "variables": [
+              "mpg",
+              "wt",
+              "hp"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["mpg", "wt", "hp"]
+            "variables": [
+              "mpg",
+              "wt",
+              "hp"
+            ]
           },
           "options": {
             "mode": "outliers"
@@ -588,20 +674,34 @@
           "analysis": "partition",
           "columns": {
             "response": "mpg",
-            "predictors": ["wt", "hp", "disp"]
+            "predictors": [
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
           "analysis": "cluster",
           "columns": {
-            "variables": ["mpg", "wt", "hp", "disp"]
+            "variables": [
+              "mpg",
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
           "analysis": "discriminant",
           "columns": {
             "group": "am",
-            "predictors": ["mpg", "wt", "hp", "disp"]
+            "predictors": [
+              "mpg",
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
@@ -616,7 +716,10 @@
           "analysis": "glm",
           "columns": {
             "dependent": "mpg",
-            "predictors": ["wt", "hp"]
+            "predictors": [
+              "wt",
+              "hp"
+            ]
           },
           "options": {
             "family": "gaussian"
@@ -626,7 +729,10 @@
           "analysis": "quantile",
           "columns": {
             "dependent": "mpg",
-            "predictors": ["wt", "hp"]
+            "predictors": [
+              "wt",
+              "hp"
+            ]
           },
           "options": {
             "tau": 0.5
@@ -643,14 +749,21 @@
           "analysis": "multinomial",
           "columns": {
             "outcome": "cyl",
-            "predictors": ["mpg", "wt", "hp"]
+            "predictors": [
+              "mpg",
+              "wt",
+              "hp"
+            ]
           }
         },
         {
           "analysis": "glmm",
           "columns": {
             "outcome": "mpg",
-            "predictors": ["wt", "hp"],
+            "predictors": [
+              "wt",
+              "hp"
+            ],
             "group": "cyl"
           }
         },
@@ -658,14 +771,22 @@
           "analysis": "pls",
           "columns": {
             "dependent": "mpg",
-            "predictors": ["wt", "hp", "disp"]
+            "predictors": [
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
           "analysis": "mars",
           "columns": {
             "dependent": "mpg",
-            "predictors": ["wt", "hp", "disp"]
+            "predictors": [
+              "wt",
+              "hp",
+              "disp"
+            ]
           }
         },
         {
@@ -715,20 +836,36 @@
           "analysis": "logistic",
           "columns": {
             "outcome": "Low",
-            "predictors": ["Age", "Lwt", "Smoke", "Ptl", "Ht", "Ui", "Bwt"]
+            "predictors": [
+              "Age",
+              "Lwt",
+              "Smoke",
+              "Ptl",
+              "Ht",
+              "Ui",
+              "Bwt"
+            ]
           }
         },
         {
           "analysis": "regression",
           "columns": {
             "dependent": "Bwt",
-            "predictors": ["Age", "Lwt", "Smoke"]
+            "predictors": [
+              "Age",
+              "Lwt",
+              "Smoke"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Age", "Lwt", "Bwt"]
+            "variables": [
+              "Age",
+              "Lwt",
+              "Bwt"
+            ]
           }
         }
       ],
@@ -767,13 +904,20 @@
           "analysis": "countreg",
           "columns": {
             "dependent": "Days",
-            "predictors": ["Age_num", "Sex_male", "Lrn_SL"]
+            "predictors": [
+              "Age_num",
+              "Sex_male",
+              "Lrn_SL"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Days", "Age_num"]
+            "variables": [
+              "Days",
+              "Age_num"
+            ]
           }
         }
       ],
@@ -811,13 +955,19 @@
           "analysis": "ordinal",
           "columns": {
             "outcome": "Sat_num",
-            "predictors": ["Infl_num", "Cont_num"]
+            "predictors": [
+              "Infl_num",
+              "Cont_num"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Sat_num", "Infl_num"]
+            "variables": [
+              "Sat_num",
+              "Infl_num"
+            ]
           }
         }
       ],
@@ -868,7 +1018,10 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Weight", "Time"]
+            "variables": [
+              "Weight",
+              "Time"
+            ]
           }
         }
       ],
@@ -905,19 +1058,34 @@
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+            "variables": [
+              "Murder",
+              "Assault",
+              "UrbanPop",
+              "Rape"
+            ]
           }
         },
         {
           "analysis": "mds",
           "columns": {
-            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+            "variables": [
+              "Murder",
+              "Assault",
+              "UrbanPop",
+              "Rape"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+            "variables": [
+              "Murder",
+              "Assault",
+              "UrbanPop",
+              "Rape"
+            ]
           }
         }
       ],
@@ -955,13 +1123,29 @@
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
+            "variables": [
+              "rating",
+              "complaints",
+              "privileges",
+              "learning",
+              "raises",
+              "critical",
+              "advance"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
+            "variables": [
+              "rating",
+              "complaints",
+              "privileges",
+              "learning",
+              "raises",
+              "critical",
+              "advance"
+            ]
           }
         }
       ],
@@ -998,19 +1182,40 @@
         {
           "analysis": "sem",
           "columns": {
-            "indicators": ["Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"]
+            "indicators": [
+              "Verbal1",
+              "Verbal2",
+              "Verbal3",
+              "Math1",
+              "Math2",
+              "Math3"
+            ]
           }
         },
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": ["Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"]
+            "variables": [
+              "Verbal1",
+              "Verbal2",
+              "Verbal3",
+              "Math1",
+              "Math2",
+              "Math3"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"]
+            "variables": [
+              "Verbal1",
+              "Verbal2",
+              "Verbal3",
+              "Math1",
+              "Math2",
+              "Math3"
+            ]
           }
         }
       ],
@@ -1044,13 +1249,23 @@
         {
           "analysis": "latentclass",
           "columns": {
-            "indicators": ["Item1", "Item2", "Item3", "Item4"]
+            "indicators": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Item1", "Item2", "Item3", "Item4"]
+            "variables": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4"
+            ]
           },
           "options": {
             "mode": "frequency"
@@ -1089,13 +1304,27 @@
         {
           "analysis": "irt",
           "columns": {
-            "items": ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6"]
+            "items": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4",
+              "Item5",
+              "Item6"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6"]
+            "variables": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4",
+              "Item5",
+              "Item6"
+            ]
           }
         }
       ],
@@ -1129,7 +1358,11 @@
         {
           "analysis": "conjoint",
           "columns": {
-            "attributes": ["Brand", "Price", "Warranty"],
+            "attributes": [
+              "Brand",
+              "Price",
+              "Warranty"
+            ],
             "rating": "Rating"
           }
         },
@@ -1170,7 +1403,10 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": ["Method_A", "Method_B"]
+            "columns": [
+              "Method_A",
+              "Method_B"
+            ]
           },
           "options": {
             "mode": "icc"
@@ -1179,7 +1415,10 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": ["Method_A", "Method_B"]
+            "columns": [
+              "Method_A",
+              "Method_B"
+            ]
           },
           "options": {
             "mode": "bland"
@@ -1188,7 +1427,10 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": ["Rater_A", "Rater_B"]
+            "columns": [
+              "Rater_A",
+              "Rater_B"
+            ]
           },
           "options": {
             "mode": "kappa",
@@ -1246,7 +1488,11 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "covariates": ["Age", "Sex_male", "Ph_ecog"]
+            "covariates": [
+              "Age",
+              "Sex_male",
+              "Ph_ecog"
+            ]
           }
         },
         {
@@ -1254,7 +1500,10 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "covariates": ["Age", "Ph_ecog"],
+            "covariates": [
+              "Age",
+              "Ph_ecog"
+            ],
             "stratum": "Sex"
           }
         },
@@ -1263,7 +1512,11 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "predictors": ["Age", "Sex_male", "Ph_ecog"]
+            "predictors": [
+              "Age",
+              "Sex_male",
+              "Ph_ecog"
+            ]
           }
         }
       ],
@@ -1304,7 +1557,11 @@
             "start": "Start",
             "stop": "Stop",
             "event": "Event",
-            "covariates": ["Age", "Surgery", "Transplant"]
+            "covariates": [
+              "Age",
+              "Surgery",
+              "Transplant"
+            ]
           }
         },
         {
@@ -1392,15 +1649,29 @@
         {
           "analysis": "mi",
           "columns": {
-            "variables": ["Ozone", "Solar_R", "Wind", "Temp"],
+            "variables": [
+              "Ozone",
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ],
             "outcome": "Ozone",
-            "predictors": ["Solar_R", "Wind", "Temp"]
+            "predictors": [
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
+            "variables": [
+              "Ozone",
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ]
           }
         },
         {
@@ -1415,7 +1686,12 @@
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
+            "variables": [
+              "Ozone",
+              "Solar_R",
+              "Wind",
+              "Temp"
+            ]
           }
         }
       ],
@@ -1603,7 +1879,10 @@
           "columns": {
             "dependent": "Y",
             "endogenous": "X",
-            "instruments": ["Z1", "Z2"],
+            "instruments": [
+              "Z1",
+              "Z2"
+            ],
             "exogenous": "W"
           }
         },
@@ -1611,19 +1890,31 @@
           "analysis": "regression",
           "columns": {
             "dependent": "Y",
-            "predictors": ["W", "X"]
+            "predictors": [
+              "W",
+              "X"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Y", "X", "W"]
+            "variables": [
+              "Y",
+              "X",
+              "W"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Y", "X", "Z1", "W"]
+            "variables": [
+              "Y",
+              "X",
+              "Z1",
+              "W"
+            ]
           }
         }
       ],
@@ -1661,7 +1952,10 @@
           "analysis": "panel",
           "columns": {
             "dependent": "Y",
-            "predictors": ["X1", "X2"],
+            "predictors": [
+              "X1",
+              "X2"
+            ],
             "entity": "ID",
             "time": "Time"
           }
@@ -1670,19 +1964,30 @@
           "analysis": "regression",
           "columns": {
             "dependent": "Y",
-            "predictors": ["X1", "X2"]
+            "predictors": [
+              "X1",
+              "X2"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Y", "X1", "X2"]
+            "variables": [
+              "Y",
+              "X1",
+              "X2"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Y", "X1", "X2"]
+            "variables": [
+              "Y",
+              "X1",
+              "X2"
+            ]
           }
         }
       ],
@@ -1721,16 +2026,26 @@
           "analysis": "selection",
           "columns": {
             "dependent": "Wage",
-            "predictors": ["Education", "Experience"]
+            "predictors": [
+              "Education",
+              "Experience"
+            ]
           }
         },
         {
           "analysis": "selection",
           "columns": {
             "dependent": "Wage_obs",
-            "predictors": ["Education", "Experience"],
+            "predictors": [
+              "Education",
+              "Experience"
+            ],
             "selection": "Selected",
-            "selectionPredictors": ["Education", "Experience", "Kids"]
+            "selectionPredictors": [
+              "Education",
+              "Experience",
+              "Kids"
+            ]
           },
           "options": {
             "mode": "heckman"
@@ -1740,19 +2055,31 @@
           "analysis": "regression",
           "columns": {
             "dependent": "Wage",
-            "predictors": ["Education", "Experience"]
+            "predictors": [
+              "Education",
+              "Experience"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Wage", "Wage_obs", "Education", "Experience"]
+            "variables": [
+              "Wage",
+              "Wage_obs",
+              "Education",
+              "Experience"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Wage", "Education", "Experience"]
+            "variables": [
+              "Wage",
+              "Education",
+              "Experience"
+            ]
           }
         }
       ],
@@ -1791,26 +2118,42 @@
           "columns": {
             "treatment": "Treatment",
             "outcome": "Outcome",
-            "covariates": ["Age", "Score", "Sex"]
+            "covariates": [
+              "Age",
+              "Score",
+              "Sex"
+            ]
           }
         },
         {
           "analysis": "regression",
           "columns": {
             "dependent": "Outcome",
-            "predictors": ["Treatment", "Age", "Score"]
+            "predictors": [
+              "Treatment",
+              "Age",
+              "Score"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Outcome", "Age", "Score"]
+            "variables": [
+              "Outcome",
+              "Age",
+              "Score"
+            ]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": ["Outcome", "Age", "Score"]
+            "variables": [
+              "Outcome",
+              "Age",
+              "Score"
+            ]
           }
         }
       ],
@@ -1847,13 +2190,19 @@
           "columns": {
             "time": "Time",
             "event": "Cause",
-            "covariates": ["Age", "Sex"]
+            "covariates": [
+              "Age",
+              "Sex"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Time", "Age"]
+            "variables": [
+              "Time",
+              "Age"
+            ]
           }
         }
       ],
@@ -1893,7 +2242,10 @@
             "start": "Start",
             "stop": "Stop",
             "event": "Event",
-            "covariates": ["Age", "Treatment"]
+            "covariates": [
+              "Age",
+              "Treatment"
+            ]
           },
           "options": {
             "model": "ag"
@@ -1902,7 +2254,10 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Stop", "Age"]
+            "variables": [
+              "Stop",
+              "Age"
+            ]
           }
         }
       ],
@@ -1953,13 +2308,20 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "predictors": ["Stress", "Temperature"]
+            "predictors": [
+              "Stress",
+              "Temperature"
+            ]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Time", "Stress", "Temperature"]
+            "variables": [
+              "Time",
+              "Stress",
+              "Temperature"
+            ]
           }
         }
       ],
@@ -2042,7 +2404,11 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Stratum", "Exposure", "Outcome"]
+            "variables": [
+              "Stratum",
+              "Exposure",
+              "Outcome"
+            ]
           },
           "options": {
             "mode": "frequency"
@@ -2076,7 +2442,10 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Dose", "Response"]
+            "variables": [
+              "Dose",
+              "Response"
+            ]
           },
           "options": {
             "mode": "frequency"
@@ -2112,7 +2481,10 @@
         {
           "analysis": "mi",
           "columns": {
-            "variables": ["Treatment", "Severity"],
+            "variables": [
+              "Treatment",
+              "Severity"
+            ],
             "predictors": "Age"
           },
           "options": {
@@ -2124,7 +2496,11 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": ["Treatment", "Severity", "Age"]
+            "variables": [
+              "Treatment",
+              "Severity",
+              "Age"
+            ]
           },
           "options": {
             "mode": "frequency"
@@ -2132,6 +2508,121 @@
         }
       ],
       "notes": "160 rows with a binary treatment, a three-level severity and a numeric age; 12 treatment and 10 severity codes are missing for the categorical imputation."
+    },
+    {
+      "id": "var_demo",
+      "title": "Bivariate VAR(2) with correlated innovations",
+      "family": "timeseries",
+      "dir": "timeseries/var_demo",
+      "source": "Synthetic, seeded with set.seed(20261104)",
+      "rows": 200,
+      "columns": [
+        "y1",
+        "y2"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "var"
+      ],
+      "examples": [
+        {
+          "analysis": "var",
+          "columns": {
+            "variables": ["y1", "y2"]
+          },
+          "options": {
+            "mode": "var",
+            "lags": 0,
+            "horizon": 12
+          }
+        }
+      ],
+      "notes": "200 observations of a stable bivariate VAR(2) with a 0.3 residual correlation; Granger causality runs from y1 to y2."
+    },
+    {
+      "id": "garch_demo",
+      "title": "GARCH(1,1) returns",
+      "family": "timeseries",
+      "dir": "timeseries/garch_demo",
+      "source": "Synthetic, seeded with set.seed(20261104)",
+      "rows": 500,
+      "columns": [
+        "Return"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "garch"
+      ],
+      "examples": [
+        {
+          "analysis": "garch",
+          "columns": {
+            "variable": "Return"
+          },
+          "options": {
+            "horizon": 10
+          }
+        }
+      ],
+      "notes": "500 returns with conditional variance omega = 0.05, alpha = 0.10, beta = 0.85: clear volatility clustering."
+    },
+    {
+      "id": "statespace_demo",
+      "title": "Local trend and two-regime Markov series",
+      "family": "timeseries",
+      "dir": "timeseries/statespace_demo",
+      "source": "Synthetic, seeded with set.seed(20261104)",
+      "rows": 300,
+      "columns": [
+        "Local",
+        "Markov"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "statespace"
+      ],
+      "examples": [
+        {
+          "analysis": "statespace",
+          "columns": {
+            "variable": "Local"
+          },
+          "options": {
+            "mode": "local",
+            "trend": true,
+            "horizon": 10
+          }
+        },
+        {
+          "analysis": "statespace",
+          "columns": {
+            "variable": "Markov"
+          },
+          "options": {
+            "mode": "markov",
+            "horizon": 10
+          }
+        }
+      ],
+      "notes": "300 observations: Local is a noisy local linear trend; Markov alternates a low-volatility regime around -1 and a high-volatility regime around 2."
     }
   ]
 }

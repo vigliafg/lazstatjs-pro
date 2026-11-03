@@ -148,4 +148,10 @@ export const metaMessages = {
   'meta.analysis.alt.description': 'Modelos de Arrhenius e potência inversa com uma variável de tensão.',
   'meta.analysis.reliability.label': 'Crescimento de fiabilidade e RBD',
   'meta.analysis.reliability.description': 'Curvas de crescimento de Crow–AMSAA e diagramas de blocos série/paralelo.',
+  'meta.analysis.var.label': 'VAR / VECM',
+  'meta.analysis.var.description': 'Autorregressões vetoriais, causalidade de Granger e correção do erro.',
+  'meta.analysis.garch.label': 'GARCH',
+  'meta.analysis.garch.description': 'Volatilidade condicional com um modelo GARCH(1,1).',
+  'meta.analysis.statespace.label': 'State-Space e Markov',
+  'meta.analysis.statespace.description': 'Filtro de Kalman, suavização e Markov switching de dois regimes.',
 } as const;

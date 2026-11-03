@@ -205,13 +205,51 @@ export interface SurvivalParams {
 export type TimeSeriesDifferenceMode = 'auto' | '0' | '1' | '2';
 export type TimeSeriesSeasonalDifferenceMode = 'auto' | '0' | '1';
 
-/** Parametri della serie temporale (ARIMA/SARIMA + modelli semplici). */
+/** Analysis carried out on the Time Series entry. */
+export type TimeSeriesMode = 'arima' | 'holtwinters' | 'unitroot' | 'spectral' | 'arimax';
+
+export type TimeSeriesSeasonalModel = 'additive' | 'multiplicative';
+
+/** Parametri della serie temporale (ARIMA/SARIMA, Holt–Winters, radici unitarie, spettro, ARIMAX). */
 export interface TimeSeriesParams {
+  mode: TimeSeriesMode;
   variable: number;
   period: number;
   horizon: number;
   differenceMode: TimeSeriesDifferenceMode;
   seasonalDifferenceMode: TimeSeriesSeasonalDifferenceMode;
+  /** Modello stagionale di Holt–Winters. */
+  seasonalModel: TimeSeriesSeasonalModel;
+  /** Regressore esterno per ARIMAX; -1 = nessuno. */
+  xregVariable: number;
+}
+
+/** VAR/VECM su più serie. */
+export type VarMode = 'var' | 'vecm';
+
+export interface VarParams {
+  mode: VarMode;
+  variables: number[];
+  /** Ordine dei ritardi; 0 = scelta automatica. */
+  lags: number;
+  horizon: number;
+}
+
+/** GARCH(1,1) su una serie di rendimenti. */
+export interface GarchParams {
+  variable: number;
+  horizon: number;
+}
+
+/** State-space locale o Markov switching a due regimi. */
+export type StateSpaceMode = 'local' | 'markov';
+
+export interface StateSpaceParams {
+  mode: StateSpaceMode;
+  variable: number;
+  horizon: number;
+  /** Modello locale: include il trend stocastico. */
+  trend: boolean;
 }
 
 /** Parametri della tabella di contingenza R×C. */
@@ -733,6 +771,9 @@ export interface ProjectParams {
   cox: CoxParams;
   survival: SurvivalParams;
   timeseries: TimeSeriesParams;
+  var: VarParams;
+  garch: GarchParams;
+  statespace: StateSpaceParams;
   contingency: ContingencyParams;
   loglinear: LoglinearParams;
   ancova: AncovaParams;
@@ -960,11 +1001,30 @@ export const DEFAULT_PARAMS: ProjectParams = {
     intervals: 0,
   },
   timeseries: {
+    mode: 'arima',
     variable: 0,
     period: 0,
     horizon: 12,
     differenceMode: 'auto',
     seasonalDifferenceMode: 'auto',
+    seasonalModel: 'additive',
+    xregVariable: -1,
+  },
+  var: {
+    mode: 'var',
+    variables: [0, 1],
+    lags: 0,
+    horizon: 12,
+  },
+  garch: {
+    variable: 0,
+    horizon: 10,
+  },
+  statespace: {
+    mode: 'local',
+    variable: 0,
+    horizon: 10,
+    trend: true,
   },
   contingency: {
     mode: 'chi2',

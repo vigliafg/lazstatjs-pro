@@ -63,6 +63,9 @@ import { CompetingForm } from '../../analyses/competing/Form';
 import { RecurrentForm } from '../../analyses/recurrent/Form';
 import { AltForm } from '../../analyses/alt/Form';
 import { ReliabilityForm } from '../../analyses/reliability/Form';
+import { VarForm } from '../../analyses/var/Form';
+import { GarchForm } from '../../analyses/garch/Form';
+import { StateSpaceForm } from '../../analyses/statespace/Form';
 import { t } from '../../i18n';
 
 interface AnalysisFormProps {
@@ -575,6 +578,26 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
             grid={p.grid}
             reliabilityParams={params.reliability}
             setReliabilityParams={setSlice('reliability')}
+          />
+        );
+      case 'var':
+        return (
+          <VarForm grid={p.grid} varParams={params.var} setVarParams={setSlice('var')} />
+        );
+      case 'garch':
+        return (
+          <GarchForm
+            grid={p.grid}
+            garchParams={params.garch}
+            setGarchParams={setSlice('garch')}
+          />
+        );
+      case 'statespace':
+        return (
+          <StateSpaceForm
+            grid={p.grid}
+            stateSpaceParams={params.statespace}
+            setStateSpaceParams={setSlice('statespace')}
           />
         );
       default:

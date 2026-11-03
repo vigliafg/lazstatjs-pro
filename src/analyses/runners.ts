@@ -63,6 +63,9 @@ import { buildCompetingOutput } from './competing/run';
 import { buildRecurrentOutput } from './recurrent/run';
 import { buildAltOutput } from './alt/run';
 import { buildReliabilityOutput } from './reliability/run';
+import { buildVarOutput } from './var/run';
+import { buildGarchOutput } from './garch/run';
+import { buildStateSpaceOutput } from './statespace/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -204,4 +207,8 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
   alt: ({ grid, params, ciLevel }) => buildAltOutput({ grid, params: params.alt, ciLevel }),
   reliability: ({ grid, params, ciLevel }) =>
     buildReliabilityOutput({ grid, params: params.reliability, ciLevel }),
+  var: ({ grid, params, ciLevel }) => buildVarOutput({ grid, params: params.var, ciLevel }),
+  garch: ({ grid, params, ciLevel }) => buildGarchOutput({ grid, params: params.garch, ciLevel }),
+  statespace: ({ grid, params, ciLevel }) =>
+    buildStateSpaceOutput({ grid, params: params.statespace, ciLevel }),
 };

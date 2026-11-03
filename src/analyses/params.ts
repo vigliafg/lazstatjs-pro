@@ -280,7 +280,31 @@ export const remapParams = (
         upperVariable: survivalUpper,
         intervals: Math.max(0, Math.min(30, Math.round(params.survival.intervals ?? 0))),
       },
-      timeseries: { ...params.timeseries, variable: timeseriesVariable },
+      timeseries: {
+        ...params.timeseries,
+        variable: timeseriesVariable,
+        mode: params.timeseries.mode ?? 'arima',
+        seasonalModel: params.timeseries.seasonalModel ?? 'additive',
+        xregVariable: optional(params.timeseries.xregVariable ?? -1),
+      },
+      var: {
+        ...params.var,
+        mode: params.var.mode ?? 'var',
+        variables: list(params.var.variables, 'VAR: variables'),
+        lags: Math.max(0, Math.min(12, Math.round(params.var.lags ?? 0))),
+        horizon: Math.max(1, Math.min(40, Math.round(params.var.horizon ?? 12))),
+      },
+      garch: {
+        ...params.garch,
+        variable: params.garch.variable,
+        horizon: Math.max(1, Math.min(40, Math.round(params.garch.horizon ?? 10))),
+      },
+      statespace: {
+        ...params.statespace,
+        mode: params.statespace.mode ?? 'local',
+        horizon: Math.max(1, Math.min(40, Math.round(params.statespace.horizon ?? 10))),
+        trend: params.statespace.trend ?? true,
+      },
       ancova: {
         ...params.ancova,
         response: ancovaResponse,
@@ -1013,6 +1037,16 @@ export const validateAnalysisColumnRefs = (
       one(params.reliability.time, 'Reliability: time');
       one(params.reliability.failures, 'Reliability: failures');
       break;
+    case 'var':
+      list(params.var.variables, 'VAR: variables');
+      if (params.var.variables.length < 2) errors.push('VAR: serve almeno due serie');
+      break;
+    case 'garch':
+      one(params.garch.variable, 'GARCH: series');
+      break;
+    case 'statespace':
+      one(params.statespace.variable, 'State-space: series');
+      break;
     default:
       break;
   }
@@ -1128,6 +1162,18 @@ export const setPrimaryColumn = (
       return { params: { ...params, parametric: { ...params.parametric, time: column } }, role: 'Parametric Survival time' };
     case 'timeseries':
       return { params: { ...params, timeseries: { ...params.timeseries, variable: column } }, role: 'Time Series variable' };
+    case 'var':
+      return {
+        params: { ...params, var: { ...params.var, variables: append([...params.var.variables, column]) } },
+        role: 'VAR variable',
+      };
+    case 'garch':
+      return { params: { ...params, garch: { ...params.garch, variable: column } }, role: 'GARCH series' };
+    case 'statespace':
+      return {
+        params: { ...params, statespace: { ...params.statespace, variable: column } },
+        role: 'State-space series',
+      };
     case 'mi':
       return { params: { ...params, mi: { ...params.mi, variables: append(params.mi.variables) } }, role: 'Missing Data variable' };
     case 'resampling':

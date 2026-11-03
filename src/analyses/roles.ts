@@ -6,6 +6,7 @@ import { isContinuousColumn, isGroupColumn } from '../grid/types';
 import { L4_ROLES } from './rolesL4';
 import { W5_ROLES } from './rolesW5';
 import { W6_ROLES } from './rolesW6';
+import { W7_ROLES } from './rolesW7';
 
 export type RoleKind = 'continuous' | 'group' | 'any';
 
@@ -344,6 +345,13 @@ const ROLES: Record<string, AnalysisRole[]> = {
       kind: 'continuous',
       get: p => [p.timeseries.variable],
       set: (p, c) => ({ ...p, timeseries: { ...p.timeseries, variable: c } }),
+    },
+    {
+      key: 'xreg',
+      label: 'Time Series: exogenous regressor',
+      kind: 'continuous',
+      get: p => [p.timeseries.xregVariable],
+      set: (p, c) => ({ ...p, timeseries: { ...p.timeseries, xregVariable: c } }),
     },
   ],
   ancova: [
@@ -964,6 +972,7 @@ const ROLES: Record<string, AnalysisRole[]> = {
   ...L4_ROLES,
   ...W5_ROLES,
   ...W6_ROLES,
+  ...W7_ROLES,
 };
 
 /** Assignable column roles for an analysis, primary role first. */

@@ -148,4 +148,10 @@ export const metaMessages = {
   'meta.analysis.alt.description': 'Arrhenius and inverse-power life models with a stress variable.',
   'meta.analysis.reliability.label': 'Reliability Growth & RBD',
   'meta.analysis.reliability.description': 'Crow–AMSAA growth curves and series/parallel reliability block diagrams.',
+  'meta.analysis.var.label': 'VAR / VECM',
+  'meta.analysis.var.description': 'Vector autoregressions, Granger causality and error correction.',
+  'meta.analysis.garch.label': 'GARCH',
+  'meta.analysis.garch.description': 'Conditional volatility with a GARCH(1,1) model.',
+  'meta.analysis.statespace.label': 'State-Space & Markov',
+  'meta.analysis.statespace.description': 'Kalman filter/smoother and two-regime Markov switching.',
 } as const;

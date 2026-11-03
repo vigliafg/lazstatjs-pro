@@ -26,6 +26,9 @@ import { defaultCompetingParams } from '../analyses/competing/defaults';
 import { defaultRecurrentParams } from '../analyses/recurrent/defaults';
 import { defaultAltParams } from '../analyses/alt/defaults';
 import { defaultReliabilityParams } from '../analyses/reliability/defaults';
+import { defaultVarParams } from '../analyses/var/defaults';
+import { defaultGarchParams } from '../analyses/garch/defaults';
+import { defaultStateSpaceParams } from '../analyses/statespace/defaults';
 
 /**
  * Owns the analysis parameters and the two update helpers used by the App.
@@ -63,6 +66,9 @@ export const useProjectParams = (boot: ProjectSnapshot | null, grid: GridData) =
       recurrent: defaultRecurrentParams(grid),
       alt: defaultAltParams(grid),
       reliability: defaultReliabilityParams(grid),
+      var: defaultVarParams(grid),
+      garch: defaultGarchParams(grid),
+      statespace: defaultStateSpaceParams(grid),
     };
   });
 

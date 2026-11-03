@@ -150,4 +150,10 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.alt.description': 'Modelli di Arrhenius e potenza inversa con una variabile di stress.',
   'meta.analysis.reliability.label': 'Crescita di affidabilità e RBD',
   'meta.analysis.reliability.description': 'Curve di crescita Crow–AMSAA e diagrammi a blocchi serie/parallelo.',
+  'meta.analysis.var.label': 'VAR / VECM',
+  'meta.analysis.var.description': 'Autoregressioni vettoriali, causalità di Granger e correzione dell’errore.',
+  'meta.analysis.garch.label': 'GARCH',
+  'meta.analysis.garch.description': 'Volatilità condizionale con un modello GARCH(1,1).',
+  'meta.analysis.statespace.label': 'State-Space e Markov',
+  'meta.analysis.statespace.description': 'Filtro di Kalman, smoother e Markov switching a due regimi.',
 };

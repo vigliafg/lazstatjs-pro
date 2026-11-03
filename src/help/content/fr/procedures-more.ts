@@ -336,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Stationnarité après différenciation ; résidus proches d’un bruit blanc.'],
       whenToUse: ['Séries avec une structure d’autocorrélation et assez d’observations.'],
       whenNotToUse: ['Séries très courtes ou ruptures structurelles non modélisées.'],
-      reading: ['Les ordres p, d, q décrivent la mémoire, la différenciation et la moyenne mobile ; un AIC plus bas est préférable à spécification égale.'],
+      reading: ['Le menu Type d’analyse propose aussi Holt–Winters, les tests de racine unitaire, l’analyse spectrale et ARIMAX avec un régresseur exogène.', 'Les ordres p, d, q décrivent la mémoire, la différenciation et la moyenne mobile ; un AIC plus bas est préférable à spécification égale.'],
       pitfalls: ['Les prévisions à long horizon ont des intervalles larges : ne les présentez pas comme certaines.'],
       glossary: [
         { term: 'Stationnarité', definition: 'Moyenne et variance stables au cours du temps.' },

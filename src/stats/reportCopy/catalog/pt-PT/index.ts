@@ -43,6 +43,7 @@ import { w3EconometricsCopy } from './w3-econometrics';
 import { proportionsCopy as ptProportionsCopy } from './proportions';
 import { w5Copy } from './w5';
 import { w6Copy } from './w6';
+import { w7Copy } from './w7';
 import { variancesCopy as ptVariancesCopy } from './variances';
 
 export const ptPTReportCopy: Record<string, string> = {
@@ -88,4 +89,5 @@ export const ptPTReportCopy: Record<string, string> = {
   ...w3EconometricsCopy,
   ...w5Copy,
   ...w6Copy,
+  ...w7Copy,
 };

@@ -150,4 +150,10 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.alt.description': 'Modèles d’Arrhenius et de puissance inverse avec une variable de contrainte.',
   'meta.analysis.reliability.label': 'Croissance de fiabilité et RBD',
   'meta.analysis.reliability.description': 'Courbes de croissance de Crow–AMSAA et diagrammes de fiabilité série/parallèle.',
+  'meta.analysis.var.label': 'VAR / VECM',
+  'meta.analysis.var.description': 'Autorégressions vectorielles, causalité de Granger et correction d’erreur.',
+  'meta.analysis.garch.label': 'GARCH',
+  'meta.analysis.garch.description': 'Volatilité conditionnelle avec un modèle GARCH(1,1).',
+  'meta.analysis.statespace.label': 'State-Space et Markov',
+  'meta.analysis.statespace.description': 'Filtre de Kalman, lisseur et Markov switching à deux régimes.',
 };

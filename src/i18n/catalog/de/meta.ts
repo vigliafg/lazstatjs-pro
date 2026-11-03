@@ -184,4 +184,10 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.alt.description': 'Arrhenius- und Inverse-Power-Modelle mit Belastungsvariable.',
   'meta.analysis.reliability.label': 'Zuverlässigkeitswachstum & RBD',
   'meta.analysis.reliability.description': 'Crow–AMSAA-Wachstumskurven und Reihen-/Parallel-Blockschaltbilder.',
+  'meta.analysis.var.label': 'VAR / VECM',
+  'meta.analysis.var.description': 'Vektorautoregressionen, Granger-Kausalität und Fehlerkorrektur.',
+  'meta.analysis.garch.label': 'GARCH',
+  'meta.analysis.garch.description': 'Bedingte Volatilität mit einem GARCH(1,1)-Modell.',
+  'meta.analysis.statespace.label': 'State-Space & Markov',
+  'meta.analysis.statespace.description': 'Kalman-Filter, Smoother und Markov-Switching mit zwei Regimen.',
 };

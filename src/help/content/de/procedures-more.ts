@@ -363,9 +363,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ["Stationarität nach der Differenzenbildung; Residuen nahe an weißem Rauschen."],
       whenToUse: ["Reihen mit Autokorrelationsstruktur und genügend Beobachtungen."],
       whenNotToUse: ["Sehr kurze Reihen oder strukturelle Brüche, die nicht modelliert werden."],
-      reading: [
-        "Die Ordnungen p, d, q beschreiben Gedächtnis, Differenzenbildung und gleitenden Durchschnitt; bei gleicher Spezifikation ist ein niedrigeres AIC vorzuziehen.",
-      ],
+      reading: ['Das Menü Analysetyp bietet außerdem Holt–Winters, Einheitswurzeltests, Spektralanalyse und ARIMAX mit einer exogenen Variable.', "Die Ordnungen p, d, q beschreiben Gedächtnis, Differenzenbildung und gleitenden Durchschnitt; bei gleicher Spezifikation ist ein niedrigeres AIC vorzuziehen.",],
       pitfalls: ["Prognosen über lange Horizonte haben breite Intervalle: Stellen Sie sie nicht als sicher dar."],
       glossary: [
         { term: "Stationarität", definition: "Mittelwert und Varianz bleiben über die Zeit stabil." },

@@ -55,6 +55,7 @@ const SOURCE_IDS = [
   ...idsOf('src/analyses/correlation'),
   ...idsOf('src/analyses/cox'),
   ...idsOf('src/analyses/timeseries'),
+  ...idsInSource(readFileSync('src/analyses/timeseries/modes.tsx', 'utf8')),
   ...idsOf('src/analyses/wizard'),
   ...idsOf('src/analyses/mixedanova'),
   ...idsOf('src/analyses/tost'),
@@ -79,6 +80,9 @@ const SOURCE_IDS = [
   ...idsOf('src/analyses/recurrent'),
   ...idsOf('src/analyses/alt'),
   ...idsOf('src/analyses/reliability'),
+  ...idsOf('src/analyses/var'),
+  ...idsOf('src/analyses/garch'),
+  ...idsOf('src/analyses/statespace'),
   ...panelIds(),
 ];
 

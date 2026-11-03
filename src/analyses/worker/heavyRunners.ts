@@ -25,6 +25,9 @@ import { buildIrtOutput } from '../irt/run';
 import { buildCompetingOutput } from '../competing/run';
 import { buildRecurrentOutput } from '../recurrent/run';
 import { buildAltOutput } from '../alt/run';
+import { buildVarOutput } from '../var/run';
+import { buildGarchOutput } from '../garch/run';
+import { buildStateSpaceOutput } from '../statespace/run';
 import type { HeavyAnalysisId } from './heavyIds';
 
 /**
@@ -82,4 +85,8 @@ export const HEAVY_RUNNERS: Record<
   recurrent: ({ grid, params, ciLevel }) =>
     buildRecurrentOutput({ grid, params: params.recurrent, ciLevel }),
   alt: ({ grid, params, ciLevel }) => buildAltOutput({ grid, params: params.alt, ciLevel }),
+  var: ({ grid, params, ciLevel }) => buildVarOutput({ grid, params: params.var, ciLevel }),
+  garch: ({ grid, params, ciLevel }) => buildGarchOutput({ grid, params: params.garch, ciLevel }),
+  statespace: ({ grid, params, ciLevel }) =>
+    buildStateSpaceOutput({ grid, params: params.statespace, ciLevel }),
 };

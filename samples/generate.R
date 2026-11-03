@@ -1018,6 +1018,86 @@ manifest <- list(
 
 # Fail before writing so a broken index never reaches the repository. The same
 # invariants are re-checked in TypeScript by src/io/sampleManifest.ts.
+
+## ---------------------------------------------------------------------------
+## Wave 7: VAR, GARCH and state-space samples
+## ---------------------------------------------------------------------------
+
+set.seed(20261104)
+var_n <- 400
+var_sim <- matrix(0, nrow = var_n, ncol = 2)
+var_b1 <- matrix(c(0.5, 0.1, 0.2, 0.4), 2, 2, byrow = TRUE)
+var_b2 <- matrix(c(0.1, -0.1, 0, 0.2), 2, 2, byrow = TRUE)
+var_chol <- t(chol(matrix(c(1, 0.3, 0.3, 1), 2, 2)))
+for (t in 1:var_n) {
+  shock <- as.numeric(var_chol %*% rnorm(2))
+  var_sim[t, ] <- if (t <= 2) c(1, 2) + shock else c(1, 2) + var_b1 %*% var_sim[t - 1, ] + var_b2 %*% var_sim[t - 2, ] + shock
+}
+var_sample <- data.frame(y1 = var_sim[201:400, 1], y2 = var_sim[201:400, 2])
+write_dataset(
+  "timeseries", "var_demo", var_sample,
+  "Bivariate VAR(2) with correlated innovations",
+  "Synthetic, seeded with set.seed(20261104)",
+  c("var"),
+  list(example("var", list(variables = c("y1", "y2")), mode = "var", lags = 0, horizon = 12)),
+  "200 observations of a stable bivariate VAR(2) with a 0.3 residual correlation; Granger causality runs from y1 to y2."
+)
+
+garch_n <- 500
+garch_omega <- 0.05
+garch_alpha <- 0.1
+garch_beta <- 0.85
+garch_eps <- numeric(garch_n)
+garch_var <- numeric(garch_n)
+garch_var[1] <- garch_omega / (1 - garch_alpha - garch_beta)
+for (t in 1:garch_n) {
+  if (t > 1) garch_var[t] <- garch_omega + garch_alpha * garch_eps[t - 1]^2 + garch_beta * garch_var[t - 1]
+  garch_eps[t] <- rnorm(1, sd = sqrt(garch_var[t]))
+}
+garch_sample <- data.frame(Return = 0.02 + garch_eps)
+write_dataset(
+  "timeseries", "garch_demo", garch_sample,
+  "GARCH(1,1) returns",
+  "Synthetic, seeded with set.seed(20261104)",
+  c("garch"),
+  list(example("garch", list(variable = "Return"), horizon = 10)),
+  "500 returns with conditional variance omega = 0.05, alpha = 0.10, beta = 0.85: clear volatility clustering."
+)
+
+ss_n <- 300
+ss_level <- numeric(ss_n)
+ss_slope <- numeric(ss_n)
+ss_level[1] <- 10
+ss_slope[1] <- 0.02
+for (t in 2:ss_n) {
+  ss_slope[t] <- ss_slope[t - 1] + rnorm(1, sd = 0.01)
+  ss_level[t] <- ss_level[t - 1] + ss_slope[t - 1] + rnorm(1, sd = 0.12)
+}
+ss_local <- ss_level + rnorm(ss_n, sd = 0.4)
+ss_transition <- matrix(c(0.96, 0.04, 0.08, 0.92), 2, 2, byrow = TRUE)
+ss_states <- integer(ss_n)
+ss_markov <- numeric(ss_n)
+ss_states[1] <- 1
+ss_markov[1] <- -1 + rnorm(1, sd = 0.5)
+for (t in 2:ss_n) {
+  ss_states[t] <- if (runif(1) < ss_transition[ss_states[t - 1], ss_states[t - 1]]) ss_states[t - 1] else 3 - ss_states[t - 1]
+  ss_mu <- if (ss_states[t] == 1) -1 else 2
+  ss_sd <- if (ss_states[t] == 1) 0.5 else 1.1
+  ss_markov[t] <- ss_mu + 0.4 * ss_markov[t - 1] + rnorm(1, sd = ss_sd)
+}
+statespace_sample <- data.frame(Local = ss_local, Markov = ss_markov)
+write_dataset(
+  "timeseries", "statespace_demo", statespace_sample,
+  "Local trend and two-regime Markov series",
+  "Synthetic, seeded with set.seed(20261104)",
+  c("statespace"),
+  list(
+    example("statespace", list(variable = "Local"), mode = "local", trend = TRUE, horizon = 10),
+    example("statespace", list(variable = "Markov"), mode = "markov", horizon = 10)
+  ),
+  "300 observations: Local is a noisy local linear trend; Markov alternates a low-volatility regime around -1 and a high-volatility regime around 2."
+)
+
 validate_manifest <- function(manifest) {
   ids <- vapply(manifest$datasets, function(dataset) dataset$id, character(1))
   if (anyDuplicated(ids)) stop("duplicate dataset id: ", ids[anyDuplicated(ids)])

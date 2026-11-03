@@ -336,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Stationarity after differencing; residuals close to white noise.'],
       whenToUse: ['Series with autocorrelation structure and enough observations.'],
       whenNotToUse: ['Very short series or structural breaks that are not modelled.'],
-      reading: ['Orders p, d, q describe memory, differencing and moving average; a lower AIC is preferable for the same specification.'],
+      reading: ['The Analysis type menu also offers Holt–Winters, unit-root tests, spectral analysis and ARIMAX with an exogenous regressor.', 'Orders p, d, q describe memory, differencing and moving average; a lower AIC is preferable for the same specification.'],
       pitfalls: ['Long-horizon forecasts have wide intervals: do not present them as certain.'],
       glossary: [
         { term: 'Stationarity', definition: 'Mean and variance stable over time.' },

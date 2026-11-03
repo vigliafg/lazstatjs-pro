@@ -6,9 +6,11 @@ import { lmmChartCopy } from './charts-lmm';
 import { remainingChartCopy } from './charts-remaining';
 import { l4ChartCopy } from './charts-l4';
 import { w6ChartCopy } from './charts-w6';
+import { w7ChartCopy } from './charts-w7';
 
 export const chartCopy: Record<string, string> = {
   ...w6ChartCopy,
+  ...w7ChartCopy,
   " Con stime instabili gli intervalli non finiti sono omessi dal grafico.":
     " With unstable estimates, non-finite intervals are omitted from the chart.",
   "ANCOVA: {s1} per {s2}":

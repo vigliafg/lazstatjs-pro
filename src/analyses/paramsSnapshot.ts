@@ -59,6 +59,9 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   recurrent: 'recurrent',
   alt: 'alt',
   reliability: 'reliability',
+  var: 'var',
+  garch: 'garch',
+  statespace: 'statespace',
 };
 
 export const analysisParamsKey = (analysisId: string): keyof ProjectParams | undefined =>

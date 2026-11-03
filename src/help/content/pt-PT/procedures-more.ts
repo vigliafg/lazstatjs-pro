@@ -336,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Estacionariedade depois da diferenciação; resíduos próximos de ruído branco.'],
       whenToUse: ['Séries com estrutura de autocorrelação e observações suficientes.'],
       whenNotToUse: ['Séries muito curtas ou ruturas estruturais não modeladas.'],
-      reading: ['As ordens p, d, q descrevem memória, diferenciação e média móvel; um AIC mais baixo é preferível para a mesma especificação.'],
+      reading: ['O menu Tipo de análise também oferece Holt–Winters, testes de raiz unitária, análise espetral e ARIMAX com um regressor exógeno.', 'As ordens p, d, q descrevem memória, diferenciação e média móvel; um AIC mais baixo é preferível para a mesma especificação.'],
       pitfalls: ['As previsões a longo prazo têm intervalos largos: não as apresente como certas.'],
       glossary: [
         { term: 'Estacionariedade', definition: 'Média e variância estáveis ao longo do tempo.' },

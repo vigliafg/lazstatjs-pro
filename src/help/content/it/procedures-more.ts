@@ -336,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Stazionarietà dopo le differenze; residui assimilabili a rumore bianco.'],
       whenToUse: ['Serie con struttura di autocorrelazione e abbastanza osservazioni.'],
       whenNotToUse: ['Serie molto corte o con interruzioni strutturali non modellate.'],
-      reading: ['Gli ordini p, d, q descrivono memoria, differenze e media mobile; un AIC più basso è preferibile a parità di specificazione.'],
+      reading: ['Il menu Tipo di analisi offre anche Holt–Winters, i test di radice unitaria, l’analisi spettrale e ARIMAX con un regressore esterno.', 'Gli ordini p, d, q descrivono memoria, differenze e media mobile; un AIC più basso è preferibile a parità di specificazione.'],
       pitfalls: ['Previsioni a lungo termine hanno intervalli larghi: non presentarle come certe.'],
       glossary: [
         { term: 'Stazionarietà', definition: 'Media e varianza stabili nel tempo.' },

@@ -341,6 +341,9 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const cox = isRecord(raw.cox) ? raw.cox : {};
   const survival = isRecord(raw.survival) ? raw.survival : {};
   const timeseries = isRecord(raw.timeseries) ? raw.timeseries : {};
+  const varParams = isRecord(raw.var) ? raw.var : {};
+  const garch = isRecord(raw.garch) ? raw.garch : {};
+  const statespace = isRecord(raw.statespace) ? raw.statespace : {};
   const contingency = isRecord(raw.contingency) ? raw.contingency : null;
   const loglinear = isRecord(raw.loglinear) ? raw.loglinear : null;
   const ancova = isRecord(raw.ancova) ? raw.ancova : {};
@@ -657,6 +660,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       intervals: Math.max(0, Math.min(30, integer(survival.intervals, d.survival.intervals ?? 0))),
     },
     timeseries: {
+      mode:
+        timeseries.mode === 'holtwinters' ||
+        timeseries.mode === 'unitroot' ||
+        timeseries.mode === 'spectral' ||
+        timeseries.mode === 'arimax'
+          ? timeseries.mode
+          : 'arima',
       variable: index(timeseries.variable, d.timeseries.variable, width),
       period: integer(timeseries.period, d.timeseries.period),
       horizon: integer(timeseries.horizon, d.timeseries.horizon),
@@ -665,6 +675,29 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
         timeseries.seasonalDifferenceMode,
         d.timeseries.seasonalDifferenceMode
       ),
+      seasonalModel: timeseries.seasonalModel === 'multiplicative' ? 'multiplicative' : 'additive',
+      xregVariable:
+        timeseries.xregVariable === undefined || timeseries.xregVariable === null
+          ? d.timeseries.xregVariable
+          : timeseries.xregVariable === -1
+            ? -1
+            : index(timeseries.xregVariable, d.timeseries.xregVariable, width),
+    },
+    var: {
+      mode: varParams.mode === 'vecm' ? 'vecm' : 'var',
+      variables: indexList(varParams.variables, d.var.variables, width),
+      lags: Math.max(0, Math.min(12, integer(varParams.lags, d.var.lags))),
+      horizon: Math.max(1, Math.min(40, integer(varParams.horizon, d.var.horizon))),
+    },
+    garch: {
+      variable: index(garch.variable, d.garch.variable, width),
+      horizon: Math.max(1, Math.min(40, integer(garch.horizon, d.garch.horizon))),
+    },
+    statespace: {
+      mode: statespace.mode === 'markov' ? 'markov' : 'local',
+      variable: index(statespace.variable, d.statespace.variable, width),
+      horizon: Math.max(1, Math.min(40, integer(statespace.horizon, d.statespace.horizon))),
+      trend: statespace.trend === undefined ? d.statespace.trend : statespace.trend === true,
     },
     contingency: {
       mode: contingency ? parseContingencyMode(contingency.mode, d.contingency.mode) : d.contingency.mode,

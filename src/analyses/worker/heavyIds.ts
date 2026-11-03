@@ -30,6 +30,9 @@ export const HEAVY_ANALYSIS_IDS = [
   'competing',
   'recurrent',
   'alt',
+  'var',
+  'garch',
+  'statespace',
 ] as const;
 
 export type HeavyAnalysisId = (typeof HEAVY_ANALYSIS_IDS)[number];

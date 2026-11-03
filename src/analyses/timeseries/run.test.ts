@@ -15,6 +15,9 @@ const base = {
     horizon: 3,
     differenceMode: 'auto' as const,
     seasonalDifferenceMode: 'auto' as const,
+    mode: 'arima' as const,
+    seasonalModel: 'additive' as const,
+    xregVariable: -1,
   },
   ciLevel: 95,
 };
