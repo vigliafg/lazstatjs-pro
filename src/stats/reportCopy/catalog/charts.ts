@@ -7,8 +7,10 @@ import { w9ChartCopy } from './en/charts-w9';
 import { l4ChartCopy as deL4ChartCopy } from './de/charts-l4';
 import { l4ChartCopy as esL4ChartCopy } from './es/charts-l4';
 import { w10ChartCopy as esW10ChartCopy } from './es/charts-w10';
+import { w10ChartCopy as ptPTW10ChartCopy } from './pt-PT/charts-w10';
 import { l4ChartCopy as frL4ChartCopy } from './fr/charts-l4';
 import { w10ChartCopy as frW10ChartCopy } from './fr/charts-w10';
+import { w10ChartCopy as deW10ChartCopy } from './de/charts-w10';
 import { l4ChartCopy as ptPTL4ChartCopy } from './pt-PT/charts-l4';
 import { extraChartCopy as deExtraChartCopy } from './de/charts-extra';
 import { extraChartCopy as esExtraChartCopy } from './es/charts-extra';
@@ -33,6 +35,8 @@ const L4_BY_LOCALE: Partial<Record<ReportLocale, Record<string, string>>> = {
 const W10_BY_LOCALE: Partial<Record<ReportLocale, Record<string, string>>> = {
   fr: frW10ChartCopy,
   es: esW10ChartCopy,
+  de: deW10ChartCopy,
+  'pt-PT': ptPTW10ChartCopy,
 };
 
 const EXTRA_BY_LOCALE: Partial<Record<ReportLocale, Record<string, string>>> = {
