@@ -29,7 +29,7 @@ export const chartGuides: Record<string, string[]> = {
   "lmm": ["Beobachtet vs angepasst, Residuen vs angepasst, Gruppenmittelwerte, Residuen-Q-Q und Caterpillar der Zufallsinterzepte (nach Effekt sortiert, mit Nulllinie)."],
   "gee": ["Beobachtet vs angepasst, beobachtete/vorhergesagte Mittelwerte je Cluster, mittlere Cluster-Residuen mit KI, Forest der Inzidenzraten und Residuen-Q-Q."],
   "glmm": ["Beobachtet vs angepasst, Caterpillar der Zufallsinterzepte (ungefähres KI, Nulllinie), Residuen vs angepasst und bei Zufallssteigung ein Steigungs-Caterpillar."],
-  "multivariate": ["Scree-Plot mit Kaiser-Linie und erklärter Varianz; Score-Plot PC1 × PC2."],
+  "multivariate": ["Scree-Plot mit Kaiser-Linie und erklärter Varianz; Score-Plot PC1 × PC2; Loadings-Heatmap und Loading-Plot (zwei Lesarten derselben Ladung: die Heatmap vergleicht Variablen, der Plot zeigt die Richtung); Biplot. EFA: Loadings, paralleles Scree, Varianz und Kommunalitäten. Alpha: Items, Korrelationen und Alpha bei Ausschluss."],
   "chisquare": ["Diagramm: beobachtete vs erwartete Häufigkeiten je Zelle der 2×2-Tabelle; Beitrag (O − E)² / E je Kategorie im Anpassungstest."],
   "contingency": ["Diagramm: Heatmap der standardisierten Residuen der R×C-Tabelle."],
   "agreement": ["Bland–Altman mit Bias/Übereinstimmungsgrenzen; ICC-Streuung mit Identitätslinie; Kappa-Übereinstimmungs-Heatmap."],

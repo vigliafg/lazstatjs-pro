@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F5.2b chiusa)
-- **Fase corrente**: F5.3 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F5.3 chiusa, ondata O5 chiusa)
+- **Fase corrente**: F6.1 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -72,7 +72,7 @@ con motivo.
 | F5.1 | cluster, canonical, MDS, correspondence | 60 | ✅ | `feat(charts): F5.1 silhouette, scatter dei cluster e correlazioni canoniche` | 3 test + `check` e `locales:check` verdi (MDS/correspondence già a 2 grafici) |
 | F5.2a | SEM, latent class | 45 | ✅ | `feat(charts): F5.2a adeguamento SEM e certezza delle classi latenti` | 2 test + `check` e `locales:check` verdi |
 | F5.2b | IRT ICC, conjoint | 30 | ✅ | `feat(charts): F5.2b curve caratteristiche degli item` | 2 test + `check` e `locales:check` verdi (conjoint già a 2 grafici) |
-| F5.3 | PCA/EFA/alpha e pannelli | 45 | ⬜ | — | — |
+| F5.3 | PCA/EFA/alpha e pannelli | 45 | ✅ | `feat(charts): F5.3 guide di PCA, EFA e alpha` | `check` + `locales:check` verdi; inventario rigenerato |
 | F6.1 | esatti, trend, verifica MH | 45 | ⬜ | — | — |
 | F7.1 | life table, competing, frailty, recurrent | 45 | ⬜ | — | — |
 | F7.2 | Cox, stratified, time-dependent | 45 | ⬜ | — | — |
@@ -168,6 +168,7 @@ sotto-blocco aperto):
 | 2026-11-03 | F5.2a | `latentclass-entropy` mostra per classe la quota di casi con posterior ≥ 0,80; l’entropia va nel sottotitolo | un indice globale in un grafico a barre avrebbe una sola barra, senza informazione per classe |
 | 2026-11-03 | F5.2b | La ICC è `iccProbability(a, b, θ)` nel kernel, con test su soglia 0,5 e monotonia | il piano chiede una funzione pura testata; il grafico deve usare la stessa formula del kernel |
 | 2026-11-03 | F5.2b | Nessun cambio a `conjoint`: utilità per attributo e importanza % sono già ordinate e spiegate | la fase chiedeva solo la verifica |
+| 2026-11-03 | F5.3 | `pca-loadings` (heatmap) e `pca-loading-plot` (scatter) restano entrambi | scelta dell’utente, documentata nella guida: confronto tra variabili vs direzione |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -528,6 +529,23 @@ sotto-blocco aperto):
   sulle 6 lingue.
 - **Commit**: `feat(charts): F5.2b curve caratteristiche degli item`
 
+### F5.3 — PCA/EFA/alpha e pannelli
+
+- **Stato**: ✅ chiusa (2026-11-03); ondata O5 chiusa con gate verde
+- **Verificato**: `pca-scree`, `pca-score`, `pca-loadings`, `pca-loading-plot`,
+  `pca-biplot`, `efa-loadings`, `efa-parallel`, `efa-variance`,
+  `efa-communalities`, `alpha-items`, `alpha-correlations`, `alpha-if-deleted`
+  sono emessi dal runner `multivariate`; `pcaPanel` compone scree, score,
+  loadings e biplot e degrada se mancano.
+- **Fatto**: guida `multivariate` riscritta nelle 6 lingue, con la spiegazione
+  della coppia heatmap/loading plot (nessun grafico eliminato) e delle
+  sezioni EFA e alpha.
+- **File toccati**: `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`;
+  inventario statico rigenerato.
+- **Test**: `npm run check` verde; `locales:check` verde sulle 6 lingue;
+  `npm run chart:inventory` rigenerato.
+- **Commit**: `feat(charts): F5.3 guide di PCA, EFA e alpha`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -569,10 +587,9 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F5.3: verifica di `pca-scree`/`pca-score`/`pca-biplot`, del pannello
-   `pcaPanel` e delle guide di PCA/EFA/alpha.
-2. Gate di fine ondata O5 con inventario statico aggiornato.
-3. F6.1: test esatti, trend e verifica Mantel-Haenszel.
+1. F6.1: test esatti, trend e verifica Mantel-Haenszel.
+2. F7.1: life table, competing risks, frailty e recurrent.
+3. F7.2: Cox, stratified e time-dependent.
 
 ---
 

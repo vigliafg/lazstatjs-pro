@@ -29,7 +29,7 @@ export const chartGuides: Record<string, string[]> = {
   "lmm": ["Observés vs ajustés, résidus vs ajustés, moyennes par groupe, Q-Q des résidus et caterpillar des interceptes aléatoires (triées par effet, avec ligne zéro)."],
   "gee": ["Observés vs ajustés, moyennes observées/prédites par cluster, résidus moyens par cluster avec IC, forêt des rapports d’incidence et Q-Q des résidus."],
   "glmm": ["Observés vs ajustés, caterpillar des interceptes aléatoires (IC approché, ligne zéro), résidus vs ajustés et, avec pente aléatoire, caterpillar des pentes."],
-  "multivariate": ["Éboulis avec ligne de Kaiser et variance expliquée ; score plot PC1 × PC2."],
+  "multivariate": ["Éboulis avec ligne de Kaiser et variance expliquée ; score plot PC1 × PC2 ; heatmap des loadings et loading plot (deux lectures du même chargement : la heatmap compare les variables, le plot montre la direction) ; biplot. EFA : loadings, éboulis parallèle, variance et communalités. Alpha : items, corrélations et alpha si supprimé."],
   "chisquare": ["Graphique : fréquences observées vs attendues pour chaque cellule du tableau 2×2 ; contribution (O − E)² / E par catégorie dans le test d’ajustement."],
   "contingency": ["Graphique : carte de chaleur des résidus standardisés du tableau R×C."],
   "agreement": ["Bland–Altman avec biais/limites d’agrément ; nuage ICC avec ligne d’identité ; carte de chaleur kappa."],

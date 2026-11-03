@@ -29,7 +29,7 @@ export const chartGuides: Record<string, string[]> = {
   "lmm": ["Observados vs ajustados, resíduos vs ajustados, médias por grupo, Q-Q dos resíduos e caterpillar das interceções aleatórias (ordenadas por efeito, com linha zero)."],
   "gee": ["Observados vs ajustados, médias observadas/previstas por cluster, resíduos médios por cluster com IC, forest das razões de incidência e Q-Q dos resíduos."],
   "glmm": ["Observados vs ajustados, caterpillar das interceções aleatórias (IC aproximado, linha zero), resíduos vs ajustados e, com declive aleatório, caterpillar dos declives."],
-  "multivariate": ["Scree plot com linha de Kaiser e variância explicada; score plot PC1 × PC2."],
+  "multivariate": ["Scree com linha de Kaiser e variância explicada; score plot PC1 × PC2; heatmap dos loadings e loading plot (duas leituras do mesmo carregamento: o heatmap compara variáveis, o plot mostra a direção); biplot. EFA: loadings, scree paralelo, variância e comunalidades. Alpha: itens, correlações e alpha se eliminado."],
   "chisquare": ["Gráfico: frequências observadas vs esperadas para cada célula da tabela 2×2; contributo (O − E)² / E por categoria no teste de bondade de ajuste."],
   "contingency": ["Gráfico: mapa de calor dos resíduos padronizados da tabela R×C."],
   "agreement": ["Bland–Altman com viés/limites de concordância; dispersão ICC com linha de identidade; mapa de calor kappa."],

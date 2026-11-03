@@ -27,7 +27,7 @@ export const chartGuides: Record<string, string[]> = {
   "lmm": ["Observed vs fitted, residuals vs fitted, group means, residual Q-Q and the random-intercept caterpillar (sorted by effect, with a zero line)."],
   "gee": ["Observed vs fitted, observed/predicted means by cluster, mean cluster residuals with CIs, incidence-ratio forest and residual Q-Q."],
   "glmm": ["Observed vs fitted, random-intercept caterpillar (approximate CI, zero line), residuals vs fitted and, with a random slope, a slope caterpillar."],
-  "multivariate": ["Scree plot with Kaiser line and explained variance; PC1 × PC2 score plot."],
+  "multivariate": ["Scree with Kaiser line and explained variance; PC1 × PC2 score plot; loadings heat map and loading plot (two readings of the same loading: the heat map compares variables, the plot shows direction); biplot. EFA: loadings, parallel scree, variance and communalities. Alpha: items, correlations and alpha if deleted."],
   "chisquare": ["Chart: observed vs expected frequencies for each cell of the 2×2 table; (O − E)² / E contribution per category in the goodness-of-fit test."],
   "contingency": ["Chart: heat map of standardized residuals for the R×C table."],
   "agreement": ["Bland–Altman with bias/limits of agreement; ICC scatter with identity line; kappa agreement heat map."],
