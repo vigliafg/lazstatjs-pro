@@ -4,7 +4,7 @@ export const chartGuides: Record<string, string[]> = {
   "distfit": ["Grafico: probability plot dei quantili osservati contro quelli teorici della distribuzione migliore, con la diagonale di riferimento."],
   "ttest": ["Box a un campione con valore di test; box Wilcoxon; box per gruppi indipendenti e box dei ranghi Mann-Whitney; box appaiato e box delle differenze."],
   "anova": ["Box per gruppo; medie con intervalli di confidenza; box dei ranghi Kruskal-Wallis."],
-  "factorial": ["Grafico: interazione delle medie di cella, con una linea per livello del primo fattore."],
+  "factorial": ["Grafico: interazione delle medie di cella, con una linea per livello del primo fattore.", "Grafico: medie di cella con intervallo di confidenza; utile quando l’interazione non è il punto principale."],
   "ancova": ["Grafico: medie grezze e aggiustate per gruppo, con etichette dei valori."],
   "repeatedanova": ["Grafico: medie per condizione con etichette dei valori."],
   "mixedanova": ["Interazione gruppo × condizione e traiettorie dei soggetti."],

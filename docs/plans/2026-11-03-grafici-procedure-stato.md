@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F0.2 chiusa)
-- **Fase corrente**: F1.1a — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F1.1a chiusa)
+- **Fase corrente**: F1.1b — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -57,7 +57,7 @@ con motivo.
 |---|---|---:|---|---|---|
 | F0.1 | Inventario, guardrail, stato | 60 | ✅ | `feat(charts): F0.1 inventario grafici e guardrail su sub-runner` | 8 test mirati + `npm run check` verdi |
 | F0.2 | 3 varianti JMP (`forest`, `survival`, `line`) | 60 | ✅ | `feat(charts): F0.2 tre varianti JMP` | 25 test + `locales:check` verdi |
-| F1.1a | `factorial`: medie di cella | 45 | ⬜ | — | — |
+| F1.1a | `factorial`: medie di cella | 45 | ✅ | `feat(charts): F1.1a medie di cella` | 11 test verdi |
 | F1.1b | `recurrent`: mean cumulative function | 45 | ⬜ | — | — |
 | F1.2 | `tost` e chiusura ampiezza | 45 | ⬜ | — | — |
 | F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ⬜ | — | — |
@@ -138,6 +138,7 @@ sotto-blocco aperto):
 | 2026-11-03 | F0.1 | Le 211 stringhe EN mancanti stanno in un file per ondata (`en/charts-f0.ts`) | i cataloghi esistenti sono già al limite di 700 righe |
 | 2026-11-03 | F0.2 | Tre varianti JMP opt-in: `forest.jmp-ratio`, `survival.jmp-km`, `line.jmp-connected` | convenzioni documentate, nessun cambio di default né di dati |
 | 2026-11-03 | F0.2 | `line.jmp-connected` ha lo stesso patch di `markers` | il contratto del piano è quello; `matchingChartStyle` evidenzia `markers` come primo match |
+| 2026-11-03 | F1.1a | `factorial-cells` riusa le medie di cella già in `series` | nessun nuovo calcolo nel kernel, solo il layer `intervals` |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -205,6 +206,21 @@ sotto-blocco aperto):
 | Curve di sopravvivenza | `jmp-km` | `survival`, `stratcox`, `parametric` (`survival-life-curve`) |
 | Serie osservate con marker | `jmp-connected` | `timeseries` (`ts-arima-chart`, `hw-series`), `var` (`var-irf-chart`) |
 
+### F1.1a — `factorial`: medie di cella
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `factorial-cells` [interval] costruito dalle medie di cella già in
+  `series` (una riga per cella popolata, con IC); `interval` aggiunto ai kind
+  dell'analisi; copy IT/EN e help IT/EN.
+- **File toccati**: `src/analyses/factorial/run.tsx`,
+  `src/analyses/factorial/charts.test.ts` (nuovo), `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts` (nuovo),
+  `src/stats/reportCopy/catalog/charts.ts`, `src/help/content/{it,en}/charts.ts`.
+- **Test**: `factorial/charts.test.ts` + `run.test.ts` + `analysisKinds.test.ts`
+  + `copy.test.ts` → 11/11 verdi; `locales:check en` verde.
+- **Nota**: il grafico compare solo se almeno una cella ha l'IC (n > 1).
+- **Commit**: `feat(charts): F1.1a medie di cella`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -214,7 +230,7 @@ sotto-blocco aperto):
 
 | Fase | id | Analisi | kind | Formato | Test | Stato |
 |---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — |
+| F1.1a | `factorial-cells` | `factorial` | `interval` | LZ | `factorial/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -222,12 +238,11 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F1.1a: `factorial-cells` [interval] dalle medie di cella già in `series`
-   (`factorial/run.tsx`).
-2. Aggiungere `interval` a `analysisKinds.ts` per `factorial` e il test
-   `src/analyses/factorial/charts.test.ts`.
-3. F1.1b: `meanCumulativeFunction` nel kernel `recurrent` con test numerico,
-   poi `recurrent-mcf` [line].
+1. F1.1b: `meanCumulativeFunction` nel kernel `recurrent` con test numerico su
+   tempi noti.
+2. `recurrent-mcf` [line] dal risultato della funzione, con copy EN e help.
+3. F1.2: sostituire il `bar` di `tost-difference` con l'`interval` (differenza,
+   IC e margini).
 
 ---
 

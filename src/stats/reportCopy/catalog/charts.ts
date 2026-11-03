@@ -1,6 +1,7 @@
 import type { ReportLocale } from '../types';
 import { chartCopy as baseChartCopy } from './en/charts';
 import { f0ChartCopy } from './en/charts-f0';
+import { w10ChartCopy } from './en/charts-w10';
 import { l4ChartCopy as enL4ChartCopy } from './en/charts-l4';
 import { w9ChartCopy } from './en/charts-w9';
 import { l4ChartCopy as deL4ChartCopy } from './de/charts-l4';
@@ -39,6 +40,7 @@ export const enChartCopy: Record<string, string> = {
   ...enL4ChartCopy,
   ...w9ChartCopy,
   ...f0ChartCopy,
+  ...w10ChartCopy,
 };
 
 export const chartCatalogFor = (locale: ReportLocale): Record<string, string> =>

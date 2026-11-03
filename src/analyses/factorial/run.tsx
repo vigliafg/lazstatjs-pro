@@ -90,6 +90,12 @@ export const buildFactorialOutput = ({
       .filter((row): row is { x: string; y: number; lo?: number; hi?: number; series: string } => row !== null)
   );
 
+  const cellIntervals = series.flatMap(row =>
+    row.lo === undefined || row.hi === undefined
+      ? []
+      : [{ category: `${row.series} · ${row.x}`, estimate: row.y, lo: row.lo, hi: row.hi }]
+  );
+
   return {
     ok: true,
     title: copy('ANOVA fattoriale: {s1} per {s2} × {s3}', {
@@ -115,6 +121,23 @@ export const buildFactorialOutput = ({
         },
         options: { showMarkers: true, showBand: true } as never,
       }),
+      ...(cellIntervals.length > 0
+        ? [
+            makeChart({
+              id: 'factorial-cells',
+              kind: 'interval',
+              title: copy('Medie di cella con intervallo'),
+              subtitle: copy('IC {s1}% · {s2} celle', {
+                s1: ciLevel,
+                s2: cellIntervals.length,
+              }),
+              note: copy('Ogni punto è la media della cella; il segmento è il suo intervallo di confidenza. Celle con poche osservazioni hanno intervalli più larghi.'),
+              data: { intervals: cellIntervals },
+              fields: { xLabel: copy('Cella'), yLabel: copy('Media') },
+              options: { valueLabels: false, sort: 'none' } as never,
+            }),
+          ]
+        : []),
     ],
   };
 };

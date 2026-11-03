@@ -4,7 +4,7 @@ export const chartGuides: Record<string, string[]> = {
   "distfit": ["Chart: probability plot of observed vs theoretical quantiles for the best-fitting distribution, with the reference diagonal."],
   "ttest": ["One-sample box with the test value; Wilcoxon box; independent-groups box and Mann-Whitney rank box; paired box and box of differences."],
   "anova": ["Group box plots; means with confidence intervals; Kruskal-Wallis rank box."],
-  "factorial": ["Chart: interaction plot of cell means, with one line per level of the first factor."],
+  "factorial": ["Chart: interaction plot of cell means, with one line per level of the first factor.", "Chart: cell means with confidence intervals; useful when the interaction is not the main point."],
   "ancova": ["Chart: raw and adjusted means per group, with value labels."],
   "repeatedanova": ["Chart: means by condition with value labels."],
   "mixedanova": ["Group × condition interaction plot and subject trajectories."],

@@ -36,7 +36,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
     'shadowgram',
   ],
   distfit: ['bar', 'line', 'qq'],
-  factorial: ['line'],
+  factorial: ['line', 'interval'],
   gee: ['bar', 'forest', 'interval', 'qq', 'scatter'],
   lmm: ['bar', 'interval', 'qq', 'scatter'],
   glmm: ['bar', 'interval', 'residual', 'scatter'],
