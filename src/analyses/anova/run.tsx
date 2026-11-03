@@ -486,7 +486,7 @@ const buildMoodOutput = ({ grid, anovaParams, ciLevel }: AnovaRunInput): Analysi
               ),
               data: { intervals: medianIntervals },
               fields: { xLabel: groupName, yLabel: copy('Mediana') },
-              options: { valueLabels: true, showMeanDiamond: false, sort: 'none' } as never,
+              options: { valueLabels: false, showMeanDiamond: false, sort: 'none' } as never,
             }),
           ]
         : []),

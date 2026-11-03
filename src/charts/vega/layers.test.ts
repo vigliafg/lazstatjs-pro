@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { barLayers, heatmapLayers, lineLayers, scatterLayers, scatterOnly, survivalLayers } from './layers';
 import { boxLayers } from './boxLayers';
+import { paretoLayers } from './advancedLayers';
 import { dotLayers, ecdfLayers, intervalLayers } from './descriptiveLayers';
 import { riskLayers } from './riskLayers';
 import { mosaicLayers } from './mosaicLayers';
@@ -196,6 +197,59 @@ test('survival showMedian draws the computed median rules', () => {
     (medians!.data?.values as Array<Record<string, unknown>>).map(row => row.x),
     [3, 3]
   );
+});
+
+test('scatter plots the long series table when no points are given', () => {
+  const chart = makeChart({
+    id: 'series-scatter',
+    kind: 'scatter',
+    title: 'Series scatter',
+    data: {
+      series: [
+        { x: 1, y: 2, series: 'Z1' },
+        { x: 2, y: 3, series: 'Z1' },
+        { x: 1, y: 4, series: 'Z2' },
+      ],
+    },
+    fields: { xLabel: 'X', yLabel: 'Y', series: 'Instrument' },
+  });
+  const options = { ...factoryOptions('scatter'), showPoints: true } as Extract<
+    ChartOptions,
+    { kind: 'scatter' }
+  >;
+  const layers = scatterLayers(chart, options);
+  const points = layers.find(layer => layer.mark?.type === 'point');
+  assert.ok(points);
+  assert.equal((points!.data?.values as unknown[]).length, 3);
+  assert.equal((points!.encoding?.color as { field?: string }).field, 'series');
+});
+
+test('the Pareto cumulative line reads the x key used by the runners', () => {
+  const chart = makeChart({
+    id: 'pareto-x',
+    kind: 'pareto',
+    title: 'Pareto',
+    data: {
+      bars: [
+        { category: 'A', value: 3 },
+        { category: 'B', value: 1 },
+      ],
+      cumulative: [
+        { x: 'A', y: 75 },
+        { x: 'B', y: 100 },
+      ],
+    },
+    fields: { xLabel: 'Categoria', yLabel: 'Conteggio', series: 'Cumulata (%)' },
+  });
+  const options = { ...factoryOptions('pareto'), showCumulative: true } as Extract<
+    ChartOptions,
+    { kind: 'pareto' }
+  >;
+  const layers = paretoLayers(chart, options);
+  const line = layers.find(layer => layer.mark?.type === 'line');
+  assert.ok(line);
+  assert.equal((line!.encoding?.x as { field?: string }).field, 'x');
+  assert.equal((line!.data?.values as unknown[]).length, 2);
 });
 
 test('interval, dot and ECDF layers expose their marks and options', () => {

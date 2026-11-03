@@ -160,6 +160,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F4.3 | I forest di IRR/OR hanno `logScale: true` nel runner | allinea i tre runner alla variante `forest.jmp-ratio` senza cambiare il default del kind |
 | 2026-11-03 | F4.3 | Il link della logistica compare nel sottotitolo e la nota probit cita Φ(η) | il grafico deve dire quale curva sta disegnando |
 | 2026-11-03 | F4.4 | Nessun cambio ai runner: `reg-scatter` porta già `meanY` e `grid.seMean`, `reg-residual-fitted` porta `residSd` | le varianti `jmp-regression` e `jmp-residual` sono selezionabili senza forzare il default del kind |
+| 2026-11-03 | QA | Lo scatter accetta `series` come osservazioni quando `points` manca | tre runner (IV, polinomio) passavano solo `series`: le card erano vuote e i test non lo vedevano |
+| 2026-11-03 | QA | Il Pareto accetta la cumulata sia come `category` sia come `x` | i runner esistenti usano `x`; il layer leggeva solo `category` |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -440,6 +442,30 @@ sotto-blocco aperto):
 - **Test**: regression charts + panels → 8/8 verdi; `npm run check` verde;
   `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F4.4 verifica stili JMP della regressione`
+
+### QA visiva — contact sheet dei nuovi grafici
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Metodo**: `scripts/chart-qa.mjs` esegue i builder reali su 7 fixture, compila
+  gli stessi spec dell’app con `buildVegaSpec` e scrive una pagina statica
+  (Vega + Vega-Lite + vega-embed da `node_modules`); Playwright (`chrome`)
+  produce uno screenshot full-page, poi ispezionato a riquadri.
+- **Difetti trovati e corretti**:
+  1. `iv-first-stage` (e `iv-observed-fitted`, `polynomial-curve`) erano
+     **vuoti**: `scatterLayers` leggeva solo `data.points`, mentre quei runner
+     passano una tabella lunga `data.series`. Ora lo scatter legge `series`
+     quando `points` è assente e colora per `series`.
+  2. La cumulata del Pareto era una linea verticale sull’ultima categoria:
+     `paretoLayers` leggeva solo la chiave `category`, mentre i runner emettono
+     `x`. Ora accetta entrambe.
+  3. `selection-coefficients` diceva “1 predittori”: aggiunto il singolare.
+  4. `mood-median-ci` sovrapponeva le etichette di valore all’intervallo:
+     `valueLabels` disattivato (i numeri restano nella tabella).
+- **Verificato dopo il fix**: IV mostra le due serie Z1/Z2, il Pareto ha la
+  cumulata monotona 40→100, il sottotitolo è corretto.
+- **Test**: `layers.test.ts` copre scatter da `series` e cumulata con chiave
+  `x`; `npm run check` e `locales:check` verdi.
+- **Commit**: `fix(charts): QA visiva, scatter da series e cumulata del Pareto`
 
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.

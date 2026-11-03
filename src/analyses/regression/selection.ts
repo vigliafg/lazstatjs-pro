@@ -87,7 +87,10 @@ export const buildSelectionOutput = ({ grid, regParams, ciLevel }: SelectionRunI
             id: 'selection-coefficients',
             kind: 'bar',
             title: copy('Coefficienti del modello selezionato'),
-            subtitle: copy('IC {s1}% · {s2} predittori', { s1: ciLevel, s2: selectedBars.length }),
+            subtitle:
+              selectedBars.length === 1
+                ? copy('IC {s1}% · {s2} predittore', { s1: ciLevel, s2: 1 })
+                : copy('IC {s1}% · {s2} predittori', { s1: ciLevel, s2: selectedBars.length }),
             note: copy(
               'Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.'
             ),

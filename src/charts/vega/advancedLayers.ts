@@ -131,11 +131,16 @@ export const paretoLayers = (
   }
   if (options.showCumulative) {
     const cumulative = rowsOf(chart, 'cumulative');
+    // Runners emit the cumulative row keyed either as `category` or as `x`;
+    // reading the wrong key would stack every point on one axis position.
+    const cumulativeX = cumulative.some(row => row.category !== undefined)
+      ? x
+      : { ...x, field: 'x' };
     layers.push({
       data: { values: cumulative },
       mark: { type: 'line', color: colorAt(options, 3), strokeWidth: options.lineWidth, point: true },
       encoding: {
-        x,
+        x: cumulativeX,
         y: {
           field: 'y',
           type: 'quantitative',

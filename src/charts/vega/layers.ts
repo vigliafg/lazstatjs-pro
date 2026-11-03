@@ -50,15 +50,23 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
     });
   }
   if (options.showPoints) {
-    const points = rowsOf(chart, 'points');
+    // Runners either pass `points` or a long `series` table; both are the raw
+    // observations, so the scatter must read whichever one is present.
+    const explicit = rowsOf(chart, 'points');
+    const points = explicit.length > 0 ? explicit : rowsOf(chart, 'series');
     const grouped = points.some(row => row.group !== undefined && row.group !== null && String(row.group).length > 0);
+    const hasSeries = points.some(row => row.series !== undefined && String(row.series).length > 0);
     layers.push({
       data: { values: points },
       mark: pointMark(options, theme),
       encoding: {
         x: xEncoding(chart, options, theme),
         y: yEncoding(chart, options, theme),
-        ...(grouped ? { color: colorEncoding(chart, options, theme, 'group', points) } : {}),
+        ...(grouped
+          ? { color: colorEncoding(chart, options, theme, 'group', points) }
+          : hasSeries
+            ? { color: colorEncoding(chart, options, theme, 'series', points) }
+            : {}),
       },
     });
   }
