@@ -13,9 +13,10 @@
 ## Ripresa rapida (2026-11-03, fine sessione)
 
 - **Ultimo commit**: `feat(charts): F8.2 Q-Q dei residui GARCH`.
-- **Chiuso**: F0.1 → F8.2. Gate mirato verde: 23 test (garch, copy,
-  analysisKinds, buildSpec), `tsc --noEmit` exit 0, `check-locale` verde su
-  it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
+- **Chiuso**: F0.1 → F8.2; ondata O8 chiusa con `npm run check` exit 0
+  (lint, suite completa e guard). Gate mirato: 23 test (garch, copy,
+  analysisKinds, buildSpec), `check-locale` verde su it/en/fr/es/de/pt-PT,
+  `help:build` con 498 topic in 6 lingue.
 - **Da riprendere**: **F9.1** (sample size, resampling, DOE), poi F9.2a.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
@@ -696,8 +697,8 @@ sotto-blocco aperto):
   `src/stats/reportCopy/catalog/en/charts-w10.ts`,
   `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
 - **Test**: garch charts + copy + analysisKinds + buildSpec → 23/23 verdi;
-  `tsc --noEmit` exit 0; `check-locale` verde sulle 6 lingue;
-  `help:build` verde (498 topic).
+  `check-locale` verde sulle 6 lingue; `help:build` verde (498 topic);
+  gate di fine ondata `npm run check` exit 0.
 - **Commit**: `feat(charts): F8.2 Q-Q dei residui GARCH`
 
 ### F7.3b — Parametric e reliability
