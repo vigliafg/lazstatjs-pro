@@ -339,6 +339,39 @@ committate; nessun R richiesto a test-time).
 
 ---
 
+## 5d. Ondata W3 — pre-decisioni sulle reference (2026-11-03)
+
+Decisione presa prima di aprire W3, dopo la verifica dei pacchetti R
+disponibili. **Nessuna installazione nuova**: le fixture sono committate, R
+non serve a test-time.
+
+| Item | Reference scelta | Note |
+|---|---|---|
+| R-09 PLS | `pls` | canonico |
+| R-10 GAM/MARS | `mgcv`, `earth` | canonici |
+| R-11 IV/2SLS | `AER::ivreg`, `systemfit` | il pacchetto `ivreg` manca, la funzione c'è |
+| R-12 Panel FE/RE | `plm` | canonico |
+| R-13 Tobit | `AER::tobit` (survreg) | ML esatto, censura dichiarata nello script |
+| R-13 Selection | **base R two-step** | `glm(probit)` + OLS con inverse Mills ratio |
+| R-14 Mediazione | `lavaan::sem` + bootstrap per proprietà | punto: tolleranza stretta; bootstrap: niente confronto puntuale |
+| R-15 Propensity | `MatchIt` | confronto su ATT e bilanciamento, non sulle coppie |
+
+### Perché queste scelte
+
+- `sampleSelection` e `mediation` non sono installati. `sampleSelection::selection`
+  stima in **ML**, mentre lo scope W3 di R-13 è il **two-step**: confrontarli
+  richiederebbe tolleranze larghe e nasconderebbe errori. Il riferimento
+  two-step si scrive in base R ed è indipendente dal nostro kernel.
+- L'ML di Heckman resta **fuori da W3** e va dichiarato come limite nel report
+  e nell'help.
+- Il bootstrap della mediazione non è confrontabile punto per punto con R
+  (generatori casuali diversi). La fixture copre solo `a`, `b`, `c'`, effetto
+  indiretto e SE delta; il bootstrap si valida per proprietà: IC che contiene
+  la stima, ampiezza che decresce con n, copertura Monte Carlo ≥ nominale −
+  tolleranza. Va scritto nel test.
+- `quine` ha 2 gruppi `Eth`: per il GLMM resta un campione valido ma poco
+  informativo; i riferimenti forti sono `sleepstudy` e `birthwt`.
+
 ## 6. Registro checkpoint
 
 | Data | Checkpoint | Commit | Test | Esito | Note |
@@ -392,10 +425,9 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
      `pls`, `mgcv`, `AER`, `plm`, `sampleSelection` assente → fallback,
      `mediation` assente → fallback), poi voce/UI.
   3. Ai gate intermedi aggiornare questo documento e i conteggi.
-- Domande aperte: nessuna.
-- Rischi attivi: W3 richiede pacchetti R non tutti installati
-  (`sampleSelection`, `mediation`); pianificare reference alternative o
-  simulazioni con seed fisso.
+- Domande aperte: nessuna; i fallback reference di W3 sono decisi in §5d.
+- Rischi attivi: il bootstrap della mediazione non è confrontabile punto per
+  punto con R (validazione per proprietà); Heckman ML resta fuori scope.
 
 ### Riassunto di 10 righe
 
