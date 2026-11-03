@@ -16,6 +16,8 @@
 - **Chiuso**: F0.1 → F9.3b. Ondata O9 completa. Gate mirato verde (variogramma,
   spatial, copy, analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
   it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
+- **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
+  moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
 - **Da riprendere**: **F10.1** (forest/survival/line in stile JMP), poi F10.2.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
