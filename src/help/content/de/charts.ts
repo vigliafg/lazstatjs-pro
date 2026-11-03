@@ -42,4 +42,7 @@ export const chartGuides: Record<string, string[]> = {
   "mi": ["Beobachtete/fehlende Werte je Variable; beobachtete und vervollständigte Verteilung der ersten Variablen."],
   "samplesize": ["Diagramm: Power-Kurve mit Ziellinie und Designpunkt."],
   "resampling": ["Bootstrap-Verteilung der Differenz mit Perzentil-KI; Permutations-Nullverteilung mit beobachteter Differenz."],
+  "var": ["Impulsantworten (eine Linie je Schock → Variable) und Varianzzerlegung am gewählten Horizont; im VECM α-Balken je Gleichung, wobei negative Werte die Abweichung korrigieren."],
+  "garch": ["Reihe und bedingte SD, Autokorrelation der standardisierten Residuen und deren Q-Q-Diagramm mit Hülle: Erklärt das GARCH die Volatilität, bleiben die Punkte nahe der Diagonale."],
+  "statespace": ["Gefiltertes und geglättetes latentes Niveau mit Prognose; beim Markov-Switching die Reihe mit Prognose und der Wahrscheinlichkeit von Regime 2."],
 };

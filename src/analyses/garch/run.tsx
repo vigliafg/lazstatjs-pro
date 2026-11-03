@@ -1,7 +1,7 @@
 import { fitGarch, garchReport, garchTables } from '../../stats/garch';
 import { acfTable } from '../../stats/timeseries';
 import { copy } from '../../stats/reportCopy';
-import { makeChart } from '../../charts/kits/common';
+import { makeChart, qqBand, qqPoints, qqReference } from '../../charts/kits/common';
 import { numericColumnValues } from '../shared/data';
 import type { Dataset } from '../../grid/types';
 import type { GarchParams } from '../../io/project';
@@ -34,6 +34,10 @@ export const buildGarchOutput = ({ grid, params, ciLevel }: GarchInput): Analysi
     .filter(point => point.lag >= 1 && Number.isFinite(point.acf))
     .map(point => ({ lag: point.lag, value: point.acf }));
   const band = 1.96 / Math.sqrt(fit.standardized.length);
+  const qq = qqPoints(fit.standardized);
+  const qqLine = qqReference(qq);
+  const jarqueBera = Number.isFinite(fit.jarqueBera.stat) ? fit.jarqueBera.stat.toFixed(2) : '—';
+  const jarqueBeraP = Number.isFinite(fit.jarqueBera.p) ? fit.jarqueBera.p.toFixed(3) : '—';
 
   return {
     ok: true,
@@ -71,6 +75,24 @@ export const buildGarchOutput = ({ grid, params, ciLevel }: GarchInput): Analysi
         },
         fields: { xLabel: copy('Lag'), yLabel: copy('Autocorrelazione') },
       }),
+      ...(qq.length > 0
+        ? [
+            makeChart({
+              id: 'garch-qq',
+              kind: 'qq' as const,
+              title: copy('Q-Q dei residui standardizzati'),
+              subtitle: copy('N = {s1} · Jarque–Bera = {s2} (p = {s3})', {
+                s1: fit.standardized.length,
+                s2: jarqueBera,
+                s3: jarqueBeraP,
+              }),
+              note: copy('I punti vicini alla diagonale indicano residui standardizzati compatibili con la normale; code pesanti o asimmetria segnalano che il GARCH gaussiano non descrive bene le innovazioni.'),
+              data: { points: qq, reference: qqLine, band: qqBand(qq, qqLine, ciLevel) },
+              fields: { xLabel: copy('Quantili teorici'), yLabel: copy('Residui standardizzati') },
+              options: { showCI: true } as never,
+            }),
+          ]
+        : []),
     ],
   };
 };

@@ -144,4 +144,8 @@ export const w10ChartCopy: Record<string, string> = {
     "The series is drawn with its linear trend: ADF = {s1}, 5% critical value = {s2}, p = {s3}. A steep trend makes the unit-root tests less informative.",
   "Ogni picco è una frequenza dominante: qui il massimo cade al periodo {s1} osservazioni (Fisher g = {s2}, p = {s3}); un picco alla frequenza 1/periodo corrisponde a un ciclo di quel periodo.":
     "Each peak is a dominant frequency: here the maximum falls at a period of {s1} observations (Fisher g = {s2}, p = {s3}); a peak at frequency 1/period corresponds to a cycle of that period.",
+  "Q-Q dei residui standardizzati": "Q-Q of standardised residuals",
+  "N = {s1} · Jarque–Bera = {s2} (p = {s3})": "N = {s1} · Jarque–Bera = {s2} (p = {s3})",
+  "I punti vicini alla diagonale indicano residui standardizzati compatibili con la normale; code pesanti o asimmetria segnalano che il GARCH gaussiano non descrive bene le innovazioni.":
+    "Points close to the diagonal indicate standardised residuals compatible with normality; heavy tails or skewness mean the Gaussian GARCH does not describe the innovations well.",
 };

@@ -42,4 +42,7 @@ export const chartGuides: Record<string, string[]> = {
   "mi": ["Conteggi osservati/mancanti per variabile; distribuzione osservata e completata della prima variabile."],
   "samplesize": ["Grafico: curva di potenza con linea obiettivo e punto del disegno."],
   "resampling": ["Distribuzione bootstrap della differenza con IC percentile; distribuzione nulla di permutazione con differenza osservata."],
+  "var": ["Risposte impulsive (una linea per shock → variabile) e scomposizione della varianza all’orizzonte scelto; nel VECM, barre di α per equazione, con i valori negativi che correggono lo scostamento."],
+  "garch": ["Serie e DS condizionale, autocorrelazione dei residui standardizzati e Q-Q degli stessi residui con envelope: se il GARCH spiega la volatilità i punti restano vicini alla diagonale."],
+  "statespace": ["Livello latente filtrato e smussato con la previsione; nel Markov switching, serie con previsione e probabilità del regime 2."],
 };

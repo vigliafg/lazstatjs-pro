@@ -42,4 +42,7 @@ export const chartGuides: Record<string, string[]> = {
   "mi": ["Observed/missing counts per variable; observed and completed distributions of the first variable."],
   "samplesize": ["Chart: power curve with target line and design point."],
   "resampling": ["Bootstrap distribution of the difference with percentile CI; permutation null distribution with observed difference."],
+  "var": ["Impulse responses (one line per shock → variable) and the variance decomposition at the chosen horizon; in the VECM, α bars per equation, where negative values correct the deviation."],
+  "garch": ["Series and conditional SD, autocorrelation of the standardised residuals and their Q-Q plot with the envelope: if GARCH explains the volatility the points stay close to the diagonal."],
+  "statespace": ["Filtered and smoothed latent level with the forecast; in Markov switching, the series with its forecast and the probability of regime 2."],
 };

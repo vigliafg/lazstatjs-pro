@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1 chiusa)
-- **Fase corrente**: F8.2 — VAR, GARCH, state-space
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1 e F8.2 chiuse)
+- **Fase corrente**: F9.1 — sample size, resampling, DOE
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,12 +12,11 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F8.1 Holt-Winters, radici unitarie e
-  spettrale`.
-- **Chiuso**: F0.1 → F8.1. Gate mirato verde: 16 test (timeseries, copy,
-  analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
+- **Ultimo commit**: `feat(charts): F8.2 Q-Q dei residui GARCH`.
+- **Chiuso**: F0.1 → F8.2. Gate mirato verde: 23 test (garch, copy,
+  analysisKinds, buildSpec), `tsc --noEmit` exit 0, `check-locale` verde su
   it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
-- **Da riprendere**: **F8.2** (VAR, GARCH, state-space), poi F9.1.
+- **Da riprendere**: **F9.1** (sample size, resampling, DOE), poi F9.2a.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -96,7 +95,7 @@ con motivo.
 | F7.3a | ALT: life-stress plot | 45 | ✅ | `feat(charts): F7.3a life-stress plot e verifica parametriche` | 8 test + `check` verdi |
 | F7.3b | parametric, reliability | 30 | ✅ | idem (solo verifica, nessuna modifica) | `check` verde, 7 grafici parametrici coerenti |
 | F8.1 | Holt-Winters, unit root, spettrale | 45 | ✅ | `feat(charts): F8.1 Holt-Winters, radici unitarie e spettrale` | 16 test + `lint` + `locales:check` + `help:build` verdi |
-| F8.2 | VAR, GARCH, state-space | 60 | ⬜ | — | — |
+| F8.2 | VAR, GARCH, state-space | 60 | ✅ | `feat(charts): F8.2 Q-Q dei residui GARCH` | 23 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.1 | sample size, resampling, DOE | 60 | ⬜ | — | — |
 | F9.2a | survey, MI | 45 | ⬜ | — | — |
 | F9.2b | ML, text, choice | 30 | ⬜ | — | — |
@@ -199,6 +198,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F8.1 | La nota di `unitroot-series` riporta ADF, valore critico 5% e p | il piano chiede la statistica nella nota; con il critico il lettore vede subito se la serie è borderline |
 | 2026-11-03 | F8.1 | La nota di `spectral-density` nomina periodo di picco, Fisher g e p | una nota generica non dice dove guardare: il picco dominante è il dato che il grafico deve comunicare |
 | 2026-11-03 | F8.1 | `hw-series` marca le osservazioni con i marker e tiene la banda sul solo forecast | le tre serie sono altrimenti indistinguibili; la banda resta l’intervallo di previsione (il kernel fornisce `lo`/`hi` solo per il forecast) |
+| 2026-11-03 | F8.2 | `garch-qq` usa `qqPoints`/`qqReference`/`qqBand` di `kits/common`, non helper nuovi | sono gli stessi usati da `countreg` e dagli altri Q-Q: una sola definizione di punti, retta ed envelope |
+| 2026-11-03 | F8.2 | La banda del Q-Q GARCH usa il `ciLevel` della procedura | l’envelope è un intervallo, quindi deve seguire il livello scelto dall’utente, non un 95% fisso |
+| 2026-11-03 | F8.2 | Jarque–Bera va nel sottotitolo, non in un grafico | il kernel espone solo statistica e p; un istogramma dei residui non aggiungerebbe informazione alla diagonale |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -673,6 +675,31 @@ sotto-blocco aperto):
   futuri cadono dopo la serie osservata.
 - **Commit**: `feat(charts): F8.1 Holt-Winters, radici unitarie e spettrale`
 
+### F8.2 — VAR, GARCH, state-space
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `garch-qq` [qq] con i residui standardizzati (`fit.standardized`), retta di
+    riferimento ed envelope al livello scelto; sottotitolo con N e
+    Jarque–Bera, nota su come leggere code e asimmetria.
+  - `analysisKinds.garch` dichiara anche `qq`.
+  - Guide `var`, `garch` e `statespace` aggiunte nelle 6 lingue (prima
+    mancavano del tutto).
+- **Verificato**: `var-irf-chart` (una linea per shock → variabile, orizzonte
+  dichiarato), `var-fevd-chart` (quote impilate all’ultimo orizzonte) e
+  `vecm-alpha` (barre di α con etichette) sono coerenti; `statespace-local`
+  (livello filtrato/smussato con banda di previsione) e `statespace-markov`
+  più `statespace-regimes` (serie con previsione e probabilità del regime 2)
+  restano gli stessi tre grafici già presenti.
+- **File toccati**: `src/analyses/garch/run.tsx`,
+  `src/analyses/garch/charts.test.ts` (nuovo), `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: garch charts + copy + analysisKinds + buildSpec → 23/23 verdi;
+  `tsc --noEmit` exit 0; `check-locale` verde sulle 6 lingue;
+  `help:build` verde (498 topic).
+- **Commit**: `feat(charts): F8.2 Q-Q dei residui GARCH`
+
 ### F7.3b — Parametric e reliability
 
 - **Stato**: ✅ chiusa (2026-11-03, solo verifica)
@@ -729,6 +756,7 @@ sotto-blocco aperto):
 | F8.1 | `hw-series` ♻️ | `timeseries` | `line` | JMP | `timeseries/charts.test.ts` | ✅ |
 | F8.1 | `unitroot-series` ♻️ | `timeseries` | `line` | LZ | `timeseries/charts.test.ts` | ✅ |
 | F8.1 | `spectral-density` ♻️ | `timeseries` | `line` | LZ | `timeseries/charts.test.ts` | ✅ |
+| F8.2 | `garch-qq` | `garch` | `qq` | LZ | `garch/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -739,10 +767,10 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F8.2: VAR, GARCH e state-space (`garch-qq` e verifica degli altri grafici).
-2. F9.1: sample size, resampling, DOE (`doe-alias`).
-3. Tradurre in F11.1a–b le nuove note del life-stress plot e delle modalità
-   `timeseries`.
+1. F9.1: sample size, resampling, DOE (`doe-alias`).
+2. F9.2a: survey e MI (con il cap di 24 grafici).
+3. Tradurre in F11.1a–b le nuove note del life-stress plot, delle modalità
+   `timeseries` e del Q-Q GARCH.
 
 ---
 
