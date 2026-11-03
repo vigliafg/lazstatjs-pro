@@ -31,7 +31,7 @@ export const chartGuides: Record<string, string[]> = {
   "glmm": ["Beobachtet vs angepasst, Caterpillar der Zufallsinterzepte (ungefähres KI, Nulllinie), Residuen vs angepasst und bei Zufallssteigung ein Steigungs-Caterpillar."],
   "multivariate": ["Scree-Plot mit Kaiser-Linie und erklärter Varianz; Score-Plot PC1 × PC2; Loadings-Heatmap und Loading-Plot (zwei Lesarten derselben Ladung: die Heatmap vergleicht Variablen, der Plot zeigt die Richtung); Biplot. EFA: Loadings, paralleles Scree, Varianz und Kommunalitäten. Alpha: Items, Korrelationen und Alpha bei Ausschluss."],
   "chisquare": ["Diagramm: beobachtete vs erwartete Häufigkeiten je Zelle der 2×2-Tabelle; Beitrag (O − E)² / E je Kategorie im Anpassungstest."],
-  "contingency": ["Diagramm: Heatmap der standardisierten Residuen der R×C-Tabelle."],
+  "contingency": ["Heatmap der standardisierten Residuen; beobachtet vs erwartet im exakten Test; Log-OR-Forest je Schicht mit Mantel-Haenszel-Pooled-Schätzung; Anteile je Score im Trendtest (ohne Band: die Statistik ist global)."],
   "agreement": ["Bland–Altman mit Bias/Übereinstimmungsgrenzen; ICC-Streuung mit Identitätslinie; Kappa-Übereinstimmungs-Heatmap."],
   "survival": ["Diagramm: Kaplan–Meier-Kurven mit Konfidenzbändern, Zensurmarken und Medianlinien."],
   "cox": ["Diagramm: Forest-Plot der Hazard Ratios mit Konfidenzintervallen und HR = 1-Referenz."],

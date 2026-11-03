@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F5.3 chiusa, ondata O5 chiusa)
-- **Fase corrente**: F6.1 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F6.1 chiusa)
+- **Fase corrente**: F7.1 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -73,7 +73,7 @@ con motivo.
 | F5.2a | SEM, latent class | 45 | ✅ | `feat(charts): F5.2a adeguamento SEM e certezza delle classi latenti` | 2 test + `check` e `locales:check` verdi |
 | F5.2b | IRT ICC, conjoint | 30 | ✅ | `feat(charts): F5.2b curve caratteristiche degli item` | 2 test + `check` e `locales:check` verdi (conjoint già a 2 grafici) |
 | F5.3 | PCA/EFA/alpha e pannelli | 45 | ✅ | `feat(charts): F5.3 guide di PCA, EFA e alpha` | `check` + `locales:check` verdi; inventario rigenerato |
-| F6.1 | esatti, trend, verifica MH | 45 | ⬜ | — | — |
+| F6.1 | esatti, trend, verifica MH | 45 | ✅ | `feat(charts): F6.1 osservati e attesi nel test esatto` | 2 test + `check` e `locales:check` verdi |
 | F7.1 | life table, competing, frailty, recurrent | 45 | ⬜ | — | — |
 | F7.2 | Cox, stratified, time-dependent | 45 | ⬜ | — | — |
 | F7.3a | ALT: life-stress plot | 45 | ⬜ | — | — |
@@ -169,6 +169,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F5.2b | La ICC è `iccProbability(a, b, θ)` nel kernel, con test su soglia 0,5 e monotonia | il piano chiede una funzione pura testata; il grafico deve usare la stessa formula del kernel |
 | 2026-11-03 | F5.2b | Nessun cambio a `conjoint`: utilità per attributo e importanza % sono già ordinate e spiegate | la fase chiedeva solo la verifica |
 | 2026-11-03 | F5.3 | `pca-loadings` (heatmap) e `pca-loading-plot` (scatter) restano entrambi | scelta dell’utente, documentata nella guida: confronto tra variabili vs direzione |
+| 2026-11-03 | F6.1 | Nessuna banda sul `contingency-trend-line` | `cochranArmitageTrend` restituisce solo la statistica complessiva e le proporzioni, non l’incertezza per riga: la nota lo dichiara |
+| 2026-11-03 | F6.1 | Il forest MH resta uno solo, con `logScale: false` e riferimento 0 | il piano vieta un secondo forest; l’asse dichiara il log-OR, non l’OR |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -546,6 +548,21 @@ sotto-blocco aperto):
   `npm run chart:inventory` rieseguito sul codice finale di O5.
 - **Commit**: `feat(charts): F5.3 guide di PCA, EFA e alpha`
 
+### F6.1 — Esatti, trend, Mantel–Haenszel
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `exact-observed-expected` [bar] con osservati e attesi affiancati per
+  cella nel test esatto; nota del trend aggiornata per esplicitare l’assenza di
+  banda; guida `contingency` riscritta nelle 6 lingue.
+- **Verificato**: `contingency-mh-forest` è già corretto — log-OR per strato più
+  pooled, riferimento 0, asse «Log odds ratio», nessun secondo forest.
+- **File toccati**: `src/analyses/contingency/{run.tsx,charts.test.ts}`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: contingency → 2/2 verdi (attesi 6,5/8,5/6,5/8,5 verificati);
+  `npm run check` verde; `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F6.1 osservati e attesi nel test esatto`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -577,6 +594,7 @@ sotto-blocco aperto):
 | F5.2a | `sem-fit` | `sem` | `bar` | LZ | `sem/charts.test.ts` | ✅ |
 | F5.2a | `latentclass-entropy` | `latentclass` | `bar` | LZ | `latentclass/charts.test.ts` | ✅ |
 | F5.2b | `irt-icc` | `irt` | `line` | LZ | `irt/charts.test.ts` | ✅ |
+| F6.1 | `exact-observed-expected` | `contingency` | `bar` | LZ | `contingency/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -587,9 +605,9 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F6.1: test esatti, trend e verifica Mantel-Haenszel.
-2. F7.1: life table, competing risks, frailty e recurrent.
-3. F7.2: Cox, stratified e time-dependent.
+1. F7.1: life table, competing risks, frailty e recurrent (note e verifica).
+2. F7.2: Cox, stratified e time-dependent.
+3. F7.3a–b: ALT life-stress plot, parametriche e affidabilità.
 
 ---
 

@@ -285,7 +285,9 @@ const buildTrendOutput = ({ params, ciLevel }: ContingencyInput): AnalysisRunRes
     kind: 'line',
     title: copy('Proporzione per punteggio'),
     subtitle: copy('{s1} righe ordinate per punteggio', { s1: observed.length }),
-    note: copy('Ogni punto è la proporzione della prima colonna sul totale di riga; la linea collega i punteggi in ordine crescente.'),
+    note: copy(
+      'Ogni punto è la proporzione della prima colonna sul totale di riga; la linea collega i punteggi in ordine crescente. Qui non c’è una banda di confidenza: il test di Cochran–Armitage verifica il trend con una statistica complessiva e non stima l’incertezza di ogni riga.'
+    ),
     data: { series },
     fields: { xLabel: copy('Punteggio'), yLabel: copy('Proporzione'), series: copy('Serie') },
     options: { showMarkers: true, step: false, showBand: false } as never,
@@ -343,6 +345,17 @@ const buildExactOutput = ({ params, ciLevel }: ContingencyInput): AnalysisRunRes
     })
   );
 
+  const expectedBars = observed.flatMap((row, i) =>
+    row.flatMap((value, j) => {
+      const expected = (rowTotals[i] * colTotals[j]) / total;
+      const cell = `${params.rows[i] ?? `R${i + 1}`} · ${params.cols[j] ?? `C${j + 1}`}`;
+      return [
+        { category: cell, value, series: copy('Osservato') },
+        { category: cell, value: expected, series: copy('Atteso') },
+      ];
+    })
+  );
+
   const chart = makeChart({
     id: 'contingency-exact-residuals',
     kind: 'heatmap',
@@ -359,7 +372,24 @@ const buildExactOutput = ({ params, ciLevel }: ContingencyInput): AnalysisRunRes
     title: copy('Test esatto {s1} × {s2}', { s1: observed.length, s2: observed[0].length }),
     tables,
     report: contingencyExactReport(tables, ciLevel),
-    charts: [chart],
+    charts: [
+      chart,
+      makeChart({
+        id: 'exact-observed-expected',
+        kind: 'bar',
+        title: copy('Osservati vs attesi (test esatto)'),
+        subtitle: copy('{s1} celle · {s2} osservazioni', {
+          s1: observed.length * (observed[0]?.length ?? 0),
+          s2: total,
+        }),
+        note: copy(
+          'Le barre affiancate confrontano ogni cella con la frequenza attesa sotto indipendenza: gli scarti grandi sono quelli che pesano nel p-value esatto. Il test esatto non usa l’approssimazione χ², quindi il grafico va letto insieme alla tabella dei residui.'
+        ),
+        data: { bars: expectedBars },
+        fields: { xLabel: copy('Cella'), yLabel: copy('Frequenza'), series: copy('Tipo') },
+        options: { grouping: 'grouped', valueLabels: true } as never,
+      }),
+    ],
   };
 };
 

@@ -735,8 +735,6 @@ export const chartCopy: Record<string, string> = {
   "Mantel–Haenszel · {s1} strati": "Mantel–Haenszel · {s1} strata",
   "Proporzione per punteggio": "Proportion by score",
   "{s1} righe ordinate per punteggio": "{s1} rows ordered by score",
-  "Ogni punto è la proporzione della prima colonna sul totale di riga; la linea collega i punteggi in ordine crescente.": "Each point is the proportion of the first column over the row total; the line connects the scores in increasing order.",
-  "Punteggio": "Score",
   "Trend di Cochran–Armitage · {s1} × 2": "Cochran–Armitage trend · {s1} × 2",
   "Residui standardizzati (test esatto)": "Standardised residuals (exact test)",
   "Il colore mostra quali celle si discostano di più dall’indipendenza; il test esatto misura quanto l’intera tabella è compatibile con i margini osservati.": "The colour shows which cells depart most from independence; the exact test measures how compatible the whole table is with the observed margins.",

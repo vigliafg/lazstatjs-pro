@@ -31,7 +31,7 @@ export const chartGuides: Record<string, string[]> = {
   "glmm": ["Observados vs ajustados, caterpillar das interceções aleatórias (IC aproximado, linha zero), resíduos vs ajustados e, com declive aleatório, caterpillar dos declives."],
   "multivariate": ["Scree com linha de Kaiser e variância explicada; score plot PC1 × PC2; heatmap dos loadings e loading plot (duas leituras do mesmo carregamento: o heatmap compara variáveis, o plot mostra a direção); biplot. EFA: loadings, scree paralelo, variância e comunalidades. Alpha: itens, correlações e alpha se eliminado."],
   "chisquare": ["Gráfico: frequências observadas vs esperadas para cada célula da tabela 2×2; contributo (O − E)² / E por categoria no teste de bondade de ajuste."],
-  "contingency": ["Gráfico: mapa de calor dos resíduos padronizados da tabela R×C."],
+  "contingency": ["Mapa de calor dos resíduos padronizados; observados vs esperados no teste exato; forest dos log-OR por estrato com o pooled de Mantel–Haenszel; proporções por pontuação no teste de tendência (sem banda: a estatística é global)."],
   "agreement": ["Bland–Altman com viés/limites de concordância; dispersão ICC com linha de identidade; mapa de calor kappa."],
   "survival": ["Gráfico: curvas de Kaplan–Meier, com bandas de confiança, marcas de censura e linhas da mediana."],
   "cox": ["Gráfico: forest plot dos hazard ratios com intervalos de confiança e referência HR = 1."],

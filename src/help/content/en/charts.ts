@@ -29,7 +29,7 @@ export const chartGuides: Record<string, string[]> = {
   "glmm": ["Observed vs fitted, random-intercept caterpillar (approximate CI, zero line), residuals vs fitted and, with a random slope, a slope caterpillar."],
   "multivariate": ["Scree with Kaiser line and explained variance; PC1 × PC2 score plot; loadings heat map and loading plot (two readings of the same loading: the heat map compares variables, the plot shows direction); biplot. EFA: loadings, parallel scree, variance and communalities. Alpha: items, correlations and alpha if deleted."],
   "chisquare": ["Chart: observed vs expected frequencies for each cell of the 2×2 table; (O − E)² / E contribution per category in the goodness-of-fit test."],
-  "contingency": ["Chart: heat map of standardized residuals for the R×C table."],
+  "contingency": ["Standardized-residual heat map; observed vs expected in the exact test; log-OR forest per stratum with the Mantel–Haenszel pooled estimate; proportions by score in the trend test (no band: the statistic is overall)."],
   "agreement": ["Bland–Altman with bias/limits of agreement; ICC scatter with identity line; kappa agreement heat map."],
   "recurrent": ["Chart: mean cumulative function of events, with events divided by the subjects at risk at each time."],
   "quality": ["Chart: Gage R&R with variance components and the part × operator profile; control chart, CUSUM, capability and Pareto in the other modes."],

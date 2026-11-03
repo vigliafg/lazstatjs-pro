@@ -125,7 +125,7 @@ test('exact mode returns a dedicated table and residual heatmap', () => {
   const result = buildContingencyOutput({ params, ciLevel: 95 });
   assert.ok('ok' in result && result.ok);
   if (!('ok' in result) || !result.ok) return;
-  assert.deepEqual(result.charts?.map(chart => chart.id), ['contingency-exact-residuals']);
+  assert.deepEqual(result.charts?.map(chart => chart.id), ['contingency-exact-residuals', 'exact-observed-expected']);
   assert.equal(result.charts?.[0].kind, 'heatmap');
   const exact = result.tables.find(table => table.id === 'cont-exact');
   assert.ok(exact);

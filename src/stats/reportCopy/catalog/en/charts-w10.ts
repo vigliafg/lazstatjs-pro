@@ -93,6 +93,12 @@ export const w10ChartCopy: Record<string, string> = {
   "Ogni curva è un item: più è ripida, più l’item discrimina; il punto in cui la curva vale 0,5 è la difficoltà b. Curve sovrapposte indicano item con lo stesso profilo.":
     "Each curve is an item: the steeper it is, the more the item discriminates; the point where the curve equals 0.5 is the difficulty b. Overlapping curves indicate items with the same profile.",
   "P(corretta)": "P(correct)",
+  "Osservati vs attesi (test esatto)": "Observed vs expected (exact test)",
+  "{s1} celle · {s2} osservazioni": "{s1} cells · {s2} observations",
+  "Le barre affiancate confrontano ogni cella con la frequenza attesa sotto indipendenza: gli scarti grandi sono quelli che pesano nel p-value esatto. Il test esatto non usa l’approssimazione χ², quindi il grafico va letto insieme alla tabella dei residui.":
+    "The paired bars compare each cell with the frequency expected under independence: the large gaps are the ones that weigh on the exact p value. The exact test does not use the χ² approximation, so read this chart together with the residual table.",
+  "Ogni punto è la proporzione della prima colonna sul totale di riga; la linea collega i punteggi in ordine crescente. Qui non c’è una banda di confidenza: il test di Cochran–Armitage verifica il trend con una statistica complessiva e non stima l’incertezza di ogni riga.":
+    "Each point is the first-column proportion over the row total; the line joins the scores in increasing order. There is no confidence band here: the Cochran–Armitage test checks the trend with an overall statistic and does not estimate per-row uncertainty.",
   "Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.":
     "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
   "Predittore": "Predictor",
