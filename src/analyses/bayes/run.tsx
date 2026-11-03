@@ -1,14 +1,112 @@
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
-import { bayesAnalysis } from '../../stats/kernels/bayes';
+import { bayesAnalysis, type BayesResult } from '../../stats/kernels/bayes';
+import { jStat } from '../../stats/jstat';
 import { GUARD_LIMITS, guardDimensions } from '../../stats/kernels/guards';
 import { bayesTables } from '../../stats/tables/bayes';
 import { bayesReport } from '../../stats/reports/bayes';
-import type { AnalysisChart } from '../../stats/charts';
+import type { AnalysisChart, ChartRow } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { BayesParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+
+/** Binomial pmf built iteratively: no factorials, stable for the usual n. */
+const binomialPmf = (n: number, p: number): number[] => {
+  const pmf = new Array<number>(n + 1).fill(0);
+  if (!(p > 0)) {
+    pmf[0] = 1;
+    return pmf;
+  }
+  if (p >= 1) {
+    pmf[n] = 1;
+    return pmf;
+  }
+  let value = Math.pow(1 - p, n);
+  const ratio = p / (1 - p);
+  for (let k = 0; k <= n; k += 1) {
+    pmf[k] = value;
+    value = value * ratio * ((n - k) / (k + 1));
+  }
+  return pmf;
+};
+
+interface PredictiveCheck {
+  curve: ChartRow[];
+  observedRows: ChartRow[];
+  xLabel: string;
+  subtitle: string;
+}
+
+/**
+ * Posterior predictive check of one summary statistic: the posterior draws
+ * simulate the sampling distribution and the observed value is compared with
+ * it. Only the normal and proportion likelihoods are covered; the other modes
+ * would need replicate datasets that the kernel does not expose.
+ */
+export const posteriorPredictiveCheck = (
+  result: BayesResult,
+  y: number[]
+): PredictiveCheck | null => {
+  const draws = result.samples[0] ?? [];
+  if (draws.length === 0 || y.length === 0) return null;
+  const stride = Math.max(1, Math.ceil(draws.length / 400));
+  const used = draws.filter((_, index) => index % stride === 0);
+  if (used.length === 0) return null;
+  const observedRowsFor = (statistic: number, top: number): ChartRow[] => [
+    { x: statistic, y: 0, series: copy('Osservato') },
+    { x: statistic, y: top, series: copy('Osservato') },
+  ];
+  if (result.mode === 'proportion') {
+    const n = y.length;
+    const observed = y.reduce((sum, value) => sum + value, 0);
+    const pmf = new Array<number>(n + 1).fill(0);
+    used.forEach(theta => {
+      if (!(theta >= 0) || theta > 1) return;
+      binomialPmf(n, theta).forEach((value, k) => {
+        pmf[k] += value;
+      });
+    });
+    const curve: ChartRow[] = pmf.map((value, k) => ({
+      x: k,
+      y: value / used.length,
+      series: copy('Repliche'),
+    }));
+    const top = Math.max(...curve.map(row => Number(row.y)));
+    return {
+      curve,
+      observedRows: observedRowsFor(observed, top),
+      xLabel: copy('Numero di successi'),
+      subtitle: copy('Repliche posteriori dei successi · {s1} osservazioni', { s1: n }),
+    };
+  }
+  if (result.mode === 'normal') {
+    const sigma = result.sigma?.mean ?? NaN;
+    if (!(sigma > 0)) return null;
+    const n = y.length;
+    const observed = y.reduce((sum, value) => sum + value, 0) / n;
+    const se = sigma / Math.sqrt(n);
+    const values = used.filter(value => Number.isFinite(value));
+    if (values.length === 0) return null;
+    const min = Math.min(...values) - 4 * se;
+    const max = Math.max(...values) + 4 * se;
+    const points = 121;
+    const curve: ChartRow[] = Array.from({ length: points }, (_, index) => {
+      const x = min + ((max - min) * index) / (points - 1);
+      const density =
+        values.reduce((sum, mu) => sum + jStat.normal.pdf(x, mu, se), 0) / values.length;
+      return { x, y: density, series: copy('Repliche') };
+    });
+    const top = Math.max(...curve.map(row => Number(row.y)));
+    return {
+      curve,
+      observedRows: observedRowsFor(observed, top),
+      xLabel: copy('Media'),
+      subtitle: copy('Repliche posteriori della media · {s1} osservazioni', { s1: n }),
+    };
+  }
+  return null;
+};
 
 export interface BayesInput {
   grid: Dataset;
@@ -146,6 +244,22 @@ export const buildBayesOutput = ({ grid, params }: BayesInput): AnalysisRunResul
         },
         fields: { xLabel: result.parameters[0].term, yLabel: result.parameters[1].term },
         options: { fit: 'none', band: 'none', pointOpacity: 0.4 } as never,
+      })
+    );
+  }
+
+  const predictive = posteriorPredictiveCheck(result, y);
+  if (predictive) {
+    charts.push(
+      makeChart({
+        id: 'bayes-ppc',
+        kind: 'line',
+        title: copy('Controllo predittivo a posteriori'),
+        subtitle: predictive.subtitle,
+        note: copy('La curva è la distribuzione predittiva a posteriori della statistica (per la normale con la DS a posteriori media); la linea verticale è il valore osservato: se cade nelle code, il modello non riproduce bene i dati.'),
+        data: { series: [...predictive.curve, ...predictive.observedRows] },
+        fields: { xLabel: predictive.xLabel, yLabel: copy('Densità'), series: copy('Serie') },
+        options: { showMarkers: false, showBand: false } as never,
       })
     );
   }

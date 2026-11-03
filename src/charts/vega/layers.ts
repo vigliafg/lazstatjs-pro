@@ -85,10 +85,15 @@ export const scatterLayers = (chart: AnalysisChart, options: Extract<ChartOption
     rules.push({ y: Number(chart.stats?.meanY) });
   }
   rules.forEach(row => {
+    // A rule with only x is a vertical reference (the meta funnel's pooled
+    // estimate); a rule with y stays horizontal (residuals at zero).
+    const vertical = row.y === undefined && row.x !== undefined;
     layers.push({
       data: { values: [row] },
       mark: { type: 'rule', color: colorAt(options, 4), strokeDash: [4, 4], strokeWidth: 1 },
-      encoding: { y: { field: 'y', type: 'quantitative' } },
+      encoding: vertical
+        ? { x: { field: 'x', type: 'quantitative' } }
+        : { y: { field: 'y', type: 'quantitative' } },
     });
   });
   if (options.pointLabels) {

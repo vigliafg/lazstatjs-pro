@@ -160,4 +160,13 @@ export const w10ChartCopy: Record<string, string> = {
     "The bar counts every occurrence of the term in the corpus; rare terms stay out of the first twenty entries.",
   "Celle più scure indicano documenti con vocabolario e pesi simili; la matrice è simmetrica e la diagonale (un documento con sé stesso) non è disegnata.":
     "Darker cells indicate documents with similar vocabulary and weights; the matrix is symmetric and the diagonal (a document with itself) is not drawn.",
+  "Controllo predittivo a posteriori": "Posterior predictive check",
+  "Repliche posteriori dei successi · {s1} osservazioni": "Posterior replicates of successes · {s1} observations",
+  "Repliche posteriori della media · {s1} osservazioni": "Posterior replicates of the mean · {s1} observations",
+  "La curva è la distribuzione predittiva a posteriori della statistica (per la normale con la DS a posteriori media); la linea verticale è il valore osservato: se cade nelle code, il modello non riproduce bene i dati.":
+    "The curve is the posterior predictive distribution of the statistic (for the normal model with the posterior mean SD); the vertical line is the observed value: if it falls in the tails, the model does not reproduce the data well.",
+  "Repliche": "Replicates",
+  "Numero di successi": "Number of successes",
+  "Media": "Mean",
+  "Densità": "Density",
 };

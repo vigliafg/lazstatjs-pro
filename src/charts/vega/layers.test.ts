@@ -566,3 +566,17 @@ test('score showVectors draws variable arrows and labels', () => {
     true
   );
 });
+
+test('the scatter draws a vertical rule when only x is given', () => {
+  const chart = makeChart({
+    id: 'vertical-rule',
+    kind: 'scatter',
+    title: 'Vertical rule',
+    data: { points: [{ x: 1, y: 2 }, { x: 2, y: 3 }], rules: [{ x: 0.5 }] },
+  });
+  const rule = scatterLayers(chart, scatterOptions({})).find(layer => layer.mark?.type === 'rule');
+  assert.ok(rule);
+  const encoding = rule!.encoding as { x?: { field?: string }; y?: unknown };
+  assert.equal(encoding.x?.field, 'x');
+  assert.equal(encoding.y, undefined);
+});

@@ -50,4 +50,6 @@ export const chartGuides: Record<string, string[]> = {
   "ml": ["Observé et prédit avec les résidus (ou matrice de confusion et sensibilité par classe), plus l’importance des variables en part de la réduction de l’erreur."],
   "text": ["Termes les plus fréquents, prévalence des thèmes et carte documents × thèmes dans le modèle de topics, heatmap de similarité cosinus dans le mode similarité."],
   "choice": ["Scores MaxDiff et parts avec intervalles ; dans le logit conditionnel, forêt des coefficients et parts observées/prévues par alternative."],
+  "bayes": ["Histogramme et intervalles a posteriori, postérieurs conjoints dans la régression, moyennes des groupes dans le modèle hiérarchique et contrôle prédictif a posteriori (réplicats contre la valeur observée) pour les modes normale et proportion."],
+  "meta": ["Forêt avec estimation pooled, funnel plot effet × précision et poids des études ; l’échelle est celle de l’effet et la ligne de référence est zéro."],
 };

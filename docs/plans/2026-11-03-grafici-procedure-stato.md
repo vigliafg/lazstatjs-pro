@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a e F9.2b chiuse)
-- **Fase corrente**: F9.3a — Bayes PPC e verifica meta
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b e F9.3a chiuse)
+- **Fase corrente**: F9.3b — variogramma spaziale
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,11 +12,11 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`.
-- **Chiuso**: F0.1 → F9.2b. Gate mirato: 35 test (ml, text, choice, copy,
+- **Ultimo commit**: `feat(charts): F9.3a controllo predittivo bayesiano e funnel`.
+- **Chiuso**: F0.1 → F9.3a. Gate mirato verde (bayes, scatter layers, copy,
   analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
   it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
-- **Da riprendere**: **F9.3a** (Bayes PPC e verifica meta), poi F9.3b.
+- **Da riprendere**: **F9.3b** (variogramma spaziale), poi F10.1.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -99,7 +99,7 @@ con motivo.
 | F9.1 | sample size, resampling, DOE | 60 | ✅ | `feat(charts): F9.1 matrice di alias del disegno DOE` | 30 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.2a | survey, MI | 45 | ✅ | `feat(charts): F9.2a effetto del disegno survey` | 31 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.2b | ML, text, choice | 30 | ✅ | `fix(charts): F9.2b note di text, kind dichiarati e guide ML` | 35 test + `lint` + `locales:check` + `help:build` verdi |
-| F9.3a | Bayes PPC, meta | 45 | ⬜ | — | — |
+| F9.3a | Bayes PPC, meta | 45 | ✅ | `feat(charts): F9.3a controllo predittivo bayesiano e funnel` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F9.3b | spatial variogram | 45 | ⬜ | — | — |
 | F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ⬜ | — | — |
 | F10.2 | bar, Pareto, mosaico, heatmap, interval, dot | 45 | ⬜ | — | — |
@@ -211,6 +211,10 @@ sotto-blocco aperto):
 | 2026-11-03 | F9.2b | La nota di `text-similarity` dice che la diagonale non è disegnata | il kernel genera solo le coppie con first < second, specchiate: la diagonale non esiste nei dati |
 | 2026-11-03 | F9.2b | `analysisKinds` toglie `line` da `ml` e `scatter` da `text` | nessuno dei due runner emette quei kind: la dichiarazione ora descrive il codice |
 | 2026-11-03 | F9.2b | Guide `ml`, `text` e `choice` aggiunte nelle 6 lingue | le tre procedure non ne avevano nessuna; la fase chiede coerenza anche nell’help |
+| 2026-11-03 | F9.3a | `bayes-ppc` copre solo normale e proporzione | sono le uniche due verosimiglianze simulabili dai draw esposti; rate, regressione e gerarchico sono dichiarati fuori perimetro |
+| 2026-11-03 | F9.3a | Per la normale la DS è quella a posteriori media | i draw di σ non sono in `samples`; la media è l’approssimazione dichiarata nella nota |
+| 2026-11-03 | F9.3a | Il valore osservato è una serie verticale a due punti, non una regola | il layer `line` disegna solo regole orizzontali; la serie esprime la stessa informazione senza un nuovo layer |
+| 2026-11-03 | F9.3a | Lo scatter ora disegna una regola verticale quando riceve solo `x` | il funnel meta passava `{ x: pooled }` e la regola non veniva disegnata: ora il riferimento pooled compare |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -785,6 +789,28 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### F9.3a — Bayes e meta
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `bayes-ppc` [line]: controllo predittivo a posteriori della statistica
+    (numero di successi nella proporzione, media nella normale), con la curva
+    delle repliche e il valore osservato come segmento verticale.
+  - Helper puro `posteriorPredictiveCheck` con pmf binomiale iterativa e
+    mistura normale; nessuna modifica al kernel.
+  - Scatter: regola verticale quando il riferimento ha solo `x` (funnel meta).
+- **Verificato**: `meta-forest` (effetti per studio + pooled, riferimento a
+  zero), `meta-funnel` (effetto × 1/SE, ora con il pooled verticale) e
+  `meta-weights` (pesi %) sono coerenti.
+- **File toccati**: `src/analyses/bayes/run.tsx`,
+  `src/analyses/bayes/charts.test.ts` (nuovo), `src/charts/vega/layers.ts`,
+  `src/charts/vega/layers.test.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: bayes + scatter layers + copy + analysisKinds verdi; `tsc --noEmit`
+  exit 0; `check-locale` verde sulle 6 lingue; `help:build` verde (498 topic).
+- **Commit**: `feat(charts): F9.3a controllo predittivo bayesiano e funnel`
+
 ### F7.3b — Parametric e reliability
 
 - **Stato**: ✅ chiusa (2026-11-03, solo verifica)
@@ -844,6 +870,7 @@ sotto-blocco aperto):
 | F8.2 | `garch-qq` | `garch` | `qq` | LZ | `garch/charts.test.ts` | ✅ |
 | F9.1 | `doe-alias` | `doe` | `heatmap` | LZ | `doe/charts.test.ts` | ✅ |
 | F9.2a | `survey-deff` | `survey` | `bar` | LZ | `survey/charts.test.ts` | ✅ |
+| F9.3a | `bayes-ppc` | `bayes` | `line` | LZ | `bayes/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -854,10 +881,10 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F9.3a: `bayes-ppc` (normal e proportion) e verifica meta.
-2. F9.3b: variogramma spaziale con funzione pura testata.
+1. F9.3b: variogramma spaziale con funzione pura testata.
+2. F10.1: varianti JMP su forest, survival e line.
 3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH,
-   matrice di alias, DEFF survey e text mining.
+   matrice di alias, DEFF survey, text mining e PPC bayesiano.
 
 ---
 
