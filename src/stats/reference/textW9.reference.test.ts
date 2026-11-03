@@ -62,16 +62,4 @@ test('document similarity reproduces the cosine matrix', () => {
   }
 });
 
-test('topic reconstruction is in the same range as NMF::nmf', () => {
-  const result = textAnalysis(fixture.documents, {
-    mode: 'topics',
-    maxTerms: 15,
-    minDocFreq: 1,
-    topics: 2,
-    iterations: 400,
-    seed: 20261113,
-    stopwords: false,
-  });
-  assert.ok(result);
-  assertClose(result!.reconstruction!, fixture.reconstruction, { absolute: 0.15 }, 'reconstruction R2');
-});
+

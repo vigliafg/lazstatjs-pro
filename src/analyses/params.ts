@@ -248,6 +248,7 @@ export const remapParams = (
   const bayesPredictors = list(params.bayes.predictors, 'Bayesian: predictors').filter(
     value => value !== bayesOutcome
   );
+  const bayesGroup = optional(params.bayes.group);
   const spatialVariable = one(params.spatial.variable, 'Spatial: variable');
   const spatialX = one(params.spatial.x, 'Spatial: X coordinate');
   const spatialY = one(params.spatial.y, 'Spatial: Y coordinate');
@@ -645,6 +646,7 @@ export const remapParams = (
         ...params.bayes,
         outcome: bayesOutcome,
         predictors: bayesPredictors,
+        group: bayesGroup,
       },
       spatial: {
         ...params.spatial,
@@ -849,6 +851,7 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.meta.study, 'Meta-analysis: study', width, errors, true);
   checkOne(params.bayes.outcome, 'Bayesian: outcome', width, errors);
   checkList(params.bayes.predictors, 'Bayesian: predictors', width, errors);
+  checkOne(params.bayes.group, 'Bayesian: group', width, errors, true);
   checkOne(params.spatial.variable, 'Spatial: variable', width, errors);
   checkOne(params.spatial.x, 'Spatial: X coordinate', width, errors);
   checkOne(params.spatial.y, 'Spatial: Y coordinate', width, errors);
@@ -1201,6 +1204,9 @@ export const validateAnalysisColumnRefs = (
       one(params.bayes.outcome, 'Bayesian: outcome');
       if (params.bayes.mode === 'regression') {
         list(params.bayes.predictors, 'Bayesian: predictors');
+      }
+      if (params.bayes.mode === 'hierarchical') {
+        one(params.bayes.group, 'Bayesian: group');
       }
       break;
     case 'spatial':

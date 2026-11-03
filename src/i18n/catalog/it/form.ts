@@ -520,4 +520,8 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'form.neighbors': 'Vicini (k)',
   'form.xCoordinate': 'Coordinata X',
   'form.yCoordinate': 'Coordinata Y',
+  'form.task': 'Compito',
+  'ml.regression': 'Regressione',
+  'ml.classification': 'Classificazione',
+  'bayes.hierarchical': 'Gerarchico',
 };

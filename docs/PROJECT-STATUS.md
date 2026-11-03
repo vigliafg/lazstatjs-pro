@@ -61,7 +61,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 - `stats/` puro, `analyses/` form + runner, `grid/` modello dati, `ui/` composizione.
 - dependency-cruiser, madge, file-size guard, sanitizer output HTML, cap di import/progetto.
 - 480 test unitari, 43 e2e passati, 35 skipped (mobile/desktop non applicabili).
-- i18n: 744 chiavi, UI inglese, help/report in italiano.
+- i18n: 1776 chiavi, UI/help/report in 6 lingue (en, it, fr, es, de, pt-PT).
 
 ---
 
@@ -97,7 +97,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 7. **Filtro analysis non persistito**: limite noto sullo stale dopo reload.
 8. **Accessibilità**: migliorata, ma senza audit con screen reader reali; mobile editing limitato.
 9. **Collaborazione assente** per scelta: nessun cloud, ruoli, audit trail.
-10. **Lingua mista**: UI inglese, help/report e prosa del Wizard in italiano.
+10. **Lingua**: UI, help e report sono coperti in 6 lingue; il catalogo grafico storico resta inglese-first con override locali.
 
 ---
 

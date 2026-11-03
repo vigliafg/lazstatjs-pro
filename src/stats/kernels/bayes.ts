@@ -13,11 +13,18 @@ export interface BayesParameter extends PosteriorSummary {
   term: string;
 }
 
+export interface BayesGroup extends PosteriorSummary {
+  label: string;
+  n: number;
+}
+
 export interface BayesResult {
-  mode: 'normal' | 'proportion' | 'rate' | 'regression';
+  mode: 'normal' | 'proportion' | 'rate' | 'regression' | 'hierarchical';
   n: number;
   parameters: BayesParameter[];
   sigma: PosteriorSummary | null;
+  tau: PosteriorSummary | null;
+  groups: BayesGroup[];
   draws: number;
   burnin: number;
   chains: number;
@@ -35,6 +42,8 @@ export interface BayesOptions {
   chains: number;
   seed: number;
   variableNames?: readonly string[];
+  groupCodes?: readonly number[];
+  groupNames?: readonly string[];
 }
 
 const invert = (matrix: number[][]): number[][] | null => {
@@ -181,6 +190,96 @@ const regressionModel = (
   return { chains, sigma: sigmas };
 };
 
+const hierarchicalModel = (
+  y: readonly number[],
+  groupCodes: readonly number[],
+  options: BayesOptions
+): {
+  theta: number[][][];
+  mu: number[][];
+  sigma: number[][];
+  tau: number[][];
+} | null => {
+  if (groupCodes.length !== y.length) return null;
+  const groups = Math.max(...groupCodes) + 1;
+  if (!Number.isFinite(groups) || groups < 2) return null;
+  const indices = Array.from({ length: groups }, () => [] as number[]);
+  groupCodes.forEach((group, index) => {
+    if (group >= 0 && group < groups) indices[group].push(index);
+  });
+  if (indices.some(group => group.length === 0)) return null;
+  const groupMeans = indices.map(group =>
+    group.reduce((sum, index) => sum + y[index], 0) / group.length
+  );
+  const grandMean = mean(groupMeans);
+  const thetaChains: number[][][] = Array.from({ length: groups }, () => []);
+  const muChains: number[][] = [];
+  const sigmaChains: number[][] = [];
+  const tauChains: number[][] = [];
+  const a0 = 0.001;
+  const b0 = 0.001;
+  for (let chain = 0; chain < options.chains; chain += 1) {
+    const rng = mulberry32(options.seed + chain * 49979687);
+    const theta = [...groupMeans];
+    let mu = grandMean;
+    let sigma2 = Math.max(
+      1e-6,
+      indices.reduce(
+        (sum, group, index) =>
+          sum +
+          group.reduce((inner, row) => inner + (y[row] - theta[index]) ** 2, 0),
+        0
+      ) /
+        Math.max(1, y.length - groups)
+    );
+    let tau2 = Math.max(
+      1e-6,
+      groupMeans.reduce((sum, value) => sum + (value - grandMean) ** 2, 0) /
+        Math.max(1, groups - 1)
+    );
+    const thetaDraws: number[][] = Array.from({ length: groups }, () => []);
+    const muDraws: number[] = [];
+    const sigmaDraws: number[] = [];
+    const tauDraws: number[] = [];
+    for (let iteration = 0; iteration < options.iterations; iteration += 1) {
+      const thetaPrecision = tau2 > 0 ? 1 / tau2 : 0;
+      indices.forEach((group, index) => {
+        const precision = group.length / sigma2 + thetaPrecision;
+        const center =
+          (group.reduce((sum, row) => sum + y[row], 0) / sigma2 +
+            mu * thetaPrecision) /
+          precision;
+        theta[index] = center + normalDraw(rng) / Math.sqrt(precision);
+      });
+      const muPrecision = groups / tau2 + 1 / Math.max(1e-9, options.priorSd ** 2);
+      const muCenter =
+        (groups * mean(theta) / tau2 +
+          options.priorMean / Math.max(1e-9, options.priorSd ** 2)) /
+        muPrecision;
+      mu = muCenter + normalDraw(rng) / Math.sqrt(muPrecision);
+      const within = indices.reduce(
+        (sum, group, index) =>
+          sum + group.reduce((inner, row) => inner + (y[row] - theta[index]) ** 2, 0),
+        0
+      );
+      sigma2 = (b0 + within / 2) / gammaDraw(a0 + y.length / 2, 1, rng);
+      const between = theta.reduce((sum, value) => sum + (value - mu) ** 2, 0);
+      tau2 = (b0 + between / 2) / gammaDraw(a0 + groups / 2, 1, rng);
+      if (iteration >= options.burnin) {
+        theta.forEach((value, index) => thetaDraws[index].push(value));
+        muDraws.push(mu);
+        sigmaDraws.push(Math.sqrt(sigma2));
+        tauDraws.push(Math.sqrt(tau2));
+      }
+    }
+    thetaDraws.forEach((draws, index) => thetaChains[index].push(draws));
+    muChains.push(muDraws);
+    sigmaChains.push(sigmaDraws);
+    tauChains.push(tauDraws);
+  }
+  return { theta: thetaChains, mu: muChains, sigma: sigmaChains, tau: tauChains };
+};
+
 export const bayesAnalysis = (
   y: readonly number[],
   x: readonly number[][],
@@ -197,6 +296,8 @@ export const bayesAnalysis = (
       n: y.length,
       parameters: [{ term: 'μ', ...parameter }],
       sigma,
+      tau: null,
+      groups: [],
       draws: fit.chains[0]?.length ?? 0,
       burnin: options.burnin,
       chains: options.chains,
@@ -214,6 +315,8 @@ export const bayesAnalysis = (
       n: y.length,
       parameters: [{ term: 'p', ...parameter }],
       sigma: null,
+      tau: null,
+      groups: [],
       draws: chains[0]?.length ?? 0,
       burnin: options.burnin,
       chains: options.chains,
@@ -231,12 +334,51 @@ export const bayesAnalysis = (
       n: y.length,
       parameters: [{ term: 'λ', ...parameter }],
       sigma: null,
+      tau: null,
+      groups: [],
       draws: chains[0]?.length ?? 0,
       burnin: options.burnin,
       chains: options.chains,
       rhatMax: parameter.rhat,
       essMin: parameter.ess,
       samples: [chains.flat()],
+    };
+  }
+  if (options.mode === 'hierarchical') {
+    const fit = hierarchicalModel(y, options.groupCodes ?? [], options);
+    if (!fit) return null;
+    const mu = summarise(fit.mu, level);
+    const sigma = summarise(fit.sigma, level);
+    const tau = summarise(fit.tau, level);
+    const labels = options.groupNames ?? fit.theta.map((_, index) => `G${index + 1}`);
+    const groups = fit.theta.map((chains, index) => ({
+      label: labels[index] ?? `G${index + 1}`,
+      n: options.groupCodes?.filter(code => code === index).length ?? 0,
+      ...summarise(chains, level),
+    }));
+    return {
+      mode: 'hierarchical',
+      n: y.length,
+      parameters: [{ term: 'μ', ...mu }],
+      sigma,
+      tau,
+      groups,
+      draws: fit.mu[0]?.length ?? 0,
+      burnin: options.burnin,
+      chains: options.chains,
+      rhatMax: Math.max(
+        mu.rhat,
+        sigma.rhat,
+        tau.rhat,
+        ...groups.map(group => group.rhat)
+      ),
+      essMin: Math.min(
+        mu.ess,
+        sigma.ess,
+        tau.ess,
+        ...groups.map(group => group.ess)
+      ),
+      samples: [fit.mu.flat(), ...fit.theta.map(chains => chains.flat())],
     };
   }
   const fit = regressionModel(x, y, options);
@@ -252,6 +394,8 @@ export const bayesAnalysis = (
     n: y.length,
     parameters,
     sigma,
+    tau: null,
+    groups: [],
     draws: fit.chains[0]?.[0]?.length ?? 0,
     burnin: options.burnin,
     chains: options.chains,

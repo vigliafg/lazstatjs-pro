@@ -8,6 +8,7 @@ export const defaultMlParams = (grid: GridData): MlParams => {
   const outcome = numeric[0] ?? 0;
   return {
     mode: 'rf',
+    task: 'regression',
     outcome,
     predictors: numeric.filter(index => index !== outcome).slice(0, 4),
     trees: 200,

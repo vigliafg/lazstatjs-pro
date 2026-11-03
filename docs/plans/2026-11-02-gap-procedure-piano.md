@@ -569,9 +569,9 @@ aggregate negli strati. Reference `survey::svydesign`/`svymean`/`svytotal`/
 
 **Note**
 
-- L-01 parte da random forest e gradient boosting; la rete a uno strato nascosto
-  chiude la voce, la classificazione resta un'estensione.
-- L-02 usa NMF (Lee–Seung) perché `quanteda`/`topicmodels` non sono installati.
+- L-01 copre random forest, gradient boosting e rete a uno strato nascosto per
+  regressione e classificazione one-vs-rest.
+- L-02 usa LDA con Gibbs collapsing; il reference è `scikit-learn` LDA.
 - L-03 condivide il logit condizionale con R-04.
 
 **Stato W9 (2026-11-03)**: L-01…L-03 chiusi; reference `randomForest` + `gbm`
@@ -590,7 +590,8 @@ aggregate negli strati. Reference `survey::svydesign`/`svymean`/`svytotal`/
 | A-03 | Statistica spaziale | new `spatial` | `kernels/spatial.ts` | `spatial/Form.tsx` | `spdep`, `spatialreg` | `spatial_demo*` | 17 | F8, W0-03 |
 
 **Stato W9 (2026-11-03)**: A-01…A-03 chiusi; F8 assorbita in `mcmc.ts`,
-`ensemble.ts` e `survey.ts`. Reference: posteriori coniugate + `lm`,
+`ensemble.ts` e `survey.ts`. Reference: posteriori coniugate + `lm` + `lme4`
+per il modello gerarchico,
 `metafor::rma` + `lm` pesata, `spdep` + `spatialreg::lagsarlm`. Sample
 `bayes_demo`, `meta_demo`, `spatial_demo`. Dettaglio in
 `2026-11-02-gap-procedure-stato.md` §5k.

@@ -43,7 +43,7 @@ export interface TextResult {
   similarity: TextSimilarity[];
   topics: TextTopic[];
   documentTopics: number[][];
-  reconstruction: number | null;
+  perplexity: number | null;
   iterations: number;
 }
 
@@ -57,87 +57,102 @@ const tokenize = (text: string, removeStopwords: boolean): string[] =>
     .filter(token => !removeStopwords || !STOPWORDS.has(token))
     .filter(token => !/^\d+$/.test(token));
 
-interface Matrix {
-  data: number[][];
-  rows: number;
-  cols: number;
-}
-
-const multiplyAB = (a: Matrix, b: Matrix): Matrix => {
-  const data = Array.from({ length: a.rows }, () => Array(b.cols).fill(0));
-  for (let i = 0; i < a.rows; i += 1) {
-    for (let k = 0; k < a.cols; k += 1) {
-      const value = a.data[i][k];
-      if (value === 0) continue;
-      for (let j = 0; j < b.cols; j += 1) data[i][j] += value * b.data[k][j];
-    }
-  }
-  return { data, rows: a.rows, cols: b.cols };
-};
-
-const transpose = (matrix: Matrix): Matrix => ({
-  data: Array.from({ length: matrix.cols }, (_, j) =>
-    Array.from({ length: matrix.rows }, (_, i) => matrix.data[i][j])
-  ),
-  rows: matrix.cols,
-  cols: matrix.rows,
-});
-
-const hadamard = (a: Matrix, b: Matrix): Matrix => ({
-  data: a.data.map((row, i) => row.map((value, j) => value * b.data[i][j])),
-  rows: a.rows,
-  cols: a.cols,
-});
-
-const divide = (a: Matrix, b: Matrix, epsilon = 1e-9): Matrix => ({
-  data: a.data.map((row, i) => row.map((value, j) => value / (b.data[i][j] + epsilon))),
-  rows: a.rows,
-  cols: a.cols,
-});
-
-/** Non-negative matrix factorisation with multiplicative Frobenius updates. */
-const factorize = (
-  matrix: Matrix,
-  rank: number,
+/**
+ * Collapsed Gibbs sampler for latent Dirichlet allocation.
+ *
+ * Each token carries a topic; the conditional distribution of a token's topic
+ * given all the others is Dirichlet-multinomial, so no continuous parameters
+ * are sampled. The returned theta and phi are the posterior mean estimates.
+ */
+const ldaFit = (
+  documents: readonly (readonly number[])[],
+  vocabulary: readonly string[],
+  topicCount: number,
   iterations: number,
   seed: number
-): { w: Matrix; h: Matrix; error: number } => {
+): { documentTopics: number[][]; topics: TextTopic[]; perplexity: number } | null => {
+  const topics = Math.max(2, Math.min(topicCount, vocabulary.length));
   const rng = mulberry32(seed);
-  const w: Matrix = {
-    data: Array.from({ length: matrix.rows }, () =>
-      Array.from({ length: rank }, () => 0.1 + rng())
-    ),
-    rows: matrix.rows,
-    cols: rank,
-  };
-  const h: Matrix = {
-    data: Array.from({ length: rank }, () =>
-      Array.from({ length: matrix.cols }, () => 0.1 + rng())
-    ),
-    rows: rank,
-    cols: matrix.cols,
-  };
-  const wt = () => transpose(w);
+  const alpha = 0.1;
+  const beta = 0.01;
+  const documentTopic = documents.map(() => Array(topics).fill(0));
+  const topicTerm = Array.from({ length: topics }, () => Array(vocabulary.length).fill(0));
+  const topicTotal = Array(topics).fill(0);
+  const tokenTopics = documents.map((document, doc) =>
+    document.map(term => {
+      const topic = Math.floor(rng() * topics);
+      documentTopic[doc][topic] += 1;
+      topicTerm[topic][term] += 1;
+      topicTotal[topic] += 1;
+      return topic;
+    })
+  );
   for (let iteration = 0; iteration < iterations; iteration += 1) {
-    h.data = hadamard(h, divide(multiplyAB(wt(), matrix), multiplyAB(multiplyAB(wt(), w), h))).data;
-    w.data = hadamard(w, divide(multiplyAB(matrix, transpose(h)), multiplyAB(w, multiplyAB(h, transpose(h))))).data;
-  }
-  // Normalise topics so the rows of H sum to one and W carries the mass.
-  for (let topic = 0; topic < rank; topic += 1) {
-    const mass = h.data[topic].reduce((sum, value) => sum + value, 0) || 1;
-    for (let column = 0; column < h.cols; column += 1) h.data[topic][column] /= mass;
-    for (let row = 0; row < w.rows; row += 1) w.data[row][topic] *= mass;
-  }
-  const reconstructed = multiplyAB(w, h);
-  let error = 0;
-  let total = 0;
-  for (let i = 0; i < matrix.rows; i += 1) {
-    for (let j = 0; j < matrix.cols; j += 1) {
-      error += (matrix.data[i][j] - reconstructed.data[i][j]) ** 2;
-      total += matrix.data[i][j] ** 2;
+    for (let doc = 0; doc < documents.length; doc += 1) {
+      for (let position = 0; position < documents[doc].length; position += 1) {
+        const term = documents[doc][position];
+        const previous = tokenTopics[doc][position];
+        documentTopic[doc][previous] -= 1;
+        topicTerm[previous][term] -= 1;
+        topicTotal[previous] -= 1;
+        const weights = Array.from({ length: topics }, (_, topic) => {
+          const probability =
+            (documentTopic[doc][topic] + alpha) *
+            ((topicTerm[topic][term] + beta) / (topicTotal[topic] + beta * vocabulary.length));
+          return Math.max(1e-12, probability);
+        });
+        const total = weights.reduce((sum, value) => sum + value, 0);
+        let draw = rng() * total;
+        let chosen = topics - 1;
+        for (let topic = 0; topic < topics; topic += 1) {
+          draw -= weights[topic];
+          if (draw <= 0) {
+            chosen = topic;
+            break;
+          }
+        }
+        tokenTopics[doc][position] = chosen;
+        documentTopic[doc][chosen] += 1;
+        topicTerm[chosen][term] += 1;
+        topicTotal[chosen] += 1;
+      }
     }
   }
-  return { w, h, error: total > 0 ? 1 - error / total : NaN };
+  const theta = documentTopic.map(row => {
+    const total = row.reduce((sum, value) => sum + value + alpha, 0);
+    return row.map(value => (value + alpha) / total);
+  });
+  const phi = topicTerm.map(row => {
+    const total = row.reduce((sum, value) => sum + value + beta, 0);
+    return row.map(value => (value + beta) / total);
+  });
+  let logLikelihood = 0;
+  let tokens = 0;
+  documents.forEach((document, doc) => {
+    document.forEach(term => {
+      const probability = theta[doc].reduce(
+        (sum, value, topic) => sum + value * phi[topic][term],
+        0
+      );
+      logLikelihood += Math.log(Math.max(1e-12, probability));
+      tokens += 1;
+    });
+  });
+  const prevalence = Array.from({ length: topics }, (_, topic) =>
+    theta.reduce((sum, row) => sum + row[topic], 0) / Math.max(1, theta.length)
+  );
+  return {
+    documentTopics: theta,
+    topics: Array.from({ length: topics }, (_, topic) => ({
+      topic: topic + 1,
+      prevalence: prevalence[topic],
+      terms: phi[topic]
+        .map((weight, index) => ({ term: vocabulary[index] ?? `T${index + 1}`, weight }))
+        .sort((a, b) => b.weight - a.weight)
+        .slice(0, 10),
+    })),
+    perplexity: tokens > 0 ? Math.exp(-logLikelihood / tokens) : NaN,
+  };
 };
 
 const cosine = (a: readonly number[], b: readonly number[]): number => {
@@ -250,24 +265,25 @@ export const textAnalysis = (
 
   let topics: TextTopic[] = [];
   let documentTopics: number[][] = [];
-  let reconstruction: number | null = null;
+  let perplexity: number | null = null;
   if (options.mode === 'topics') {
-    const matrix: Matrix = { data: termDocuments, rows: termDocuments.length, cols: vocabulary.length };
-    const rank = Math.max(2, Math.min(options.topics, vocabulary.length, documents.length));
-    const fit = factorize(matrix, rank, Math.max(20, options.iterations), options.seed);
-    const rowMass = fit.w.data.map(row => row.reduce((sum, value) => sum + value, 0) || 1);
-    documentTopics = fit.w.data.map((row, index) => row.map(value => value / rowMass[index]));
-    topics = fit.h.data.map((row, topic) => ({
-      topic: topic + 1,
-      prevalence:
-        documentTopics.reduce((sum, values) => sum + values[topic], 0) /
-        Math.max(1, documentTopics.length),
-      terms: row
-        .map((weight, column) => ({ term: vocabulary[column], weight }))
-        .sort((a, b) => b.weight - a.weight)
-        .slice(0, 10),
-    }));
-    reconstruction = fit.error;
+    const tokenIndexes = tokens.map(document =>
+      document
+        .map(term => indexOf.get(term))
+        .filter((index): index is number => index !== undefined)
+    );
+    const fit = ldaFit(
+      tokenIndexes,
+      vocabulary,
+      Math.max(2, Math.min(options.topics, vocabulary.length, documents.length)),
+      Math.max(20, options.iterations),
+      options.seed
+    );
+    if (fit) {
+      topics = fit.topics;
+      documentTopics = fit.documentTopics;
+      perplexity = fit.perplexity;
+    }
   }
 
   return {
@@ -281,7 +297,7 @@ export const textAnalysis = (
     similarity,
     topics,
     documentTopics,
-    reconstruction,
+    perplexity,
     iterations: options.mode === 'topics' ? Math.max(20, options.iterations) : 0,
   };
 };

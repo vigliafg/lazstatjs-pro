@@ -11,7 +11,8 @@ src/stats/reference/
 ├── harness.ts              # assertClose / assertCloseVector / loadFixture / TOLERANCES
 ├── *.reference.test.ts     # the tests, one file per procedure or family
 ├── fixtures/*.json         # committed expected values
-└── r/*.R                   # generators for the fixtures
+├── r/*.R                   # R generators for the fixtures
+└── python/*.py             # Python generators (e.g. scikit-learn LDA)
 ```
 
 `npm test` picks up `*.reference.test.ts` like any other test. The fixtures are
@@ -84,8 +85,10 @@ the test file and in `docs/plans/2026-11-02-gap-procedure-stato.md`.
 | `samplesizeW8.json` | `r/samplesizeW8.R` | `kernels/samplesize.ts` |
 | `surveyW9.json` | `r/surveyW9.R` | `kernels/survey.ts` |
 | `mlW9.json` | `r/mlW9.R` | `kernels/ml.ts` |
-| `textW9.json` | `r/textW9.R` | `kernels/text.ts` |
+| `textW9.json` | `r/textW9.R` | `kernels/text.ts` (TF-IDF, similarity) |
+| `textLdaW9.json` | `python/textLdaW9.py` | `kernels/text.ts` (LDA) |
 | `choiceW9.json` | `r/choiceW9.R` | `kernels/choice.ts` |
 | `metaW9.json` | `r/metaW9.R` | `kernels/meta.ts` |
-| `bayesW9.json` | `r/bayesW9.R` | `kernels/bayes.ts` |
+| `bayesW9.json` | `r/bayesW9.R` | `kernels/bayes.ts` (conjugate/Gibbs) |
+| `bayesHierW9.json` | `r/bayesHierW9.R` | `kernels/bayes.ts` (hierarchical) |
 | `spatialW9.json` | `r/spatialW9.R` | `kernels/spatial.ts` |

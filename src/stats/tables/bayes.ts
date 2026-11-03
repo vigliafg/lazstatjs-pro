@@ -22,6 +22,9 @@ export const bayesTables = (result: BayesResult): TableSpec[] => {
       ...(result.sigma
         ? [{ term: 'σ', ...result.sigma }]
         : []),
+      ...(result.tau
+        ? [{ term: 'τ', ...result.tau }]
+        : []),
     ],
   };
   const diagnostics: TableSpec = {
@@ -42,5 +45,23 @@ export const bayesTables = (result: BayesResult): TableSpec[] => {
       copy('Rhat vicino a 1 e ESS alto indicano che le catene si sono mescolate; valori sopra 1.05 richiedono più iterazioni.'),
     ],
   };
-  return [summary, diagnostics];
+  const tables = [summary, diagnostics];
+  if (result.groups.length > 0) {
+    tables.push({
+      id: 'bayes-groups',
+      title: copy('Medie dei gruppi'),
+      subtitle: copy('Shrinkage verso la media generale μ'),
+      columns: [
+        { key: 'label', label: copy('Gruppo'), align: 'left' },
+        { key: 'n', label: copy('Osservazioni'), format: 'int', align: 'right' },
+        { key: 'mean', label: copy('Media'), format: 'dec4', align: 'right' },
+        { key: 'sd', label: copy('Deviazione standard'), format: 'dec4', align: 'right' },
+        { key: 'hdiLo', label: copy('HDI inferiore'), format: 'dec4', align: 'right' },
+        { key: 'hdiHi', label: copy('HDI superiore'), format: 'dec4', align: 'right' },
+        { key: 'rhat', label: 'Rhat', format: 'dec3', align: 'right' },
+      ],
+      rows: result.groups.map(group => ({ ...group })),
+    });
+  }
+  return tables;
 };

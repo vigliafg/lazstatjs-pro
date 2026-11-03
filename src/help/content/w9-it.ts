@@ -32,10 +32,10 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'ml',
     title: 'Machine learning',
-    summary: 'Random forest, gradient boosting e rete neurale a uno strato nascosto per esiti numerici.',
-    goal: 'Prevedere un esito numerico da più predittori senza imporre una forma lineare o parametrica.',
+    summary: 'Random forest, gradient boosting e rete neurale a uno strato nascosto per regressione e classificazione.',
+    goal: 'Prevedere un esito numerico o una classe da più predittori senza imporre una forma lineare o parametrica.',
     steps: [
-      'Seleziona l’esito numerico e almeno un predittore numerico.',
+      'Seleziona l’esito e se il compito è regressione o classificazione.',
       'Scegli random forest, gradient boosting o rete neurale.',
       'Imposta alberi, dimensione minima dei nodi, riduzione o unità nascoste e mantieni un seme fisso.',
     ],
@@ -58,7 +58,7 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'text',
     title: 'Text mining',
-    summary: 'Frequenze dei termini, TF-IDF, similarità tra documenti e modello di argomenti non negativo.',
+    summary: 'Frequenze dei termini, TF-IDF, similarità tra documenti e modello di argomenti LDA.',
     goal: 'Descrivere un corpus di testi brevi e trovare i termini e gli argomenti che distinguono i documenti.',
     steps: [
       'Seleziona la colonna di testo e, se serve, una colonna di gruppo.',
@@ -113,7 +113,7 @@ export const w9Topics: HelpTopic[] = [
     summary: 'Sintesi a posteriori e diagnostica MCMC per modelli coniugati e regressione gaussiana.',
     goal: 'Combinare la verosimiglianza con una distribuzione a priori e descrivere il parametro con la sua distribuzione a posteriori.',
     steps: [
-      'Scegli il modello: media normale, proporzione binomiale, tasso di Poisson o regressione lineare.',
+      'Scegli il modello: media normale, proporzione binomiale, tasso di Poisson, regressione lineare o modello gerarchico normale.',
       'Seleziona l’esito e, per la regressione, i predittori.',
       'Imposta la prior, le iterazioni, il burn-in e il numero di catene.',
     ],

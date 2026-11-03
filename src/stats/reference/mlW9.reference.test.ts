@@ -9,6 +9,11 @@ interface MlFixture {
   forest: { r2: number; rmse: number; importance: number[]; names: string[] };
   boosting: { rmse: number; r2: number };
   nnet: { rmse: number; r2: number };
+  classification: {
+    data: { X1: number; X2: number; X3: number; Class: string }[];
+    classes: string[];
+    accuracy: number;
+  };
 }
 
 const fixture = loadFixture<MlFixture>('mlW9.json');
@@ -48,4 +53,21 @@ test('the neural network stays close to nnet on the same data', () => {
   const result = mlAnalysis(x, y, { ...options, mode: 'nnet' });
   assert.ok(result);
   assertClose(result!.rmse, fixture.nnet.rmse, { absolute: 0.6 }, 'nnet RMSE');
+});
+
+test('classification reaches the randomForest accuracy on the same data', () => {
+  const classX = fixture.classification.data.map(row => [row.X1, row.X2, row.X3]);
+  const labels = fixture.classification.data.map(row => row.Class);
+  const classes = [...new Set(labels)].sort((a, b) => a.localeCompare(b));
+  const codes = labels.map(label => classes.indexOf(label));
+  const result = mlAnalysis(classX, codes, {
+    ...options,
+    mode: 'rf',
+    task: 'classification',
+    classes,
+    classCodes: codes,
+  });
+  assert.ok(result);
+  assertClose(result!.accuracy, fixture.classification.accuracy, { absolute: 0.15 }, 'accuracy');
+  assert.equal(result!.classes.length, fixture.classification.classes.length);
 });

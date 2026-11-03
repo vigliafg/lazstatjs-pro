@@ -7,8 +7,11 @@ export interface MlImportance {
   pct: number;
 }
 
+export type MlTask = 'regression' | 'classification';
+
 export interface MlResult {
   mode: 'rf' | 'boosting' | 'nnet';
+  task: MlTask;
   n: number;
   p: number;
   predictions: number[];
@@ -20,6 +23,14 @@ export interface MlResult {
   oobRmse: number | null;
   importance: MlImportance[];
   trees: number;
+  /** Classification output; empty for regression. */
+  classes: string[];
+  probabilities: number[][];
+  predictedClass: number[];
+  accuracy: number;
+  balancedAccuracy: number;
+  logLoss: number;
+  confusion: number[][];
 }
 
 export interface NnetOptions {
@@ -160,11 +171,119 @@ const metrics = (y: readonly number[], predictions: readonly number[]) => {
 const namesFor = (p: number, names?: readonly string[]): string[] =>
   Array.from({ length: p }, (_, index) => names?.[index] ?? `X${index + 1}`);
 
+interface MlFit {
+  predictions: number[];
+  oobPredictions: number[];
+  importance: number[];
+  trees: number;
+}
+
+const fitModel = (
+  x: readonly number[][],
+  y: readonly number[],
+  options: {
+    mode: MlResult['mode'];
+    trees: number;
+    minNode: number;
+    mtry: number;
+    shrinkage: number;
+    hidden: number;
+    iterations: number;
+    seed: number;
+  }
+): MlFit => {
+  if (options.mode === 'rf') {
+    const fit: EnsembleFit = randomForest(x, y, {
+      trees: options.trees,
+      minNode: options.minNode,
+      mtry: options.mtry,
+      seed: options.seed,
+    });
+    return fit;
+  }
+  if (options.mode === 'boosting') {
+    const fit: EnsembleFit = gradientBoosting(x, y, {
+      trees: options.trees,
+      minNode: Math.max(2, options.minNode),
+      shrinkage: options.shrinkage,
+      maxDepth: 2,
+      seed: options.seed,
+    });
+    return fit;
+  }
+  const network = nnetFit(x, y, {
+    hidden: options.hidden,
+    iterations: Math.max(100, options.iterations),
+    seed: options.seed,
+  });
+  return {
+    predictions: network.predictions,
+    oobPredictions: [],
+    importance: [],
+    trees: 0,
+  };
+};
+
+const normalise = (values: readonly number[]): number[] => {
+  const clipped = values.map(value => Math.max(0, Math.min(1, value)));
+  const total = clipped.reduce((sum, value) => sum + value, 0);
+  if (total <= 0) return values.map(() => 1 / Math.max(1, values.length));
+  return clipped.map(value => value / total);
+};
+
+const classificationMetrics = (
+  actual: readonly number[],
+  probabilities: readonly number[][],
+  classes: number
+): {
+  accuracy: number;
+  balancedAccuracy: number;
+  logLoss: number;
+  predicted: number[];
+  confusion: number[][];
+} => {
+  const predicted = probabilities.map(row => {
+    let best = 0;
+    for (let index = 1; index < row.length; index += 1) {
+      if (row[index] > row[best]) best = index;
+    }
+    return best;
+  });
+  const confusion = Array.from({ length: classes }, () => Array(classes).fill(0));
+  actual.forEach((value, index) => {
+    confusion[value][predicted[index]] += 1;
+  });
+  const n = actual.length;
+  const accuracy =
+    actual.reduce((sum, value, index) => sum + (value === predicted[index] ? 1 : 0), 0) /
+    Math.max(1, n);
+  const recalls: number[] = [];
+  for (let klass = 0; klass < classes; klass += 1) {
+    const support = confusion[klass].reduce((sum, value) => sum + value, 0);
+    if (support > 0) recalls.push(confusion[klass][klass] / support);
+  }
+  const logLoss =
+    -actual.reduce((sum, value, index) => {
+      const probability = probabilities[index][value] ?? 1e-12;
+      return sum + Math.log(Math.max(1e-12, probability));
+    }, 0) / Math.max(1, n);
+  return {
+    accuracy,
+    balancedAccuracy: recalls.reduce((sum, value) => sum + value, 0) / Math.max(1, recalls.length),
+    logLoss,
+    predicted,
+    confusion,
+  };
+};
+
 export const mlAnalysis = (
   x: readonly number[][],
   y: readonly number[],
   options: {
     mode: MlResult['mode'];
+    task?: MlTask;
+    classes?: readonly string[];
+    classCodes?: readonly number[];
     trees: number;
     minNode: number;
     mtry: number;
@@ -178,39 +297,61 @@ export const mlAnalysis = (
   if (y.length < 6 || x[0]?.length === 0) return null;
   if (y.length !== x.length) return null;
   const p = x[0]?.length ?? 0;
-  let fit: EnsembleFit | { predictions: number[]; oobPredictions: number[]; importance: number[]; trees: number };
-  if (options.mode === 'rf') {
-    fit = randomForest(x, y, {
-      trees: options.trees,
-      minNode: options.minNode,
-      mtry: options.mtry,
-      seed: options.seed,
+  const names = namesFor(p, options.variableNames);
+
+  if (options.task === 'classification') {
+    const classes = options.classes ?? [];
+    const codes = options.classCodes ?? [];
+    if (classes.length < 2 || codes.length !== y.length) return null;
+    if (codes.some(code => code < 0 || code >= classes.length)) return null;
+    const models = classes.map((_, klass) =>
+      fitModel(x, codes.map(code => (code === klass ? 1 : 0)), options)
+    );
+    const probabilities = codes.map((_, row) =>
+      normalise(models.map(model => model.predictions[row]))
+    );
+    const base = classificationMetrics(codes, probabilities, classes.length);
+    const importance = Array(p).fill(0);
+    models.forEach(model => {
+      const total = model.importance.reduce((sum, value) => sum + Math.max(0, value), 0);
+      model.importance.forEach((value, index) => {
+        importance[index] += total > 0 ? Math.max(0, value) / total : 0;
+      });
     });
-  } else if (options.mode === 'boosting') {
-    fit = gradientBoosting(x, y, {
-      trees: options.trees,
-      minNode: Math.max(2, options.minNode),
-      shrinkage: options.shrinkage,
-      maxDepth: 2,
-      seed: options.seed,
-    });
-  } else {
-    const network = nnetFit(x, y, {
-      hidden: options.hidden,
-      iterations: Math.max(100, options.iterations),
-      seed: options.seed,
-    });
-    fit = {
-      predictions: network.predictions,
-      oobPredictions: [],
-      importance: [],
-      trees: 0,
+    const importanceTotal = importance.reduce((sum, value) => sum + value, 0);
+    return {
+      mode: options.mode,
+      task: 'classification',
+      n: y.length,
+      p,
+      predictions: probabilities.map(row => Math.max(...row)),
+      residuals: [],
+      r2: NaN,
+      rmse: NaN,
+      mae: NaN,
+      oobR2: null,
+      oobRmse: null,
+      importance: importance
+        .map((value, index) => ({
+          variable: index,
+          reduction: value,
+          pct: importanceTotal > 0 ? (100 * value) / importanceTotal : 100 / p,
+        }))
+        .sort((a, b) => b.reduction - a.reduction),
+      trees: models[0]?.trees ?? 0,
+      classes: [...classes],
+      probabilities,
+      predictedClass: base.predicted,
+      accuracy: base.accuracy,
+      balancedAccuracy: base.balancedAccuracy,
+      logLoss: base.logLoss,
+      confusion: base.confusion,
     };
   }
 
+  const fit = fitModel(x, y, options);
   const base = metrics(y, fit.predictions);
   const totalImportance = fit.importance.reduce((sum, value) => sum + Math.max(0, value), 0);
-  const names = namesFor(p, options.variableNames);
   const importance = fit.importance
     .map((value, index) => ({
       variable: index,
@@ -230,6 +371,7 @@ export const mlAnalysis = (
 
   return {
     mode: options.mode,
+    task: 'regression',
     n: y.length,
     p,
     predictions: fit.predictions,
@@ -241,5 +383,12 @@ export const mlAnalysis = (
     oobRmse,
     importance: importance.map(({ variable, reduction, pct }) => ({ variable, reduction, pct })),
     trees: fit.trees,
+    classes: [],
+    probabilities: [],
+    predictedClass: [],
+    accuracy: NaN,
+    balancedAccuracy: NaN,
+    logLoss: NaN,
+    confusion: [],
   };
 };

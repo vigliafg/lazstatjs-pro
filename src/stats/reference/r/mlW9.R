@@ -45,6 +45,16 @@ network_rmse <- sqrt(mean((data$Y - network_prediction)^2))
 importance <- as.numeric(importance(forest, type = 1)[, 1])
 names(importance) <- rownames(importance(forest, type = 1))
 
+## ---------------------------------------------------------------------------
+## Classification: three classes from the first predictor
+## ---------------------------------------------------------------------------
+classes <- cut(data$X1, breaks = c(-Inf, -0.5, 0.5, Inf), labels = c("low", "mid", "high"))
+class_data <- data.frame(data[, c("X1", "X2", "X3")], Class = classes)
+set.seed(20261114)
+class_forest <- randomForest(Class ~ ., data = class_data, ntree = 200, mtry = 2, nodesize = 5)
+class_prediction <- predict(class_forest, newdata = class_data)
+class_accuracy <- mean(class_prediction == class_data$Class)
+
 result <- list(
   source = "randomForest + gbm + nnet",
   data = data,
@@ -55,7 +65,12 @@ result <- list(
     names = names(importance)
   ),
   boosting = list(rmse = boosting_rmse, r2 = 1 - mean((data$Y - boosting_prediction)^2) / var(data$Y)),
-  nnet = list(rmse = network_rmse, r2 = 1 - mean((data$Y - network_prediction)^2) / var(data$Y))
+  nnet = list(rmse = network_rmse, r2 = 1 - mean((data$Y - network_prediction)^2) / var(data$Y)),
+  classification = list(
+    data = class_data,
+    classes = levels(classes),
+    accuracy = class_accuracy
+  )
 )
 
 writeLines(

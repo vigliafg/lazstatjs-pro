@@ -677,9 +677,9 @@ Copertura finale: **73/73 metodi**, **36/36 nuove voci**.
 |---|---|---|---|---|
 | N-02 | Survey/complex samples | nuova voce `survey` | `kernels/survey.ts` | `survey::svydesign` + `svymean`/`svytotal`/`svyglm` |
 | L-01 | RF/boosting/reti neurali | nuova voce `ml` | `kernels/ml.ts`, `kernels/ensemble.ts` | `randomForest` + `gbm` + `nnet` |
-| L-02 | Text mining | nuova voce `text` | `kernels/text.ts` | base R TF-IDF/coseno + `NMF::nmf` |
+| L-02 | Text mining | nuova voce `text` | `kernels/text.ts` | base R TF-IDF/coseno + `scikit-learn` LDA |
 | L-03 | Choice/MaxDiff | nuova voce `choice` | `kernels/choice.ts` | `optim` sul logit condizionale + conteggi esatti |
-| A-01 | Analisi bayesiana | nuova voce `bayes` | `kernels/bayes.ts`, `kernels/mcmc.ts` | posteriori coniugate + `lm` per la regressione |
+| A-01 | Analisi bayesiana | nuova voce `bayes` | `kernels/bayes.ts`, `kernels/mcmc.ts` | posteriori coniugate, Gibbs gerarchico + `lm` |
 | A-02 | Meta-analisi | nuova voce `meta` | `kernels/meta.ts` | `metafor::rma` + `lm` pesata per Egger |
 | A-03 | Statistica spaziale | nuova voce `spatial` | `kernels/spatial.ts` | `spdep` + `spatialreg::lagsarlm` |
 
@@ -687,29 +687,30 @@ Copertura finale: **73/73 metodi**, **36/36 nuove voci**.
 
 - F8 è stata assorbita nei kernel: `mcmc.ts` (Rhat/ESS/HDI), `ensemble.ts`
   (alberi/RF/boosting), `survey.ts` (varianza di linearizzazione con PSU).
-- L-01 copre random forest, gradient boosting e rete a uno strato nascosto su
-  esito numerico; la classificazione resta un'estensione futura.
-- L-02 usa NMF (Lee–Seung) invece di LDA: `topicmodels`/`quanteda` non sono
-  installati e NMF è deterministico dato il seme; il reference confronta la
-  ricostruzione con `NMF::nmf`.
+- L-01 copre random forest, gradient boosting e rete a uno strato nascosto sia
+  per regressione sia per classificazione one-vs-rest, con matrice di confusione,
+  accuratezza bilanciata e log-loss.
+- L-02 usa LDA con Gibbs collapsing; il reference è `scikit-learn` LDA
+  (inferenza variazionale) e confronta perplessità e recupero dei vocabolari.
 - A-01 usa campionatori coniugati e Gibbs, non Stan/brms: il reference è
-  analitico per i modelli coniugati e confronta la regressione con `lm`.
+  analitico per i modelli coniugati, `lm` per la regressione e `lme4` per il
+  modello gerarchico normale.
 - A-02 usa intervalli normali (come `metafor` con `test = "z"`) e il test di
   Egger coincide con la regressione pesata `lm(effect ~ se, weights = 1/se²)`.
 - A-03 usa pesi k-nearest row-standardised e verosimiglianza concentrata SAR;
   il modello filtra solo l'esito, non la matrice disegno.
-- Copy report/tabelle W9 per de/fr/es/pt-PT usa temporaneamente il catalogo
-  inglese (debito dichiarato, come W6/W7/W8).
+- Copy report/tabelle e titoli grafici W6–W9 sono tradotti per de/fr/es/pt-PT;
+  il catalogo grafico storico resta inglese-first con override locali.
 
 ### Verifiche del gate G9
 
-- `npm run check` verde: `tsc`, **1295/1295** test, depcruise, madge, file size.
+- `npm run check` verde: `tsc`, **1298/1298** test, depcruise, madge, file size.
 - `npm run test:samples` **7/7**; 8 sample nuovi (`survey_demo`, `ml_demo`,
   `text_demo`, `choice_demo`, `maxdiff_demo`, `meta_demo`, `bayes_demo`,
   `spatial_demo`) in 5 formati.
 - Locale check **6/6** (83 pagine help, 4645 frasi report).
-- Reference W9 **7/7** verdi; fixture committate. 29 test W9 complessivi
-  (runner + reference).
+- Reference W9 **9/9** verdi; fixture committate. Test W9 complessivi:
+  runner, reference e regressione/classificazione ML.
 
 ### Handoff — 2026-11-03 / chiusura W9 (G9 verde)
 
@@ -719,8 +720,8 @@ Copertura finale: **73/73 metodi**, **36/36 nuove voci**.
 - Item chiusi (ID): N-02, L-01, L-02, L-03, A-01, A-02, A-03.
 - Item in corso (ID): nessuno.
 - Item bloccati (ID + motivo): nessuno.
-- Test eseguiti e risultato: `npm run check` verde (1295/1295); sample 7/7;
-  locale 6/6; reference W9 7/7.
+- Test eseguiti e risultato: `npm run check` verde (1298/1298); sample 7/7;
+  locale 6/6; reference W9 9/9.
 - File/moduli toccati: kernel `survey`, `ml`, `ensemble`, `text`, `choice`,
   `meta`, `bayes`, `mcmc`, `spatial`; tabelle/report omonimi; form e default
   delle 7 voci; contratti `types/parse/params/roles/registry`; help W9 in 6
@@ -729,10 +730,10 @@ Copertura finale: **73/73 metodi**, **36/36 nuove voci**.
 - Prossimi 3 passi:
   1. Revisione finale del branch e merge su `main`.
   2. Eventuale release v0.19 con note di rilascio.
-  3. Debito traduzioni copy W6–W9 per de/fr/es/pt-PT.
+  3. Manutenzione del catalogo grafico storico (ancora inglese-first).
 - Domande aperte: nessuna.
-- Rischi attivi: L-01 non copre la classificazione; A-01 non copre modelli
-  gerarchici; L-02 usa NMF invece di LDA.
+- Rischi attivi: il catalogo grafico storico non è tradotto in tutte le voci;
+  le traduzioni W6–W9 vanno riviste quando cambia la prosa inglese.
 
 ---
 

@@ -8,6 +8,7 @@ import {
   NumberField,
   VariableList,
   VariableSelect,
+  variableOptions,
   variableOptionsFrom,
 } from '../../components/FormFields';
 import { continuousColumnIndexes } from '../shared/columns';
@@ -20,6 +21,22 @@ export interface MlFormProps {
 
 export const MlForm = ({ grid, mlParams, setMlParams }: MlFormProps) => (
   <div className="flex flex-col gap-3">
+    <Field label={t('form.task')}>
+      <select
+        aria-label={t('form.task')}
+        className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+        value={mlParams.task}
+        onChange={event =>
+          setMlParams(previous => ({
+            ...previous,
+            task: event.target.value as MlParams['task'],
+          }))
+        }
+      >
+        <option value="regression">{t('ml.regression')}</option>
+        <option value="classification">{t('ml.classification')}</option>
+      </select>
+    </Field>
     <Field label={t('form.procedure')}>
       <select
         aria-label={t('form.procedure')}
@@ -40,7 +57,11 @@ export const MlForm = ({ grid, mlParams, setMlParams }: MlFormProps) => (
     <VariableSelect
       label={t('form.outcome')}
       value={mlParams.outcome}
-      options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
+      options={
+        mlParams.task === 'classification'
+          ? variableOptions(grid.cols)
+          : variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))
+      }
       onChange={value => setMlParams(previous => ({ ...previous, outcome: value }))}
     />
     <VariableList

@@ -10,6 +10,7 @@ export const defaultBayesParams = (grid: GridData): BayesParams => {
     mode: 'normal',
     outcome,
     predictors: numeric.filter(index => index !== outcome).slice(0, 3),
+    group: -1,
     priorMean: 0,
     priorSd: 10,
     iterations: 4000,

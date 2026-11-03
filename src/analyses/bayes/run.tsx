@@ -22,6 +22,7 @@ export const buildBayesOutput = ({ grid, params }: BayesInput): AnalysisRunResul
   );
   const y: number[] = [];
   const x: number[][] = [];
+  const rawGroups: string[] = [];
   grid.rows.forEach(row => {
     const value = parseNum(row[params.outcome]);
     const values = params.predictors.map(index => parseNum(row[index]));
@@ -29,6 +30,11 @@ export const buildBayesOutput = ({ grid, params }: BayesInput): AnalysisRunResul
     if (params.mode === 'regression' && values.some(item => !Number.isFinite(item))) return;
     if (params.mode === 'proportion' && value !== 0 && value !== 1) return;
     if (params.mode === 'rate' && value < 0) return;
+    if (params.mode === 'hierarchical') {
+      const group = String(row[params.group] ?? '').trim();
+      if (group === '') return;
+      rawGroups.push(group);
+    }
     y.push(value);
     x.push(values);
   });
@@ -38,6 +44,18 @@ export const buildBayesOutput = ({ grid, params }: BayesInput): AnalysisRunResul
   if (params.mode === 'regression' && params.predictors.length === 0) {
     return { ok: false, reason: 'The regression mode needs at least one predictor' };
   }
+  if (params.mode === 'hierarchical' && params.group < 0) {
+    return { ok: false, reason: 'The hierarchical model needs a grouping column' };
+  }
+  const groupNames = params.mode === 'hierarchical'
+    ? [...new Set(rawGroups)].sort((a, b) => a.localeCompare(b))
+    : [];
+  if (params.mode === 'hierarchical' && groupNames.length < 2) {
+    return { ok: false, reason: 'The hierarchical model needs at least two groups' };
+  }
+  const groupCodes = groupNames.length
+    ? rawGroups.map(label => groupNames.indexOf(label))
+    : [];
   const guard = guardDimensions(
     { rows: y.length, columns: params.predictors.length + 1 },
     GUARD_LIMITS.linear
@@ -53,6 +71,8 @@ export const buildBayesOutput = ({ grid, params }: BayesInput): AnalysisRunResul
     chains: params.chains,
     seed: params.seed,
     variableNames: predictorNames,
+    groupCodes,
+    groupNames,
   });
   if (!result) {
     return { ok: false, reason: 'The posterior could not be sampled: check the data and the prior settings' };
@@ -88,6 +108,26 @@ export const buildBayesOutput = ({ grid, params }: BayesInput): AnalysisRunResul
       fields: { xLabel: copy('Valore'), yLabel: copy('Parametro') },
     }),
   ];
+  if (result.mode === 'hierarchical' && result.groups.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'bayes-groups',
+        kind: 'interval',
+        title: copy('Medie dei gruppi'),
+        subtitle: copy('Media a posteriori e HDI al 95%'),
+        note: copy('Le medie dei gruppi sono stimate con uno shrinkage verso la media generale: i gruppi piccoli si avvicinano di più a μ.'),
+        data: {
+          intervals: result.groups.map(group => ({
+            category: group.label,
+            estimate: group.mean,
+            lo: group.hdiLo,
+            hi: group.hdiHi,
+          })),
+        },
+        fields: { xLabel: copy('Valore'), yLabel: copy('Gruppo') },
+      })
+    );
+  }
   if (result.mode === 'regression' && result.parameters.length >= 2) {
     const first = result.samples[0] ?? [];
     const second = result.samples[1] ?? [];

@@ -3,16 +3,13 @@
 # Reference fixture for the text-mining kernel.
 #
 # Tokenisation, TF-IDF and cosine similarity are reimplemented in base R with
-# the same rules as the kernel. The topic model is compared with the NMF
-# package (Lee-Seung multiplicative updates) through its reconstruction fit.
+# the same rules as the kernel. The LDA topic model is compared separately
+# with the scikit-learn variational reference (python/textLdaW9.py).
 #
 # Run from the repository root:
 #   Rscript src/stats/reference/r/textW9.R
 
-suppressPackageStartupMessages({
-  library(NMF)
-  library(jsonlite)
-})
+suppressPackageStartupMessages(library(jsonlite))
 
 documents <- c(
   "model data regression estimate sample variable model",
@@ -67,11 +64,6 @@ for (i in 1:(length(documents) - 1)) {
   }
 }
 
-fit <- nmf(matrix_counts, rank = 2, method = "lee", seed = 20261113)
-reconstructed <- fitted(fit)
-error <- sum((matrix_counts - reconstructed)^2)
-total <- sum(matrix_counts^2)
-
 result <- list(
   source = "Base R tokenisation/TF-IDF/cosine and NMF::nmf(method='lee')",
   documents = documents,
@@ -80,8 +72,7 @@ result <- list(
   documents_per_term = as.numeric(document_frequency),
   idf = as.numeric(idf),
   average_tfidf = as.numeric(average_tfidf),
-  similarity = similarity,
-  reconstruction = 1 - error / total
+  similarity = similarity
 )
 
 writeLines(

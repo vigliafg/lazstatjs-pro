@@ -32,10 +32,10 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'ml',
     title: 'Apprentissage automatique',
-    summary: 'Forêt aléatoire, gradient boosting et réseau de neurones à une couche cachée pour un résultat numérique.',
-    goal: 'Prédire un résultat numérique à partir de plusieurs prédicteurs sans imposer une forme linéaire ou paramétrique.',
+    summary: 'Forêt aléatoire, gradient boosting et réseau de neurones à une couche cachée pour la régression et la classification.',
+    goal: 'Prédire un résultat numérique ou une classe à partir de plusieurs prédicteurs sans imposer une forme linéaire ou paramétrique.',
     steps: [
-      'Sélectionnez le résultat numérique et au moins un prédicteur numérique.',
+      'Sélectionnez le résultat et si la tâche est une régression ou une classification.',
       'Choisissez forêt aléatoire, gradient boosting ou réseau de neurones.',
       'Réglez arbres, taille minimale des nœuds, rétrécissement ou unités cachées et gardez une graine fixe.',
     ],
@@ -58,7 +58,7 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'text',
     title: 'Fouille de texte',
-    summary: 'Fréquences des termes, TF-IDF, similarité des documents et modèle de sujets non négatif.',
+    summary: 'Fréquences des termes, TF-IDF, similarité des documents et modèle de sujets LDA.',
     goal: 'Décrire un corpus de textes courts et trouver les termes et sujets qui distinguent les documents.',
     steps: [
       'Sélectionnez la colonne de texte et, si besoin, une colonne de groupe.',
@@ -113,7 +113,7 @@ export const w9Topics: HelpTopic[] = [
     summary: 'Résumés a posteriori et diagnostic MCMC pour modèles conjugués et régression gaussienne.',
     goal: 'Combiner la vraisemblance avec une loi a priori et décrire le paramètre par sa distribution a posteriori.',
     steps: [
-      'Choisissez le modèle : moyenne normale, proportion binomiale, taux de Poisson ou régression linéaire.',
+      'Choisissez le modèle : moyenne normale, proportion binomiale, taux de Poisson, régression linéaire ou modèle hiérarchique normal.',
       'Sélectionnez le résultat et, pour la régression, les prédicteurs.',
       'Réglez la loi a priori, les itérations, le burn-in et le nombre de chaînes.',
     ],

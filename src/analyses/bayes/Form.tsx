@@ -8,6 +8,7 @@ import {
   NumberField,
   VariableList,
   VariableSelect,
+  variableOptions,
   variableOptionsFrom,
 } from '../../components/FormFields';
 import { continuousColumnIndexes } from '../shared/columns';
@@ -36,6 +37,7 @@ export const BayesForm = ({ grid, bayesParams, setBayesParams }: BayesFormProps)
         <option value="proportion">{t('bayes.proportion')}</option>
         <option value="rate">{t('bayes.rate')}</option>
         <option value="regression">{t('bayes.regression')}</option>
+        <option value="hierarchical">{t('bayes.hierarchical')}</option>
       </select>
     </Field>
     <VariableSelect
@@ -44,6 +46,14 @@ export const BayesForm = ({ grid, bayesParams, setBayesParams }: BayesFormProps)
       options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
       onChange={value => setBayesParams(previous => ({ ...previous, outcome: value }))}
     />
+    {bayesParams.mode === 'hierarchical' && (
+      <VariableSelect
+        label={t('form.group')}
+        value={bayesParams.group}
+        options={[{ value: -1, label: t('form.none') }, ...variableOptions(grid.cols)]}
+        onChange={value => setBayesParams(previous => ({ ...previous, group: value }))}
+      />
+    )}
     {bayesParams.mode === 'regression' && (
       <VariableList
         label={t('form.predictorsX')}

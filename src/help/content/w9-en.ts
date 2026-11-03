@@ -39,10 +39,10 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'ml',
     title: 'Machine Learning',
-    summary: 'Random forest, gradient boosting and a one-hidden-layer neural network for numeric prediction.',
-    goal: 'Predict a numeric outcome from several predictors without imposing a linear or parametric form.',
+    summary: 'Random forest, gradient boosting and a one-hidden-layer neural network for regression and classification.',
+    goal: 'Predict a numeric outcome or a class from several predictors without imposing a linear or parametric form.',
     steps: [
-      'Select the numeric outcome and at least one numeric predictor.',
+      'Select the outcome and whether the task is regression or classification.',
       'Choose random forest, gradient boosting or neural network.',
       'Set trees, minimum node size, shrinkage or hidden units, and keep a fixed seed for reproducibility.',
     ],
@@ -71,7 +71,7 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'text',
     title: 'Text Mining',
-    summary: 'Term frequencies, TF-IDF, document similarity and a non-negative topic model.',
+    summary: 'Term frequencies, TF-IDF, document similarity and an LDA topic model.',
     goal: 'Describe a corpus of short texts and find the terms and topics that distinguish the documents.',
     steps: [
       'Select the column that contains the text and, optionally, a group label.',
@@ -139,7 +139,7 @@ export const w9Topics: HelpTopic[] = [
     summary: 'Posterior summaries and MCMC diagnostics for conjugate models and Gaussian regression.',
     goal: 'Combine the likelihood with a prior and describe the parameter by its posterior distribution.',
     steps: [
-      'Choose the model: normal mean, binomial proportion, Poisson rate or linear regression.',
+      'Choose the model: normal mean, binomial proportion, Poisson rate, linear regression or hierarchical normal.',
       'Select the outcome and, for regression, the predictors.',
       'Set a prior, the number of iterations, the burn-in and the number of chains.',
     ],

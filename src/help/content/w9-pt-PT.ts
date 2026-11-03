@@ -32,10 +32,10 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'ml',
     title: 'Aprendizagem automática',
-    summary: 'Floresta aleatória, gradient boosting e rede neuronal de uma camada oculta para um resultado numérico.',
-    goal: 'Prever um resultado numérico a partir de vários preditores sem impor uma forma linear ou paramétrica.',
+    summary: 'Floresta aleatória, gradient boosting e rede neuronal de uma camada oculta para regressão e classificação.',
+    goal: 'Prever um resultado numérico ou uma classe a partir de vários preditores sem impor uma forma linear ou paramétrica.',
     steps: [
-      'Selecione o resultado numérico e pelo menos um preditor numérico.',
+      'Selecione o resultado e se a tarefa é regressão ou classificação.',
       'Escolha floresta aleatória, gradient boosting ou rede neuronal.',
       'Ajuste árvores, tamanho mínimo do nó, encolhimento ou unidades ocultas e mantenha uma semente fixa.',
     ],
@@ -58,7 +58,7 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'text',
     title: 'Mineração de texto',
-    summary: 'Frequências dos termos, TF-IDF, similaridade entre documentos e modelo de tópicos não negativo.',
+    summary: 'Frequências dos termos, TF-IDF, similaridade entre documentos e modelo de tópicos LDA.',
     goal: 'Descrever um corpus de textos curtos e encontrar os termos e tópicos que distinguem os documentos.',
     steps: [
       'Selecione a coluna de texto e, se necessário, uma coluna de grupo.',
@@ -113,7 +113,7 @@ export const w9Topics: HelpTopic[] = [
     summary: 'Resumos a posteriori e diagnóstico MCMC para modelos conjugados e regressão gaussiana.',
     goal: 'Combinar a verosimilhança com uma distribuição a priori e descrever o parâmetro pela sua distribuição a posteriori.',
     steps: [
-      'Escolha o modelo: média normal, proporção binomial, taxa de Poisson ou regressão linear.',
+      'Escolha o modelo: média normal, proporção binomial, taxa de Poisson, regressão linear ou modelo hierárquico normal.',
       'Selecione o resultado e, na regressão, os preditores.',
       'Ajuste a prior, as iterações, o burn-in e o número de cadeias.',
     ],

@@ -750,10 +750,12 @@ export interface SurveyParams {
 }
 
 export type MlMode = 'rf' | 'boosting' | 'nnet';
+export type MlTask = 'regression' | 'classification';
 
 /** Tree ensembles and a one-hidden-layer neural network. */
 export interface MlParams {
   mode: MlMode;
+  task: MlTask;
   outcome: number;
   predictors: number[];
   trees: number;
@@ -812,13 +814,15 @@ export interface MetaParams {
   egger: boolean;
 }
 
-export type BayesMode = 'normal' | 'proportion' | 'rate' | 'regression';
+export type BayesMode = 'normal' | 'proportion' | 'rate' | 'regression' | 'hierarchical';
 
-/** Bayesian estimation with a Metropolis/Gibbs sampler. */
+/** Bayesian estimation with conjugate, Gibbs and hierarchical samplers. */
 export interface BayesParams {
   mode: BayesMode;
   outcome: number;
   predictors: number[];
+  /** Grouping column for the hierarchical normal model; -1 = none. */
+  group: number;
   priorMean: number;
   priorSd: number;
   iterations: number;
@@ -1502,6 +1506,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
   },
   ml: {
     mode: 'rf',
+    task: 'regression',
     outcome: 0,
     predictors: [1, 2],
     trees: 200,
@@ -1543,6 +1548,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     mode: 'normal',
     outcome: 0,
     predictors: [1],
+    group: -1,
     priorMean: 0,
     priorSd: 10,
     iterations: 4000,

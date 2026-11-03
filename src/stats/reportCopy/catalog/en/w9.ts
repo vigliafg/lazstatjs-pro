@@ -87,8 +87,6 @@ export const w9Copy: Record<string, string> = {
     'The SAR model estimates the neighbours’ effect beyond the predictors: ρ measures the strength of the spatial lag.',
   'Il modello a effetti fissi assume un unico effetto vero; il modello a effetti casuali assume che gli studi stimino effetti diversi attorno a una media.':
     'The fixed-effects model assumes one true effect; the random-effects model assumes that studies estimate different effects around a mean.',
-  'Il modello a fattori non negativi scompone la matrice in argomenti e pesi per documento: ogni argomento è una distribuzione di termini.':
-    'The non-negative factor model decomposes the matrix into topics and document weights: each topic is a distribution of terms.',
   'Il modello assume indipendenza dalle alternative irrilevanti (IIA): se un’opzione nuova cambia le quote in modo non proporzionale, il logit condizionale non basta.':
     'The model assumes independence from irrelevant alternatives (IIA): if a new option changes shares disproportionately, the conditional logit is not enough.',
   'Il modello di argomenti è esplorativo: il numero di argomenti va scelto e confrontato, non accettato come verità.':
@@ -139,8 +137,6 @@ export const w9Copy: Record<string, string> = {
     'The weighted regression is descriptive: it corrects neither endogeneity nor selection.',
   'La rete neurale non produce un’importanza delle variabili.':
     'The neural network does not produce variable importance.',
-  'La ricostruzione spiega il {s1}% della variabilità della matrice.':
-    'The reconstruction explains {s1}% of the matrix variability.',
   'La scelta della distribuzione a priori conta con pochi dati: dichiarala e verifica la sensibilità delle conclusioni.':
     'The prior matters with few data: state it and check the sensitivity of the conclusions.',
   'La similarità è il coseno tra vettori TF-IDF: 1 significa documenti identici in vocabolario e pesi, 0 nessuna sovrapposizione.':
@@ -342,4 +338,56 @@ export const w9Copy: Record<string, string> = {
   '{s1}: {s2} (z {s3}, p {s4}).': '{s1}: {s2} (z {s3}, p {s4}).',
   '{s1}: {s2} con HDI {s3}–{s4}.': '{s1}: {s2} with HDI {s3}–{s4}.',
   '{s1}: {s2}% dell’importanza.': '{s1}: {s2}% of importance.',
+  'modello gerarchico normale': 'hierarchical normal model',
+  'Modello gerarchico: μ = {s1}, τ = {s2} su {s3} gruppi.': 'Hierarchical model: μ = {s1}, τ = {s2} across {s3} groups.',
+  'Il modello gerarchico stima una media per gruppo e le lega a una media generale μ, con varianza tra gruppi τ².':
+    'The hierarchical model estimates one mean per group and links them to an overall mean μ with between-group variance τ².',
+  'Le medie dei gruppi sono stimate con shrinkage: i gruppi con pochi dati si avvicinano di più alla media generale.':
+    'Group means are estimated with shrinkage: groups with little data move closer to the overall mean.',
+  '{s1}: media {s2}, HDI {s3}–{s4}.': '{s1}: mean {s2}, HDI {s3}–{s4}.',
+  'σ = {s1} (HDI {s2}–{s3}).': 'σ = {s1} (HDI {s2}–{s3}).',
+  'Nessuna deviazione residua disponibile.': 'No residual deviation available.',
+  'τ = {s1} (HDI {s2}–{s3}): descrive quanto le medie dei gruppi si allontanano da μ.':
+    'τ = {s1} (HDI {s2}–{s3}): it describes how far group means move from μ.',
+  'Nessuna varianza tra gruppi disponibile.': 'No between-group variance available.',
+  'Il gruppo con media più alta è {s1}.': 'The group with the highest mean is {s1}.',
+  'Nessun gruppo disponibile.': 'No group available.',
+  'Rhat massimo {s1}; ESS minimo {s2}; {s3} catene.': 'Maximum Rhat {s1}; minimum ESS {s2}; {s3} chains.',
+  'Il modello assume scambiabilità dei gruppi e normalità dentro i gruppi.':
+    'The model assumes exchangeable groups and normality within groups.',
+  'Con pochi gruppi la varianza τ² è difficile da stimare e l’intervallo è ampio.':
+    'With few groups τ² is hard to estimate and the interval is wide.',
+  'La scelta della distribuzione a priori conta con pochi dati: dichiarala e verifica la sensibilità.':
+    'The prior matters with few data: state it and check sensitivity.',
+  'Le conclusioni valgono condizionatamente al modello gerarchico e alla prior scelti.':
+    'Conclusions hold conditional on the chosen hierarchical model and prior.',
+  '{s1} per {s2}: accuratezza {s3}% su {s4} classi.': '{s1} for {s2}: accuracy {s3}% across {s4} classes.',
+  'Il modello impara a separare le classi dell’esito a partire dai predittori.':
+    'The model learns to separate the outcome classes from the predictors.',
+  'L’accuratezza da sola può ingannare con classi sbilanciate: guarda anche accuratezza bilanciata, sensibilità per classe e matrice di confusione.':
+    'Accuracy alone can mislead with imbalanced classes: check balanced accuracy, per-class recall and the confusion matrix too.',
+  'Accuratezza: {s1}%; accuratezza bilanciata: {s2}%; log-loss: {s3}.':
+    'Accuracy: {s1}%; balanced accuracy: {s2}%; log-loss: {s3}.',
+  'Classi: {s1}; osservazioni: {s2}; predittori: {s3}.': 'Classes: {s1}; observations: {s2}; predictors: {s3}.',
+  'La classe con sensibilità più bassa è {s1} ({s2}%).': 'The lowest-recall class is {s1} ({s2}%).',
+  'Nessuna classe con supporto sufficiente per la sensibilità.': 'No class has enough support for recall.',
+  '{s1}: {s2}% dell’importanza media.': '{s1}: {s2}% of the mean importance.',
+  'La matrice di confusione descrive gli errori sui dati usati per l’addestramento: serve una validazione esterna per la generalizzazione.':
+    'The confusion matrix describes errors on the training data: external validation is needed for generalisation.',
+  'L’importanza per impurità non prova una relazione causale e favorisce variabili con molti valori distinti.':
+    'Impurity importance does not prove causation and favours variables with many distinct values.',
+  'Con classi rare l’accuratezza può essere alta anche se il modello non riconosce la classe rara.':
+    'With rare classes accuracy can be high even when the model does not recognise the rare class.',
+  'Il modello LDA (latent Dirichlet allocation) stima argomenti come distribuzioni di termini e pesi per documento.':
+    'The LDA model estimates topics as distributions of terms and weights per document.',
+  'La perplessità del corpus è {s1}: valori più bassi indicano un modello che descrive meglio i testi.':
+    'The corpus perplexity is {s1}: lower values mean the model describes the texts better.',
+  'Shrinkage verso la media generale μ': 'Shrinkage towards the overall mean μ',
+  'Misure calcolate sulle classi osservate e predette': 'Measures computed on observed and predicted classes',
+  'Accuratezza bilanciata': 'Balanced accuracy',
+  'Log-loss': 'Log-loss',
+  'Matrice di confusione': 'Confusion matrix',
+  'Riga: classe osservata; colonna: classe predetta': 'Row: observed class; column: predicted class',
+  Osservata: 'Observed',
+  'Media della riduzione di impurità sulle classi': 'Mean impurity reduction across classes',
 };

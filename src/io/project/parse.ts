@@ -1130,6 +1130,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
     ml: {
       mode:
         ml.mode === 'boosting' || ml.mode === 'nnet' ? ml.mode : d.ml.mode,
+      task: ml.task === 'classification' ? 'classification' : d.ml.task,
       outcome: mlOutcome,
       predictors: mlPredictors,
       trees: Math.max(10, Math.min(2000, integer(ml.trees, d.ml.trees))),
@@ -1177,11 +1178,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       mode:
         bayes.mode === 'proportion' ||
         bayes.mode === 'rate' ||
-        bayes.mode === 'regression'
+        bayes.mode === 'regression' ||
+        bayes.mode === 'hierarchical'
           ? bayes.mode
           : d.bayes.mode,
       outcome: bayesOutcome,
       predictors: bayesPredictors,
+      group: optionalIndex(bayes.group, d.bayes.group, width),
       priorMean: finite(bayes.priorMean, d.bayes.priorMean),
       priorSd: Math.max(1e-6, finite(bayes.priorSd, d.bayes.priorSd)),
       iterations: Math.max(100, Math.min(100000, integer(bayes.iterations, d.bayes.iterations))),

@@ -51,6 +51,7 @@ export interface MlImportance {
 
 export interface MlResult {
   mode: 'rf' | 'boosting' | 'nnet';
+  task: 'regression' | 'classification';
   n: number;
   p: number;
   predictions: number[];
@@ -62,6 +63,13 @@ export interface MlResult {
   oobRmse: number | null;
   importance: MlImportance[];
   trees: number;
+  classes: string[];
+  probabilities: number[][];
+  predictedClass: number[];
+  accuracy: number;
+  balancedAccuracy: number;
+  logLoss: number;
+  confusion: number[][];
 }
 
 export interface TextTerm {
@@ -94,7 +102,7 @@ export interface TextResult {
   similarity: TextSimilarity[];
   topics: TextTopic[];
   documentTopics: number[][];
-  reconstruction: number | null;
+  perplexity: number | null;
   iterations: number;
 }
 
@@ -187,11 +195,27 @@ export interface BayesParameter {
   ess: number;
 }
 
+export interface BayesGroup {
+  label: string;
+  n: number;
+  mean: number;
+  sd: number;
+  median: number;
+  lo: number;
+  hi: number;
+  hdiLo: number;
+  hdiHi: number;
+  rhat: number;
+  ess: number;
+}
+
 export interface BayesResult {
-  mode: 'normal' | 'proportion' | 'rate' | 'regression';
+  mode: 'normal' | 'proportion' | 'rate' | 'regression' | 'hierarchical';
   n: number;
   parameters: BayesParameter[];
   sigma: Omit<BayesParameter, 'term'> | null;
+  tau: Omit<BayesParameter, 'term'> | null;
+  groups: BayesGroup[];
   draws: number;
   burnin: number;
   chains: number;

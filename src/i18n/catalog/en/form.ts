@@ -518,4 +518,8 @@ export const formMessages = {
   'form.neighbors': 'Neighbours (k)',
   'form.xCoordinate': 'X coordinate',
   'form.yCoordinate': 'Y coordinate',
+  'form.task': 'Task',
+  'ml.regression': 'Regression',
+  'ml.classification': 'Classification',
+  'bayes.hierarchical': 'Hierarchical',
 } as const;

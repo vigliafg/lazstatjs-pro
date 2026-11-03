@@ -32,10 +32,10 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'ml',
     title: 'Maschinelles Lernen',
-    summary: 'Random Forest, Gradient Boosting und ein neuronales Netz mit einer versteckten Schicht für numerische Ergebnisse.',
-    goal: 'Ein numerisches Ergebnis aus mehreren Prädiktoren vorhersagen, ohne eine lineare oder parametrische Form vorzugeben.',
+    summary: 'Random Forest, Gradient Boosting und ein neuronales Netz mit einer versteckten Schicht für Regression und Klassifikation.',
+    goal: 'Ein numerisches Ergebnis oder eine Klasse aus mehreren Prädiktoren vorhersagen, ohne eine lineare oder parametrische Form vorzugeben.',
     steps: [
-      'Das numerische Ergebnis und mindestens einen numerischen Prädiktor wählen.',
+      'Ergebnis und Aufgabe (Regression oder Klassifikation) wählen.',
       'Random Forest, Gradient Boosting oder neuronales Netz wählen.',
       'Bäume, minimale Knotengröße, Schrumpfung oder versteckte Einheiten setzen und einen festen Seed behalten.',
     ],
@@ -58,7 +58,7 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'text',
     title: 'Text Mining',
-    summary: 'Termhäufigkeiten, TF-IDF, Dokumentähnlichkeit und ein nicht-negatives Themenmodell.',
+    summary: 'Termhäufigkeiten, TF-IDF, Dokumentähnlichkeit und ein LDA-Themenmodell.',
     goal: 'Ein Korpus kurzer Texte beschreiben und die Begriffe und Themen finden, die Dokumente unterscheiden.',
     steps: [
       'Die Textspalte und optional eine Gruppenspalte wählen.',
@@ -113,7 +113,7 @@ export const w9Topics: HelpTopic[] = [
     summary: 'Posterior-Zusammenfassungen und MCMC-Diagnostik für konjugierte Modelle und Gauß-Regression.',
     goal: 'Die Likelihood mit einer Priori-Verteilung kombinieren und den Parameter durch seine Posterior-Verteilung beschreiben.',
     steps: [
-      'Das Modell wählen: Normalmittelwert, binomialer Anteil, Poisson-Rate oder lineare Regression.',
+      'Das Modell wählen: Normalmittelwert, binomialer Anteil, Poisson-Rate, lineare Regression oder hierarchisches Normmodell.',
       'Das Ergebnis und bei der Regression die Prädiktoren wählen.',
       'Priori, Iterationen, Burn-in und Anzahl der Ketten setzen.',
     ],

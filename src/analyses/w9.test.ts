@@ -189,6 +189,38 @@ test('wave 9 machine learning modes emit fit, importance and predictions', () =>
   }
 });
 
+test('wave 9 machine learning classification emits a confusion matrix', () => {
+  const grid: GridData = {
+    cols: [
+      { id: 'petal', name: 'Petal', type: 'num' },
+      { id: 'width', name: 'Width', type: 'num' },
+      { id: 'species', name: 'Species', type: 'cat' },
+    ],
+    rows: Array.from({ length: 60 }, (_, index) => {
+      const group = index % 3;
+      const petal = group + 0.1 * (index % 4);
+      const width = group * 2 + 0.2 * (index % 3);
+      return [String(petal), String(width), ['setosa', 'versicolor', 'virginica'][group]];
+    }),
+  };
+  const result = buildMlOutput({
+    grid,
+    params: {
+      ...DEFAULT_PARAMS.ml,
+      task: 'classification',
+      outcome: 2,
+      predictors: [0, 1],
+      trees: 30,
+      iterations: 120,
+    },
+  });
+  if ('reason' in result) throw new Error(result.reason);
+  assert.ok(result.tables.some(table => table.id === 'ml-confusion'));
+  assert.ok(chartsOf(result).some(chart => chart.id === 'ml-confusion'));
+  assert.equal(result.report?.id, 'ml');
+  expectKinds(result, 'ml');
+});
+
 test('wave 9 text modes emit terms, topics and similarity', () => {
   const topics = buildTextOutput({
     grid: textGrid,
@@ -288,6 +320,21 @@ test('wave 9 Bayesian modes emit posterior summaries and diagnostics', () => {
     },
   });
   assert.ok(regression.ok);
+
+  const hierarchical = buildBayesOutput({
+    grid: bayesGrid,
+    params: {
+      ...DEFAULT_PARAMS.bayes,
+      mode: 'hierarchical',
+      outcome: 0,
+      group: 2,
+      iterations: 600,
+      burnin: 100,
+      chains: 2,
+    },
+  });
+  assert.ok(hierarchical.ok);
+  assert.ok(tableIds(hierarchical).includes('bayes-groups'));
 });
 
 test('wave 9 spatial modes emit global, local and SAR tables', () => {

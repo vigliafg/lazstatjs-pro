@@ -89,7 +89,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   alt: ['bar', 'forest'],
   reliability: ['bar', 'line'],
   survey: ['bar', 'forest', 'interval'],
-  ml: ['bar', 'line', 'scatter'],
+  ml: ['bar', 'heatmap', 'line', 'scatter'],
   text: ['bar', 'heatmap', 'scatter'],
   choice: ['bar', 'forest', 'interval'],
   meta: ['bar', 'forest', 'scatter'],

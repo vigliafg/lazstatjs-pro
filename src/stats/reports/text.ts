@@ -51,9 +51,9 @@ export const textReport = (result: TextResult): ReportSpec => {
         body:
           result.mode === 'topics'
             ? [
-                copy('Il modello a fattori non negativi scompone la matrice in argomenti e pesi per documento: ogni argomento è una distribuzione di termini.'),
-                copy('La ricostruzione spiega il {s1}% della variabilità della matrice.', {
-                  s1: fmtEst(100 * (result.reconstruction ?? NaN), 1),
+                copy('Il modello LDA (latent Dirichlet allocation) stima argomenti come distribuzioni di termini e pesi per documento.'),
+                copy('La perplessità del corpus è {s1}: valori più bassi indicano un modello che descrive meglio i testi.', {
+                  s1: fmtEst(result.perplexity ?? NaN, 1),
                 }),
                 copy('I pesi dei documenti sono normalizzati a uno: indicano la mescolanza di argomenti, non il numero di parole.'),
               ]

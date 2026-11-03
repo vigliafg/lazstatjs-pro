@@ -64,7 +64,7 @@ export const W9_ROLES: Record<string, W9Role[]> = {
     {
       key: 'outcome',
       label: 'Machine learning: outcome',
-      kind: 'continuous',
+      kind: 'any',
       get: p => [p.ml.outcome],
       set: (p, c) => ({ ...p, ml: { ...p.ml, outcome: c } }),
     },
@@ -179,6 +179,13 @@ export const W9_ROLES: Record<string, W9Role[]> = {
         ...p,
         bayes: { ...p.bayes, predictors: append(p.bayes.predictors, c) },
       }),
+    },
+    {
+      key: 'group',
+      label: 'Bayesian: group',
+      kind: 'any',
+      get: p => [p.bayes.group],
+      set: (p, c) => ({ ...p, bayes: { ...p.bayes, group: c } }),
     },
   ],
   spatial: [

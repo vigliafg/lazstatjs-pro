@@ -32,10 +32,10 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'ml',
     title: 'Aprendizaje automático',
-    summary: 'Bosque aleatorio, gradient boosting y red neuronal de una capa oculta para un resultado numérico.',
-    goal: 'Predecir un resultado numérico a partir de varios predictores sin imponer una forma lineal o paramétrica.',
+    summary: 'Bosque aleatorio, gradient boosting y red neuronal de una capa oculta para regresión y clasificación.',
+    goal: 'Predecir un resultado numérico o una clase a partir de varios predictores sin imponer una forma lineal o paramétrica.',
     steps: [
-      'Selecciona el resultado numérico y al menos un predictor numérico.',
+      'Selecciona el resultado y si la tarea es regresión o clasificación.',
       'Elige bosque aleatorio, gradient boosting o red neuronal.',
       'Ajusta árboles, tamaño mínimo de nodo, contracción o unidades ocultas y mantén una semilla fija.',
     ],
@@ -58,7 +58,7 @@ export const w9Topics: HelpTopic[] = [
   procedureTopic({
     id: 'text',
     title: 'Minería de texto',
-    summary: 'Frecuencias de términos, TF-IDF, similitud entre documentos y modelo de temas no negativo.',
+    summary: 'Frecuencias de términos, TF-IDF, similitud entre documentos y modelo de temas LDA.',
     goal: 'Describir un corpus de textos cortos y encontrar los términos y temas que distinguen los documentos.',
     steps: [
       'Selecciona la columna de texto y, si hace falta, una columna de grupo.',
@@ -113,7 +113,7 @@ export const w9Topics: HelpTopic[] = [
     summary: 'Resúmenes a posteriori y diagnóstico MCMC para modelos conjugados y regresión gaussiana.',
     goal: 'Combinar la verosimilitud con una distribución a priori y describir el parámetro con su distribución a posteriori.',
     steps: [
-      'Elige el modelo: media normal, proporción binomial, tasa de Poisson o regresión lineal.',
+      'Elige el modelo: media normal, proporción binomial, tasa de Poisson, regresión lineal o modelo jerárquico normal.',
       'Selecciona el resultado y, para la regresión, los predictores.',
       'Ajusta la prior, las iteraciones, el burn-in y el número de cadenas.',
     ],
