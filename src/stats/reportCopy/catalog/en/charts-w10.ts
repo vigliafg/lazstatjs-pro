@@ -12,4 +12,6 @@ export const w10ChartCopy: Record<string, string> = {
   "MCF": "MCF",
   "Tempo": "Time",
   "Eventi cumulati per soggetto": "Cumulative events per subject",
+  "La differenza stimata è il punto; il segmento è il suo intervallo di confidenza. La fascia colorata è la regione di equivalenza delimitata dai margini tratteggiati: se l’intero intervallo cade dentro, l’equivalenza è supportata.":
+    "The estimated difference is the point; the segment is its confidence interval. The shaded band is the equivalence region bounded by the dashed margins: if the whole interval falls inside, equivalence is supported.",
 };

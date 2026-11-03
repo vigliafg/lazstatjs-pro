@@ -1,18 +1,12 @@
 # Inventario dei grafici delle procedure
 
-> **Nota (F0.1, 2026-11-03)** — Questo documento sostituisce
-> `docs/analysis/2026-10-30-inventario-grafici-31-procedure.md`, che fotografava
-> 31 procedure ed è ormai uno snapshot storico. L'inventario è generato da
-> `scripts/chart-inventory.mjs`: rieseguire `npm run chart:inventory` dopo ogni
-> fase e confrontare la tabella con la matrice §6 del piano.
-
 Sorgente: scansione statica di `src/analyses/*/` (esclusi i test).
 Comando: `npm run chart:inventory`.
 
 ## Totali
 
 - Analisi con almeno un grafico: **71**
-- Modelli `AnalysisChart` emessi: **321**
+- Modelli `AnalysisChart` emessi: **323**
 - Kind distinti: **32**
 
 ## Grafici per analisi
@@ -39,7 +33,7 @@ Comando: `npm run chart:inventory`.
 | `discriminant` | 4 |
 | `distfit` | 5 |
 | `doe` | 4 |
-| `factorial` | 1 |
+| `factorial` | 2 |
 | `garch` | 2 |
 | `gee` | 6 |
 | `glm` | 3 |
@@ -70,7 +64,7 @@ Comando: `npm run chart:inventory`.
 | `proportions` | 4 |
 | `quality` | 10 |
 | `quantile` | 2 |
-| `recurrent` | 1 |
+| `recurrent` | 2 |
 | `regression` | 14 |
 | `reliability` | 2 |
 | `repeatedanova` | 3 |
@@ -97,7 +91,7 @@ Comando: `npm run chart:inventory`.
 |---|---:|
 | `'dendrogram' as const` | 1 |
 | `acf` | 4 |
-| `bar` | 62 |
+| `bar` | 61 |
 | `bland` | 1 |
 | `bootstrap` | 3 |
 | `box` | 16 |
@@ -109,8 +103,8 @@ Comando: `npm run chart:inventory`.
 | `forest` | 22 |
 | `heatmap` | 17 |
 | `histogram` | 9 |
-| `interval` | 27 |
-| `line` | 56 |
+| `interval` | 29 |
+| `line` | 57 |
 | `missingness` | 3 |
 | `mosaic` | 2 |
 | `pareto` | 1 |
@@ -331,11 +325,12 @@ Comando: `npm run chart:inventory`.
 | `doe-contour` | `surface` | `src/analyses/doe/run.tsx:170` |
 | `doe-coefficients` | `bar` | `src/analyses/doe/run.tsx:183` |
 
-### `factorial` (1)
+### `factorial` (2)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `factorial-interaction` | `line` | `src/analyses/factorial/run.tsx:103` |
+| `factorial-interaction` | `line` | `src/analyses/factorial/run.tsx:109` |
+| `factorial-cells` | `interval` | `src/analyses/factorial/run.tsx:126` |
 
 ### `garch` (2)
 
@@ -615,11 +610,12 @@ Comando: `npm run chart:inventory`.
 | `quantile-line` | `scatter` | `src/analyses/quantile/run.tsx:112` |
 | `quantile-residuals` | `residual` | `src/analyses/quantile/run.tsx:139` |
 
-### `recurrent` (1)
+### `recurrent` (2)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `recurrent-forest` | `forest` | `src/analyses/recurrent/run.tsx:93` |
+| `recurrent-forest` | `forest` | `src/analyses/recurrent/run.tsx:94` |
+| `recurrent-mcf` | `line` | `src/analyses/recurrent/run.tsx:115` |
 
 ### `regression` (14)
 
@@ -769,7 +765,7 @@ Comando: `npm run chart:inventory`.
 
 | Grafico | Kind | File |
 |---|---|---|
-| `tost-difference` | `bar` | `src/analyses/tost/run.tsx:37` |
+| `tost-difference` | `interval` | `src/analyses/tost/run.tsx:37` |
 
 ### `ttest` (13)
 

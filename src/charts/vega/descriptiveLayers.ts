@@ -83,6 +83,17 @@ export const intervalLayers = (
       },
     });
   }
+  // Shaded region (for example the TOST equivalence band) behind the rules.
+  rowsOf(chart, 'regions').forEach(row => {
+    layers.push({
+      data: { values: [row] },
+      mark: { type: 'rect', color: colorAt(options, 3), opacity: 0.12 },
+      encoding: {
+        y: { field: 'lo', type: 'quantitative' },
+        y2: { field: 'hi' },
+      },
+    });
+  });
   rowsOf(chart, 'rules').forEach(row => {
     layers.push({
       data: { values: [row] },

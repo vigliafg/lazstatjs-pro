@@ -69,7 +69,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   var: ['bar', 'line'],
   garch: ['acf', 'line'],
   statespace: ['line'],
-  tost: ['bar'],
+  tost: ['interval'],
   ttest: ['box', 'diamond', 'histogram', 'interval'],
   wizard: [],
   partition: ['bar', 'scatter', 'tree'],

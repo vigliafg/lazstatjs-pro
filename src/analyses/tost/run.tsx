@@ -36,21 +36,23 @@ export const buildTostOutput = ({ grid, params, ciLevel }: TostInput): AnalysisR
   const tables = tostTables(stats, ciLevel);
   const chart = makeChart({
     id: 'tost-difference',
-    kind: 'bar',
+    kind: 'interval',
     title: copy('TOST: differenza e margini di equivalenza'),
     subtitle: copy('Differenza {s1} · IC {s2}% · margine ±{s3}', {
       s1: stats.diff.toFixed(3),
       s2: ciLevel,
       s3: stats.margin,
     }),
-    note: copy('La barra è la differenza stimata con il suo intervallo; la fascia colorata è la regione di equivalenza delimitata dai margini tratteggiati.'),
+    note: copy('La differenza stimata è il punto; il segmento è il suo intervallo di confidenza. La fascia colorata è la regione di equivalenza delimitata dai margini tratteggiati: se l’intero intervallo cade dentro, l’equivalenza è supportata.'),
     data: {
-      bars: [{ category: copy('Differenza'), value: stats.diff, lo: stats.ciLo, hi: stats.ciHi }],
+      intervals: [
+        { category: copy('Differenza'), estimate: stats.diff, lo: stats.ciLo, hi: stats.ciHi },
+      ],
       rules: [{ value: -stats.margin }, { value: stats.margin }],
       regions: [{ lo: -stats.margin, hi: stats.margin }],
     },
-    fields: { xLabel: copy('Stima'), yLabel: copy('Differenza') },
-    options: { error: 'ci', valueLabels: true } as never,
+    fields: { xLabel: copy('Differenza'), yLabel: copy('Differenza') },
+    options: { valueLabels: true, sort: 'none' } as never,
   });
   return {
     ok: true,

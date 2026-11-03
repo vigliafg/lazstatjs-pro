@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F1.1b chiusa)
-- **Fase corrente**: F1.2 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F1.2 chiusa)
+- **Fase corrente**: F2.1 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -59,7 +59,7 @@ con motivo.
 | F0.2 | 3 varianti JMP (`forest`, `survival`, `line`) | 60 | ✅ | `feat(charts): F0.2 tre varianti JMP` | 25 test + `locales:check` verdi |
 | F1.1a | `factorial`: medie di cella | 45 | ✅ | `feat(charts): F1.1a medie di cella` | 11 test verdi |
 | F1.1b | `recurrent`: mean cumulative function | 45 | ✅ | `feat(charts): F1.1b funzione cumulata media` | 11 test verdi |
-| F1.2 | `tost` e chiusura ampiezza | 45 | ⬜ | — | — |
+| F1.2 | `tost` e chiusura ampiezza | 45 | ✅ | `feat(charts): F1.2 TOST a intervallo` | 22 test + inventory verdi |
 | F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ⬜ | — | — |
 | F2.2 | `quality`: profilo operatore, contributi carta | 60 | ⬜ | — | — |
 | F3.1 | varianze, sign, KS | 60 | ⬜ | — | — |
@@ -140,6 +140,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F0.2 | `line.jmp-connected` ha lo stesso patch di `markers` | il contratto del piano è quello; `matchingChartStyle` evidenzia `markers` come primo match |
 | 2026-11-03 | F1.1a | `factorial-cells` riusa le medie di cella già in `series` | nessun nuovo calcolo nel kernel, solo il layer `intervals` |
 | 2026-11-03 | F1.1b | MCF in forma Nelson–Aalen: eventi al tempo / soggetti a rischio, cumulati | è la definizione non parametrica del MCF per eventi ricorrenti |
+| 2026-11-03 | F1.2 | Il layer `interval` disegna anche `regions` (rettangolo dietro le regole) | serve per la regione di equivalenza TOST ed è riusabile da ogni card interval |
+| 2026-11-03 | F1.2 | `tost` resta a 1 grafico (sostituzione, non aggiunta) | §6.2 lo elenca come ♻️; il DoD F1.2 chiede solo `factorial`/`recurrent` a 2 e `tdcox` documentato |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -239,6 +241,28 @@ sotto-blocco aperto):
   presenza di covariate, il MCF è sempre disponibile.
 - **Commit**: `feat(charts): F1.1b funzione cumulata media`
 
+### F1.2 — `tost` e chiusura ampiezza
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `tost-difference` passa da `bar` a `interval`: punto = differenza,
+  segmento = IC, regole tratteggiate ai margini, fascia della regione di
+  equivalenza. Il layer `interval` ora disegna `regions` (rettangolo dietro le
+  regole), con test di compilazione. Copy EN e help IT/EN aggiornati.
+- **File toccati**: `src/analyses/tost/run.tsx`,
+  `src/analyses/tost/charts.test.ts` (nuovo), `src/charts/vega/descriptiveLayers.ts`,
+  `src/charts/vega/buildSpec.test.ts`, `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/stats/reportCopy/catalog/en/charts-remaining.ts`,
+  `src/help/content/{it,en}/charts.ts`,
+  `docs/analysis/2026-11-03-inventario-grafici-72-procedure.md`.
+- **Test**: TOST + buildSpec + copy + analysisKinds → 22/22 verdi;
+  `chart:inventory` → 323 modelli; restano con un solo grafico `tdcox`
+  (limite §6.4) e `tost` (sostituzione ♻️, non aggiunta).
+- **Scostamento dal piano**: il passo 3 di §F1.2 parla di "solo `tdcox` a un
+  grafico", ma la matrice §6.2 assegna a `tost` una sostituzione e il DoD
+  chiede solo `factorial`/`recurrent` a 2. Nessun secondo grafico inventato.
+- **Commit**: `feat(charts): F1.2 TOST a intervallo`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -250,6 +274,7 @@ sotto-blocco aperto):
 |---|---|---|---|---|---|---|
 | F1.1a | `factorial-cells` | `factorial` | `interval` | LZ | `factorial/charts.test.ts` | ✅ |
 | F1.1b | `recurrent-mcf` | `recurrent` | `line` | JMP | `kernels/recurrent.test.ts` | ✅ |
+| F1.2 | `tost-difference` ♻️ | `tost` | `interval` | JMP | `tost/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -257,10 +282,11 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F1.2: sostituire il `bar` di `tost-difference` con l'`interval` (differenza,
-   IC e margini di equivalenza).
-2. Verificare con `npm run chart:inventory` che resti solo `tdcox` a 1 grafico.
-3. F2.1: `freq-cumulative` [pareto] e `outliers-strip` [dot] in `descriptive`.
+1. F2.1: `freq-cumulative` [pareto] e `outliers-strip` [dot] in `descriptive`.
+2. Aggiungere i kind `pareto` e `dot` a `descriptive` con i test in
+   `descriptive/charts.test.ts`.
+3. F2.2: `msa-operator-profile` [line] e, se resta tempo, i contributi della
+   carta multivariata.
 
 ---
 

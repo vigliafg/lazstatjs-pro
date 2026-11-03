@@ -94,8 +94,6 @@ export const remainingChartCopy: Record<string, string> = {
     "The moving mean highlights the trend; the moving SD shows whether variability changes over time.",
   "Statistica":
     "Statistic",
-  "La barra è la differenza stimata con il suo intervallo; la fascia colorata è la regione di equivalenza delimitata dai margini tratteggiati.":
-    "The bar is the estimated difference with its interval; the shaded band is the equivalence region bounded by the dashed margins.",
   "I punti vicini alla diagonale indicano residui compatibili con la normale; code pesanti suggeriscono sovradispersione o outlier.":
     "Points close to the diagonal indicate residuals compatible with normality; heavy tails suggest overdispersion or outliers.",
   "Rapporti di incidenza per predittore":

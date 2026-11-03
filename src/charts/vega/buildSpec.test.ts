@@ -353,6 +353,28 @@ test('the JMP-like regression style draws the grid band and the mean line', () =
   );
 });
 
+test('the interval layer draws the TOST equivalence region behind the margins', () => {
+  const chart = makeChart({
+    id: 'tost-difference',
+    kind: 'interval',
+    title: 'TOST',
+    data: {
+      intervals: [{ category: 'Difference', estimate: 0.2, lo: -0.1, hi: 0.5 }],
+      rules: [{ value: -0.5 }, { value: 0.5 }],
+      regions: [{ lo: -0.5, hi: 0.5 }],
+    },
+  });
+  const spec = buildVegaSpec(chart) as unknown as {
+    layer: Array<{ mark?: { type?: string }; data?: { values?: Array<Record<string, unknown>> } }>;
+  };
+  const regions = spec.layer.filter(layer => layer.mark?.type === 'rect');
+  assert.equal(regions.length, 1);
+  assert.deepEqual(regions[0].data?.values?.[0], { lo: -0.5, hi: 0.5 });
+  const warnings: string[] = [];
+  compile(spec, { logger: { warn: (message: string) => warnings.push(message), info: () => {}, debug: () => {}, level: () => ({ warn: () => {}, info: () => {}, debug: () => {} }) } as never });
+  assert.deepEqual(warnings, []);
+});
+
 test('every style-gallery entry compiles without warnings', () => {
   for (const kind of kinds) {
     for (const style of stylesFor(kind)) {
