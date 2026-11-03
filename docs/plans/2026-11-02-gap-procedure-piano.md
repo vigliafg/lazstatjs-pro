@@ -378,9 +378,9 @@ Obiettivo: passare da OLS/logistica/count a una cassetta di modelli completa.
 | R-10 | GAM/MARS | new `mars` | `kernels/mars.ts` | `mars/Form.tsx` | `earth` | `mtcars` | 9 | W0-03 |
 | R-11 | IV/2SLS | new `iv` | `kernels/iv.ts` | `iv/Form.tsx` | `AER::ivreg` | `iv_demo*` | 9 | W0-03 |
 | R-12 | Panel FE/RE | new `panel` | `kernels/panel.ts` | `panel/Form.tsx` | `plm` | `panel_demo*` | 9 | R-11 |
-| R-13 | Tobit/selection | new `selection` | `kernels/selection.ts` | `selection/Form.tsx` | `sampleSelection` | `selection_demo*` | 9 | W0-01 |
-| R-14 | Mediazione | new `mediation` | `kernels/mediation.ts` | `mediation/Form.tsx` | `mediation` | `mtcars` | 4 | — |
-| R-15 | Propensity score | new `propensity` | `kernels/propensity.ts` | `propensity/Form.tsx` | `MatchIt` | `treatment_demo*` | 4 | R-05 |
+| R-13 | Tobit/selection | new `selection` | `kernels/tobit.ts` | `selection/Form.tsx` | `AER::tobit` + base R two-step | `selection_demo*` | 9 | W0-01 |
+| R-14 | Mediazione | new `mediation` | `kernels/mediation.ts` | `mediation/Form.tsx` | `lavaan` + bootstrap per proprietà | `mtcars` | 4 | — |
+| R-15 | Propensity score | new `propensity` | `kernels/propensity.ts` | `propensity/Form.tsx` | `MatchIt` + base R IPW | `treatment_demo*` | 4 | R-05 |
 
 **Note**
 
@@ -392,6 +392,21 @@ Obiettivo: passare da OLS/logistica/count a una cassetta di modelli completa.
 
 **Rischi**: panel e selection richiedono bilanciamento/struttura dati; prevedere
 adattatori e messaggi espliciti.
+
+**Deviazioni decise in W3** (dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5d):
+
+- R-13 usa `kernels/tobit.ts` perché `kernels/selection.ts` è già la selezione
+  stepwise di R-01. La voce resta `selection`.
+- `sampleSelection` e `mediation` non sono installati: il riferimento di
+  Heckman è base R two-step, quello della mediazione è `lavaan` per le stime
+  puntuali e il bootstrap è validato per proprietà.
+- L'ML di Heckman resta fuori da W3 ed è dichiarato come limite.
+
+**Stato W3 (2026-11-03)**: R-09…R-15 chiusi, gate G3 verde. Kernel, reference
+R, voci/UI, help e `reportCopy` in 6 lingue completati; `npm run check`
+1161/1161, `test:samples` 7/7, locale check 6/6. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5e e registro §6.
 
 ---
 
@@ -710,7 +725,7 @@ numerica, salvo il Wizard che non è una procedura statistica.
 |---|---|---|
 | v0.13 | W0 + W1 (14 metodi) | G1 verde, help 6 lingue, 2 nuove voci |
 | v0.14 | W2 (12 metodi) — **chiuso 2026-11-03, G2 verde** | GLM/GLMM reference, 5 nuove voci |
-| v0.15 | W3 (7 metodi) | 7 modelli avanzati, 7 nuove voci |
+| v0.15 | W3 (7 metodi) — **chiuso 2026-11-03, G3 verde** | 7 modelli avanzati, 7 nuove voci |
 | v0.16 | W4 + W5 (13 metodi) | Categorical, MI, SEM/IRT/latent |
 | v0.17 | W6 + W7 (15 metodi) | Survival e time series |
 | v0.18 | W8 (5 metodi) | Quality/DOE/power |

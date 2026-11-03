@@ -12,6 +12,13 @@ import { buildQuantileOutput } from './quantile/run';
 import { buildNonlinearOutput } from './nonlinear/run';
 import { buildMultinomialOutput } from './multinomial/run';
 import { buildGlmmOutput } from './glmm/run';
+import { buildPlsOutput } from './pls/run';
+import { buildMarsOutput } from './mars/run';
+import { buildIvOutput } from './iv/run';
+import { buildPanelOutput } from './panel/run';
+import { buildSelectionOutput } from './selection/run';
+import { buildMediationOutput } from './mediation/run';
+import { buildPropensityOutput } from './propensity/run';
 import { buildCorrelationOutput } from './correlation/run';
 import { buildChiSquareOutput } from './chisquare/run';
 import { buildSampleSizeOutput } from './samplesize/run';
@@ -88,6 +95,20 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildMultinomialOutput({ grid, params: params.multinomial, ciLevel }),
   glmm: ({ grid, params, ciLevel }) =>
     buildGlmmOutput({ grid, params: params.glmm, ciLevel }),
+  pls: ({ grid, params, ciLevel }) =>
+    buildPlsOutput({ grid, params: params.pls, ciLevel }),
+  mars: ({ grid, params, ciLevel }) =>
+    buildMarsOutput({ grid, params: params.mars, ciLevel }),
+  iv: ({ grid, params, ciLevel }) =>
+    buildIvOutput({ grid, params: params.iv, ciLevel }),
+  panel: ({ grid, params, ciLevel }) =>
+    buildPanelOutput({ grid, params: params.panel, ciLevel }),
+  selection: ({ grid, params, ciLevel }) =>
+    buildSelectionOutput({ grid, params: params.selection, ciLevel }),
+  mediation: ({ grid, params, ciLevel }) =>
+    buildMediationOutput({ grid, params: params.mediation, ciLevel }),
+  propensity: ({ grid, params, ciLevel }) =>
+    buildPropensityOutput({ grid, params: params.propensity, ciLevel }),
   correlation: ({ grid, params, ciLevel }) =>
     buildCorrelationOutput({ grid, corrParams: params.corr, ciLevel }),
   chisquare: ({ grid, params, ciLevel }) =>

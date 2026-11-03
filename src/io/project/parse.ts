@@ -289,6 +289,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const ordinal = isRecord(raw.ordinal) ? raw.ordinal : {};
   const lmm = isRecord(raw.lmm) ? raw.lmm : {};
   const glmm = isRecord(raw.glmm) ? raw.glmm : {};
+  const pls = isRecord(raw.pls) ? raw.pls : {};
+  const mars = isRecord(raw.mars) ? raw.mars : {};
+  const iv = isRecord(raw.iv) ? raw.iv : {};
+  const panel = isRecord(raw.panel) ? raw.panel : {};
+  const selection = isRecord(raw.selection) ? raw.selection : {};
+  const mediation = isRecord(raw.mediation) ? raw.mediation : {};
+  const propensity = isRecord(raw.propensity) ? raw.propensity : {};
   const countreg = isRecord(raw.countreg) ? raw.countreg : {};
   const agreement = isRecord(raw.agreement) ? raw.agreement : {};
   const tost = isRecord(raw.tost) ? raw.tost : {};
@@ -643,6 +650,67 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
         slope: rawSlope === dep || rawSlope === group ? -1 : rawSlope,
       };
     })(),
+    pls: {
+      dep: index(pls.dep, d.pls.dep, width),
+      indeps: indexList(pls.indeps, d.pls.indeps, width).filter(
+        (value) => value !== index(pls.dep, d.pls.dep, width)
+      ),
+      components: Math.max(1, Math.min(20, integer(pls.components, d.pls.components))),
+      cvFolds: Math.max(0, Math.min(20, integer(pls.cvFolds, d.pls.cvFolds))),
+    },
+    mars: {
+      dep: index(mars.dep, d.mars.dep, width),
+      indeps: indexList(mars.indeps, d.mars.indeps, width).filter(
+        (value) => value !== index(mars.dep, d.mars.dep, width)
+      ),
+      degree: mars.degree === 2 ? 2 : 1,
+      maxTerms: Math.max(1, Math.min(200, integer(mars.maxTerms, d.mars.maxTerms))),
+      penalty: Math.max(0, finite(mars.penalty, d.mars.penalty)),
+      prune: bool(mars.prune, d.mars.prune),
+    },
+    iv: {
+      dep: index(iv.dep, d.iv.dep, width),
+      endog: indexList(iv.endog, d.iv.endog, width),
+      instruments: indexList(iv.instruments, d.iv.instruments, width),
+      exog: indexList(iv.exog, d.iv.exog, width),
+      robust: bool(iv.robust, d.iv.robust),
+    },
+    panel: {
+      dep: index(panel.dep, d.panel.dep, width),
+      indeps: indexList(panel.indeps, d.panel.indeps, width),
+      entity: index(panel.entity, d.panel.entity, width),
+      time: index(panel.time, d.panel.time, width),
+      model:
+        panel.model === 'fe' || panel.model === 're' ? panel.model : d.panel.model,
+    },
+    selection: {
+      mode: selection.mode === 'heckman' ? 'heckman' : d.selection.mode,
+      dep: index(selection.dep, d.selection.dep, width),
+      indeps: indexList(selection.indeps, d.selection.indeps, width),
+      lower: finite(selection.lower, d.selection.lower),
+      upper:
+        typeof selection.upper === 'number' && Number.isFinite(selection.upper)
+          ? selection.upper
+          : null,
+      selection: optionalIndex(selection.selection, d.selection.selection, width),
+      selectIndeps: indexList(selection.selectIndeps, d.selection.selectIndeps, width),
+    },
+    mediation: {
+      outcome: index(mediation.outcome, d.mediation.outcome, width),
+      predictor: index(mediation.predictor, d.mediation.predictor, width),
+      mediator: index(mediation.mediator, d.mediation.mediator, width),
+      covariates: indexList(mediation.covariates, d.mediation.covariates, width),
+      bootstrap: Math.max(0, Math.min(5000, integer(mediation.bootstrap, d.mediation.bootstrap))),
+      seed: integer(mediation.seed, d.mediation.seed),
+    },
+    propensity: {
+      treatment: index(propensity.treatment, d.propensity.treatment, width),
+      outcome: index(propensity.outcome, d.propensity.outcome, width),
+      covariates: indexList(propensity.covariates, d.propensity.covariates, width),
+      method: propensity.method === 'ipw' ? 'ipw' : d.propensity.method,
+      caliper: Math.max(0, finite(propensity.caliper, d.propensity.caliper)),
+      ratio: Math.max(1, Math.min(10, integer(propensity.ratio, d.propensity.ratio))),
+    },
     countreg: {
       dep: index(countreg.dep, d.countreg.dep, width),
       indeps: indexList(countreg.indeps, d.countreg.indeps, width),

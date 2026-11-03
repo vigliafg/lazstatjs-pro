@@ -70,3 +70,10 @@ the test file and in `docs/plans/2026-11-02-gap-procedure-stato.md`.
 | `anom.json` | `r/anom.R` | `kernels/anom.ts` |
 | `mancova.json` | `r/mancova.R` | `kernels/mancova.ts` |
 | `glmm.json` | `r/glmm.R` | `kernels/glmm.ts` |
+| `pls.json` | `r/pls.R` | `kernels/pls.ts` |
+| `iv.json` | `r/iv.R` | `kernels/iv.ts` |
+| `mars.json` | `r/mars.R` | `kernels/mars.ts` |
+| `tobit.json` | `r/tobit.R` | `kernels/tobit.ts` |
+| `mediation.json` | `r/mediation.R` | `kernels/mediation.ts` |
+| `panel.json` | `r/panel.R` | `kernels/panel.ts` |
+| `propensity.json` | `r/propensity.R` | `kernels/propensity.ts` |

@@ -12,6 +12,13 @@ import { QuantileForm } from '../../analyses/quantile/Form';
 import { NonlinearForm } from '../../analyses/nonlinear/Form';
 import { MultinomialForm } from '../../analyses/multinomial/Form';
 import { GlmmForm } from '../../analyses/glmm/Form';
+import { PlsForm } from '../../analyses/pls/Form';
+import { MarsForm } from '../../analyses/mars/Form';
+import { IvForm } from '../../analyses/iv/Form';
+import { PanelForm } from '../../analyses/panel/Form';
+import { SelectionForm } from '../../analyses/selection/Form';
+import { MediationForm } from '../../analyses/mediation/Form';
+import { PropensityForm } from '../../analyses/propensity/Form';
 import { CorrelationForm } from '../../analyses/correlation/Form';
 import { ChiSquareForm } from '../../analyses/chisquare/Form';
 import { SampleSizeForm } from '../../analyses/samplesize/Form';
@@ -148,6 +155,46 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
             setGlmmParams={setSlice('glmm')}
             onLevels={p.updateColumnLevels}
             onRecode={p.updateColumnRecode}
+          />
+        );
+      case 'pls':
+        return (
+          <PlsForm grid={p.grid} params={params.pls} setParams={setSlice('pls')} />
+        );
+      case 'mars':
+        return (
+          <MarsForm grid={p.grid} params={params.mars} setParams={setSlice('mars')} />
+        );
+      case 'iv':
+        return (
+          <IvForm grid={p.grid} params={params.iv} setParams={setSlice('iv')} />
+        );
+      case 'panel':
+        return (
+          <PanelForm grid={p.grid} params={params.panel} setParams={setSlice('panel')} />
+        );
+      case 'selection':
+        return (
+          <SelectionForm
+            grid={p.grid}
+            params={params.selection}
+            setParams={setSlice('selection')}
+          />
+        );
+      case 'mediation':
+        return (
+          <MediationForm
+            grid={p.grid}
+            params={params.mediation}
+            setParams={setSlice('mediation')}
+          />
+        );
+      case 'propensity':
+        return (
+          <PropensityForm
+            grid={p.grid}
+            params={params.propensity}
+            setParams={setSlice('propensity')}
           />
         );
       case 'correlation':

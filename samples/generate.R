@@ -620,6 +620,128 @@ write_dataset(
 )
 
 ## ---------------------------------------------------------------------------
+## Advanced regression (W3)
+## ---------------------------------------------------------------------------
+
+set.seed(20261103)
+
+iv_n <- 220
+iv_z1 <- rnorm(iv_n)
+iv_z2 <- rbinom(iv_n, 1, 0.45)
+iv_w <- rnorm(iv_n)
+iv_u <- rnorm(iv_n)
+iv_x <- 0.9 * iv_z1 + 0.6 * iv_z2 + 0.4 * iv_w + 0.7 * iv_u + rnorm(iv_n, sd = 0.5)
+iv_y <- 1.2 + 0.7 * iv_x + 0.5 * iv_w + 0.8 * iv_u + rnorm(iv_n, sd = 0.6)
+iv_demo <- data.frame(
+  Y = round(iv_y, 6),
+  X = round(iv_x, 6),
+  Z1 = round(iv_z1, 6),
+  Z2 = iv_z2,
+  W = round(iv_w, 6)
+)
+write_dataset(
+  "regression", "iv_demo", iv_demo,
+  "Instrumental-variables demo",
+  "Simulated (samples/generate.R, seed 20261103)",
+  c("iv", "regression", "descriptive", "correlation"),
+  list(
+    example("iv", list(dependent = "Y", endogenous = "X", instruments = c("Z1", "Z2"), exogenous = "W")),
+    example("regression", list(dependent = "Y", predictors = c("W", "X"))),
+    example("descriptive", list(variables = c("Y", "X", "W"))),
+    example("correlation", list(variables = c("Y", "X", "Z1", "W")))
+  ),
+  "220 observations with an endogenous regressor X, two excluded instruments and one exogenous control."
+)
+
+panel_entities <- 30
+panel_periods <- 10
+panel_demo <- do.call(rbind, lapply(seq_len(panel_entities), function(i) {
+  effect <- rnorm(1)
+  time <- seq_len(panel_periods)
+  x1 <- 0.4 * time + 0.3 * effect + rnorm(panel_periods, sd = 0.5)
+  x2 <- rnorm(panel_periods)
+  y <- 1.0 + 0.8 * x1 - 0.35 * x2 + effect + rnorm(panel_periods, sd = 0.6)
+  data.frame(ID = i, Time = time, Y = round(y, 6), X1 = round(x1, 6), X2 = round(x2, 6))
+}))
+write_dataset(
+  "regression", "panel_demo", panel_demo,
+  "Balanced panel demo",
+  "Simulated (samples/generate.R, seed 20261103)",
+  c("panel", "regression", "descriptive", "correlation"),
+  list(
+    example("panel", list(dependent = "Y", predictors = c("X1", "X2"), entity = "ID", time = "Time")),
+    example("regression", list(dependent = "Y", predictors = c("X1", "X2"))),
+    example("descriptive", list(variables = c("Y", "X1", "X2"))),
+    example("correlation", list(variables = c("Y", "X1", "X2")))
+  ),
+  "30 entities observed for 10 periods, with a persistent entity effect and two time-varying predictors."
+)
+
+selection_n <- 450
+selection_education <- round(rnorm(selection_n, 12, 2.2), 6)
+selection_experience <- round(rnorm(selection_n, 10, 4), 6)
+selection_kids <- rpois(selection_n, 1.8)
+selection_latent <- -5 + 0.4 * selection_education + 0.15 * selection_experience +
+  rnorm(selection_n, sd = 1.9)
+selection_wage <- pmax(0, selection_latent)
+selection_index <- -1 + 0.14 * selection_education + 0.05 * selection_experience -
+  0.55 * selection_kids + rnorm(selection_n)
+selection_selected <- as.integer(selection_index > 0)
+selection_demo <- data.frame(
+  Wage = round(selection_wage, 6),
+  Wage_obs = round(ifelse(selection_selected == 1, selection_wage, 0), 6),
+  Selected = selection_selected,
+  Education = selection_education,
+  Experience = selection_experience,
+  Kids = selection_kids
+)
+write_dataset(
+  "regression", "selection_demo", selection_demo,
+  "Tobit and Heckman selection demo",
+  "Simulated (samples/generate.R, seed 20261103)",
+  c("selection", "regression", "descriptive", "correlation"),
+  list(
+    example("selection", list(dependent = "Wage", predictors = c("Education", "Experience"))),
+    example("selection", list(dependent = "Wage_obs", predictors = c("Education", "Experience"), selection = "Selected", selectionPredictors = c("Education", "Experience", "Kids")), mode = "heckman"),
+    example("regression", list(dependent = "Wage", predictors = c("Education", "Experience"))),
+    example("descriptive", list(variables = c("Wage", "Wage_obs", "Education", "Experience"))),
+    example("correlation", list(variables = c("Wage", "Education", "Experience")))
+  ),
+  "450 observations with a lower-censored wage for Tobit and a 0/1 selection indicator with the Kids exclusion restriction for Heckman."
+)
+
+treatment_n <- 600
+treatment_age <- round(rnorm(treatment_n, 45, 12), 6)
+treatment_score <- round(rnorm(treatment_n, 100, 15), 6)
+treatment_sex <- rbinom(treatment_n, 1, 0.5)
+treatment_age_z <- (treatment_age - mean(treatment_age)) / sd(treatment_age)
+treatment_score_z <- (treatment_score - mean(treatment_score)) / sd(treatment_score)
+treatment_ps <- plogis(-0.4 + 0.8 * treatment_age_z + 0.7 * treatment_score_z + 0.35 * treatment_sex)
+treatment <- rbinom(treatment_n, 1, treatment_ps)
+treatment_outcome <- 2 + 2.1 * treatment + 0.5 * treatment_age_z + 0.8 * treatment_score_z +
+  0.3 * treatment_sex + rnorm(treatment_n, sd = 0.8)
+treatment_demo <- data.frame(
+  Treatment = treatment,
+  Outcome = round(treatment_outcome, 6),
+  Age = treatment_age,
+  Score = treatment_score,
+  Sex = treatment_sex
+)
+write_dataset(
+  "regression", "treatment_demo", treatment_demo,
+  "Propensity-score demo",
+  "Simulated (samples/generate.R, seed 20261103)",
+  c("propensity", "regression", "descriptive", "correlation"),
+  list(
+    example("propensity", list(treatment = "Treatment", outcome = "Outcome", covariates = c("Age", "Score", "Sex"))),
+    example("regression", list(dependent = "Outcome", predictors = c("Treatment", "Age", "Score"))),
+    example("descriptive", list(variables = c("Outcome", "Age", "Score"))),
+    example("correlation", list(variables = c("Outcome", "Age", "Score")))
+  ),
+  "600 observations with a binary treatment assigned by a known propensity score and a continuous outcome."
+)
+
+## ---------------------------------------------------------------------------
 ## Manifest
 ## ---------------------------------------------------------------------------
 

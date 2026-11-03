@@ -122,6 +122,50 @@ export const remapParams = (
   const glmmIndeps = list(params.glmm.indeps, 'GLMM: predictors').filter(
     value => value !== glmmDep && value !== glmmGroup
   );
+  const plsDep = one(params.pls.dep, 'PLS: dependent variable');
+  const plsIndeps = list(params.pls.indeps, 'PLS: predictors').filter(value => value !== plsDep);
+  const marsDep = one(params.mars.dep, 'MARS: dependent variable');
+  const marsIndeps = list(params.mars.indeps, 'MARS: predictors').filter(value => value !== marsDep);
+  const ivDep = one(params.iv.dep, 'IV: outcome');
+  const ivEndog = list(params.iv.endog, 'IV: endogenous predictors').filter(
+    value => value !== ivDep
+  );
+  const ivInstruments = list(params.iv.instruments, 'IV: instruments').filter(
+    value => value !== ivDep && !ivEndog.includes(value)
+  );
+  const ivExog = list(params.iv.exog, 'IV: exogenous predictors').filter(
+    value => value !== ivDep && !ivEndog.includes(value) && !ivInstruments.includes(value)
+  );
+  const panelDep = one(params.panel.dep, 'Panel: outcome');
+  const panelEntity = one(params.panel.entity, 'Panel: entity');
+  const panelTime = one(params.panel.time, 'Panel: time');
+  const panelIndeps = list(params.panel.indeps, 'Panel: predictors').filter(
+    value => value !== panelDep && value !== panelEntity && value !== panelTime
+  );
+  const selectionDep = one(params.selection.dep, 'Selection: outcome');
+  const selectionIndicator = optional(params.selection.selection);
+  const selectionIndeps = list(params.selection.indeps, 'Selection: predictors').filter(
+    value => value !== selectionDep
+  );
+  const selectionPredictors = list(
+    params.selection.selectIndeps,
+    'Selection: selection predictors'
+  ).filter(value => value !== selectionDep && value !== selectionIndicator);
+  const mediationOutcome = one(params.mediation.outcome, 'Mediation: outcome');
+  const mediationPredictor = one(params.mediation.predictor, 'Mediation: predictor');
+  const mediationMediator = one(params.mediation.mediator, 'Mediation: mediator');
+  const mediationCovariates = list(params.mediation.covariates, 'Mediation: covariates').filter(
+    value =>
+      value !== mediationOutcome &&
+      value !== mediationPredictor &&
+      value !== mediationMediator
+  );
+  const propensityTreatment = one(params.propensity.treatment, 'Propensity: treatment');
+  const propensityOutcome = one(params.propensity.outcome, 'Propensity: outcome');
+  const propensityCovariates = list(
+    params.propensity.covariates,
+    'Propensity: covariates'
+  ).filter(value => value !== propensityTreatment && value !== propensityOutcome);
   const countDep = one(params.countreg.dep, 'Count Regression: outcome');
   const countIndeps = list(params.countreg.indeps, 'Count Regression: predictors');
   const tostVar1 = one(params.tost.var1, 'TOST: first variable');
@@ -307,6 +351,77 @@ export const remapParams = (
           slope,
         };
       })(),
+      pls: {
+        ...params.pls,
+        dep: plsDep,
+        indeps: plsIndeps,
+        components: Math.max(1, Math.min(20, Math.round(params.pls.components))),
+        cvFolds: Math.max(0, Math.min(20, Math.round(params.pls.cvFolds))),
+      },
+      mars: {
+        ...params.mars,
+        dep: marsDep,
+        indeps: marsIndeps,
+        degree: params.mars.degree === 2 ? 2 : 1,
+        maxTerms: Math.max(1, Math.min(200, Math.round(params.mars.maxTerms))),
+        penalty: Math.max(0, params.mars.penalty),
+        prune: params.mars.prune ?? true,
+      },
+      iv: {
+        ...params.iv,
+        dep: ivDep,
+        endog: ivEndog,
+        instruments: ivInstruments,
+        exog: ivExog,
+        robust: params.iv.robust ?? false,
+      },
+      panel: {
+        ...params.panel,
+        dep: panelDep,
+        indeps: panelIndeps,
+        entity: panelEntity,
+        time: panelTime,
+        model:
+          params.panel.model === 'fe' || params.panel.model === 're'
+            ? params.panel.model
+            : 'both',
+      },
+      selection: {
+        ...params.selection,
+        mode: params.selection.mode === 'heckman' ? 'heckman' : 'tobit',
+        dep: selectionDep,
+        indeps: selectionIndeps,
+        lower: Number.isFinite(params.selection.lower) ? params.selection.lower : 0,
+        upper:
+          typeof params.selection.upper === 'number' && Number.isFinite(params.selection.upper)
+            ? params.selection.upper
+            : null,
+        selection: selectionIndicator,
+        selectIndeps: selectionPredictors,
+      },
+      mediation: {
+        ...params.mediation,
+        outcome: mediationOutcome,
+        predictor: mediationPredictor,
+        mediator: mediationMediator,
+        covariates: mediationCovariates,
+        bootstrap: Math.max(
+          0,
+          Math.min(5000, Math.round(params.mediation.bootstrap ?? 1000))
+        ),
+        seed: Number.isInteger(params.mediation.seed)
+          ? params.mediation.seed
+          : 20261103,
+      },
+      propensity: {
+        ...params.propensity,
+        treatment: propensityTreatment,
+        outcome: propensityOutcome,
+        covariates: propensityCovariates,
+        method: params.propensity.method === 'ipw' ? 'ipw' : 'nearest',
+        caliper: Math.max(0, params.propensity.caliper ?? 0),
+        ratio: Math.max(1, Math.min(10, Math.round(params.propensity.ratio ?? 1))),
+      },
       countreg: { ...params.countreg, dep: countDep, indeps: countIndeps },
       agreement: {
         ...params.agreement,
@@ -455,6 +570,29 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkList(params.glmm.indeps, 'GLMM: predictors', width, errors);
   checkOne(params.glmm.group, 'GLMM: group', width, errors);
   checkOne(params.glmm.slope, 'GLMM: random slope', width, errors, true);
+  checkOne(params.pls.dep, 'PLS: dependent variable', width, errors);
+  checkList(params.pls.indeps, 'PLS: predictors', width, errors);
+  checkOne(params.mars.dep, 'MARS: dependent variable', width, errors);
+  checkList(params.mars.indeps, 'MARS: predictors', width, errors);
+  checkOne(params.iv.dep, 'IV: outcome', width, errors);
+  checkList(params.iv.endog, 'IV: endogenous predictors', width, errors);
+  checkList(params.iv.instruments, 'IV: instruments', width, errors);
+  checkList(params.iv.exog, 'IV: exogenous predictors', width, errors);
+  checkOne(params.panel.dep, 'Panel: outcome', width, errors);
+  checkList(params.panel.indeps, 'Panel: predictors', width, errors);
+  checkOne(params.panel.entity, 'Panel: entity', width, errors);
+  checkOne(params.panel.time, 'Panel: time', width, errors);
+  checkOne(params.selection.dep, 'Selection: outcome', width, errors);
+  checkList(params.selection.indeps, 'Selection: predictors', width, errors);
+  checkOne(params.selection.selection, 'Selection: selection indicator', width, errors, true);
+  checkList(params.selection.selectIndeps, 'Selection: selection predictors', width, errors);
+  checkOne(params.mediation.outcome, 'Mediation: outcome', width, errors);
+  checkOne(params.mediation.predictor, 'Mediation: predictor', width, errors);
+  checkOne(params.mediation.mediator, 'Mediation: mediator', width, errors);
+  checkList(params.mediation.covariates, 'Mediation: covariates', width, errors);
+  checkOne(params.propensity.treatment, 'Propensity: treatment', width, errors);
+  checkOne(params.propensity.outcome, 'Propensity: outcome', width, errors);
+  checkList(params.propensity.covariates, 'Propensity: covariates', width, errors);
   checkOne(params.countreg.dep, 'Count Regression: outcome', width, errors);
   checkList(params.countreg.indeps, 'Count Regression: predictors', width, errors);
   checkList(params.agreement.columns, 'Agreement: measurements', width, errors);
@@ -650,6 +788,43 @@ export const validateAnalysisColumnRefs = (
       list(params.glmm.indeps, 'GLMM: predictors');
       one(params.glmm.group, 'GLMM: group');
       break;
+    case 'pls':
+      one(params.pls.dep, 'PLS: dependent variable');
+      list(params.pls.indeps, 'PLS: predictors');
+      break;
+    case 'mars':
+      one(params.mars.dep, 'MARS: dependent variable');
+      list(params.mars.indeps, 'MARS: predictors');
+      break;
+    case 'iv':
+      one(params.iv.dep, 'IV: outcome');
+      list(params.iv.endog, 'IV: endogenous predictors');
+      list(params.iv.instruments, 'IV: instruments');
+      list(params.iv.exog, 'IV: exogenous predictors');
+      break;
+    case 'panel':
+      one(params.panel.dep, 'Panel: outcome');
+      list(params.panel.indeps, 'Panel: predictors');
+      one(params.panel.entity, 'Panel: entity');
+      one(params.panel.time, 'Panel: time');
+      break;
+    case 'selection':
+      one(params.selection.dep, 'Selection: outcome');
+      list(params.selection.indeps, 'Selection: predictors');
+      one(params.selection.selection, 'Selection: selection indicator', true);
+      list(params.selection.selectIndeps, 'Selection: selection predictors');
+      break;
+    case 'mediation':
+      one(params.mediation.outcome, 'Mediation: outcome');
+      one(params.mediation.predictor, 'Mediation: predictor');
+      one(params.mediation.mediator, 'Mediation: mediator');
+      list(params.mediation.covariates, 'Mediation: covariates');
+      break;
+    case 'propensity':
+      one(params.propensity.treatment, 'Propensity: treatment');
+      one(params.propensity.outcome, 'Propensity: outcome');
+      list(params.propensity.covariates, 'Propensity: covariates');
+      break;
     case 'countreg':
       one(params.countreg.dep, 'Count Regression: outcome');
       list(params.countreg.indeps, 'Count Regression: predictors');
@@ -756,6 +931,29 @@ export const setPrimaryColumn = (
       return { params: { ...params, reg: { ...params.reg, dep: column } }, role: 'Regression outcome' };
     case 'logistic':
       return { params: { ...params, logistic: { ...params.logistic, outcome: column } }, role: 'Logistic outcome' };
+    case 'pls':
+      return { params: { ...params, pls: { ...params.pls, dep: column } }, role: 'PLS outcome' };
+    case 'mars':
+      return { params: { ...params, mars: { ...params.mars, dep: column } }, role: 'MARS outcome' };
+    case 'iv':
+      return { params: { ...params, iv: { ...params.iv, dep: column } }, role: 'IV outcome' };
+    case 'panel':
+      return { params: { ...params, panel: { ...params.panel, dep: column } }, role: 'Panel outcome' };
+    case 'selection':
+      return {
+        params: { ...params, selection: { ...params.selection, dep: column } },
+        role: 'Selection outcome',
+      };
+    case 'mediation':
+      return {
+        params: { ...params, mediation: { ...params.mediation, outcome: column } },
+        role: 'Mediation outcome',
+      };
+    case 'propensity':
+      return {
+        params: { ...params, propensity: { ...params.propensity, treatment: column } },
+        role: 'Propensity treatment',
+      };
     case 'countreg':
       return { params: { ...params, countreg: { ...params.countreg, dep: column } }, role: 'Count Regression outcome' };
     case 'ordinal':

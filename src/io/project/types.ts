@@ -340,6 +340,88 @@ export interface GlmmParams {
   slope: number;
 }
 
+/** Partial least squares regression (PLS1). */
+export interface PlsParams {
+  dep: number;
+  indeps: number[];
+  /** Number of latent components, 1..p. */
+  components: number;
+  /** Cross-validation folds; 0 disables the Q² estimate. */
+  cvFolds: number;
+}
+
+/** Multivariate adaptive regression splines (MARS). */
+export interface MarsParams {
+  dep: number;
+  indeps: number[];
+  /** Maximum interaction degree: 1 additive, 2 with two-way products. */
+  degree: number;
+  /** Maximum number of basis functions, intercept included. */
+  maxTerms: number;
+  /** GCV penalty per effective parameter (earth's `penalty`). */
+  penalty: number;
+  prune: boolean;
+}
+
+/** Two-stage least squares with excluded instruments. */
+export interface IvParams {
+  dep: number;
+  /** Endogenous regressors instrumented by `instruments`. */
+  endog: number[];
+  /** Excluded instruments. */
+  instruments: number[];
+  /** Included exogenous regressors (their own instruments). */
+  exog: number[];
+  /** HC1 heteroskedasticity-robust standard errors. */
+  robust: boolean;
+}
+
+/** Panel fixed-effects / random-effects model. */
+export interface PanelParams {
+  dep: number;
+  indeps: number[];
+  entity: number;
+  time: number;
+  model: 'fe' | 're' | 'both';
+}
+
+/** Tobit type-I censored regression and Heckman two-step selection. */
+export interface SelectionParams {
+  mode: 'tobit' | 'heckman';
+  dep: number;
+  indeps: number[];
+  lower: number;
+  /** `null` means no upper censoring. */
+  upper: number | null;
+  /** 0/1 selection indicator (Heckman only). */
+  selection: number;
+  selectIndeps: number[];
+}
+
+/** Baron–Kenny mediation with Sobel/delta and percentile bootstrap. */
+export interface MediationParams {
+  outcome: number;
+  predictor: number;
+  mediator: number;
+  covariates: number[];
+  /** Bootstrap replications; 0 disables the bootstrap interval. */
+  bootstrap: number;
+  seed: number;
+}
+
+/** Propensity-score matching and inverse-probability weighting. */
+export interface PropensityParams {
+  /** 0/1 treatment indicator. */
+  treatment: number;
+  outcome: number;
+  covariates: number[];
+  method: 'nearest' | 'ipw';
+  /** Caliper in SD of the logit propensity score; 0 = no caliper. */
+  caliper: number;
+  /** 1:k nearest-neighbour ratio. */
+  ratio: number;
+}
+
 /** Parametri della regressione per conteggi. */
 export interface CountParams {
   dep: number;
@@ -519,6 +601,13 @@ export interface ProjectParams {
   ordinal: OrdinalParams;
   lmm: LmmParams;
   glmm: GlmmParams;
+  pls: PlsParams;
+  mars: MarsParams;
+  iv: IvParams;
+  panel: PanelParams;
+  selection: SelectionParams;
+  mediation: MediationParams;
+  propensity: PropensityParams;
   countreg: CountParams;
   agreement: AgreementParams;
   tost: TostParams;
@@ -812,6 +901,59 @@ export const DEFAULT_PARAMS: ProjectParams = {
     family: 'gaussian',
     link: 'identity',
     slope: -1,
+  },
+  pls: {
+    dep: 0,
+    indeps: [1, 2],
+    components: 2,
+    cvFolds: 5,
+  },
+  mars: {
+    dep: 0,
+    indeps: [1, 2],
+    degree: 1,
+    maxTerms: 21,
+    penalty: 2,
+    prune: true,
+  },
+  iv: {
+    dep: 0,
+    endog: [1],
+    instruments: [2],
+    exog: [],
+    robust: false,
+  },
+  panel: {
+    dep: 0,
+    indeps: [],
+    entity: 2,
+    time: 1,
+    model: 'both',
+  },
+  selection: {
+    mode: 'tobit',
+    dep: 0,
+    indeps: [1],
+    lower: 0,
+    upper: null,
+    selection: -1,
+    selectIndeps: [],
+  },
+  mediation: {
+    outcome: 0,
+    predictor: 1,
+    mediator: 2,
+    covariates: [],
+    bootstrap: 1000,
+    seed: 20261103,
+  },
+  propensity: {
+    treatment: 0,
+    outcome: 1,
+    covariates: [2],
+    method: 'nearest',
+    caliper: 0.2,
+    ratio: 1,
   },
   countreg: {
     dep: 0,

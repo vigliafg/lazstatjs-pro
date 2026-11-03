@@ -18,6 +18,12 @@ export const HEAVY_ANALYSIS_IDS = [
   'nonlinear',
   'multinomial',
   'glmm',
+  'pls',
+  'mars',
+  'panel',
+  'selection',
+  'mediation',
+  'propensity',
 ] as const;
 
 export type HeavyAnalysisId = (typeof HEAVY_ANALYSIS_IDS)[number];

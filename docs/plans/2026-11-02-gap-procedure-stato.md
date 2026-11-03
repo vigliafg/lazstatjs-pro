@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W2 chiusa, gate G2 verde)
+**Ultimo aggiornamento**: 2026-11-03 (W3: 7/7 item con test verdi; restano traduzioni e gate G3)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0, W1 e W2 chiuse; gate G0, G1 e G2 verdi
-**Prossima ondata**: W3 — Regressione avanzata
+**Stato**: W0, W1 e W2 chiuse; W3 numericamente completa; gate G0, G1 e G2 verdi
+**Ondata corrente**: W3 — Regressione avanzata (7 item)
 
 ---
 
@@ -31,17 +31,17 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W2 quase chiusa: 11/12 metodi |
+| Ondata corrente | W3 chiusa (gate G3 verde); prossima W4 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `863029b` (C-10, GLMM) |
-| Ultimo commit documentale | `09ec811` (handoff pre-compattazione) |
-| Test | `npm run check` verde; `npm test` 1068/1068 verdi; `npm run test:samples` 7/7; locale check 6/6 |
-| Item chiusi | 26 / 73 |
-| Nuove voci | 7 / 36 (`proportions`, `variances`, `glm`, `quantile`, `nonlinear`, `multinomial`, `glmm`) |
+| Ultimo commit di codice | commit W3 su `feat/gap-wave-1` (vedi registro §6) |
+| Ultimo commit documentale | `3b5284d` (fallback reference W3) |
+| Test | `npm run check` verde; `npm test` 1161/1161 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Item chiusi | 33 / 73; W3 chiusa |
+| Nuove voci | 14 / 36 (W2 + `pls`, `mars`, `iv`, `panel`, `selection`, `mediation`, `propensity`) |
 | Estensioni | 20 / 37 |
-| Reference baseline | 35 / 35 procedure statistiche (W0-09 chiuso) |
+| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 |
 | Blocchi | nessuno |
-| Prossimo gate | G3 — fine W3 (regressione avanzata) |
+| Prossimo gate | G4 — fine W4 (categorical + MI categorica) |
 
 ---
 
@@ -52,7 +52,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | W0 | Fondazioni condivise + retrofit | — | — | **chiusa** (G0 verde) | G0 |
 | W1 | Descriptive + test di base | 14 | 2 | **chiusa** (G1 verde) | G1 |
 | W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | **chiusa** (G2 verde) | G2 |
-| W3 | Regressione avanzata | 7 | 7 | pronta a partire | G3 |
+| W3 | Regressione avanzata | 7 | 7 | **chiusa** (G3 verde) | G3 |
 | W4 | Categorical + MI categorica | 5 | 1 | non iniziata | G4 |
 | W5 | Multivariate avanzata | 8 | 7 | non iniziata | G5 |
 | W6 | Survival e affidabilità | 8 | 4 | non iniziata | G6 |
@@ -68,7 +68,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---:|---:|---|
 | Descriptive | 5 | 8 | in corso (D-01…D-04, Q-04) |
 | Compare groups | 11 | 11 | **chiusa** (C-01…C-11) |
-| Regression | 8 | 15 | in corso (R-01…R-08) |
+| Regression | 15 | 15 | **chiusa** (R-01…R-15) |
 | Multivariate | 0 | 8 | non iniziata |
 | Categorical | 0 | 4 | non iniziata |
 | Survival | 0 | 8 | non iniziata |
@@ -77,7 +77,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | Missing data | 0 | 2 | non iniziata |
 | Machine Learning | 0 | 3 | non iniziata |
 | Advanced & Bayesian | 0 | 3 | non iniziata |
-| **Totale** | **26** | **73** |  |
+| **Totale** | **33** | **73** |  |
 
 ---
 
@@ -372,6 +372,56 @@ non serve a test-time.
 - `quine` ha 2 gruppi `Eth`: per il GLMM resta un campione valido ma poco
   informativo; i riferimenti forti sono `sleepstudy` e `birthwt`.
 
+## 5e. Ondata W3 — avanzamento (2026-11-03)
+
+Apertura di W3 dopo la decisione sulle reference (§5d). Nessuna installazione
+R nuova. Stato dei cantieri:
+
+| Item | Stato | Note |
+|---|---|---|
+| R-09 PLS | **test verdi** | kernel `pls.ts`, reference `pls::plsr(oscorespls)`, 14/14 test, scarti ≤ 2.3e-11 |
+| R-10 MARS | **test verdi** | kernel `mars.ts`, reference `earth`, 13/13 test, scarti ≤ 6.7e-13 |
+| R-11 IV/2SLS | **test verdi** | kernel `iv.ts`, reference `AER::ivreg` + HC1, 11/11 test, scarti ≤ 1e-13 |
+| R-12 Panel FE/RE | **test verdi** | kernel `panel.ts`, reference `plm` (within/random + Hausman), 15/15 test |
+| R-13 Tobit/Heckman | **test verdi** | kernel `tobit.ts`, reference `AER::tobit` + base R two-step, 18/18 test |
+| R-14 Mediazione | **test verdi** | kernel `mediation.ts`, reference `lavaan`, bootstrap per proprietà, 8/8 test |
+| R-15 Propensity | **test verdi** | kernel `propensity.ts`, reference `MatchIt` + base R IPW, 14/14 test |
+
+Integrazione condivisa già fatta: tipi/default, parsing, normalizzazione,
+validazione, ruoli, registry, runners, worker, `AnalysisForm`, i18n meta/form,
+help 6 lingue, sample manifest e quattro dataset simulati
+(`iv_demo`, `panel_demo`, `selection_demo`, `treatment_demo`).
+
+Chiusure finali prima di G3:
+
+- traduzioni `reportCopy` completate per `de`, `fr`, `es`, `pt-PT`: 3309/3309
+  frasi in ciascuna lingua (`w3-regression.ts` e `w3-econometrics.ts` per
+  locale, agganciati nei rispettivi `catalog/<loc>/index.ts`);
+- due chiavi inglesi stantie (varianti superate delle frasi panel su errori
+  standard) rimosse da tutti i cataloghi: il test `reportCopy` le segnalava
+  come non usate;
+- eccezioni di `scripts/check-file-size.mjs` aggiornate per i file condivisi
+  cresciuti (`types` 1038, `parse` 872, `params` 1023, `roles` 1005);
+- `ANALYSIS_CHART_KINDS` esteso ai 7 nuovi item; rimosso
+  `src/analyses/panel/probe.ts`; helper `isFailure` nel test panel per il
+  narrowing TS.
+
+Gate G3 (2026-11-03):
+
+| Verifica | Esito |
+|---|---|
+| `npx tsc --noEmit` | pulito |
+| `npm test` | **1161/1161** verdi |
+| `npm run test:samples` | 7/7 verdi |
+| `npm run depcruise` | nessuna violazione (919 moduli) |
+| `npm run madge` | nessuna dipendenza circolare |
+| `npm run filesize` | 903 file sotto 700 righe, 8 eccezioni |
+| `node scripts/check-locale.mjs` it/en/de/fr/es/pt-PT | 6/6 "translation wave complete" |
+
+Nota dataset: `selection_demo` è stato rigenerato con intercette più basse
+(133 censurati su 450, 243 selezionati); la fixture `tobit.json` è stata
+rigenerata sui dati reali e i 18 test selection restano verdi.
+
 ## 6. Registro checkpoint
 
 | Data | Checkpoint | Commit | Test | Esito | Note |
@@ -384,6 +434,7 @@ non serve a test-time.
 | 2026-11-03 | Handoff pre-compattazione | `bccd8bd` | `npm run check` verde (ultima esecuzione) | verde | W1 chiusa; W2 pianificata con batch di 3 subagenti; nessun file W2 scritto |
 | 2026-11-03 | Checkpoint W2 (11/12) | `7bf4e84` | `npm run check` 1052/1052 + `test:samples` 7/7 + locale 6/6 | verde | C-08/C-09/C-11, R-01…R-08 tranne C-10; 4 nuove voci; 10 reference; G2 non dichiarato |
 | 2026-11-03 | Chiusura W2 / G2 | `863029b` + `3ff1b34` + `7bfb8f4` | `npm run check` 1068/1068 + `test:samples` 7/7 + locale 6/6 | verde | C-10 GLMM Laplace + `lmm` random slope; 26/73 metodi, 7/36 voci, 20/37 estensioni |
+| 2026-11-03 | Chiusura W3 / G3 | commit W3 (hash in allineamento) | `npm run check` 1161/1161 + `test:samples` 7/7 + locale 6/6 | verde | R-09…R-15 (7/7); 33/73 metodi, 14/36 voci; traduzioni reportCopy 5 lingue complete |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -393,7 +444,62 @@ non serve a test-time.
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
 
-### Handoff — 2026-11-03 / chiusura W2 (G2 verde)
+### Handoff — 2026-11-03 / chiusura W3 (G3 verde)
+
+- Ondata: W3 chiusa, gate G3 verde; prossima W4 (categorical + MI categorica).
+- Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
+- Ultimo commit: commit W3 su `feat/gap-wave-1` (hash in allineamento);
+  base documentale `3b5284d`.
+- Item chiusi (ID): W1, W2 complete; W3 completa — R-09 PLS, R-10 MARS,
+  R-11 IV/2SLS, R-12 panel FE/RE, R-13 Tobit/selection, R-14 mediazione,
+  R-15 propensity score.
+- Item in corso (ID): nessuno.
+- Item bloccati (ID + motivo): nessuno.
+- Test eseguiti e risultato: `npm run check` **verde** (1161/1161 test, tsc,
+  depcruise, madge, file size); `npm run test:samples` 7/7; locale check 6/6
+  ("translation wave complete" per it/en/de/fr/es/pt-PT).
+- File/moduli toccati: contratti condivisi `types/parse/params/roles/
+  paramsSnapshot/registry/runners/AnalysisForm/worker/analysisKinds`; kernel
+  `pls`, `mars`, `iv`, `panel`, `tobit`, `mediation`, `propensity`; tabelle e
+  report dedicati; voci `analyses/{pls,mars,iv,panel,selection,mediation,
+  propensity}`; help `w3-*.ts` in 6 lingue; cataloghi `reportCopy`
+  `w3*` in 6 lingue; `samples/generate.R` e manifest con 4 dataset; fixture
+  reference `pls`, `mars`, `iv`, `panel`, `selection`, `tobit`, `mediation`,
+  `propensity`.
+- Decisioni prese / deviazioni dal piano:
+  - nessuna installazione R: Tobit `AER::tobit`; Heckman base R two-step;
+    mediazione `lavaan` (SE delta/ML) + bootstrap per proprietà; propensity
+    `MatchIt` con confronto su ATT e bilanciamento.
+  - Heckman solo two-step; ML dichiarato fuori scope.
+  - R-13 usa `kernels/tobit.ts` per non collidere con la selezione stepwise
+    di R-01; la voce resta `selection`.
+  - `selection_demo` rigenerato (133 censurati su 450, 243 selezionati).
+- Prossimi 3 passi:
+  1. Aprire W4: C-12…C-16 (categorical) e MI categorica, partendo dalla
+     verifica delle reference R disponibili (`nnet`, `MASS`, `mice`).
+  2. Applicare lo stesso flusso kernel + reference + voce/UI + help/i18n,
+     con subagenti paralleli su file dedicati.
+  3. Chiudere G4 con `npm run check`, `test:samples` e locale check.
+- Domande aperte: nessuna.
+- Rischi attivi: bootstrap mediazione non confrontabile punto-punto con R
+  (validazione per proprietà); Heckman ML fuori scope; panel senza GMM
+  dinamici; propensity senza stimatori doubly robust.
+
+### Riassunto di 10 righe — W3
+
+1. Ondata e obiettivo: W3 chiusa, G3 verde; 33/73 metodi.
+2. Cosa è chiuso: 33 metodi, 14 voci nuove, 20 estensioni.
+3. Cosa è in corso: nulla; W4 pronta a partire.
+4. Cosa è bloccato: nulla.
+5. Ultimo commit: commit W3 su `feat/gap-wave-1`.
+6. Test: `npm run check` 1161/1161; sample 7/7; locale 6/6.
+7. Decisioni: nessuna installazione R; Heckman two-step; mediazione/propensity
+   con reference disponibili e limiti dichiarati.
+8. Prossimi 3 passi: aprire W4, implementare C-12…C-16 + MI categorica, G4.
+9. Domande: nessuna.
+10. Rischi: inferenza dei metodi non-ML validata per proprietà, non punto-punto.
+
+### Handoff — 2026-11-03 / chiusura W2 (G2 verde) — storico
 
 - Ondata: W2 chiusa, gate G2 verde; prossima W3 (regressione avanzata).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
@@ -429,7 +535,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 - Rischi attivi: il bootstrap della mediazione non è confrontabile punto per
   punto con R (validazione per proprietà); Heckman ML resta fuori scope.
 
-### Riassunto di 10 righe
+### Riassunto di 10 righe — W2 (storico)
 
 1. Ondata e obiettivo: W2 chiusa, G2 verde; 26/73 metodi.
 2. Cosa è chiuso: 26 metodi, 7 voci nuove, 20 estensioni.

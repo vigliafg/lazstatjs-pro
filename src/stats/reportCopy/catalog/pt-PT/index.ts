@@ -37,6 +37,8 @@ import { ttestCopy } from './ttest';
 import { wizardCopy } from './wizard';
 import { w2Copy } from './w2';
 import { w3Copy } from './w3';
+import { w3RegressionCopy } from './w3-regression';
+import { w3EconometricsCopy } from './w3-econometrics';
 import { proportionsCopy as ptProportionsCopy } from './proportions';
 import { variancesCopy as ptVariancesCopy } from './variances';
 
@@ -78,4 +80,6 @@ export const ptPTReportCopy: Record<string, string> = {
   ...ptVariancesCopy,
   ...w2Copy,
   ...w3Copy,
+  ...w3RegressionCopy,
+  ...w3EconometricsCopy,
 };

@@ -45,6 +45,8 @@ import { ptPTReportCopy } from './pt-PT';
 import { wizardCopy } from './en/wizard';
 import { w2Copy as enW2Copy } from './en/w2';
 import { w3Copy as enW3Copy } from './en/w3';
+import { w3RegressionCopy as enW3RegressionCopy } from './en/w3-regression';
+import { w3EconometricsCopy as enW3EconometricsCopy } from './en/w3-econometrics';
 
 export const enReportCopy: Record<string, string> = {
   ...agreementCopy,
@@ -84,6 +86,8 @@ export const enReportCopy: Record<string, string> = {
   ...enVariancesCopy,
   ...enW2Copy,
   ...enW3Copy,
+  ...enW3RegressionCopy,
+  ...enW3EconometricsCopy,
 };
 
 const CATALOGS: Partial<Record<ReportLocale, Record<string, string>>> = {

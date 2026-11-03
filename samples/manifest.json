@@ -652,7 +652,10 @@
         "discriminant",
         "doe",
         "glm",
-        "quantile"
+        "quantile",
+        "pls",
+        "mars",
+        "mediation"
       ],
       "examples": [
         {
@@ -810,6 +813,42 @@
             "mode": "penalized",
             "penalty": "lasso",
             "lambda": 0.1
+          }
+        },
+        {
+          "analysis": "pls",
+          "columns": {
+            "dependent": "mpg",
+            "predictors": [
+              "wt",
+              "hp",
+              "disp",
+              "qsec"
+            ]
+          },
+          "options": {
+            "components": 3,
+            "cvFolds": 5
+          }
+        },
+        {
+          "analysis": "mars",
+          "columns": {
+            "dependent": "mpg",
+            "predictors": [
+              "wt",
+              "hp",
+              "disp",
+              "qsec"
+            ]
+          }
+        },
+        {
+          "analysis": "mediation",
+          "columns": {
+            "outcome": "mpg",
+            "predictor": "hp",
+            "mediator": "wt"
           }
         }
       ],
@@ -1693,6 +1732,319 @@
         }
       ],
       "notes": "100 observations in five categories, designed to show a goodness-of-fit test against equal shares."
+    },
+    {
+      "id": "iv_demo",
+      "title": "Instrumental-variables demo",
+      "family": "regression",
+      "dir": "regression/iv_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 220,
+      "columns": [
+        "Y",
+        "X",
+        "Z1",
+        "Z2",
+        "W"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "iv",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "iv",
+          "columns": {
+            "dependent": "Y",
+            "endogenous": "X",
+            "instruments": [
+              "Z1",
+              "Z2"
+            ],
+            "exogenous": "W"
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Y",
+            "predictors": [
+              "W",
+              "X"
+            ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Y",
+              "X",
+              "W"
+            ]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": [
+              "Y",
+              "X",
+              "Z1",
+              "W"
+            ]
+          }
+        }
+      ],
+      "notes": "220 observations with an endogenous regressor X, two excluded instruments and one exogenous control."
+    },
+    {
+      "id": "panel_demo",
+      "title": "Balanced panel demo",
+      "family": "regression",
+      "dir": "regression/panel_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 300,
+      "columns": [
+        "ID",
+        "Time",
+        "Y",
+        "X1",
+        "X2"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "panel",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "panel",
+          "columns": {
+            "dependent": "Y",
+            "predictors": [
+              "X1",
+              "X2"
+            ],
+            "entity": "ID",
+            "time": "Time"
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Y",
+            "predictors": [
+              "X1",
+              "X2"
+            ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Y",
+              "X1",
+              "X2"
+            ]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": [
+              "Y",
+              "X1",
+              "X2"
+            ]
+          }
+        }
+      ],
+      "notes": "30 entities observed for 10 periods, with a persistent entity effect and two time-varying predictors."
+    },
+    {
+      "id": "selection_demo",
+      "title": "Tobit and Heckman selection demo",
+      "family": "regression",
+      "dir": "regression/selection_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 450,
+      "columns": [
+        "Wage",
+        "Wage_obs",
+        "Selected",
+        "Education",
+        "Experience",
+        "Kids"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "selection",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "selection",
+          "columns": {
+            "dependent": "Wage",
+            "predictors": [
+              "Education",
+              "Experience"
+            ]
+          }
+        },
+        {
+          "analysis": "selection",
+          "columns": {
+            "dependent": "Wage_obs",
+            "predictors": [
+              "Education",
+              "Experience"
+            ],
+            "selection": "Selected",
+            "selectionPredictors": [
+              "Education",
+              "Experience",
+              "Kids"
+            ]
+          },
+          "options": {
+            "mode": "heckman"
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Wage",
+            "predictors": [
+              "Education",
+              "Experience"
+            ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Wage",
+              "Wage_obs",
+              "Education",
+              "Experience"
+            ]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": [
+              "Wage",
+              "Education",
+              "Experience"
+            ]
+          }
+        }
+      ],
+      "notes": "450 observations with a lower-censored wage for Tobit and a 0/1 selection indicator with the Kids exclusion restriction for Heckman."
+    },
+    {
+      "id": "treatment_demo",
+      "title": "Propensity-score demo",
+      "family": "regression",
+      "dir": "regression/treatment_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 600,
+      "columns": [
+        "Treatment",
+        "Outcome",
+        "Age",
+        "Score",
+        "Sex"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "propensity",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "propensity",
+          "columns": {
+            "treatment": "Treatment",
+            "outcome": "Outcome",
+            "covariates": [
+              "Age",
+              "Score",
+              "Sex"
+            ]
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Outcome",
+            "predictors": [
+              "Treatment",
+              "Age",
+              "Score"
+            ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Outcome",
+              "Age",
+              "Score"
+            ]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": [
+              "Outcome",
+              "Age",
+              "Score"
+            ]
+          }
+        }
+      ],
+      "notes": "600 observations with a binary treatment assigned by a known propensity score and a continuous outcome."
     }
   ]
 }

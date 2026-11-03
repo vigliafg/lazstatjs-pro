@@ -1,4 +1,4 @@
-/** English: W3 report and table prose (GLMM). */
+/** English prose of the W3 GLMM report and its tables. */
 export const w3Copy: Record<string, string> = {
   'Binomiale':
     'Binomial',
