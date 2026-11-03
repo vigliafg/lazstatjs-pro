@@ -54,29 +54,71 @@ l'agente deve:
 
 Il protocollo completo è nel piano, §16.
 
+## Economia del contesto
+
+Obiettivo: ridurre il consumo di token **senza** ridurre la qualità. Le regole
+valgono per ogni ondata e ogni sessione.
+
+1. **Test mirati durante gli step, gate completo solo alla fine.**
+   - Durante l'implementazione eseguire solo i test dei file toccati.
+   - `npm run check`, `npm run test:samples` e locale check si eseguono al gate
+     di fine ondata o dopo una modifica ai contratti condivisi.
+   - Non rieseguire il gate completo dopo modifiche solo a documentazione,
+     help o cataloghi già coperti da un test mirato.
+2. **Lettura selettiva.**
+   - Prima `grep -n`, `wc -l`, `git diff --stat`; poi `sed -n` sulle sole righe
+     utili.
+   - Non rileggere file già visti e non stampare interi file oltre ~200 righe
+     se basta un intervallo.
+3. **Output filtrati.**
+   - Usare `tail`, `grep`, `head` su test, build e diff.
+   - Riportare solo esito ed errori reali; niente dump di log o diff enormi
+     nella risposta finale.
+4. **Call indipendenti in parallelo e niente ripetizioni.**
+   - Raggruppare le verifiche indipendenti in una sola tornata.
+   - Non rilanciare lo stesso comando "per sicurezza" se nulla è cambiato.
+5. **Sample e generazioni massive.**
+   - Non rigenerare tutti i sample se servono solo dataset nuovi.
+   - Dopo `samples/generate.R` ripristinare i binari invariati e tenere solo i
+     file nuovi più il manifest.
+6. **Script per il lavoro ripetitivo.**
+   - Translation, codemod e parsing di massa vanno fatti con uno script una
+     tantum, revisionato, non con centinaia di edit manuali.
+7. **Checkpoint frequenti.**
+   - Commit piccoli a fine step significativo e stato aggiornato nel documento
+     di handoff: il contesto si compatta senza rileggere tutto.
+8. **Risposte finali brevi.**
+   - Cosa è cambiato, test, commit. Il dettaglio resta nei documenti e nei
+     commit.
+9. **Fermarsi quando basta per agire.**
+   - Evitare letture speculative e refactor non richiesti; riusare pattern e
+     helper esistenti.
+10. **Un solo scrittore.**
+    - L'agente principale è l'unico che modifica i file. Vedi §Subagenti.
+
 ## Subagenti
 
-Quando i compiti sono separabili, usare **2–3 subagenti in parallelo**. Regole:
+**Niente subagenti paralleli in scrittura.** L'agente principale è l'unico
+scrittore della sessione: questo elimina merge, ownership ambigua e rework di
+integrazione, che sono la principale fonte di token sprecati.
 
-1. **Proprietario unico**: ogni file ha un solo scrittore per sessione.
-2. I file condivisi (registry, tipi/parse dei parametri, `params.ts`,
+1. I subagenti in **sola lettura** (`explore`, `council-*`) sono ammessi solo se
+   costano meno della lettura diretta: al massimo un `explore` per mappare file
+   che richiederebbero molte letture, e i `council-*` solo alla revisione del
+   gate.
+2. Non delegare a un subagente scrittura di kernel, tabelle, report, form,
+   test, traduzioni, help o integrazione.
+3. I file condivisi (registry, tipi/parse dei parametri, `params.ts`,
    `roles.ts`, `runners.ts`, `AnalysisForm.tsx`, cataloghi i18n, help, piano)
-   sono **solo dell'agente principale**.
-3. I subagenti lavorano su file nuovi o dedicati: kernel + test, tabelle,
-   report, script/fixture R, nuova voce di analisi.
-4. Se due compiti toccano lo stesso file, si serializzano: niente merge
-   creativo.
-5. Ogni incarico dichiara perimetro file, reference, tolleranza, test e
-   criterio di stop, e **il modello esplicito**: i subagenti che scrivono
-   kernel/tabelle/report usano lo stesso modello dell'agente principale
-   (`opencode-go/deepseek-v4.1-flash`), non il default dei subagenti.
-   `explore` resta sul modello veloce; i `council-*` restano sui loro modelli
-   per la revisione indipendente.
-6. Un subagente non chiude un item: la chiusura passa dal gate dell'agente
-   principale (`npm run check`, help/i18n, sample).
-7. Non delegare decisioni di prodotto/architettura, azioni distruttive, bump di
-   versione, aggiornamento dello stato.
-8. Worktree separati solo per rami davvero indipendenti; altrimenti stesso
-   albero con file ownership.
+   sono **sempre** dell'agente principale.
+4. Se un subagente in lettura viene usato, l'incarico dichiara perimetro,
+   domanda e criterio di stop; la risposta richiesta è breve e l'agente
+   principale verifica con test mirati.
+5. Non delegare decisioni di prodotto/architettura, azioni distruttive, bump di
+   versione o aggiornamento dello stato.
+6. Worktree separati solo per rami davvero indipendenti; altrimenti stesso
+   albero con un solo scrittore.
 
-Dettagli nel piano, §17.
+Dettagli nel piano, §17. In caso di conflitto, valgono le regole di questo
+documento.
+

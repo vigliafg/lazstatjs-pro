@@ -1159,13 +1159,14 @@ Totale: **14 checkpoint obbligatori** + checkpoint liberi ogni 2-3 item.
 
 ## 17. Uso dei subagenti (regole vincolanti)
 
-Obiettivo: usare **2–3 subagenti in parallelo quando i compiti sono davvero
-separabili**, senza scaricare sull'utente il costo dei conflitti.
+Obiettivo: **un solo scrittore** e subagenti solo in lettura, quando costano
+meno della lettura diretta. Le regole di economia del contesto sono in
+`AGENTS.md` e prevalgono in caso di conflitto.
 
 ### 17.1 Regola del proprietario unico
 
-Ogni file ha **un solo scrittore per sessione**. I file condivisi sono di
-competenza esclusiva dell'agente principale:
+Ogni file ha **un solo scrittore per sessione**: l'agente principale. I file
+condivisi sono di competenza esclusiva dell'agente principale:
 
 - `src/analyses/registry.ts`;
 - `src/io/project/{types,parse}.ts`;
@@ -1175,49 +1176,35 @@ competenza esclusiva dell'agente principale:
 - help book (`src/help/content/*`, `order.ts`);
 - `package.json`, `AGENTS.md`, documenti di piano.
 
-I subagenti lavorano solo su **file nuovi o dedicati**:
-
-- `src/stats/kernels/<metodo>.ts` + test;
-- `src/stats/tables/<metodo>.ts`;
-- `src/stats/reports/<metodo>.ts`;
-- `src/stats/reference/r/*.R` e `fixtures/*.json`;
-- `src/analyses/<nuova-voce>/run.tsx` e `Form.tsx` (solo per voci nuove, mai
-  per estendere una procedura esistente).
-
-Se due compiti toccano lo stesso file, **si serializzano**: niente merge
-creativo.
+I subagenti **non scrivono** kernel, tabelle, report, form, test, traduzioni,
+help o integrazione. Se un compito tocca più file, si serializza nel main.
 
 ### 17.2 Schema per ondata
 
-1. `explore` in parallelo: mappa di impatto (quali file tocca ogni item) e
-   ricognizione dei pattern; sola lettura.
-2. 2–3 `general` in parallelo: un metodo per agente sui file isolati, con
-   perimetro esplicito.
-3. `council-luna` / `council-glm` in sola lettura: revisione dei kernel e dei
-   reference prima del merge.
-4. Agente principale, in serie: integrazione nei file condivisi, help e i18n,
-   `npm run check`, aggiornamento dello stato, commit.
+1. Agente principale: ricognizione diretta con `grep -n`, `wc -l` e `sed -n`.
+   Un solo `explore` in lettura è ammesso se evita molte letture manuali.
+2. Agente principale, un item alla volta: kernel + test mirato → tabelle/report
+   → form/run → integrazione nei file condivisi → test mirato.
+3. `council-luna` / `council-glm` in sola lettura: solo alla revisione del
+   gate, non durante l'implementazione.
+4. Agente principale: gate completo (`npm run check`, `test:samples`, locale
+   check), aggiornamento dello stato, commit e push.
 
-### 17.3 Contratto per ogni subagente
+### 17.3 Contratto per un subagente in lettura
 
-Ogni incarico deve dichiarare:
+Se viene usato, l'incarico dichiara:
 
-- perimetro esatto dei file (nessun altro file);
-- reference indipendente e tolleranza attesa;
-- test che devono passare;
-- criterio di stop (quando fermarsi e riportare, senza allargare il perimetro);
-- **modello esplicito**: i subagenti che scrivono kernel/tabelle/report usano lo
-  stesso modello dell'agente principale (`opencode-go/deepseek-v4.1-flash`),
-  passato nel campo `model`. Non si eredita il default dei subagenti.
-  `explore` resta sul modello veloce (sola lettura); `council-luna` e
-  `council-glm` restano sui loro modelli, per garantire una revisione
-  indipendente.
+- perimetro esatto dei file o della domanda;
+- cosa cercare e perché la lettura diretta costerebbe di più;
+- criterio di stop;
+- risposta breve: file/righe rilevanti, rischi, nessuna proposta di modifica.
 
-Un subagente **non chiude un item**: la chiusura richiede il gate dell'agente
-principale (`npm run check` + reference + help/i18n + sample).
+L'agente principale verifica sempre con test mirati e resta l'unico a
+modificare i file.
 
 ### 17.4 Cosa non delegare
 
+- Scrittura di codice, test, traduzioni, help o documenti.
 - Decisioni di prodotto o architettura.
 - Modifiche distruttive o irreversibili.
 - Bump di versione e release.
@@ -1227,5 +1214,12 @@ principale (`npm run check` + reference + help/i18n + sample).
 ### 17.5 Worktree
 
 Worktree separati solo per rami davvero indipendenti. Per le ondate normali si
-usa lo stesso albero con la regola del proprietario unico: meno merge, meno
-conflitti, stessa velocità.
+usa lo stesso albero con un solo scrittore: meno merge, meno conflitti, meno
+token sprecati.
+
+### 17.6 Economia del contesto
+
+Test mirati durante gli step e gate completo solo a fine ondata; lettura
+selettiva e output filtrati; niente rigenerazioni massive dei sample; script
+una tantum per il lavoro ripetitivo; checkpoint e risposte finali brevi.
+Dettaglio vincolante in `AGENTS.md`, sezione “Economia del contesto”.

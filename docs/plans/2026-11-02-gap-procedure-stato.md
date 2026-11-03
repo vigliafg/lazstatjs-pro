@@ -531,6 +531,10 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
   - N-01 imputa solo categorie osservate con pooling di Rubin sulle
     proporzioni; FIML resta fuori scope fino a M-05.
   - Reference `mice` confrontata sulla distribuzione pooled (tolleranza 0.06).
+  - Regole operative aggiornate: `AGENTS.md` “Economia del contesto” e piano
+    §17 impongono un solo scrittore e nessun subagente parallelo in scrittura;
+    i subagenti restano solo in lettura quando costano meno della lettura
+    diretta. Test mirati durante gli step, gate completo solo a fine ondata.
 - Prossimi 3 passi:
   1. Aprire W5: M-01…M-08 (cluster, CCA, MDS, correspondence, SEM/CFA,
      latent class, IRT, conjoint), verificando `lavaan`, `poLCA`, `mirt`,
