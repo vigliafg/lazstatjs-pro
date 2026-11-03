@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ANALYSIS_CHART_KINDS, chartKindsFor } from './analysisKinds';
 import { CHART_KINDS } from '../stats/charts';
@@ -23,12 +23,28 @@ test('every analysis in the registry has a declared chart-kind list', () => {
   assert.deepEqual(missing, [], `missing chart kinds:\n${missing.join('\n')}`);
 });
 
+/** Charts can also be emitted by sub-runners, not just by `run.tsx`. */
+const runnerSources = (analysisId: string): string => {
+  const files: string[] = [];
+  const walk = (directory: string) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) walk(path);
+      else if (/\\.(ts|tsx)$/.test(entry.name) && !/\\.(test|spec)\\.(ts|tsx)$/.test(entry.name)) {
+        files.push(path);
+      }
+    }
+  };
+  walk(join('src/analyses', analysisId));
+  return files.map(file => readFileSync(file, 'utf8')).join('\n');
+};
+
 test('the declared kinds cover the literals emitted by each runner', () => {
   for (const [analysisId, kinds] of Object.entries(ANALYSIS_CHART_KINDS)) {
     if (analysisId === 'wizard') continue;
-    const source = readFileSync(join('src/analyses', analysisId, 'run.tsx'), 'utf8');
+    const source = runnerSources(analysisId);
     const literals = new Set(
-      [...source.matchAll(/kind: '([a-z]+)'/g)].map(match => match[1])
+      [...source.matchAll(/makeChart\(\{[\s\S]{0,4000}?kind: '([a-z]+)'/g)].map(match => match[1])
     );
     for (const literal of literals) {
       assert.ok(

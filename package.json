@@ -38,6 +38,7 @@
     "test:electron": "node scripts/smoke-electron.mjs",
     "test:samples": "node --import tsx --test src/io/samples.test.ts",
     "samples:generate": "Rscript samples/generate.R",
+    "chart:inventory": "node scripts/chart-inventory.mjs",
     "bench:grid": "node --import tsx scripts/bench-grid.mjs",
     "bench:kernels": "node --import tsx scripts/bench-kernels.mjs",
     "help:build": "node --import tsx scripts/build-help.mjs",

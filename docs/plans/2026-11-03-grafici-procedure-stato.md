@@ -3,10 +3,10 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (baseline)
-- **Fase corrente**: F0.1 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F0.1 chiusa)
+- **Fase corrente**: F0.2 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
-- **Branch**: `main` (creare `grafici-procedure` prima di F0.1)
+- **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
 - **Versione**: `0.19.0`
 
@@ -55,7 +55,7 @@ con motivo.
 
 | Fase | Contenuto | Tempo | Stato | Commit | Test |
 |---|---|---:|---|---|---|
-| F0.1 | Inventario, guardrail, stato | 60 | ⬜ | — | — |
+| F0.1 | Inventario, guardrail, stato | 60 | ✅ | `feat(charts): F0.1 inventario grafici e guardrail su sub-runner` | 8 test mirati + `npm run check` verdi |
 | F0.2 | 3 varianti JMP (`forest`, `survival`, `line`) | 60 | ⬜ | — | — |
 | F1.1a | `factorial`: medie di cella | 45 | ⬜ | — | — |
 | F1.1b | `recurrent`: mean cumulative function | 45 | ⬜ | — | — |
@@ -133,6 +133,9 @@ sotto-blocco aperto):
 | 2026-11-03 | piano | `tdcox` resta a 1 grafico (forest log) | il kernel non espone β(t); niente grafici finti |
 | 2026-11-03 | piano | `competing` resta a 2 grafici (CIF + forest) | modello stimato per una causa alla volta |
 | 2026-11-03 | piano | MSA: `msa-variance` resta l'unico grafico delle componenti; si aggiunge il profilo parte × operatore | il dettaglio per operatore non è scomposto dal kernel |
+| 2026-11-03 | F0.1 | `enChartCopy` include `en/charts-l4.ts` e il nuovo `en/charts-f0.ts` | senza il merge le card L4 in inglese ricadevano sull'italiano |
+| 2026-11-03 | F0.1 | `copy.test.ts` verifica la catena reale di `copy()` (`enChartCopy` → `enReportCopy`) | molte stringhe dei runner sono già tradotte nel catalogo del report |
+| 2026-11-03 | F0.1 | Le 211 stringhe EN mancanti stanno in un file per ondata (`en/charts-f0.ts`) | i cataloghi esistenti sono già al limite di 700 righe |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -147,16 +150,30 @@ sotto-blocco aperto):
 
 ### F0.1 — Inventario, guardrail, stato
 
-- **Stato**: ⬜ da iniziare
-- **Obiettivo**: `scripts/chart-inventory.mjs`, doc inventario, test che vedono
-  i sub-runner, questo documento.
-- **File previsti**: `scripts/chart-inventory.mjs`, `package.json`,
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `scripts/chart-inventory.mjs` (+ script `chart:inventory`): scansione
+    statica di `src/analyses/*/`, opzioni `--analysis <id>` e `--json`.
+  - `docs/analysis/2026-11-03-inventario-grafici-72-procedure.md`: 321 modelli,
+    71 analisi con grafici, 32 kind; sostituisce l'inventario del 2026-10-30.
+  - `analysisKinds.test.ts`: legge tutti i moduli non-test dell'analisi, non
+    solo `run.tsx` (sub-runner inclusi), estraendo i kind dalle chiamate
+    `makeChart`.
+  - `copy.test.ts`: scansione ricorsiva di `src/analyses`, catalogo risolto
+    `enChartCopy` + fallback `enReportCopy` (la catena reale di `copy()`).
+  - `catalog/charts.ts`: `enChartCopy` ora include `en/charts-l4.ts` (prima le
+    card L4 in inglese ricadevano sull'italiano) e `en/charts-f0.ts` con le
+    211 stringhe EN che non avevano sorgente inglese.
+- **File toccati**: `scripts/chart-inventory.mjs`, `package.json`,
   `docs/analysis/2026-11-03-inventario-grafici-72-procedure.md`,
-  `src/charts/analysisKinds.test.ts`, `src/charts/copy.test.ts`.
+  `src/charts/analysisKinds.test.ts`, `src/charts/copy.test.ts`,
+  `src/stats/reportCopy/catalog/charts.ts`,
+  `src/stats/reportCopy/catalog/en/charts-f0.ts`.
 - **Test**: `node --import tsx --test src/charts/analysisKinds.test.ts
-  src/charts/copy.test.ts` + `npm run check`.
-- **Esito**: —
-- **Commit**: —
+  src/charts/copy.test.ts` → 8/8 verdi; `npm run check` → verde.
+- **Esito**: inventario ripetibile (321, invariato), test che vedono i
+  sub-runner, nessuna modifica ai grafici.
+- **Commit**: `feat(charts): F0.1 inventario grafici e guardrail su sub-runner`
 
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
@@ -175,10 +192,12 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. Creare il branch `grafici-procedure` e aprire F0.1.
-2. Implementare `scripts/chart-inventory.mjs` e verificare il totale 321.
-3. Estendere `analysisKinds.test.ts` e `copy.test.ts` ai sub-runner; correggere
-   le copy EN mancanti emerse.
+1. Aprire F0.2: `forest.jmp-ratio`, `survival.jmp-km`, `line.jmp-connected` in
+   `src/charts/styles.ts` con etichette nelle 6 lingue.
+2. Aggiungere i test "pin" in `styles.test.ts` e verificare che
+   `buildSpec.test.ts` compili le tre nuove tile della gallery.
+3. Documentare la mappa "procedura → stile JMP" e aggiornare lo stato prima di
+   passare a F1.1a (`factorial`).
 
 ---
 
@@ -196,7 +215,7 @@ sotto-blocco aperto):
 
 | Rischio | Stato | Mitigazione in corso |
 |---|---|---|
-| Copy EN mancante nei sub-runner | aperto | F0.1 estende `copy.test.ts` |
+| Copy EN mancante nei sub-runner | chiuso in F0.1 | `copy.test.ts` esteso; 211 stringhe EN aggiunte in `en/charts-f0.ts` |
 | File al limite di 700 righe | aperto | file per ondata, split |
 | Forest log con IC ≤ 0 | aperto | regola in F10.1 |
 | Cap 24 grafici per `mi` | aperto | conteggio in F9.2a |

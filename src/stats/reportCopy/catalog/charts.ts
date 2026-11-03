@@ -1,5 +1,7 @@
 import type { ReportLocale } from '../types';
 import { chartCopy as baseChartCopy } from './en/charts';
+import { f0ChartCopy } from './en/charts-f0';
+import { l4ChartCopy as enL4ChartCopy } from './en/charts-l4';
 import { w9ChartCopy } from './en/charts-w9';
 import { l4ChartCopy as deL4ChartCopy } from './de/charts-l4';
 import { l4ChartCopy as esL4ChartCopy } from './es/charts-l4';
@@ -32,7 +34,12 @@ const EXTRA_BY_LOCALE: Partial<Record<ReportLocale, Record<string, string>>> = {
   'pt-PT': ptPTExtraChartCopy,
 };
 
-export const enChartCopy: Record<string, string> = { ...baseChartCopy, ...w9ChartCopy };
+export const enChartCopy: Record<string, string> = {
+  ...baseChartCopy,
+  ...enL4ChartCopy,
+  ...w9ChartCopy,
+  ...f0ChartCopy,
+};
 
 export const chartCatalogFor = (locale: ReportLocale): Record<string, string> =>
   locale === 'en' || locale === 'it'
