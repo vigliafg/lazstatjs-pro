@@ -433,6 +433,14 @@ R, voci/UI, help e `reportCopy` in 6 lingue completati; `npm run check`
 **Rischi**: SEM e IRT hanno molti parametri di output; definire prima i TableSpec
 minimi per non esplodere.
 
+**Stato W5 (2026-11-03)**: M-01…M-08 chiusi, gate G5 verde. Cluster esteso a
+k-means/k-medians; nuove voci `canonical`, `mds`, `correspondence`, `sem`,
+`latentclass`, `irt`, `conjoint`; F4 in `kernels/latent.ts` (entropia, BIC,
+quadratura, gradiente numerico). Reference R: `kmeans`, `cancor`, `cmdscale`/
+`isoMDS`, `ca`, `lavaan`, `poLCA`, `mirt`, `conjoint`/`lm`. `npm run check`
+1206/1206, `test:samples` 7/7, locale check 6/6. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5g e registro §6.
+
 ---
 
 ### 7.5 Categorical (4 metodi, 1 nuova voce)

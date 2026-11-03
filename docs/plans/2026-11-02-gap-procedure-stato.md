@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W4 chiusa: 5/5 item, gate G4 verde)
+**Ultimo aggiornamento**: 2026-11-03 (W5 chiusa: 8/8 item, gate G5 verde)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0–W4 chiuse; gate G0, G1, G2, G3 e G4 verdi
-**Ondata corrente**: W4 — Categorical + MI categorica (5 item)
+**Stato**: W0–W5 chiuse; gate G0, G1, G2, G3, G4 e G5 verdi
+**Ondata corrente**: W5 — Multivariate avanzata (8 item)
 
 ---
 
@@ -31,17 +31,17 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W4 chiusa (gate G4 verde); prossima W5 |
+| Ondata corrente | W5 chiusa (gate G5 verde); prossima W6 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `e2ec8cc` (chiusura W4) |
+| Ultimo commit di codice | `09c67cc` (chiusura W5) |
 | Ultimo commit documentale | `7541e2d` (regole economia del contesto) |
-| Test | `npm run check` verde; `npm test` 1196/1196 verdi; `npm run test:samples` 7/7; locale check 6/6 |
-| Item chiusi | 38 / 73; W4 chiusa |
-| Nuove voci | 15 / 36 (W2 + W3 + `loglinear`) |
-| Estensioni | 24 / 37 |
-| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 |
+| Test | `npm run check` verde; `npm test` 1206/1206 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Item chiusi | 46 / 73; W5 chiusa |
+| Nuove voci | 22 / 36 (W2 + W3 + `loglinear` + 7 voci W5) |
+| Estensioni | 25 / 37 (cluster k-means/k-medians) |
+| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 + 8 reference W5 |
 | Blocchi | nessuno |
-| Prossimo gate | G5 — fine W5 (multivariate avanzata) |
+| Prossimo gate | G6 — fine W6 (survival e affidabilità) |
 
 ---
 
@@ -54,7 +54,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | **chiusa** (G2 verde) | G2 |
 | W3 | Regressione avanzata | 7 | 7 | **chiusa** (G3 verde) | G3 |
 | W4 | Categorical + MI categorica | 5 | 1 | **chiusa** (G4 verde) | G4 |
-| W5 | Multivariate avanzata | 8 | 7 | non iniziata | G5 |
+| W5 | Multivariate avanzata | 8 | 7 | **chiusa** (G5 verde) | G5 |
 | W6 | Survival e affidabilità | 8 | 4 | non iniziata | G6 |
 | W7 | Time series | 7 | 3 | non iniziata | G7 |
 | W8 | Quality/DOE/power restanti | 5 | 0 | non iniziata | G8 |
@@ -69,7 +69,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | Descriptive | 5 | 8 | in corso (D-01…D-04, Q-04) |
 | Compare groups | 11 | 11 | **chiusa** (C-01…C-11) |
 | Regression | 15 | 15 | **chiusa** (R-01…R-15) |
-| Multivariate | 0 | 8 | non iniziata |
+| Multivariate | 8 | 8 | **chiusa** (M-01…M-08) |
 | Categorical | 4 | 4 | **chiusa** (K-01…K-04) |
 | Survival | 0 | 8 | non iniziata |
 | Time series | 0 | 7 | non iniziata |
@@ -77,7 +77,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | Missing data | 1 | 2 | in corso (N-01) |
 | Machine Learning | 0 | 3 | non iniziata |
 | Advanced & Bayesian | 0 | 3 | non iniziata |
-| **Totale** | **38** | **73** |  |
+| **Totale** | **46** | **73** |  |
 
 ---
 
@@ -481,6 +481,74 @@ Decisioni W4:
   (tolleranza assoluta 0.06), non sui singoli valori imputati: RNG e schedule
   delle catene sono diversi.
 
+## 5g. Ondata W5 — avanzamento (2026-11-03)
+
+Apertura di W5 dopo G4. Pacchetti R verificati: `lavaan`, `poLCA`, `mirt`,
+`ca`, `conjoint` disponibili (installati nella library utente per generare le
+fixture); i test usano solo i JSON committati.
+
+| Item | Stato | Note |
+|---|---|---|
+| M-01 K-means/k-medians | **test verdi** | modalità `kmeans`/`kmedians` di `cluster`; inizializzazione farthest-first deterministica; reference `stats::kmeans` |
+| M-02 Correlazione canonica | **test verdi** | nuova voce `canonical`; SVD di `Sxx^-1/2 Sxy Syy^-1/2`; reference `cancor` |
+| M-03 MDS | **test verdi** | nuova voce `mds`; classica (Torgerson) e non metrica (Kruskal/PAVA); reference `cmdscale`/`isoMDS` |
+| M-04 Corrispondenze | **test verdi** | nuova voce `correspondence` con editor di tabella; reference `ca::ca` |
+| M-05 SEM/CFA | **test verdi** | nuova voce `sem`; ML su covarianza con fattori a varianza 1 e percorso strutturale opzionale; reference `lavaan` |
+| M-06 Classi latenti | **test verdi** | nuova voce `latentclass`; EM con start deterministici e casuali, BIC/entropia; reference `poLCA` |
+| M-07 IRT | **test verdi** | nuova voce `irt`; 2PL/Rasch con quadratura gaussiana ed EM; reference `mirt` |
+| M-08 Conjoint | **test verdi** | nuova voce `conjoint`; codifica a effetti, utilità parziali e importanza; reference `conjoint`/`lm` |
+
+Integrazione condivisa: `ProjectParams` e `parse.ts` estesi con i sette nuovi
+blocchi; `params.ts` (validazione/remap), `rolesW5.ts`, `paramsSnapshot`,
+`registry`, `runners`, `worker/heavyIds` + `heavyRunners`,
+`AnalysisForm`, `analysisKinds`, `useProjectParams` e default per ogni voce.
+Help `w5-*.ts` in 6 lingue (69 pagine per libro); chiavi i18n `canonical.*`,
+`mds.*`, `sem.*`, `latentclass.*`, `irt.*`, `conjoint.*`, `cluster.kmeans*`,
+`meta.analysis.*` in 6 lingue.
+
+Chiusure finali prima di G5:
+
+- F4: `src/stats/kernels/latent.ts` con standardizzazione, BIC/AIC/AICc,
+  entropia normalizzata, quadratura Gauss-Hermite, gradiente numerico e
+  `maximize`.
+- `reportCopy` W5 completo: **3693/3693** frasi per `en`, `fr`, `es`, `de`,
+  `pt-PT`; nuovi moduli `w5.ts` per locale.
+- Sample nuovi in `samples/multivariate/`: `sem_demo` (320), `latent_demo`
+  (450), `irt_demo` (600), `conjoint_demo` (18); `generate.R` e manifest
+  aggiornati; `correspondence` dichiarata manual-only.
+- Reference R: `cluster.R`, `canonical.R`, `mds.R`, `correspondence.R`,
+  `sem.R`, `latentclass.R`, `irt.R`, `conjoint.R` + fixture JSON.
+- Eccezioni file-size aggiornate: `types` 1194, `parse` 1020, `params` 1129,
+  `roles` 1016.
+
+Gate G5 (2026-11-03):
+
+| Verifica | Esito |
+|---|---|
+| `npx tsc --noEmit` | pulito |
+| `npm test` | **1206/1206** verdi |
+| `npm run test:samples` | 7/7 verdi |
+| `npm run depcruise` | nessuna violazione (1004 moduli) |
+| `npm run madge` | nessuna dipendenza circolare |
+| `npm run filesize` | 988 file sotto 700 righe, 8 eccezioni |
+| `node scripts/check-locale.mjs` it/en/de/fr/es/pt-PT | 6/6 "translation wave complete" |
+
+Decisioni W5:
+
+- M-01 resta una **modalità** di `cluster` (nessuna voce nuova), con
+  `method = kmeans | kmedians`; le modalità gerarchiche conservano dendrogramma
+  e profili.
+- M-05 è una CFA con fattori a varianza 1 e percorso strutturale opzionale tra
+  due fattori; non è un SEM generalizzato. Il limite è dichiarato nel report.
+- M-06 usa start deterministici più start casuali; nei modelli a 3 classi la
+  fixture `poLCA` può cadere in un massimo locale diverso, quindi il test
+  confronta log-verosimiglianza e BIC, non la permutazione delle classi.
+- M-07 stima 2PL/Rasch con EM e quadratura; i parametri sono confrontati con
+  `mirt` a tolleranza larga perché i due ottimizzatori possono fermarsi in
+  punti vicini della stessa cresta di verosimiglianza.
+- M-08 usa la stessa codifica a effetti di `conjoint::caUtilities` (`lm` con
+  `contr.sum`); la fixture è generata da quel modello.
+
 ## 6. Registro checkpoint
 
 | Data | Checkpoint | Commit | Test | Esito | Note |
@@ -495,6 +563,7 @@ Decisioni W4:
 | 2026-11-03 | Chiusura W2 / G2 | `863029b` + `3ff1b34` + `7bfb8f4` | `npm run check` 1068/1068 + `test:samples` 7/7 + locale 6/6 | verde | C-10 GLMM Laplace + `lmm` random slope; 26/73 metodi, 7/36 voci, 20/37 estensioni |
 | 2026-11-03 | Chiusura W3 / G3 | `8f8298f` | `npm run check` 1161/1161 + `test:samples` 7/7 + locale 6/6 | verde | R-09…R-15 (7/7); 33/73 metodi, 14/36 voci; traduzioni reportCopy 5 lingue complete |
 | 2026-11-03 | Chiusura W4 / G4 | `e2ec8cc` | `npm run check` 1196/1196 + `test:samples` 7/7 + locale 6/6 | verde | K-01…K-04 + N-01 (5/5); 38/73 metodi, 15/36 voci; 3 reference W4; traduzioni reportCopy 5 lingue complete |
+| 2026-11-03 | Chiusura W5 / G5 | `09c67cc` | `npm run check` 1206/1206 + `test:samples` 7/7 + locale 6/6 | verde | M-01…M-08 (8/8); 46/73 metodi, 22/36 voci, 25/37 estensioni; 8 reference W5; F4 e reportCopy 5 lingue complete |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -504,7 +573,61 @@ Decisioni W4:
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
 
-### Handoff — 2026-11-03 / chiusura W4 (G4 verde)
+### Handoff — 2026-11-03 / chiusura W5 (G5 verde)
+
+- Ondata: W5 chiusa, gate G5 verde; prossima W6 (survival e affidabilità).
+- Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
+- Ultimo commit: `09c67cc` (chiusura W5).
+- Item chiusi (ID): M-01 k-means/k-medians, M-02 correlazione canonica,
+  M-03 MDS, M-04 corrispondenze, M-05 SEM/CFA, M-06 classi latenti,
+  M-07 IRT, M-08 conjoint.
+- Item in corso (ID): nessuno.
+- Item bloccati (ID + motivo): nessuno.
+- Test eseguiti e risultato: `npm run check` **verde** (1206/1206 test, tsc,
+  depcruise, madge, file size); `npm run test:samples` 7/7; locale check 6/6.
+- File/moduli toccati: contratti `types/parse/params/roles/rolesW5/
+  paramsSnapshot/registry/runners/heavyIds/heavyRunners/AnalysisForm/
+  analysisKinds/useProjectParams`; kernel `latent` (F4), `cluster`,
+  `canonical`, `mds`, `correspondence`, `sem`, `latentclass`, `irt`,
+  `conjoint`; tabelle/report omonimi; voci `analyses/{canonical,mds,
+  correspondence,sem,latentclass,irt,conjoint}` e form/run; help `w5-*.ts` in
+  6 lingue; cataloghi reportCopy `w5.ts` per locale; `samples/generate.R` e
+  manifest con 4 dataset; reference R + fixture W5.
+- Decisioni prese / deviazioni dal piano:
+  - M-01 è una modalità di `cluster`, non una voce nuova.
+  - M-05 è una CFA con fattori a varianza 1 e percorso strutturale opzionale;
+    il SEM generalizzato resta fuori scope.
+  - M-06 confronta con `poLCA` su log-verosimiglianza e BIC quando i massimi
+    locali differiscono; il test stretto è sul modello a 2 classi.
+  - M-07 confronta i parametri con `mirt` a tolleranza larga e la
+    log-verosimiglianza in modo stretto.
+  - M-08 replica la codifica di `conjoint::caUtilities` (`lm`, `contr.sum`).
+- Prossimi 3 passi:
+  1. Aprire W6 verificando i pacchetti R per survival e affidabilità.
+  2. Implementare S-01…S-08 uno alla volta con kernel + reference + voce/UI +
+     help/i18n, come per W5.
+  3. Chiudere G6 con `npm run check`, `test:samples` e locale check.
+- Domande aperte: nessuna.
+- Rischi attivi: i pacchetti `poLCA`, `mirt`, `conjoint` sono installati solo
+  nella library utente usata per generare le fixture; i test non richiedono R.
+  SEM/IRT hanno molti parametri e i TableSpec restano volutamente minimi.
+
+### Riassunto di 10 righe — W5
+
+1. Ondata e obiettivo: W5 chiusa, G5 verde; 46/73 metodi.
+2. Cosa è chiuso: 8 metodi, 7 voci nuove, 1 estensione.
+3. Cosa è in corso: nulla; W6 pronta a partire.
+4. Cosa è bloccato: nulla.
+5. Ultimo commit: `09c67cc` su `feat/gap-wave-1`.
+6. Test: `npm run check` 1206/1206; sample 7/7; locale 6/6.
+7. Decisioni: cluster k-means/k-medians come modalità; CFA invece di SEM
+   generalizzato; latent class e IRT con tolleranze dichiarate.
+8. Prossimi 3 passi: aprire W6, implementare S-01…S-08, chiudere G6.
+9. Domande: nessuna.
+10. Rischi: reference R di W6 da verificare prima dei kernel; output survival
+    e affidabilità da limitare per non esplodere.
+
+### Handoff — 2026-11-03 / chiusura W4 (G4 verde) — storico
 
 - Ondata: W4 chiusa, gate G4 verde; prossima W5 (multivariate avanzata).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
@@ -547,7 +670,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
   installati; SEM/IRT hanno molti parametri e vanno limitati i TableSpec
   minimi prima di implementare.
 
-### Riassunto di 10 righe — W4
+### Riassunto di 10 righe — W4 (storico)
 
 1. Ondata e obiettivo: W4 chiusa, G4 verde; 38/73 metodi.
 2. Cosa è chiuso: 5 metodi (K-01…K-04, N-01), 1 voce nuova (`loglinear`),
