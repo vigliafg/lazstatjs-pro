@@ -33,7 +33,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W4 completa (gate G4 da dichiarare); prossima W5 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `in preparazione` (chiusura W4) |
+| Ultimo commit di codice | `e2ec8cc` (chiusura W4) |
 | Ultimo commit documentale | `in preparazione` (allineamento hash W4) |
 | Test | `npm run check` verde; `npm test` 1196/1196 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 38 / 73; W4 chiusa |
@@ -494,7 +494,7 @@ Decisioni W4:
 | 2026-11-03 | Checkpoint W2 (11/12) | `7bf4e84` | `npm run check` 1052/1052 + `test:samples` 7/7 + locale 6/6 | verde | C-08/C-09/C-11, R-01…R-08 tranne C-10; 4 nuove voci; 10 reference; G2 non dichiarato |
 | 2026-11-03 | Chiusura W2 / G2 | `863029b` + `3ff1b34` + `7bfb8f4` | `npm run check` 1068/1068 + `test:samples` 7/7 + locale 6/6 | verde | C-10 GLMM Laplace + `lmm` random slope; 26/73 metodi, 7/36 voci, 20/37 estensioni |
 | 2026-11-03 | Chiusura W3 / G3 | `8f8298f` | `npm run check` 1161/1161 + `test:samples` 7/7 + locale 6/6 | verde | R-09…R-15 (7/7); 33/73 metodi, 14/36 voci; traduzioni reportCopy 5 lingue complete |
-| 2026-11-03 | Chiusura W4 / G4 | `in preparazione` | `npm run check` 1196/1196 + `test:samples` 7/7 + locale 6/6 | verde | K-01…K-04 + N-01 (5/5); 38/73 metodi, 15/36 voci; 3 reference W4; traduzioni reportCopy 5 lingue complete |
+| 2026-11-03 | Chiusura W4 / G4 | `e2ec8cc` | `npm run check` 1196/1196 + `test:samples` 7/7 + locale 6/6 | verde | K-01…K-04 + N-01 (5/5); 38/73 metodi, 15/36 voci; 3 reference W4; traduzioni reportCopy 5 lingue complete |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -508,7 +508,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 
 - Ondata: W4 chiusa, gate G4 verde; prossima W5 (multivariate avanzata).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: `in preparazione` (chiusura W4).
+- Ultimo commit: `e2ec8cc` (chiusura W4).
 - Item chiusi (ID): W3 completa; W4 completa — K-01 Mantel–Haenszel,
   K-02 Cochran–Armitage, K-03 log-linear, K-04 esatti R×C, N-01 MI categorica.
 - Item in corso (ID): nessuno.
