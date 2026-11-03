@@ -127,17 +127,17 @@ sotto-blocco aperto):
 
 | Famiglia | Analisi | Gap pianificati | Fasi | Stato |
 |---|---|---:|---|---|
-| Descriptive | `descriptive`, `distfit`, `ttest`, `anova`, `factorial`, `ancova`, `repeatedanova`, `mixedanova`, `nonparamrm`, `tost`, `proportions`, `variances` | 9 | F1.2, F2.1, F3.1, F3.2 | ⬜ |
-| Quality / SPC | `quality` | 2 | F2.2 | ⬜ |
-| Regression | `regression`, `logistic`, `glm`, `quantile`, `nonlinear`, `multinomial`, `countreg`, `ordinal`, `lmm`, `glmm`, `gee`, `pls`, `mars`, `iv`, `panel`, `selection`, `mediation`, `propensity` | 4 | F3.3, F4.1–F4.4 | ⬜ |
-| Multivariate | `multivariate`, `cluster`, `canonical`, `mds`, `correspondence`, `sem`, `latentclass`, `irt`, `conjoint`, `discriminant` | 6 | F3.2, F5.1–F5.3 | ⬜ |
-| Categorical | `chisquare`, `contingency`, `loglinear`, `agreement` | 2 | F3.2, F6.1 | ⬜ |
-| Survival | `survival`, `cox`, `stratcox`, `tdcox`, `parametric`, `competing`, `recurrent`, `alt`, `reliability` | 2 | F1.1a–b, F7.1–F7.3b | ⬜ |
-| Time series | `timeseries`, `var`, `garch`, `statespace` | 1 | F8.1, F8.2 | ⬜ |
-| Design & power | `samplesize`, `resampling`, `doe` | 1 | F9.1 | ⬜ |
-| Missing data | `mi`, `survey` | 1 | F9.2a | ⬜ |
-| ML | `ml`, `text`, `choice` | 0 | F9.2b | ⬜ |
-| Advanced | `bayes`, `meta`, `spatial` | 2 | F9.3a–b | ⬜ |
+| Descriptive | `descriptive`, `distfit`, `ttest`, `anova`, `factorial`, `ancova`, `repeatedanova`, `mixedanova`, `nonparamrm`, `tost`, `proportions`, `variances` | 9 | F1.2, F2.1, F3.1, F3.2 | ✅ |
+| Quality / SPC | `quality` | 2 | F2.2 | ✅ |
+| Regression | `regression`, `logistic`, `glm`, `quantile`, `nonlinear`, `multinomial`, `countreg`, `ordinal`, `lmm`, `glmm`, `gee`, `pls`, `mars`, `iv`, `panel`, `selection`, `mediation`, `propensity` | 4 | F3.3, F4.1–F4.4 | ✅ |
+| Multivariate | `multivariate`, `cluster`, `canonical`, `mds`, `correspondence`, `sem`, `latentclass`, `irt`, `conjoint`, `discriminant` | 6 | F3.2, F5.1–F5.3 | ✅ |
+| Categorical | `chisquare`, `contingency`, `loglinear`, `agreement` | 2 | F3.2, F6.1 | ✅ |
+| Survival | `survival`, `cox`, `stratcox`, `tdcox`, `parametric`, `competing`, `recurrent`, `alt`, `reliability` | 2 | F1.1a–b, F7.1–F7.3b | ✅ |
+| Time series | `timeseries`, `var`, `garch`, `statespace` | 1 | F8.1, F8.2 | ✅ |
+| Design & power | `samplesize`, `resampling`, `doe` | 1 | F9.1 | ✅ |
+| Missing data | `mi`, `survey` | 1 | F9.2a | ✅ |
+| ML | `ml`, `text`, `choice` | 0 | F9.2b | ✅ |
+| Advanced | `bayes`, `meta`, `spatial` | 2 | F9.3a–b | ✅ |
 | Guided | `wizard` | 0 (per scelta) | — | ✅ |
 
 ---
