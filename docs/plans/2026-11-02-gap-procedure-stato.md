@@ -34,7 +34,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | Ondata corrente | W3 chiusa (gate G3 verde); prossima W4 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
 | Ultimo commit di codice | `8f8298f` (chiusura W3) |
-| Ultimo commit documentale | `3b5284d` (fallback reference W3) |
+| Ultimo commit documentale | `bc90227` (allineamento hash W3) |
 | Test | `npm run check` verde; `npm test` 1161/1161 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 33 / 73; W3 chiusa |
 | Nuove voci | 14 / 36 (W2 + `pls`, `mars`, `iv`, `panel`, `selection`, `mediation`, `propensity`) |
@@ -448,7 +448,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 
 - Ondata: W3 chiusa, gate G3 verde; prossima W4 (categorical + MI categorica).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: `8f8298f` (chiusura W3); base documentale `3b5284d`.
+- Ultimo commit: `bc90227` (documenti W3); codice `8f8298f`.
 - Item chiusi (ID): W1, W2 complete; W3 completa — R-09 PLS, R-10 MARS,
   R-11 IV/2SLS, R-12 panel FE/RE, R-13 Tobit/selection, R-14 mediazione,
   R-15 propensity score.
