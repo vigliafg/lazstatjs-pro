@@ -33,7 +33,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W6 chiusa (gate G6 verde); prossima W7 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `09c67cc` + interventi W6 (da committare) |
+| Ultimo commit di codice | `0bc03fe` (chiusura W6) |
 | Ultimo commit documentale | `a3a751f` (allineamento hash post-G5) |
 | Test | `npm run check` verde; `npm test` 1227/1227 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 54 / 73; W6 chiusa |
@@ -637,7 +637,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere â€œn/dâ€
 
 - Ondata: W6 chiusa, gate G6 verde; prossima W7 (time series).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: interventi W6 da committare; base `a3a751f`.
+- Ultimo commit: `0bc03fe` (chiusura W6).
 - Item chiusi (ID): S-01 life table, S-02 competing risks, S-03 frailty,
   S-04 eventi ricorrenti, S-05 censoring a intervallo, S-06 parametriche
   extra, S-07 ALT, S-08 reliability growth/RBD.
