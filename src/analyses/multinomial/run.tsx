@@ -106,6 +106,17 @@ export const buildMultinomialOutput = ({
     };
   });
 
+  const confusionCells = model.classes.flatMap((predictedLabel, predictedIndex) =>
+    model.classes.map((observedLabel, observedIndex) => {
+      const count = y.reduce(
+        (sum, value, position) =>
+          sum + (value === observedIndex && model.predicted[position] === predictedIndex ? 1 : 0),
+        0
+      );
+      return { x: predictedLabel, y: observedLabel, value: count, label: String(count) };
+    })
+  );
+
   const charts: AnalysisChart[] = [
     makeChart({
       id: 'multinomial-probabilities',
@@ -149,6 +160,21 @@ export const buildMultinomialOutput = ({
       },
       fields: { xLabel: copy('Classe osservata'), yLabel: copy('Accuratezza (%)') },
       options: { valueLabels: true, referenceLine: 'none' } as never,
+    }),
+    makeChart({
+      id: 'multinomial-confusion',
+      kind: 'heatmap',
+      title: copy('Matrice di confusione'),
+      subtitle: copy('{s1} classi · accuratezza {s2}%', {
+        s1: model.classes.length,
+        s2: (model.accuracy * 100).toFixed(1),
+      }),
+      note: copy(
+        'Riga: classe osservata; colonna: classe predetta. La diagonale raccoglie le classificazioni corrette: i valori fuori diagonale sono gli scambi più frequenti tra classi.'
+      ),
+      data: { cells: confusionCells },
+      fields: { xLabel: copy('Classe predetta'), yLabel: copy('Classe osservata') },
+      options: { showValues: true, diverging: false, sort: 'none' } as never,
     }),
   ];
 

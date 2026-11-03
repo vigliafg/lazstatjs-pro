@@ -1,5 +1,8 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "multinomial": ["Distribución de las clases predichas, exactitud por clase y matriz de confusión observado × predicho."],
+  "iv": ["Observados vs ajustados, residuos y primera etapa: instrumentos frente a la variable endógena, una serie por instrumento."],
+  "pls": ["Observados vs ajustados, R² acumulado por componente y heatmap de los loadings de los predictores sobre las componentes."],
   "descriptive": ["Barras de medias; caja y bigotes con puntos brutos y atípicos; histograma de la primera variable con clases, densidad, rug y línea de media; Q-Q normal para las ocho primeras variables.", "Vista frecuencias: barras de los recuentos y Pareto con porcentaje acumulado para la primera variable categórica.", "Vista valores atípicos: strip de los valores observados, con el valor señalado por Grubbs o Dixon indicado en la nota."],
   "recurrent": ["Gráfico: función acumulada media de los eventos, con los eventos divididos por los sujetos en riesgo en cada tiempo."],
   "quality": ["Gráfico: Gage R&R con componentes de varianza y perfil pieza × operador; carta de control, CUSUM, capacidad y Pareto en los otros modos."],

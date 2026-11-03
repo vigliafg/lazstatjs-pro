@@ -88,6 +88,13 @@ export const buildIvOutput = ({
 
   const tables = ivTables(fit, names, ciLevel);
   const estimation = robust ? copy('2SLS · SE HC1') : copy('2SLS · SE omoschedastici');
+  const firstStage = rows.flatMap(row =>
+    instruments.map((instrument, position) => ({
+      x: parseNum(row[instrument]),
+      y: parseNum(row[endog[0]]),
+      series: names.instruments[position],
+    }))
+  );
 
   const charts: AnalysisChart[] = [
     makeChart({
@@ -121,6 +128,22 @@ export const buildIvOutput = ({
         rules: [{ y: 0 }],
       },
       fields: { xLabel: copy('Valore stimato'), yLabel: copy('Residuo'), series: copy('Serie') },
+      options: { showMarkers: true, showBand: false } as never,
+    }),
+    makeChart({
+      id: 'iv-first-stage',
+      kind: 'scatter',
+      title: copy('Primo stadio: strumenti e variabile endogena'),
+      subtitle: copy('Una serie per strumento · {s1} osservazioni', { s1: fit.n }),
+      note: copy(
+        'Ogni punto è un’osservazione: se la nuvola di uno strumento è piatta, lo strumento è debole e la stima 2SLS diventa instabile.'
+      ),
+      data: { series: firstStage },
+      fields: {
+        xLabel: instruments.length === 1 ? names.instruments[0] : copy('Strumento'),
+        yLabel: names.endog[0],
+        series: copy('Strumento'),
+      },
       options: { showMarkers: true, showBand: false } as never,
     }),
   ];

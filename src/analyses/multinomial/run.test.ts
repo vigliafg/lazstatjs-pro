@@ -40,6 +40,7 @@ test('multinomial builder returns fit, coefficients, classification, report and 
   const chartIds = (result.charts ?? []).map(chart => chart.id);
   assert.ok(chartIds.includes('multinomial-probabilities'));
   assert.ok(chartIds.includes('multinomial-accuracy'));
+  assert.ok(chartIds.includes('multinomial-confusion'));
 
   const fit = result.tables.find(table => table.id === 'multinomial-fit');
   const accuracyRow = fit?.rows.find(row => row.metric === 'Accuratezza complessiva (%)');
@@ -71,6 +72,20 @@ test('multinomial builder returns fit, coefficients, classification, report and 
   const accuracy = (result.charts ?? []).find(chart => chart.id === 'multinomial-accuracy');
   assert.equal(accuracy?.kind, 'bar');
   assert.equal((accuracy?.data.bars ?? []).length, 3);
+
+  const confusion = (result.charts ?? []).find(chart => chart.id === 'multinomial-confusion');
+  assert.equal(confusion?.kind, 'heatmap');
+  const cells = confusion?.data.cells ?? [];
+  assert.equal(cells.length, 9);
+  const diagonal = cells
+    .filter(cell => cell.x === cell.y)
+    .reduce((sum, cell) => sum + Number(cell.value), 0);
+  const correct = classification!.rows.reduce((sum, row) => sum + Number(row.correct), 0);
+  assert.equal(diagonal, correct);
+  assert.equal(
+    cells.reduce((sum, cell) => sum + Number(cell.value), 0),
+    classification!.rows.reduce((sum, row) => sum + Number(row.n), 0)
+  );
 });
 
 test('multinomial builder rejects an outcome with fewer than three levels', () => {

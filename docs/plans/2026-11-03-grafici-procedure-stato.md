@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F4.1 chiusa)
-- **Fase corrente**: F4.2 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F4.2 chiusa)
+- **Fase corrente**: F4.3 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -66,7 +66,7 @@ con motivo.
 | F3.2 | Mood, GOF, nested | 60 | ✅ | `feat(charts): F3.2 mediane Mood, componenti gerarchiche e contributi GOF` | 9 test + `check` e `locales:check` verdi |
 | F3.3 | GLMM/GEE/LMM polish | 45 | ✅ | `feat(charts): F3.3 guide caterpillar per LMM, GLMM e GEE` | `check` + `locales:check` verdi |
 | F4.1 | stepwise, polynomial, penalized | 60 | ✅ | `feat(charts): F4.1 coefficienti del modello selezionato` | 6 test + `check` e `locales:check` verdi |
-| F4.2 | multinomial, IV, PLS | 60 | ⬜ | — | — |
+| F4.2 | multinomial, IV, PLS | 60 | ✅ | `feat(charts): F4.2 confusione, primo stadio e loadings PLS` | 21 test + `check` e `locales:check` verdi |
 | F4.3 | logistica, conteggi, ordinale | 45 | ⬜ | — | — |
 | F4.4 | diagnostica di regressione | 45 | ⬜ | — | — |
 | F5.1 | cluster, canonical, MDS, correspondence | 60 | ⬜ | — | — |
@@ -154,6 +154,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F4.1 | `selection-coefficients` mostra solo i predittori scelti, non l’intercetta | l’intercetta resta nella tabella e schiaccerebbe la scala delle barre |
 | 2026-11-03 | F4.1 | Niente banda CI su `polynomial-curve` | `polynomialCurve` restituisce solo `{x, y}`: il kernel non espone `seMean` e aggiungerlo è fuori budget |
 | 2026-11-03 | F4.1 | Niente `penalized-cv` | `penalizedPath` restituisce i fit, non gli errori di cross-validazione |
+| 2026-11-03 | F4.2 | `pls-loadings` mostra solo i loadings X | `PlsResult` espone `components[].loading` (X); i loadings Y non esistono come campo separato |
+| 2026-11-03 | F4.2 | La matrice di confusione usa `sort: 'none'` | le classi devono restare nell’ordine del modello, non riordinate per margine |
+| 2026-11-03 | F4.2 | Test aggiunti ai `run.test.ts` esistenti invece di nuovi `charts.test.ts` | stessi fixture e stesso kernel: un file per analisi avrebbe duplicato i dati |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -378,6 +381,26 @@ sotto-blocco aperto):
   `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F4.1 coefficienti del modello selezionato`
 
+### F4.2 — Multinomial, IV, PLS
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `multinomial-confusion` [heatmap]: celle osservato × predetto con i
+    conteggi, diagonale = classificazioni corrette.
+  - `iv-first-stage` [scatter]: una serie per strumento contro la prima
+    variabile endogena, per vedere a occhio la forza dello strumento.
+  - `pls-loadings` [heatmap]: loading di ogni predittore su ogni componente;
+    `analysisKinds.pls` dichiara ora `heatmap`.
+- **File toccati**: `src/analyses/multinomial/run.tsx` e `run.test.ts`,
+  `src/analyses/iv/run.tsx` e `run.test.ts`, `src/analyses/pls/run.tsx` e
+  `run.test.ts`, `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts` (nuove guide per
+  `multinomial`, `iv`, `pls`).
+- **Test**: multinomial + iv + pls + copy + analysisKinds → 21/21 verdi;
+  `npm run check` verde; `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F4.2 confusione, primo stadio e loadings PLS`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -400,6 +423,9 @@ sotto-blocco aperto):
 | F3.2 | `nested-variance` | `anova` | `bar` | LZ | `anova/w2.test.ts` | ✅ |
 | F3.2 | `gof-contribution` | `chisquare` | `pareto` | JMP | `chisquare/gof.test.ts` | ✅ |
 | F4.1 | `selection-coefficients` | `regression` | `bar` | JMP | `regression/charts.test.ts` | ✅ |
+| F4.2 | `multinomial-confusion` | `multinomial` | `heatmap` | LZ | `multinomial/run.test.ts` | ✅ |
+| F4.2 | `iv-first-stage` | `iv` | `scatter` | LZ | `iv/run.test.ts` | ✅ |
+| F4.2 | `pls-loadings` | `pls` | `heatmap` | LZ | `pls/run.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -407,11 +433,10 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F4.2: `multinomial-confusion` [heatmap] (#12), `iv-first-stage` [scatter]
-   (#13), `pls-loadings` [heatmap] (#14).
-2. F4.3: allineamento di logistica, conteggi e ordinale (foresta IRR/OR su
-   scala log) e verifica del link probit.
-3. F4.4: diagnostica di regressione mancante; poi gate di fine ondata O4.
+1. F4.3: allineamento di logistica, conteggi e ordinale (foresta IRR/OR su
+   scala log, link probit).
+2. F4.4: diagnostica di regressione mancante; poi gate di fine ondata O4.
+3. F5.1: `cluster` (#15, #16), `canonical` (#17), MDS e correspondence.
 
 ---
 

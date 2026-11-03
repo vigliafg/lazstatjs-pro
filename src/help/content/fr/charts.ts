@@ -1,5 +1,8 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "multinomial": ["Distribution des classes prédites, exactitude par classe et matrice de confusion observé × prédit."],
+  "iv": ["Observés vs ajustés, résidus et premier stade : instruments contre variable endogène, une série par instrument."],
+  "pls": ["Observés vs ajustés, R² cumulé par composante et heatmap des loadings des prédicteurs sur les composantes."],
   "descriptive": ["Barres des moyennes ; boîte à moustaches avec points bruts et valeurs aberrantes ; histogramme de la première variable avec classes, densité, rug et ligne de moyenne ; Q-Q normal pour les huit premières variables.", "Vue fréquences : barres des effectifs et Pareto avec pourcentage cumulé pour la première variable catégorielle.", "Vue valeurs aberrantes : strip des valeurs observées, la valeur signalée par Grubbs ou Dixon étant nommée dans la note."],
   "recurrent": ["Graphique : fonction cumulée moyenne des événements, avec les événements divisés par les sujets à risque à chaque temps."],
   "quality": ["Graphique : Gage R&R avec composantes de variance et profil pièce × opérateur ; carte de contrôle, CUSUM, capabilité et Pareto dans les autres modes."],

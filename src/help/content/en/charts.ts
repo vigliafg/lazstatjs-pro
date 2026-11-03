@@ -1,5 +1,8 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "multinomial": ["Predicted class distribution, accuracy per class and the observed × predicted confusion matrix."],
+  "iv": ["Observed vs fitted, residuals and the first stage: instruments against the endogenous variable, one series per instrument."],
+  "pls": ["Observed vs fitted, cumulative R² per component and a heat map of the predictor loadings on the components."],
   "descriptive": ["Means bar; box-and-whisker with raw points and outliers; histogram of the first variable with bins, density, rug and mean line; normal Q-Q for the first eight variables.", "Frequency view: count bars and a Pareto chart with the cumulative percentage for the first categorical variable.", "Outlier view: strip of the observed values, with the value flagged by Grubbs or Dixon named in the note."],
   "distfit": ["Chart: probability plot of observed vs theoretical quantiles for the best-fitting distribution, with the reference diagonal.", "Chart: difference between the two ECDFs with the maximum point highlighted."],
   "ttest": ["One-sample box with the test value; Wilcoxon box; independent-groups box and Mann-Whitney rank box; paired box and box of differences.", "Chart: paired differences and the median difference with an order-statistic interval."],

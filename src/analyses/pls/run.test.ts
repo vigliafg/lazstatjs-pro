@@ -68,8 +68,8 @@ test('PLS builder emits coefficients, components, VIP, report and charts on mtca
   assert.ok(vip.every(row => Number.isFinite(Number(row.vip))));
 
   const chartIds = (result.charts ?? []).map(chart => chart.id);
-  assert.equal(chartIds.length, 2);
-  assert.deepEqual(chartIds, ['pls-observed-fitted', 'pls-cumulative-r2']);
+  assert.equal(chartIds.length, 3);
+  assert.deepEqual(chartIds, ['pls-observed-fitted', 'pls-cumulative-r2', 'pls-loadings']);
 
   const observedFitted = (result.charts ?? []).find(chart => chart.id === 'pls-observed-fitted');
   assert.equal(observedFitted?.kind, 'scatter');
@@ -79,6 +79,16 @@ test('PLS builder emits coefficients, components, VIP, report and charts on mtca
   const cumulative = (result.charts ?? []).find(chart => chart.id === 'pls-cumulative-r2');
   assert.equal(cumulative?.kind, 'line');
   assert.equal((cumulative?.data.series ?? []).length, 2);
+
+  const loadings = (result.charts ?? []).find(chart => chart.id === 'pls-loadings');
+  assert.equal(loadings?.kind, 'heatmap');
+  const cells = loadings?.data.cells ?? [];
+  assert.equal(cells.length, params.indeps.length * params.components);
+  assert.ok(cells.every(cell => Number.isFinite(Number(cell.value))));
+  assert.deepEqual(
+    [...new Set(cells.map(cell => String(cell.x)))],
+    ['C1', 'C2']
+  );
 });
 
 test('PLS builder disables Q² when cvFolds is zero', () => {

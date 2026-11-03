@@ -1,5 +1,8 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "multinomial": ["Verteilung der vorhergesagten Klassen, Genauigkeit je Klasse und Konfusionsmatrix beobachtet × vorhergesagt."],
+  "iv": ["Beobachtet vs angepasst, Residuen und erste Stufe: Instrumente gegen die endogene Variable, eine Reihe je Instrument."],
+  "pls": ["Beobachtet vs angepasst, kumuliertes R² je Komponente und Heatmap der Prädiktor-Loadings auf die Komponenten."],
   "descriptive": ["Balken der Mittelwerte; Box-Plot mit Rohpunkten und Ausreißern; Histogramm der ersten Variablen mit Klassen, Dichte, Rug und Mittellinie; Normal-Q-Q für die ersten acht Variablen.", "Ansicht Häufigkeiten: Balken der Anzahlen und Pareto mit kumulativem Prozentsatz für die erste kategoriale Variable.", "Ansicht Ausreißer: Strip der beobachteten Werte, wobei der von Grubbs oder Dixon markierte Wert in der Notiz genannt wird."],
   "recurrent": ["Diagramm: mittlere kumulative Funktion der Ereignisse, mit den Ereignissen geteilt durch die zu jedem Zeitpunkt gefährdeten Subjekte."],
   "quality": ["Diagramm: Gage R&R mit Varianzkomponenten und Profil Teil × Bediener; Regelkarte, CUSUM, Fähigkeit und Pareto in den anderen Modi."],

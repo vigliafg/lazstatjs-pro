@@ -73,12 +73,25 @@ test('IV builder fits the iv_demo sample and exposes tables, report and charts',
 
   assert.deepEqual(
     (result.charts ?? []).map(chart => chart.id),
-    ['iv-observed-fitted', 'iv-residuals']
+    ['iv-observed-fitted', 'iv-residuals', 'iv-first-stage']
   );
   const observed = (result.charts ?? [])[0];
   assert.equal(observed?.kind, 'scatter');
   assert.equal(observed?.data.series?.length, rows.length);
   assert.ok((observed?.data.series ?? []).every(point => Number.isFinite(Number(point.x))));
+
+  const firstStageChart = (result.charts ?? []).find(chart => chart.id === 'iv-first-stage');
+  assert.equal(firstStageChart?.kind, 'scatter');
+  assert.equal(firstStageChart?.data.series?.length, rows.length * 2);
+  assert.deepEqual(
+    [...new Set((firstStageChart?.data.series ?? []).map(point => String(point.series)))].sort(),
+    ['Z1', 'Z2']
+  );
+  assert.ok(
+    (firstStageChart?.data.series ?? []).every(
+      point => Number.isFinite(Number(point.x)) && Number.isFinite(Number(point.y))
+    )
+  );
 });
 
 test('robust IV keeps the coefficients and changes the standard errors', () => {

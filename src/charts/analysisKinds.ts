@@ -41,7 +41,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   gee: ['bar', 'forest', 'interval', 'qq', 'scatter'],
   lmm: ['bar', 'interval', 'qq', 'scatter'],
   glmm: ['bar', 'interval', 'residual', 'scatter'],
-  pls: ['line', 'scatter'],
+  pls: ['heatmap', 'line', 'scatter'],
   mars: ['line', 'residual', 'scatter'],
   iv: ['residual', 'scatter'],
   panel: ['bar', 'scatter'],

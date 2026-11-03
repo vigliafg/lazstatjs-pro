@@ -89,6 +89,13 @@ export const buildPlsOutput = ({ grid, params }: PlsInput): AnalysisRunResult =>
   const min = allValues.length ? Math.min(...allValues) : 0;
   const max = allValues.length ? Math.max(...allValues) : 1;
 
+  const loadingCells = predictorNames.flatMap((name, position) =>
+    fit.components.map((component, index) => {
+      const value = component.loading[position];
+      return { x: `C${index + 1}`, y: name, value, label: fmtEst(value, 2) };
+    })
+  );
+
   const charts: AnalysisChart[] = [
     makeChart({
       id: 'pls-observed-fitted',
@@ -133,6 +140,21 @@ export const buildPlsOutput = ({ grid, params }: PlsInput): AnalysisRunResult =>
         xType: 'nominal',
       },
       options: { showMarkers: true, showBand: false } as never,
+    }),
+    makeChart({
+      id: 'pls-loadings',
+      kind: 'heatmap',
+      title: copy('Loadings delle componenti PLS'),
+      subtitle: copy('{s1} componenti · {s2} predittori', {
+        s1: components,
+        s2: indeps.length,
+      }),
+      note: copy(
+        'Ogni cella è il loading di un predittore su una componente latente: valori grandi in modulo indicano un legame forte, il segno dà la direzione.'
+      ),
+      data: { cells: loadingCells },
+      fields: { xLabel: copy('Componente'), yLabel: copy('Predittore') },
+      options: { showValues: true, diverging: true, sort: 'none' } as never,
     }),
   ];
 

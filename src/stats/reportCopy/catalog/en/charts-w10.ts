@@ -62,4 +62,19 @@ export const w10ChartCopy: Record<string, string> = {
     "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
   "Predittore": "Predictor",
   "Coefficiente (B)": "Coefficient (B)",
+  "Matrice di confusione": "Confusion matrix",
+  "{s1} classi · accuratezza {s2}%": "{s1} classes · accuracy {s2}%",
+  "Riga: classe osservata; colonna: classe predetta. La diagonale raccoglie le classificazioni corrette: i valori fuori diagonale sono gli scambi più frequenti tra classi.":
+    "Row: observed class; column: predicted class. The diagonal holds the correct classifications: off-diagonal values are the most frequent swaps between classes.",
+  "Classe predetta": "Predicted class",
+  "Classe osservata": "Observed class",
+  "Primo stadio: strumenti e variabile endogena": "First stage: instruments and endogenous variable",
+  "Una serie per strumento · {s1} osservazioni": "One series per instrument · {s1} observations",
+  "Ogni punto è un’osservazione: se la nuvola di uno strumento è piatta, lo strumento è debole e la stima 2SLS diventa instabile.":
+    "Each point is an observation: if an instrument's cloud is flat, the instrument is weak and the 2SLS estimate becomes unstable.",
+  "Strumento": "Instrument",
+  "Loadings delle componenti PLS": "PLS component loadings",
+  "{s1} componenti · {s2} predittori": "{s1} components · {s2} predictors",
+  "Ogni cella è il loading di un predittore su una componente latente: valori grandi in modulo indicano un legame forte, il segno dà la direzione.":
+    "Each cell is the loading of a predictor on a latent component: large absolute values indicate a strong link, the sign gives the direction.",
 };

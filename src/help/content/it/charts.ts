@@ -1,5 +1,8 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "multinomial": ["Distribuzione delle classi predette, accuratezza per classe e matrice di confusione osservato × predetto."],
+  "iv": ["Osservati vs stimati, residui e primo stadio: strumenti contro variabile endogena, una serie per strumento."],
+  "pls": ["Osservati vs predetti, R² cumulato per componente e heatmap dei loadings dei predittori sulle componenti."],
   "descriptive": ["Barre delle medie; scatola e baffi con punti grezzi e outlier; istogramma della prima variabile con classi, densità, rug e linea della media; Q-Q normale per le prime otto variabili.", "Vista frequenze: barre dei conteggi e Pareto con percentuale cumulata sulla prima variabile categorica.", "Vista valori anomali: strip dei valori osservati con il valore segnalato da Grubbs o Dixon riportato nella nota."],
   "distfit": ["Grafico: probability plot dei quantili osservati contro quelli teorici della distribuzione migliore, con la diagonale di riferimento.", "Grafico: differenza tra le due ECDF con il punto di massimo evidenziato."],
   "ttest": ["Box a un campione con valore di test; box Wilcoxon; box per gruppi indipendenti e box dei ranghi Mann-Whitney; box appaiato e box delle differenze.", "Grafico: differenze appaiate e mediana delle differenze con intervallo per ordine-statistiche."],
