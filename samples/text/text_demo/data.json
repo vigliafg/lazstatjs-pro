@@ -1,0 +1,182 @@
+[
+  {
+    "Document": "Doc01",
+    "Text": "estimate variable regression data data sample regression regression estimate model variable sample",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc02",
+    "Text": "dose trial outcome dose clinical trial patient clinical dose treatment patient treatment",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc03",
+    "Text": "market market customer market price sales customer demand price price sales market",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc04",
+    "Text": "regression model variable model sample estimate sample regression sample estimate estimate variable",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc05",
+    "Text": "treatment patient outcome treatment patient clinical patient patient clinical dose clinical dose",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc06",
+    "Text": "sales sales sales demand product sales price price price customer price customer",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc07",
+    "Text": "estimate estimate regression estimate model data regression model sample estimate estimate data",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc08",
+    "Text": "trial dose outcome patient outcome clinical treatment clinical trial trial dose outcome",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc09",
+    "Text": "demand sales product product product demand sales sales demand market price product",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc10",
+    "Text": "regression sample regression estimate model regression estimate model variable variable regression variable",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc11",
+    "Text": "patient treatment patient patient treatment treatment treatment treatment trial patient treatment trial",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc12",
+    "Text": "market product demand market customer market demand demand product price demand demand",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc13",
+    "Text": "model estimate model model model estimate data estimate regression model variable estimate",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc14",
+    "Text": "outcome patient patient dose dose trial patient dose clinical treatment treatment dose",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc15",
+    "Text": "sales demand demand product customer sales price product price customer product sales",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc16",
+    "Text": "data model regression variable regression estimate estimate data sample model model sample",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc17",
+    "Text": "clinical trial clinical trial patient clinical outcome dose treatment treatment clinical patient",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc18",
+    "Text": "sales demand sales market demand demand customer customer customer customer sales sales",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc19",
+    "Text": "estimate model sample data data estimate model regression sample data estimate estimate",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc20",
+    "Text": "dose trial treatment patient patient clinical outcome dose dose clinical outcome patient",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc21",
+    "Text": "market market price sales demand market sales market customer price price price",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc22",
+    "Text": "model variable estimate sample sample data model data model regression data sample",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc23",
+    "Text": "treatment dose outcome outcome treatment clinical patient trial trial trial trial patient",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc24",
+    "Text": "demand price customer market customer demand market product sales sales sales market",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc25",
+    "Text": "variable estimate variable regression sample variable regression sample sample data estimate variable",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc26",
+    "Text": "patient outcome clinical outcome outcome clinical outcome outcome treatment patient treatment patient",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc27",
+    "Text": "market price product sales customer market demand demand product product sales demand",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc28",
+    "Text": "data sample data variable sample data variable regression data regression sample sample",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc29",
+    "Text": "clinical trial trial dose treatment trial treatment patient outcome outcome patient treatment",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc30",
+    "Text": "product customer customer customer market market price sales customer product demand demand",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc31",
+    "Text": "estimate regression variable variable regression regression regression estimate estimate regression data sample",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc32",
+    "Text": "outcome outcome patient dose clinical treatment dose outcome treatment clinical patient trial",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc33",
+    "Text": "price customer demand price sales market market price product customer market sales",
+    "Group": "Topic 3"
+  },
+  {
+    "Document": "Doc34",
+    "Text": "estimate estimate sample regression data model model estimate estimate regression sample regression",
+    "Group": "Topic 1"
+  },
+  {
+    "Document": "Doc35",
+    "Text": "treatment patient treatment treatment trial patient patient trial clinical treatment trial dose",
+    "Group": "Topic 2"
+  },
+  {
+    "Document": "Doc36",
+    "Text": "demand customer price product customer demand product market customer product sales sales",
+    "Group": "Topic 3"
+  }
+]

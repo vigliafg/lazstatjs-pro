@@ -62,6 +62,13 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   var: 'var',
   garch: 'garch',
   statespace: 'statespace',
+  survey: 'survey',
+  ml: 'ml',
+  text: 'text',
+  choice: 'choice',
+  meta: 'meta',
+  bayes: 'bayes',
+  spatial: 'spatial',
 };
 
 export const analysisParamsKey = (analysisId: string): keyof ProjectParams | undefined =>

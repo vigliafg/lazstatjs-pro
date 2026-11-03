@@ -52,6 +52,7 @@ import { w5Copy as enW5Copy } from './en/w5';
 import { w6Copy as enW6Copy } from './en/w6';
 import { w7Copy as enW7Copy } from './en/w7';
 import { w8Copy as enW8Copy } from './en/w8';
+import { w9Copy as enW9Copy } from './en/w9';
 
 export const enReportCopy: Record<string, string> = {
   ...agreementCopy,
@@ -98,6 +99,7 @@ export const enReportCopy: Record<string, string> = {
   ...enW6Copy,
   ...enW7Copy,
   ...enW8Copy,
+  ...enW9Copy,
 };
 
 const CATALOGS: Partial<Record<ReportLocale, Record<string, string>>> = {

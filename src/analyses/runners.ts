@@ -66,6 +66,13 @@ import { buildReliabilityOutput } from './reliability/run';
 import { buildVarOutput } from './var/run';
 import { buildGarchOutput } from './garch/run';
 import { buildStateSpaceOutput } from './statespace/run';
+import { buildSurveyOutput } from './survey/run';
+import { buildMlOutput } from './ml/run';
+import { buildTextOutput } from './text/run';
+import { buildChoiceOutput } from './choice/run';
+import { buildMetaOutput } from './meta/run';
+import { buildBayesOutput } from './bayes/run';
+import { buildSpatialOutput } from './spatial/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -211,4 +218,14 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
   garch: ({ grid, params, ciLevel }) => buildGarchOutput({ grid, params: params.garch, ciLevel }),
   statespace: ({ grid, params, ciLevel }) =>
     buildStateSpaceOutput({ grid, params: params.statespace, ciLevel }),
+  survey: ({ grid, params, ciLevel }) =>
+    buildSurveyOutput({ grid, params: params.survey, ciLevel }),
+  ml: ({ grid, params }) => buildMlOutput({ grid, params: params.ml }),
+  text: ({ grid, params }) => buildTextOutput({ grid, params: params.text }),
+  choice: ({ grid, params }) => buildChoiceOutput({ grid, params: params.choice }),
+  meta: ({ grid, params, ciLevel }) =>
+    buildMetaOutput({ grid, params: params.meta, ciLevel }),
+  bayes: ({ grid, params }) => buildBayesOutput({ grid, params: params.bayes }),
+  spatial: ({ grid, params }) =>
+    buildSpatialOutput({ grid, params: params.spatial }),
 };

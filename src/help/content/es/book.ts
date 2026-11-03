@@ -10,6 +10,7 @@ import { w4Topics } from '../w4-es';
 import { w5Topics } from '../w5-es';
 import { w6Topics } from '../w6-es';
 import { w7Topics } from '../w7-es';
+import { w9Topics } from '../w9-es';
 
 import { chartGuides } from './charts';
 
@@ -54,7 +55,7 @@ export const esBook: HelpBook = {
     updated: 'Manual alineado con las funciones actuales del programa',
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics, ...w5Topics, ...w6Topics, ...w7Topics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics, ...w5Topics, ...w6Topics, ...w7Topics, ...w9Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

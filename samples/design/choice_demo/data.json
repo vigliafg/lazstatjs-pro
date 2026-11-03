@@ -1,0 +1,2162 @@
+[
+  {
+    "Respondent": "R01",
+    "Set": "Set01",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set01",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set01",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set02",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set02",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set02",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set03",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set03",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set03",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set04",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set04",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set04",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set05",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set05",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set05",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set06",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set06",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set06",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set07",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set07",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set07",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set08",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set08",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set08",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set09",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set09",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set09",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set10",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set10",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set10",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set11",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set11",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set11",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set12",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set12",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set12",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set13",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set13",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set13",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set14",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set14",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set14",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set15",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set15",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set15",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set16",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set16",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set16",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set17",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set17",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set17",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set18",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set18",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set18",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set19",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set19",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set19",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set20",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set20",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set20",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set21",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set21",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set21",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set22",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set22",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set22",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set23",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set23",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set23",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set24",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set24",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set24",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set25",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set25",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set25",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set26",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set26",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set26",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set27",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set27",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set27",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set28",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set28",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set28",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set29",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set29",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set29",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set30",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set30",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set30",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set31",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set31",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set31",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set32",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set32",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set32",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set33",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set33",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set33",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set34",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set34",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set34",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set35",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set35",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set35",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set36",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set36",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set36",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set37",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set37",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set37",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set38",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set38",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set38",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set39",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set39",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set39",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set40",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set40",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set40",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set41",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set41",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set41",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set42",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set42",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set42",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set43",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set43",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set43",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set44",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set44",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set44",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set45",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set45",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set45",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set46",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set46",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set46",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set47",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set47",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set47",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set48",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set48",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set48",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set49",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set49",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set49",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set50",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set50",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set50",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set51",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set51",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set51",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set52",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set52",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set52",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set53",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set53",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set53",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set54",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set54",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set54",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set55",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set55",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set55",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set56",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set56",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set56",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set57",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set57",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set57",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set58",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set58",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set58",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set59",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set59",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set59",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set60",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set60",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set60",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set61",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set61",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R01",
+    "Set": "Set61",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set62",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set62",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R02",
+    "Set": "Set62",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set63",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set63",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R03",
+    "Set": "Set63",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set64",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set64",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R04",
+    "Set": "Set64",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set65",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set65",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R05",
+    "Set": "Set65",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set66",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set66",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R06",
+    "Set": "Set66",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set67",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set67",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R07",
+    "Set": "Set67",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set68",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set68",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R08",
+    "Set": "Set68",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set69",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set69",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R09",
+    "Set": "Set69",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set70",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set70",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R10",
+    "Set": "Set70",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set71",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set71",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R11",
+    "Set": "Set71",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set72",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set72",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R12",
+    "Set": "Set72",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set73",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set73",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R13",
+    "Set": "Set73",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set74",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set74",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R14",
+    "Set": "Set74",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set75",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set75",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R15",
+    "Set": "Set75",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set76",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set76",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R16",
+    "Set": "Set76",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set77",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set77",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R17",
+    "Set": "Set77",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set78",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set78",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R18",
+    "Set": "Set78",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set79",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set79",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R19",
+    "Set": "Set79",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set80",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set80",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R20",
+    "Set": "Set80",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set81",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set81",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R21",
+    "Set": "Set81",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set82",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set82",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R22",
+    "Set": "Set82",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set83",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set83",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R23",
+    "Set": "Set83",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set84",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set84",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R24",
+    "Set": "Set84",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set85",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set85",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R25",
+    "Set": "Set85",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set86",
+    "Alternative": "A",
+    "Price": 3,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set86",
+    "Alternative": "B",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R26",
+    "Set": "Set86",
+    "Alternative": "C",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set87",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set87",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R27",
+    "Set": "Set87",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set88",
+    "Alternative": "A",
+    "Price": 1,
+    "Quality": 2,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set88",
+    "Alternative": "B",
+    "Price": 3,
+    "Quality": 3,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R28",
+    "Set": "Set88",
+    "Alternative": "C",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set89",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set89",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R29",
+    "Set": "Set89",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set90",
+    "Alternative": "A",
+    "Price": 2,
+    "Quality": 3,
+    "Chosen": 1
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set90",
+    "Alternative": "B",
+    "Price": 1,
+    "Quality": 1,
+    "Chosen": 0
+  },
+  {
+    "Respondent": "R30",
+    "Set": "Set90",
+    "Alternative": "C",
+    "Price": 3,
+    "Quality": 2,
+    "Chosen": 0
+  }
+]

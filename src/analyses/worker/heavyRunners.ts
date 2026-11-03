@@ -28,6 +28,10 @@ import { buildAltOutput } from '../alt/run';
 import { buildVarOutput } from '../var/run';
 import { buildGarchOutput } from '../garch/run';
 import { buildStateSpaceOutput } from '../statespace/run';
+import { buildMlOutput } from '../ml/run';
+import { buildTextOutput } from '../text/run';
+import { buildBayesOutput } from '../bayes/run';
+import { buildSpatialOutput } from '../spatial/run';
 import type { HeavyAnalysisId } from './heavyIds';
 
 /**
@@ -89,4 +93,8 @@ export const HEAVY_RUNNERS: Record<
   garch: ({ grid, params, ciLevel }) => buildGarchOutput({ grid, params: params.garch, ciLevel }),
   statespace: ({ grid, params, ciLevel }) =>
     buildStateSpaceOutput({ grid, params: params.statespace, ciLevel }),
+  ml: ({ grid, params }) => buildMlOutput({ grid, params: params.ml }),
+  text: ({ grid, params }) => buildTextOutput({ grid, params: params.text }),
+  bayes: ({ grid, params }) => buildBayesOutput({ grid, params: params.bayes }),
+  spatial: ({ grid, params }) => buildSpatialOutput({ grid, params: params.spatial }),
 };

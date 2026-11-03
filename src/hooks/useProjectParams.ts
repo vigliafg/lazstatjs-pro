@@ -29,6 +29,13 @@ import { defaultReliabilityParams } from '../analyses/reliability/defaults';
 import { defaultVarParams } from '../analyses/var/defaults';
 import { defaultGarchParams } from '../analyses/garch/defaults';
 import { defaultStateSpaceParams } from '../analyses/statespace/defaults';
+import { defaultSurveyParams } from '../analyses/survey/defaults';
+import { defaultMlParams } from '../analyses/ml/defaults';
+import { defaultTextParams } from '../analyses/text/defaults';
+import { defaultChoiceParams } from '../analyses/choice/defaults';
+import { defaultMetaParams } from '../analyses/meta/defaults';
+import { defaultBayesParams } from '../analyses/bayes/defaults';
+import { defaultSpatialParams } from '../analyses/spatial/defaults';
 
 /**
  * Owns the analysis parameters and the two update helpers used by the App.
@@ -69,6 +76,13 @@ export const useProjectParams = (boot: ProjectSnapshot | null, grid: GridData) =
       var: defaultVarParams(grid),
       garch: defaultGarchParams(grid),
       statespace: defaultStateSpaceParams(grid),
+      survey: defaultSurveyParams(grid),
+      ml: defaultMlParams(grid),
+      text: defaultTextParams(grid),
+      choice: defaultChoiceParams(grid),
+      meta: defaultMetaParams(grid),
+      bayes: defaultBayesParams(grid),
+      spatial: defaultSpatialParams(grid),
     };
   });
 

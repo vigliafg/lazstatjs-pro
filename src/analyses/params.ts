@@ -221,6 +221,39 @@ export const remapParams = (
   const altCovariates = list(params.alt.covariates, 'ALT: covariates').filter(
     value => value !== altTime && value !== altEvent && value !== altStress
   );
+  const surveyVariable = one(params.survey.variable, 'Survey: variable');
+  const surveyCategory = one(params.survey.category, 'Survey: category');
+  const surveyWeight = optional(params.survey.weight);
+  const surveyStrata = optional(params.survey.strata);
+  const surveyCluster = optional(params.survey.cluster);
+  const surveyPredictors = list(params.survey.predictors, 'Survey: predictors').filter(
+    value => value !== surveyVariable
+  );
+  const mlOutcome = one(params.ml.outcome, 'Machine learning: outcome');
+  const mlPredictors = list(params.ml.predictors, 'Machine learning: predictors').filter(
+    value => value !== mlOutcome
+  );
+  const textVariable = one(params.text.text, 'Text mining: text column');
+  const textGroup = optional(params.text.group);
+  const choiceSet = one(params.choice.set, 'Choice: set');
+  const choiceAlternative = one(params.choice.alternative, 'Choice: alternative');
+  const choiceChosen = one(params.choice.chosen, 'Choice: chosen');
+  const choiceBest = one(params.choice.best, 'Choice: best');
+  const choiceWorst = one(params.choice.worst, 'Choice: worst');
+  const choiceAttributes = list(params.choice.attributes, 'Choice: attributes');
+  const metaEffect = one(params.meta.effect, 'Meta-analysis: effect');
+  const metaSe = one(params.meta.se, 'Meta-analysis: standard error');
+  const metaStudy = optional(params.meta.study);
+  const bayesOutcome = one(params.bayes.outcome, 'Bayesian: outcome');
+  const bayesPredictors = list(params.bayes.predictors, 'Bayesian: predictors').filter(
+    value => value !== bayesOutcome
+  );
+  const spatialVariable = one(params.spatial.variable, 'Spatial: variable');
+  const spatialX = one(params.spatial.x, 'Spatial: X coordinate');
+  const spatialY = one(params.spatial.y, 'Spatial: Y coordinate');
+  const spatialPredictors = list(params.spatial.predictors, 'Spatial: predictors').filter(
+    value => value !== spatialVariable && value !== spatialX && value !== spatialY
+  );
 
   return {
     invalidated: unique(invalidated.map(label => label)),
@@ -574,6 +607,52 @@ export const remapParams = (
         ...params.reliability,
         mode: params.reliability.mode ?? 'growth',
       },
+      survey: {
+        ...params.survey,
+        variable: surveyVariable,
+        category: surveyCategory,
+        weight: surveyWeight,
+        strata: surveyStrata,
+        cluster: surveyCluster,
+        predictors: surveyPredictors,
+      },
+      ml: {
+        ...params.ml,
+        outcome: mlOutcome,
+        predictors: mlPredictors,
+      },
+      text: {
+        ...params.text,
+        text: textVariable,
+        group: textGroup,
+      },
+      choice: {
+        ...params.choice,
+        set: choiceSet,
+        alternative: choiceAlternative,
+        chosen: choiceChosen,
+        best: choiceBest,
+        worst: choiceWorst,
+        attributes: choiceAttributes,
+      },
+      meta: {
+        ...params.meta,
+        effect: metaEffect,
+        se: metaSe,
+        study: metaStudy,
+      },
+      bayes: {
+        ...params.bayes,
+        outcome: bayesOutcome,
+        predictors: bayesPredictors,
+      },
+      spatial: {
+        ...params.spatial,
+        variable: spatialVariable,
+        x: spatialX,
+        y: spatialY,
+        predictors: spatialPredictors,
+      },
       variances: {
         ...params.variances,
         variable: varianceVariable,
@@ -749,6 +828,31 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.alt.event, 'ALT: event', width, errors);
   checkOne(params.alt.stress, 'ALT: stress', width, errors);
   checkList(params.alt.covariates, 'ALT: covariates', width, errors);
+  checkOne(params.survey.variable, 'Survey: variable', width, errors);
+  checkOne(params.survey.category, 'Survey: category', width, errors);
+  checkOne(params.survey.weight, 'Survey: weight', width, errors, true);
+  checkOne(params.survey.strata, 'Survey: strata', width, errors, true);
+  checkOne(params.survey.cluster, 'Survey: cluster', width, errors, true);
+  checkList(params.survey.predictors, 'Survey: predictors', width, errors);
+  checkOne(params.ml.outcome, 'Machine learning: outcome', width, errors);
+  checkList(params.ml.predictors, 'Machine learning: predictors', width, errors);
+  checkOne(params.text.text, 'Text mining: text column', width, errors);
+  checkOne(params.text.group, 'Text mining: group', width, errors, true);
+  checkOne(params.choice.set, 'Choice: set', width, errors);
+  checkOne(params.choice.alternative, 'Choice: alternative', width, errors);
+  checkOne(params.choice.chosen, 'Choice: chosen', width, errors);
+  checkOne(params.choice.best, 'Choice: best', width, errors);
+  checkOne(params.choice.worst, 'Choice: worst', width, errors);
+  checkList(params.choice.attributes, 'Choice: attributes', width, errors);
+  checkOne(params.meta.effect, 'Meta-analysis: effect', width, errors);
+  checkOne(params.meta.se, 'Meta-analysis: standard error', width, errors);
+  checkOne(params.meta.study, 'Meta-analysis: study', width, errors, true);
+  checkOne(params.bayes.outcome, 'Bayesian: outcome', width, errors);
+  checkList(params.bayes.predictors, 'Bayesian: predictors', width, errors);
+  checkOne(params.spatial.variable, 'Spatial: variable', width, errors);
+  checkOne(params.spatial.x, 'Spatial: X coordinate', width, errors);
+  checkOne(params.spatial.y, 'Spatial: Y coordinate', width, errors);
+  checkList(params.spatial.predictors, 'Spatial: predictors', width, errors);
   return unique(errors);
 };
 
@@ -1059,6 +1163,54 @@ export const validateAnalysisColumnRefs = (
     case 'statespace':
       one(params.statespace.variable, 'State-space: series');
       break;
+    case 'survey':
+      one(params.survey.variable, 'Survey: variable');
+      if (params.survey.mode === 'proportion') one(params.survey.category, 'Survey: category');
+      one(params.survey.weight, 'Survey: weight', true);
+      one(params.survey.strata, 'Survey: strata', true);
+      one(params.survey.cluster, 'Survey: cluster', true);
+      if (params.survey.mode === 'regression') {
+        list(params.survey.predictors, 'Survey: predictors');
+      }
+      break;
+    case 'ml':
+      one(params.ml.outcome, 'Machine learning: outcome');
+      list(params.ml.predictors, 'Machine learning: predictors');
+      break;
+    case 'text':
+      one(params.text.text, 'Text mining: text column');
+      one(params.text.group, 'Text mining: group', true);
+      break;
+    case 'choice':
+      one(params.choice.set, 'Choice: set');
+      one(params.choice.alternative, 'Choice: alternative');
+      if (params.choice.mode === 'choice') {
+        one(params.choice.chosen, 'Choice: chosen');
+        list(params.choice.attributes, 'Choice: attributes');
+      } else {
+        one(params.choice.best, 'Choice: best');
+        one(params.choice.worst, 'Choice: worst');
+      }
+      break;
+    case 'meta':
+      one(params.meta.effect, 'Meta-analysis: effect');
+      one(params.meta.se, 'Meta-analysis: standard error');
+      one(params.meta.study, 'Meta-analysis: study', true);
+      break;
+    case 'bayes':
+      one(params.bayes.outcome, 'Bayesian: outcome');
+      if (params.bayes.mode === 'regression') {
+        list(params.bayes.predictors, 'Bayesian: predictors');
+      }
+      break;
+    case 'spatial':
+      one(params.spatial.variable, 'Spatial: variable');
+      one(params.spatial.x, 'Spatial: X coordinate');
+      one(params.spatial.y, 'Spatial: Y coordinate');
+      if (params.spatial.mode === 'sar') {
+        list(params.spatial.predictors, 'Spatial: predictors');
+      }
+      break;
     default:
       break;
   }
@@ -1275,6 +1427,41 @@ export const setPrimaryColumn = (
       return {
         params: { ...params, doe: { ...params.doe, response: column } },
         role: 'DOE response',
+      };
+    case 'survey':
+      return {
+        params: { ...params, survey: { ...params.survey, variable: column } },
+        role: 'Survey variable',
+      };
+    case 'ml':
+      return {
+        params: { ...params, ml: { ...params.ml, outcome: column } },
+        role: 'Machine learning outcome',
+      };
+    case 'text':
+      return {
+        params: { ...params, text: { ...params.text, text: column } },
+        role: 'Text column',
+      };
+    case 'choice':
+      return {
+        params: { ...params, choice: { ...params.choice, set: column } },
+        role: 'Choice set',
+      };
+    case 'meta':
+      return {
+        params: { ...params, meta: { ...params.meta, effect: column } },
+        role: 'Meta-analysis effect',
+      };
+    case 'bayes':
+      return {
+        params: { ...params, bayes: { ...params.bayes, outcome: column } },
+        role: 'Bayesian outcome',
+      };
+    case 'spatial':
+      return {
+        params: { ...params, spatial: { ...params.spatial, variable: column } },
+        role: 'Spatial variable',
       };
     default:
       return null;

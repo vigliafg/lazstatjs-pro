@@ -45,6 +45,7 @@ import { w5Copy } from './w5';
 import { w6Copy } from './w6';
 import { w7Copy } from './w7';
 import { w8Copy } from './w8';
+import { w9Copy } from './w9';
 import { variancesCopy as frVariancesCopy } from './variances';
 
 export const frReportCopy: Record<string, string> = {
@@ -92,4 +93,5 @@ export const frReportCopy: Record<string, string> = {
   ...w6Copy,
   ...w7Copy,
   ...w8Copy,
+  ...w9Copy,
 };

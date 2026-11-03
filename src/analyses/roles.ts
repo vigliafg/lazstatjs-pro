@@ -7,6 +7,7 @@ import { L4_ROLES } from './rolesL4';
 import { W5_ROLES } from './rolesW5';
 import { W6_ROLES } from './rolesW6';
 import { W7_ROLES } from './rolesW7';
+import { W9_ROLES } from './rolesW9';
 
 export type RoleKind = 'continuous' | 'group' | 'any';
 
@@ -88,6 +89,17 @@ const ROLE_SUFFIX_KEYS: Record<string, MessageKey> = {
   failures: 'form.failures',
   'frailty group': 'form.frailtyGroup',
   'upper bound': 'form.upperBound',
+  weight: 'form.weight',
+  strata: 'form.strata',
+  alternative: 'form.alternative',
+  chosen: 'form.chosen',
+  best: 'form.best',
+  worst: 'form.worst',
+  effect: 'form.effectSize',
+  'standard error': 'form.standardError',
+  'text column': 'form.textColumn',
+  'x coordinate': 'form.xCoordinate',
+  'y coordinate': 'form.yCoordinate',
 };
 
 /** Localised role label: "ANOVA: dependent variable" becomes the active UI language. */
@@ -973,6 +985,7 @@ const ROLES: Record<string, AnalysisRole[]> = {
   ...W5_ROLES,
   ...W6_ROLES,
   ...W7_ROLES,
+  ...W9_ROLES,
 };
 
 /** Assignable column roles for an analysis, primary role first. */

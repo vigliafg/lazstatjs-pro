@@ -1,0 +1,122 @@
+{
+  "source": "survey::svydesign + svymean/svytotal/svyglm",
+  "data": [
+    {
+      "stratum": "A",
+      "psu": "A1",
+      "weight": 1.2,
+      "y": 10,
+      "age": 30,
+      "employed": 1
+    },
+    {
+      "stratum": "A",
+      "psu": "A1",
+      "weight": 0.8,
+      "y": 12,
+      "age": 34,
+      "employed": 1
+    },
+    {
+      "stratum": "A",
+      "psu": "A2",
+      "weight": 1.1,
+      "y": 13,
+      "age": 40,
+      "employed": 0
+    },
+    {
+      "stratum": "A",
+      "psu": "A2",
+      "weight": 0.9,
+      "y": 15,
+      "age": 44,
+      "employed": 1
+    },
+    {
+      "stratum": "A",
+      "psu": "A3",
+      "weight": 1.4,
+      "y": 14,
+      "age": 50,
+      "employed": 1
+    },
+    {
+      "stratum": "A",
+      "psu": "A3",
+      "weight": 1,
+      "y": 16,
+      "age": 54,
+      "employed": 1
+    },
+    {
+      "stratum": "B",
+      "psu": "B1",
+      "weight": 0.7,
+      "y": 20,
+      "age": 32,
+      "employed": 0
+    },
+    {
+      "stratum": "B",
+      "psu": "B1",
+      "weight": 1.3,
+      "y": 22,
+      "age": 36,
+      "employed": 1
+    },
+    {
+      "stratum": "B",
+      "psu": "B2",
+      "weight": 1,
+      "y": 21,
+      "age": 42,
+      "employed": 1
+    },
+    {
+      "stratum": "B",
+      "psu": "B2",
+      "weight": 1.2,
+      "y": 23,
+      "age": 46,
+      "employed": 0
+    },
+    {
+      "stratum": "B",
+      "psu": "B3",
+      "weight": 0.8,
+      "y": 24,
+      "age": 52,
+      "employed": 1
+    },
+    {
+      "stratum": "B",
+      "psu": "B3",
+      "weight": 1.1,
+      "y": 26,
+      "age": 56,
+      "employed": 1
+    }
+  ],
+  "mean": {
+    "estimate": 17.92,
+    "se": 0.718176677983907,
+    "df": 4
+  },
+  "total": {
+    "estimate": 224,
+    "se": 13.3970145928113,
+    "df": 4
+  },
+  "proportion": {
+    "estimate": 0.76,
+    "se": 0.121105520931128,
+    "df": 4
+  },
+  "regression": {
+    "term": ["(Intercept)", "age"],
+    "estimate": [6.0253164556962, 0.275136092346035],
+    "se": [11.6619360810076, 0.271965169303402],
+    "df": 4
+  }
+}

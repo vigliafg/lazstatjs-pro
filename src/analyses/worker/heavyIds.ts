@@ -33,6 +33,10 @@ export const HEAVY_ANALYSIS_IDS = [
   'var',
   'garch',
   'statespace',
+  'ml',
+  'text',
+  'bayes',
+  'spatial',
 ] as const;
 
 export type HeavyAnalysisId = (typeof HEAVY_ANALYSIS_IDS)[number];

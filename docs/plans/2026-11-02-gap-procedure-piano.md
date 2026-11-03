@@ -541,7 +541,7 @@ Sample: `msa_demo`, `acceptance_demo`, `doe_demo`. Dettaglio in
 **Note**
 
 - N-01 parte in W4 con l’imputazione categorica; il FIML si chiude dopo M-05.
-- N-02 è trasversale e richiede F8.
+- N-02 è trasversale e richiede F8 (assorbita nel kernel `survey.ts`).
 
 **Stato W4 (2026-11-03)**: K-01…K-04 e N-01 chiusi, gate G4 verde. Kernel,
 reference R (`mantelhaen.test`, `prop.trend.test`, enumerazione esatta,
@@ -551,21 +551,33 @@ K-03 è una voce autonoma: il modello saturo risolve direttamente
 `Xβ = log(y)` perché `glmFit` richiede p < n. Dettaglio in
 `2026-11-02-gap-procedure-stato.md` §5f e registro §6.
 
+**Stato W9 (2026-11-03)**: N-02 chiuso come voce `survey`, con medie, totali,
+proporzioni e regressione ponderata; varianza di linearizzazione con PSU
+aggregate negli strati. Reference `survey::svydesign`/`svymean`/`svytotal`/
+`svyglm`. Sample `survey_demo`. Dettaglio in `2026-11-02-gap-procedure-stato.md`
+§5k.
+
 ---
 
 ### 7.10 Machine Learning (3 metodi, 3 nuove voci)
 
 | ID | Metodo | Tipo | Kernel / moduli | Form / params | Test reference | Sample | gg | Dip. |
 |---|---|---|---|---|---:|---|---:|---|
-| L-01 | RF/boosting/reti neurali | new `ml` | `kernels/ml.ts` | `ml/Form.tsx` | `randomForest`, `xgboost`, `nnet` | `iris`, `birthwt` | 17 | F8 |
-| L-02 | Text mining | new `text` | `kernels/text.ts` | `text/Form.tsx` | `quanteda`, `topicmodels` | `text_demo*` | 17 | — |
-| L-03 | Choice/MaxDiff | new `choice` | `kernels/choice.ts` | `choice/Form.tsx` | `mlogit`, `ChoiceModelR` | `choice_demo*` | 17 | R-04 |
+| L-01 | RF/boosting/reti neurali | new `ml` | `kernels/ml.ts` | `ml/Form.tsx` | `randomForest`, `gbm`, `nnet` | `ml_demo*` | 17 | F8 |
+| L-02 | Text mining | new `text` | `kernels/text.ts` | `text/Form.tsx` | base R + `NMF` | `text_demo*` | 17 | — |
+| L-03 | Choice/MaxDiff | new `choice` | `kernels/choice.ts` | `choice/Form.tsx` | `optim` + conteggi esatti | `choice_demo*`, `maxdiff_demo*` | 17 | R-04 |
 
 **Note**
 
-- L-01 parte da random forest e gradient boosting; reti neurali in seconda fase.
-- L-02 richiede pipeline testuale e formato dedicato.
+- L-01 parte da random forest e gradient boosting; la rete a uno strato nascosto
+  chiude la voce, la classificazione resta un'estensione.
+- L-02 usa NMF (Lee–Seung) perché `quanteda`/`topicmodels` non sono installati.
 - L-03 condivide il logit condizionale con R-04.
+
+**Stato W9 (2026-11-03)**: L-01…L-03 chiusi; reference `randomForest` + `gbm`
++ `nnet`, base R + `NMF`, `optim`. Sample `ml_demo`, `text_demo`,
+`choice_demo`, `maxdiff_demo`. Dettaglio in `2026-11-02-gap-procedure-stato.md`
+§5k.
 
 ---
 
@@ -573,9 +585,15 @@ K-03 è una voce autonoma: il modello saturo risolve direttamente
 
 | ID | Metodo | Tipo | Kernel / moduli | Form / params | Test reference | Sample | gg | Dip. |
 |---|---|---|---|---|---:|---|---:|---|
-| A-01 | Analisi bayesiana | new `bayes` | `kernels/bayes.ts` | `bayes/Form.tsx` | `rstan`, `brms` | `mtcars` | 17 | F8 |
-| A-02 | Meta-analisi | new `meta` | `kernels/meta.ts` | `meta/Form.tsx` | `metafor` | `meta_demo*` | 9 | — |
+| A-01 | Analisi bayesiana | new `bayes` | `kernels/bayes.ts` | `bayes/Form.tsx` | posteriori coniugate, `lm` | `bayes_demo*` | 17 | F8 |
+| A-02 | Meta-analisi | new `meta` | `kernels/meta.ts` | `meta/Form.tsx` | `metafor`, `lm` pesata | `meta_demo*` | 9 | — |
 | A-03 | Statistica spaziale | new `spatial` | `kernels/spatial.ts` | `spatial/Form.tsx` | `spdep`, `spatialreg` | `spatial_demo*` | 17 | F8, W0-03 |
+
+**Stato W9 (2026-11-03)**: A-01…A-03 chiusi; F8 assorbita in `mcmc.ts`,
+`ensemble.ts` e `survey.ts`. Reference: posteriori coniugate + `lm`,
+`metafor::rma` + `lm` pesata, `spdep` + `spatialreg::lagsarlm`. Sample
+`bayes_demo`, `meta_demo`, `spatial_demo`. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5k.
 
 ---
 
@@ -759,7 +777,7 @@ numerica, salvo il Wizard che non è una procedura statistica.
 | v0.16 | W4 + W5 (13 metodi) | Categorical, MI, SEM/IRT/latent |
 | v0.17 | W6 + W7 (15 metodi) | Survival e time series |
 | v0.18 | W8 (5 metodi) — **chiuso 2026-11-03, G8 verde** | Quality/DOE/power |
-| v0.19 | W9 (7 metodi) | Survey/ML/Advanced, copertura 73/73 |
+| v0.19 | W9 (7 metodi) — **chiuso 2026-11-03, G9 verde** | Survey/ML/Advanced, copertura 73/73 |
 
 Ogni release:
 
@@ -809,7 +827,7 @@ moduli condivisi.
 | 6-7 | W4+W5 chiusi, v0.16 |
 | 8 | W6+W7 chiusi, v0.17 |
 | 9 | W8 chiuso, v0.18 |
-| 10 | W9 chiuso, v0.19, copertura 73/73 |
+| 10 | W9 chiuso, v0.19, copertura 73/73 — **completato 2026-11-03, G9 verde** |
 
 ---
 

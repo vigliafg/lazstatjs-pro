@@ -392,6 +392,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const recurrent = isRecord(raw.recurrent) ? raw.recurrent : {};
   const alt = isRecord(raw.alt) ? raw.alt : {};
   const reliability = isRecord(raw.reliability) ? raw.reliability : {};
+  const survey = isRecord(raw.survey) ? raw.survey : {};
+  const ml = isRecord(raw.ml) ? raw.ml : {};
+  const textMining = isRecord(raw.text) ? raw.text : {};
+  const choice = isRecord(raw.choice) ? raw.choice : {};
+  const meta = isRecord(raw.meta) ? raw.meta : {};
+  const bayes = isRecord(raw.bayes) ? raw.bayes : {};
+  const spatial = isRecord(raw.spatial) ? raw.spatial : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -454,6 +461,16 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
     width
   );
   const reliabilityStages = parseReliabilityStages(reliability.stages, d.reliability.stages);
+  const mlOutcome = index(ml.outcome, d.ml.outcome, width);
+  const mlPredictors = indexList(ml.predictors, d.ml.predictors, width).filter(
+    value => value !== mlOutcome
+  );
+  const bayesOutcome = index(bayes.outcome, d.bayes.outcome, width);
+  const bayesPredictors = indexList(bayes.predictors, d.bayes.predictors, width).filter(
+    value => value !== bayesOutcome
+  );
+  const spatialVariable = index(spatial.variable, d.spatial.variable, width);
+  const surveyVariable = index(survey.variable, d.survey.variable, width);
 
   return {
     descVars: indexList(raw.descVars, d.descVars, width),
@@ -1092,6 +1109,102 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       time: index(reliability.time, d.reliability.time, width),
       failures: index(reliability.failures, d.reliability.failures, width),
       stages: reliabilityStages,
+    },
+    survey: {
+      mode:
+        survey.mode === 'total' ||
+        survey.mode === 'proportion' ||
+        survey.mode === 'regression'
+          ? survey.mode
+          : d.survey.mode,
+      variable: surveyVariable,
+      category: index(survey.category, d.survey.category, width),
+      successLevel: text(survey.successLevel, d.survey.successLevel),
+      weight: optionalIndex(survey.weight, d.survey.weight, width),
+      strata: optionalIndex(survey.strata, d.survey.strata, width),
+      cluster: optionalIndex(survey.cluster, d.survey.cluster, width),
+      predictors: indexList(survey.predictors, d.survey.predictors, width).filter(
+        value => value !== surveyVariable
+      ),
+    },
+    ml: {
+      mode:
+        ml.mode === 'boosting' || ml.mode === 'nnet' ? ml.mode : d.ml.mode,
+      outcome: mlOutcome,
+      predictors: mlPredictors,
+      trees: Math.max(10, Math.min(2000, integer(ml.trees, d.ml.trees))),
+      minNode: Math.max(1, Math.min(100, integer(ml.minNode, d.ml.minNode))),
+      mtry: Math.max(0, Math.min(50, integer(ml.mtry, d.ml.mtry))),
+      shrinkage: Math.max(0.001, Math.min(1, finite(ml.shrinkage, d.ml.shrinkage))),
+      hidden: Math.max(1, Math.min(20, integer(ml.hidden, d.ml.hidden))),
+      iterations: Math.max(50, Math.min(5000, integer(ml.iterations, d.ml.iterations))),
+      seed: integer(ml.seed, d.ml.seed),
+    },
+    text: {
+      mode:
+        textMining.mode === 'tfidf' ||
+        textMining.mode === 'similarity' ||
+        textMining.mode === 'topics'
+          ? textMining.mode
+          : d.text.mode,
+      text: index(textMining.text, d.text.text, width),
+      group: optionalIndex(textMining.group, d.text.group, width),
+      maxTerms: Math.max(3, Math.min(200, integer(textMining.maxTerms, d.text.maxTerms))),
+      minDocFreq: Math.max(1, Math.min(100, integer(textMining.minDocFreq, d.text.minDocFreq))),
+      topics: Math.max(2, Math.min(12, integer(textMining.topics, d.text.topics))),
+      iterations: Math.max(20, Math.min(3000, integer(textMining.iterations, d.text.iterations))),
+      seed: integer(textMining.seed, d.text.seed),
+      stopwords: bool(textMining.stopwords, d.text.stopwords),
+    },
+    choice: {
+      mode: choice.mode === 'maxdiff' ? 'maxdiff' : d.choice.mode,
+      set: index(choice.set, d.choice.set, width),
+      alternative: index(choice.alternative, d.choice.alternative, width),
+      chosen: index(choice.chosen, d.choice.chosen, width),
+      best: index(choice.best, d.choice.best, width),
+      worst: index(choice.worst, d.choice.worst, width),
+      attributes: indexList(choice.attributes, d.choice.attributes, width),
+    },
+    meta: {
+      effect: index(meta.effect, d.meta.effect, width),
+      se: index(meta.se, d.meta.se, width),
+      study: optionalIndex(meta.study, d.meta.study, width),
+      method:
+        meta.method === 'REML' || meta.method === 'FE' ? meta.method : d.meta.method,
+      egger: bool(meta.egger, d.meta.egger),
+    },
+    bayes: {
+      mode:
+        bayes.mode === 'proportion' ||
+        bayes.mode === 'rate' ||
+        bayes.mode === 'regression'
+          ? bayes.mode
+          : d.bayes.mode,
+      outcome: bayesOutcome,
+      predictors: bayesPredictors,
+      priorMean: finite(bayes.priorMean, d.bayes.priorMean),
+      priorSd: Math.max(1e-6, finite(bayes.priorSd, d.bayes.priorSd)),
+      iterations: Math.max(100, Math.min(100000, integer(bayes.iterations, d.bayes.iterations))),
+      burnin: Math.max(0, Math.min(50000, integer(bayes.burnin, d.bayes.burnin))),
+      chains: Math.max(1, Math.min(8, integer(bayes.chains, d.bayes.chains))),
+      seed: integer(bayes.seed, d.bayes.seed),
+    },
+    spatial: {
+      mode:
+        spatial.mode === 'geary' ||
+        spatial.mode === 'lisa' ||
+        spatial.mode === 'sar'
+          ? spatial.mode
+          : d.spatial.mode,
+      variable: spatialVariable,
+      predictors: indexList(spatial.predictors, d.spatial.predictors, width).filter(
+        value => value !== spatialVariable
+      ),
+      x: index(spatial.x, d.spatial.x, width),
+      y: index(spatial.y, d.spatial.y, width),
+      k: Math.max(1, Math.min(20, integer(spatial.k, d.spatial.k))),
+      permutations: Math.max(99, Math.min(9999, integer(spatial.permutations, d.spatial.permutations))),
+      seed: integer(spatial.seed, d.spatial.seed),
     },
   };
 };

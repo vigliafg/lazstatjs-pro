@@ -82,3 +82,10 @@ the test file and in `docs/plans/2026-11-02-gap-procedure-stato.md`.
 | `mcontrol.json` | `r/mcontrol.R` | `kernels/mcontrol.ts` |
 | `doeDesign.json` | `r/doeDesign.R` | `kernels/doeDesign.ts` |
 | `samplesizeW8.json` | `r/samplesizeW8.R` | `kernels/samplesize.ts` |
+| `surveyW9.json` | `r/surveyW9.R` | `kernels/survey.ts` |
+| `mlW9.json` | `r/mlW9.R` | `kernels/ml.ts` |
+| `textW9.json` | `r/textW9.R` | `kernels/text.ts` |
+| `choiceW9.json` | `r/choiceW9.R` | `kernels/choice.ts` |
+| `metaW9.json` | `r/metaW9.R` | `kernels/meta.ts` |
+| `bayesW9.json` | `r/bayesW9.R` | `kernels/bayes.ts` |
+| `spatialW9.json` | `r/spatialW9.R` | `kernels/spatial.ts` |

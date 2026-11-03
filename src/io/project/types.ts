@@ -730,6 +730,118 @@ export interface DoeParams {
   centerPoints: number;
 }
 
+export type SurveyMode = 'mean' | 'total' | 'proportion' | 'regression';
+
+/** Design-based estimation for complex survey samples. */
+export interface SurveyParams {
+  mode: SurveyMode;
+  variable: number;
+  /** Categorical variable read by the proportion mode. */
+  category: number;
+  successLevel: string;
+  /** Sampling weight column; -1 = every row counts once. */
+  weight: number;
+  /** Stratum column; -1 = one stratum. */
+  strata: number;
+  /** Primary sampling unit column; -1 = rows are PSUs. */
+  cluster: number;
+  /** Predictors of the weighted regression mode. */
+  predictors: number[];
+}
+
+export type MlMode = 'rf' | 'boosting' | 'nnet';
+
+/** Tree ensembles and a one-hidden-layer neural network. */
+export interface MlParams {
+  mode: MlMode;
+  outcome: number;
+  predictors: number[];
+  trees: number;
+  minNode: number;
+  /** Predictors tried at each random-forest split; 0 = square root of p. */
+  mtry: number;
+  shrinkage: number;
+  hidden: number;
+  iterations: number;
+  seed: number;
+}
+
+export type TextMode = 'frequency' | 'tfidf' | 'similarity' | 'topics';
+
+/** Text mining: term frequencies, TF-IDF, document similarity and topics. */
+export interface TextParams {
+  mode: TextMode;
+  text: number;
+  /** Optional grouping column; -1 = none. */
+  group: number;
+  maxTerms: number;
+  minDocFreq: number;
+  topics: number;
+  iterations: number;
+  seed: number;
+  stopwords: boolean;
+}
+
+export type ChoiceMode = 'choice' | 'maxdiff';
+
+/** Conditional logit over choice sets and MaxDiff best-worst counts. */
+export interface ChoiceParams {
+  mode: ChoiceMode;
+  /** Choice set or MaxDiff block identifier. */
+  set: number;
+  /** Alternative/item label column. */
+  alternative: number;
+  /** Chosen indicator (1 = chosen) for the conditional logit. */
+  chosen: number;
+  /** Best indicator for MaxDiff. */
+  best: number;
+  /** Worst indicator for MaxDiff. */
+  worst: number;
+  /** Attributes that vary across alternatives. */
+  attributes: number[];
+}
+
+export type MetaMethod = 'DL' | 'REML' | 'FE';
+
+/** Fixed- and random-effects meta-analysis of effect sizes with standard errors. */
+export interface MetaParams {
+  effect: number;
+  se: number;
+  study: number;
+  method: MetaMethod;
+  egger: boolean;
+}
+
+export type BayesMode = 'normal' | 'proportion' | 'rate' | 'regression';
+
+/** Bayesian estimation with a Metropolis/Gibbs sampler. */
+export interface BayesParams {
+  mode: BayesMode;
+  outcome: number;
+  predictors: number[];
+  priorMean: number;
+  priorSd: number;
+  iterations: number;
+  burnin: number;
+  chains: number;
+  seed: number;
+}
+
+export type SpatialMode = 'moran' | 'geary' | 'lisa' | 'sar';
+
+/** Spatial autocorrelation and a spatial lag model on coordinates. */
+export interface SpatialParams {
+  mode: SpatialMode;
+  variable: number;
+  predictors: number[];
+  x: number;
+  y: number;
+  /** Number of nearest neighbours in the row-standardised weights. */
+  k: number;
+  permutations: number;
+  seed: number;
+}
+
 /**
  * Descriptive views: the classic per-variable summary, a frequency tally,
  * outlier tests (Grubbs/Dixon) and the runs test.
@@ -841,6 +953,13 @@ export interface ProjectParams {
   recurrent: RecurrentParams;
   alt: AltParams;
   reliability: ReliabilityParams;
+  survey: SurveyParams;
+  ml: MlParams;
+  text: TextParams;
+  choice: ChoiceParams;
+  meta: MetaParams;
+  bayes: BayesParams;
+  spatial: SpatialParams;
 }
 
 export interface ProjectSettings {
@@ -1370,6 +1489,76 @@ export const DEFAULT_PARAMS: ProjectParams = {
     time: 0,
     failures: 1,
     stages: [['0.9', '0.9']],
+  },
+  survey: {
+    mode: 'mean',
+    variable: 0,
+    category: 1,
+    successLevel: '',
+    weight: -1,
+    strata: -1,
+    cluster: -1,
+    predictors: [1],
+  },
+  ml: {
+    mode: 'rf',
+    outcome: 0,
+    predictors: [1, 2],
+    trees: 200,
+    minNode: 5,
+    mtry: 0,
+    shrinkage: 0.05,
+    hidden: 4,
+    iterations: 500,
+    seed: 20261109,
+  },
+  text: {
+    mode: 'frequency',
+    text: 0,
+    group: -1,
+    maxTerms: 20,
+    minDocFreq: 1,
+    topics: 3,
+    iterations: 300,
+    seed: 20261109,
+    stopwords: true,
+  },
+  choice: {
+    mode: 'choice',
+    set: 0,
+    alternative: 1,
+    chosen: 2,
+    best: 2,
+    worst: 2,
+    attributes: [0],
+  },
+  meta: {
+    effect: 0,
+    se: 1,
+    study: -1,
+    method: 'DL',
+    egger: true,
+  },
+  bayes: {
+    mode: 'normal',
+    outcome: 0,
+    predictors: [1],
+    priorMean: 0,
+    priorSd: 10,
+    iterations: 4000,
+    burnin: 1000,
+    chains: 2,
+    seed: 20261109,
+  },
+  spatial: {
+    mode: 'moran',
+    variable: 0,
+    predictors: [1],
+    x: 1,
+    y: 2,
+    k: 4,
+    permutations: 999,
+    seed: 20261109,
   },
 };
 

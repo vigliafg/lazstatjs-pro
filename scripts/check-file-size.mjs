@@ -13,10 +13,11 @@ const EXCEPTIONS = new Map([
   ['src/stats/kernels/arima.ts', 1429], // kernel numerico compatto: ARIMA, ARIMAX e ADF
   ['src/App.tsx', 754], // composizione root: preset, salvataggio, temi, comandi desktop e row state L5
   ['src/charts/features.ts', 701], // registro unico dei controlli: una riga in più dopo gli oggetti L4
-  ['src/io/project/types.ts', 1393], // tipi di tutti i parametri persistiti: un blocco per procedura (W8)
-  ['src/io/project/parse.ts', 1171], // parsing difensivo di tutti i parametri persistiti (W8)
-  ['src/analyses/params.ts', 1282], // normalizzazione/validazione di tutte le procedure (W8)
-  ['src/analyses/roles.ts', 1032], // mappa ruoli/colonne di tutte le procedure (W8)
+  ['src/io/project/types.ts', 1582], // tipi di tutti i parametri persistiti: un blocco per procedura (W9)
+  ['src/io/project/parse.ts', 1284], // parsing difensivo di tutti i parametri persistiti (W9)
+  ['src/analyses/params.ts', 1469], // normalizzazione/validazione di tutte le procedure (W9)
+  ['src/analyses/roles.ts', 1045], // mappa ruoli/colonne di tutte le procedure (W9)
+  ['src/analyses/registry.ts', 747], // registro unico delle procedure: una voce per analisi (W9)
   ['src/stats/reportCopy/catalog/en/charts.ts', 760], // catalogo inglese dei grafici, un blocco per famiglia (W4)
   ['src/stats/kernels/cox.ts', 854], // Cox PH e fragilità gamma condivisa, con verosimiglianze e EM (W6)
 ]);

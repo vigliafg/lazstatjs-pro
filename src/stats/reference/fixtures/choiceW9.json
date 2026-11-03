@@ -1,0 +1,1005 @@
+{
+  "source": "Base R optim for the conditional logit; exact MaxDiff counts",
+  "choice": {
+    "data": [
+      {
+        "Set": "Set01",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set01",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set01",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set02",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set02",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set02",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set03",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set03",
+        "Alternative": "B",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set03",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set04",
+        "Alternative": "A",
+        "Price": 2,
+        "Quality": 2,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set04",
+        "Alternative": "B",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set04",
+        "Alternative": "C",
+        "Price": 1,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set05",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set05",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set05",
+        "Alternative": "C",
+        "Price": 1,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set06",
+        "Alternative": "A",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set06",
+        "Alternative": "B",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set06",
+        "Alternative": "C",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set07",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set07",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set07",
+        "Alternative": "C",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set08",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set08",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set08",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set09",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set09",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set09",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set10",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set10",
+        "Alternative": "B",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set10",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set11",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set11",
+        "Alternative": "B",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set11",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set12",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set12",
+        "Alternative": "B",
+        "Price": 1,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set12",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set13",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set13",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set13",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set14",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set14",
+        "Alternative": "B",
+        "Price": 1,
+        "Quality": 1,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set14",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set15",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set15",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set15",
+        "Alternative": "C",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set16",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set16",
+        "Alternative": "B",
+        "Price": 1,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set16",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set17",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set17",
+        "Alternative": "B",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set17",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set18",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set18",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set18",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set19",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set19",
+        "Alternative": "B",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set19",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set20",
+        "Alternative": "A",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set20",
+        "Alternative": "B",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set20",
+        "Alternative": "C",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set21",
+        "Alternative": "A",
+        "Price": 2,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set21",
+        "Alternative": "B",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set21",
+        "Alternative": "C",
+        "Price": 1,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set22",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 3,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set22",
+        "Alternative": "B",
+        "Price": 3,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set22",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set23",
+        "Alternative": "A",
+        "Price": 3,
+        "Quality": 3,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set23",
+        "Alternative": "B",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 1
+      },
+      {
+        "Set": "Set23",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set24",
+        "Alternative": "A",
+        "Price": 1,
+        "Quality": 2,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set24",
+        "Alternative": "B",
+        "Price": 3,
+        "Quality": 1,
+        "Chosen": 0
+      },
+      {
+        "Set": "Set24",
+        "Alternative": "C",
+        "Price": 2,
+        "Quality": 3,
+        "Chosen": 1
+      }
+    ],
+    "coefficients": [-1.12465549018129, 1.63406706908802],
+    "se": [0.451416565915871, 0.549485449924159],
+    "logLik": -13.8692155088458,
+    "rows": 72,
+    "sets": 24
+  },
+  "maxdiff": {
+    "data": [
+      {
+        "Block": "B01",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B01",
+        "Item": "Item02",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B01",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B01",
+        "Item": "Item08",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B02",
+        "Item": "Item05",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B02",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B02",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B02",
+        "Item": "Item01",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B03",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B03",
+        "Item": "Item02",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B03",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B03",
+        "Item": "Item07",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B04",
+        "Item": "Item08",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B04",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B04",
+        "Item": "Item04",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B04",
+        "Item": "Item05",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B05",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B05",
+        "Item": "Item05",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B05",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B05",
+        "Item": "Item06",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B06",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B06",
+        "Item": "Item01",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B06",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B06",
+        "Item": "Item04",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B07",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B07",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B07",
+        "Item": "Item02",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B07",
+        "Item": "Item07",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B08",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B08",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B08",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B08",
+        "Item": "Item07",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B09",
+        "Item": "Item02",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B09",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B09",
+        "Item": "Item01",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B09",
+        "Item": "Item03",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B10",
+        "Item": "Item08",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B10",
+        "Item": "Item02",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B10",
+        "Item": "Item01",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B10",
+        "Item": "Item03",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B11",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B11",
+        "Item": "Item05",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B11",
+        "Item": "Item01",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B11",
+        "Item": "Item03",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B12",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B12",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B12",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B12",
+        "Item": "Item02",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B13",
+        "Item": "Item05",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B13",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B13",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B13",
+        "Item": "Item03",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B14",
+        "Item": "Item02",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B14",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B14",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B14",
+        "Item": "Item08",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B15",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B15",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B15",
+        "Item": "Item01",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B15",
+        "Item": "Item08",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B16",
+        "Item": "Item01",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B16",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B16",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B16",
+        "Item": "Item06",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B17",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B17",
+        "Item": "Item02",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B17",
+        "Item": "Item01",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B17",
+        "Item": "Item05",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B18",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B18",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B18",
+        "Item": "Item05",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B18",
+        "Item": "Item04",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B19",
+        "Item": "Item03",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B19",
+        "Item": "Item08",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B19",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B19",
+        "Item": "Item01",
+        "Best": 1,
+        "Worst": 0
+      },
+      {
+        "Block": "B20",
+        "Item": "Item06",
+        "Best": 0,
+        "Worst": 1
+      },
+      {
+        "Block": "B20",
+        "Item": "Item07",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B20",
+        "Item": "Item04",
+        "Best": 0,
+        "Worst": 0
+      },
+      {
+        "Block": "B20",
+        "Item": "Item05",
+        "Best": 1,
+        "Worst": 0
+      }
+    ],
+    "items": ["Item03", "Item01", "Item08", "Item04", "Item07", "Item05", "Item02", "Item06"],
+    "best": [4, 2, 3, 3, 3, 2, 1, 2],
+    "worst": [2, 1, 2, 3, 3, 3, 2, 4],
+    "score": [2, 1, 1, 0, 0, -1, -1, -2],
+    "share": [0.642857142857143, 0.625, 0.583333333333333, 0.5, 0.5, 0.416666666666667, 0.375, 0.357142857142857]
+  }
+}

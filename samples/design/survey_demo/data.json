@@ -1,0 +1,962 @@
+[
+  {
+    "Stratum": "S1",
+    "Cluster": "C01",
+    "Weight": 1.327,
+    "Income": 4985,
+    "Age": 54,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C01",
+    "Weight": 1.706,
+    "Income": 4535,
+    "Age": 44,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C01",
+    "Weight": 1.631,
+    "Income": 3481,
+    "Age": 40,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C01",
+    "Weight": 0.522,
+    "Income": 4440,
+    "Age": 53,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C01",
+    "Weight": 0.62,
+    "Income": 3325,
+    "Age": 39,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C02",
+    "Weight": 0.972,
+    "Income": 4357,
+    "Age": 46,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C02",
+    "Weight": 0.81,
+    "Income": 3119,
+    "Age": 20,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C02",
+    "Weight": 1.053,
+    "Income": 3817,
+    "Age": 29,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C02",
+    "Weight": 1.335,
+    "Income": 3670,
+    "Age": 43,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C02",
+    "Weight": 1.15,
+    "Income": 4219,
+    "Age": 46,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C03",
+    "Weight": 1.092,
+    "Income": 5187,
+    "Age": 57,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C03",
+    "Weight": 0.562,
+    "Income": 2617,
+    "Age": 27,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C03",
+    "Weight": 1.124,
+    "Income": 3651,
+    "Age": 42,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C03",
+    "Weight": 0.8,
+    "Income": 4042,
+    "Age": 50,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C03",
+    "Weight": 1.49,
+    "Income": 3522,
+    "Age": 32,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C04",
+    "Weight": 1.102,
+    "Income": 4296,
+    "Age": 46,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C04",
+    "Weight": 1.211,
+    "Income": 4549,
+    "Age": 68,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C04",
+    "Weight": 1.223,
+    "Income": 3892,
+    "Age": 38,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C04",
+    "Weight": 0.866,
+    "Income": 5158,
+    "Age": 79,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S1",
+    "Cluster": "C04",
+    "Weight": 0.885,
+    "Income": 3594,
+    "Age": 39,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C05",
+    "Weight": 1.756,
+    "Income": 4160,
+    "Age": 56,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C05",
+    "Weight": 1.13,
+    "Income": 5280,
+    "Age": 62,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C05",
+    "Weight": 1.929,
+    "Income": 2977,
+    "Age": 41,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C05",
+    "Weight": 1.704,
+    "Income": 5305,
+    "Age": 51,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C05",
+    "Weight": 1.616,
+    "Income": 4148,
+    "Age": 36,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C06",
+    "Weight": 1.063,
+    "Income": 3557,
+    "Age": 23,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C06",
+    "Weight": 1.723,
+    "Income": 4015,
+    "Age": 48,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C06",
+    "Weight": 1.156,
+    "Income": 4767,
+    "Age": 47,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C06",
+    "Weight": 0.589,
+    "Income": 3815,
+    "Age": 31,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C06",
+    "Weight": 0.912,
+    "Income": 3632,
+    "Age": 30,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C07",
+    "Weight": 0.966,
+    "Income": 3996,
+    "Age": 44,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C07",
+    "Weight": 1.667,
+    "Income": 2975,
+    "Age": 27,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C07",
+    "Weight": 0.512,
+    "Income": 4609,
+    "Age": 36,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C07",
+    "Weight": 0.743,
+    "Income": 4056,
+    "Age": 31,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C07",
+    "Weight": 1.297,
+    "Income": 4143,
+    "Age": 47,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C08",
+    "Weight": 1.64,
+    "Income": 4953,
+    "Age": 59,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C08",
+    "Weight": 1.312,
+    "Income": 3728,
+    "Age": 35,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C08",
+    "Weight": 1.484,
+    "Income": 4987,
+    "Age": 41,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C08",
+    "Weight": 1.103,
+    "Income": 5455,
+    "Age": 56,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S2",
+    "Cluster": "C08",
+    "Weight": 1.499,
+    "Income": 4015,
+    "Age": 39,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C09",
+    "Weight": 0.968,
+    "Income": 5991,
+    "Age": 63,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C09",
+    "Weight": 1.517,
+    "Income": 5167,
+    "Age": 51,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C09",
+    "Weight": 0.676,
+    "Income": 3887,
+    "Age": 27,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C09",
+    "Weight": 1.994,
+    "Income": 4399,
+    "Age": 29,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C09",
+    "Weight": 0.531,
+    "Income": 4787,
+    "Age": 56,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C10",
+    "Weight": 1.309,
+    "Income": 4191,
+    "Age": 20,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C10",
+    "Weight": 0.764,
+    "Income": 4864,
+    "Age": 47,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C10",
+    "Weight": 0.702,
+    "Income": 4155,
+    "Age": 19,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C10",
+    "Weight": 1.018,
+    "Income": 5266,
+    "Age": 54,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C10",
+    "Weight": 1.418,
+    "Income": 4081,
+    "Age": 26,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C11",
+    "Weight": 1.646,
+    "Income": 5172,
+    "Age": 62,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C11",
+    "Weight": 0.816,
+    "Income": 4580,
+    "Age": 37,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C11",
+    "Weight": 1.418,
+    "Income": 4595,
+    "Age": 48,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C11",
+    "Weight": 1.569,
+    "Income": 4584,
+    "Age": 40,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C11",
+    "Weight": 1.928,
+    "Income": 5438,
+    "Age": 67,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C12",
+    "Weight": 1.962,
+    "Income": 5687,
+    "Age": 76,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C12",
+    "Weight": 1.725,
+    "Income": 5169,
+    "Age": 44,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C12",
+    "Weight": 1.728,
+    "Income": 4266,
+    "Age": 47,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C12",
+    "Weight": 0.77,
+    "Income": 5216,
+    "Age": 61,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S3",
+    "Cluster": "C12",
+    "Weight": 0.667,
+    "Income": 5647,
+    "Age": 53,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C13",
+    "Weight": 0.631,
+    "Income": 5273,
+    "Age": 49,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C13",
+    "Weight": 1.843,
+    "Income": 4937,
+    "Age": 32,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C13",
+    "Weight": 1.286,
+    "Income": 4940,
+    "Age": 51,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C13",
+    "Weight": 1.872,
+    "Income": 6091,
+    "Age": 73,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C13",
+    "Weight": 1.452,
+    "Income": 4272,
+    "Age": 28,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C14",
+    "Weight": 0.637,
+    "Income": 5138,
+    "Age": 56,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C14",
+    "Weight": 1.265,
+    "Income": 5593,
+    "Age": 52,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C14",
+    "Weight": 0.885,
+    "Income": 5057,
+    "Age": 53,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C14",
+    "Weight": 1.564,
+    "Income": 6537,
+    "Age": 55,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C14",
+    "Weight": 0.993,
+    "Income": 4886,
+    "Age": 39,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C15",
+    "Weight": 1.757,
+    "Income": 4450,
+    "Age": 47,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C15",
+    "Weight": 1.728,
+    "Income": 5160,
+    "Age": 42,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C15",
+    "Weight": 0.992,
+    "Income": 4352,
+    "Age": 39,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C15",
+    "Weight": 1.292,
+    "Income": 4414,
+    "Age": 48,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C15",
+    "Weight": 0.925,
+    "Income": 4374,
+    "Age": 31,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C16",
+    "Weight": 1.426,
+    "Income": 5251,
+    "Age": 43,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C16",
+    "Weight": 1.875,
+    "Income": 5658,
+    "Age": 43,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C16",
+    "Weight": 0.591,
+    "Income": 5463,
+    "Age": 45,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C16",
+    "Weight": 1.315,
+    "Income": 4656,
+    "Age": 51,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S4",
+    "Cluster": "C16",
+    "Weight": 1.686,
+    "Income": 3724,
+    "Age": 12,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C17",
+    "Weight": 1.408,
+    "Income": 6737,
+    "Age": 70,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C17",
+    "Weight": 0.916,
+    "Income": 5260,
+    "Age": 45,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C17",
+    "Weight": 1.177,
+    "Income": 4971,
+    "Age": 42,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C17",
+    "Weight": 0.867,
+    "Income": 4776,
+    "Age": 44,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C17",
+    "Weight": 0.873,
+    "Income": 4410,
+    "Age": 43,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C18",
+    "Weight": 1.013,
+    "Income": 5421,
+    "Age": 42,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C18",
+    "Weight": 0.713,
+    "Income": 5855,
+    "Age": 52,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C18",
+    "Weight": 0.612,
+    "Income": 6074,
+    "Age": 49,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C18",
+    "Weight": 1.697,
+    "Income": 5593,
+    "Age": 53,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C18",
+    "Weight": 1.81,
+    "Income": 5670,
+    "Age": 47,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C19",
+    "Weight": 1.212,
+    "Income": 5016,
+    "Age": 34,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C19",
+    "Weight": 1.295,
+    "Income": 4694,
+    "Age": 23,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C19",
+    "Weight": 1.373,
+    "Income": 4641,
+    "Age": 41,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C19",
+    "Weight": 1.589,
+    "Income": 6334,
+    "Age": 60,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C19",
+    "Weight": 0.729,
+    "Income": 5454,
+    "Age": 25,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C20",
+    "Weight": 1.57,
+    "Income": 5121,
+    "Age": 44,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C20",
+    "Weight": 1.911,
+    "Income": 5739,
+    "Age": 57,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C20",
+    "Weight": 1.76,
+    "Income": 5903,
+    "Age": 47,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C20",
+    "Weight": 1.174,
+    "Income": 4973,
+    "Age": 41,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S5",
+    "Cluster": "C20",
+    "Weight": 1.901,
+    "Income": 4731,
+    "Age": 27,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C21",
+    "Weight": 1.955,
+    "Income": 7097,
+    "Age": 74,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C21",
+    "Weight": 1.336,
+    "Income": 5839,
+    "Age": 39,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C21",
+    "Weight": 0.885,
+    "Income": 6083,
+    "Age": 47,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C21",
+    "Weight": 1.452,
+    "Income": 5743,
+    "Age": 37,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C21",
+    "Weight": 1.703,
+    "Income": 4598,
+    "Age": 42,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C22",
+    "Weight": 1.44,
+    "Income": 4858,
+    "Age": 28,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C22",
+    "Weight": 0.68,
+    "Income": 4903,
+    "Age": 41,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C22",
+    "Weight": 1.171,
+    "Income": 5258,
+    "Age": 38,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C22",
+    "Weight": 1.327,
+    "Income": 6924,
+    "Age": 51,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C22",
+    "Weight": 1.885,
+    "Income": 5787,
+    "Age": 48,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C23",
+    "Weight": 1.701,
+    "Income": 6602,
+    "Age": 50,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C23",
+    "Weight": 1.67,
+    "Income": 5737,
+    "Age": 48,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C23",
+    "Weight": 1.804,
+    "Income": 5253,
+    "Age": 34,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C23",
+    "Weight": 1.735,
+    "Income": 6385,
+    "Age": 47,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C23",
+    "Weight": 1.192,
+    "Income": 7562,
+    "Age": 64,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C24",
+    "Weight": 1.024,
+    "Income": 4427,
+    "Age": 32,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C24",
+    "Weight": 0.95,
+    "Income": 5725,
+    "Age": 50,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C24",
+    "Weight": 0.876,
+    "Income": 4756,
+    "Age": 48,
+    "Employed": 0
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C24",
+    "Weight": 0.61,
+    "Income": 6282,
+    "Age": 42,
+    "Employed": 1
+  },
+  {
+    "Stratum": "S6",
+    "Cluster": "C24",
+    "Weight": 1.649,
+    "Income": 5527,
+    "Age": 49,
+    "Employed": 0
+  }
+]

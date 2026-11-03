@@ -88,6 +88,13 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   recurrent: ['forest'],
   alt: ['bar', 'forest'],
   reliability: ['bar', 'line'],
+  survey: ['bar', 'forest', 'interval'],
+  ml: ['bar', 'line', 'scatter'],
+  text: ['bar', 'heatmap', 'scatter'],
+  choice: ['bar', 'forest', 'interval'],
+  meta: ['bar', 'forest', 'scatter'],
+  bayes: ['histogram', 'interval', 'line', 'scatter'],
+  spatial: ['bar', 'forest', 'scatter'],
 };
 
 export const chartKindsFor = (analysisId: string): ChartKind[] =>

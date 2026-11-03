@@ -1170,6 +1170,191 @@ write_dataset(
   "300 observations: Local is a noisy local linear trend; Markov alternates a low-volatility regime around -1 and a high-volatility regime around 2."
 )
 
+## ---------------------------------------------------------------------------
+## Wave 9: survey, machine learning, text, choice, meta, Bayes and spatial
+## ---------------------------------------------------------------------------
+
+set.seed(20261110)
+survey_strata <- rep(sprintf("S%d", 1:6), each = 20)
+survey_cluster <- rep(sprintf("C%02d", 1:24), each = 5)
+survey_weight <- round(runif(120, 0.5, 2.0), 3)
+survey_age <- round(rnorm(120, 44, 12))
+survey_income <- round(1800 + 42 * survey_age + 350 * as.integer(sub("S", "", survey_strata)) +
+  rnorm(120, 0, 420))
+survey_employed <- rbinom(120, 1, plogis(-3 + 0.06 * survey_age))
+survey_demo <- data.frame(
+  Stratum = survey_strata,
+  Cluster = survey_cluster,
+  Weight = survey_weight,
+  Income = survey_income,
+  Age = survey_age,
+  Employed = survey_employed
+)
+write_dataset(
+  "design", "survey_demo", survey_demo,
+  "Stratified cluster sample of income",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("survey", "descriptive"),
+  list(
+    example("survey", list(variable = "Income", weight = "Weight", strata = "Stratum", cluster = "Cluster"), mode = "mean"),
+    example("survey", list(category = "Employed"), mode = "proportion", successLevel = "1"),
+    example("survey", list(variable = "Income", predictors = "Age", weight = "Weight", strata = "Stratum", cluster = "Cluster"), mode = "regression")
+  ),
+  "120 rows in six strata with four clusters each; Income depends on age and stratum, Employed is a binary outcome."
+)
+
+ml_x1 <- round(runif(160, -2, 2), 3)
+ml_x2 <- round(rnorm(160), 3)
+ml_x3 <- round(runif(160, 0, 3), 3)
+ml_y <- round(3 + 2 * ml_x1 + 2 * sin(2 * ml_x2) + 0.6 * ml_x2 * ml_x3 + rnorm(160, 0, 0.7), 3)
+ml_demo <- data.frame(X1 = ml_x1, X2 = ml_x2, X3 = ml_x3, Y = ml_y)
+write_dataset(
+  "ml", "ml_demo", ml_demo,
+  "Non-linear regression with interactions",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("ml", "descriptive"),
+  list(
+    example("ml", list(outcome = "Y", predictors = c("X1", "X2", "X3")), mode = "rf", trees = 200, seed = 20261110),
+    example("ml", list(outcome = "Y", predictors = c("X1", "X2", "X3")), mode = "boosting", trees = 200, shrinkage = 0.05, seed = 20261110)
+  ),
+  "160 rows: Y is a non-linear function of X1, X2 and the interaction X2*X3, plus Gaussian noise."
+)
+
+text_topics <- list(
+  c("model", "data", "regression", "estimate", "sample", "variable"),
+  c("patient", "treatment", "clinical", "trial", "dose", "outcome"),
+  c("market", "price", "customer", "demand", "product", "sales")
+)
+text_documents <- character(36)
+text_labels <- character(36)
+for (index in 1:36) {
+  topic <- ((index - 1) %% 3) + 1
+  words <- sample(text_topics[[topic]], 12, replace = TRUE)
+  text_documents[index] <- paste(words, collapse = " ")
+  text_labels[index] <- sprintf("Topic %d", topic)
+}
+text_demo <- data.frame(Document = sprintf("Doc%02d", 1:36), Text = text_documents, Group = text_labels)
+write_dataset(
+  "text", "text_demo", text_demo,
+  "Three-topic short-text corpus",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("text", "descriptive"),
+  list(
+    example("text", list(text = "Text"), mode = "frequency", maxTerms = 20, minDocFreq = 1, stopwords = FALSE),
+    example("text", list(text = "Text", group = "Group"), mode = "topics", topics = 3, iterations = 300, seed = 20261110, stopwords = FALSE)
+  ),
+  "36 short documents generated from three vocabularies; Group records the generating topic."
+)
+
+choice_rows <- list()
+for (set_index in 1:90) {
+  prices <- sample(c(1, 2, 3), 3, replace = FALSE)
+  quality <- sample(c(1, 2, 3), 3, replace = FALSE)
+  utility <- -0.8 * prices + 0.9 * quality + rnorm(3, 0, 0.3)
+  chosen <- which.max(utility)
+  for (alternative in 1:3) {
+    choice_rows[[length(choice_rows) + 1]] <- data.frame(
+      Respondent = sprintf("R%02d", ((set_index - 1) %% 30) + 1),
+      Set = sprintf("Set%02d", set_index),
+      Alternative = LETTERS[alternative],
+      Price = prices[alternative],
+      Quality = quality[alternative],
+      Chosen = as.integer(alternative == chosen)
+    )
+  }
+}
+choice_demo <- do.call(rbind, choice_rows)
+write_dataset(
+  "design", "choice_demo", choice_demo,
+  "Discrete choice experiment with price and quality",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("choice", "descriptive"),
+  list(
+    example("choice", list(set = "Set", alternative = "Alternative", chosen = "Chosen", attributes = c("Price", "Quality")), mode = "choice")
+  ),
+  "90 choice sets of three alternatives; the chosen alternative follows a utility with a negative price effect and a positive quality effect."
+)
+
+maxdiff_rows <- list()
+items <- sprintf("Item%02d", 1:12)
+for (block in 1:80) {
+  shown <- sample(items, 4)
+  utility <- seq_along(items)[match(shown, items)] + rnorm(4, 0, 1.5)
+  for (item_index in seq_along(shown)) {
+    maxdiff_rows[[length(maxdiff_rows) + 1]] <- data.frame(
+      Block = sprintf("B%02d", block),
+      Item = shown[item_index],
+      Best = as.integer(item_index == which.max(utility)),
+      Worst = as.integer(item_index == which.min(utility))
+    )
+  }
+}
+maxdiff_demo <- do.call(rbind, maxdiff_rows)
+write_dataset(
+  "design", "maxdiff_demo", maxdiff_demo,
+  "MaxDiff best-worst blocks",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("choice", "descriptive"),
+  list(
+    example("choice", list(set = "Block", alternative = "Item", best = "Best", worst = "Worst"), mode = "maxdiff")
+  ),
+  "80 blocks of four items; each block marks one best and one worst item."
+)
+
+meta_studies <- data.frame(
+  Study = sprintf("Study %02d", 1:9),
+  Effect = round(c(0.18, 0.24, 0.31, 0.12, 0.42, 0.27, 0.09, 0.35, 0.21), 3),
+  SE = round(c(0.08, 0.10, 0.09, 0.12, 0.15, 0.07, 0.11, 0.13, 0.09), 3)
+)
+write_dataset(
+  "design", "meta_demo", meta_studies,
+  "Nine studies with effect sizes and standard errors",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("meta", "descriptive"),
+  list(
+    example("meta", list(effect = "Effect", se = "SE", study = "Study"), method = "DL", egger = TRUE)
+  ),
+  "Nine studies with small positive effects and heterogeneous standard errors."
+)
+
+bayes_demo <- data.frame(
+  Score = round(50 + 0.4 * survey_age[1:80] + 3 * rep(c(0, 1), 40) + rnorm(80, 0, 5), 2),
+  Age = survey_age[1:80],
+  Treatment = rep(c(0, 1), 40)
+)
+write_dataset(
+  "design", "bayes_demo", bayes_demo,
+  "Score with age and a binary treatment",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("bayes", "descriptive"),
+  list(
+    example("bayes", list(outcome = "Score"), mode = "normal", priorMean = 50, priorSd = 20, iterations = 4000, burnin = 1000, chains = 2, seed = 20261110),
+    example("bayes", list(outcome = "Score", predictors = c("Age", "Treatment")), mode = "regression", priorMean = 0, priorSd = 20, iterations = 4000, burnin = 1000, chains = 2, seed = 20261110)
+  ),
+  "80 rows: Score increases with age and with the binary treatment, with Gaussian noise."
+)
+
+spatial_grid <- expand.grid(X = 1:12, Y = 1:12)
+spatial_noise <- as.numeric(arima.sim(list(order = c(1, 0, 0), ar = 0.6), n = nrow(spatial_grid))) * 1.5
+spatial_demo <- data.frame(
+  Region = sprintf("G%03d", 1:nrow(spatial_grid)),
+  X = spatial_grid$X,
+  Y = spatial_grid$Y,
+  Crime = round(10 + 0.5 * spatial_grid$X + 0.3 * spatial_grid$Y + spatial_noise, 2),
+  Income = round(40 - 0.8 * spatial_grid$X + rnorm(nrow(spatial_grid), 0, 2), 2)
+)
+write_dataset(
+  "design", "spatial_demo", spatial_demo,
+  "Regular grid with spatial autocorrelation",
+  "Synthetic, seeded with set.seed(20261110)",
+  c("spatial", "descriptive"),
+  list(
+    example("spatial", list(variable = "Crime", x = "X", y = "Y"), mode = "moran", k = 4, permutations = 999, seed = 20261110),
+    example("spatial", list(variable = "Crime", predictors = "Income", x = "X", y = "Y"), mode = "sar", k = 4, permutations = 999, seed = 20261110)
+  ),
+  "144 cells of a 12x12 grid; Crime follows a gradient plus spatially autocorrelated noise, Income is a predictor."
+)
+
 manifest <- list(
   version = 1,
   generatedBy = "samples/generate.R",

@@ -2388,6 +2388,414 @@
         }
       ],
       "notes": "300 observations: Local is a noisy local linear trend; Markov alternates a low-volatility regime around -1 and a high-volatility regime around 2."
+    },
+    {
+      "id": "survey_demo",
+      "title": "Stratified cluster sample of income",
+      "family": "design",
+      "dir": "design/survey_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 120,
+      "columns": [
+        "Stratum",
+        "Cluster",
+        "Weight",
+        "Income",
+        "Age",
+        "Employed"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "survey",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "survey",
+          "columns": {
+            "variable": "Income",
+            "weight": "Weight",
+            "strata": "Stratum",
+            "cluster": "Cluster"
+          },
+          "options": {
+            "mode": "mean"
+          }
+        },
+        {
+          "analysis": "survey",
+          "columns": {
+            "category": "Employed"
+          },
+          "options": {
+            "mode": "proportion",
+            "successLevel": "1"
+          }
+        },
+        {
+          "analysis": "survey",
+          "columns": {
+            "variable": "Income",
+            "predictors": "Age",
+            "weight": "Weight",
+            "strata": "Stratum",
+            "cluster": "Cluster"
+          },
+          "options": {
+            "mode": "regression"
+          }
+        }
+      ],
+      "notes": "120 rows in six strata with four clusters each; Income depends on age and stratum, Employed is a binary outcome."
+    },
+    {
+      "id": "ml_demo",
+      "title": "Non-linear regression with interactions",
+      "family": "ml",
+      "dir": "ml/ml_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 160,
+      "columns": [
+        "X1",
+        "X2",
+        "X3",
+        "Y"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "ml",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "ml",
+          "columns": {
+            "outcome": "Y",
+            "predictors": ["X1", "X2", "X3"]
+          },
+          "options": {
+            "mode": "rf",
+            "trees": 200,
+            "seed": 20261110
+          }
+        },
+        {
+          "analysis": "ml",
+          "columns": {
+            "outcome": "Y",
+            "predictors": ["X1", "X2", "X3"]
+          },
+          "options": {
+            "mode": "boosting",
+            "trees": 200,
+            "shrinkage": 0.05,
+            "seed": 20261110
+          }
+        }
+      ],
+      "notes": "160 rows: Y is a non-linear function of X1, X2 and the interaction X2*X3, plus Gaussian noise."
+    },
+    {
+      "id": "text_demo",
+      "title": "Three-topic short-text corpus",
+      "family": "text",
+      "dir": "text/text_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 36,
+      "columns": [
+        "Document",
+        "Text",
+        "Group"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "text",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "text",
+          "columns": {
+            "text": "Text"
+          },
+          "options": {
+            "mode": "frequency",
+            "maxTerms": 20,
+            "minDocFreq": 1,
+            "stopwords": false
+          }
+        },
+        {
+          "analysis": "text",
+          "columns": {
+            "text": "Text",
+            "group": "Group"
+          },
+          "options": {
+            "mode": "topics",
+            "topics": 3,
+            "iterations": 300,
+            "seed": 20261110,
+            "stopwords": false
+          }
+        }
+      ],
+      "notes": "36 short documents generated from three vocabularies; Group records the generating topic."
+    },
+    {
+      "id": "choice_demo",
+      "title": "Discrete choice experiment with price and quality",
+      "family": "design",
+      "dir": "design/choice_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 270,
+      "columns": [
+        "Respondent",
+        "Set",
+        "Alternative",
+        "Price",
+        "Quality",
+        "Chosen"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "choice",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "choice",
+          "columns": {
+            "set": "Set",
+            "alternative": "Alternative",
+            "chosen": "Chosen",
+            "attributes": ["Price", "Quality"]
+          },
+          "options": {
+            "mode": "choice"
+          }
+        }
+      ],
+      "notes": "90 choice sets of three alternatives; the chosen alternative follows a utility with a negative price effect and a positive quality effect."
+    },
+    {
+      "id": "maxdiff_demo",
+      "title": "MaxDiff best-worst blocks",
+      "family": "design",
+      "dir": "design/maxdiff_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 320,
+      "columns": [
+        "Block",
+        "Item",
+        "Best",
+        "Worst"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "choice",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "choice",
+          "columns": {
+            "set": "Block",
+            "alternative": "Item",
+            "best": "Best",
+            "worst": "Worst"
+          },
+          "options": {
+            "mode": "maxdiff"
+          }
+        }
+      ],
+      "notes": "80 blocks of four items; each block marks one best and one worst item."
+    },
+    {
+      "id": "meta_demo",
+      "title": "Nine studies with effect sizes and standard errors",
+      "family": "design",
+      "dir": "design/meta_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 9,
+      "columns": [
+        "Study",
+        "Effect",
+        "SE"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "meta",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "meta",
+          "columns": {
+            "effect": "Effect",
+            "se": "SE",
+            "study": "Study"
+          },
+          "options": {
+            "method": "DL",
+            "egger": true
+          }
+        }
+      ],
+      "notes": "Nine studies with small positive effects and heterogeneous standard errors."
+    },
+    {
+      "id": "bayes_demo",
+      "title": "Score with age and a binary treatment",
+      "family": "design",
+      "dir": "design/bayes_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 80,
+      "columns": [
+        "Score",
+        "Age",
+        "Treatment"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "bayes",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "bayes",
+          "columns": {
+            "outcome": "Score"
+          },
+          "options": {
+            "mode": "normal",
+            "priorMean": 50,
+            "priorSd": 20,
+            "iterations": 4000,
+            "burnin": 1000,
+            "chains": 2,
+            "seed": 20261110
+          }
+        },
+        {
+          "analysis": "bayes",
+          "columns": {
+            "outcome": "Score",
+            "predictors": ["Age", "Treatment"]
+          },
+          "options": {
+            "mode": "regression",
+            "priorMean": 0,
+            "priorSd": 20,
+            "iterations": 4000,
+            "burnin": 1000,
+            "chains": 2,
+            "seed": 20261110
+          }
+        }
+      ],
+      "notes": "80 rows: Score increases with age and with the binary treatment, with Gaussian noise."
+    },
+    {
+      "id": "spatial_demo",
+      "title": "Regular grid with spatial autocorrelation",
+      "family": "design",
+      "dir": "design/spatial_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 144,
+      "columns": [
+        "Region",
+        "X",
+        "Y",
+        "Crime",
+        "Income"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "spatial",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "spatial",
+          "columns": {
+            "variable": "Crime",
+            "x": "X",
+            "y": "Y"
+          },
+          "options": {
+            "mode": "moran",
+            "k": 4,
+            "permutations": 999,
+            "seed": 20261110
+          }
+        },
+        {
+          "analysis": "spatial",
+          "columns": {
+            "variable": "Crime",
+            "predictors": "Income",
+            "x": "X",
+            "y": "Y"
+          },
+          "options": {
+            "mode": "sar",
+            "k": 4,
+            "permutations": 999,
+            "seed": 20261110
+          }
+        }
+      ],
+      "notes": "144 cells of a 12x12 grid; Crime follows a gradient plus spatially autocorrelated noise, Income is a predictor."
     }
   ]
 }

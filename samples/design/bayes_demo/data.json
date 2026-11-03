@@ -1,0 +1,402 @@
+[
+  {
+    "Score": 67.56,
+    "Age": 54,
+    "Treatment": 0
+  },
+  {
+    "Score": 74.19,
+    "Age": 44,
+    "Treatment": 1
+  },
+  {
+    "Score": 68.06,
+    "Age": 40,
+    "Treatment": 0
+  },
+  {
+    "Score": 79,
+    "Age": 53,
+    "Treatment": 1
+  },
+  {
+    "Score": 70.07,
+    "Age": 39,
+    "Treatment": 0
+  },
+  {
+    "Score": 73.06,
+    "Age": 46,
+    "Treatment": 1
+  },
+  {
+    "Score": 58.98,
+    "Age": 20,
+    "Treatment": 0
+  },
+  {
+    "Score": 58.06,
+    "Age": 29,
+    "Treatment": 1
+  },
+  {
+    "Score": 63.18,
+    "Age": 43,
+    "Treatment": 0
+  },
+  {
+    "Score": 62.02,
+    "Age": 46,
+    "Treatment": 1
+  },
+  {
+    "Score": 71.18,
+    "Age": 57,
+    "Treatment": 0
+  },
+  {
+    "Score": 65.06,
+    "Age": 27,
+    "Treatment": 1
+  },
+  {
+    "Score": 67.39,
+    "Age": 42,
+    "Treatment": 0
+  },
+  {
+    "Score": 70.23,
+    "Age": 50,
+    "Treatment": 1
+  },
+  {
+    "Score": 62.88,
+    "Age": 32,
+    "Treatment": 0
+  },
+  {
+    "Score": 81.73,
+    "Age": 46,
+    "Treatment": 1
+  },
+  {
+    "Score": 77.41,
+    "Age": 68,
+    "Treatment": 0
+  },
+  {
+    "Score": 60.32,
+    "Age": 38,
+    "Treatment": 1
+  },
+  {
+    "Score": 90.89,
+    "Age": 79,
+    "Treatment": 0
+  },
+  {
+    "Score": 69.3,
+    "Age": 39,
+    "Treatment": 1
+  },
+  {
+    "Score": 69.94,
+    "Age": 56,
+    "Treatment": 0
+  },
+  {
+    "Score": 71.55,
+    "Age": 62,
+    "Treatment": 1
+  },
+  {
+    "Score": 66.38,
+    "Age": 41,
+    "Treatment": 0
+  },
+  {
+    "Score": 80.09,
+    "Age": 51,
+    "Treatment": 1
+  },
+  {
+    "Score": 63.06,
+    "Age": 36,
+    "Treatment": 0
+  },
+  {
+    "Score": 59.96,
+    "Age": 23,
+    "Treatment": 1
+  },
+  {
+    "Score": 64.72,
+    "Age": 48,
+    "Treatment": 0
+  },
+  {
+    "Score": 77.3,
+    "Age": 47,
+    "Treatment": 1
+  },
+  {
+    "Score": 71.91,
+    "Age": 31,
+    "Treatment": 0
+  },
+  {
+    "Score": 60.69,
+    "Age": 30,
+    "Treatment": 1
+  },
+  {
+    "Score": 68.48,
+    "Age": 44,
+    "Treatment": 0
+  },
+  {
+    "Score": 61.34,
+    "Age": 27,
+    "Treatment": 1
+  },
+  {
+    "Score": 68,
+    "Age": 36,
+    "Treatment": 0
+  },
+  {
+    "Score": 58.6,
+    "Age": 31,
+    "Treatment": 1
+  },
+  {
+    "Score": 67.82,
+    "Age": 47,
+    "Treatment": 0
+  },
+  {
+    "Score": 78.46,
+    "Age": 59,
+    "Treatment": 1
+  },
+  {
+    "Score": 64.99,
+    "Age": 35,
+    "Treatment": 0
+  },
+  {
+    "Score": 71.58,
+    "Age": 41,
+    "Treatment": 1
+  },
+  {
+    "Score": 78.21,
+    "Age": 56,
+    "Treatment": 0
+  },
+  {
+    "Score": 71.46,
+    "Age": 39,
+    "Treatment": 1
+  },
+  {
+    "Score": 82.98,
+    "Age": 63,
+    "Treatment": 0
+  },
+  {
+    "Score": 72.91,
+    "Age": 51,
+    "Treatment": 1
+  },
+  {
+    "Score": 58.66,
+    "Age": 27,
+    "Treatment": 0
+  },
+  {
+    "Score": 62.89,
+    "Age": 29,
+    "Treatment": 1
+  },
+  {
+    "Score": 74.05,
+    "Age": 56,
+    "Treatment": 0
+  },
+  {
+    "Score": 60.7,
+    "Age": 20,
+    "Treatment": 1
+  },
+  {
+    "Score": 73.35,
+    "Age": 47,
+    "Treatment": 0
+  },
+  {
+    "Score": 61.59,
+    "Age": 19,
+    "Treatment": 1
+  },
+  {
+    "Score": 68.51,
+    "Age": 54,
+    "Treatment": 0
+  },
+  {
+    "Score": 64.8,
+    "Age": 26,
+    "Treatment": 1
+  },
+  {
+    "Score": 81.74,
+    "Age": 62,
+    "Treatment": 0
+  },
+  {
+    "Score": 69.98,
+    "Age": 37,
+    "Treatment": 1
+  },
+  {
+    "Score": 63.74,
+    "Age": 48,
+    "Treatment": 0
+  },
+  {
+    "Score": 71.69,
+    "Age": 40,
+    "Treatment": 1
+  },
+  {
+    "Score": 79.09,
+    "Age": 67,
+    "Treatment": 0
+  },
+  {
+    "Score": 86.19,
+    "Age": 76,
+    "Treatment": 1
+  },
+  {
+    "Score": 65.64,
+    "Age": 44,
+    "Treatment": 0
+  },
+  {
+    "Score": 69.44,
+    "Age": 47,
+    "Treatment": 1
+  },
+  {
+    "Score": 76.14,
+    "Age": 61,
+    "Treatment": 0
+  },
+  {
+    "Score": 68.3,
+    "Age": 53,
+    "Treatment": 1
+  },
+  {
+    "Score": 61.22,
+    "Age": 49,
+    "Treatment": 0
+  },
+  {
+    "Score": 65.06,
+    "Age": 32,
+    "Treatment": 1
+  },
+  {
+    "Score": 62.28,
+    "Age": 51,
+    "Treatment": 0
+  },
+  {
+    "Score": 81.02,
+    "Age": 73,
+    "Treatment": 1
+  },
+  {
+    "Score": 58.99,
+    "Age": 28,
+    "Treatment": 0
+  },
+  {
+    "Score": 77.16,
+    "Age": 56,
+    "Treatment": 1
+  },
+  {
+    "Score": 64.15,
+    "Age": 52,
+    "Treatment": 0
+  },
+  {
+    "Score": 71.01,
+    "Age": 53,
+    "Treatment": 1
+  },
+  {
+    "Score": 72.81,
+    "Age": 55,
+    "Treatment": 0
+  },
+  {
+    "Score": 74.41,
+    "Age": 39,
+    "Treatment": 1
+  },
+  {
+    "Score": 72.02,
+    "Age": 47,
+    "Treatment": 0
+  },
+  {
+    "Score": 69.97,
+    "Age": 42,
+    "Treatment": 1
+  },
+  {
+    "Score": 67.15,
+    "Age": 39,
+    "Treatment": 0
+  },
+  {
+    "Score": 78.57,
+    "Age": 48,
+    "Treatment": 1
+  },
+  {
+    "Score": 61.17,
+    "Age": 31,
+    "Treatment": 0
+  },
+  {
+    "Score": 64.3,
+    "Age": 43,
+    "Treatment": 1
+  },
+  {
+    "Score": 66.46,
+    "Age": 43,
+    "Treatment": 0
+  },
+  {
+    "Score": 71.21,
+    "Age": 45,
+    "Treatment": 1
+  },
+  {
+    "Score": 74.06,
+    "Age": 51,
+    "Treatment": 0
+  },
+  {
+    "Score": 53.9,
+    "Age": 12,
+    "Treatment": 1
+  }
+]

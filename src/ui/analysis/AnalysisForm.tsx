@@ -66,6 +66,13 @@ import { ReliabilityForm } from '../../analyses/reliability/Form';
 import { VarForm } from '../../analyses/var/Form';
 import { GarchForm } from '../../analyses/garch/Form';
 import { StateSpaceForm } from '../../analyses/statespace/Form';
+import { SurveyForm } from '../../analyses/survey/Form';
+import { MlForm } from '../../analyses/ml/Form';
+import { TextForm } from '../../analyses/text/Form';
+import { ChoiceForm } from '../../analyses/choice/Form';
+import { MetaForm } from '../../analyses/meta/Form';
+import { BayesForm } from '../../analyses/bayes/Form';
+import { SpatialForm } from '../../analyses/spatial/Form';
 import { t } from '../../i18n';
 
 interface AnalysisFormProps {
@@ -598,6 +605,58 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
             grid={p.grid}
             stateSpaceParams={params.statespace}
             setStateSpaceParams={setSlice('statespace')}
+          />
+        );
+      case 'survey':
+        return (
+          <SurveyForm
+            grid={p.grid}
+            surveyParams={params.survey}
+            setSurveyParams={setSlice('survey')}
+          />
+        );
+      case 'ml':
+        return (
+          <MlForm grid={p.grid} mlParams={params.ml} setMlParams={setSlice('ml')} />
+        );
+      case 'text':
+        return (
+          <TextForm
+            grid={p.grid}
+            textParams={params.text}
+            setTextParams={setSlice('text')}
+          />
+        );
+      case 'choice':
+        return (
+          <ChoiceForm
+            grid={p.grid}
+            choiceParams={params.choice}
+            setChoiceParams={setSlice('choice')}
+          />
+        );
+      case 'meta':
+        return (
+          <MetaForm
+            grid={p.grid}
+            metaParams={params.meta}
+            setMetaParams={setSlice('meta')}
+          />
+        );
+      case 'bayes':
+        return (
+          <BayesForm
+            grid={p.grid}
+            bayesParams={params.bayes}
+            setBayesParams={setSlice('bayes')}
+          />
+        );
+      case 'spatial':
+        return (
+          <SpatialForm
+            grid={p.grid}
+            spatialParams={params.spatial}
+            setSpatialParams={setSlice('spatial')}
           />
         );
       default:

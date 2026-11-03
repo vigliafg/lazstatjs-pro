@@ -1,0 +1,47 @@
+[
+  {
+    "Study": "Study 01",
+    "Effect": 0.18,
+    "SE": 0.08
+  },
+  {
+    "Study": "Study 02",
+    "Effect": 0.24,
+    "SE": 0.1
+  },
+  {
+    "Study": "Study 03",
+    "Effect": 0.31,
+    "SE": 0.09
+  },
+  {
+    "Study": "Study 04",
+    "Effect": 0.12,
+    "SE": 0.12
+  },
+  {
+    "Study": "Study 05",
+    "Effect": 0.42,
+    "SE": 0.15
+  },
+  {
+    "Study": "Study 06",
+    "Effect": 0.27,
+    "SE": 0.07
+  },
+  {
+    "Study": "Study 07",
+    "Effect": 0.09,
+    "SE": 0.11
+  },
+  {
+    "Study": "Study 08",
+    "Effect": 0.35,
+    "SE": 0.13
+  },
+  {
+    "Study": "Study 09",
+    "Effect": 0.21,
+    "SE": 0.09
+  }
+]
