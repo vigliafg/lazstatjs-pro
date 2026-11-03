@@ -1,7 +1,7 @@
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
-import { hierarchicalClusters } from '../../stats/kernels/cluster';
+import { hierarchicalClusters, partitionClusters } from '../../stats/kernels/cluster';
 import { GUARD_LIMITS, guardDimensions, sampleEvenly } from '../../stats/kernels/guards';
 import { clusterTables } from '../../stats/tables/cluster';
 import { clusterReport } from '../../stats/reports/cluster';
@@ -48,13 +48,23 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
   const variableNames = columns.map(index => grid.cols[index]?.name ?? `V${index + 1}`);
   const k = Math.max(2, Math.min(sample.length, params.clusters || 3));
 
-  const result = hierarchicalClusters({
-    data: sample.map(row => row.values),
-    method: params.method,
-    clusters: k,
-    standardize: params.standardize,
-    variableNames,
-  });
+  const partitioned = params.method === 'kmeans' || params.method === 'kmedians';
+  const result =
+    params.method === 'kmeans' || params.method === 'kmedians'
+      ? partitionClusters({
+          data: sample.map(row => row.values),
+          k,
+          method: params.method,
+          standardize: params.standardize,
+          variableNames,
+        })
+      : hierarchicalClusters({
+          data: sample.map(row => row.values),
+          method: params.method,
+          clusters: k,
+          standardize: params.standardize,
+          variableNames,
+        });
   if (!result) {
     return {
       ok: false,
@@ -77,19 +87,23 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
   }));
 
   const charts: AnalysisChart[] = [
-    makeChart({
-      id: 'cluster-dendrogram',
-      kind: 'dendrogram',
-      title: copy('Dendrogramma'),
-      subtitle: copy('{s1} osservazioni · {s2} cluster', { s1: sample.length, s2: result.k }),
-      note: copy('Ogni linea unisce due gruppi alla distanza a cui sono stati fusi: più in alto è l’unione, più diversi erano i gruppi. Il taglio orizzontale definisce il numero di cluster.'),
-      data: {
-        links: result.links,
-        leaves: result.leaves,
-      },
-      fields: { xLabel: copy('Osservazioni'), yLabel: copy('Distanza') },
-      options: { showLabels: true, showHeights: false } as never,
-    }),
+    ...(partitioned
+      ? []
+      : [
+          makeChart({
+            id: 'cluster-dendrogram',
+            kind: 'dendrogram' as const,
+            title: copy('Dendrogramma'),
+            subtitle: copy('{s1} osservazioni · {s2} cluster', { s1: sample.length, s2: result.k }),
+            note: copy('Ogni linea unisce due gruppi alla distanza a cui sono stati fusi: più in alto è l’unione, più diversi erano i gruppi. Il taglio orizzontale definisce il numero di cluster.'),
+            data: {
+              links: result.links,
+              leaves: result.leaves,
+            },
+            fields: { xLabel: copy('Osservazioni'), yLabel: copy('Distanza') },
+            options: { showLabels: true, showHeights: false } as never,
+          }),
+        ]),
     makeChart({
       id: 'cluster-profile',
       kind: 'line',

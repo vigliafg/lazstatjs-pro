@@ -517,7 +517,13 @@ export interface QualityParams {
   toleranceP: number;
 }
 
-export type ClusterMethod = 'average' | 'complete' | 'single' | 'ward';
+export type ClusterMethod =
+  | 'average'
+  | 'complete'
+  | 'single'
+  | 'ward'
+  | 'kmeans'
+  | 'kmedians';
 
 /** Parametri del clustering gerarchico. */
 export interface ClusterParams {
@@ -528,8 +534,60 @@ export interface ClusterParams {
   standardize: boolean;
 }
 
-/** Parametri dell'analisi discriminante (con MANOVA a un fattore). */
-export interface DiscriminantParams {
+/** Canonical correlation between two blocks of numeric variables. */
+export interface CanonicalParams {
+  x: number[];
+  y: number[];
+}
+
+export type MdsMetric = 'classical' | 'nonmetric';
+
+/** Multidimensional scaling of a numeric distance matrix. */
+export interface MdsParams {
+  selected: number[];
+  dimensions: number;
+  metric: MdsMetric;
+}
+
+/** Correspondence analysis of a table entered in the form. */
+export interface CorrespondenceParams {
+  rows: string[];
+  cols: string[];
+  values: string[][];
+}
+
+/** Confirmatory factor analysis / two-factor structural model. */
+export interface SemParams {
+  selected: number[];
+  factors: number;
+  /** Factor index for each selected variable, in the same order. */
+  groups: number[];
+  structural: boolean;
+}
+
+/** Latent class analysis of categorical indicators. */
+export interface LatentClassParams {
+  selected: number[];
+  classes: number;
+  maxIterations: number;
+}
+
+export type IrtModel = '2pl' | 'rasch';
+
+/** Unidimensional IRT for binary indicators. */
+export interface IrtParams {
+  selected: number[];
+  model: IrtModel;
+  quadrature: number;
+}
+
+/** Additive conjoint analysis from profiles and a rating. */
+export interface ConjointParams {
+  attributes: number[];
+  response: number;
+}
+
+/** Parametri dell'analisi discriminante (con MANOVA a un fattore). */export interface DiscriminantParams {
   /** Classic discriminant analysis or MANCOVA (predictors are outcomes). */
   mode?: 'classic' | 'mancova';
   group: number;
@@ -641,6 +699,13 @@ export interface ProjectParams {
   partition: PartitionParams;
   quality: QualityParams;
   cluster: ClusterParams;
+  canonical: CanonicalParams;
+  mds: MdsParams;
+  correspondence: CorrespondenceParams;
+  sem: SemParams;
+  latentclass: LatentClassParams;
+  irt: IrtParams;
+  conjoint: ConjointParams;
   discriminant: DiscriminantParams;
   doe: DoeParams;
 }
@@ -1057,6 +1122,43 @@ export const DEFAULT_PARAMS: ProjectParams = {
     method: 'average',
     clusters: 3,
     standardize: true,
+  },
+  canonical: {
+    x: [0, 1],
+    y: [2],
+  },
+  mds: {
+    selected: [0, 1, 2],
+    dimensions: 2,
+    metric: 'classical',
+  },
+  correspondence: {
+    rows: ['Basso', 'Alto'],
+    cols: ['Basso', 'Alto'],
+    values: [
+      ['10', '5'],
+      ['6', '12'],
+    ],
+  },
+  sem: {
+    selected: [0, 1, 2],
+    factors: 2,
+    groups: [0, 0, 1],
+    structural: false,
+  },
+  latentclass: {
+    selected: [0, 1, 2],
+    classes: 2,
+    maxIterations: 500,
+  },
+  irt: {
+    selected: [0, 1, 2],
+    model: '2pl',
+    quadrature: 21,
+  },
+  conjoint: {
+    attributes: [0, 1],
+    response: 2,
   },
   discriminant: {
     mode: 'classic',

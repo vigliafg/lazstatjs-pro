@@ -50,6 +50,13 @@ import { TdCoxForm } from '../../analyses/tdcox/Form';
 import { PartitionForm } from '../../analyses/partition/Form';
 import { QualityForm } from '../../analyses/quality/Form';
 import { ClusterForm } from '../../analyses/cluster/Form';
+import { CanonicalForm } from '../../analyses/canonical/Form';
+import { MdsForm } from '../../analyses/mds/Form';
+import { CorrespondenceForm } from '../../analyses/correspondence/Form';
+import { SemForm } from '../../analyses/sem/Form';
+import { LatentClassForm } from '../../analyses/latentclass/Form';
+import { IrtForm } from '../../analyses/irt/Form';
+import { ConjointForm } from '../../analyses/conjoint/Form';
 import { DiscriminantForm } from '../../analyses/discriminant/Form';
 import { DoeForm } from '../../analyses/doe/Form';
 import { t } from '../../i18n';
@@ -459,6 +466,61 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
             grid={p.grid}
             clusterParams={params.cluster}
             setClusterParams={setSlice('cluster')}
+          />
+        );
+      case 'canonical':
+        return (
+          <CanonicalForm
+            grid={p.grid}
+            canonicalParams={params.canonical}
+            setCanonicalParams={setSlice('canonical')}
+          />
+        );
+      case 'mds':
+        return (
+          <MdsForm
+            grid={p.grid}
+            mdsParams={params.mds}
+            setMdsParams={setSlice('mds')}
+          />
+        );
+      case 'correspondence':
+        return (
+          <CorrespondenceForm
+            correspondenceParams={params.correspondence}
+            setCorrespondenceParams={setSlice('correspondence')}
+          />
+        );
+      case 'sem':
+        return (
+          <SemForm
+            grid={p.grid}
+            semParams={params.sem}
+            setSemParams={setSlice('sem')}
+          />
+        );
+      case 'latentclass':
+        return (
+          <LatentClassForm
+            grid={p.grid}
+            latentClassParams={params.latentclass}
+            setLatentClassParams={setSlice('latentclass')}
+          />
+        );
+      case 'irt':
+        return (
+          <IrtForm
+            grid={p.grid}
+            irtParams={params.irt}
+            setIrtParams={setSlice('irt')}
+          />
+        );
+      case 'conjoint':
+        return (
+          <ConjointForm
+            grid={p.grid}
+            conjointParams={params.conjoint}
+            setConjointParams={setSlice('conjoint')}
           />
         );
       case 'discriminant':

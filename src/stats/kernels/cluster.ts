@@ -246,3 +246,162 @@ export const hierarchicalClusters = (input: ClusterInput): ClusterResult | null 
 };
 
 export { buildLayout as clusterLayout };
+
+export interface PartitionClusterInput {
+  data: number[][];
+  k: number;
+  method: 'kmeans' | 'kmedians';
+  standardize: boolean;
+  variableNames: string[];
+  maxIterations?: number;
+}
+
+const euclidean = (a: number[], b: number[]): number =>
+  Math.sqrt(a.reduce((sum, value, index) => sum + Math.pow(value - (b[index] ?? 0), 2), 0));
+
+const manhattan = (a: number[], b: number[]): number =>
+  a.reduce((sum, value, index) => sum + Math.abs(value - (b[index] ?? 0)), 0);
+
+const median = (values: number[]): number => {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 1
+    ? sorted[middle]
+    : (sorted[middle - 1] + sorted[middle]) / 2;
+};
+
+/** Deterministic k-means++ seeding: first row, then farthest-first traversal. */
+const initialCenters = (data: number[][], k: number, metric: 'kmeans' | 'kmedians'): number[][] => {
+  const distance = metric === 'kmeans' ? euclidean : manhattan;
+  const centers = [[...data[0]]];
+  while (centers.length < k) {
+    let bestIndex = 0;
+    let bestDistance = -1;
+    data.forEach((row, index) => {
+      const nearest = Math.min(...centers.map(center => distance(row, center)));
+      if (nearest > bestDistance) {
+        bestDistance = nearest;
+        bestIndex = index;
+      }
+    });
+    centers.push([...data[bestIndex]]);
+  }
+  return centers;
+};
+
+const withinCluster = (
+  data: number[][],
+  assignment: number[],
+  centers: number[][],
+  metric: 'kmeans' | 'kmedians'
+): number =>
+  data.reduce((sum, row, index) => {
+    const center = centers[assignment[index]] ?? centers[0];
+    return sum + (metric === 'kmeans' ? Math.pow(euclidean(row, center), 2) : manhattan(row, center));
+  }, 0);
+
+const meanSilhouette = (data: number[][], assignment: number[], k: number): number => {
+  if (k < 2 || data.length < 3) return 0;
+  const distances = data.map(row => data.map(other => euclidean(row, other)));
+  const scores: number[] = [];
+  data.forEach((_, index) => {
+    const own = assignment[index];
+    const ownMembers = distances[index].filter((__, other) => assignment[other] === own && other !== index);
+    if (ownMembers.length === 0) return;
+    const a = ownMembers.reduce((sum, value) => sum + value, 0) / ownMembers.length;
+    let b = Infinity;
+    for (let cluster = 0; cluster < k; cluster += 1) {
+      if (cluster === own) continue;
+      const members = distances[index].filter((__, other) => assignment[other] === cluster);
+      if (members.length === 0) continue;
+      b = Math.min(b, members.reduce((sum, value) => sum + value, 0) / members.length);
+    }
+    if (Number.isFinite(b)) scores.push((b - a) / Math.max(a, b, 1e-12));
+  });
+  return scores.length > 0 ? scores.reduce((sum, value) => sum + value, 0) / scores.length : 0;
+};
+
+/**
+ * Lloyd's algorithm for k-means (Euclidean means) or k-medians (component-wise
+ * medians). Seeding is deterministic (first row plus farthest-first) so a run
+ * is reproducible and the R fixture can pass the same starting centres.
+ */
+export const partitionClusters = (input: PartitionClusterInput): ClusterResult | null => {
+  const n = input.data.length;
+  const width = input.variableNames.length;
+  const k = Math.max(1, Math.min(n, Math.round(input.k)));
+  if (n < 2 || width < 1 || input.data.some(row => row.length !== width)) return null;
+  const working = input.standardize ? standardizeData(input.data) : input.data;
+  if (!working) return null;
+  if (k < 2) return null;
+
+  let centers = initialCenters(working, k, input.method);
+  let assignment = new Array<number>(n).fill(0);
+  let iterations = 0;
+  const maxIterations = Math.max(1, Math.min(500, input.maxIterations ?? 200));
+
+  for (; iterations < maxIterations; iterations += 1) {
+    const next = working.map(row => {
+      let best = 0;
+      let bestDistance = Infinity;
+      centers.forEach((center, cluster) => {
+        const value = input.method === 'kmeans' ? euclidean(row, center) : manhattan(row, center);
+        if (value < bestDistance) {
+          bestDistance = value;
+          best = cluster;
+        }
+      });
+      return best;
+    });
+    const changed = next.some((cluster, index) => cluster !== assignment[index]);
+    assignment = next;
+    if (!changed && iterations > 0) break;
+
+    centers = Array.from({ length: k }, (_, cluster) => {
+      const members = working.filter((_, index) => assignment[index] === cluster);
+      if (members.length === 0) return centers[cluster];
+      return Array.from({ length: width }, (_, column) =>
+        input.method === 'kmeans'
+          ? mean(members.map(row => row[column]))
+          : median(members.map(row => row[column]))
+      );
+    });
+  }
+
+  const objective = withinCluster(working, assignment, centers, input.method);
+  const profiles = Array.from({ length: k }, (_, cluster) => {
+    const members = working.filter((_, index) => assignment[index] === cluster);
+    return Array.from({ length: width }, (_, column) =>
+      members.length > 0 ? mean(members.map(row => row[column])) : 0
+    );
+  });
+  const rawCenters = Array.from({ length: k }, (_, cluster) => {
+    const members = input.data.filter((_, index) => assignment[index] === cluster);
+    return Array.from({ length: width }, (_, column) =>
+      members.length > 0
+        ? input.method === 'kmeans'
+          ? mean(members.map(row => row[column]))
+          : median(members.map(row => row[column]))
+        : 0
+    );
+  });
+
+  return {
+    merges: [],
+    assignment,
+    k,
+    centers: rawCenters,
+    profiles,
+    variableNames: input.variableNames,
+    leafOrder: [],
+    heights: [],
+    labels: [],
+    links: [],
+    leaves: [],
+    method: input.method,
+    objective,
+    iterations: iterations + 1,
+    silhouette: meanSilhouette(working, assignment, k),
+  };
+};

@@ -7,6 +7,7 @@ import { l4Topics } from '../l4';
 import { w2Topics } from '../w2-it';
 import { w3Topics } from '../w3-it';
 import { w4Topics } from '../w4-it';
+import { w5Topics } from '../w5-it';
 
 import { chartGuides } from './charts';
 
@@ -51,7 +52,7 @@ export const itBook: HelpBook = {
     updated: 'Manuale allineato alle funzioni attuali del programma',
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics, ...w5Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

@@ -50,6 +50,13 @@ import { buildTdCoxOutput } from './tdcox/run';
 import { buildPartitionOutput } from './partition/run';
 import { buildQualityOutput } from './quality/run';
 import { buildClusterOutput } from './cluster/run';
+import { buildCanonicalOutput } from './canonical/run';
+import { buildMdsOutput } from './mds/run';
+import { buildCorrespondenceOutput } from './correspondence/run';
+import { buildSemOutput } from './sem/run';
+import { buildLatentClassOutput } from './latentclass/run';
+import { buildIrtOutput } from './irt/run';
+import { buildConjointOutput } from './conjoint/run';
 import { buildDiscriminantOutput } from './discriminant/run';
 import { buildDoeOutput } from './doe/run';
 
@@ -171,6 +178,17 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildQualityOutput({ grid, params: params.quality, ciLevel }),
   cluster: ({ grid, params, ciLevel }) =>
     buildClusterOutput({ grid, params: params.cluster, ciLevel }),
+  canonical: ({ grid, params }) =>
+    buildCanonicalOutput({ grid, params: params.canonical }),
+  mds: ({ grid, params }) => buildMdsOutput({ grid, params: params.mds }),
+  correspondence: ({ params }) =>
+    buildCorrespondenceOutput({ params: params.correspondence }),
+  sem: ({ grid, params }) => buildSemOutput({ grid, params: params.sem }),
+  latentclass: ({ grid, params }) =>
+    buildLatentClassOutput({ grid, params: params.latentclass }),
+  irt: ({ grid, params }) => buildIrtOutput({ grid, params: params.irt }),
+  conjoint: ({ grid, params }) =>
+    buildConjointOutput({ grid, params: params.conjoint }),
   discriminant: ({ grid, params, ciLevel }) =>
     buildDiscriminantOutput({ grid, params: params.discriminant, ciLevel }),
   doe: ({ grid, params, ciLevel }) =>

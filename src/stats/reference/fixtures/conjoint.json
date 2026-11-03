@@ -1,0 +1,108 @@
+{
+  "source": "R conjoint::caUtilities model (lm, contr.sum)",
+  "generatedBy": "src/stats/reference/r/conjoint.R",
+  "cases": [
+    {
+      "name": "profile-ratings",
+      "attributes": ["Brand", "Price", "Warranty"],
+      "levels": [
+        ["Alfa", "Beta", "Gamma"],
+        ["Basso", "Medio", "Alto"],
+        ["1 anno", "3 anni"]
+      ],
+      "coefficients": [
+        {
+          "term": "(Intercept)",
+          "estimate": 5.05555555555556,
+          "se": 0.0468119431843132,
+          "t": 107.99713089564,
+          "p": 2.66050866565984e-19
+        },
+        {
+          "term": "Brand1",
+          "estimate": 0.777777777777778,
+          "se": 0.0662020849322945,
+          "t": 11.7485390161536,
+          "p": 6.12072750636081e-08
+        },
+        {
+          "term": "Brand2",
+          "estimate": -0.605555555555556,
+          "se": 0.0662020849322945,
+          "t": -9.1470768054339,
+          "p": 9.30077757882182e-07
+        },
+        {
+          "term": "Price1",
+          "estimate": 1.16111111111111,
+          "se": 0.0662020849322945,
+          "t": 17.5388903884008,
+          "p": 6.42336157529036e-10
+        },
+        {
+          "term": "Price2",
+          "estimate": 0.111111111111111,
+          "se": 0.0662020849322945,
+          "t": 1.67836271659337,
+          "p": 0.119105985534588
+        },
+        {
+          "term": "Warranty1",
+          "estimate": -0.577777777777777,
+          "se": 0.0468119431843132,
+          "t": -12.342529245216,
+          "p": 3.53200220477069e-08
+        }
+      ],
+      "utilities": [
+        {
+          "attribute": "Brand",
+          "level": "Alfa",
+          "utility": 0.777777777777778
+        },
+        {
+          "attribute": "Brand",
+          "level": "Beta",
+          "utility": -0.605555555555556
+        },
+        {
+          "attribute": "Brand",
+          "level": "Gamma",
+          "utility": -0.172222222222223
+        },
+        {
+          "attribute": "Price",
+          "level": "Basso",
+          "utility": 1.16111111111111
+        },
+        {
+          "attribute": "Price",
+          "level": "Medio",
+          "utility": 0.111111111111111
+        },
+        {
+          "attribute": "Price",
+          "level": "Alto",
+          "utility": -1.27222222222222
+        },
+        {
+          "attribute": "Warranty",
+          "level": "1 anno",
+          "utility": -0.577777777777777
+        },
+        {
+          "attribute": "Warranty",
+          "level": "3 anni",
+          "utility": 0.577777777777777
+        }
+      ],
+      "importance": [27.8212290502793, 48.9385474860335, 23.2402234636871],
+      "r2": 0.984411592505855,
+      "adjR2": 0.977916422716628,
+      "rmse": 0.198606254796883,
+      "f": 151.560563380281,
+      "fP": 2.06192846910729e-10,
+      "intercept": 5.05555555555556
+    }
+  ]
+}

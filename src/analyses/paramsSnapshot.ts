@@ -46,6 +46,13 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   partition: 'partition',
   quality: 'quality',
   cluster: 'cluster',
+  canonical: 'canonical',
+  mds: 'mds',
+  correspondence: 'correspondence',
+  sem: 'sem',
+  latentclass: 'latentclass',
+  irt: 'irt',
+  conjoint: 'conjoint',
   discriminant: 'discriminant',
   doe: 'doe',
 };

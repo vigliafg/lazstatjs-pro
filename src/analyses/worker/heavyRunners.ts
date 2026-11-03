@@ -19,6 +19,9 @@ import { buildPanelOutput } from '../panel/run';
 import { buildSelectionOutput } from '../selection/run';
 import { buildMediationOutput } from '../mediation/run';
 import { buildPropensityOutput } from '../propensity/run';
+import { buildSemOutput } from '../sem/run';
+import { buildLatentClassOutput } from '../latentclass/run';
+import { buildIrtOutput } from '../irt/run';
 import type { HeavyAnalysisId } from './heavyIds';
 
 /**
@@ -67,4 +70,8 @@ export const HEAVY_RUNNERS: Record<
     buildMediationOutput({ grid, params: params.mediation, ciLevel }),
   propensity: ({ grid, params, ciLevel }) =>
     buildPropensityOutput({ grid, params: params.propensity, ciLevel }),
+  sem: ({ grid, params }) => buildSemOutput({ grid, params: params.sem }),
+  latentclass: ({ grid, params }) =>
+    buildLatentClassOutput({ grid, params: params.latentclass }),
+  irt: ({ grid, params }) => buildIrtOutput({ grid, params: params.irt }),
 };

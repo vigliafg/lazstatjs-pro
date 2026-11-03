@@ -39,7 +39,8 @@
         "partition",
         "cluster",
         "discriminant",
-        "multinomial"
+        "multinomial",
+        "canonical"
       ],
       "examples": [
         {
@@ -157,6 +158,19 @@
           },
           "options": {
             "mode": "mancova"
+          }
+        },
+        {
+          "analysis": "canonical",
+          "columns": {
+            "x": [
+              "Sepal_Length",
+              "Sepal_Width"
+            ],
+            "y": [
+              "Petal_Length",
+              "Petal_Width"
+            ]
           }
         }
       ],
@@ -1174,7 +1188,8 @@
       "procedures": [
         "multivariate",
         "correlation",
-        "descriptive"
+        "descriptive",
+        "mds"
       ],
       "examples": [
         {
@@ -1190,6 +1205,17 @@
         },
         {
           "analysis": "correlation",
+          "columns": {
+            "variables": [
+              "Murder",
+              "Assault",
+              "UrbanPop",
+              "Rape"
+            ]
+          }
+        },
+        {
+          "analysis": "mds",
           "columns": {
             "variables": [
               "Murder",
@@ -2176,6 +2202,230 @@
         }
       ],
       "notes": "160 rows with a binary treatment, a three-level severity and a numeric age; 12 treatment and 10 severity codes are missing for the categorical imputation."
+    },
+    {
+      "id": "sem_demo",
+      "title": "Two correlated latent abilities",
+      "family": "multivariate",
+      "dir": "multivariate/sem_demo",
+      "source": "Synthetic, seeded with set.seed(20261105)",
+      "rows": 320,
+      "columns": [
+        "Verbal1",
+        "Verbal2",
+        "Verbal3",
+        "Math1",
+        "Math2",
+        "Math3"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "sem",
+        "multivariate",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "sem",
+          "columns": {
+            "indicators": [
+              "Verbal1",
+              "Verbal2",
+              "Verbal3",
+              "Math1",
+              "Math2",
+              "Math3"
+            ]
+          }
+        },
+        {
+          "analysis": "multivariate",
+          "columns": {
+            "variables": [
+              "Verbal1",
+              "Verbal2",
+              "Verbal3",
+              "Math1",
+              "Math2",
+              "Math3"
+            ]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": [
+              "Verbal1",
+              "Verbal2",
+              "Verbal3",
+              "Math1",
+              "Math2",
+              "Math3"
+            ]
+          }
+        }
+      ],
+      "notes": "Six indicators generated from two correlated factors, for CFA and a two-factor structural model."
+    },
+    {
+      "id": "latent_demo",
+      "title": "Three latent response profiles",
+      "family": "multivariate",
+      "dir": "multivariate/latent_demo",
+      "source": "Synthetic, seeded with set.seed(20261105)",
+      "rows": 450,
+      "columns": [
+        "Item1",
+        "Item2",
+        "Item3",
+        "Item4"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "latentclass",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "latentclass",
+          "columns": {
+            "indicators": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4"
+            ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4"
+            ]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "Four categorical indicators drawn from three classes with distinct response probabilities."
+    },
+    {
+      "id": "irt_demo",
+      "title": "Binary responses to six items",
+      "family": "multivariate",
+      "dir": "multivariate/irt_demo",
+      "source": "Synthetic 2PL, seeded with set.seed(20261105)",
+      "rows": 600,
+      "columns": [
+        "Item1",
+        "Item2",
+        "Item3",
+        "Item4",
+        "Item5",
+        "Item6"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "irt",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "irt",
+          "columns": {
+            "items": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4",
+              "Item5",
+              "Item6"
+            ]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Item1",
+              "Item2",
+              "Item3",
+              "Item4",
+              "Item5",
+              "Item6"
+            ]
+          }
+        }
+      ],
+      "notes": "Six dichotomous items with a range of difficulties, generated from a two-parameter logistic model."
+    },
+    {
+      "id": "conjoint_demo",
+      "title": "Conjoint profiles with ratings",
+      "family": "multivariate",
+      "dir": "multivariate/conjoint_demo",
+      "source": "Synthetic, seeded with set.seed(20261105)",
+      "rows": 18,
+      "columns": [
+        "Brand",
+        "Price",
+        "Warranty",
+        "Rating"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "conjoint",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "conjoint",
+          "columns": {
+            "attributes": [
+              "Brand",
+              "Price",
+              "Warranty"
+            ],
+            "rating": "Rating"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Rating"
+          }
+        }
+      ],
+      "notes": "Full factorial design of three attributes with a rating that follows additive part-worth utilities."
     }
   ]
 }

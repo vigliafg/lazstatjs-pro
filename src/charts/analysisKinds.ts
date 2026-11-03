@@ -72,6 +72,13 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   partition: ['bar', 'scatter', 'tree'],
   quality: ['box', 'histogram', 'interval', 'line', 'pareto'],
   cluster: ['bar', 'dendrogram', 'line'],
+  canonical: ['bar', 'scatter'],
+  mds: ['scatter', 'scree'],
+  correspondence: ['heatmap', 'scatter'],
+  sem: ['bar', 'heatmap'],
+  latentclass: ['bar', 'line'],
+  irt: ['bar', 'line'],
+  conjoint: ['bar'],
   discriminant: ['heatmap', 'line', 'scatter'],
   doe: ['bar', 'surface'],
 };

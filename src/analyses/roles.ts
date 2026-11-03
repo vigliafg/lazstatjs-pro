@@ -4,6 +4,7 @@ import { analysisLabel } from './registry';
 import { t, type MessageKey } from '../i18n';
 import { isContinuousColumn, isGroupColumn } from '../grid/types';
 import { L4_ROLES } from './rolesL4';
+import { W5_ROLES } from './rolesW5';
 
 export type RoleKind = 'continuous' | 'group' | 'any';
 
@@ -74,6 +75,12 @@ const ROLE_SUFFIX_KEYS: Record<string, MessageKey> = {
   predictor: 'form.predictor',
   mediator: 'form.mediator',
   treatment: 'form.treatment',
+  indicators: 'form.variables',
+  items: 'form.variables',
+  attributes: 'form.variables',
+  rating: 'form.variable1',
+  'x variables': 'form.variables',
+  'y variables': 'form.variables',
 };
 
 /** Localised role label: "ANOVA: dependent variable" becomes the active UI language. */
@@ -949,6 +956,7 @@ const ROLES: Record<string, AnalysisRole[]> = {
     },
   ],
   ...L4_ROLES,
+  ...W5_ROLES,
 };
 
 /** Assignable column roles for an analysis, primary role first. */

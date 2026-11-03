@@ -102,7 +102,13 @@ export interface ParetoResult {
   total: number;
 }
 
-export type ClusterMethod = 'average' | 'complete' | 'single' | 'ward';
+export type ClusterMethod =
+  | 'average'
+  | 'complete'
+  | 'single'
+  | 'ward'
+  | 'kmeans'
+  | 'kmedians';
 
 export interface ClusterMerge {
   id: number;
@@ -124,6 +130,12 @@ export interface ClusterResult {
   labels: string[];
   links: { x1: number; y1: number; x2: number; y2: number }[];
   leaves: { x: number; label: string }[];
+  /** Filled by the partitioning variants; absent for hierarchical clustering. */
+  method?: ClusterMethod;
+  /** Within-cluster sum of squares (k-means) or absolute deviations (k-medians). */
+  objective?: number;
+  iterations?: number;
+  silhouette?: number;
 }
 
 export interface DiscriminantResult {

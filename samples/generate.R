@@ -85,7 +85,7 @@ write_dataset(
   "descriptive", "iris", iris_data,
   "Iris measurements",
   "datasets::iris (R)",
-  c("descriptive", "distfit", "correlation", "multivariate", "wizard", "partition", "cluster", "discriminant"),
+  c("descriptive", "distfit", "correlation", "multivariate", "wizard", "partition", "cluster", "discriminant", "canonical"),
   list(
     example("descriptive", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
     example("descriptive", list(variables = "Species"), mode = "frequency"),
@@ -95,6 +95,7 @@ write_dataset(
     example("wizard", list(outcome = "Sepal_Length", group = "Species")),
     example("partition", list(response = "Sepal_Length", predictors = c("Sepal_Width", "Petal_Length", "Petal_Width"))),
     example("cluster", list(variables = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"))),
+    example("canonical", list(x = c("Sepal_Length", "Sepal_Width"), y = c("Petal_Length", "Petal_Width"))),
     example("discriminant", list(group = "Species", predictors = c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width")))
   ),
   "The canonical classification dataset: four continuous flower measurements and a three-level species label."
@@ -392,9 +393,10 @@ write_dataset(
   "multivariate", "usarrests", usarrests_sample,
   "US arrests by state",
   "datasets::USArrests (R)",
-  c("multivariate", "correlation", "descriptive"),
+  c("multivariate", "correlation", "descriptive", "mds"),
   list(
     example("multivariate", list(variables = c("Murder", "Assault", "UrbanPop", "Rape"))),
+    example("mds", list(variables = c("Murder", "Assault", "UrbanPop", "Rape"))),
     example("correlation", list(variables = c("Murder", "Assault", "UrbanPop", "Rape")))
   ),
   "Four standardised crime measures on 50 states, commonly used for PCA and factor analysis."
@@ -411,6 +413,104 @@ write_dataset(
     example("correlation", list(variables = c("rating", "complaints", "privileges", "learning", "raises", "critical", "advance")))
   ),
   "Seven survey items on 30 departments, useful for Cronbach's alpha and exploratory factor analysis."
+)
+
+## Wave 5: latent-variable and preference datasets -------------------------
+set.seed(20261105)
+
+n_sem <- 320
+sem_f1 <- rnorm(n_sem)
+sem_f2 <- 0.45 * sem_f1 + sqrt(1 - 0.45^2) * rnorm(n_sem)
+sem_demo <- data.frame(
+  Verbal1 = round(0.82 * sem_f1 + rnorm(n_sem, 0, 0.55), 2),
+  Verbal2 = round(0.74 * sem_f1 + rnorm(n_sem, 0, 0.65), 2),
+  Verbal3 = round(0.69 * sem_f1 + rnorm(n_sem, 0, 0.72), 2),
+  Math1 = round(0.79 * sem_f2 + rnorm(n_sem, 0, 0.60), 2),
+  Math2 = round(0.71 * sem_f2 + rnorm(n_sem, 0, 0.68), 2),
+  Math3 = round(0.66 * sem_f2 + rnorm(n_sem, 0, 0.75), 2)
+)
+write_dataset(
+  "multivariate", "sem_demo", sem_demo,
+  "Two correlated latent abilities",
+  "Synthetic, seeded with set.seed(20261105)",
+  c("sem", "multivariate", "correlation"),
+  list(
+    example("sem", list(indicators = c("Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"))),
+    example("multivariate", list(variables = c("Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"))),
+    example("correlation", list(variables = c("Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3")))
+  ),
+  "Six indicators generated from two correlated factors, for CFA and a two-factor structural model."
+)
+
+n_latent <- 450
+latent_classes <- sample(1:3, n_latent, replace = TRUE, prob = c(0.35, 0.40, 0.25))
+latent_probs <- list(
+  c(0.75, 0.20, 0.05),
+  c(0.15, 0.25, 0.60),
+  c(0.30, 0.40, 0.30)
+)
+latent_demo <- data.frame(
+  Item1 = factor(sapply(latent_classes, function(cl) sample(c("Basso", "Medio", "Alto"), 1, prob = latent_probs[[1]]))),
+  Item2 = factor(sapply(latent_classes, function(cl) sample(c("Basso", "Medio", "Alto"), 1, prob = latent_probs[[2]]))),
+  Item3 = factor(sapply(latent_classes, function(cl) sample(c("Basso", "Medio", "Alto"), 1, prob = latent_probs[[3]]))),
+  Item4 = factor(sapply(latent_classes, function(cl) sample(c("Basso", "Medio", "Alto"), 1, prob = latent_probs[[2]])))
+)
+write_dataset(
+  "multivariate", "latent_demo", latent_demo,
+  "Three latent response profiles",
+  "Synthetic, seeded with set.seed(20261105)",
+  c("latentclass", "descriptive"),
+  list(
+    example("latentclass", list(indicators = c("Item1", "Item2", "Item3", "Item4"))),
+    example("descriptive", list(variables = c("Item1", "Item2", "Item3", "Item4")), mode = "frequency")
+  ),
+  "Four categorical indicators drawn from three classes with distinct response probabilities."
+)
+
+n_irt <- 600
+irt_theta <- rnorm(n_irt)
+irt_a <- c(1.35, 1.10, 0.95, 1.20, 0.85, 1.05)
+irt_b <- c(-1.4, -0.9, -0.3, 0.35, 0.9, 1.45)
+irt_demo <- as.data.frame(
+  sapply(seq_along(irt_b), function(j) rbinom(n_irt, 1, plogis(irt_a[j] * (irt_theta - irt_b[j]))))
+)
+names(irt_demo) <- paste0("Item", 1:6)
+write_dataset(
+  "multivariate", "irt_demo", irt_demo,
+  "Binary responses to six items",
+  "Synthetic 2PL, seeded with set.seed(20261105)",
+  c("irt", "descriptive"),
+  list(
+    example("irt", list(items = c("Item1", "Item2", "Item3", "Item4", "Item5", "Item6"))),
+    example("descriptive", list(variables = c("Item1", "Item2", "Item3", "Item4", "Item5", "Item6")))
+  ),
+  "Six dichotomous items with a range of difficulties, generated from a two-parameter logistic model."
+)
+
+conjoint_demo <- expand.grid(
+  Brand = c("Alfa", "Beta", "Gamma"),
+  Price = c("Basso", "Medio", "Alto"),
+  Warranty = c("1 anno", "3 anni"),
+  stringsAsFactors = FALSE
+)
+conjoint_demo$Rating <- round(
+  5 +
+    c(Alfa = 0.8, Beta = -0.5, Gamma = -0.3)[conjoint_demo$Brand] +
+    c(Basso = 1.2, Medio = 0.1, Alto = -1.3)[conjoint_demo$Price] +
+    c("1 anno" = -0.6, "3 anni" = 0.6)[conjoint_demo$Warranty] +
+    rnorm(nrow(conjoint_demo), 0, 0.25),
+  1
+)
+write_dataset(
+  "multivariate", "conjoint_demo", conjoint_demo,
+  "Conjoint profiles with ratings",
+  "Synthetic, seeded with set.seed(20261105)",
+  c("conjoint", "descriptive"),
+  list(
+    example("conjoint", list(attributes = c("Brand", "Price", "Warranty"), rating = "Rating")),
+    example("descriptive", list(variables = "Rating"))
+  ),
+  "Full factorial design of three attributes with a rating that follows additive part-worth utilities."
 )
 
 ## ---------------------------------------------------------------------------

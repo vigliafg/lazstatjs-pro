@@ -354,6 +354,13 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const proportions = isRecord(raw.proportions) ? raw.proportions : {};
   const variances = isRecord(raw.variances) ? raw.variances : {};
   const cluster = isRecord(raw.cluster) ? raw.cluster : {};
+  const canonical = isRecord(raw.canonical) ? raw.canonical : {};
+  const mds = isRecord(raw.mds) ? raw.mds : {};
+  const correspondence = isRecord(raw.correspondence) ? raw.correspondence : {};
+  const sem = isRecord(raw.sem) ? raw.sem : {};
+  const latentclass = isRecord(raw.latentclass) ? raw.latentclass : {};
+  const irt = isRecord(raw.irt) ? raw.irt : {};
+  const conjoint = isRecord(raw.conjoint) ? raw.conjoint : {};
   const discriminant = isRecord(raw.discriminant) ? raw.discriminant : {};
   const doe = isRecord(raw.doe) ? raw.doe : {};
   const d = DEFAULT_PARAMS;
@@ -369,6 +376,34 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const loglinearCols = loglinear
     ? parseContingencyLabels(loglinear.cols, d.loglinear.cols)
     : [...d.loglinear.cols];
+  const correspondenceRows = correspondence
+    ? parseContingencyLabels(correspondence.rows, d.correspondence.rows)
+    : [...d.correspondence.rows];
+  const correspondenceCols = correspondence
+    ? parseContingencyLabels(correspondence.cols, d.correspondence.cols)
+    : [...d.correspondence.cols];
+  const canonicalX = indexList(canonical.x, d.canonical.x, width);
+  const canonicalY = indexList(canonical.y, d.canonical.y, width).filter(
+    value => !canonicalX.includes(value)
+  );
+  const semSelected = indexList(sem.selected, d.sem.selected, width);
+  const semFactors = Math.max(1, Math.min(4, integer(sem.factors, d.sem.factors)));
+  const semGroups = semSelected.map((_, position) => {
+    const value = Array.isArray(sem.groups) ? sem.groups[position] : undefined;
+    const group = typeof value === 'number' ? Math.trunc(value) : -1;
+    return group >= 0 && group < semFactors
+      ? group
+      : position < Math.ceil(semSelected.length / 2)
+        ? 0
+        : Math.min(semFactors - 1, 1);
+  });
+  const irtSelected = indexList(irt.selected, d.irt.selected, width);
+  const conjointResponse = index(conjoint.response, d.conjoint.response, width);
+  const conjointAttributes = indexList(
+    conjoint.attributes,
+    d.conjoint.attributes,
+    width
+  ).filter(value => value !== conjointResponse);
   const ancovaResponse = index(ancova.response, d.ancova.response, width);
   const ancovaFactor = index(ancova.factor, d.ancova.factor, width);
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
@@ -845,11 +880,51 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
     cluster: {
       selected: indexList(cluster.selected, d.cluster.selected, width),
       method:
-        cluster.method === 'complete' || cluster.method === 'single' || cluster.method === 'ward'
+        cluster.method === 'complete' ||
+        cluster.method === 'single' ||
+        cluster.method === 'ward' ||
+        cluster.method === 'kmeans' ||
+        cluster.method === 'kmedians'
           ? cluster.method
           : d.cluster.method,
       clusters: Math.max(0, Math.min(20, integer(cluster.clusters, d.cluster.clusters))),
       standardize: bool(cluster.standardize, d.cluster.standardize),
+    },
+    canonical: {
+      x: canonicalX,
+      y: canonicalY,
+    },
+    mds: {
+      selected: indexList(mds.selected, d.mds.selected, width),
+      dimensions: Math.max(1, Math.min(10, integer(mds.dimensions, d.mds.dimensions))),
+      metric: mds.metric === 'nonmetric' ? 'nonmetric' : d.mds.metric,
+    },
+    correspondence: {
+      rows: correspondenceRows,
+      cols: correspondenceCols,
+      values: correspondence
+        ? parseContingencyValues(correspondence.values, correspondenceRows, correspondenceCols)
+        : d.correspondence.values.map(row => [...row]),
+    },
+    sem: {
+      selected: semSelected,
+      factors: semFactors,
+      groups: semGroups,
+      structural: bool(sem.structural, d.sem.structural),
+    },
+    latentclass: {
+      selected: indexList(latentclass.selected, d.latentclass.selected, width),
+      classes: Math.max(2, Math.min(10, integer(latentclass.classes, d.latentclass.classes))),
+      maxIterations: Math.max(50, Math.min(2000, integer(latentclass.maxIterations, d.latentclass.maxIterations))),
+    },
+    irt: {
+      selected: irtSelected,
+      model: irt.model === 'rasch' ? 'rasch' : d.irt.model,
+      quadrature: Math.max(5, Math.min(61, integer(irt.quadrature, d.irt.quadrature))),
+    },
+    conjoint: {
+      attributes: conjointAttributes,
+      response: conjointResponse,
     },
     discriminant: {
       mode: discriminant.mode === 'mancova' ? 'mancova' : 'classic',

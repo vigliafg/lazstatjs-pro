@@ -13,6 +13,13 @@ import { defaultWizardParams } from '../analyses/wizard/defaults';
 import { defaultPartitionParams } from '../analyses/partition/defaults';
 import { defaultQualityParams } from '../analyses/quality/defaults';
 import { defaultClusterParams } from '../analyses/cluster/defaults';
+import { defaultCanonicalParams } from '../analyses/canonical/defaults';
+import { defaultMdsParams } from '../analyses/mds/defaults';
+import { defaultCorrespondenceParams } from '../analyses/correspondence/defaults';
+import { defaultSemParams } from '../analyses/sem/defaults';
+import { defaultLatentClassParams } from '../analyses/latentclass/defaults';
+import { defaultIrtParams } from '../analyses/irt/defaults';
+import { defaultConjointParams } from '../analyses/conjoint/defaults';
 import { defaultDiscriminantParams } from '../analyses/discriminant/defaults';
 import { defaultDoeParams } from '../analyses/doe/defaults';
 
@@ -39,6 +46,13 @@ export const useProjectParams = (boot: ProjectSnapshot | null, grid: GridData) =
       partition: defaultPartitionParams(grid),
       quality: defaultQualityParams(grid),
       cluster: defaultClusterParams(grid),
+      canonical: defaultCanonicalParams(grid),
+      mds: defaultMdsParams(grid),
+      correspondence: defaultCorrespondenceParams(grid),
+      sem: defaultSemParams(grid),
+      latentclass: defaultLatentClassParams(grid),
+      irt: defaultIrtParams(grid),
+      conjoint: defaultConjointParams(grid),
       discriminant: defaultDiscriminantParams(grid),
       doe: defaultDoeParams(grid),
     };

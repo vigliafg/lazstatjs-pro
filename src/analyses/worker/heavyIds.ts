@@ -24,6 +24,9 @@ export const HEAVY_ANALYSIS_IDS = [
   'selection',
   'mediation',
   'propensity',
+  'sem',
+  'latentclass',
+  'irt',
 ] as const;
 
 export type HeavyAnalysisId = (typeof HEAVY_ANALYSIS_IDS)[number];

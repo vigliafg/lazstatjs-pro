@@ -29,9 +29,9 @@ export const ClusterForm = ({ grid, clusterParams, setClusterParams }: ClusterFo
       }
     />
     <Advanced>
-      <Field label={t('form.linkage')}>
+      <Field label={t('form.method')}>
         <select
-          aria-label={t('form.linkage')}
+          aria-label={t('form.method')}
           className="min-w-[140px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
           value={clusterParams.method}
           onChange={event =>
@@ -45,6 +45,8 @@ export const ClusterForm = ({ grid, clusterParams, setClusterParams }: ClusterFo
           <option value="complete">{t('cluster.complete')}</option>
           <option value="single">{t('cluster.single')}</option>
           <option value="ward">{t('cluster.ward')}</option>
+          <option value="kmeans">{t('cluster.kmeans')}</option>
+          <option value="kmedians">{t('cluster.kmedians')}</option>
         </select>
       </Field>
       <Field label={t('form.clustersK')}>

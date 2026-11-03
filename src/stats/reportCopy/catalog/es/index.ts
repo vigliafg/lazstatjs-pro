@@ -37,6 +37,7 @@ import { w3Copy } from './w3';
 import { w3RegressionCopy } from './w3-regression';
 import { w3EconometricsCopy } from './w3-econometrics';
 import { proportionsCopy as esProportionsCopy } from './proportions';
+import { w5Copy } from './w5';
 import { variancesCopy as esVariancesCopy } from './variances';
 
 /** Spanish report and table prose, merged from the per-procedure files. */
@@ -81,4 +82,5 @@ export const esReportCopy: Record<string, string> = {
   ...w3Copy,
   ...w3RegressionCopy,
   ...w3EconometricsCopy,
+  ...w5Copy,
 };

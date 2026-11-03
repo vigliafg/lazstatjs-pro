@@ -178,6 +178,14 @@ export const remapParams = (
   const qualityCategory = one(params.quality.category, 'Quality: category');
   const qualityGroup = optional(params.quality.group);
   const clusterSelected = list(params.cluster.selected, 'Cluster: variables');
+  const canonicalX = list(params.canonical.x, 'Canonical: X variables');
+  const canonicalY = list(params.canonical.y, 'Canonical: Y variables');
+  const mdsSelected = list(params.mds.selected, 'MDS: variables');
+  const semSelected = list(params.sem.selected, 'SEM: indicators');
+  const latentClassSelected = list(params.latentclass.selected, 'Latent class: indicators');
+  const irtSelected = list(params.irt.selected, 'IRT: items');
+  const conjointAttributes = list(params.conjoint.attributes, 'Conjoint: attributes');
+  const conjointResponse = one(params.conjoint.response, 'Conjoint: rating');
   const discriminantGroup = one(params.discriminant.group, 'Discriminant: group');
   const discriminantPredictors = list(
     params.discriminant.predictors,
@@ -449,6 +457,23 @@ export const remapParams = (
         ...params.cluster,
         selected: clusterSelected,
       },
+      canonical: {
+        x: canonicalX,
+        y: canonicalY.filter(value => !canonicalX.includes(value)),
+      },
+      mds: { ...params.mds, selected: mdsSelected },
+      sem: {
+        ...params.sem,
+        selected: semSelected,
+        groups: semSelected.map((_, index) => params.sem.groups[index] ?? 0),
+      },
+      latentclass: { ...params.latentclass, selected: latentClassSelected },
+      irt: { ...params.irt, selected: irtSelected },
+      conjoint: {
+        ...params.conjoint,
+        attributes: conjointAttributes.filter(value => value !== conjointResponse),
+        response: conjointResponse,
+      },
       discriminant: {
         ...params.discriminant,
         mode: params.discriminant.mode ?? 'classic',
@@ -607,6 +632,14 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.quality.category, 'Quality: category', width, errors);
   checkOne(params.quality.group, 'Quality: group', width, errors, true);
   checkList(params.cluster.selected, 'Cluster: variables', width, errors);
+  checkList(params.canonical.x, 'Canonical: X variables', width, errors);
+  checkList(params.canonical.y, 'Canonical: Y variables', width, errors);
+  checkList(params.mds.selected, 'MDS: variables', width, errors);
+  checkList(params.sem.selected, 'SEM: indicators', width, errors);
+  checkList(params.latentclass.selected, 'Latent class: indicators', width, errors);
+  checkList(params.irt.selected, 'IRT: items', width, errors);
+  checkList(params.conjoint.attributes, 'Conjoint: attributes', width, errors);
+  checkOne(params.conjoint.response, 'Conjoint: rating', width, errors);
   checkOne(params.discriminant.group, 'Discriminant: group', width, errors);
   checkList(params.discriminant.predictors, 'Discriminant: predictors', width, errors);
   checkList(params.discriminant.covariates ?? [], 'Discriminant: covariates', width, errors);
@@ -853,6 +886,26 @@ export const validateAnalysisColumnRefs = (
     case 'cluster':
       list(params.cluster.selected, 'Cluster: variables');
       break;
+    case 'canonical':
+      list(params.canonical.x, 'Canonical: X variables');
+      list(params.canonical.y, 'Canonical: Y variables');
+      break;
+    case 'mds':
+      list(params.mds.selected, 'MDS: variables');
+      break;
+    case 'sem':
+      list(params.sem.selected, 'SEM: indicators');
+      break;
+    case 'latentclass':
+      list(params.latentclass.selected, 'Latent class: indicators');
+      break;
+    case 'irt':
+      list(params.irt.selected, 'IRT: items');
+      break;
+    case 'conjoint':
+      list(params.conjoint.attributes, 'Conjoint: attributes');
+      one(params.conjoint.response, 'Conjoint: rating');
+      break;
     case 'discriminant':
       one(params.discriminant.group, 'Discriminant: group');
       list(params.discriminant.predictors, 'Discriminant: predictors');
@@ -1003,6 +1056,59 @@ export const setPrimaryColumn = (
           cluster: { ...params.cluster, selected: append(params.cluster.selected) },
         },
         role: 'Cluster variable',
+      };
+    case 'canonical': {
+      const inY = params.canonical.y.includes(column);
+      return {
+        params: {
+          ...params,
+          canonical: inY
+            ? { ...params.canonical, y: params.canonical.y.filter(value => value !== column) }
+            : { ...params.canonical, x: append(params.canonical.x) },
+        },
+        role: 'Canonical X variable',
+      };
+    }
+    case 'mds':
+      return {
+        params: { ...params, mds: { ...params.mds, selected: append(params.mds.selected) } },
+        role: 'MDS variable',
+      };
+    case 'sem':
+      return {
+        params: {
+          ...params,
+          sem: {
+            ...params.sem,
+            selected: append(params.sem.selected),
+            groups: [...params.sem.groups, 0],
+          },
+        },
+        role: 'SEM indicator',
+      };
+    case 'latentclass':
+      return {
+        params: {
+          ...params,
+          latentclass: {
+            ...params.latentclass,
+            selected: append(params.latentclass.selected),
+          },
+        },
+        role: 'Latent class indicator',
+      };
+    case 'irt':
+      return {
+        params: { ...params, irt: { ...params.irt, selected: append(params.irt.selected) } },
+        role: 'IRT item',
+      };
+    case 'conjoint':
+      return {
+        params: {
+          ...params,
+          conjoint: { ...params.conjoint, attributes: append(params.conjoint.attributes) },
+        },
+        role: 'Conjoint attribute',
       };
     case 'discriminant':
       return {

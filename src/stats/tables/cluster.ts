@@ -35,6 +35,26 @@ export const clusterTables = ({
     })),
   };
 
+  const partition: TableSpec | null = result.method
+    ? {
+        id: 'cluster-fit',
+        title: copy('Qualità della partizione'),
+        subtitle: copy('{s1} cluster', { s1: result.k }),
+        columns: [
+          { key: 'measure', label: copy('Misura'), align: 'left' },
+          { key: 'value', label: copy('Valore'), format: 'dec3', align: 'right' },
+        ],
+        rows: [
+          {
+            measure: result.method === 'kmeans' ? copy('Somma dei quadrati entro i cluster') : copy('Scostamento assoluto entro i cluster'),
+            value: result.objective ?? 0,
+          },
+          { measure: copy('Silhouette media'), value: result.silhouette ?? 0 },
+          { measure: copy('Iterazioni'), value: result.iterations ?? 0 },
+        ],
+      }
+    : null;
+
   const means: TableSpec = {
     id: 'cluster-means',
     title: copy('Medie dei cluster'),
@@ -70,7 +90,7 @@ export const clusterTables = ({
     })),
   };
 
-  return [means, merges, membership];
+  return partition ? [means, partition, membership] : [means, merges, membership];
 };
 
 export const clusterDistanceSummary = (result: ClusterResult): string =>
