@@ -13,6 +13,11 @@ import {
   sampleSizeTwoProportions,
   sampleSizeTost,
   sampleSizeSurvival,
+  sampleSizeOneProportion,
+  sampleSizeVariance,
+  sampleSizeOneRate,
+  sampleSizeRegression,
+  sampleSizeLogistic,
 } from '../kernels/samplesize';
 
 /** Main entry point used by the planner tab: validates, solves and tabulates. */
@@ -62,13 +67,54 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
         options.tails
       );
       break;
+    case 'oneProportion':
+      result = sampleSizeOneProportion(
+        options.p1 ?? 0,
+        options.p2 ?? 0,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
+    case 'variance':
+      result = sampleSizeVariance(options.ratio ?? 1, options.alpha, options.power, options.tails);
+      break;
+    case 'oneRate':
+      result = sampleSizeOneRate(
+        options.p1 ?? 1,
+        options.p2 ?? 1,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
+    case 'regression':
+      result = sampleSizeRegression(
+        options.predictors ?? 1,
+        options.f2 ?? 0.15,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
+    case 'logistic':
+      result = sampleSizeLogistic(
+        options.p1 ?? 0.3,
+        options.oddsRatio ?? 2,
+        options.alpha,
+        options.power,
+        options.tails
+      );
+      break;
     default:
       result = sampleSizeTwoMeans(0, 0);
   }
 
   if (!Number.isFinite(result.nPerGroup)) return { tables: [], result };
 
-  const precision = options.design !== 'tost' && options.design !== 'survival' && options.margin && options.margin > 0 && options.sd
+  const precisionDesign =
+    options.design === 'twoMeans' || options.design === 'oneMean' || options.design === 'paired';
+  const precision = precisionDesign && options.margin && options.margin > 0 && options.sd
     ? sampleSizePrecision(options.sd, options.margin, 100 * (1 - options.alpha), options.design === 'twoMeans' ? 2 : 1)
     : NaN;
 
@@ -91,6 +137,11 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
     anova: copy('ANOVA a una via'),
     tost: copy('TOST (equivalenza)'),
     survival: copy('Sopravvivenza (log-rank)'),
+    oneProportion: copy('Una proporzione'),
+    variance: copy('Una varianza'),
+    oneRate: copy('Un tasso di Poisson'),
+    regression: copy('Regressione multipla'),
+    logistic: copy('Regressione logistica'),
   };
 
   const inputRows = [
@@ -110,6 +161,17 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
     inputRows.push({ parameter: copy('Differenza da rilevare'), value: fmtEst(options.delta ?? NaN, 4) });
     inputRows.push({ parameter: copy('SD (dei differenziali se appaiato)'), value: fmtEst(options.sd ?? NaN, 4) });
   }
+  if (options.design === 'oneProportion') {
+    inputRows.push({ parameter: copy('Proporzione alternativa'), value: fmtEst(options.p1 ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Proporzione nulla'), value: fmtEst(options.p2 ?? NaN, 4) });
+  }
+  if (options.design === 'variance') {
+    inputRows.push({ parameter: copy('Rapporto tra varianze'), value: fmtEst(options.ratio ?? NaN, 4) });
+  }
+  if (options.design === 'oneRate') {
+    inputRows.push({ parameter: copy('Tasso alternativo'), value: fmtEst(options.p1 ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Tasso nullo'), value: fmtEst(options.p2 ?? NaN, 4) });
+  }
   if (options.design === 'twoProportions') {
     inputRows.push({ parameter: copy('Proporzione gruppo 1'), value: fmtEst(options.p1 ?? NaN, 4) });
     inputRows.push({ parameter: copy('Proporzione gruppo 2'), value: fmtEst(options.p2 ?? NaN, 4) });
@@ -120,6 +182,14 @@ export const sampleSizeTables = (options: SampleSizeOptions): { tables: TableSpe
   if (options.design === 'anova') {
     inputRows.push({ parameter: copy('Numero di gruppi'), value: showInt(options.groups ?? NaN) });
     inputRows.push({ parameter: copy("Cohen's f"), value: fmtEst(options.f ?? NaN, 4) });
+  }
+  if (options.design === 'regression') {
+    inputRows.push({ parameter: copy('Numero di predittori'), value: showInt(options.predictors ?? NaN) });
+    inputRows.push({ parameter: copy("Cohen's f²"), value: fmtEst(options.f2 ?? NaN, 4) });
+  }
+  if (options.design === 'logistic') {
+    inputRows.push({ parameter: copy('Tasso di eventi'), value: fmtEst(options.p1 ?? NaN, 4) });
+    inputRows.push({ parameter: copy('Odds ratio da rilevare'), value: fmtEst(options.oddsRatio ?? NaN, 4) });
   }
 
   const tables: TableSpec[] = [];

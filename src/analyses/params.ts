@@ -53,6 +53,18 @@ export const remapParams = (
   const anovaGrp = one(params.anova.grp, 'ANOVA: group variable');
   const regDep = one(params.reg.dep, 'Regression: dependent variable');
   const regIndeps = list(params.reg.indeps, 'Regression: predictors');
+  const glmDep = one(params.glm.dep, 'GLM: dependent variable');
+  const glmIndeps = list(params.glm.indeps, 'GLM: predictors').filter(value => value !== glmDep);
+  const quantileDep = one(params.quantile.dep, 'Quantile: dependent variable');
+  const quantileIndeps = list(params.quantile.indeps, 'Quantile: predictors').filter(
+    value => value !== quantileDep
+  );
+  const nonlinearDep = one(params.nonlinear.dep, 'Nonlinear: dependent variable');
+  const nonlinearPredictor = one(params.nonlinear.predictor, 'Nonlinear: predictor');
+  const multinomialOutcome = one(params.multinomial.outcome, 'Multinomial: outcome');
+  const multinomialPredictors = list(params.multinomial.predictors, 'Multinomial: predictors').filter(
+    value => value !== multinomialOutcome
+  );
   const corrVars = list(params.corr.vars, 'Correlation: variables');
   const distfitVariable = one(params.distfit.variable, 'Distribution Fit: variable');
   const logisticOutcome = one(params.logistic.outcome, 'Logistic: outcome');
@@ -105,6 +117,55 @@ export const remapParams = (
   const lmmDep = one(params.lmm.dep, 'Mixed Model: outcome');
   const lmmIndeps = list(params.lmm.indeps, 'Mixed Model: predictors');
   const lmmGroup = one(params.lmm.group, 'Mixed Model: group');
+  const glmmDep = one(params.glmm.dep, 'GLMM: outcome');
+  const glmmGroup = one(params.glmm.group, 'GLMM: group');
+  const glmmIndeps = list(params.glmm.indeps, 'GLMM: predictors').filter(
+    value => value !== glmmDep && value !== glmmGroup
+  );
+  const plsDep = one(params.pls.dep, 'PLS: dependent variable');
+  const plsIndeps = list(params.pls.indeps, 'PLS: predictors').filter(value => value !== plsDep);
+  const marsDep = one(params.mars.dep, 'MARS: dependent variable');
+  const marsIndeps = list(params.mars.indeps, 'MARS: predictors').filter(value => value !== marsDep);
+  const ivDep = one(params.iv.dep, 'IV: outcome');
+  const ivEndog = list(params.iv.endog, 'IV: endogenous predictors').filter(
+    value => value !== ivDep
+  );
+  const ivInstruments = list(params.iv.instruments, 'IV: instruments').filter(
+    value => value !== ivDep && !ivEndog.includes(value)
+  );
+  const ivExog = list(params.iv.exog, 'IV: exogenous predictors').filter(
+    value => value !== ivDep && !ivEndog.includes(value) && !ivInstruments.includes(value)
+  );
+  const panelDep = one(params.panel.dep, 'Panel: outcome');
+  const panelEntity = one(params.panel.entity, 'Panel: entity');
+  const panelTime = one(params.panel.time, 'Panel: time');
+  const panelIndeps = list(params.panel.indeps, 'Panel: predictors').filter(
+    value => value !== panelDep && value !== panelEntity && value !== panelTime
+  );
+  const selectionDep = one(params.selection.dep, 'Selection: outcome');
+  const selectionIndicator = optional(params.selection.selection);
+  const selectionIndeps = list(params.selection.indeps, 'Selection: predictors').filter(
+    value => value !== selectionDep
+  );
+  const selectionPredictors = list(
+    params.selection.selectIndeps,
+    'Selection: selection predictors'
+  ).filter(value => value !== selectionDep && value !== selectionIndicator);
+  const mediationOutcome = one(params.mediation.outcome, 'Mediation: outcome');
+  const mediationPredictor = one(params.mediation.predictor, 'Mediation: predictor');
+  const mediationMediator = one(params.mediation.mediator, 'Mediation: mediator');
+  const mediationCovariates = list(params.mediation.covariates, 'Mediation: covariates').filter(
+    value =>
+      value !== mediationOutcome &&
+      value !== mediationPredictor &&
+      value !== mediationMediator
+  );
+  const propensityTreatment = one(params.propensity.treatment, 'Propensity: treatment');
+  const propensityOutcome = one(params.propensity.outcome, 'Propensity: outcome');
+  const propensityCovariates = list(
+    params.propensity.covariates,
+    'Propensity: covariates'
+  ).filter(value => value !== propensityTreatment && value !== propensityOutcome);
   const countDep = one(params.countreg.dep, 'Count Regression: outcome');
   const countIndeps = list(params.countreg.indeps, 'Count Regression: predictors');
   const tostVar1 = one(params.tost.var1, 'TOST: first variable');
@@ -116,7 +177,18 @@ export const remapParams = (
   const qualityVariable = one(params.quality.variable, 'Quality: variable');
   const qualityCategory = one(params.quality.category, 'Quality: category');
   const qualityGroup = optional(params.quality.group);
+  const qualityPart = one(params.quality.part, 'Quality: part');
+  const qualityOperator = one(params.quality.operator, 'Quality: operator');
+  const qualityVariables = list(params.quality.variables, 'Quality: variables');
   const clusterSelected = list(params.cluster.selected, 'Cluster: variables');
+  const canonicalX = list(params.canonical.x, 'Canonical: X variables');
+  const canonicalY = list(params.canonical.y, 'Canonical: Y variables');
+  const mdsSelected = list(params.mds.selected, 'MDS: variables');
+  const semSelected = list(params.sem.selected, 'SEM: indicators');
+  const latentClassSelected = list(params.latentclass.selected, 'Latent class: indicators');
+  const irtSelected = list(params.irt.selected, 'IRT: items');
+  const conjointAttributes = list(params.conjoint.attributes, 'Conjoint: attributes');
+  const conjointResponse = one(params.conjoint.response, 'Conjoint: rating');
   const discriminantGroup = one(params.discriminant.group, 'Discriminant: group');
   const discriminantPredictors = list(
     params.discriminant.predictors,
@@ -125,6 +197,64 @@ export const remapParams = (
   const doeResponse = one(params.doe.response, 'DOE: response');
   const doeFactorA = one(params.doe.factorA, 'DOE: factor A');
   const doeFactorB = one(params.doe.factorB, 'DOE: factor B');
+  const varianceVariable = one(params.variances.variable, 'Variances: variable');
+  const varianceGroup = optional(params.variances.group);
+  const proportionVariable = one(params.proportions.variable, 'Proportions: variable');
+  const proportionGroup = optional(params.proportions.group);
+  const coxFrailty = optional(params.cox.frailtyVariable ?? -1);
+  const survivalUpper = optional(params.survival.upperVariable ?? -1);
+  const parametricUpper = optional(params.parametric.upperVariable ?? -1);
+  const competingTime = one(params.competing.time, 'Competing risks: time');
+  const competingEvent = one(params.competing.event, 'Competing risks: event');
+  const competingCovariates = list(
+    params.competing.covariates,
+    'Competing risks: covariates'
+  ).filter(value => value !== competingTime && value !== competingEvent);
+  const recurrentId = one(params.recurrent.id, 'Recurrent events: subject');
+  const recurrentStart = one(params.recurrent.start, 'Recurrent events: start');
+  const recurrentStop = one(params.recurrent.stop, 'Recurrent events: stop');
+  const recurrentEvent = one(params.recurrent.event, 'Recurrent events: event');
+  const recurrentCovariates = list(params.recurrent.covariates, 'Recurrent events: covariates');
+  const altTime = one(params.alt.time, 'ALT: time');
+  const altEvent = one(params.alt.event, 'ALT: event');
+  const altStress = one(params.alt.stress, 'ALT: stress');
+  const altCovariates = list(params.alt.covariates, 'ALT: covariates').filter(
+    value => value !== altTime && value !== altEvent && value !== altStress
+  );
+  const surveyVariable = one(params.survey.variable, 'Survey: variable');
+  const surveyCategory = one(params.survey.category, 'Survey: category');
+  const surveyWeight = optional(params.survey.weight);
+  const surveyStrata = optional(params.survey.strata);
+  const surveyCluster = optional(params.survey.cluster);
+  const surveyPredictors = list(params.survey.predictors, 'Survey: predictors').filter(
+    value => value !== surveyVariable
+  );
+  const mlOutcome = one(params.ml.outcome, 'Machine learning: outcome');
+  const mlPredictors = list(params.ml.predictors, 'Machine learning: predictors').filter(
+    value => value !== mlOutcome
+  );
+  const textVariable = one(params.text.text, 'Text mining: text column');
+  const textGroup = optional(params.text.group);
+  const choiceSet = one(params.choice.set, 'Choice: set');
+  const choiceAlternative = one(params.choice.alternative, 'Choice: alternative');
+  const choiceChosen = one(params.choice.chosen, 'Choice: chosen');
+  const choiceBest = one(params.choice.best, 'Choice: best');
+  const choiceWorst = one(params.choice.worst, 'Choice: worst');
+  const choiceAttributes = list(params.choice.attributes, 'Choice: attributes');
+  const metaEffect = one(params.meta.effect, 'Meta-analysis: effect');
+  const metaSe = one(params.meta.se, 'Meta-analysis: standard error');
+  const metaStudy = optional(params.meta.study);
+  const bayesOutcome = one(params.bayes.outcome, 'Bayesian: outcome');
+  const bayesPredictors = list(params.bayes.predictors, 'Bayesian: predictors').filter(
+    value => value !== bayesOutcome
+  );
+  const bayesGroup = optional(params.bayes.group);
+  const spatialVariable = one(params.spatial.variable, 'Spatial: variable');
+  const spatialX = one(params.spatial.x, 'Spatial: X coordinate');
+  const spatialY = one(params.spatial.y, 'Spatial: Y coordinate');
+  const spatialPredictors = list(params.spatial.predictors, 'Spatial: predictors').filter(
+    value => value !== spatialVariable && value !== spatialX && value !== spatialY
+  );
 
   return {
     invalidated: unique(invalidated.map(label => label)),
@@ -132,28 +262,86 @@ export const remapParams = (
       ...params,
       descVars,
       ttest: { ...params.ttest, var1: ttestVar1, var2: ttestVar2 },
-      anova: { ...params.anova, dep: anovaDep, grp: anovaGrp },
-      reg: { ...params.reg, dep: regDep, indeps: regIndeps },
+      anova: {
+        ...params.anova,
+        dep: anovaDep,
+        grp: anovaGrp,
+        inner: Number.isInteger(params.anova.inner) ? params.anova.inner! : -1,
+        alpha:
+          Number.isFinite(params.anova.alpha) && (params.anova.alpha ?? 0) > 0 && (params.anova.alpha ?? 0) < 0.5
+            ? params.anova.alpha!
+            : 0.05,
+      },
+      reg: {
+        ...params.reg,
+        dep: regDep,
+        indeps: regIndeps,
+        mode: params.reg.mode ?? 'linear',
+        degree: params.reg.degree ?? 2,
+        selectionDirection: params.reg.selectionDirection ?? 'both',
+        selectionCriterion: params.reg.selectionCriterion ?? 'bic',
+        penalty: params.reg.penalty ?? 'lasso',
+        lambda: Math.max(0, params.reg.lambda ?? 0.1),
+        penaltyAlpha: Math.min(1, Math.max(0, params.reg.penaltyAlpha ?? 0.5)),
+      },
+      glm: { ...params.glm, dep: glmDep, indeps: glmIndeps },
+      quantile: { ...params.quantile, dep: quantileDep, indeps: quantileIndeps },
+      nonlinear: { ...params.nonlinear, dep: nonlinearDep, predictor: nonlinearPredictor },
+      multinomial: {
+        ...params.multinomial,
+        outcome: multinomialOutcome,
+        predictors: multinomialPredictors,
+      },
       corr: { ...params.corr, vars: corrVars },
       distfit: { ...params.distfit, variable: distfitVariable },
       logistic: {
         ...params.logistic,
         outcome: logisticOutcome,
         predictors: logisticPredictors,
+        link: params.logistic.link === 'probit' ? 'probit' : 'logit',
       },
       cox: {
         ...params.cox,
         timeVariable: coxTime,
         eventVariable: coxEvent,
         covariates: coxCovariates,
+        mode: params.cox.mode ?? 'standard',
+        frailtyVariable: coxFrailty,
       },
       survival: {
         ...params.survival,
         timeVariable: survivalTime,
         eventVariable: survivalEvent,
         groupVariable: optional(params.survival.groupVariable),
+        mode: params.survival.mode ?? 'km',
+        upperVariable: survivalUpper,
+        intervals: Math.max(0, Math.min(30, Math.round(params.survival.intervals ?? 0))),
       },
-      timeseries: { ...params.timeseries, variable: timeseriesVariable },
+      timeseries: {
+        ...params.timeseries,
+        variable: timeseriesVariable,
+        mode: params.timeseries.mode ?? 'arima',
+        seasonalModel: params.timeseries.seasonalModel ?? 'additive',
+        xregVariable: optional(params.timeseries.xregVariable ?? -1),
+      },
+      var: {
+        ...params.var,
+        mode: params.var.mode ?? 'var',
+        variables: list(params.var.variables, 'VAR: variables'),
+        lags: Math.max(0, Math.min(12, Math.round(params.var.lags ?? 0))),
+        horizon: Math.max(1, Math.min(40, Math.round(params.var.horizon ?? 12))),
+      },
+      garch: {
+        ...params.garch,
+        variable: params.garch.variable,
+        horizon: Math.max(1, Math.min(40, Math.round(params.garch.horizon ?? 10))),
+      },
+      statespace: {
+        ...params.statespace,
+        mode: params.statespace.mode ?? 'local',
+        horizon: Math.max(1, Math.min(40, Math.round(params.statespace.horizon ?? 10))),
+        trend: params.statespace.trend ?? true,
+      },
       ancova: {
         ...params.ancova,
         response: ancovaResponse,
@@ -212,6 +400,7 @@ export const remapParams = (
         time: parametricTime,
         event: parametricEvent,
         predictors: parametricPredictors,
+        upperVariable: parametricUpper,
       },
       mixedanova: {
         ...params.mixedanova,
@@ -225,7 +414,109 @@ export const remapParams = (
         predictors: miPredictors,
       },
       ordinal: { ...params.ordinal, dep: ordinalDep, indeps: ordinalIndeps },
-      lmm: { ...params.lmm, dep: lmmDep, indeps: lmmIndeps, group: lmmGroup },
+      lmm: {
+        ...params.lmm,
+        dep: lmmDep,
+        indeps: lmmIndeps,
+        group: lmmGroup,
+        randomSlope: params.lmm.randomSlope ?? false,
+      },
+      glmm: (() => {
+        const family =
+          params.glmm.family === 'binomial' || params.glmm.family === 'poisson'
+            ? params.glmm.family
+            : 'gaussian';
+        const slope =
+          Number.isInteger(params.glmm.slope) &&
+          params.glmm.slope >= 0 &&
+          params.glmm.slope !== glmmDep &&
+          params.glmm.slope !== glmmGroup
+            ? params.glmm.slope
+            : -1;
+        return {
+          ...params.glmm,
+          dep: glmmDep,
+          indeps: glmmIndeps,
+          group: glmmGroup,
+          family,
+          link: (family === 'binomial' ? 'logit' : family === 'poisson' ? 'log' : 'identity') as
+            | 'identity'
+            | 'logit'
+            | 'log',
+          slope,
+        };
+      })(),
+      pls: {
+        ...params.pls,
+        dep: plsDep,
+        indeps: plsIndeps,
+        components: Math.max(1, Math.min(20, Math.round(params.pls.components))),
+        cvFolds: Math.max(0, Math.min(20, Math.round(params.pls.cvFolds))),
+      },
+      mars: {
+        ...params.mars,
+        dep: marsDep,
+        indeps: marsIndeps,
+        degree: params.mars.degree === 2 ? 2 : 1,
+        maxTerms: Math.max(1, Math.min(200, Math.round(params.mars.maxTerms))),
+        penalty: Math.max(0, params.mars.penalty),
+        prune: params.mars.prune ?? true,
+      },
+      iv: {
+        ...params.iv,
+        dep: ivDep,
+        endog: ivEndog,
+        instruments: ivInstruments,
+        exog: ivExog,
+        robust: params.iv.robust ?? false,
+      },
+      panel: {
+        ...params.panel,
+        dep: panelDep,
+        indeps: panelIndeps,
+        entity: panelEntity,
+        time: panelTime,
+        model:
+          params.panel.model === 'fe' || params.panel.model === 're'
+            ? params.panel.model
+            : 'both',
+      },
+      selection: {
+        ...params.selection,
+        mode: params.selection.mode === 'heckman' ? 'heckman' : 'tobit',
+        dep: selectionDep,
+        indeps: selectionIndeps,
+        lower: Number.isFinite(params.selection.lower) ? params.selection.lower : 0,
+        upper:
+          typeof params.selection.upper === 'number' && Number.isFinite(params.selection.upper)
+            ? params.selection.upper
+            : null,
+        selection: selectionIndicator,
+        selectIndeps: selectionPredictors,
+      },
+      mediation: {
+        ...params.mediation,
+        outcome: mediationOutcome,
+        predictor: mediationPredictor,
+        mediator: mediationMediator,
+        covariates: mediationCovariates,
+        bootstrap: Math.max(
+          0,
+          Math.min(5000, Math.round(params.mediation.bootstrap ?? 1000))
+        ),
+        seed: Number.isInteger(params.mediation.seed)
+          ? params.mediation.seed
+          : 20261103,
+      },
+      propensity: {
+        ...params.propensity,
+        treatment: propensityTreatment,
+        outcome: propensityOutcome,
+        covariates: propensityCovariates,
+        method: params.propensity.method === 'ipw' ? 'ipw' : 'nearest',
+        caliper: Math.max(0, params.propensity.caliper ?? 0),
+        ratio: Math.max(1, Math.min(10, Math.round(params.propensity.ratio ?? 1))),
+      },
       countreg: { ...params.countreg, dep: countDep, indeps: countIndeps },
       agreement: {
         ...params.agreement,
@@ -248,21 +539,131 @@ export const remapParams = (
         variable: qualityVariable,
         category: qualityCategory,
         group: qualityGroup,
+        part: qualityPart,
+        operator: qualityOperator,
+        variables: qualityVariables,
       },
       cluster: {
         ...params.cluster,
         selected: clusterSelected,
       },
+      canonical: {
+        x: canonicalX,
+        y: canonicalY.filter(value => !canonicalX.includes(value)),
+      },
+      mds: { ...params.mds, selected: mdsSelected },
+      sem: {
+        ...params.sem,
+        selected: semSelected,
+        groups: semSelected.map((_, index) => params.sem.groups[index] ?? 0),
+      },
+      latentclass: { ...params.latentclass, selected: latentClassSelected },
+      irt: { ...params.irt, selected: irtSelected },
+      conjoint: {
+        ...params.conjoint,
+        attributes: conjointAttributes.filter(value => value !== conjointResponse),
+        response: conjointResponse,
+      },
       discriminant: {
         ...params.discriminant,
+        mode: params.discriminant.mode ?? 'classic',
         group: discriminantGroup,
         predictors: discriminantPredictors,
+        covariates: (params.discriminant.covariates ?? []).filter(
+          value => value !== discriminantGroup && !discriminantPredictors.includes(value)
+        ),
       },
       doe: {
         ...params.doe,
         response: doeResponse,
         factorA: doeFactorA,
         factorB: doeFactorB,
+      },
+      competing: {
+        ...params.competing,
+        time: competingTime,
+        event: competingEvent,
+        cause: Math.max(1, Math.round(params.competing.cause)),
+        covariates: competingCovariates,
+      },
+      recurrent: {
+        ...params.recurrent,
+        id: recurrentId,
+        start: recurrentStart,
+        stop: recurrentStop,
+        event: recurrentEvent,
+        covariates: recurrentCovariates,
+        model: params.recurrent.model ?? 'ag',
+      },
+      alt: {
+        ...params.alt,
+        time: altTime,
+        event: altEvent,
+        stress: altStress,
+        covariates: altCovariates,
+        model: params.alt.model ?? 'arrhenius',
+        useStress: Number.isFinite(params.alt.useStress) ? params.alt.useStress : 1,
+      },
+      reliability: {
+        ...params.reliability,
+        mode: params.reliability.mode ?? 'growth',
+      },
+      survey: {
+        ...params.survey,
+        variable: surveyVariable,
+        category: surveyCategory,
+        weight: surveyWeight,
+        strata: surveyStrata,
+        cluster: surveyCluster,
+        predictors: surveyPredictors,
+      },
+      ml: {
+        ...params.ml,
+        outcome: mlOutcome,
+        predictors: mlPredictors,
+      },
+      text: {
+        ...params.text,
+        text: textVariable,
+        group: textGroup,
+      },
+      choice: {
+        ...params.choice,
+        set: choiceSet,
+        alternative: choiceAlternative,
+        chosen: choiceChosen,
+        best: choiceBest,
+        worst: choiceWorst,
+        attributes: choiceAttributes,
+      },
+      meta: {
+        ...params.meta,
+        effect: metaEffect,
+        se: metaSe,
+        study: metaStudy,
+      },
+      bayes: {
+        ...params.bayes,
+        outcome: bayesOutcome,
+        predictors: bayesPredictors,
+        group: bayesGroup,
+      },
+      spatial: {
+        ...params.spatial,
+        variable: spatialVariable,
+        x: spatialX,
+        y: spatialY,
+        predictors: spatialPredictors,
+      },
+      variances: {
+        ...params.variances,
+        variable: varianceVariable,
+        group: varianceGroup,
+      },
+      proportions: {
+        ...params.proportions,
+        variable: proportionVariable,
+        group: proportionGroup,
       },
     },
   };
@@ -287,12 +688,25 @@ const checkList = (values: readonly number[], label: string, width: number, erro
 export const validateColumnRefs = (params: ProjectParams, width: number): string[] => {
   const errors: string[] = [];
   checkList(params.descVars, 'Descriptive: variables', width, errors);
+  checkOne(params.variances.variable, 'Variances: variable', width, errors);
+  checkOne(params.variances.group, 'Variances: group', width, errors, true);
+  checkOne(params.proportions.variable, 'Proportions: variable', width, errors);
+  checkOne(params.proportions.group, 'Proportions: group', width, errors, true);
   checkOne(params.ttest.var1, 'T-Test: first variable', width, errors);
   checkOne(params.ttest.var2, 'T-Test: second variable', width, errors);
   checkOne(params.anova.dep, 'ANOVA: dependent variable', width, errors);
   checkOne(params.anova.grp, 'ANOVA: group variable', width, errors);
+  checkOne(params.anova.inner ?? -1, 'ANOVA: inner factor', width, errors, true);
   checkOne(params.reg.dep, 'Regression: dependent variable', width, errors);
   checkList(params.reg.indeps, 'Regression: predictors', width, errors);
+  checkOne(params.glm.dep, 'GLM: dependent variable', width, errors);
+  checkList(params.glm.indeps, 'GLM: predictors', width, errors);
+  checkOne(params.quantile.dep, 'Quantile: dependent variable', width, errors);
+  checkList(params.quantile.indeps, 'Quantile: predictors', width, errors);
+  checkOne(params.nonlinear.dep, 'Nonlinear: dependent variable', width, errors);
+  checkOne(params.nonlinear.predictor, 'Nonlinear: predictor', width, errors);
+  checkOne(params.multinomial.outcome, 'Multinomial: outcome', width, errors);
+  checkList(params.multinomial.predictors, 'Multinomial: predictors', width, errors);
   checkList(params.corr.vars, 'Correlation: variables', width, errors);
   checkOne(params.distfit.variable, 'Distribution Fit: variable', width, errors);
   checkOne(params.logistic.outcome, 'Logistic: outcome', width, errors);
@@ -300,9 +714,11 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.cox.timeVariable, 'Cox: time', width, errors);
   checkOne(params.cox.eventVariable, 'Cox: event', width, errors);
   checkList(params.cox.covariates, 'Cox: covariates', width, errors);
+  checkOne(params.cox.frailtyVariable ?? -1, 'Cox: frailty group', width, errors, true);
   checkOne(params.survival.timeVariable, 'Survival: time', width, errors);
   checkOne(params.survival.eventVariable, 'Survival: event', width, errors);
   checkOne(params.survival.groupVariable, 'Survival: group', width, errors, true);
+  checkOne(params.survival.upperVariable ?? -1, 'Survival: upper bound', width, errors, true);
   checkOne(params.timeseries.variable, 'Time Series: series', width, errors);
   checkOne(params.ancova.response, 'ANCOVA: response', width, errors);
   checkOne(params.ancova.factor, 'ANCOVA: factor', width, errors);
@@ -333,6 +749,7 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.parametric.time, 'Parametric Survival: time', width, errors);
   checkOne(params.parametric.event, 'Parametric Survival: event', width, errors);
   checkList(params.parametric.predictors, 'Parametric Survival: predictors', width, errors);
+  checkOne(params.parametric.upperVariable ?? -1, 'Parametric Survival: upper bound', width, errors, true);
   checkOne(params.mixedanova.group, 'Mixed ANOVA: group', width, errors);
   checkList(params.mixedanova.conditions, 'Mixed ANOVA: conditions', width, errors);
   checkList(params.mi.variables, 'Missing Data: variables', width, errors);
@@ -343,6 +760,33 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.lmm.dep, 'Mixed Model: outcome', width, errors);
   checkList(params.lmm.indeps, 'Mixed Model: predictors', width, errors);
   checkOne(params.lmm.group, 'Mixed Model: group', width, errors);
+  checkOne(params.glmm.dep, 'GLMM: outcome', width, errors);
+  checkList(params.glmm.indeps, 'GLMM: predictors', width, errors);
+  checkOne(params.glmm.group, 'GLMM: group', width, errors);
+  checkOne(params.glmm.slope, 'GLMM: random slope', width, errors, true);
+  checkOne(params.pls.dep, 'PLS: dependent variable', width, errors);
+  checkList(params.pls.indeps, 'PLS: predictors', width, errors);
+  checkOne(params.mars.dep, 'MARS: dependent variable', width, errors);
+  checkList(params.mars.indeps, 'MARS: predictors', width, errors);
+  checkOne(params.iv.dep, 'IV: outcome', width, errors);
+  checkList(params.iv.endog, 'IV: endogenous predictors', width, errors);
+  checkList(params.iv.instruments, 'IV: instruments', width, errors);
+  checkList(params.iv.exog, 'IV: exogenous predictors', width, errors);
+  checkOne(params.panel.dep, 'Panel: outcome', width, errors);
+  checkList(params.panel.indeps, 'Panel: predictors', width, errors);
+  checkOne(params.panel.entity, 'Panel: entity', width, errors);
+  checkOne(params.panel.time, 'Panel: time', width, errors);
+  checkOne(params.selection.dep, 'Selection: outcome', width, errors);
+  checkList(params.selection.indeps, 'Selection: predictors', width, errors);
+  checkOne(params.selection.selection, 'Selection: selection indicator', width, errors, true);
+  checkList(params.selection.selectIndeps, 'Selection: selection predictors', width, errors);
+  checkOne(params.mediation.outcome, 'Mediation: outcome', width, errors);
+  checkOne(params.mediation.predictor, 'Mediation: predictor', width, errors);
+  checkOne(params.mediation.mediator, 'Mediation: mediator', width, errors);
+  checkList(params.mediation.covariates, 'Mediation: covariates', width, errors);
+  checkOne(params.propensity.treatment, 'Propensity: treatment', width, errors);
+  checkOne(params.propensity.outcome, 'Propensity: outcome', width, errors);
+  checkList(params.propensity.covariates, 'Propensity: covariates', width, errors);
   checkOne(params.countreg.dep, 'Count Regression: outcome', width, errors);
   checkList(params.countreg.indeps, 'Count Regression: predictors', width, errors);
   checkList(params.agreement.columns, 'Agreement: measurements', width, errors);
@@ -356,12 +800,62 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.quality.variable, 'Quality: variable', width, errors);
   checkOne(params.quality.category, 'Quality: category', width, errors);
   checkOne(params.quality.group, 'Quality: group', width, errors, true);
+  checkOne(params.quality.part, 'Quality: part', width, errors);
+  checkOne(params.quality.operator, 'Quality: operator', width, errors);
+  checkList(params.quality.variables, 'Quality: variables', width, errors);
   checkList(params.cluster.selected, 'Cluster: variables', width, errors);
+  checkList(params.canonical.x, 'Canonical: X variables', width, errors);
+  checkList(params.canonical.y, 'Canonical: Y variables', width, errors);
+  checkList(params.mds.selected, 'MDS: variables', width, errors);
+  checkList(params.sem.selected, 'SEM: indicators', width, errors);
+  checkList(params.latentclass.selected, 'Latent class: indicators', width, errors);
+  checkList(params.irt.selected, 'IRT: items', width, errors);
+  checkList(params.conjoint.attributes, 'Conjoint: attributes', width, errors);
+  checkOne(params.conjoint.response, 'Conjoint: rating', width, errors);
   checkOne(params.discriminant.group, 'Discriminant: group', width, errors);
   checkList(params.discriminant.predictors, 'Discriminant: predictors', width, errors);
+  checkList(params.discriminant.covariates ?? [], 'Discriminant: covariates', width, errors);
   checkOne(params.doe.response, 'DOE: response', width, errors);
   checkOne(params.doe.factorA, 'DOE: factor A', width, errors);
   checkOne(params.doe.factorB, 'DOE: factor B', width, errors);
+  checkOne(params.competing.time, 'Competing risks: time', width, errors);
+  checkOne(params.competing.event, 'Competing risks: event', width, errors);
+  checkList(params.competing.covariates, 'Competing risks: covariates', width, errors);
+  checkOne(params.recurrent.id, 'Recurrent events: subject', width, errors);
+  checkOne(params.recurrent.start, 'Recurrent events: start', width, errors);
+  checkOne(params.recurrent.stop, 'Recurrent events: stop', width, errors);
+  checkOne(params.recurrent.event, 'Recurrent events: event', width, errors);
+  checkList(params.recurrent.covariates, 'Recurrent events: covariates', width, errors);
+  checkOne(params.alt.time, 'ALT: time', width, errors);
+  checkOne(params.alt.event, 'ALT: event', width, errors);
+  checkOne(params.alt.stress, 'ALT: stress', width, errors);
+  checkList(params.alt.covariates, 'ALT: covariates', width, errors);
+  checkOne(params.survey.variable, 'Survey: variable', width, errors);
+  checkOne(params.survey.category, 'Survey: category', width, errors);
+  checkOne(params.survey.weight, 'Survey: weight', width, errors, true);
+  checkOne(params.survey.strata, 'Survey: strata', width, errors, true);
+  checkOne(params.survey.cluster, 'Survey: cluster', width, errors, true);
+  checkList(params.survey.predictors, 'Survey: predictors', width, errors);
+  checkOne(params.ml.outcome, 'Machine learning: outcome', width, errors);
+  checkList(params.ml.predictors, 'Machine learning: predictors', width, errors);
+  checkOne(params.text.text, 'Text mining: text column', width, errors);
+  checkOne(params.text.group, 'Text mining: group', width, errors, true);
+  checkOne(params.choice.set, 'Choice: set', width, errors);
+  checkOne(params.choice.alternative, 'Choice: alternative', width, errors);
+  checkOne(params.choice.chosen, 'Choice: chosen', width, errors);
+  checkOne(params.choice.best, 'Choice: best', width, errors);
+  checkOne(params.choice.worst, 'Choice: worst', width, errors);
+  checkList(params.choice.attributes, 'Choice: attributes', width, errors);
+  checkOne(params.meta.effect, 'Meta-analysis: effect', width, errors);
+  checkOne(params.meta.se, 'Meta-analysis: standard error', width, errors);
+  checkOne(params.meta.study, 'Meta-analysis: study', width, errors, true);
+  checkOne(params.bayes.outcome, 'Bayesian: outcome', width, errors);
+  checkList(params.bayes.predictors, 'Bayesian: predictors', width, errors);
+  checkOne(params.bayes.group, 'Bayesian: group', width, errors, true);
+  checkOne(params.spatial.variable, 'Spatial: variable', width, errors);
+  checkOne(params.spatial.x, 'Spatial: X coordinate', width, errors);
+  checkOne(params.spatial.y, 'Spatial: Y coordinate', width, errors);
+  checkList(params.spatial.predictors, 'Spatial: predictors', width, errors);
   return unique(errors);
 };
 
@@ -403,6 +897,16 @@ export const validateAnalysisColumnRefs = (
     case 'descriptive':
       list(params.descVars, 'Descriptive: variables');
       break;
+    case 'variances':
+      one(params.variances.variable, 'Variances: variable');
+      if (params.variances.mode === 'two') one(params.variances.group, 'Variances: group');
+      break;
+    case 'proportions':
+      one(params.proportions.variable, 'Proportions: variable');
+      if (params.proportions.mode === 'twoProp' || params.proportions.mode === 'twoRate') {
+        one(params.proportions.group, 'Proportions: group');
+      }
+      break;
     case 'ttest':
       one(params.ttest.var1, 'T-Test: first variable');
       one(params.ttest.var2, 'T-Test: second variable');
@@ -410,6 +914,23 @@ export const validateAnalysisColumnRefs = (
     case 'anova':
       one(params.anova.dep, 'ANOVA: dependent variable');
       one(params.anova.grp, 'ANOVA: group variable');
+      if (params.anova.mode === 'nested') one(params.anova.inner ?? -1, 'ANOVA: inner factor');
+      break;
+    case 'glm':
+      one(params.glm.dep, 'GLM: dependent variable');
+      list(params.glm.indeps, 'GLM: predictors');
+      break;
+    case 'quantile':
+      one(params.quantile.dep, 'Quantile: dependent variable');
+      list(params.quantile.indeps, 'Quantile: predictors');
+      break;
+    case 'nonlinear':
+      one(params.nonlinear.dep, 'Nonlinear: dependent variable');
+      one(params.nonlinear.predictor, 'Nonlinear: predictor');
+      break;
+    case 'multinomial':
+      one(params.multinomial.outcome, 'Multinomial: outcome');
+      list(params.multinomial.predictors, 'Multinomial: predictors');
       break;
     case 'regression':
       one(params.reg.dep, 'Regression: dependent variable');
@@ -429,11 +950,13 @@ export const validateAnalysisColumnRefs = (
       one(params.cox.timeVariable, 'Cox: time');
       one(params.cox.eventVariable, 'Cox: event');
       list(params.cox.covariates, 'Cox: covariates');
+      if (params.cox.mode === 'frailty') one(params.cox.frailtyVariable ?? -1, 'Cox: frailty group');
       break;
     case 'survival':
       one(params.survival.timeVariable, 'Survival: time');
       one(params.survival.eventVariable, 'Survival: event');
       one(params.survival.groupVariable, 'Survival: group', true);
+      if (params.survival.mode === 'interval') one(params.survival.upperVariable ?? -1, 'Survival: upper bound');
       break;
     case 'timeseries':
       one(params.timeseries.variable, 'Time Series: series');
@@ -486,6 +1009,7 @@ export const validateAnalysisColumnRefs = (
       one(params.parametric.time, 'Parametric Survival: time');
       one(params.parametric.event, 'Parametric Survival: event');
       list(params.parametric.predictors, 'Parametric Survival: predictors');
+      one(params.parametric.upperVariable ?? -1, 'Parametric Survival: upper bound', true);
       break;
     case 'mixedanova':
       one(params.mixedanova.group, 'Mixed ANOVA: group');
@@ -493,7 +1017,7 @@ export const validateAnalysisColumnRefs = (
       break;
     case 'mi':
       list(params.mi.variables, 'Missing Data: variables');
-      one(params.mi.outcome, 'Missing Data: outcome');
+      if (params.mi.model !== 'categorical') one(params.mi.outcome, 'Missing Data: outcome');
       list(params.mi.predictors, 'Missing Data: predictors');
       break;
     case 'ordinal':
@@ -504,6 +1028,48 @@ export const validateAnalysisColumnRefs = (
       one(params.lmm.dep, 'Mixed Model: outcome');
       list(params.lmm.indeps, 'Mixed Model: predictors');
       one(params.lmm.group, 'Mixed Model: group');
+      break;
+    case 'glmm':
+      one(params.glmm.dep, 'GLMM: outcome');
+      list(params.glmm.indeps, 'GLMM: predictors');
+      one(params.glmm.group, 'GLMM: group');
+      break;
+    case 'pls':
+      one(params.pls.dep, 'PLS: dependent variable');
+      list(params.pls.indeps, 'PLS: predictors');
+      break;
+    case 'mars':
+      one(params.mars.dep, 'MARS: dependent variable');
+      list(params.mars.indeps, 'MARS: predictors');
+      break;
+    case 'iv':
+      one(params.iv.dep, 'IV: outcome');
+      list(params.iv.endog, 'IV: endogenous predictors');
+      list(params.iv.instruments, 'IV: instruments');
+      list(params.iv.exog, 'IV: exogenous predictors');
+      break;
+    case 'panel':
+      one(params.panel.dep, 'Panel: outcome');
+      list(params.panel.indeps, 'Panel: predictors');
+      one(params.panel.entity, 'Panel: entity');
+      one(params.panel.time, 'Panel: time');
+      break;
+    case 'selection':
+      one(params.selection.dep, 'Selection: outcome');
+      list(params.selection.indeps, 'Selection: predictors');
+      one(params.selection.selection, 'Selection: selection indicator', true);
+      list(params.selection.selectIndeps, 'Selection: selection predictors');
+      break;
+    case 'mediation':
+      one(params.mediation.outcome, 'Mediation: outcome');
+      one(params.mediation.predictor, 'Mediation: predictor');
+      one(params.mediation.mediator, 'Mediation: mediator');
+      list(params.mediation.covariates, 'Mediation: covariates');
+      break;
+    case 'propensity':
+      one(params.propensity.treatment, 'Propensity: treatment');
+      one(params.propensity.outcome, 'Propensity: outcome');
+      list(params.propensity.covariates, 'Propensity: covariates');
       break;
     case 'countreg':
       one(params.countreg.dep, 'Count Regression: outcome');
@@ -529,18 +1095,127 @@ export const validateAnalysisColumnRefs = (
       one(params.quality.variable, 'Quality: variable');
       one(params.quality.category, 'Quality: category');
       one(params.quality.group, 'Quality: group', true);
+      one(params.quality.part, 'Quality: part');
+      one(params.quality.operator, 'Quality: operator');
+      list(params.quality.variables, 'Quality: variables');
       break;
     case 'cluster':
       list(params.cluster.selected, 'Cluster: variables');
       break;
+    case 'canonical':
+      list(params.canonical.x, 'Canonical: X variables');
+      list(params.canonical.y, 'Canonical: Y variables');
+      break;
+    case 'mds':
+      list(params.mds.selected, 'MDS: variables');
+      break;
+    case 'sem':
+      list(params.sem.selected, 'SEM: indicators');
+      break;
+    case 'latentclass':
+      list(params.latentclass.selected, 'Latent class: indicators');
+      break;
+    case 'irt':
+      list(params.irt.selected, 'IRT: items');
+      break;
+    case 'conjoint':
+      list(params.conjoint.attributes, 'Conjoint: attributes');
+      one(params.conjoint.response, 'Conjoint: rating');
+      break;
     case 'discriminant':
       one(params.discriminant.group, 'Discriminant: group');
       list(params.discriminant.predictors, 'Discriminant: predictors');
+      if (params.discriminant.mode === 'mancova') {
+        list(params.discriminant.covariates ?? [], 'Discriminant: covariates');
+      }
       break;
     case 'doe':
       one(params.doe.response, 'DOE: response');
       one(params.doe.factorA, 'DOE: factor A');
       one(params.doe.factorB, 'DOE: factor B');
+      break;
+    case 'competing':
+      one(params.competing.time, 'Competing risks: time');
+      one(params.competing.event, 'Competing risks: event');
+      list(params.competing.covariates, 'Competing risks: covariates');
+      break;
+    case 'recurrent':
+      one(params.recurrent.id, 'Recurrent events: subject');
+      one(params.recurrent.start, 'Recurrent events: start');
+      one(params.recurrent.stop, 'Recurrent events: stop');
+      one(params.recurrent.event, 'Recurrent events: event');
+      list(params.recurrent.covariates, 'Recurrent events: covariates');
+      break;
+    case 'alt':
+      one(params.alt.time, 'ALT: time');
+      one(params.alt.event, 'ALT: event');
+      one(params.alt.stress, 'ALT: stress');
+      list(params.alt.covariates, 'ALT: covariates');
+      break;
+    case 'reliability':
+      one(params.reliability.time, 'Reliability: time');
+      one(params.reliability.failures, 'Reliability: failures');
+      break;
+    case 'var':
+      list(params.var.variables, 'VAR: variables');
+      if (params.var.variables.length < 2) errors.push('VAR: serve almeno due serie');
+      break;
+    case 'garch':
+      one(params.garch.variable, 'GARCH: series');
+      break;
+    case 'statespace':
+      one(params.statespace.variable, 'State-space: series');
+      break;
+    case 'survey':
+      one(params.survey.variable, 'Survey: variable');
+      if (params.survey.mode === 'proportion') one(params.survey.category, 'Survey: category');
+      one(params.survey.weight, 'Survey: weight', true);
+      one(params.survey.strata, 'Survey: strata', true);
+      one(params.survey.cluster, 'Survey: cluster', true);
+      if (params.survey.mode === 'regression') {
+        list(params.survey.predictors, 'Survey: predictors');
+      }
+      break;
+    case 'ml':
+      one(params.ml.outcome, 'Machine learning: outcome');
+      list(params.ml.predictors, 'Machine learning: predictors');
+      break;
+    case 'text':
+      one(params.text.text, 'Text mining: text column');
+      one(params.text.group, 'Text mining: group', true);
+      break;
+    case 'choice':
+      one(params.choice.set, 'Choice: set');
+      one(params.choice.alternative, 'Choice: alternative');
+      if (params.choice.mode === 'choice') {
+        one(params.choice.chosen, 'Choice: chosen');
+        list(params.choice.attributes, 'Choice: attributes');
+      } else {
+        one(params.choice.best, 'Choice: best');
+        one(params.choice.worst, 'Choice: worst');
+      }
+      break;
+    case 'meta':
+      one(params.meta.effect, 'Meta-analysis: effect');
+      one(params.meta.se, 'Meta-analysis: standard error');
+      one(params.meta.study, 'Meta-analysis: study', true);
+      break;
+    case 'bayes':
+      one(params.bayes.outcome, 'Bayesian: outcome');
+      if (params.bayes.mode === 'regression') {
+        list(params.bayes.predictors, 'Bayesian: predictors');
+      }
+      if (params.bayes.mode === 'hierarchical') {
+        one(params.bayes.group, 'Bayesian: group');
+      }
+      break;
+    case 'spatial':
+      one(params.spatial.variable, 'Spatial: variable');
+      one(params.spatial.x, 'Spatial: X coordinate');
+      one(params.spatial.y, 'Spatial: Y coordinate');
+      if (params.spatial.mode === 'sar') {
+        list(params.spatial.predictors, 'Spatial: predictors');
+      }
       break;
     default:
       break;
@@ -562,6 +1237,22 @@ export const setPrimaryColumn = (
   switch (analysisId) {
     case 'descriptive':
       return { params: { ...params, descVars: append(params.descVars) }, role: 'Descriptive variable' };
+    case 'variances':
+      return {
+        params: {
+          ...params,
+          variances: { ...params.variances, variable: column },
+        },
+        role: 'Variances: variable',
+      };
+    case 'proportions':
+      return {
+        params: {
+          ...params,
+          proportions: { ...params.proportions, variable: column },
+        },
+        role: 'Proportions: variable',
+      };
     case 'distfit':
       return { params: { ...params, distfit: { ...params.distfit, variable: column } }, role: 'Distribution variable' };
     case 'ttest':
@@ -580,16 +1271,49 @@ export const setPrimaryColumn = (
       return { params: { ...params, nonparamrm: { ...params.nonparamrm, outcome: column } }, role: 'Non-parametric outcome' };
     case 'tost':
       return { params: { ...params, tost: { ...params.tost, var1: column } }, role: 'TOST first variable' };
+    case 'glm':
+      return { params: { ...params, glm: { ...params.glm, dep: column } }, role: 'GLM outcome' };
+    case 'quantile':
+      return { params: { ...params, quantile: { ...params.quantile, dep: column } }, role: 'Quantile outcome' };
+    case 'nonlinear':
+      return { params: { ...params, nonlinear: { ...params.nonlinear, predictor: column } }, role: 'Nonlinear predictor' };
+    case 'multinomial':
+      return { params: { ...params, multinomial: { ...params.multinomial, outcome: column } }, role: 'Multinomial outcome' };
     case 'regression':
       return { params: { ...params, reg: { ...params.reg, dep: column } }, role: 'Regression outcome' };
     case 'logistic':
       return { params: { ...params, logistic: { ...params.logistic, outcome: column } }, role: 'Logistic outcome' };
+    case 'pls':
+      return { params: { ...params, pls: { ...params.pls, dep: column } }, role: 'PLS outcome' };
+    case 'mars':
+      return { params: { ...params, mars: { ...params.mars, dep: column } }, role: 'MARS outcome' };
+    case 'iv':
+      return { params: { ...params, iv: { ...params.iv, dep: column } }, role: 'IV outcome' };
+    case 'panel':
+      return { params: { ...params, panel: { ...params.panel, dep: column } }, role: 'Panel outcome' };
+    case 'selection':
+      return {
+        params: { ...params, selection: { ...params.selection, dep: column } },
+        role: 'Selection outcome',
+      };
+    case 'mediation':
+      return {
+        params: { ...params, mediation: { ...params.mediation, outcome: column } },
+        role: 'Mediation outcome',
+      };
+    case 'propensity':
+      return {
+        params: { ...params, propensity: { ...params.propensity, treatment: column } },
+        role: 'Propensity treatment',
+      };
     case 'countreg':
       return { params: { ...params, countreg: { ...params.countreg, dep: column } }, role: 'Count Regression outcome' };
     case 'ordinal':
       return { params: { ...params, ordinal: { ...params.ordinal, dep: column } }, role: 'Ordinal Logistic outcome' };
     case 'lmm':
       return { params: { ...params, lmm: { ...params.lmm, dep: column } }, role: 'Mixed Model outcome' };
+    case 'glmm':
+      return { params: { ...params, glmm: { ...params.glmm, dep: column } }, role: 'GLMM outcome' };
     case 'gee':
       return { params: { ...params, gee: { ...params.gee, dep: column } }, role: 'GEE outcome' };
     case 'multivariate':
@@ -608,6 +1332,18 @@ export const setPrimaryColumn = (
       return { params: { ...params, parametric: { ...params.parametric, time: column } }, role: 'Parametric Survival time' };
     case 'timeseries':
       return { params: { ...params, timeseries: { ...params.timeseries, variable: column } }, role: 'Time Series variable' };
+    case 'var':
+      return {
+        params: { ...params, var: { ...params.var, variables: append([...params.var.variables, column]) } },
+        role: 'VAR variable',
+      };
+    case 'garch':
+      return { params: { ...params, garch: { ...params.garch, variable: column } }, role: 'GARCH series' };
+    case 'statespace':
+      return {
+        params: { ...params, statespace: { ...params.statespace, variable: column } },
+        role: 'State-space series',
+      };
     case 'mi':
       return { params: { ...params, mi: { ...params.mi, variables: append(params.mi.variables) } }, role: 'Missing Data variable' };
     case 'resampling':
@@ -632,6 +1368,59 @@ export const setPrimaryColumn = (
         },
         role: 'Cluster variable',
       };
+    case 'canonical': {
+      const inY = params.canonical.y.includes(column);
+      return {
+        params: {
+          ...params,
+          canonical: inY
+            ? { ...params.canonical, y: params.canonical.y.filter(value => value !== column) }
+            : { ...params.canonical, x: append(params.canonical.x) },
+        },
+        role: 'Canonical X variable',
+      };
+    }
+    case 'mds':
+      return {
+        params: { ...params, mds: { ...params.mds, selected: append(params.mds.selected) } },
+        role: 'MDS variable',
+      };
+    case 'sem':
+      return {
+        params: {
+          ...params,
+          sem: {
+            ...params.sem,
+            selected: append(params.sem.selected),
+            groups: [...params.sem.groups, 0],
+          },
+        },
+        role: 'SEM indicator',
+      };
+    case 'latentclass':
+      return {
+        params: {
+          ...params,
+          latentclass: {
+            ...params.latentclass,
+            selected: append(params.latentclass.selected),
+          },
+        },
+        role: 'Latent class indicator',
+      };
+    case 'irt':
+      return {
+        params: { ...params, irt: { ...params.irt, selected: append(params.irt.selected) } },
+        role: 'IRT item',
+      };
+    case 'conjoint':
+      return {
+        params: {
+          ...params,
+          conjoint: { ...params.conjoint, attributes: append(params.conjoint.attributes) },
+        },
+        role: 'Conjoint attribute',
+      };
     case 'discriminant':
       return {
         params: {
@@ -644,6 +1433,41 @@ export const setPrimaryColumn = (
       return {
         params: { ...params, doe: { ...params.doe, response: column } },
         role: 'DOE response',
+      };
+    case 'survey':
+      return {
+        params: { ...params, survey: { ...params.survey, variable: column } },
+        role: 'Survey variable',
+      };
+    case 'ml':
+      return {
+        params: { ...params, ml: { ...params.ml, outcome: column } },
+        role: 'Machine learning outcome',
+      };
+    case 'text':
+      return {
+        params: { ...params, text: { ...params.text, text: column } },
+        role: 'Text column',
+      };
+    case 'choice':
+      return {
+        params: { ...params, choice: { ...params.choice, set: column } },
+        role: 'Choice set',
+      };
+    case 'meta':
+      return {
+        params: { ...params, meta: { ...params.meta, effect: column } },
+        role: 'Meta-analysis effect',
+      };
+    case 'bayes':
+      return {
+        params: { ...params, bayes: { ...params.bayes, outcome: column } },
+        role: 'Bayesian outcome',
+      };
+    case 'spatial':
+      return {
+        params: { ...params, spatial: { ...params.spatial, variable: column } },
+        role: 'Spatial variable',
       };
     default:
       return null;

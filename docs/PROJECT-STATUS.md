@@ -12,7 +12,7 @@
 
 LazStats è oggi un **workbench statistico locale per un singolo dataset**, pensato per ricercatore/studente. Non è un clone di SPSS: l’identità è “dato unico, analisi guidata, risultati spiegati, tutto locale”.
 
-La struttura è matura: 36 procedure, 36 form, 36 runner, store dei parametri, snapshot delle card, stale, griglia tipizzata, import/export, report e **Web Worker per le 9 procedure pesanti**. Le fondamenta sono solide; restano debiti su **reshape, model comparison, diagnostica aggregata e scala dei dataset**.
+La struttura è matura: 72 procedure, 72 form, 72 runner, store dei parametri, snapshot delle card, stale, griglia tipizzata, import/export, report e **Web Worker per le 32 procedure pesanti**. Le fondamenta sono solide; restano debiti su **reshape, model comparison, diagnostica aggregata e scala dei dataset**.
 
 ---
 
@@ -29,7 +29,7 @@ La struttura è matura: 36 procedure, 36 form, 36 runner, store dei parametri, s
 - Limiti: 50.000 righe, 500 colonne; autosave localStorage ~4 MB; 20 card output; 1,5 MB HTML.
 
 ### Analisi
-36 procedure in 10 famiglie:
+72 procedure in 12 famiglie:
 Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power.
 
 Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repeated/mixed ANOVA, non-parametric RM, TOST, regression, correlation, logistic, count regression, ordinal, LMM, GEE, PCA/alpha/EFA, chi-square, contingency, agreement, Kaplan–Meier, Cox, stratified Cox, time-dependent Cox, parametric survival, ARIMA/SARIMA, multiple imputation, sample size, resampling, partition (regression tree), quality/SPC, cluster analysis, discriminant/MANOVA, response surface (DOE).
@@ -41,7 +41,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 - Onboarding con tre percorsi: descrivere, confrontare, prevedere.
 - Preset per t-test, ANOVA, regressione, logistica, correlazione.
 - Live-run opt-in per procedure instant, con token di generazione.
-- Le 9 procedure `heavy` girano in un **Web Worker** con fase, tempo trascorso e **Cancel**; se il browser non può creare il worker, il runner sincrono resta il fallback.
+- Le 32 procedure `heavy` girano in un **Web Worker** con fase, tempo trascorso e **Cancel**; se il browser non può creare il worker, il runner sincrono resta il fallback.
 - Snapshot parametri nella card, Re-run, Apply, Re-run all.
 - Stale su dati, dataset, filtro, parametri, CI; persistito dopo reload per dataset/revision/CI.
 
@@ -60,8 +60,8 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 ### Qualità e architettura
 - `stats/` puro, `analyses/` form + runner, `grid/` modello dati, `ui/` composizione.
 - dependency-cruiser, madge, file-size guard, sanitizer output HTML, cap di import/progetto.
-- 480 test unitari, 43 e2e passati, 35 skipped (mobile/desktop non applicabili).
-- i18n: 744 chiavi, UI inglese, help/report in italiano.
+- 1298 test unitari, 43 e2e passati, 35 skipped (mobile/desktop non applicabili).
+- i18n: 1776 chiavi, UI/help/report in 6 lingue (en, it, fr, es, de, pt-PT).
 
 ---
 
@@ -78,7 +78,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 ## 4. Punti di forza
 
 - Kernel puri e report che non ricalcolano: la parte statisticamente più solida.
-- 36 procedure con form coerenti e runner separati.
+- 72 procedure con form coerenti e runner separati.
 - Snapshot parametri, stale e re-run: il ciclo di lavoro è chiuso.
 - Local-first: nessun dato inviato a un server.
 - Griglia tipizzata, livelli, missing code e formule: buona base per dati reali.
@@ -88,7 +88,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 
 ## 5. Limiti e debito tecnico
 
-1. **Worker limitato alle procedure heavy**: le 27 procedure instant restano sincrone; il clone della griglia verso il worker è O(righe×colonne) e non è ancora trasferibile con `ArrayBuffer`.
+1. **Worker limitato alle procedure heavy**: le 40 procedure instant restano sincrone; il clone della griglia verso il worker è O(righe×colonne) e non è ancora trasferibile con `ArrayBuffer`.
 2. **Import binario senza `.zsav`**: `.sav` e `.dta` sono supportati; i file SPSS compressi `.zsav` richiedono zlib nel browser e sono rifiutati con un messaggio esplicito.
 3. **Nessun reshape long/wide** guidato: dataset longitudinali reali restano fuori.
 4. **Nessun model comparison** né diagnostics dashboard aggregata.
@@ -97,7 +97,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 7. **Filtro analysis non persistito**: limite noto sullo stale dopo reload.
 8. **Accessibilità**: migliorata, ma senza audit con screen reader reali; mobile editing limitato.
 9. **Collaborazione assente** per scelta: nessun cloud, ruoli, audit trail.
-10. **Lingua mista**: UI inglese, help/report e prosa del Wizard in italiano.
+10. **Lingua**: UI, help e report sono coperti in 6 lingue; il catalogo grafico storico resta inglese-first con override locali.
 
 ---
 
@@ -145,7 +145,7 @@ npm run bench:grid       # benchmark griglia/formule
 | `src/ui/analysis/AnalysisOptions.tsx` | Setup, preset, code export, run |
 | `src/ui/OutputConsole.tsx` | Card, outline, stale, export |
 | `src/ui/analysis/store.tsx` | Store parametri |
-| `src/analyses/registry.ts` | 36 procedure e famiglie |
+| `src/analyses/registry.ts` | 72 procedure e 12 famiglie |
 | `src/analyses/runners.ts` | Registro runner |
 | `src/grid/DataGrid.tsx` | Griglia, editing, tastiera |
 | `src/io/project/index.ts` | `.lzs`, autosave, migrazione |

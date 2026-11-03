@@ -102,3 +102,5 @@ export const contingencyReport = (tables: TableSpec[], level: number): ReportSpe
     ],
   };
 };
+
+export * from './contingencyModes';

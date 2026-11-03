@@ -31,7 +31,7 @@ export const MAX_AUTOSAVE_CHARS = 4_000_000;
 export type ProjectTab = 'data' | 'analysis' | 'settings' | 'help';
 
 export interface TTestParams {
-  type: 'ind' | 'dep' | 'one';
+  type: 'ind' | 'dep' | 'one' | 'sign';
   var1: number;
   var2: number;
   mu: number;
@@ -40,12 +40,52 @@ export interface TTestParams {
 }
 
 export interface AnovaParams {
+  /** One-way ANOVA/Kruskal–Wallis, Mood median, nested ANOVA or ANOM. */
+  mode: 'oneway' | 'median' | 'nested' | 'anom';
   dep: number;
   grp: number;
   posthoc: string;
   useNonParam: boolean;
   kwPosthoc: 'none' | 'bonferroni' | 'holm' | 'fdr';
+  /** Inner factor for the nested mode; -1 when unused. */
+  inner?: number;
+  /** Significance level for the ANOM decision lines. */
+  alpha?: number;
 }
+
+/** Generalized linear model with an explicit family and link. */
+export interface GlmParams {
+  dep: number;
+  indeps: number[];
+  family: 'gaussian' | 'binomial' | 'poisson' | 'gamma';
+  link: 'identity' | 'log' | 'logit' | 'probit' | 'inverse';
+}
+
+/** Quantile regression at a single target quantile. */
+export interface QuantileParams {
+  dep: number;
+  indeps: number[];
+  tau: number;
+}
+
+export type NonlinearModelType = 'exponential' | 'logistic' | 'gompertz' | 'power' | 'michaelis';
+
+/** Nonlinear least squares with a named growth/decay model. */
+export interface NonlinearParams {
+  dep: number;
+  predictor: number;
+  model: NonlinearModelType;
+}
+
+/** Multinomial logistic regression for a categorical outcome. */
+export interface MultinomialParams {
+  outcome: number;
+  predictors: number[];
+}
+
+export type RegressionMode = 'linear' | 'selection' | 'polynomial' | 'penalized';
+export type SelectionDirection = 'forward' | 'backward' | 'both';
+export type SelectionCriterion = 'aic' | 'bic' | 'adjR2' | 'r2' | 'cp' | 'p';
 
 export interface RegParams {
   dep: number;
@@ -53,6 +93,20 @@ export interface RegParams {
   useNonParam: boolean;
   robustEstimator: string;
   robustSE: 'none' | 'HC1' | 'HC3';
+  /** Linear OLS (default), variable selection, polynomial curve or penalized fit. */
+  mode?: RegressionMode;
+  /** Polynomial degree for the polynomial mode. */
+  degree?: number;
+  /** Search direction for the selection mode. */
+  selectionDirection?: SelectionDirection;
+  /** Optimality criterion for the selection mode. */
+  selectionCriterion?: SelectionCriterion;
+  /** Penalty for the penalized mode. */
+  penalty?: 'ridge' | 'lasso' | 'elasticnet';
+  /** Penalization strength for the penalized mode (glmnet scale). */
+  lambda?: number;
+  /** Elastic-net mixing: 0 = ridge, 1 = LASSO. */
+  penaltyAlpha?: number;
 }
 
 export interface CorrParams {
@@ -62,7 +116,14 @@ export interface CorrParams {
   showKendall: boolean;
 }
 
+export type ChiSqMode = 'table' | 'gof';
+
 export interface ChiSqParams {
+  mode: ChiSqMode;
+  /** Categorical variable for the goodness-of-fit mode. */
+  gofVariable: number;
+  /** Comma-separated expected proportions; empty means equal shares. */
+  gofExpected: string;
   row1col1: number;
   row1col2: number;
   row2col1: number;
@@ -91,11 +152,22 @@ export interface SampleSizeParams {
   margin: number;
   hazardRatio: number;
   eventRate: number;
+  /** Rapporto tra varianze da rilevare (disegno 'variance'). */
+  ratio: number;
+  /** Numero di predittori (disegno 'regression'). */
+  predictors: number;
+  /** Cohen's f² (disegno 'regression'). */
+  f2: number;
+  /** Odds ratio da rilevare (disegno 'logistic'). */
+  oddsRatio: number;
 }
 
 /** Parametri del fit delle distribuzioni. */
 export interface DistributionFitParams {
+  mode: 'fit' | 'ks';
   variable: number;
+  /** Group column for the two-sample KS mode; -1 otherwise. */
+  group: number;
   selected: DistributionName[];
 }
 
@@ -105,6 +177,8 @@ export interface LogisticParams {
   predictors: number[];
   cutoff: number;
   penalized: boolean;
+  /** Link for the binary model: logit (odds) or probit (normal latent scale). */
+  link?: 'logit' | 'probit';
 }
 
 /** Parametri del modello di Cox. */
@@ -112,36 +186,111 @@ export interface CoxParams {
   timeVariable: number;
   eventVariable: number;
   covariates: number[];
+  /** Standard proportional hazards or a shared gamma frailty model. */
+  mode?: 'standard' | 'frailty';
+  /** Grouping column for the frailty mode; -1 when unused. */
+  frailtyVariable?: number;
 }
 
-/** Parametri della sopravvivenza (Kaplan–Meier). */
+export type SurvivalMode = 'km' | 'life' | 'interval';
+
+/** Parametri della sopravvivenza (Kaplan–Meier, tavola di vita, censura a intervallo). */
 export interface SurvivalParams {
   timeVariable: number;
   eventVariable: number;
   /** -1 = nessun raggruppamento. */
   groupVariable: number;
+  /** Curve di Kaplan–Meier, tavola di vita attuariale o NPMLE a intervalli. */
+  mode?: SurvivalMode;
+  /** Limite superiore dell'intervallo; -1 quando non serve. */
+  upperVariable?: number;
+  /** Numero di intervalli della tavola di vita; 0 = automatico. */
+  intervals?: number;
 }
 
 export type TimeSeriesDifferenceMode = 'auto' | '0' | '1' | '2';
 export type TimeSeriesSeasonalDifferenceMode = 'auto' | '0' | '1';
 
-/** Parametri della serie temporale (ARIMA/SARIMA + modelli semplici). */
+/** Analysis carried out on the Time Series entry. */
+export type TimeSeriesMode = 'arima' | 'holtwinters' | 'unitroot' | 'spectral' | 'arimax';
+
+export type TimeSeriesSeasonalModel = 'additive' | 'multiplicative';
+
+/** Parametri della serie temporale (ARIMA/SARIMA, Holt–Winters, radici unitarie, spettro, ARIMAX). */
 export interface TimeSeriesParams {
+  mode: TimeSeriesMode;
   variable: number;
   period: number;
   horizon: number;
   differenceMode: TimeSeriesDifferenceMode;
   seasonalDifferenceMode: TimeSeriesSeasonalDifferenceMode;
+  /** Modello stagionale di Holt–Winters. */
+  seasonalModel: TimeSeriesSeasonalModel;
+  /** Regressore esterno per ARIMAX; -1 = nessuno. */
+  xregVariable: number;
+}
+
+/** VAR/VECM su più serie. */
+export type VarMode = 'var' | 'vecm';
+
+export interface VarParams {
+  mode: VarMode;
+  variables: number[];
+  /** Ordine dei ritardi; 0 = scelta automatica. */
+  lags: number;
+  horizon: number;
+}
+
+/** GARCH(1,1) su una serie di rendimenti. */
+export interface GarchParams {
+  variable: number;
+  horizon: number;
+}
+
+/** State-space locale o Markov switching a due regimi. */
+export type StateSpaceMode = 'local' | 'markov';
+
+export interface StateSpaceParams {
+  mode: StateSpaceMode;
+  variable: number;
+  horizon: number;
+  /** Modello locale: include il trend stocastico. */
+  trend: boolean;
 }
 
 /** Parametri della tabella di contingenza R×C. */
+export type ContingencyMode = 'chi2' | 'mantelHaenszel' | 'trend' | 'exact';
+
+/** One 2×2 stratum of the Mantel–Haenszel test (counts as strings). */
+export interface ContingencyStratum {
+  label: string;
+  values: string[][];
+}
+
 export interface ContingencyParams {
+  /** Test performed on the table(s). */
+  mode: ContingencyMode;
   rows: string[];
   cols: string[];
   /** Frequenze come stringhe: il calcolo usa parseInt, come il form. */
   values: string[][];
   exact: boolean;
   monteCarlo: boolean;
+  /** 2×2 tables used by the Mantel–Haenszel mode. */
+  strata: ContingencyStratum[];
+  /** Row scores used by the Cochran–Armitage trend mode (default 1..R). */
+  scores: string[];
+}
+
+/** Poisson log-linear model for a two-way table. */
+export type LoglinearModel = 'independence' | 'saturated';
+
+export interface LoglinearParams {
+  rows: string[];
+  cols: string[];
+  /** Frequenze come stringhe, come nella tabella di contingenza. */
+  values: string[][];
+  model: LoglinearModel;
 }
 
 /** Parametri dell'ANCOVA. */
@@ -222,12 +371,65 @@ export interface ResamplingParams {
   bootstrap: number;
 }
 
+export type ParametricDistribution =
+  | 'weibull'
+  | 'exponential'
+  | 'lognormal'
+  | 'loglogistic'
+  | 'gompertz';
+
 /** Parametri della sopravvivenza parametrica. */
 export interface ParametricSurvivalParams {
   time: number;
   event: number;
   predictors: number[];
-  distribution: 'weibull' | 'exponential';
+  distribution: ParametricDistribution;
+  /** Colonna del limite superiore per la censura a intervallo; -1 se assente. */
+  upperVariable?: number;
+}
+
+/** Competing risks: one event code per cause, 0 = censored. */
+export interface CompetingParams {
+  time: number;
+  event: number;
+  /** Event code of the cause of interest. */
+  cause: number;
+  covariates: number[];
+}
+
+/** Recurrent events: one row per (start, stop] interval and subject. */
+export interface RecurrentParams {
+  id: number;
+  start: number;
+  stop: number;
+  event: number;
+  covariates: number[];
+  /** Andersen–Gill or Wei–Lin–Weissfeld. */
+  model: 'ag' | 'wlw';
+}
+
+export type AltModel = 'arrhenius' | 'inversePower' | 'exponential';
+
+/** Accelerated life testing with a stress column. */
+export interface AltParams {
+  time: number;
+  event: number;
+  stress: number;
+  covariates: number[];
+  model: AltModel;
+  /** Stress level at which the acceleration factor is reported. */
+  useStress: number;
+}
+
+export type ReliabilityMode = 'growth' | 'rbd';
+
+/** Reliability growth (Crow–AMSAA) or a series/parallel block diagram. */
+export interface ReliabilityParams {
+  mode: ReliabilityMode;
+  time: number;
+  failures: number;
+  /** Series stages; each stage lists the reliability of parallel components. */
+  stages: string[][];
 }
 
 /** Parametri dell'ANOVA mista between-within. */
@@ -241,7 +443,7 @@ export interface MiParams {
   variables: number[];
   imputations: number;
   iterations: number;
-  model: 'descriptives' | 'linear';
+  model: 'descriptives' | 'linear' | 'categorical';
   outcome: number;
   predictors: number[];
 }
@@ -257,6 +459,101 @@ export interface LmmParams {
   dep: number;
   indeps: number[];
   group: number;
+  /** Add a random slope for the first fixed predictor (default false). */
+  randomSlope?: boolean;
+}
+
+/** Generalized linear mixed model with random intercept and optional slope. */
+export interface GlmmParams {
+  dep: number;
+  indeps: number[];
+  group: number;
+  family: 'gaussian' | 'binomial' | 'poisson';
+  link: 'identity' | 'logit' | 'log';
+  /** Column used as random slope; -1 keeps a random intercept only. */
+  slope: number;
+}
+
+/** Partial least squares regression (PLS1). */
+export interface PlsParams {
+  dep: number;
+  indeps: number[];
+  /** Number of latent components, 1..p. */
+  components: number;
+  /** Cross-validation folds; 0 disables the Q² estimate. */
+  cvFolds: number;
+}
+
+/** Multivariate adaptive regression splines (MARS). */
+export interface MarsParams {
+  dep: number;
+  indeps: number[];
+  /** Maximum interaction degree: 1 additive, 2 with two-way products. */
+  degree: number;
+  /** Maximum number of basis functions, intercept included. */
+  maxTerms: number;
+  /** GCV penalty per effective parameter (earth's `penalty`). */
+  penalty: number;
+  prune: boolean;
+}
+
+/** Two-stage least squares with excluded instruments. */
+export interface IvParams {
+  dep: number;
+  /** Endogenous regressors instrumented by `instruments`. */
+  endog: number[];
+  /** Excluded instruments. */
+  instruments: number[];
+  /** Included exogenous regressors (their own instruments). */
+  exog: number[];
+  /** HC1 heteroskedasticity-robust standard errors. */
+  robust: boolean;
+}
+
+/** Panel fixed-effects / random-effects model. */
+export interface PanelParams {
+  dep: number;
+  indeps: number[];
+  entity: number;
+  time: number;
+  model: 'fe' | 're' | 'both';
+}
+
+/** Tobit type-I censored regression and Heckman two-step selection. */
+export interface SelectionParams {
+  mode: 'tobit' | 'heckman';
+  dep: number;
+  indeps: number[];
+  lower: number;
+  /** `null` means no upper censoring. */
+  upper: number | null;
+  /** 0/1 selection indicator (Heckman only). */
+  selection: number;
+  selectIndeps: number[];
+}
+
+/** Baron–Kenny mediation with Sobel/delta and percentile bootstrap. */
+export interface MediationParams {
+  outcome: number;
+  predictor: number;
+  mediator: number;
+  covariates: number[];
+  /** Bootstrap replications; 0 disables the bootstrap interval. */
+  bootstrap: number;
+  seed: number;
+}
+
+/** Propensity-score matching and inverse-probability weighting. */
+export interface PropensityParams {
+  /** 0/1 treatment indicator. */
+  treatment: number;
+  outcome: number;
+  covariates: number[];
+  method: 'nearest' | 'ipw';
+  /** Caliper in SD of the logit propensity score; 0 = no caliper. */
+  caliper: number;
+  /** 1:k nearest-neighbour ratio. */
+  ratio: number;
 }
 
 /** Parametri della regressione per conteggi. */
@@ -303,12 +600,21 @@ export interface PartitionParams {
   minSplit: number;
 }
 
-export type QualityMode = 'control' | 'capability' | 'pareto' | 'variability';
+export type QualityMode =
+  | 'control'
+  | 'capability'
+  | 'pareto'
+  | 'variability'
+  | 'tolerance'
+  | 'cusum'
+  | 'msa'
+  | 'acceptance'
+  | 'mcontrol';
 
 /** Parametri della piattaforma qualità. */
 export interface QualityParams {
   mode: QualityMode;
-  /** Variabile numerica per controllo, capacità e variabilità. */
+  /** Variabile numerica per controllo, capacità, variabilità e tolleranza. */
   variable: number;
   /** Variabile categorica per il Pareto. */
   category: number;
@@ -319,9 +625,26 @@ export interface QualityParams {
   lsl: number;
   usl: number;
   target: number;
+  /** Quota di popolazione coperta dall’intervallo di tolleranza (0–1). */
+  toleranceP: number;
+  /** MSA: parte e operatore del disegno incrociato. */
+  part: number;
+  operator: number;
+  /** Controllo multivariato: variabili sorvegliate insieme. */
+  variables: number[];
+  /** Campionamento di accettazione: piano e lotto. */
+  planN: number;
+  planC: number;
+  lotSize: number;
 }
 
-export type ClusterMethod = 'average' | 'complete' | 'single' | 'ward';
+export type ClusterMethod =
+  | 'average'
+  | 'complete'
+  | 'single'
+  | 'ward'
+  | 'kmeans'
+  | 'kmedians';
 
 /** Parametri del clustering gerarchico. */
 export interface ClusterParams {
@@ -332,22 +655,250 @@ export interface ClusterParams {
   standardize: boolean;
 }
 
-/** Parametri dell'analisi discriminante (con MANOVA a un fattore). */
-export interface DiscriminantParams {
-  group: number;
-  predictors: number[];
+/** Canonical correlation between two blocks of numeric variables. */
+export interface CanonicalParams {
+  x: number[];
+  y: number[];
 }
 
-/** Parametri della superficie di risposta (DOE). */
+export type MdsMetric = 'classical' | 'nonmetric';
+
+/** Multidimensional scaling of a numeric distance matrix. */
+export interface MdsParams {
+  selected: number[];
+  dimensions: number;
+  metric: MdsMetric;
+}
+
+/** Correspondence analysis of a table entered in the form. */
+export interface CorrespondenceParams {
+  rows: string[];
+  cols: string[];
+  values: string[][];
+}
+
+/** Confirmatory factor analysis / two-factor structural model. */
+export interface SemParams {
+  selected: number[];
+  factors: number;
+  /** Factor index for each selected variable, in the same order. */
+  groups: number[];
+  structural: boolean;
+}
+
+/** Latent class analysis of categorical indicators. */
+export interface LatentClassParams {
+  selected: number[];
+  classes: number;
+  maxIterations: number;
+}
+
+export type IrtModel = '2pl' | 'rasch';
+
+/** Unidimensional IRT for binary indicators. */
+export interface IrtParams {
+  selected: number[];
+  model: IrtModel;
+  quadrature: number;
+}
+
+/** Additive conjoint analysis from profiles and a rating. */
+export interface ConjointParams {
+  attributes: number[];
+  response: number;
+}
+
+/** Parametri dell'analisi discriminante (con MANOVA a un fattore). */export interface DiscriminantParams {
+  /** Classic discriminant analysis or MANCOVA (predictors are outcomes). */
+  mode?: 'classic' | 'mancova';
+  group: number;
+  predictors: number[];
+  /** Continuous covariates for the MANCOVA mode. */
+  covariates?: number[];
+}
+
+/** Parametri della superficie di risposta (DOE) e del generatore di disegni. */
 export interface DoeParams {
+  mode: 'surface' | 'design';
   response: number;
   factorA: number;
   factorB: number;
   model: 'linear' | 'quadratic';
+  /** Generatore di disegni: tipo, numero di fattori e punti centrali. */
+  designType: 'full' | 'half' | 'ccd' | 'boxBehnken';
+  factors: number;
+  centerPoints: number;
 }
+
+export type SurveyMode = 'mean' | 'total' | 'proportion' | 'regression';
+
+/** Design-based estimation for complex survey samples. */
+export interface SurveyParams {
+  mode: SurveyMode;
+  variable: number;
+  /** Categorical variable read by the proportion mode. */
+  category: number;
+  successLevel: string;
+  /** Sampling weight column; -1 = every row counts once. */
+  weight: number;
+  /** Stratum column; -1 = one stratum. */
+  strata: number;
+  /** Primary sampling unit column; -1 = rows are PSUs. */
+  cluster: number;
+  /** Predictors of the weighted regression mode. */
+  predictors: number[];
+}
+
+export type MlMode = 'rf' | 'boosting' | 'nnet';
+export type MlTask = 'regression' | 'classification';
+
+/** Tree ensembles and a one-hidden-layer neural network. */
+export interface MlParams {
+  mode: MlMode;
+  task: MlTask;
+  outcome: number;
+  predictors: number[];
+  trees: number;
+  minNode: number;
+  /** Predictors tried at each random-forest split; 0 = square root of p. */
+  mtry: number;
+  shrinkage: number;
+  hidden: number;
+  iterations: number;
+  seed: number;
+}
+
+export type TextMode = 'frequency' | 'tfidf' | 'similarity' | 'topics';
+
+/** Text mining: term frequencies, TF-IDF, document similarity and topics. */
+export interface TextParams {
+  mode: TextMode;
+  text: number;
+  /** Optional grouping column; -1 = none. */
+  group: number;
+  maxTerms: number;
+  minDocFreq: number;
+  topics: number;
+  iterations: number;
+  seed: number;
+  stopwords: boolean;
+}
+
+export type ChoiceMode = 'choice' | 'maxdiff';
+
+/** Conditional logit over choice sets and MaxDiff best-worst counts. */
+export interface ChoiceParams {
+  mode: ChoiceMode;
+  /** Choice set or MaxDiff block identifier. */
+  set: number;
+  /** Alternative/item label column. */
+  alternative: number;
+  /** Chosen indicator (1 = chosen) for the conditional logit. */
+  chosen: number;
+  /** Best indicator for MaxDiff. */
+  best: number;
+  /** Worst indicator for MaxDiff. */
+  worst: number;
+  /** Attributes that vary across alternatives. */
+  attributes: number[];
+}
+
+export type MetaMethod = 'DL' | 'REML' | 'FE';
+
+/** Fixed- and random-effects meta-analysis of effect sizes with standard errors. */
+export interface MetaParams {
+  effect: number;
+  se: number;
+  study: number;
+  method: MetaMethod;
+  egger: boolean;
+}
+
+export type BayesMode = 'normal' | 'proportion' | 'rate' | 'regression' | 'hierarchical';
+
+/** Bayesian estimation with conjugate, Gibbs and hierarchical samplers. */
+export interface BayesParams {
+  mode: BayesMode;
+  outcome: number;
+  predictors: number[];
+  /** Grouping column for the hierarchical normal model; -1 = none. */
+  group: number;
+  priorMean: number;
+  priorSd: number;
+  iterations: number;
+  burnin: number;
+  chains: number;
+  seed: number;
+}
+
+export type SpatialMode = 'moran' | 'geary' | 'lisa' | 'sar';
+
+/** Spatial autocorrelation and a spatial lag model on coordinates. */
+export interface SpatialParams {
+  mode: SpatialMode;
+  variable: number;
+  predictors: number[];
+  x: number;
+  y: number;
+  /** Number of nearest neighbours in the row-standardised weights. */
+  k: number;
+  permutations: number;
+  seed: number;
+}
+
+/**
+ * Descriptive views: the classic per-variable summary, a frequency tally,
+ * outlier tests (Grubbs/Dixon) and the runs test.
+ */
+export type DescriptiveMode = 'summary' | 'frequency' | 'outliers' | 'runs';
+
+/** One- and two-sample tests for proportions and Poisson rates. */
+export type ProportionMode = 'oneProp' | 'twoProp' | 'oneRate' | 'twoRate';
+
+export type VarianceMode = 'one' | 'two';
+
+export interface VarianceParams {
+  mode: VarianceMode;
+  /** Numeric variable whose variance is tested. */
+  variable: number;
+  /** Group column for the two-sample modes; -1 for one sample. */
+  group: number;
+  /** Null variance for the one-sample test. */
+  nullVariance: number;
+}
+
+export interface ProportionParams {
+  mode: ProportionMode;
+  /** Binary outcome (proportions) or count column (rates). */
+  variable: number;
+  /** Group column for the two-sample modes; -1 for one sample. */
+  group: number;
+  /** Level counted as a success in the proportion modes. */
+  successLevel: string;
+  /** Null proportion (oneProp) or null rate (oneRate). */
+  nullP: number;
+  nullRate: number;
+  /** Exposure per row for the rate modes (default 1). */
+  exposure: number;
+}
+
+export const DESCRIPTIVE_MODES: readonly DescriptiveMode[] = [
+  'summary',
+  'frequency',
+  'outliers',
+  'runs',
+];
 
 export interface ProjectParams {
   descVars: number[];
+  /** Which view of the Descriptive procedure the form and runner use. */
+  descMode: DescriptiveMode;
+  glm: GlmParams;
+  quantile: QuantileParams;
+  nonlinear: NonlinearParams;
+  multinomial: MultinomialParams;
+  proportions: ProportionParams;
+  variances: VarianceParams;
   ttest: TTestParams;
   anova: AnovaParams;
   reg: RegParams;
@@ -359,7 +910,11 @@ export interface ProjectParams {
   cox: CoxParams;
   survival: SurvivalParams;
   timeseries: TimeSeriesParams;
+  var: VarParams;
+  garch: GarchParams;
+  statespace: StateSpaceParams;
   contingency: ContingencyParams;
+  loglinear: LoglinearParams;
   ancova: AncovaParams;
   factorial: FactorialParams;
   repeatedanova: RepeatedAnovaParams;
@@ -374,6 +929,14 @@ export interface ProjectParams {
   mi: MiParams;
   ordinal: OrdinalParams;
   lmm: LmmParams;
+  glmm: GlmmParams;
+  pls: PlsParams;
+  mars: MarsParams;
+  iv: IvParams;
+  panel: PanelParams;
+  selection: SelectionParams;
+  mediation: MediationParams;
+  propensity: PropensityParams;
   countreg: CountParams;
   agreement: AgreementParams;
   tost: TostParams;
@@ -381,8 +944,26 @@ export interface ProjectParams {
   partition: PartitionParams;
   quality: QualityParams;
   cluster: ClusterParams;
+  canonical: CanonicalParams;
+  mds: MdsParams;
+  correspondence: CorrespondenceParams;
+  sem: SemParams;
+  latentclass: LatentClassParams;
+  irt: IrtParams;
+  conjoint: ConjointParams;
   discriminant: DiscriminantParams;
   doe: DoeParams;
+  competing: CompetingParams;
+  recurrent: RecurrentParams;
+  alt: AltParams;
+  reliability: ReliabilityParams;
+  survey: SurveyParams;
+  ml: MlParams;
+  text: TextParams;
+  choice: ChoiceParams;
+  meta: MetaParams;
+  bayes: BayesParams;
+  spatial: SpatialParams;
 }
 
 export interface ProjectSettings {
@@ -445,11 +1026,72 @@ export interface ProjectInput {
 
 export const DEFAULT_PARAMS: ProjectParams = {
   descVars: [0, 1],
+  descMode: 'summary',
+  glm: {
+    dep: 1,
+    indeps: [0],
+    family: 'gamma',
+    link: 'log',
+  },
+  quantile: {
+    dep: 1,
+    indeps: [0],
+    tau: 0.5,
+  },
+  nonlinear: {
+    dep: 1,
+    predictor: 0,
+    model: 'logistic',
+  },
+  multinomial: {
+    outcome: 2,
+    predictors: [0, 1],
+  },
+  variances: {
+    mode: 'one',
+    variable: 0,
+    group: -1,
+    nullVariance: 1,
+  },
+  proportions: {
+    mode: 'oneProp',
+    variable: 0,
+    group: -1,
+    successLevel: '',
+    nullP: 0.5,
+    nullRate: 1,
+    exposure: 1,
+  },
   ttest: { type: 'ind', var1: 0, var2: 1, mu: 0, useNonParam: true, equalVar: true },
-  anova: { dep: 0, grp: 2, posthoc: 'holm', useNonParam: true, kwPosthoc: 'bonferroni' },
-  reg: { dep: 1, indeps: [0], useNonParam: true, robustEstimator: 'theilsen', robustSE: 'none' },
+  anova: {
+    mode: 'oneway',
+    dep: 0,
+    grp: 2,
+    posthoc: 'holm',
+    useNonParam: true,
+    kwPosthoc: 'bonferroni',
+    inner: -1,
+    alpha: 0.05,
+  },
+  reg: {
+    dep: 1,
+    indeps: [0],
+    useNonParam: true,
+    robustEstimator: 'theilsen',
+    robustSE: 'none',
+    mode: 'linear',
+    degree: 2,
+    selectionDirection: 'both',
+    selectionCriterion: 'bic',
+    penalty: 'lasso',
+    lambda: 0.1,
+    penaltyAlpha: 0.5,
+  },
   corr: { vars: [0, 1], method: 'pearson', showSpearman: true, showKendall: true },
   chisq: {
+    mode: 'table',
+    gofVariable: 0,
+    gofExpected: '',
     row1col1: 30,
     row1col2: 20,
     row2col1: 15,
@@ -474,9 +1116,15 @@ export const DEFAULT_PARAMS: ProjectParams = {
     margin: 0,
     hazardRatio: 0.7,
     eventRate: 0.5,
+    ratio: 2,
+    predictors: 3,
+    f2: 0.15,
+    oddsRatio: 2,
   },
   distfit: {
+    mode: 'fit',
     variable: 0,
+    group: -1,
     selected: ['normal', 'lognormal', 'exponential', 'gamma', 'weibull'],
   },
   logistic: {
@@ -484,25 +1132,51 @@ export const DEFAULT_PARAMS: ProjectParams = {
     predictors: [1],
     cutoff: 0.5,
     penalized: false,
+    link: 'logit',
   },
   cox: {
     timeVariable: 0,
     eventVariable: 1,
     covariates: [],
+    mode: 'standard',
+    frailtyVariable: -1,
   },
   survival: {
     timeVariable: 0,
     eventVariable: 1,
     groupVariable: -1,
+    mode: 'km',
+    upperVariable: -1,
+    intervals: 0,
   },
   timeseries: {
+    mode: 'arima',
     variable: 0,
     period: 0,
     horizon: 12,
     differenceMode: 'auto',
     seasonalDifferenceMode: 'auto',
+    seasonalModel: 'additive',
+    xregVariable: -1,
+  },
+  var: {
+    mode: 'var',
+    variables: [0, 1],
+    lags: 0,
+    horizon: 12,
+  },
+  garch: {
+    variable: 0,
+    horizon: 10,
+  },
+  statespace: {
+    mode: 'local',
+    variable: 0,
+    horizon: 10,
+    trend: true,
   },
   contingency: {
+    mode: 'chi2',
     rows: ['Treatment', 'Control'],
     cols: ['Improved', 'Unchanged', 'Worse'],
     values: [
@@ -511,6 +1185,33 @@ export const DEFAULT_PARAMS: ProjectParams = {
     ],
     exact: true,
     monteCarlo: true,
+    strata: [
+      {
+        label: 'Stratum 1',
+        values: [
+          ['12', '20'],
+          ['18', '9'],
+        ],
+      },
+      {
+        label: 'Stratum 2',
+        values: [
+          ['7', '15'],
+          ['19', '11'],
+        ],
+      },
+    ],
+    scores: ['1', '2'],
+  },
+  loglinear: {
+    rows: ['Low', 'Medium', 'High'],
+    cols: ['Yes', 'No'],
+    values: [
+      ['20', '80'],
+      ['35', '65'],
+      ['50', '50'],
+    ],
+    model: 'independence',
   },
   ancova: {
     response: 0,
@@ -572,6 +1273,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     event: 2,
     predictors: [1],
     distribution: 'weibull',
+    upperVariable: -1,
   },
   mixedanova: {
     group: 2,
@@ -593,6 +1295,68 @@ export const DEFAULT_PARAMS: ProjectParams = {
     dep: 0,
     indeps: [1],
     group: 2,
+    randomSlope: false,
+  },
+  glmm: {
+    dep: 0,
+    indeps: [1],
+    group: 2,
+    family: 'gaussian',
+    link: 'identity',
+    slope: -1,
+  },
+  pls: {
+    dep: 0,
+    indeps: [1, 2],
+    components: 2,
+    cvFolds: 5,
+  },
+  mars: {
+    dep: 0,
+    indeps: [1, 2],
+    degree: 1,
+    maxTerms: 21,
+    penalty: 2,
+    prune: true,
+  },
+  iv: {
+    dep: 0,
+    endog: [1],
+    instruments: [2],
+    exog: [],
+    robust: false,
+  },
+  panel: {
+    dep: 0,
+    indeps: [],
+    entity: 2,
+    time: 1,
+    model: 'both',
+  },
+  selection: {
+    mode: 'tobit',
+    dep: 0,
+    indeps: [1],
+    lower: 0,
+    upper: null,
+    selection: -1,
+    selectIndeps: [],
+  },
+  mediation: {
+    outcome: 0,
+    predictor: 1,
+    mediator: 2,
+    covariates: [],
+    bootstrap: 1000,
+    seed: 20261103,
+  },
+  propensity: {
+    treatment: 0,
+    outcome: 1,
+    covariates: [2],
+    method: 'nearest',
+    caliper: 0.2,
+    ratio: 1,
   },
   countreg: {
     dep: 0,
@@ -635,6 +1399,13 @@ export const DEFAULT_PARAMS: ProjectParams = {
     lsl: 0,
     usl: 10,
     target: 5,
+    toleranceP: 0.95,
+    part: 1,
+    operator: 2,
+    variables: [0, 1],
+    planN: 50,
+    planC: 2,
+    lotSize: 500,
   },
   cluster: {
     selected: [0, 1],
@@ -642,15 +1413,158 @@ export const DEFAULT_PARAMS: ProjectParams = {
     clusters: 3,
     standardize: true,
   },
+  canonical: {
+    x: [0, 1],
+    y: [2],
+  },
+  mds: {
+    selected: [0, 1, 2],
+    dimensions: 2,
+    metric: 'classical',
+  },
+  correspondence: {
+    rows: ['Basso', 'Alto'],
+    cols: ['Basso', 'Alto'],
+    values: [
+      ['10', '5'],
+      ['6', '12'],
+    ],
+  },
+  sem: {
+    selected: [0, 1, 2],
+    factors: 2,
+    groups: [0, 0, 1],
+    structural: false,
+  },
+  latentclass: {
+    selected: [0, 1, 2],
+    classes: 2,
+    maxIterations: 500,
+  },
+  irt: {
+    selected: [0, 1, 2],
+    model: '2pl',
+    quadrature: 21,
+  },
+  conjoint: {
+    attributes: [0, 1],
+    response: 2,
+  },
   discriminant: {
+    mode: 'classic',
     group: 2,
     predictors: [0, 1],
+    covariates: [],
   },
   doe: {
+    mode: 'surface',
     response: 0,
     factorA: 1,
     factorB: 2,
     model: 'quadratic',
+    designType: 'full',
+    factors: 3,
+    centerPoints: 3,
+  },
+  competing: {
+    time: 0,
+    event: 1,
+    cause: 1,
+    covariates: [],
+  },
+  recurrent: {
+    id: 0,
+    start: 1,
+    stop: 2,
+    event: 2,
+    covariates: [],
+    model: 'ag',
+  },
+  alt: {
+    time: 0,
+    event: 1,
+    stress: 2,
+    covariates: [],
+    model: 'arrhenius',
+    useStress: 1,
+  },
+  reliability: {
+    mode: 'growth',
+    time: 0,
+    failures: 1,
+    stages: [['0.9', '0.9']],
+  },
+  survey: {
+    mode: 'mean',
+    variable: 0,
+    category: 1,
+    successLevel: '',
+    weight: -1,
+    strata: -1,
+    cluster: -1,
+    predictors: [1],
+  },
+  ml: {
+    mode: 'rf',
+    task: 'regression',
+    outcome: 0,
+    predictors: [1, 2],
+    trees: 200,
+    minNode: 5,
+    mtry: 0,
+    shrinkage: 0.05,
+    hidden: 4,
+    iterations: 500,
+    seed: 20261109,
+  },
+  text: {
+    mode: 'frequency',
+    text: 0,
+    group: -1,
+    maxTerms: 20,
+    minDocFreq: 1,
+    topics: 3,
+    iterations: 300,
+    seed: 20261109,
+    stopwords: true,
+  },
+  choice: {
+    mode: 'choice',
+    set: 0,
+    alternative: 1,
+    chosen: 2,
+    best: 2,
+    worst: 2,
+    attributes: [0],
+  },
+  meta: {
+    effect: 0,
+    se: 1,
+    study: -1,
+    method: 'DL',
+    egger: true,
+  },
+  bayes: {
+    mode: 'normal',
+    outcome: 0,
+    predictors: [1],
+    group: -1,
+    priorMean: 0,
+    priorSd: 10,
+    iterations: 4000,
+    burnin: 1000,
+    chains: 2,
+    seed: 20261109,
+  },
+  spatial: {
+    mode: 'moran',
+    variable: 0,
+    predictors: [1],
+    x: 1,
+    y: 2,
+    k: 4,
+    permutations: 999,
+    seed: 20261109,
   },
 };
 

@@ -13,12 +13,15 @@ import { correlationCopy } from './en/correlation';
 import { countregCopy } from './en/countreg';
 import { coxCopy } from './en/cox';
 import { descriptiveCopy } from './en/descriptive';
+import { proportionsCopy as enProportionsCopy } from './en/proportions';
+import { variancesCopy as enVariancesCopy } from './en/variances';
 import { distfitCopy } from './en/distfit';
 import { factorialCopy } from './en/factorial';
 import { geeCopy } from './en/gee';
 import { lmmCopy } from './en/lmm';
 import { l4Copy } from './en/l4';
 import { logisticCopy } from './en/logistic';
+import { loglinearCopy } from './en/loglinear';
 import { miCopy } from './en/mi';
 import { mixedanovaCopy } from './en/mixedanova';
 import { multivariateCopy } from './en/multivariate';
@@ -41,6 +44,15 @@ import { esReportCopy } from './es';
 import { frReportCopy } from './fr';
 import { ptPTReportCopy } from './pt-PT';
 import { wizardCopy } from './en/wizard';
+import { w2Copy as enW2Copy } from './en/w2';
+import { w3Copy as enW3Copy } from './en/w3';
+import { w3RegressionCopy as enW3RegressionCopy } from './en/w3-regression';
+import { w3EconometricsCopy as enW3EconometricsCopy } from './en/w3-econometrics';
+import { w5Copy as enW5Copy } from './en/w5';
+import { w6Copy as enW6Copy } from './en/w6';
+import { w7Copy as enW7Copy } from './en/w7';
+import { w8Copy as enW8Copy } from './en/w8';
+import { w9Copy as enW9Copy } from './en/w9';
 
 export const enReportCopy: Record<string, string> = {
   ...agreementCopy,
@@ -58,6 +70,7 @@ export const enReportCopy: Record<string, string> = {
   ...lmmCopy,
   ...l4Copy,
   ...logisticCopy,
+  ...loglinearCopy,
   ...miCopy,
   ...mixedanovaCopy,
   ...multivariateCopy,
@@ -76,6 +89,17 @@ export const enReportCopy: Record<string, string> = {
   ...tostCopy,
   ...ttestCopy,
   ...wizardCopy,
+  ...enProportionsCopy,
+  ...enVariancesCopy,
+  ...enW2Copy,
+  ...enW3Copy,
+  ...enW3RegressionCopy,
+  ...enW3EconometricsCopy,
+  ...enW5Copy,
+  ...enW6Copy,
+  ...enW7Copy,
+  ...enW8Copy,
+  ...enW9Copy,
 };
 
 const CATALOGS: Partial<Record<ReportLocale, Record<string, string>>> = {

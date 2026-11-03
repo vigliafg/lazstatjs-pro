@@ -124,3 +124,84 @@ export const coxReport = (tables: TableSpec[], level: number): ReportSpec => {
     ],
   };
 };
+
+/** Reading report for the shared gamma frailty model. */
+export const frailtyReport = (tables: TableSpec[], level: number): ReportSpec => {
+  const summary = tableById(tables, 'frailty-summary')?.rows ?? [];
+  const coefficients = tableById(tables, 'frailty-coefficients')?.rows ?? [];
+  const effects = tableById(tables, 'frailty-effects')?.rows ?? [];
+  const value = (name: string): number =>
+    Number(summary.find(row => sourceOf(String(row.metric)) === name)?.raw ?? NaN);
+  const n = value('Osservazioni');
+  const groups = value('Gruppi');
+  const events = value('Eventi');
+  const theta = value(copy('Varianza della fragilità (θ)'));
+  const largest = effects
+    .slice()
+    .sort((left, right) => Math.abs(Number(right.mean) - 1) - Math.abs(Number(left.mean) - 1))[0];
+  const strongest = coefficients
+    .slice()
+    .sort((left, right) => Math.abs(Number(right.z ?? 0)) - Math.abs(Number(left.z ?? 0)))[0];
+
+  return {
+    id: 'cox-frailty',
+    title: copy('Report di lettura — Cox con fragilità'),
+    headline: copy('Fragilità condivisa su {s1} gruppi: θ = {s2} su {s3} eventi.', {
+      s1: groups,
+      s2: fmtEst(theta, 3),
+      s3: events,
+    }),
+    badge: copy('Fragilità gamma'),
+    tone: Number.isFinite(theta) && theta < 0.1 ? 'caution' : 'neutral',
+    intro: [
+      copy('La fragilità condivisa aggiunge un effetto casuale per gruppo: due soggetti dello stesso gruppo condividono un rischio di base non osservato.'),
+      copy('Serve quando le osservazioni non sono indipendenti, per esempio pazienti dello stesso centro o componenti dello stesso lotto.'),
+      copy('Il modello stima {s1} osservazioni in {s2} gruppi e {s3} covariati.', { s1: n, s2: groups, s3: coefficients.length }),
+    ],
+    sections: [
+      {
+        heading: copy('La varianza di fragilità'),
+        body: [
+          copy('θ misura l’eterogeneità non spiegata: θ vicino a zero significa che i gruppi non differiscono e il modello ordinario basta.'),
+          Number.isFinite(theta) && theta < 0.1
+            ? copy('Con θ = {s1} l’evidenza di eterogeneità è debole: interpreta gli effetti di gruppo con molta cautela.', { s1: fmtEst(theta, 3) })
+            : copy('Con θ = {s1} una parte del rischio resta specifica dei gruppi.', { s1: fmtEst(theta, 3) }),
+          largest
+            ? copy('Il gruppo più distante da 1 è {s1}: fragilità media {s2} su {s3} soggetti.', {
+                s1: String(largest.group),
+                s2: fmtEst(Number(largest.mean), 3),
+                s3: String(largest.subjects),
+              })
+            : copy('Nessun effetto di gruppo disponibile.'),
+        ],
+      },
+      {
+        heading: copy('Effetti fissi'),
+        body: [
+          strongest
+            ? copy('La covariata con effetto più netto è {s1}: HR = {s2} (p = {s3}), condizionato alla fragilità.', {
+                s1: String(strongest.term),
+                s2: fmtEst(Number(strongest.hr), 3),
+                s3: fmtP(Number(strongest.p)),
+              })
+            : copy('Nessuna covariata nel modello.'),
+          copy('Gli hazard ratio vanno letti dentro il gruppo: confrontano soggetti con la stessa fragilità, non gruppi diversi.'),
+          copy('Il livello di confidenza è {s1}%; con pochi eventi per gruppo le stime della fragilità sono instabili.', { s1: level }),
+        ],
+      },
+      {
+        heading: copy('Assunzioni e cautele'),
+        bullets: [
+          copy('La fragilità è costante nel tempo e moltiplicativa sul rischio di base.'),
+          copy('La distribuzione gamma è una scelta: altre famiglie possono dare valori di θ diversi.'),
+          copy('Servono più eventi per gruppo: gruppi senza eventi non contribuiscono all’eterogeneità.'),
+        ],
+      },
+    ],
+    limitations: [
+      copy('La verosimiglianza riportata è quella parziale ponderata: non è direttamente confrontabile con un modello marginale.'),
+      copy('L’errore standard di θ è approssimato e non include l’incertezza dei coefficienti fissi.'),
+      copy('La fragilità descrive eterogeneità non osservata, non identifica il meccanismo che la produce.'),
+    ],
+  };
+};

@@ -1,0 +1,2562 @@
+[
+  {
+    "Verbal1": -1.35,
+    "Verbal2": -1.26,
+    "Verbal3": -2.06,
+    "Math1": -0.1,
+    "Math2": 0.87,
+    "Math3": -0.57
+  },
+  {
+    "Verbal1": 0.4,
+    "Verbal2": 1.05,
+    "Verbal3": 1.66,
+    "Math1": -1.22,
+    "Math2": -1.06,
+    "Math3": 1.42
+  },
+  {
+    "Verbal1": 0.1,
+    "Verbal2": 1.2,
+    "Verbal3": 0.03,
+    "Math1": 1.6,
+    "Math2": -0.29,
+    "Math3": -0.64
+  },
+  {
+    "Verbal1": -2.08,
+    "Verbal2": -0.06,
+    "Verbal3": -0.33,
+    "Math1": -0.75,
+    "Math2": -0.33,
+    "Math3": -0.89
+  },
+  {
+    "Verbal1": 0.18,
+    "Verbal2": 0.46,
+    "Verbal3": 0.02,
+    "Math1": -0.98,
+    "Math2": -0.22,
+    "Math3": -0.13
+  },
+  {
+    "Verbal1": -0.53,
+    "Verbal2": -0.24,
+    "Verbal3": 0.3,
+    "Math1": 0.41,
+    "Math2": 1.27,
+    "Math3": -0.28
+  },
+  {
+    "Verbal1": 0.08,
+    "Verbal2": 0.75,
+    "Verbal3": 0.1,
+    "Math1": -1.54,
+    "Math2": -1.05,
+    "Math3": 0.47
+  },
+  {
+    "Verbal1": 0.53,
+    "Verbal2": 0.13,
+    "Verbal3": 1.63,
+    "Math1": -0.42,
+    "Math2": 0.1,
+    "Math3": 0.03
+  },
+  {
+    "Verbal1": -0.73,
+    "Verbal2": 1.04,
+    "Verbal3": -0.51,
+    "Math1": 0.57,
+    "Math2": 0.04,
+    "Math3": 1.3
+  },
+  {
+    "Verbal1": -1.18,
+    "Verbal2": -0.93,
+    "Verbal3": -0.48,
+    "Math1": -1.82,
+    "Math2": -0.91,
+    "Math3": -0.82
+  },
+  {
+    "Verbal1": 0.91,
+    "Verbal2": 0.77,
+    "Verbal3": 1.26,
+    "Math1": -1.04,
+    "Math2": -1.11,
+    "Math3": -1.24
+  },
+  {
+    "Verbal1": 0.08,
+    "Verbal2": -0.57,
+    "Verbal3": -0.19,
+    "Math1": -0.35,
+    "Math2": 0.39,
+    "Math3": -0.97
+  },
+  {
+    "Verbal1": 0.8,
+    "Verbal2": 0.61,
+    "Verbal3": 0.49,
+    "Math1": 0.39,
+    "Math2": 0.55,
+    "Math3": 0.03
+  },
+  {
+    "Verbal1": 0.7,
+    "Verbal2": -0.2,
+    "Verbal3": -0.59,
+    "Math1": -1.39,
+    "Math2": -0.47,
+    "Math3": -0.45
+  },
+  {
+    "Verbal1": 0.11,
+    "Verbal2": 0.01,
+    "Verbal3": 0.17,
+    "Math1": -0.09,
+    "Math2": 0.42,
+    "Math3": -1.21
+  },
+  {
+    "Verbal1": -0.81,
+    "Verbal2": 0.1,
+    "Verbal3": 0.44,
+    "Math1": 0.56,
+    "Math2": 0.86,
+    "Math3": 0.36
+  },
+  {
+    "Verbal1": 0.9,
+    "Verbal2": 1.54,
+    "Verbal3": 3.07,
+    "Math1": 1.01,
+    "Math2": 0.87,
+    "Math3": 1.87
+  },
+  {
+    "Verbal1": -0.26,
+    "Verbal2": 0.68,
+    "Verbal3": -0.47,
+    "Math1": -0.01,
+    "Math2": -1.01,
+    "Math3": -1.26
+  },
+  {
+    "Verbal1": 0.54,
+    "Verbal2": 0.48,
+    "Verbal3": -1.16,
+    "Math1": 0.82,
+    "Math2": 0.46,
+    "Math3": 0.97
+  },
+  {
+    "Verbal1": 1.55,
+    "Verbal2": 1.65,
+    "Verbal3": 2.38,
+    "Math1": -2.3,
+    "Math2": -0.29,
+    "Math3": -0.55
+  },
+  {
+    "Verbal1": -0.56,
+    "Verbal2": -0.29,
+    "Verbal3": -0.22,
+    "Math1": -0.45,
+    "Math2": -0.11,
+    "Math3": -0.6
+  },
+  {
+    "Verbal1": -0.43,
+    "Verbal2": -1.25,
+    "Verbal3": -1.69,
+    "Math1": 0.93,
+    "Math2": -0.88,
+    "Math3": -1.76
+  },
+  {
+    "Verbal1": -0.82,
+    "Verbal2": -0.92,
+    "Verbal3": 0.41,
+    "Math1": 0.05,
+    "Math2": 1.17,
+    "Math3": 1.13
+  },
+  {
+    "Verbal1": -1.17,
+    "Verbal2": -0.39,
+    "Verbal3": -0.67,
+    "Math1": -2.22,
+    "Math2": -0.9,
+    "Math3": -1.35
+  },
+  {
+    "Verbal1": -0.82,
+    "Verbal2": 1.07,
+    "Verbal3": -0.56,
+    "Math1": -2.26,
+    "Math2": -1.01,
+    "Math3": -0.36
+  },
+  {
+    "Verbal1": 0.1,
+    "Verbal2": 0.77,
+    "Verbal3": -0.46,
+    "Math1": -0.17,
+    "Math2": -0.62,
+    "Math3": 0.12
+  },
+  {
+    "Verbal1": 1.26,
+    "Verbal2": 1.04,
+    "Verbal3": 0.94,
+    "Math1": -1.08,
+    "Math2": -0.23,
+    "Math3": -1.5
+  },
+  {
+    "Verbal1": -0,
+    "Verbal2": 0.28,
+    "Verbal3": 0.06,
+    "Math1": 0.4,
+    "Math2": 0.74,
+    "Math3": 0.47
+  },
+  {
+    "Verbal1": 0.72,
+    "Verbal2": 1.08,
+    "Verbal3": 1.04,
+    "Math1": -1.19,
+    "Math2": -0.11,
+    "Math3": -0.57
+  },
+  {
+    "Verbal1": 2.21,
+    "Verbal2": 2.36,
+    "Verbal3": 1.86,
+    "Math1": -0.9,
+    "Math2": -0.5,
+    "Math3": -1.13
+  },
+  {
+    "Verbal1": 1.89,
+    "Verbal2": 1.7,
+    "Verbal3": 0.83,
+    "Math1": 0.5,
+    "Math2": 0.44,
+    "Math3": 1.51
+  },
+  {
+    "Verbal1": 0.7,
+    "Verbal2": -0.08,
+    "Verbal3": -0.67,
+    "Math1": -0.4,
+    "Math2": -0.06,
+    "Math3": -0.63
+  },
+  {
+    "Verbal1": -1,
+    "Verbal2": 0.23,
+    "Verbal3": -0.22,
+    "Math1": 1.08,
+    "Math2": 0.94,
+    "Math3": 0.01
+  },
+  {
+    "Verbal1": 0.25,
+    "Verbal2": -0.21,
+    "Verbal3": -0.94,
+    "Math1": -0.67,
+    "Math2": -0.78,
+    "Math3": 0.41
+  },
+  {
+    "Verbal1": -0.25,
+    "Verbal2": 0.11,
+    "Verbal3": 0,
+    "Math1": 0.9,
+    "Math2": 0.65,
+    "Math3": 0.6
+  },
+  {
+    "Verbal1": -0.6,
+    "Verbal2": -0.21,
+    "Verbal3": -0.47,
+    "Math1": 0.39,
+    "Math2": 0.27,
+    "Math3": -0.57
+  },
+  {
+    "Verbal1": 0.6,
+    "Verbal2": 0.44,
+    "Verbal3": 1.47,
+    "Math1": 0.2,
+    "Math2": 0.62,
+    "Math3": -0.05
+  },
+  {
+    "Verbal1": 0.05,
+    "Verbal2": 0.48,
+    "Verbal3": 0.63,
+    "Math1": 0.57,
+    "Math2": -0.35,
+    "Math3": 1.32
+  },
+  {
+    "Verbal1": 0.62,
+    "Verbal2": -0.73,
+    "Verbal3": 0.46,
+    "Math1": -0.26,
+    "Math2": 0.37,
+    "Math3": -1.2
+  },
+  {
+    "Verbal1": 0.84,
+    "Verbal2": 0.21,
+    "Verbal3": 1.44,
+    "Math1": -0.25,
+    "Math2": -0.51,
+    "Math3": -0.28
+  },
+  {
+    "Verbal1": -0.74,
+    "Verbal2": 0.27,
+    "Verbal3": 0.27,
+    "Math1": 0.24,
+    "Math2": -0.64,
+    "Math3": 0.58
+  },
+  {
+    "Verbal1": -0.51,
+    "Verbal2": 0.46,
+    "Verbal3": -1.58,
+    "Math1": 0.48,
+    "Math2": -0.98,
+    "Math3": -0.3
+  },
+  {
+    "Verbal1": -0.83,
+    "Verbal2": -1.94,
+    "Verbal3": -0.41,
+    "Math1": -0.46,
+    "Math2": 0.23,
+    "Math3": -0.86
+  },
+  {
+    "Verbal1": 1.08,
+    "Verbal2": -0.17,
+    "Verbal3": 0.83,
+    "Math1": -0.31,
+    "Math2": 0.95,
+    "Math3": -0.25
+  },
+  {
+    "Verbal1": -3.4,
+    "Verbal2": -3.13,
+    "Verbal3": -1.71,
+    "Math1": -1.07,
+    "Math2": -0.24,
+    "Math3": -1.16
+  },
+  {
+    "Verbal1": -0.67,
+    "Verbal2": 0.83,
+    "Verbal3": -0.38,
+    "Math1": 1.38,
+    "Math2": 0.5,
+    "Math3": 0.59
+  },
+  {
+    "Verbal1": -0.78,
+    "Verbal2": -0.71,
+    "Verbal3": 1.53,
+    "Math1": 1.54,
+    "Math2": -0.38,
+    "Math3": 0.12
+  },
+  {
+    "Verbal1": -0.45,
+    "Verbal2": -0.03,
+    "Verbal3": -0.29,
+    "Math1": 1.15,
+    "Math2": 1.08,
+    "Math3": 0.03
+  },
+  {
+    "Verbal1": 1.44,
+    "Verbal2": 1.09,
+    "Verbal3": 3.16,
+    "Math1": 0.62,
+    "Math2": -0.7,
+    "Math3": 1.13
+  },
+  {
+    "Verbal1": -1.31,
+    "Verbal2": -1.61,
+    "Verbal3": -1.39,
+    "Math1": -1.88,
+    "Math2": -2.07,
+    "Math3": -1.81
+  },
+  {
+    "Verbal1": -0.31,
+    "Verbal2": 0.11,
+    "Verbal3": 0.59,
+    "Math1": 0.38,
+    "Math2": -0.41,
+    "Math3": 0.17
+  },
+  {
+    "Verbal1": 0.06,
+    "Verbal2": 0.91,
+    "Verbal3": -0.33,
+    "Math1": 0.54,
+    "Math2": -0.77,
+    "Math3": 0.23
+  },
+  {
+    "Verbal1": 0.52,
+    "Verbal2": 1.16,
+    "Verbal3": 0.74,
+    "Math1": 1.29,
+    "Math2": 1.3,
+    "Math3": -0.66
+  },
+  {
+    "Verbal1": 0.48,
+    "Verbal2": -0.38,
+    "Verbal3": -0.1,
+    "Math1": -0.02,
+    "Math2": 0.48,
+    "Math3": 0.19
+  },
+  {
+    "Verbal1": 1.08,
+    "Verbal2": 0.04,
+    "Verbal3": 0.86,
+    "Math1": 0.79,
+    "Math2": 0.06,
+    "Math3": 0.7
+  },
+  {
+    "Verbal1": -0.32,
+    "Verbal2": 0.11,
+    "Verbal3": 0.34,
+    "Math1": 0.74,
+    "Math2": 2.55,
+    "Math3": 1.65
+  },
+  {
+    "Verbal1": 1.03,
+    "Verbal2": 0,
+    "Verbal3": -0.04,
+    "Math1": 0.09,
+    "Math2": 0.99,
+    "Math3": 0.39
+  },
+  {
+    "Verbal1": 0.25,
+    "Verbal2": -0.85,
+    "Verbal3": -0.67,
+    "Math1": 1.31,
+    "Math2": -0.19,
+    "Math3": 1.41
+  },
+  {
+    "Verbal1": 0.16,
+    "Verbal2": -0.18,
+    "Verbal3": -1.25,
+    "Math1": -0.19,
+    "Math2": -1.32,
+    "Math3": 0.1
+  },
+  {
+    "Verbal1": 0.1,
+    "Verbal2": -0.91,
+    "Verbal3": -0.58,
+    "Math1": 1.62,
+    "Math2": 1.63,
+    "Math3": -0.32
+  },
+  {
+    "Verbal1": 0.14,
+    "Verbal2": 1.04,
+    "Verbal3": 0.83,
+    "Math1": 1.04,
+    "Math2": 0.79,
+    "Math3": -0.13
+  },
+  {
+    "Verbal1": 2.06,
+    "Verbal2": 2.62,
+    "Verbal3": 1.69,
+    "Math1": 2.37,
+    "Math2": 0.85,
+    "Math3": 1.05
+  },
+  {
+    "Verbal1": 1.13,
+    "Verbal2": -0.53,
+    "Verbal3": 1.93,
+    "Math1": 1.9,
+    "Math2": 0.71,
+    "Math3": -0.57
+  },
+  {
+    "Verbal1": -0.75,
+    "Verbal2": -1.01,
+    "Verbal3": 0.02,
+    "Math1": -0.34,
+    "Math2": -1.25,
+    "Math3": -1.58
+  },
+  {
+    "Verbal1": -0.39,
+    "Verbal2": -0.61,
+    "Verbal3": 1.29,
+    "Math1": -0.99,
+    "Math2": -1.7,
+    "Math3": -0.42
+  },
+  {
+    "Verbal1": -0.12,
+    "Verbal2": 0.35,
+    "Verbal3": 1.6,
+    "Math1": 0.72,
+    "Math2": 1.12,
+    "Math3": -0.6
+  },
+  {
+    "Verbal1": 0.18,
+    "Verbal2": 0.69,
+    "Verbal3": 0.82,
+    "Math1": -1.62,
+    "Math2": -0.63,
+    "Math3": -0.12
+  },
+  {
+    "Verbal1": -1.61,
+    "Verbal2": -0.6,
+    "Verbal3": 0.14,
+    "Math1": -0.45,
+    "Math2": 0.7,
+    "Math3": 0.94
+  },
+  {
+    "Verbal1": 1.2,
+    "Verbal2": 0.49,
+    "Verbal3": 0.26,
+    "Math1": 2.25,
+    "Math2": 1.53,
+    "Math3": 1.85
+  },
+  {
+    "Verbal1": -0.07,
+    "Verbal2": 0.84,
+    "Verbal3": -0.26,
+    "Math1": -0.45,
+    "Math2": -0.56,
+    "Math3": -0.17
+  },
+  {
+    "Verbal1": -0.96,
+    "Verbal2": -0.97,
+    "Verbal3": 1.11,
+    "Math1": -0.46,
+    "Math2": 0.28,
+    "Math3": 0.1
+  },
+  {
+    "Verbal1": -0.22,
+    "Verbal2": 0.21,
+    "Verbal3": 1.61,
+    "Math1": -0.46,
+    "Math2": -0.77,
+    "Math3": -0.19
+  },
+  {
+    "Verbal1": 0.62,
+    "Verbal2": -0.56,
+    "Verbal3": 1.65,
+    "Math1": 0.79,
+    "Math2": 0.61,
+    "Math3": 1.38
+  },
+  {
+    "Verbal1": -0.64,
+    "Verbal2": -1.75,
+    "Verbal3": -2.06,
+    "Math1": 0.66,
+    "Math2": 1.13,
+    "Math3": 0.23
+  },
+  {
+    "Verbal1": 0.51,
+    "Verbal2": -0.12,
+    "Verbal3": -1.22,
+    "Math1": -0.91,
+    "Math2": -0.68,
+    "Math3": -0.04
+  },
+  {
+    "Verbal1": -0.2,
+    "Verbal2": 1.39,
+    "Verbal3": 0.19,
+    "Math1": 0.62,
+    "Math2": 0.24,
+    "Math3": 0.56
+  },
+  {
+    "Verbal1": -0.91,
+    "Verbal2": -0.44,
+    "Verbal3": 0.14,
+    "Math1": -0.74,
+    "Math2": -0.93,
+    "Math3": -0.8
+  },
+  {
+    "Verbal1": -0.46,
+    "Verbal2": -0.21,
+    "Verbal3": -0.4,
+    "Math1": 0.4,
+    "Math2": 0.74,
+    "Math3": -0.68
+  },
+  {
+    "Verbal1": 0.52,
+    "Verbal2": 0.23,
+    "Verbal3": 0.8,
+    "Math1": -1.05,
+    "Math2": 1.58,
+    "Math3": -0.09
+  },
+  {
+    "Verbal1": 0.13,
+    "Verbal2": 0.7,
+    "Verbal3": 0.08,
+    "Math1": 0.56,
+    "Math2": 0.46,
+    "Math3": 0.81
+  },
+  {
+    "Verbal1": 0.3,
+    "Verbal2": -0.02,
+    "Verbal3": -0.53,
+    "Math1": 0.71,
+    "Math2": 0.59,
+    "Math3": -0.92
+  },
+  {
+    "Verbal1": -0.69,
+    "Verbal2": -2,
+    "Verbal3": -1.29,
+    "Math1": -1.75,
+    "Math2": -0.71,
+    "Math3": -2.33
+  },
+  {
+    "Verbal1": -0.24,
+    "Verbal2": -0.91,
+    "Verbal3": 0,
+    "Math1": -0.53,
+    "Math2": -0.49,
+    "Math3": 0.47
+  },
+  {
+    "Verbal1": -0.62,
+    "Verbal2": -0.13,
+    "Verbal3": -0.71,
+    "Math1": 0.54,
+    "Math2": 1.25,
+    "Math3": 0.41
+  },
+  {
+    "Verbal1": 1.13,
+    "Verbal2": 1.58,
+    "Verbal3": 0.96,
+    "Math1": 1.14,
+    "Math2": 1.41,
+    "Math3": 0.63
+  },
+  {
+    "Verbal1": -1.16,
+    "Verbal2": -1,
+    "Verbal3": -0.49,
+    "Math1": -0.03,
+    "Math2": -1.16,
+    "Math3": -0.69
+  },
+  {
+    "Verbal1": 0.96,
+    "Verbal2": -0.16,
+    "Verbal3": 0.36,
+    "Math1": 0.52,
+    "Math2": 0.85,
+    "Math3": 2.22
+  },
+  {
+    "Verbal1": 0.96,
+    "Verbal2": 1.53,
+    "Verbal3": 0.62,
+    "Math1": -0.16,
+    "Math2": -0.51,
+    "Math3": -0.54
+  },
+  {
+    "Verbal1": -0.61,
+    "Verbal2": -1.62,
+    "Verbal3": 0.08,
+    "Math1": -1.89,
+    "Math2": -1.45,
+    "Math3": -1.57
+  },
+  {
+    "Verbal1": 1.79,
+    "Verbal2": 1.18,
+    "Verbal3": 0.87,
+    "Math1": 2.13,
+    "Math2": 1.1,
+    "Math3": 0.76
+  },
+  {
+    "Verbal1": 2.14,
+    "Verbal2": 1.95,
+    "Verbal3": 1.07,
+    "Math1": -0.07,
+    "Math2": -0.36,
+    "Math3": -0.28
+  },
+  {
+    "Verbal1": -0.54,
+    "Verbal2": -0.47,
+    "Verbal3": -0.81,
+    "Math1": 0.15,
+    "Math2": -1.95,
+    "Math3": -0.61
+  },
+  {
+    "Verbal1": -2.05,
+    "Verbal2": -0.38,
+    "Verbal3": -0.01,
+    "Math1": -0.83,
+    "Math2": -0.39,
+    "Math3": -0.98
+  },
+  {
+    "Verbal1": 0.55,
+    "Verbal2": 0.21,
+    "Verbal3": -0.73,
+    "Math1": -1.86,
+    "Math2": -0.72,
+    "Math3": -1.48
+  },
+  {
+    "Verbal1": -0.48,
+    "Verbal2": 1.04,
+    "Verbal3": -0.16,
+    "Math1": -2.56,
+    "Math2": -1.45,
+    "Math3": -1.86
+  },
+  {
+    "Verbal1": -0.34,
+    "Verbal2": 0.55,
+    "Verbal3": -0.7,
+    "Math1": -0.43,
+    "Math2": 0.93,
+    "Math3": -0.27
+  },
+  {
+    "Verbal1": -0.04,
+    "Verbal2": 1.25,
+    "Verbal3": 0.4,
+    "Math1": 0.8,
+    "Math2": 0.36,
+    "Math3": -0.15
+  },
+  {
+    "Verbal1": 0.31,
+    "Verbal2": -0.46,
+    "Verbal3": -0.54,
+    "Math1": 1.17,
+    "Math2": 0.85,
+    "Math3": 0.07
+  },
+  {
+    "Verbal1": -0,
+    "Verbal2": 1.41,
+    "Verbal3": 1.24,
+    "Math1": 0.38,
+    "Math2": -0.95,
+    "Math3": -0.65
+  },
+  {
+    "Verbal1": -0.44,
+    "Verbal2": -1.44,
+    "Verbal3": -0.83,
+    "Math1": -1.46,
+    "Math2": -1.18,
+    "Math3": -1.06
+  },
+  {
+    "Verbal1": 0.85,
+    "Verbal2": 1.74,
+    "Verbal3": 0.11,
+    "Math1": 2.12,
+    "Math2": 2.68,
+    "Math3": 0.88
+  },
+  {
+    "Verbal1": 1.22,
+    "Verbal2": 0.52,
+    "Verbal3": -0.02,
+    "Math1": 0.34,
+    "Math2": 1.47,
+    "Math3": 0.52
+  },
+  {
+    "Verbal1": 1.46,
+    "Verbal2": -0.61,
+    "Verbal3": 0.2,
+    "Math1": 0.32,
+    "Math2": 0.57,
+    "Math3": 2.63
+  },
+  {
+    "Verbal1": -0.31,
+    "Verbal2": -1.03,
+    "Verbal3": -0.05,
+    "Math1": -1.4,
+    "Math2": -1.04,
+    "Math3": -1.1
+  },
+  {
+    "Verbal1": -0.25,
+    "Verbal2": -0.59,
+    "Verbal3": 0.05,
+    "Math1": -1.07,
+    "Math2": -2.03,
+    "Math3": -0.91
+  },
+  {
+    "Verbal1": 1.83,
+    "Verbal2": 2.37,
+    "Verbal3": 1.78,
+    "Math1": 0.5,
+    "Math2": -0.88,
+    "Math3": 0.1
+  },
+  {
+    "Verbal1": 1.39,
+    "Verbal2": 2.12,
+    "Verbal3": 1.9,
+    "Math1": 0.38,
+    "Math2": 0.69,
+    "Math3": 1.28
+  },
+  {
+    "Verbal1": -0.18,
+    "Verbal2": 1.38,
+    "Verbal3": 1.08,
+    "Math1": 0.46,
+    "Math2": 1.29,
+    "Math3": 0.18
+  },
+  {
+    "Verbal1": -0.41,
+    "Verbal2": -0.11,
+    "Verbal3": -0.96,
+    "Math1": 0.22,
+    "Math2": 1.46,
+    "Math3": 0.53
+  },
+  {
+    "Verbal1": 0.98,
+    "Verbal2": 0.64,
+    "Verbal3": 0.58,
+    "Math1": 0.77,
+    "Math2": -0.35,
+    "Math3": 1.16
+  },
+  {
+    "Verbal1": 0.77,
+    "Verbal2": -0.87,
+    "Verbal3": -0.05,
+    "Math1": -0.14,
+    "Math2": -0,
+    "Math3": 0.42
+  },
+  {
+    "Verbal1": 1.05,
+    "Verbal2": 1.48,
+    "Verbal3": -0.05,
+    "Math1": -1,
+    "Math2": 0.78,
+    "Math3": -0.89
+  },
+  {
+    "Verbal1": 1.57,
+    "Verbal2": 0.57,
+    "Verbal3": -0.11,
+    "Math1": -0.47,
+    "Math2": -0.79,
+    "Math3": -1.48
+  },
+  {
+    "Verbal1": 1.22,
+    "Verbal2": 0.71,
+    "Verbal3": -0.33,
+    "Math1": 0.75,
+    "Math2": -0.52,
+    "Math3": 0.11
+  },
+  {
+    "Verbal1": -1.49,
+    "Verbal2": -3.29,
+    "Verbal3": -2.26,
+    "Math1": 0.34,
+    "Math2": 0.38,
+    "Math3": -1.48
+  },
+  {
+    "Verbal1": 1.15,
+    "Verbal2": 0.81,
+    "Verbal3": 0.46,
+    "Math1": 0.02,
+    "Math2": -0.63,
+    "Math3": -0.97
+  },
+  {
+    "Verbal1": 0.4,
+    "Verbal2": 1.95,
+    "Verbal3": 0.65,
+    "Math1": 0.37,
+    "Math2": 0.67,
+    "Math3": 1.85
+  },
+  {
+    "Verbal1": 0.66,
+    "Verbal2": 1.95,
+    "Verbal3": 0.9,
+    "Math1": 1.09,
+    "Math2": 1.72,
+    "Math3": 1.65
+  },
+  {
+    "Verbal1": 0.5,
+    "Verbal2": 0.9,
+    "Verbal3": 0.33,
+    "Math1": -1.15,
+    "Math2": 0.73,
+    "Math3": 0.83
+  },
+  {
+    "Verbal1": 0.36,
+    "Verbal2": 0.84,
+    "Verbal3": -1.47,
+    "Math1": -1.13,
+    "Math2": -0.27,
+    "Math3": -1.75
+  },
+  {
+    "Verbal1": -1.05,
+    "Verbal2": -0.47,
+    "Verbal3": -0.85,
+    "Math1": 0.49,
+    "Math2": 0.1,
+    "Math3": -0.46
+  },
+  {
+    "Verbal1": 0.67,
+    "Verbal2": 1.57,
+    "Verbal3": 1.09,
+    "Math1": 0.79,
+    "Math2": 1.48,
+    "Math3": 1.2
+  },
+  {
+    "Verbal1": 0.23,
+    "Verbal2": -0.75,
+    "Verbal3": -1.19,
+    "Math1": 0.42,
+    "Math2": 2.14,
+    "Math3": 1.18
+  },
+  {
+    "Verbal1": 0.58,
+    "Verbal2": 0.86,
+    "Verbal3": 0.28,
+    "Math1": -0.71,
+    "Math2": -0.76,
+    "Math3": -0.06
+  },
+  {
+    "Verbal1": -0.05,
+    "Verbal2": 0.75,
+    "Verbal3": -0.14,
+    "Math1": -0.58,
+    "Math2": -0.55,
+    "Math3": -0.11
+  },
+  {
+    "Verbal1": -0.26,
+    "Verbal2": -0.05,
+    "Verbal3": 0.1,
+    "Math1": -0.63,
+    "Math2": -0.43,
+    "Math3": -0.16
+  },
+  {
+    "Verbal1": 1.13,
+    "Verbal2": 1.63,
+    "Verbal3": 0.86,
+    "Math1": -0.76,
+    "Math2": -0.7,
+    "Math3": 0.94
+  },
+  {
+    "Verbal1": 0.44,
+    "Verbal2": 2,
+    "Verbal3": -0.08,
+    "Math1": -1.08,
+    "Math2": -1.77,
+    "Math3": -1
+  },
+  {
+    "Verbal1": -0.4,
+    "Verbal2": -1.76,
+    "Verbal3": -1.3,
+    "Math1": -0.88,
+    "Math2": -0.75,
+    "Math3": -0.85
+  },
+  {
+    "Verbal1": -0.13,
+    "Verbal2": 0.66,
+    "Verbal3": -0.31,
+    "Math1": -0.6,
+    "Math2": -2.06,
+    "Math3": -0.74
+  },
+  {
+    "Verbal1": -0.69,
+    "Verbal2": 0.27,
+    "Verbal3": 0.13,
+    "Math1": -0.82,
+    "Math2": -0.13,
+    "Math3": 1.04
+  },
+  {
+    "Verbal1": 0.7,
+    "Verbal2": -0.85,
+    "Verbal3": -0.5,
+    "Math1": 0.46,
+    "Math2": 0.66,
+    "Math3": -0.34
+  },
+  {
+    "Verbal1": 0.04,
+    "Verbal2": 0.35,
+    "Verbal3": -0.54,
+    "Math1": -0.78,
+    "Math2": -0.92,
+    "Math3": 0.67
+  },
+  {
+    "Verbal1": 1.2,
+    "Verbal2": 1.34,
+    "Verbal3": 1.36,
+    "Math1": 1.32,
+    "Math2": 0.37,
+    "Math3": 1.88
+  },
+  {
+    "Verbal1": 0.18,
+    "Verbal2": 1.12,
+    "Verbal3": 1.01,
+    "Math1": 0.5,
+    "Math2": 0.51,
+    "Math3": 0.11
+  },
+  {
+    "Verbal1": -0.62,
+    "Verbal2": -0.64,
+    "Verbal3": 0.26,
+    "Math1": -0,
+    "Math2": 0.22,
+    "Math3": -0.66
+  },
+  {
+    "Verbal1": -0.75,
+    "Verbal2": -1.45,
+    "Verbal3": 0.69,
+    "Math1": 0.49,
+    "Math2": -0.87,
+    "Math3": -0.54
+  },
+  {
+    "Verbal1": -1.15,
+    "Verbal2": -0.53,
+    "Verbal3": -0.02,
+    "Math1": 0.84,
+    "Math2": 0.92,
+    "Math3": 0.14
+  },
+  {
+    "Verbal1": -1.5,
+    "Verbal2": -0.33,
+    "Verbal3": -0.83,
+    "Math1": 0.14,
+    "Math2": 0.51,
+    "Math3": -0.34
+  },
+  {
+    "Verbal1": 0.17,
+    "Verbal2": -0.93,
+    "Verbal3": 1.91,
+    "Math1": -0.02,
+    "Math2": 0.07,
+    "Math3": 0.77
+  },
+  {
+    "Verbal1": -1.27,
+    "Verbal2": -1.22,
+    "Verbal3": -0.69,
+    "Math1": -2.25,
+    "Math2": -0.63,
+    "Math3": -0.69
+  },
+  {
+    "Verbal1": -0.28,
+    "Verbal2": -0.01,
+    "Verbal3": -1.67,
+    "Math1": -0.03,
+    "Math2": 0.81,
+    "Math3": -0.36
+  },
+  {
+    "Verbal1": -1.59,
+    "Verbal2": -2.03,
+    "Verbal3": -0.51,
+    "Math1": 0.21,
+    "Math2": -0.09,
+    "Math3": -1.19
+  },
+  {
+    "Verbal1": 0.9,
+    "Verbal2": -0.04,
+    "Verbal3": -0.33,
+    "Math1": 1.24,
+    "Math2": -0.19,
+    "Math3": 0.38
+  },
+  {
+    "Verbal1": 0.4,
+    "Verbal2": -0.47,
+    "Verbal3": 0.25,
+    "Math1": 0.51,
+    "Math2": 0.2,
+    "Math3": -1.71
+  },
+  {
+    "Verbal1": 0.35,
+    "Verbal2": -0.13,
+    "Verbal3": 1.08,
+    "Math1": -0.21,
+    "Math2": 0.17,
+    "Math3": 1.98
+  },
+  {
+    "Verbal1": -0.49,
+    "Verbal2": -0.19,
+    "Verbal3": -1.1,
+    "Math1": 0.59,
+    "Math2": 0.84,
+    "Math3": 0.47
+  },
+  {
+    "Verbal1": 1.75,
+    "Verbal2": 1.55,
+    "Verbal3": 1.66,
+    "Math1": 0.54,
+    "Math2": -0.13,
+    "Math3": -1.11
+  },
+  {
+    "Verbal1": 1.05,
+    "Verbal2": 1.02,
+    "Verbal3": 0.44,
+    "Math1": 0.56,
+    "Math2": 0.83,
+    "Math3": 1.32
+  },
+  {
+    "Verbal1": 0.38,
+    "Verbal2": 1.15,
+    "Verbal3": 0.61,
+    "Math1": -0.57,
+    "Math2": 0.01,
+    "Math3": 0.61
+  },
+  {
+    "Verbal1": -0.23,
+    "Verbal2": 0.77,
+    "Verbal3": -2.05,
+    "Math1": 0.9,
+    "Math2": 2.37,
+    "Math3": 0.56
+  },
+  {
+    "Verbal1": 1.52,
+    "Verbal2": 0.8,
+    "Verbal3": 0.91,
+    "Math1": 1.27,
+    "Math2": 1.85,
+    "Math3": 1.33
+  },
+  {
+    "Verbal1": 0.81,
+    "Verbal2": -0.48,
+    "Verbal3": 0.1,
+    "Math1": -1.24,
+    "Math2": -1.41,
+    "Math3": -1.28
+  },
+  {
+    "Verbal1": 0.02,
+    "Verbal2": 1.12,
+    "Verbal3": 0.44,
+    "Math1": -0.06,
+    "Math2": -0.38,
+    "Math3": 0.31
+  },
+  {
+    "Verbal1": -0.18,
+    "Verbal2": 0.18,
+    "Verbal3": 0.26,
+    "Math1": 0.7,
+    "Math2": 0.18,
+    "Math3": -0.29
+  },
+  {
+    "Verbal1": -0.93,
+    "Verbal2": -0.71,
+    "Verbal3": 0.34,
+    "Math1": -0.15,
+    "Math2": -0.42,
+    "Math3": 1.04
+  },
+  {
+    "Verbal1": 0.88,
+    "Verbal2": 0.86,
+    "Verbal3": 0.32,
+    "Math1": 0.82,
+    "Math2": 1.16,
+    "Math3": -0.87
+  },
+  {
+    "Verbal1": -1.2,
+    "Verbal2": -1.45,
+    "Verbal3": -1.68,
+    "Math1": 0.55,
+    "Math2": 0.18,
+    "Math3": 0.42
+  },
+  {
+    "Verbal1": 0.38,
+    "Verbal2": 0.18,
+    "Verbal3": 0.02,
+    "Math1": -0.91,
+    "Math2": 0.04,
+    "Math3": 0.63
+  },
+  {
+    "Verbal1": -0.11,
+    "Verbal2": 0.01,
+    "Verbal3": 0.73,
+    "Math1": 1.29,
+    "Math2": 0.23,
+    "Math3": 0.6
+  },
+  {
+    "Verbal1": -1.47,
+    "Verbal2": -1.15,
+    "Verbal3": -0.74,
+    "Math1": 0.03,
+    "Math2": 0.94,
+    "Math3": -0.83
+  },
+  {
+    "Verbal1": 0.34,
+    "Verbal2": 1.34,
+    "Verbal3": 0.15,
+    "Math1": -1.02,
+    "Math2": -0.3,
+    "Math3": 1.4
+  },
+  {
+    "Verbal1": 0.22,
+    "Verbal2": 0.57,
+    "Verbal3": -0.23,
+    "Math1": 0.04,
+    "Math2": -0.27,
+    "Math3": -0.49
+  },
+  {
+    "Verbal1": -0.07,
+    "Verbal2": 1.27,
+    "Verbal3": 0.67,
+    "Math1": 0.02,
+    "Math2": 0.69,
+    "Math3": 1.5
+  },
+  {
+    "Verbal1": -1.07,
+    "Verbal2": 0.51,
+    "Verbal3": -1.95,
+    "Math1": -1.87,
+    "Math2": -2.05,
+    "Math3": -3.64
+  },
+  {
+    "Verbal1": -1.24,
+    "Verbal2": 0.06,
+    "Verbal3": -1.08,
+    "Math1": -0.01,
+    "Math2": -0.4,
+    "Math3": -0.48
+  },
+  {
+    "Verbal1": 0.39,
+    "Verbal2": -0.8,
+    "Verbal3": 0.42,
+    "Math1": -1.72,
+    "Math2": -1.97,
+    "Math3": -2.46
+  },
+  {
+    "Verbal1": 1.55,
+    "Verbal2": -0.08,
+    "Verbal3": 1.61,
+    "Math1": 0.62,
+    "Math2": 1.48,
+    "Math3": 0.12
+  },
+  {
+    "Verbal1": 0.11,
+    "Verbal2": 0.02,
+    "Verbal3": -1.46,
+    "Math1": -0.14,
+    "Math2": 0.17,
+    "Math3": -0.64
+  },
+  {
+    "Verbal1": -0.05,
+    "Verbal2": -0.48,
+    "Verbal3": 0.44,
+    "Math1": -0.46,
+    "Math2": -0.09,
+    "Math3": 0.1
+  },
+  {
+    "Verbal1": 0.64,
+    "Verbal2": 1.98,
+    "Verbal3": 0.65,
+    "Math1": 0.23,
+    "Math2": -0.11,
+    "Math3": 0.92
+  },
+  {
+    "Verbal1": 0.05,
+    "Verbal2": -1.4,
+    "Verbal3": -0.2,
+    "Math1": 0.13,
+    "Math2": 0.83,
+    "Math3": -0.62
+  },
+  {
+    "Verbal1": -2.33,
+    "Verbal2": -0.71,
+    "Verbal3": -1.97,
+    "Math1": -1.38,
+    "Math2": -1.37,
+    "Math3": -0.96
+  },
+  {
+    "Verbal1": -0.67,
+    "Verbal2": 0.42,
+    "Verbal3": -0.34,
+    "Math1": -0.15,
+    "Math2": -0.27,
+    "Math3": 0.23
+  },
+  {
+    "Verbal1": 0.32,
+    "Verbal2": 0.25,
+    "Verbal3": 0.46,
+    "Math1": 0.4,
+    "Math2": -0.8,
+    "Math3": -1.5
+  },
+  {
+    "Verbal1": 0.56,
+    "Verbal2": 0.72,
+    "Verbal3": 1.18,
+    "Math1": 1.2,
+    "Math2": 2.04,
+    "Math3": 1.81
+  },
+  {
+    "Verbal1": 0.29,
+    "Verbal2": 0.22,
+    "Verbal3": -0.68,
+    "Math1": 0.86,
+    "Math2": 1.29,
+    "Math3": 1.15
+  },
+  {
+    "Verbal1": -2.97,
+    "Verbal2": -1.96,
+    "Verbal3": -1.09,
+    "Math1": 0.59,
+    "Math2": 0.93,
+    "Math3": 0.17
+  },
+  {
+    "Verbal1": 0.19,
+    "Verbal2": 0.12,
+    "Verbal3": -0.41,
+    "Math1": -0.31,
+    "Math2": 0.31,
+    "Math3": -0.73
+  },
+  {
+    "Verbal1": -1.28,
+    "Verbal2": -1.98,
+    "Verbal3": -0.63,
+    "Math1": 0.01,
+    "Math2": 0.23,
+    "Math3": 2.04
+  },
+  {
+    "Verbal1": 0.59,
+    "Verbal2": 1.91,
+    "Verbal3": 0.64,
+    "Math1": 0.73,
+    "Math2": 1.28,
+    "Math3": 0.36
+  },
+  {
+    "Verbal1": -0.7,
+    "Verbal2": 1.08,
+    "Verbal3": -0.35,
+    "Math1": -0.79,
+    "Math2": -0.2,
+    "Math3": -0.44
+  },
+  {
+    "Verbal1": -0.51,
+    "Verbal2": -0.46,
+    "Verbal3": -0.34,
+    "Math1": 0.39,
+    "Math2": 0.48,
+    "Math3": 0.38
+  },
+  {
+    "Verbal1": -2.11,
+    "Verbal2": -1.38,
+    "Verbal3": -2.01,
+    "Math1": 0.8,
+    "Math2": -0.38,
+    "Math3": -0.41
+  },
+  {
+    "Verbal1": -0.53,
+    "Verbal2": -0.66,
+    "Verbal3": -0.73,
+    "Math1": -0.25,
+    "Math2": -0.57,
+    "Math3": -0.39
+  },
+  {
+    "Verbal1": 1.63,
+    "Verbal2": 1.15,
+    "Verbal3": 0.84,
+    "Math1": 1.17,
+    "Math2": -0.03,
+    "Math3": -0.12
+  },
+  {
+    "Verbal1": -0.39,
+    "Verbal2": -1.76,
+    "Verbal3": -0.49,
+    "Math1": -1,
+    "Math2": -1.51,
+    "Math3": 1.64
+  },
+  {
+    "Verbal1": 0.2,
+    "Verbal2": 0.48,
+    "Verbal3": 0.33,
+    "Math1": -0.41,
+    "Math2": -0.69,
+    "Math3": 0.81
+  },
+  {
+    "Verbal1": 0.97,
+    "Verbal2": -1.07,
+    "Verbal3": 0.74,
+    "Math1": -0.86,
+    "Math2": -1.07,
+    "Math3": -0.16
+  },
+  {
+    "Verbal1": 0.99,
+    "Verbal2": 1.06,
+    "Verbal3": 1.17,
+    "Math1": 1.24,
+    "Math2": 0.6,
+    "Math3": -0.51
+  },
+  {
+    "Verbal1": -0.24,
+    "Verbal2": -1.33,
+    "Verbal3": -0.75,
+    "Math1": -1.08,
+    "Math2": -0.61,
+    "Math3": 0.93
+  },
+  {
+    "Verbal1": 0.41,
+    "Verbal2": 1.29,
+    "Verbal3": 0.8,
+    "Math1": 0.52,
+    "Math2": 0.84,
+    "Math3": -0.09
+  },
+  {
+    "Verbal1": -0.29,
+    "Verbal2": -0.41,
+    "Verbal3": -1.39,
+    "Math1": -3.01,
+    "Math2": -1.21,
+    "Math3": -0.55
+  },
+  {
+    "Verbal1": 1.02,
+    "Verbal2": 2.01,
+    "Verbal3": 0.51,
+    "Math1": 2.48,
+    "Math2": 0.59,
+    "Math3": 1.21
+  },
+  {
+    "Verbal1": -1.25,
+    "Verbal2": -1.59,
+    "Verbal3": -0.92,
+    "Math1": -0.54,
+    "Math2": 0.03,
+    "Math3": 1.01
+  },
+  {
+    "Verbal1": -0.69,
+    "Verbal2": -0.77,
+    "Verbal3": -1.33,
+    "Math1": 0.48,
+    "Math2": -0.52,
+    "Math3": -0.82
+  },
+  {
+    "Verbal1": -0.34,
+    "Verbal2": -0.72,
+    "Verbal3": 0.5,
+    "Math1": 2.08,
+    "Math2": -0.02,
+    "Math3": 1.46
+  },
+  {
+    "Verbal1": 1.28,
+    "Verbal2": 1.51,
+    "Verbal3": 0.77,
+    "Math1": 0.59,
+    "Math2": -0.67,
+    "Math3": -0.39
+  },
+  {
+    "Verbal1": -1.14,
+    "Verbal2": -0.17,
+    "Verbal3": -0.99,
+    "Math1": -1.03,
+    "Math2": -1.52,
+    "Math3": -1.11
+  },
+  {
+    "Verbal1": 0.18,
+    "Verbal2": 0.5,
+    "Verbal3": -0.43,
+    "Math1": 0.24,
+    "Math2": -0.03,
+    "Math3": -0.7
+  },
+  {
+    "Verbal1": 1.08,
+    "Verbal2": 0.83,
+    "Verbal3": 0.93,
+    "Math1": -0.12,
+    "Math2": 1.02,
+    "Math3": -0.07
+  },
+  {
+    "Verbal1": -0.77,
+    "Verbal2": -0.75,
+    "Verbal3": -0.48,
+    "Math1": 0.3,
+    "Math2": 0.14,
+    "Math3": -1.23
+  },
+  {
+    "Verbal1": 2.16,
+    "Verbal2": 2.4,
+    "Verbal3": 0.86,
+    "Math1": 0.6,
+    "Math2": 0.82,
+    "Math3": 0.61
+  },
+  {
+    "Verbal1": 1.01,
+    "Verbal2": 1.15,
+    "Verbal3": -0.56,
+    "Math1": 0.35,
+    "Math2": -0.37,
+    "Math3": 0.21
+  },
+  {
+    "Verbal1": 1.7,
+    "Verbal2": 0.96,
+    "Verbal3": 0.96,
+    "Math1": 0.48,
+    "Math2": 2.11,
+    "Math3": 1.43
+  },
+  {
+    "Verbal1": 0.09,
+    "Verbal2": -0.24,
+    "Verbal3": -0.32,
+    "Math1": -0.06,
+    "Math2": -1.08,
+    "Math3": 0.46
+  },
+  {
+    "Verbal1": 0.36,
+    "Verbal2": -0.55,
+    "Verbal3": -0.5,
+    "Math1": -0.14,
+    "Math2": -0.18,
+    "Math3": 1.1
+  },
+  {
+    "Verbal1": 2.31,
+    "Verbal2": -0.27,
+    "Verbal3": 1.12,
+    "Math1": 0.05,
+    "Math2": 0.68,
+    "Math3": 0.29
+  },
+  {
+    "Verbal1": 0.24,
+    "Verbal2": 0.52,
+    "Verbal3": -0.28,
+    "Math1": 0.55,
+    "Math2": 1.42,
+    "Math3": 2.23
+  },
+  {
+    "Verbal1": -1.37,
+    "Verbal2": -1.57,
+    "Verbal3": -0.91,
+    "Math1": 2.07,
+    "Math2": 1.13,
+    "Math3": -0.67
+  },
+  {
+    "Verbal1": -0.69,
+    "Verbal2": 0.09,
+    "Verbal3": -0.55,
+    "Math1": -0.22,
+    "Math2": -1.56,
+    "Math3": -0.66
+  },
+  {
+    "Verbal1": 1.86,
+    "Verbal2": 1.8,
+    "Verbal3": 0.86,
+    "Math1": 1.53,
+    "Math2": 1.14,
+    "Math3": 0.85
+  },
+  {
+    "Verbal1": 0.66,
+    "Verbal2": 0.93,
+    "Verbal3": -0.34,
+    "Math1": 0.08,
+    "Math2": -0.08,
+    "Math3": 0.26
+  },
+  {
+    "Verbal1": -0.32,
+    "Verbal2": -0.62,
+    "Verbal3": 0.17,
+    "Math1": -0.32,
+    "Math2": 0.24,
+    "Math3": 1.27
+  },
+  {
+    "Verbal1": -0.3,
+    "Verbal2": 0.61,
+    "Verbal3": -0.58,
+    "Math1": -1.09,
+    "Math2": -1.38,
+    "Math3": 0.24
+  },
+  {
+    "Verbal1": -0.57,
+    "Verbal2": -0.42,
+    "Verbal3": -0.53,
+    "Math1": -1.17,
+    "Math2": 0.31,
+    "Math3": -1.05
+  },
+  {
+    "Verbal1": -0.47,
+    "Verbal2": -1.31,
+    "Verbal3": 0.52,
+    "Math1": -0.89,
+    "Math2": -1.64,
+    "Math3": -1.27
+  },
+  {
+    "Verbal1": 0.18,
+    "Verbal2": 0.32,
+    "Verbal3": 2.1,
+    "Math1": -0.67,
+    "Math2": 0.03,
+    "Math3": -1.22
+  },
+  {
+    "Verbal1": -2.26,
+    "Verbal2": -0.39,
+    "Verbal3": -1.47,
+    "Math1": -1.94,
+    "Math2": -0.17,
+    "Math3": 0.09
+  },
+  {
+    "Verbal1": -0.33,
+    "Verbal2": 0.3,
+    "Verbal3": -0.51,
+    "Math1": -0.27,
+    "Math2": 0.38,
+    "Math3": 1.17
+  },
+  {
+    "Verbal1": -1.36,
+    "Verbal2": -1.54,
+    "Verbal3": -0.04,
+    "Math1": -0.07,
+    "Math2": 1.28,
+    "Math3": 0.77
+  },
+  {
+    "Verbal1": 0.59,
+    "Verbal2": 0.82,
+    "Verbal3": 0.3,
+    "Math1": -0.66,
+    "Math2": -2.22,
+    "Math3": -0.44
+  },
+  {
+    "Verbal1": -2.16,
+    "Verbal2": -1.85,
+    "Verbal3": -1.92,
+    "Math1": 0.16,
+    "Math2": -0.58,
+    "Math3": -0.76
+  },
+  {
+    "Verbal1": 1.2,
+    "Verbal2": 0.1,
+    "Verbal3": -0.91,
+    "Math1": 0.51,
+    "Math2": -0.9,
+    "Math3": 0.26
+  },
+  {
+    "Verbal1": 0.61,
+    "Verbal2": 0.14,
+    "Verbal3": 1.01,
+    "Math1": 1.97,
+    "Math2": 0.37,
+    "Math3": 1.97
+  },
+  {
+    "Verbal1": -1.88,
+    "Verbal2": -0.29,
+    "Verbal3": -1.56,
+    "Math1": -0.3,
+    "Math2": 0.18,
+    "Math3": -0.62
+  },
+  {
+    "Verbal1": -1.93,
+    "Verbal2": -0.56,
+    "Verbal3": -0.33,
+    "Math1": 0.12,
+    "Math2": 0.86,
+    "Math3": 1.53
+  },
+  {
+    "Verbal1": 1.42,
+    "Verbal2": 1.6,
+    "Verbal3": 1.33,
+    "Math1": 1.76,
+    "Math2": 1.82,
+    "Math3": 1.79
+  },
+  {
+    "Verbal1": 1.36,
+    "Verbal2": 0.64,
+    "Verbal3": 1.02,
+    "Math1": -0.84,
+    "Math2": -1.18,
+    "Math3": -0.55
+  },
+  {
+    "Verbal1": -0.09,
+    "Verbal2": 0.26,
+    "Verbal3": -0.81,
+    "Math1": 0.09,
+    "Math2": 0.51,
+    "Math3": 2.07
+  },
+  {
+    "Verbal1": 1.26,
+    "Verbal2": 0.47,
+    "Verbal3": 0.27,
+    "Math1": 1.33,
+    "Math2": 0.36,
+    "Math3": 0.71
+  },
+  {
+    "Verbal1": -0.45,
+    "Verbal2": -0.93,
+    "Verbal3": -1.09,
+    "Math1": -1.17,
+    "Math2": -0.7,
+    "Math3": -0.65
+  },
+  {
+    "Verbal1": -0.07,
+    "Verbal2": 1.37,
+    "Verbal3": -0.98,
+    "Math1": 0.2,
+    "Math2": 0.89,
+    "Math3": -0.33
+  },
+  {
+    "Verbal1": -1.58,
+    "Verbal2": -0.93,
+    "Verbal3": -1.28,
+    "Math1": 0.2,
+    "Math2": 1.66,
+    "Math3": 0.04
+  },
+  {
+    "Verbal1": -0.05,
+    "Verbal2": -0.61,
+    "Verbal3": 0.54,
+    "Math1": 0.58,
+    "Math2": 2.05,
+    "Math3": -0.2
+  },
+  {
+    "Verbal1": -0.68,
+    "Verbal2": -0.83,
+    "Verbal3": -0.03,
+    "Math1": -0.51,
+    "Math2": 0.91,
+    "Math3": -0.53
+  },
+  {
+    "Verbal1": 0.95,
+    "Verbal2": 1.15,
+    "Verbal3": 0.28,
+    "Math1": 0.28,
+    "Math2": -0.17,
+    "Math3": 1.54
+  },
+  {
+    "Verbal1": 1.38,
+    "Verbal2": 1.65,
+    "Verbal3": 1.43,
+    "Math1": 0.05,
+    "Math2": -0.01,
+    "Math3": 0.82
+  },
+  {
+    "Verbal1": 0.99,
+    "Verbal2": 1.43,
+    "Verbal3": 1.43,
+    "Math1": 0.71,
+    "Math2": 1.1,
+    "Math3": 0.05
+  },
+  {
+    "Verbal1": -1.16,
+    "Verbal2": -0.75,
+    "Verbal3": -0.63,
+    "Math1": 1.36,
+    "Math2": 0.29,
+    "Math3": 0.3
+  },
+  {
+    "Verbal1": -0.53,
+    "Verbal2": -0.73,
+    "Verbal3": -0.15,
+    "Math1": -0.15,
+    "Math2": -0.23,
+    "Math3": -1.8
+  },
+  {
+    "Verbal1": -0.37,
+    "Verbal2": -0.17,
+    "Verbal3": -0.42,
+    "Math1": -0.91,
+    "Math2": -0.61,
+    "Math3": -0.52
+  },
+  {
+    "Verbal1": 0.4,
+    "Verbal2": 1.03,
+    "Verbal3": 0.44,
+    "Math1": 1.75,
+    "Math2": 0.37,
+    "Math3": 1.96
+  },
+  {
+    "Verbal1": -0.87,
+    "Verbal2": 0.37,
+    "Verbal3": -1.79,
+    "Math1": -1.73,
+    "Math2": -1.41,
+    "Math3": -2.01
+  },
+  {
+    "Verbal1": 1.65,
+    "Verbal2": -0.06,
+    "Verbal3": -1.03,
+    "Math1": -0.37,
+    "Math2": -0.65,
+    "Math3": 0.3
+  },
+  {
+    "Verbal1": 1.42,
+    "Verbal2": -0.61,
+    "Verbal3": 0.57,
+    "Math1": 0.62,
+    "Math2": -0.56,
+    "Math3": -0.27
+  },
+  {
+    "Verbal1": -0.64,
+    "Verbal2": -0.13,
+    "Verbal3": -0,
+    "Math1": 0.25,
+    "Math2": -0.61,
+    "Math3": 0.18
+  },
+  {
+    "Verbal1": -0.17,
+    "Verbal2": -0.31,
+    "Verbal3": -0.55,
+    "Math1": -1.21,
+    "Math2": -0.42,
+    "Math3": -0.74
+  },
+  {
+    "Verbal1": -1.3,
+    "Verbal2": -1.74,
+    "Verbal3": -1.81,
+    "Math1": -0.2,
+    "Math2": 0.57,
+    "Math3": 0.31
+  },
+  {
+    "Verbal1": 0.14,
+    "Verbal2": 0.55,
+    "Verbal3": -0.01,
+    "Math1": 1.28,
+    "Math2": 0.14,
+    "Math3": 0.07
+  },
+  {
+    "Verbal1": -1.54,
+    "Verbal2": -0.63,
+    "Verbal3": -1.89,
+    "Math1": -0.46,
+    "Math2": -0.5,
+    "Math3": -1.53
+  },
+  {
+    "Verbal1": 0.88,
+    "Verbal2": 0.62,
+    "Verbal3": 0.47,
+    "Math1": 1.59,
+    "Math2": 2.03,
+    "Math3": 1.4
+  },
+  {
+    "Verbal1": 0.05,
+    "Verbal2": -0.5,
+    "Verbal3": 1.04,
+    "Math1": -0.06,
+    "Math2": 0.99,
+    "Math3": -1.08
+  },
+  {
+    "Verbal1": -0.82,
+    "Verbal2": 0.26,
+    "Verbal3": -0.26,
+    "Math1": -0.66,
+    "Math2": -0.26,
+    "Math3": -2.02
+  },
+  {
+    "Verbal1": 1.05,
+    "Verbal2": 0.74,
+    "Verbal3": -0.33,
+    "Math1": 0.16,
+    "Math2": -0.16,
+    "Math3": -1.06
+  },
+  {
+    "Verbal1": 1.63,
+    "Verbal2": 0.89,
+    "Verbal3": 1.03,
+    "Math1": 0.76,
+    "Math2": -0.44,
+    "Math3": 0.6
+  },
+  {
+    "Verbal1": 0.48,
+    "Verbal2": -0.29,
+    "Verbal3": 0.89,
+    "Math1": -0.24,
+    "Math2": 0.29,
+    "Math3": 0.59
+  },
+  {
+    "Verbal1": 0.61,
+    "Verbal2": 2.93,
+    "Verbal3": 1.37,
+    "Math1": -0.86,
+    "Math2": -0.89,
+    "Math3": 0.22
+  },
+  {
+    "Verbal1": -1.96,
+    "Verbal2": -2.87,
+    "Verbal3": -1.15,
+    "Math1": -0.91,
+    "Math2": -0.24,
+    "Math3": 0.9
+  },
+  {
+    "Verbal1": -0.54,
+    "Verbal2": -1.62,
+    "Verbal3": -1.68,
+    "Math1": -0.76,
+    "Math2": 1.02,
+    "Math3": 0.14
+  },
+  {
+    "Verbal1": -0.14,
+    "Verbal2": 0.17,
+    "Verbal3": 0.31,
+    "Math1": 0.98,
+    "Math2": 0.55,
+    "Math3": 1.23
+  },
+  {
+    "Verbal1": 0.18,
+    "Verbal2": -0.36,
+    "Verbal3": -0.59,
+    "Math1": -0.1,
+    "Math2": 0.28,
+    "Math3": 1.43
+  },
+  {
+    "Verbal1": 1.07,
+    "Verbal2": 0.63,
+    "Verbal3": 0.74,
+    "Math1": 0.16,
+    "Math2": -0.33,
+    "Math3": 0.95
+  },
+  {
+    "Verbal1": 0.39,
+    "Verbal2": 0.42,
+    "Verbal3": 0.03,
+    "Math1": -0.55,
+    "Math2": 0.1,
+    "Math3": 0.13
+  },
+  {
+    "Verbal1": 1.18,
+    "Verbal2": -0.45,
+    "Verbal3": -0.5,
+    "Math1": 0.54,
+    "Math2": 0.91,
+    "Math3": 1.24
+  },
+  {
+    "Verbal1": 0.23,
+    "Verbal2": 0,
+    "Verbal3": 0.31,
+    "Math1": -1.4,
+    "Math2": -0.7,
+    "Math3": -0.47
+  },
+  {
+    "Verbal1": 0.03,
+    "Verbal2": -0.79,
+    "Verbal3": 0.01,
+    "Math1": -0.27,
+    "Math2": 1.2,
+    "Math3": 0.85
+  },
+  {
+    "Verbal1": -0.7,
+    "Verbal2": -0.95,
+    "Verbal3": -0.39,
+    "Math1": 0.12,
+    "Math2": 1.11,
+    "Math3": -1.08
+  },
+  {
+    "Verbal1": 0.01,
+    "Verbal2": -0.02,
+    "Verbal3": 0.57,
+    "Math1": -0.59,
+    "Math2": 0.1,
+    "Math3": -0.91
+  },
+  {
+    "Verbal1": 1.82,
+    "Verbal2": 0.26,
+    "Verbal3": 0.57,
+    "Math1": -1.82,
+    "Math2": -1.13,
+    "Math3": -0.83
+  },
+  {
+    "Verbal1": 0.49,
+    "Verbal2": 0.61,
+    "Verbal3": -0.33,
+    "Math1": -0.15,
+    "Math2": -1.25,
+    "Math3": 0.2
+  },
+  {
+    "Verbal1": 0.51,
+    "Verbal2": 1.19,
+    "Verbal3": -0.43,
+    "Math1": 0.49,
+    "Math2": 0.49,
+    "Math3": 0.49
+  },
+  {
+    "Verbal1": 0.41,
+    "Verbal2": -0.17,
+    "Verbal3": -0.36,
+    "Math1": -0.15,
+    "Math2": -0.44,
+    "Math3": 0.6
+  },
+  {
+    "Verbal1": 0.09,
+    "Verbal2": 0.15,
+    "Verbal3": -0.39,
+    "Math1": 0.58,
+    "Math2": 0.13,
+    "Math3": -0.09
+  },
+  {
+    "Verbal1": -0.45,
+    "Verbal2": -0.19,
+    "Verbal3": -0.06,
+    "Math1": 0.21,
+    "Math2": -0.36,
+    "Math3": 1.09
+  },
+  {
+    "Verbal1": 1.51,
+    "Verbal2": -0.37,
+    "Verbal3": 0.2,
+    "Math1": -0.97,
+    "Math2": -0.73,
+    "Math3": -0.25
+  },
+  {
+    "Verbal1": -0.23,
+    "Verbal2": 1.64,
+    "Verbal3": 0.68,
+    "Math1": 1.07,
+    "Math2": 2.33,
+    "Math3": 0.22
+  },
+  {
+    "Verbal1": -1.65,
+    "Verbal2": -1.15,
+    "Verbal3": -0.4,
+    "Math1": -0.69,
+    "Math2": 0.07,
+    "Math3": -0.46
+  },
+  {
+    "Verbal1": -2.22,
+    "Verbal2": -1.14,
+    "Verbal3": -0.68,
+    "Math1": -2.31,
+    "Math2": -0.29,
+    "Math3": -0.99
+  },
+  {
+    "Verbal1": -1.82,
+    "Verbal2": -0.5,
+    "Verbal3": -0.29,
+    "Math1": -0.83,
+    "Math2": -0.18,
+    "Math3": -1.23
+  },
+  {
+    "Verbal1": -1.45,
+    "Verbal2": -0.27,
+    "Verbal3": -0.63,
+    "Math1": -0.8,
+    "Math2": -0.57,
+    "Math3": 0.27
+  },
+  {
+    "Verbal1": 0.34,
+    "Verbal2": -0.6,
+    "Verbal3": 0.6,
+    "Math1": -1.69,
+    "Math2": -0.59,
+    "Math3": -2.11
+  },
+  {
+    "Verbal1": -0.17,
+    "Verbal2": -0.69,
+    "Verbal3": -0.79,
+    "Math1": -0.43,
+    "Math2": -0.89,
+    "Math3": -0.39
+  },
+  {
+    "Verbal1": -0.53,
+    "Verbal2": -1.41,
+    "Verbal3": -0.96,
+    "Math1": -0.32,
+    "Math2": 1.03,
+    "Math3": -0.75
+  },
+  {
+    "Verbal1": -1.66,
+    "Verbal2": -0.55,
+    "Verbal3": -0.19,
+    "Math1": 1.76,
+    "Math2": 0.84,
+    "Math3": 0.37
+  },
+  {
+    "Verbal1": 1.2,
+    "Verbal2": 0.73,
+    "Verbal3": 0.71,
+    "Math1": 0.95,
+    "Math2": 0.59,
+    "Math3": -1.31
+  },
+  {
+    "Verbal1": 1.09,
+    "Verbal2": 2.66,
+    "Verbal3": 0.66,
+    "Math1": 0.46,
+    "Math2": 0.58,
+    "Math3": 0.26
+  },
+  {
+    "Verbal1": 0.74,
+    "Verbal2": 0.22,
+    "Verbal3": 0.87,
+    "Math1": 0.37,
+    "Math2": 0.75,
+    "Math3": -0.76
+  },
+  {
+    "Verbal1": 0.16,
+    "Verbal2": 0.78,
+    "Verbal3": -0.41,
+    "Math1": -0.83,
+    "Math2": -0.28,
+    "Math3": -1.3
+  },
+  {
+    "Verbal1": 0.61,
+    "Verbal2": 1.32,
+    "Verbal3": 0.45,
+    "Math1": 0.74,
+    "Math2": 0.85,
+    "Math3": 1.83
+  },
+  {
+    "Verbal1": -0.79,
+    "Verbal2": -1.24,
+    "Verbal3": -0.7,
+    "Math1": -1.27,
+    "Math2": 0.28,
+    "Math3": 0.2
+  },
+  {
+    "Verbal1": -0.49,
+    "Verbal2": -0.14,
+    "Verbal3": -0.15,
+    "Math1": 0.14,
+    "Math2": 0.53,
+    "Math3": -1.21
+  },
+  {
+    "Verbal1": -0.37,
+    "Verbal2": 0.68,
+    "Verbal3": -0.31,
+    "Math1": -2.56,
+    "Math2": -1.39,
+    "Math3": -2.23
+  },
+  {
+    "Verbal1": -0.39,
+    "Verbal2": 0,
+    "Verbal3": -0.35,
+    "Math1": 2.57,
+    "Math2": 1.03,
+    "Math3": 2.28
+  },
+  {
+    "Verbal1": 0.62,
+    "Verbal2": 0.69,
+    "Verbal3": 1.64,
+    "Math1": -0.61,
+    "Math2": 0.07,
+    "Math3": -1.65
+  },
+  {
+    "Verbal1": -0.1,
+    "Verbal2": -0.23,
+    "Verbal3": -0.56,
+    "Math1": -0.63,
+    "Math2": -0.91,
+    "Math3": 0.38
+  },
+  {
+    "Verbal1": 0.56,
+    "Verbal2": -0.47,
+    "Verbal3": 0.18,
+    "Math1": -0.89,
+    "Math2": -1.93,
+    "Math3": -0.96
+  },
+  {
+    "Verbal1": 0.56,
+    "Verbal2": 0.2,
+    "Verbal3": 2.06,
+    "Math1": -0.42,
+    "Math2": 0.2,
+    "Math3": 0.22
+  },
+  {
+    "Verbal1": -2.2,
+    "Verbal2": -1.72,
+    "Verbal3": -1.35,
+    "Math1": -1.6,
+    "Math2": -1.04,
+    "Math3": 0
+  },
+  {
+    "Verbal1": -0.59,
+    "Verbal2": -0.81,
+    "Verbal3": -0.49,
+    "Math1": -1.98,
+    "Math2": 0.38,
+    "Math3": -1.64
+  },
+  {
+    "Verbal1": -1.07,
+    "Verbal2": -0.7,
+    "Verbal3": 0.11,
+    "Math1": 0.52,
+    "Math2": -0.09,
+    "Math3": 1.53
+  },
+  {
+    "Verbal1": -1.24,
+    "Verbal2": -2.26,
+    "Verbal3": -2.19,
+    "Math1": -1.1,
+    "Math2": -0.49,
+    "Math3": -0.48
+  },
+  {
+    "Verbal1": -0.09,
+    "Verbal2": 1.95,
+    "Verbal3": 0.29,
+    "Math1": 1.63,
+    "Math2": 1.54,
+    "Math3": 1.48
+  },
+  {
+    "Verbal1": -0.58,
+    "Verbal2": 0.2,
+    "Verbal3": -0.49,
+    "Math1": -0.25,
+    "Math2": -0.52,
+    "Math3": -1.2
+  },
+  {
+    "Verbal1": 0.01,
+    "Verbal2": -0.59,
+    "Verbal3": -1.59,
+    "Math1": -0.83,
+    "Math2": 0.61,
+    "Math3": 0.84
+  },
+  {
+    "Verbal1": -0.3,
+    "Verbal2": -1.47,
+    "Verbal3": -0.29,
+    "Math1": 0.97,
+    "Math2": -1.03,
+    "Math3": 0.33
+  },
+  {
+    "Verbal1": -0.63,
+    "Verbal2": -1.51,
+    "Verbal3": -1.78,
+    "Math1": 0.31,
+    "Math2": 0.17,
+    "Math3": -0.22
+  },
+  {
+    "Verbal1": -0.89,
+    "Verbal2": -0.08,
+    "Verbal3": -0.23,
+    "Math1": -1.96,
+    "Math2": -1.79,
+    "Math3": 0.8
+  },
+  {
+    "Verbal1": 2.36,
+    "Verbal2": 1.16,
+    "Verbal3": 0.46,
+    "Math1": 1.1,
+    "Math2": 0.28,
+    "Math3": -0.24
+  },
+  {
+    "Verbal1": -0.15,
+    "Verbal2": -0.58,
+    "Verbal3": 0.53,
+    "Math1": -0.79,
+    "Math2": -0.31,
+    "Math3": 0.83
+  },
+  {
+    "Verbal1": 0.13,
+    "Verbal2": 0.85,
+    "Verbal3": -0.2,
+    "Math1": 0.58,
+    "Math2": 0.47,
+    "Math3": 0.22
+  },
+  {
+    "Verbal1": 2.34,
+    "Verbal2": 0.59,
+    "Verbal3": 1.6,
+    "Math1": 1.28,
+    "Math2": 0.48,
+    "Math3": 1.33
+  },
+  {
+    "Verbal1": 0,
+    "Verbal2": -0.13,
+    "Verbal3": 0.29,
+    "Math1": 2.25,
+    "Math2": 0.38,
+    "Math3": -0.27
+  },
+  {
+    "Verbal1": -0.43,
+    "Verbal2": 0.06,
+    "Verbal3": -1.54,
+    "Math1": -0.67,
+    "Math2": -1.27,
+    "Math3": -0.99
+  },
+  {
+    "Verbal1": -1.8,
+    "Verbal2": -1.44,
+    "Verbal3": -0.01,
+    "Math1": -0.13,
+    "Math2": -1.34,
+    "Math3": -0.21
+  },
+  {
+    "Verbal1": 1.45,
+    "Verbal2": 0.4,
+    "Verbal3": 2.48,
+    "Math1": -0.24,
+    "Math2": 0.11,
+    "Math3": -0.27
+  },
+  {
+    "Verbal1": 0.04,
+    "Verbal2": -1.5,
+    "Verbal3": -0.36,
+    "Math1": -0.55,
+    "Math2": -0.8,
+    "Math3": -0.11
+  },
+  {
+    "Verbal1": 0.29,
+    "Verbal2": 0.06,
+    "Verbal3": -0.17,
+    "Math1": -1.31,
+    "Math2": -1.07,
+    "Math3": 0.12
+  },
+  {
+    "Verbal1": -1.3,
+    "Verbal2": -1.4,
+    "Verbal3": -1.13,
+    "Math1": -1.09,
+    "Math2": -0.14,
+    "Math3": -0.11
+  },
+  {
+    "Verbal1": -1.18,
+    "Verbal2": 0.05,
+    "Verbal3": -0.23,
+    "Math1": -1.06,
+    "Math2": -1.37,
+    "Math3": -0.89
+  }
+]

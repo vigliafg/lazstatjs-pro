@@ -1,4 +1,5 @@
 import { jStat } from '../jstat';
+import { THEIL_SEN_MAX_ROWS, sampleEvenly } from './guards';
 
 /**
  * Wilcoxon Signed-Rank Test (One-sample or Paired differences)
@@ -383,6 +384,30 @@ export const calcTheilSen = (xs: number[], ys: number[]): TheilSenResult => {
   const intercept = jStat.median(intercepts);
 
   return { slope, intercept };
+};
+
+/**
+ * Theil–Sen on at most `THEIL_SEN_MAX_ROWS` evenly spaced points.
+ *
+ * The exact estimator enumerates every pair, so it is O(n²) in time and
+ * memory; on a 50 000-row grid it exhausts the heap. Above the cap the same
+ * order-preserving thinning used by the other quadratic kernels keeps the
+ * estimate stable and the procedure usable.
+ */
+export const calcTheilSenCapped = (
+  xs: number[],
+  ys: number[],
+  maxRows: number = THEIL_SEN_MAX_ROWS
+): TheilSenResult => {
+  if (xs.length <= maxRows) return calcTheilSen(xs, ys);
+  const indices = sampleEvenly(
+    xs.map((_, index) => index),
+    maxRows
+  );
+  return calcTheilSen(
+    indices.map(index => xs[index]),
+    indices.map(index => ys[index])
+  );
 };
 
 /**

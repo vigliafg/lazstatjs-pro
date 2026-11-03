@@ -1,0 +1,1963 @@
+{
+  "source": "R stats::cancor",
+  "generatedBy": "src/stats/reference/r/canonical.R",
+  "cases": [
+    {
+      "name": "iris-blocks",
+      "x": [
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.5
+        },
+        {
+          "Sepal.Length": 4.9,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 4.7,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 4.6,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3.6
+        },
+        {
+          "Sepal.Length": 5.4,
+          "Sepal.Width": 3.9
+        },
+        {
+          "Sepal.Length": 4.6,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 4.4,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 4.9,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 5.4,
+          "Sepal.Width": 3.7
+        },
+        {
+          "Sepal.Length": 4.8,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 4.8,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 4.3,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.8,
+          "Sepal.Width": 4
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 4.4
+        },
+        {
+          "Sepal.Length": 5.4,
+          "Sepal.Width": 3.9
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.5
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 3.8
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.8
+        },
+        {
+          "Sepal.Length": 5.4,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.7
+        },
+        {
+          "Sepal.Length": 4.6,
+          "Sepal.Width": 3.6
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.3
+        },
+        {
+          "Sepal.Length": 4.8,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 5.2,
+          "Sepal.Width": 3.5
+        },
+        {
+          "Sepal.Length": 5.2,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 4.7,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 4.8,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 5.4,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 5.2,
+          "Sepal.Width": 4.1
+        },
+        {
+          "Sepal.Length": 5.5,
+          "Sepal.Width": 4.2
+        },
+        {
+          "Sepal.Length": 4.9,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 5.5,
+          "Sepal.Width": 3.5
+        },
+        {
+          "Sepal.Length": 4.9,
+          "Sepal.Width": 3.6
+        },
+        {
+          "Sepal.Length": 4.4,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3.5
+        },
+        {
+          "Sepal.Length": 4.5,
+          "Sepal.Width": 2.3
+        },
+        {
+          "Sepal.Length": 4.4,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3.5
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.8
+        },
+        {
+          "Sepal.Length": 4.8,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 3.8
+        },
+        {
+          "Sepal.Length": 4.6,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 5.3,
+          "Sepal.Width": 3.7
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 3.3
+        },
+        {
+          "Sepal.Length": 7,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 6.4,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 6.9,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 5.5,
+          "Sepal.Width": 2.3
+        },
+        {
+          "Sepal.Length": 6.5,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 3.3
+        },
+        {
+          "Sepal.Length": 4.9,
+          "Sepal.Width": 2.4
+        },
+        {
+          "Sepal.Length": 6.6,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 5.2,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 2
+        },
+        {
+          "Sepal.Length": 5.9,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6,
+          "Sepal.Width": 2.2
+        },
+        {
+          "Sepal.Length": 6.1,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 5.6,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 5.6,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.8,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 6.2,
+          "Sepal.Width": 2.2
+        },
+        {
+          "Sepal.Length": 5.6,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 5.9,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 6.1,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 6.1,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.4,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 6.6,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6.8,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 2.6
+        },
+        {
+          "Sepal.Length": 5.5,
+          "Sepal.Width": 2.4
+        },
+        {
+          "Sepal.Length": 5.5,
+          "Sepal.Width": 2.4
+        },
+        {
+          "Sepal.Length": 5.8,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 6,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 5.4,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 2.3
+        },
+        {
+          "Sepal.Length": 5.6,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.5,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 5.5,
+          "Sepal.Width": 2.6
+        },
+        {
+          "Sepal.Length": 6.1,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.8,
+          "Sepal.Width": 2.6
+        },
+        {
+          "Sepal.Length": 5,
+          "Sepal.Width": 2.3
+        },
+        {
+          "Sepal.Length": 5.6,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 6.2,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 5.1,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 3.3
+        },
+        {
+          "Sepal.Length": 5.8,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 7.1,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 6.5,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 7.6,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 4.9,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 7.3,
+          "Sepal.Width": 2.9
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 7.2,
+          "Sepal.Width": 3.6
+        },
+        {
+          "Sepal.Length": 6.5,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 6.4,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 6.8,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 5.7,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 5.8,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.4,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 6.5,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 7.7,
+          "Sepal.Width": 3.8
+        },
+        {
+          "Sepal.Length": 7.7,
+          "Sepal.Width": 2.6
+        },
+        {
+          "Sepal.Length": 6,
+          "Sepal.Width": 2.2
+        },
+        {
+          "Sepal.Length": 6.9,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 5.6,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 7.7,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 3.3
+        },
+        {
+          "Sepal.Length": 7.2,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 6.2,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.1,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6.4,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 7.2,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 7.4,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 7.9,
+          "Sepal.Width": 3.8
+        },
+        {
+          "Sepal.Length": 6.4,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 2.8
+        },
+        {
+          "Sepal.Length": 6.1,
+          "Sepal.Width": 2.6
+        },
+        {
+          "Sepal.Length": 7.7,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 6.4,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 6,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6.9,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 6.9,
+          "Sepal.Width": 3.1
+        },
+        {
+          "Sepal.Length": 5.8,
+          "Sepal.Width": 2.7
+        },
+        {
+          "Sepal.Length": 6.8,
+          "Sepal.Width": 3.2
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 3.3
+        },
+        {
+          "Sepal.Length": 6.7,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6.3,
+          "Sepal.Width": 2.5
+        },
+        {
+          "Sepal.Length": 6.5,
+          "Sepal.Width": 3
+        },
+        {
+          "Sepal.Length": 6.2,
+          "Sepal.Width": 3.4
+        },
+        {
+          "Sepal.Length": 5.9,
+          "Sepal.Width": 3
+        }
+      ],
+      "y": [
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.3,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.7,
+          "Petal.Width": 0.4
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.3
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.1
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.6,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.1
+        },
+        {
+          "Petal.Length": 1.1,
+          "Petal.Width": 0.1
+        },
+        {
+          "Petal.Length": 1.2,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.4
+        },
+        {
+          "Petal.Length": 1.3,
+          "Petal.Width": 0.4
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.3
+        },
+        {
+          "Petal.Length": 1.7,
+          "Petal.Width": 0.3
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.3
+        },
+        {
+          "Petal.Length": 1.7,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.4
+        },
+        {
+          "Petal.Length": 1,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.7,
+          "Petal.Width": 0.5
+        },
+        {
+          "Petal.Length": 1.9,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.6,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.6,
+          "Petal.Width": 0.4
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.6,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.6,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.4
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.1
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.2,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.3,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.1
+        },
+        {
+          "Petal.Length": 1.3,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.3,
+          "Petal.Width": 0.3
+        },
+        {
+          "Petal.Length": 1.3,
+          "Petal.Width": 0.3
+        },
+        {
+          "Petal.Length": 1.3,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.6,
+          "Petal.Width": 0.6
+        },
+        {
+          "Petal.Length": 1.9,
+          "Petal.Width": 0.4
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.3
+        },
+        {
+          "Petal.Length": 1.6,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.5,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 1.4,
+          "Petal.Width": 0.2
+        },
+        {
+          "Petal.Length": 4.7,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4.9,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.6,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.7,
+          "Petal.Width": 1.6
+        },
+        {
+          "Petal.Length": 3.3,
+          "Petal.Width": 1
+        },
+        {
+          "Petal.Length": 4.6,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 3.9,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 3.5,
+          "Petal.Width": 1
+        },
+        {
+          "Petal.Length": 4.2,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4,
+          "Petal.Width": 1
+        },
+        {
+          "Petal.Length": 4.7,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 3.6,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.4,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4.1,
+          "Petal.Width": 1
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 3.9,
+          "Petal.Width": 1.1
+        },
+        {
+          "Petal.Length": 4.8,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 4,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.9,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4.7,
+          "Petal.Width": 1.2
+        },
+        {
+          "Petal.Length": 4.3,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.4,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 4.8,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 5,
+          "Petal.Width": 1.7
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 3.5,
+          "Petal.Width": 1
+        },
+        {
+          "Petal.Length": 3.8,
+          "Petal.Width": 1.1
+        },
+        {
+          "Petal.Length": 3.7,
+          "Petal.Width": 1
+        },
+        {
+          "Petal.Length": 3.9,
+          "Petal.Width": 1.2
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 1.6
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.6
+        },
+        {
+          "Petal.Length": 4.7,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 4.4,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.1,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.4,
+          "Petal.Width": 1.2
+        },
+        {
+          "Petal.Length": 4.6,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 4,
+          "Petal.Width": 1.2
+        },
+        {
+          "Petal.Length": 3.3,
+          "Petal.Width": 1
+        },
+        {
+          "Petal.Length": 4.2,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.2,
+          "Petal.Width": 1.2
+        },
+        {
+          "Petal.Length": 4.2,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 4.3,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 3,
+          "Petal.Width": 1.1
+        },
+        {
+          "Petal.Length": 4.1,
+          "Petal.Width": 1.3
+        },
+        {
+          "Petal.Length": 6,
+          "Petal.Width": 2.5
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 1.9
+        },
+        {
+          "Petal.Length": 5.9,
+          "Petal.Width": 2.1
+        },
+        {
+          "Petal.Length": 5.6,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 5.8,
+          "Petal.Width": 2.2
+        },
+        {
+          "Petal.Length": 6.6,
+          "Petal.Width": 2.1
+        },
+        {
+          "Petal.Length": 4.5,
+          "Petal.Width": 1.7
+        },
+        {
+          "Petal.Length": 6.3,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 5.8,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 6.1,
+          "Petal.Width": 2.5
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 2
+        },
+        {
+          "Petal.Length": 5.3,
+          "Petal.Width": 1.9
+        },
+        {
+          "Petal.Length": 5.5,
+          "Petal.Width": 2.1
+        },
+        {
+          "Petal.Length": 5,
+          "Petal.Width": 2
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 2.4
+        },
+        {
+          "Petal.Length": 5.3,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 5.5,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 6.7,
+          "Petal.Width": 2.2
+        },
+        {
+          "Petal.Length": 6.9,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 5,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 5.7,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 4.9,
+          "Petal.Width": 2
+        },
+        {
+          "Petal.Length": 6.7,
+          "Petal.Width": 2
+        },
+        {
+          "Petal.Length": 4.9,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 5.7,
+          "Petal.Width": 2.1
+        },
+        {
+          "Petal.Length": 6,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 4.8,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 4.9,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 5.6,
+          "Petal.Width": 2.1
+        },
+        {
+          "Petal.Length": 5.8,
+          "Petal.Width": 1.6
+        },
+        {
+          "Petal.Length": 6.1,
+          "Petal.Width": 1.9
+        },
+        {
+          "Petal.Length": 6.4,
+          "Petal.Width": 2
+        },
+        {
+          "Petal.Length": 5.6,
+          "Petal.Width": 2.2
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 1.5
+        },
+        {
+          "Petal.Length": 5.6,
+          "Petal.Width": 1.4
+        },
+        {
+          "Petal.Length": 6.1,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 5.6,
+          "Petal.Width": 2.4
+        },
+        {
+          "Petal.Length": 5.5,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 4.8,
+          "Petal.Width": 1.8
+        },
+        {
+          "Petal.Length": 5.4,
+          "Petal.Width": 2.1
+        },
+        {
+          "Petal.Length": 5.6,
+          "Petal.Width": 2.4
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 1.9
+        },
+        {
+          "Petal.Length": 5.9,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 5.7,
+          "Petal.Width": 2.5
+        },
+        {
+          "Petal.Length": 5.2,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 5,
+          "Petal.Width": 1.9
+        },
+        {
+          "Petal.Length": 5.2,
+          "Petal.Width": 2
+        },
+        {
+          "Petal.Length": 5.4,
+          "Petal.Width": 2.3
+        },
+        {
+          "Petal.Length": 5.1,
+          "Petal.Width": 1.8
+        }
+      ],
+      "correlation": [0.940968996975749, 0.123936881205404],
+      "xcoef": [
+        [-0.0875743547510272, 0.0474941070136955],
+        [0.0700436258784862, 0.175829697075399]
+      ],
+      "ycoef": [
+        [-0.06956302015451, -0.157186715480365],
+        [0.0568384932045647, 0.394012145124361]
+      ],
+      "xcenter": [5.84333333333333, 3.05733333333333],
+      "ycenter": [3.758, 1.19933333333333]
+    },
+    {
+      "name": "synthetic-two-functions",
+      "x": [
+        {
+          "X1": -2.58052434934627,
+          "X2": -2.11726602803819,
+          "X3": 1.4592924086185
+        },
+        {
+          "X1": 0.753055469917176,
+          "X2": 0.443008049127429,
+          "X3": -1.11103193758797
+        },
+        {
+          "X1": 0.392401664820577,
+          "X2": 0.754643835568256,
+          "X3": -0.336761442626371
+        },
+        {
+          "X1": -0.704002098371656,
+          "X2": -1.04499576440766,
+          "X3": -0.840770232400053
+        },
+        {
+          "X1": -0.595131786717234,
+          "X2": 0.555554287691571,
+          "X3": -1.57664325315933
+        },
+        {
+          "X1": -0.390689767077894,
+          "X2": 0.374353910964728,
+          "X3": 0.856744819527027
+        },
+        {
+          "X1": 0.227477767268347,
+          "X2": -0.122650918553576,
+          "X3": -1.25548480658733
+        },
+        {
+          "X1": 1.8125977738001,
+          "X2": 0.628525718789106,
+          "X3": -0.581189130281648
+        },
+        {
+          "X1": 0.79395783155238,
+          "X2": -0.767697301053225,
+          "X3": 0.71958723810997
+        },
+        {
+          "X1": -1.62321394909984,
+          "X2": -0.78449901063962,
+          "X3": 0.117495757079001
+        },
+        {
+          "X1": 2.37088211749456,
+          "X2": -0.216578908941151,
+          "X3": -0.786882695984109
+        },
+        {
+          "X1": -0.690374179628897,
+          "X2": 1.41616799202467,
+          "X3": 0.0903739128959955
+        },
+        {
+          "X1": -0.655916247247366,
+          "X2": 0.343057598276195,
+          "X3": -0.304930925007116
+        },
+        {
+          "X1": 0.184218454982977,
+          "X2": -0.256816056966188,
+          "X3": -1.32371336537674
+        },
+        {
+          "X1": 0.311282544978196,
+          "X2": 0.322034850249553,
+          "X3": -0.0203202143074868
+        },
+        {
+          "X1": 0.777023174337188,
+          "X2": 0.583942303467029,
+          "X3": 0.0770922994387901
+        },
+        {
+          "X1": 2.62580941920342,
+          "X2": 2.39294688382401,
+          "X3": 0.718156567241375
+        },
+        {
+          "X1": -0.842759485804097,
+          "X2": 2.58004784987065,
+          "X3": -1.37376292890753
+        },
+        {
+          "X1": 0.0291306317599722,
+          "X2": -2.08153412653662,
+          "X3": 1.16776765852308
+        },
+        {
+          "X1": 1.15086352173445,
+          "X2": 0.175901150603358,
+          "X3": -2.52465401764777
+        },
+        {
+          "X1": 0.883710525859097,
+          "X2": 0.632309246943795,
+          "X3": -0.320497207780708
+        },
+        {
+          "X1": -2.1674044549421,
+          "X2": -1.96474238649941,
+          "X3": -0.169234868395936
+        },
+        {
+          "X1": -0.528637481498913,
+          "X2": 0.667927271196138,
+          "X3": 0.890048674635521
+        },
+        {
+          "X1": -2.23890740516692,
+          "X2": -0.679707666747475,
+          "X3": -1.68055376082738
+        },
+        {
+          "X1": -0.883839711980444,
+          "X2": 0.527221131567437,
+          "X3": -0.777184561709183
+        },
+        {
+          "X1": 0.874320757793207,
+          "X2": 0.187781231107837,
+          "X3": -0.452235358591003
+        },
+        {
+          "X1": -0.304940037543381,
+          "X2": -0.44283892736492,
+          "X3": -1.08187486066889
+        },
+        {
+          "X1": 0.297506969553102,
+          "X2": -0.555721293379138,
+          "X3": 0.10699740270576
+        },
+        {
+          "X1": 0.994011528653191,
+          "X2": 1.12552453568818,
+          "X3": -0.928908593546424
+        },
+        {
+          "X1": 2.58781739521547,
+          "X2": 2.48627277171806,
+          "X3": -1.70629443739978
+        },
+        {
+          "X1": 1.37624127471296,
+          "X2": 1.07007461460398,
+          "X3": 0.466031699071069
+        },
+        {
+          "X1": 0.867561120900523,
+          "X2": 0.677798355825293,
+          "X3": -0.0911671577716565
+        },
+        {
+          "X1": -0.7652647669943,
+          "X2": -0.00893617509836593,
+          "X3": 0.930001479272343
+        },
+        {
+          "X1": 0.497946953973704,
+          "X2": -0.346020785539608,
+          "X3": -0.91728613574184
+        },
+        {
+          "X1": -0.0595517866537108,
+          "X2": 0.488116794003896,
+          "X3": 0.740816971967966
+        },
+        {
+          "X1": -0.391163517553315,
+          "X2": -0.448146901303369,
+          "X3": 1.57122949607081
+        },
+        {
+          "X1": 0.293886265831563,
+          "X2": 1.02596193200499,
+          "X3": 0.624081663208288
+        },
+        {
+          "X1": 1.35705859264795,
+          "X2": -0.56699692491846,
+          "X3": 0.470849436060531
+        },
+        {
+          "X1": -0.295130462238603,
+          "X2": -1.48224569672815,
+          "X3": -0.440680309880644
+        },
+        {
+          "X1": 1.18066672308458,
+          "X2": -0.125631436776868,
+          "X3": -1.21472948039661
+        },
+        {
+          "X1": 0.361848240054597,
+          "X2": -1.3274451727831,
+          "X3": 0.201100798233059
+        },
+        {
+          "X1": -1.51437773573588,
+          "X2": -0.492647377722094,
+          "X3": 0.829640822291994
+        },
+        {
+          "X1": 0.132801213120701,
+          "X2": -1.15567463807949,
+          "X3": -0.0838149428219119
+        },
+        {
+          "X1": 0.905056898743003,
+          "X2": -0.0960375125778923,
+          "X3": -0.457794337479663
+        },
+        {
+          "X1": -1.71385148477657,
+          "X2": -2.86547094454606,
+          "X3": 0.693265568330927
+        },
+        {
+          "X1": -0.223486485812281,
+          "X2": 0.598226086737033,
+          "X3": 1.47529366890789
+        },
+        {
+          "X1": -0.576264396286482,
+          "X2": 1.02484027237292,
+          "X3": 1.59254132322155
+        },
+        {
+          "X1": 0.680242051975214,
+          "X2": 0.506468219029995,
+          "X3": 1.24854206723195
+        },
+        {
+          "X1": 1.88294501238677,
+          "X2": 1.37789374942577,
+          "X3": -0.0617198069509578
+        },
+        {
+          "X1": -1.99020285481593,
+          "X2": -0.123626437274976,
+          "X3": -1.851537838597
+        },
+        {
+          "X1": -0.439568908073274,
+          "X2": -1.70085690751326,
+          "X3": -0.315385285861729
+        },
+        {
+          "X1": 1.31449536060681,
+          "X2": -0.130372762697002,
+          "X3": 0.83039514117358
+        },
+        {
+          "X1": 0.723695718111547,
+          "X2": 1.11974191825407,
+          "X3": 0.637840796202764
+        },
+        {
+          "X1": 0.871444140056445,
+          "X2": 0.85270896074575,
+          "X3": 0.410474355065838
+        },
+        {
+          "X1": 0.43025568541679,
+          "X2": 1.11480265222795,
+          "X3": -0.0574521617201616
+        },
+        {
+          "X1": -1.42834023850327,
+          "X2": -0.803303729361491,
+          "X3": 3.01944712229826
+        },
+        {
+          "X1": 0.404434503303865,
+          "X2": 0.274978461277588,
+          "X3": 1.13110323797688
+        },
+        {
+          "X1": 0.529245202525888,
+          "X2": 1.57055731543607,
+          "X3": 0.845760602031659
+        },
+        {
+          "X1": -1.99855108477604,
+          "X2": -2.20063941245346,
+          "X3": -1.03131920712065
+        },
+        {
+          "X1": -0.740151023058396,
+          "X2": -1.1813889714952,
+          "X3": 2.6427382578625
+        },
+        {
+          "X1": -0.610113973897191,
+          "X2": -0.205731710698998,
+          "X3": 0.940856569713836
+        },
+        {
+          "X1": 2.22403496863217,
+          "X2": 0.198577708095515,
+          "X3": 1.32786129888962
+        },
+        {
+          "X1": -0.189639301892761,
+          "X2": 0.659640304706714,
+          "X3": -0.376263979749386
+        },
+        {
+          "X1": -1.91609205582145,
+          "X2": -1.61328328083676,
+          "X3": 0.258046001531751
+        },
+        {
+          "X1": -0.283688113099753,
+          "X2": -0.868808795687128,
+          "X3": -0.684676412837166
+        },
+        {
+          "X1": -0.287281199564726,
+          "X2": 0.206891913051164,
+          "X3": -0.062804186240377
+        },
+        {
+          "X1": -0.259404589535852,
+          "X2": -0.247409654035113,
+          "X3": -1.74902904869622
+        },
+        {
+          "X1": 0.295073592085022,
+          "X2": -1.02578598846628,
+          "X3": 0.197193436637588
+        },
+        {
+          "X1": 0.567976728903659,
+          "X2": 1.26602834613208,
+          "X3": 2.08016421333766
+        },
+        {
+          "X1": -0.0307314937791124,
+          "X2": 0.584167900229166,
+          "X3": -0.231457051549471
+        },
+        {
+          "X1": -0.675426538891942,
+          "X2": -0.389920430335371,
+          "X3": 0.58258997955534
+        },
+        {
+          "X1": -1.0121952169601,
+          "X2": 1.39305032332904,
+          "X3": -0.91711794348789
+        },
+        {
+          "X1": 1.06818814354209,
+          "X2": 0.159963739613996,
+          "X3": 1.39184407305604
+        },
+        {
+          "X1": -1.85838962463781,
+          "X2": -1.54681446632796,
+          "X3": 1.73641272067078
+        },
+        {
+          "X1": -0.324390306152491,
+          "X2": -2.14212294103098,
+          "X3": -1.0535405121997
+        },
+        {
+          "X1": 0.0357392396724294,
+          "X2": 1.64909270279582,
+          "X3": -0.130173098102134
+        },
+        {
+          "X1": 0.3508172815074,
+          "X2": -0.485246052513959,
+          "X3": -0.83566754202877
+        },
+        {
+          "X1": 0.415957350046369,
+          "X2": -0.2022787385796,
+          "X3": 0.641593165885332
+        },
+        {
+          "X1": 0.372173295231279,
+          "X2": -1.26285834728268,
+          "X3": -0.0858138624596162
+        },
+        {
+          "X1": -0.135956105403851,
+          "X2": -0.261840495902451,
+          "X3": 0.853836497370759
+        }
+      ],
+      "y": [
+        {
+          "Y1": -0.544063814076915,
+          "Y2": 0.0789619591181933
+        },
+        {
+          "Y1": -0.566634626864808,
+          "Y2": -1.01328936116892
+        },
+        {
+          "Y1": 0.0667318320265887,
+          "Y2": -0.579562917486599
+        },
+        {
+          "Y1": -0.166004678668933,
+          "Y2": -0.378601021700305
+        },
+        {
+          "Y1": 1.75566233235616,
+          "Y2": 0.137300923913126
+        },
+        {
+          "Y1": -0.929537379266025,
+          "Y2": -0.50097163470491
+        },
+        {
+          "Y1": 0.399613773484217,
+          "Y2": -0.299916675517391
+        },
+        {
+          "Y1": 0.25581819717089,
+          "Y2": 0.651010780391167
+        },
+        {
+          "Y1": -0.0631418815177792,
+          "Y2": -0.376527564770126
+        },
+        {
+          "Y1": -0.346275944771834,
+          "Y2": 0.0108565694613259
+        },
+        {
+          "Y1": 0.886390839689145,
+          "Y2": 1.34432140560445
+        },
+        {
+          "Y1": -1.17329389974071,
+          "Y2": -0.0090340258082261
+        },
+        {
+          "Y1": -0.344092982103966,
+          "Y2": -1.60564999777852
+        },
+        {
+          "Y1": -0.744790269133431,
+          "Y2": 0.596196544599356
+        },
+        {
+          "Y1": -1.8779553508831,
+          "Y2": -1.64131713337841
+        },
+        {
+          "Y1": -0.713668245610352,
+          "Y2": 1.16642937383586
+        },
+        {
+          "Y1": 2.32535084863032,
+          "Y2": 1.56456382819668
+        },
+        {
+          "Y1": 1.61653956376755,
+          "Y2": 1.62773823079459
+        },
+        {
+          "Y1": -0.140487796696943,
+          "Y2": 0.298564342040721
+        },
+        {
+          "Y1": 0.562477628597244,
+          "Y2": -0.688532081536784
+        },
+        {
+          "Y1": 2.05373745739941,
+          "Y2": 2.05919270659112
+        },
+        {
+          "Y1": -1.18699791222832,
+          "Y2": 0.366945868145891
+        },
+        {
+          "Y1": 0.312167666600921,
+          "Y2": 1.2306634305528
+        },
+        {
+          "Y1": -2.16597831130034,
+          "Y2": 0.427849946604211
+        },
+        {
+          "Y1": -1.61443297412813,
+          "Y2": -1.38910216720209
+        },
+        {
+          "Y1": 0.482664221711966,
+          "Y2": 1.72148244961029
+        },
+        {
+          "Y1": 1.82558774559741,
+          "Y2": 1.05830398484551
+        },
+        {
+          "Y1": 0.9304256079396,
+          "Y2": 0.708677086776151
+        },
+        {
+          "Y1": 1.40040120419622,
+          "Y2": -0.0918643119573469
+        },
+        {
+          "Y1": 1.94708538001414,
+          "Y2": 1.69446455446146
+        },
+        {
+          "Y1": 1.8606987756993,
+          "Y2": 0.950081586459445
+        },
+        {
+          "Y1": 0.366703834587145,
+          "Y2": 1.24085104364368
+        },
+        {
+          "Y1": -0.1302879569845,
+          "Y2": 0.0247892900165618
+        },
+        {
+          "Y1": -0.524874297411307,
+          "Y2": 1.46218214463154
+        },
+        {
+          "Y1": 0.209885392257207,
+          "Y2": -1.11715935550843
+        },
+        {
+          "Y1": -0.312709277763608,
+          "Y2": 0.376496715753653
+        },
+        {
+          "Y1": 0.972677087139942,
+          "Y2": 1.57761188813106
+        },
+        {
+          "Y1": 1.43832992639977,
+          "Y2": 0.290296761707724
+        },
+        {
+          "Y1": 0.0156013554964428,
+          "Y2": -0.714734177093514
+        },
+        {
+          "Y1": -0.1971651608225,
+          "Y2": -0.0686944007117775
+        },
+        {
+          "Y1": 0.00360774731093982,
+          "Y2": 0.0988759632927264
+        },
+        {
+          "Y1": 0.580084519710838,
+          "Y2": 0.291547808563007
+        },
+        {
+          "Y1": -0.592484504310592,
+          "Y2": -0.536276229227164
+        },
+        {
+          "Y1": 0.473340773252328,
+          "Y2": 0.720655222661397
+        },
+        {
+          "Y1": -2.4564931246969,
+          "Y2": -0.0792424783642891
+        },
+        {
+          "Y1": 0.0251816966513964,
+          "Y2": -0.643656763610547
+        },
+        {
+          "Y1": -0.22169688273595,
+          "Y2": 0.561881046409991
+        },
+        {
+          "Y1": -1.61544083171216,
+          "Y2": 1.04730064925798
+        },
+        {
+          "Y1": 0.840226082687085,
+          "Y2": -0.105705489810909
+        },
+        {
+          "Y1": -2.93325722805601,
+          "Y2": 1.45045563726721
+        },
+        {
+          "Y1": -0.523386815304054,
+          "Y2": -0.0444786056964666
+        },
+        {
+          "Y1": 0.843598288127418,
+          "Y2": 1.16654255915725
+        },
+        {
+          "Y1": 0.424584408164132,
+          "Y2": -0.0803252714394032
+        },
+        {
+          "Y1": 2.0856613712074,
+          "Y2": 1.38294600160511
+        },
+        {
+          "Y1": 1.03935761706623,
+          "Y2": -0.0693560058466097
+        },
+        {
+          "Y1": -0.710889580678698,
+          "Y2": -0.851598455322494
+        },
+        {
+          "Y1": 0.768092572975929,
+          "Y2": -0.991899698287259
+        },
+        {
+          "Y1": 0.960329511894439,
+          "Y2": -1.67924087764964
+        },
+        {
+          "Y1": -1.20112907530012,
+          "Y2": -1.15865644139925
+        },
+        {
+          "Y1": 0.134846891570308,
+          "Y2": 0.257910561215037
+        },
+        {
+          "Y1": -1.43863353566595,
+          "Y2": 0.12065212366862
+        },
+        {
+          "Y1": 1.99178020137186,
+          "Y2": -0.316408304989703
+        },
+        {
+          "Y1": 0.701119720766731,
+          "Y2": -0.0277609206928117
+        },
+        {
+          "Y1": -1.01572160223932,
+          "Y2": -0.205760015871409
+        },
+        {
+          "Y1": -1.21099719197229,
+          "Y2": 0.483318723442757
+        },
+        {
+          "Y1": 0.913704584120497,
+          "Y2": 0.890320695565037
+        },
+        {
+          "Y1": 1.02354488004659,
+          "Y2": 0.288734516833536
+        },
+        {
+          "Y1": -0.960441996645758,
+          "Y2": 1.77081511981423
+        },
+        {
+          "Y1": 0.98670058742656,
+          "Y2": 0.169410539920624
+        },
+        {
+          "Y1": 0.694855430009761,
+          "Y2": 0.852042925950902
+        },
+        {
+          "Y1": -0.102221059694382,
+          "Y2": -0.32300262879822
+        },
+        {
+          "Y1": 0.449209408311492,
+          "Y2": 0.413459921176564
+        },
+        {
+          "Y1": -0.435381099100646,
+          "Y2": 0.00520586015680725
+        },
+        {
+          "Y1": -1.1440389086008,
+          "Y2": 0.841953784881452
+        },
+        {
+          "Y1": -0.066418433055365,
+          "Y2": 0.241792372267659
+        },
+        {
+          "Y1": 0.246821427493653,
+          "Y2": -0.0932151822608514
+        },
+        {
+          "Y1": 0.158480841761789,
+          "Y2": 1.11480691623464
+        },
+        {
+          "Y1": -0.631931666143922,
+          "Y2": -0.720527180281855
+        },
+        {
+          "Y1": -0.244890376649132,
+          "Y2": -0.405553381721746
+        },
+        {
+          "Y1": 0.752313623437701,
+          "Y2": 2.0317202470791
+        }
+      ],
+      "correlation": [0.632422406464362, 0.0903849557926419],
+      "xcoef": [
+        [-0.0705053329521997, -0.0148746924494318, 0.0909472251925652],
+        [-0.0447237014885177, 0.0245778399324951, -0.105165166582072],
+        [-0.00418137779667219, 0.103875049742679, 0.0188258940925153]
+      ],
+      "ycoef": [
+        [-0.100960864780263, 0.0367506670082364],
+        [-0.00622774657251308, -0.132098713558743]
+      ],
+      "xcenter": [0.0285037360832078, -0.0290723523639565, 0.0596593787677156],
+      "ycenter": [0.0816768272948887, 0.250757023183928]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "source": "scikit-learn LatentDirichletAllocation (variational inference)",
+  "documents": [
+    "model data regression estimate sample variable model",
+    "patient treatment clinical trial dose outcome patient",
+    "market price customer demand product sales market",
+    "regression model estimate sample data variable regression",
+    "clinical trial patient dose treatment outcome trial",
+    "price demand market product customer sales price",
+    "data model sample regression estimate model data",
+    "treatment patient outcome clinical dose trial patient",
+    "product price sales market demand customer product",
+    "variable estimate regression model sample data estimate",
+    "dose outcome patient trial clinical treatment dose",
+    "sales customer product price market demand sales"
+  ],
+  "vocabulary": [
+    "model",
+    "patient",
+    "data",
+    "dose",
+    "estimate",
+    "market",
+    "price",
+    "product",
+    "regression",
+    "sales",
+    "trial",
+    "clinical",
+    "customer",
+    "demand",
+    "outcome"
+  ],
+  "topics": [
+    {
+      "topic": 1,
+      "prevalence": 0.33333232904202154,
+      "terms": [
+        "patient",
+        "trial",
+        "dose",
+        "clinical",
+        "outcome",
+        "estimate",
+        "regression",
+        "model",
+        "data",
+        "demand"
+      ]
+    },
+    {
+      "topic": 2,
+      "prevalence": 0.3392757134989086,
+      "terms": [
+        "product",
+        "sales",
+        "market",
+        "price",
+        "customer",
+        "demand",
+        "estimate",
+        "regression",
+        "model",
+        "outcome"
+      ]
+    },
+    {
+      "topic": 3,
+      "prevalence": 0.32739195745906985,
+      "terms": [
+        "model",
+        "data",
+        "regression",
+        "estimate",
+        "clinical",
+        "outcome",
+        "dose",
+        "trial",
+        "patient",
+        "demand"
+      ]
+    }
+  ],
+  "perplexity": 12.825425825606496
+}

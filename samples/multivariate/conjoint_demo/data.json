@@ -1,0 +1,110 @@
+[
+  {
+    "Brand": "Alfa",
+    "Price": "Basso",
+    "Warranty": "1 anno",
+    "Rating": 6.5
+  },
+  {
+    "Brand": "Beta",
+    "Price": "Basso",
+    "Warranty": "1 anno",
+    "Rating": 4.9
+  },
+  {
+    "Brand": "Gamma",
+    "Price": "Basso",
+    "Warranty": "1 anno",
+    "Rating": 5.6
+  },
+  {
+    "Brand": "Alfa",
+    "Price": "Medio",
+    "Warranty": "1 anno",
+    "Rating": 5.2
+  },
+  {
+    "Brand": "Beta",
+    "Price": "Medio",
+    "Warranty": "1 anno",
+    "Rating": 4.2
+  },
+  {
+    "Brand": "Gamma",
+    "Price": "Medio",
+    "Warranty": "1 anno",
+    "Rating": 4.3
+  },
+  {
+    "Brand": "Alfa",
+    "Price": "Alto",
+    "Warranty": "1 anno",
+    "Rating": 4.1
+  },
+  {
+    "Brand": "Beta",
+    "Price": "Alto",
+    "Warranty": "1 anno",
+    "Rating": 2.8
+  },
+  {
+    "Brand": "Gamma",
+    "Price": "Alto",
+    "Warranty": "1 anno",
+    "Rating": 2.7
+  },
+  {
+    "Brand": "Alfa",
+    "Price": "Basso",
+    "Warranty": "3 anni",
+    "Rating": 7.6
+  },
+  {
+    "Brand": "Beta",
+    "Price": "Basso",
+    "Warranty": "3 anni",
+    "Rating": 6.1
+  },
+  {
+    "Brand": "Gamma",
+    "Price": "Basso",
+    "Warranty": "3 anni",
+    "Rating": 6.6
+  },
+  {
+    "Brand": "Alfa",
+    "Price": "Medio",
+    "Warranty": "3 anni",
+    "Rating": 6.5
+  },
+  {
+    "Brand": "Beta",
+    "Price": "Medio",
+    "Warranty": "3 anni",
+    "Rating": 5.2
+  },
+  {
+    "Brand": "Gamma",
+    "Price": "Medio",
+    "Warranty": "3 anni",
+    "Rating": 5.6
+  },
+  {
+    "Brand": "Alfa",
+    "Price": "Alto",
+    "Warranty": "3 anni",
+    "Rating": 5.1
+  },
+  {
+    "Brand": "Beta",
+    "Price": "Alto",
+    "Warranty": "3 anni",
+    "Rating": 3.5
+  },
+  {
+    "Brand": "Gamma",
+    "Price": "Alto",
+    "Warranty": "3 anni",
+    "Rating": 4.5
+  }
+]

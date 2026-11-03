@@ -3,6 +3,8 @@ import type { ProjectParams } from '../io/project';
 /** Project-parameter slot owned by each analysis. */
 const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   descriptive: 'descVars',
+  proportions: 'proportions',
+  variances: 'variances',
   ttest: 'ttest',
   anova: 'anova',
   regression: 'reg',
@@ -15,6 +17,7 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   survival: 'survival',
   timeseries: 'timeseries',
   contingency: 'contingency',
+  loglinear: 'loglinear',
   ancova: 'ancova',
   factorial: 'factorial',
   repeatedanova: 'repeatedanova',
@@ -29,6 +32,13 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   mi: 'mi',
   ordinal: 'ordinal',
   lmm: 'lmm',
+  pls: 'pls',
+  mars: 'mars',
+  iv: 'iv',
+  panel: 'panel',
+  selection: 'selection',
+  mediation: 'mediation',
+  propensity: 'propensity',
   countreg: 'countreg',
   agreement: 'agreement',
   tost: 'tost',
@@ -36,18 +46,51 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   partition: 'partition',
   quality: 'quality',
   cluster: 'cluster',
+  canonical: 'canonical',
+  mds: 'mds',
+  correspondence: 'correspondence',
+  sem: 'sem',
+  latentclass: 'latentclass',
+  irt: 'irt',
+  conjoint: 'conjoint',
   discriminant: 'discriminant',
   doe: 'doe',
+  competing: 'competing',
+  recurrent: 'recurrent',
+  alt: 'alt',
+  reliability: 'reliability',
+  var: 'var',
+  garch: 'garch',
+  statespace: 'statespace',
+  survey: 'survey',
+  ml: 'ml',
+  text: 'text',
+  choice: 'choice',
+  meta: 'meta',
+  bayes: 'bayes',
+  spatial: 'spatial',
 };
 
 export const analysisParamsKey = (analysisId: string): keyof ProjectParams | undefined =>
   PARAMS_KEY[analysisId];
+
+/** Snapshot shape of Descriptive: the summary used `descVars` alone. */
+interface DescriptiveSnapshot {
+  vars: number[];
+  mode: ProjectParams['descMode'];
+}
+
+const descriptiveSnapshot = (params: ProjectParams): DescriptiveSnapshot => ({
+  vars: params.descVars,
+  mode: params.descMode,
+});
 
 /** Parameters actually read by an analysis (a slice of the project params). */
 export const analysisParamsOf = (
   analysisId: string,
   params: ProjectParams
 ): unknown => {
+  if (analysisId === 'descriptive') return descriptiveSnapshot(params);
   const key = analysisParamsKey(analysisId);
   return key ? params[key] : undefined;
 };
@@ -55,12 +98,24 @@ export const analysisParamsOf = (
 /**
  * Re-run/apply target: current project parameters with only the analysis slot
  * replaced by the saved snapshot. Other procedures keep their live settings.
+ *
+ * A snapshot stored before the Descriptive modes existed is a plain array of
+ * column indices; it still applies, and only the variables are restored.
  */
 export const withAnalysisParams = (
   params: ProjectParams,
   analysisId: string,
   value: unknown
 ): ProjectParams => {
+  if (analysisId === 'descriptive') {
+    if (Array.isArray(value)) return { ...params, descVars: value as number[] };
+    const snapshot = value as Partial<DescriptiveSnapshot> | null;
+    return {
+      ...params,
+      descVars: snapshot?.vars ?? params.descVars,
+      descMode: snapshot?.mode ?? params.descMode,
+    };
+  }
   const key = analysisParamsKey(analysisId);
   if (!key) return params;
   return { ...params, [key]: value } as ProjectParams;

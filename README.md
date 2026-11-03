@@ -33,7 +33,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 
 ### Analysis workbench
 - **Three-pane workspace**: a searchable analysis library on the left, a setup panel in the middle and the output document on the right
-- **Library grouped into ten families** (Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power), with search across labels, descriptions, keywords and family names, recent analyses and a `heavy` badge for expensive procedures
+- **Library grouped into twelve families** (Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power, Machine learning, Advanced & Bayesian), with search across labels, descriptions, keywords and family names, recent analyses and a `heavy` badge for expensive procedures
 - **Sticky Run** at the bottom of the setup panel, `Ctrl/Cmd + Enter` to run and `Ctrl/Cmd + K` to focus the analysis search
 - **Output document**: one collapsible card per run with a stable run number, timestamp, analysis label and a *Setup* shortcut back to the parameters that produced it; Copy, Charts PNG, Report HTML and Results XLSX keep working
 - **Session-report outline**: a family → analysis → run-report tree with pinned shortcuts, search and state filters, scroll sync and keyboard navigation; on a narrow output pane (< 720 px) it becomes a keyboard-friendly drawer; pins, closed groups and filters are restored per dataset after reload or tab switches
@@ -48,13 +48,13 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Heavy procedures run in a Web Worker**: LMM, GEE, Cox (all variants), parametric survival, time series, multiple imputation and resampling keep the UI responsive, show phase/elapsed time and can be cancelled; the synchronous runner remains the fallback
 - **Output workspace**: filter by analysis, pin cards to the top, copy a single card and confirm Clear; the outline tree groups runs by family and analysis with search and stale/warning filters
 - **Library** with ranked search, favorites, a flat A–Z index and arrow-key navigation
-- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 36 procedures, with static UI chrome centralised in `src/i18n/` (six complete catalogs: English, Italian, French, Spanish, German and European Portuguese); catalogue metadata, help book and report prose are content modules
+- **Shared form primitives** (`Field`, `VariableSelect`, `VariableList`, `CheckboxList`, `Advanced`, `CheckboxField`) used by all 72 procedures, with static UI chrome centralised in `src/i18n/` (six complete catalogs: English, Italian, French, Spanish, German and European Portuguese); catalogue metadata, help book and report prose are content modules
 
 ### Help handbook
 - **HELP tab** hosts the generated handbook (plain HTML + CSS + JS) in an iframe: cover, contents, search, previous/next navigation and a printable edition of the whole book
 - Every page has **two levels**: a tutorial with a worked example on a real dataset (`score-groups.csv`) and an advanced reading in plain language (assumptions, when to use/avoid the procedure, how to read the output, pitfalls, key terms)
 - The same page can be opened as a **popup from the analysis panel and from every output card** (`?` button), deep-linked to the tutorial or the advanced section
-- Content is authored as structured data in `src/help/content/<locale>/` (40 pages in each of the six languages) and rendered by `scripts/build-help.mjs` into `public/help/<locale>/` on `predev`/`prebuild`; `src/help/content.test.ts` checks that every registry procedure has both levels, that locales stay aligned and that datasets exist
+- Content is authored as structured data in `src/help/content/<locale>/` (83 pages in each of the six languages) and rendered by `scripts/build-help.mjs` into `public/help/<locale>/` on `predev`/`prebuild`; `src/help/content.test.ts` checks that every registry procedure has both levels, that locales stay aligned and that datasets exist
 
 ### Project persistence
 - **Silent autosave** of the grid, CI level, analysis parameters, IO preferences and the output console to `localStorage` (debounced), restored automatically on the next visit

@@ -3,6 +3,8 @@ import { copy, sourceOf } from '../reportCopy';
 import { isDecided, tableById } from '../reportKit';
 import type { ReportSpec } from '../report';
 import type { TableSpec } from '../types';
+import type { LifeTableRow, TurnbullResult } from '../survival/types';
+
 
 export const survivalReport = (tables: TableSpec[], level: number): ReportSpec => {
   const summary = tableById(tables, 'surv-summary')?.rows ?? [];
@@ -84,6 +86,106 @@ export const survivalReport = (tables: TableSpec[], level: number): ReportSpec =
       copy('Il log-rank assume rischi proporzionali: curve che si incrociano richiedono altri test.'),
       copy('L’hazard ratio è riportato solo per due gruppi.'),
       copy('I tempi di censura coincidenti con un evento sono trattati come eventi allo stesso tempo (nessuna correzione per i ties oltre alla gestione standard del risk set).'),
+    ],
+  };
+};
+
+/** Reading report for the actuarial life table. */
+export const lifeTableReport = (
+  groups: { name: string; rows: LifeTableRow[] }[],
+  level: number
+): ReportSpec => {
+  const first = groups[0];
+  const last = first?.rows[first.rows.length - 1];
+  const medianRow = first?.rows.find(row => row.survival <= 0.5);
+  return {
+    id: 'survival-life',
+    title: copy('Report di lettura — Life table'),
+    headline: last
+      ? copy('Sopravvivenza a fine follow-up: {s1} ({s2}%): {s3} gruppi e {s4} intervalli.', {
+          s1: fmtEst(last.survival, 3),
+          s2: fmtEst(last.survival * 100, 1),
+          s3: groups.length,
+          s4: first.rows.length,
+        })
+      : copy('Nessun intervallo calcolabile.'),
+    badge: copy('Tavola attuariale'),
+    tone: 'neutral',
+    intro: [
+      copy('La life table divide il tempo in intervalli e stima, per ciascuno, quante persone sono a rischio, quanti eventi e quante censure avvengono.'),
+      copy('È la versione tabellare della curva di sopravvivenza: utile per riassumere il follow-up per anno o per periodo e per calcolare q e p intervallo per intervallo.'),
+    ],
+    sections: [
+      {
+        heading: copy('Come leggere la tavola'),
+        body: [
+          copy('“A rischio efficace” sottrae metà dei censurati dell’intervallo: è l’esposizione corretta quando le censure arrivano uniformemente nel periodo.'),
+          copy('q è la probabilità condizionata di evento nell’intervallo, p = 1 − q; S(t) è il prodotto dei p fino a quell’intervallo.'),
+          medianRow
+            ? copy('La sopravvivenza scende sotto 0,50 nell’intervallo {s1}–{s2}.', { s1: fmtEst(medianRow.start, 2), s2: fmtEst(medianRow.end, 2) })
+            : copy('La sopravvivenza non scende sotto 0,50 entro l’ultimo intervallo: la mediana non è raggiunta.'),
+          copy('Il livello di confidenza dichiarato è {s1}%; l’errore standard della tavola è quello di Greenwood.', { s1: level }),
+        ],
+      },
+      {
+        heading: copy('Assunzioni'),
+        bullets: [
+          copy('Censura non informativa e uniforme dentro ogni intervallo.'),
+          copy('Intervalli di uguale ampiezza scelti sui dati: cambiando il numero di intervalli cambia la granularità della stima.'),
+          copy('Con intervalli molto piccoli q diventa rumoroso; con pochi intervalli si perde la forma della curva.'),
+        ],
+      },
+    ],
+    limitations: [
+      copy('La tavola attuariale è descrittiva: non aggiusta per covariariate né confronta gruppi con un test formale.'),
+      copy('La scelta degli intervalli è arbitraria e va dichiarata nel report.'),
+      copy('Nelle code con pochi a rischio le stime sono instabili.'),
+    ],
+  };
+};
+
+/** Reading report for the Turnbull interval-censored estimate. */
+export const turnbullReport = (result: TurnbullResult, level: number): ReportSpec => {
+  const final = result.points[result.points.length - 1];
+  const mass = result.points.reduce((sum, point) => sum + point.mass, 0);
+  return {
+    id: 'survival-turnbull',
+    title: copy('Report di lettura — Censura a intervalli'),
+    headline: copy('NPMLE di Turnbull su {s1} osservazioni: sopravvivenza finale {s2}.', {
+      s1: result.n,
+      s2: fmtEst(final?.survival ?? 0, 3),
+    }),
+    badge: copy('Turnbull'),
+    tone: result.converged ? 'neutral' : 'caution',
+    intro: [
+      copy('La censura a intervalli si ha quando non osserviamo il tempo esatto dell’evento ma solo un intervallo che lo contiene: per esempio un guasto compreso tra due ispezioni.'),
+      copy('La stima NPMLE di Turnbull è la distribuzione discreta che massimizza la verosimiglianza sui soli intervalli osservati; non richiede di scegliere un punto dentro l’intervallo.'),
+    ],
+    sections: [
+      {
+        heading: copy('Come leggere il supporto'),
+        body: [
+          copy('Ogni punto del supporto è la fine di un intervallo in cui la stima concentra massa: la massa è la probabilità attribuita a quell’intervallo.'),
+          copy('La somma delle masse è {s1}: se è vicina a 1 la distribuzione è completa, altrimenti parte della probabilità è oltre l’ultimo tempo osservato.', { s1: fmtEst(mass, 4) }),
+          copy('La funzione di sopravvivenza è costante a tratti e scende solo alla fine degli intervalli con massa; il livello dichiarato è {s1}%.', { s1: level }),
+          result.converged
+            ? copy('L’algoritmo EM ha raggiunto la convergenza in {s1} iterazioni.', { s1: result.iterations })
+            : copy('L’EM non ha raggiunto la convergenza: la stima è instabile e va interpretata con cautela.'),
+        ],
+      },
+      {
+        heading: copy('Assunzioni e cautele'),
+        bullets: [
+          copy('Censura non informativa: il fatto di essere controllato a un certo tempo non dipende dal rischio.'),
+          copy('Gli intervalli devono essere costruiti in modo coerente (stesse ispezioni o stesse finestre).'),
+          copy('La NPMLE può non essere unica: intervalli adiacenti con massa piatta sono equivalenti.'),
+          copy('Con pochi intervalli osservati il supporto è grossolano e la curva poco informativa.'),
+        ],
+      },
+    ],
+    limitations: [
+      copy('La stima è non parametrica e descrittiva: non aggiusta per covariariate.'),
+      copy('Non fornisce una curva continua né una mediana puntuale quando la massa è distribuita su intervalli ampi.'),
     ],
   };
 };

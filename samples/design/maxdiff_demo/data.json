@@ -1,0 +1,1922 @@
+[
+  {
+    "Block": "B01",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B01",
+    "Item": "Item05",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B01",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B01",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B02",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B02",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B02",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B02",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B03",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B03",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B03",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B03",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B04",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B04",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B04",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B04",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B05",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B05",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B05",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B05",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B06",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B06",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B06",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B06",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B07",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B07",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B07",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B07",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B08",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B08",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B08",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B08",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B09",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B09",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B09",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B09",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B10",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B10",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B10",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B10",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B11",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B11",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B11",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B11",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B12",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B12",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B12",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B12",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B13",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B13",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B13",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B13",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B14",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B14",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B14",
+    "Item": "Item07",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B14",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B15",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B15",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B15",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B15",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B16",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B16",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B16",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B16",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B17",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B17",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B17",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B17",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B18",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B18",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B18",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B18",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B19",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B19",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B19",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B19",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B20",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B20",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B20",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B20",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B21",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B21",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B21",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B21",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B22",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B22",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B22",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B22",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B23",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B23",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B23",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B23",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B24",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B24",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B24",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B24",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B25",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B25",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B25",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B25",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B26",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B26",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B26",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B26",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B27",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B27",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B27",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B27",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B28",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B28",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B28",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B28",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B29",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B29",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B29",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B29",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B30",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B30",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B30",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B30",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B31",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B31",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B31",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B31",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B32",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B32",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B32",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B32",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B33",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B33",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B33",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B33",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B34",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B34",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B34",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B34",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B35",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B35",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B35",
+    "Item": "Item11",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B35",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B36",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B36",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B36",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B36",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B37",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B37",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B37",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B37",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B38",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B38",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B38",
+    "Item": "Item06",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B38",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B39",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B39",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B39",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B39",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B40",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B40",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B40",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B40",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B41",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B41",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B41",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B41",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B42",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B42",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B42",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B42",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B43",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B43",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B43",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B43",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B44",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B44",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B44",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B44",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B45",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B45",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B45",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B45",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B46",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B46",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B46",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B46",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B47",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B47",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B47",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B47",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B48",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B48",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B48",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B48",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B49",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B49",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B49",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B49",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B50",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B50",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B50",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B50",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B51",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B51",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B51",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B51",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B52",
+    "Item": "Item11",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B52",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B52",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B52",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B53",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B53",
+    "Item": "Item05",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B53",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B53",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B54",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B54",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B54",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B54",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B55",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B55",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B55",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B55",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B56",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B56",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B56",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B56",
+    "Item": "Item11",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B57",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B57",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B57",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B57",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B58",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B58",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B58",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B58",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B59",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B59",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B59",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B59",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B60",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B60",
+    "Item": "Item11",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B60",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B60",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B61",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B61",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B61",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B61",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B62",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B62",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B62",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B62",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B63",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B63",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B63",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B63",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B64",
+    "Item": "Item10",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B64",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B64",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B64",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B65",
+    "Item": "Item06",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B65",
+    "Item": "Item05",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B65",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B65",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B66",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B66",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B66",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B66",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B67",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B67",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B67",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B67",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B68",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B68",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B68",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B68",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B69",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B69",
+    "Item": "Item11",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B69",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B69",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B70",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B70",
+    "Item": "Item10",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B70",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B70",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B71",
+    "Item": "Item12",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B71",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B71",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B71",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B72",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B72",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B72",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B72",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B73",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B73",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B73",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B73",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B74",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B74",
+    "Item": "Item11",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B74",
+    "Item": "Item08",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B74",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B75",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B75",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B75",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B75",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B76",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B76",
+    "Item": "Item08",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B76",
+    "Item": "Item07",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B76",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B77",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B77",
+    "Item": "Item09",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B77",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B77",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B78",
+    "Item": "Item09",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B78",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B78",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B78",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B79",
+    "Item": "Item07",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B79",
+    "Item": "Item04",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B79",
+    "Item": "Item02",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B79",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B80",
+    "Item": "Item03",
+    "Best": 0,
+    "Worst": 0
+  },
+  {
+    "Block": "B80",
+    "Item": "Item01",
+    "Best": 0,
+    "Worst": 1
+  },
+  {
+    "Block": "B80",
+    "Item": "Item12",
+    "Best": 1,
+    "Worst": 0
+  },
+  {
+    "Block": "B80",
+    "Item": "Item06",
+    "Best": 0,
+    "Worst": 0
+  }
+]

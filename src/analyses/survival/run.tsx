@@ -1,4 +1,13 @@
-import { survivalReport, survivalTables } from '../../stats/survival';
+import {
+  lifeTable,
+  lifeTableReport,
+  lifeTableTables,
+  survivalReport,
+  survivalTables,
+  turnbull,
+  turnbullReport,
+  turnbullTables,
+} from '../../stats/survival';
 import { parseNum } from '../../stats/core';
 import { analysisRows, type Dataset } from '../../grid/types';
 import { copy } from '../../stats/reportCopy';
@@ -20,6 +29,89 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
 
   if (timeVariable === eventVariable) {
     return { ok: false, reason: 'Time and event must be different columns' };
+  }
+
+  const mode = params.mode ?? 'km';
+
+  if (mode === 'interval') {
+    const upperVariable = params.upperVariable ?? -1;
+    if (upperVariable < 0) {
+      return { ok: false, reason: 'Interval censoring needs an upper-bound column' };
+    }
+    if (upperVariable === timeVariable || upperVariable === eventVariable) {
+      return { ok: false, reason: 'The upper bound must be different from the lower bound and the event column' };
+    }
+    const eventValues = Array.from(
+      new Set(grid.rows.map(row => String(row[eventVariable] ?? '').trim()).filter(value => value !== ''))
+    ).sort();
+    const intervals = grid.rows
+      .map(row => {
+        const lower = parseNum(row[timeVariable]);
+        const upper = parseNum(row[upperVariable]);
+        const eventLabel = String(row[eventVariable] ?? '').trim();
+        const exact =
+          eventValues.length === 2
+            ? eventLabel === eventValues[1]
+            : Number.isFinite(parseNum(eventLabel)) && parseNum(eventLabel) > 0;
+        if (exact) {
+          if (!Number.isFinite(lower)) return null;
+          return { lower, upper: lower };
+        }
+        const safeLower = Number.isFinite(lower) && lower >= 0 ? lower : 0;
+        return {
+          lower: safeLower,
+          upper: Number.isFinite(upper) && upper >= safeLower ? upper : Infinity,
+        };
+      })
+      .filter((item): item is { lower: number; upper: number } => item !== null);
+    if (intervals.length < 3) {
+      return {
+        ok: false,
+        reason: 'Interval censoring needs at least three rows with a lower bound and/or an upper bound',
+      };
+    }
+    const result = turnbull(intervals);
+    const tables = turnbullTables(result, ciLevel);
+    const support = result.points;
+    return {
+      ok: true,
+      title: copy('Censura a intervalli (Turnbull)'),
+      header: copy('{s1} osservazioni · {s2} punti di supporto', {
+        s1: result.n,
+        s2: support.length,
+      }),
+      tables,
+      report: turnbullReport(result, ciLevel),
+      charts: [
+        makeChart({
+          id: 'survival-turnbull',
+          kind: 'survival',
+          title: copy('Sopravvivenza NPMLE'),
+          subtitle: copy('Stima di Turnbull per dati a intervallo'),
+          note: copy('La curva è costante tra i punti di supporto e scende dove la massa è concentrata.'),
+          data: {
+            curves: [
+              { x: 0, y: 1, series: 'NPMLE' },
+              ...support.map(point => ({ x: point.time, y: point.survival, series: 'NPMLE' })),
+            ],
+            censored: [],
+            annotations: [],
+          },
+          fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza') },
+        }),
+        makeChart({
+          id: 'survival-turnbull-mass',
+          kind: 'bar',
+          title: copy('Massa per intervallo'),
+          subtitle: copy('Probabilità attribuita a ciascun intervallo di supporto'),
+          note: copy('Barre più alte indicano dove la stima concentra la probabilità dell’evento.'),
+          data: {
+            bars: support.map(point => ({ category: String(point.time), value: point.mass })),
+          },
+          fields: { xLabel: copy('Fine intervallo'), yLabel: copy('Massa') },
+        }),
+      ],
+    };
   }
 
   const eventLevels = Array.from(
@@ -51,6 +143,69 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
 
   if (rows.length < 3) {
     return { ok: false, reason: 'Not enough complete rows: time must be numeric and non-negative' };
+  }
+
+  if (mode === 'life') {
+    const groupNames = Array.from(new Set(rows.map(row => row.group))).sort();
+    const groups = groupNames.map(name => {
+      const subset = rows.filter(row => row.group === name);
+      return {
+        name,
+        time: subset.map(row => row.time),
+        event: subset.map(row => row.event),
+      };
+    });
+    const intervals = params.intervals ?? 0;
+    const specs = lifeTableTables(groups, ciLevel, intervals);
+    if (specs.length === 0) {
+      return { ok: false, reason: 'The life table needs at least three observations' };
+    }
+    const withRows = groups.map(group => ({
+      name: group.name,
+      rows: lifeTable(group.time, group.event, intervals > 0 ? intervals : undefined),
+    }));
+    const curves: ChartRow[] = withRows.flatMap(group =>
+      group.rows.flatMap((row, index) => [
+        ...(index === 0 ? [{ x: row.start, y: 1, series: group.name }] : []),
+        { x: row.end, y: row.survival, series: group.name },
+      ])
+    );
+    return {
+      ok: true,
+      title: copy('Life table: {s1}', { s1: grid.cols[timeVariable]?.name ?? 'T' }),
+      header: copy('{s1} osservazioni · {s2} gruppi · {s3} intervalli', {
+        s1: rows.length,
+        s2: groups.length,
+        s3: withRows[0]?.rows.length ?? 0,
+      }),
+      tables: specs,
+      report: lifeTableReport(withRows, ciLevel),
+      charts: [
+        makeChart({
+          id: 'survival-life-curve',
+          kind: 'survival',
+          title: copy('Sopravvivenza per intervallo'),
+          subtitle: copy('Tavola attuariale'),
+          note: copy('Ogni gradino corrisponde alla fine di un intervallo della tavola.'),
+          data: { curves, censored: [], annotations: [] },
+          fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Gruppo') },
+        }),
+        makeChart({
+          id: 'survival-life-events',
+          kind: 'bar',
+          title: copy('Eventi per intervallo'),
+          subtitle: copy('Conteggio nella prima tavola'),
+          note: copy('Le barre mostrano in quali intervalli si concentrano gli eventi.'),
+          data: {
+            bars: (withRows[0]?.rows ?? []).map(row => ({
+              category: `${row.start.toFixed(2)}–${row.end.toFixed(2)}`,
+              value: row.events,
+            })),
+          },
+          fields: { xLabel: copy('Intervallo'), yLabel: copy('Eventi') },
+        }),
+      ],
+    };
   }
 
   const tables = survivalTables({

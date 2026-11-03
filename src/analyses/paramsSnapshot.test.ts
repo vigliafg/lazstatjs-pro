@@ -37,3 +37,25 @@ test('the signature changes only when that analysis changes', () => {
   };
   assert.notEqual(analysisParamsSignature('anova', changed), base);
 });
+
+test('the descriptive snapshot carries both the variables and the mode', () => {
+  const snapshot = analysisParamsOf('descriptive', DEFAULT_PARAMS);
+  assert.deepEqual(snapshot, { vars: DEFAULT_PARAMS.descVars, mode: 'summary' });
+
+  const applied = withAnalysisParams(DEFAULT_PARAMS, 'descriptive', {
+    vars: [2, 3],
+    mode: 'frequency',
+  });
+  assert.deepEqual(applied.descVars, [2, 3]);
+  assert.equal(applied.descMode, 'frequency');
+  assert.notEqual(
+    analysisParamsSignature('descriptive', applied),
+    analysisParamsSignature('descriptive', DEFAULT_PARAMS)
+  );
+});
+
+test('a legacy descriptive snapshot (plain array) still applies', () => {
+  const applied = withAnalysisParams(DEFAULT_PARAMS, 'descriptive', [1, 4]);
+  assert.deepEqual(applied.descVars, [1, 4]);
+  assert.equal(applied.descMode, DEFAULT_PARAMS.descMode);
+});

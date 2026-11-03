@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Osservazioni indipendenti; frequenze attese sufficienti per il chi-quadro.'],
       whenToUse: ['Due variabili categoriche con due livelli ciascuna.'],
       whenNotToUse: ['Tabelle più grandi (usa R×C) o misure appaiate (McNemar).'],
-      reading: ['Con frequenze attese basse il p di Fisher è più affidabile del chi-quadro.'],
+      reading: [
+        'Con frequenze attese basse il p di Fisher è più affidabile del chi-quadro.',
+        'La modalità bontà di adattamento confronta una variabile categorica con proporzioni pianificate.',
+      ],
       pitfalls: ['Percentuali calcolate sulla colonna sbagliata portano a conclusioni invertite.'],
       glossary: [
         { term: 'Frequenza attesa', definition: 'Il conteggio che si osserverebbe se le due variabili fossero indipendenti.' },
@@ -117,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'Tabelle di contingenza R×C',
-    summary: 'Tabelle più grandi di 2×2, con misure di associazione e Monte Carlo.',
+    summary: 'Tabelle R×C con chi-quadro, Mantel–Haenszel, trend ed esatti.',
     tutorial: {
       goal: 'Verificare l’associazione tra fascia d’età e preferenza.',
       dataset: 'score-groups.csv',
@@ -140,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Residuo standardizzato', definition: 'Differenza tra osservato e atteso, in unità di deviazione standard.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -333,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Stazionarietà dopo le differenze; residui assimilabili a rumore bianco.'],
       whenToUse: ['Serie con struttura di autocorrelazione e abbastanza osservazioni.'],
       whenNotToUse: ['Serie molto corte o con interruzioni strutturali non modellate.'],
-      reading: ['Gli ordini p, d, q descrivono memoria, differenze e media mobile; un AIC più basso è preferibile a parità di specificazione.'],
+      reading: ['Il menu Tipo di analisi offre anche Holt–Winters, i test di radice unitaria, l’analisi spettrale e ARIMAX con un regressore esterno.', 'Gli ordini p, d, q descrivono memoria, differenze e media mobile; un AIC più basso è preferibile a parità di specificazione.'],
       pitfalls: ['Previsioni a lungo termine hanno intervalli larghi: non presentarle come certe.'],
       glossary: [
         { term: 'Stazionarietà', definition: 'Media e varianza stabili nel tempo.' },
@@ -346,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Dati mancanti (imputazione multipla)',
-    summary: 'Imputazione a equazioni concatenate con pooling di Rubin.',
+    summary: 'Imputazione a equazioni concatenate per variabili numeriche e categoriche, con pooling di Rubin.',
     tutorial: {
       goal: 'Gestire dati mancanti senza cancellare casi.',
       dataset: 'score-groups.csv',
@@ -380,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Scegli il disegno (es. Due medie indipendenti).',
-        'Inserisci differenza attesa, deviazione standard, α e potenza desiderata.',
+        'Inserisci differenza attesa, deviazione standard, α e potenza desiderata; per la regressione indica predittori e f², per la logistica tasso di eventi e odds ratio.',
         'Esegui e leggi N per gruppo e N totale.',
       ],
       expected: 'Numerosità per gruppo e totale, con nota sugli arrotondamenti e sull’eventuale abbandono previsto.',
@@ -389,7 +392,11 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Differenza e variabilità sono ipotesi di disegno, non risultati.'],
       whenToUse: ['Prima di raccogliere dati; per valutare la potenza di uno studio già fatto.'],
       whenNotToUse: ['Non usare la potenza osservata a posteriori come prova di validità.'],
-      reading: ['Ridurre la differenza attesa o la potenza richiesta aumenta molto N.'],
+      reading: [
+        'Ridurre la differenza attesa o la potenza richiesta aumenta molto N.',
+        'Il pianificatore copre medie, proporzioni, varianze, tassi di Poisson, regressione multipla e regressione logistica: scegli il disegno del test che eseguirai.',
+        'Nella regressione N è il numero di osservazioni per il test F complessivo; nella logistica è il numero di soggetti per un odds ratio binario.',
+      ],
       pitfalls: ['Una differenza attesa gonfiata produce uno studio sottodimensionato.'],
       glossary: [
         { term: 'Potenza', definition: 'Probabilità di trovare un effetto quando esiste davvero.' },

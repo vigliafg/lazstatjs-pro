@@ -13,8 +13,29 @@ import { defaultWizardParams } from '../analyses/wizard/defaults';
 import { defaultPartitionParams } from '../analyses/partition/defaults';
 import { defaultQualityParams } from '../analyses/quality/defaults';
 import { defaultClusterParams } from '../analyses/cluster/defaults';
+import { defaultCanonicalParams } from '../analyses/canonical/defaults';
+import { defaultMdsParams } from '../analyses/mds/defaults';
+import { defaultCorrespondenceParams } from '../analyses/correspondence/defaults';
+import { defaultSemParams } from '../analyses/sem/defaults';
+import { defaultLatentClassParams } from '../analyses/latentclass/defaults';
+import { defaultIrtParams } from '../analyses/irt/defaults';
+import { defaultConjointParams } from '../analyses/conjoint/defaults';
 import { defaultDiscriminantParams } from '../analyses/discriminant/defaults';
 import { defaultDoeParams } from '../analyses/doe/defaults';
+import { defaultCompetingParams } from '../analyses/competing/defaults';
+import { defaultRecurrentParams } from '../analyses/recurrent/defaults';
+import { defaultAltParams } from '../analyses/alt/defaults';
+import { defaultReliabilityParams } from '../analyses/reliability/defaults';
+import { defaultVarParams } from '../analyses/var/defaults';
+import { defaultGarchParams } from '../analyses/garch/defaults';
+import { defaultStateSpaceParams } from '../analyses/statespace/defaults';
+import { defaultSurveyParams } from '../analyses/survey/defaults';
+import { defaultMlParams } from '../analyses/ml/defaults';
+import { defaultTextParams } from '../analyses/text/defaults';
+import { defaultChoiceParams } from '../analyses/choice/defaults';
+import { defaultMetaParams } from '../analyses/meta/defaults';
+import { defaultBayesParams } from '../analyses/bayes/defaults';
+import { defaultSpatialParams } from '../analyses/spatial/defaults';
 
 /**
  * Owns the analysis parameters and the two update helpers used by the App.
@@ -39,8 +60,29 @@ export const useProjectParams = (boot: ProjectSnapshot | null, grid: GridData) =
       partition: defaultPartitionParams(grid),
       quality: defaultQualityParams(grid),
       cluster: defaultClusterParams(grid),
+      canonical: defaultCanonicalParams(grid),
+      mds: defaultMdsParams(grid),
+      correspondence: defaultCorrespondenceParams(grid),
+      sem: defaultSemParams(grid),
+      latentclass: defaultLatentClassParams(grid),
+      irt: defaultIrtParams(grid),
+      conjoint: defaultConjointParams(grid),
       discriminant: defaultDiscriminantParams(grid),
       doe: defaultDoeParams(grid),
+      competing: defaultCompetingParams(grid),
+      recurrent: defaultRecurrentParams(grid),
+      alt: defaultAltParams(grid),
+      reliability: defaultReliabilityParams(grid),
+      var: defaultVarParams(grid),
+      garch: defaultGarchParams(grid),
+      statespace: defaultStateSpaceParams(grid),
+      survey: defaultSurveyParams(grid),
+      ml: defaultMlParams(grid),
+      text: defaultTextParams(grid),
+      choice: defaultChoiceParams(grid),
+      meta: defaultMetaParams(grid),
+      bayes: defaultBayesParams(grid),
+      spatial: defaultSpatialParams(grid),
     };
   });
 

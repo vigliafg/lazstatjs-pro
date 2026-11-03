@@ -1,0 +1,1010 @@
+[
+  {
+    "Region": "G001",
+    "X": 1,
+    "Y": 1,
+    "Crime": 10.52,
+    "Income": 39.96
+  },
+  {
+    "Region": "G002",
+    "X": 2,
+    "Y": 1,
+    "Crime": 11.11,
+    "Income": 38.77
+  },
+  {
+    "Region": "G003",
+    "X": 3,
+    "Y": 1,
+    "Crime": 12.21,
+    "Income": 36.74
+  },
+  {
+    "Region": "G004",
+    "X": 4,
+    "Y": 1,
+    "Crime": 9.42,
+    "Income": 39.02
+  },
+  {
+    "Region": "G005",
+    "X": 5,
+    "Y": 1,
+    "Crime": 10.74,
+    "Income": 33.41
+  },
+  {
+    "Region": "G006",
+    "X": 6,
+    "Y": 1,
+    "Crime": 12.06,
+    "Income": 35.74
+  },
+  {
+    "Region": "G007",
+    "X": 7,
+    "Y": 1,
+    "Crime": 13.43,
+    "Income": 36.81
+  },
+  {
+    "Region": "G008",
+    "X": 8,
+    "Y": 1,
+    "Crime": 14.6,
+    "Income": 32.36
+  },
+  {
+    "Region": "G009",
+    "X": 9,
+    "Y": 1,
+    "Crime": 16.16,
+    "Income": 33.18
+  },
+  {
+    "Region": "G010",
+    "X": 10,
+    "Y": 1,
+    "Crime": 17.27,
+    "Income": 29.88
+  },
+  {
+    "Region": "G011",
+    "X": 11,
+    "Y": 1,
+    "Crime": 13.69,
+    "Income": 32.87
+  },
+  {
+    "Region": "G012",
+    "X": 12,
+    "Y": 1,
+    "Crime": 14.64,
+    "Income": 30.95
+  },
+  {
+    "Region": "G013",
+    "X": 1,
+    "Y": 2,
+    "Crime": 8.19,
+    "Income": 39.61
+  },
+  {
+    "Region": "G014",
+    "X": 2,
+    "Y": 2,
+    "Crime": 11.61,
+    "Income": 35.37
+  },
+  {
+    "Region": "G015",
+    "X": 3,
+    "Y": 2,
+    "Crime": 11.47,
+    "Income": 38.88
+  },
+  {
+    "Region": "G016",
+    "X": 4,
+    "Y": 2,
+    "Crime": 12.67,
+    "Income": 37.45
+  },
+  {
+    "Region": "G017",
+    "X": 5,
+    "Y": 2,
+    "Crime": 13.51,
+    "Income": 33.69
+  },
+  {
+    "Region": "G018",
+    "X": 6,
+    "Y": 2,
+    "Crime": 12.61,
+    "Income": 31.96
+  },
+  {
+    "Region": "G019",
+    "X": 7,
+    "Y": 2,
+    "Crime": 15.87,
+    "Income": 33.47
+  },
+  {
+    "Region": "G020",
+    "X": 8,
+    "Y": 2,
+    "Crime": 14.11,
+    "Income": 34.42
+  },
+  {
+    "Region": "G021",
+    "X": 9,
+    "Y": 2,
+    "Crime": 14.93,
+    "Income": 33.79
+  },
+  {
+    "Region": "G022",
+    "X": 10,
+    "Y": 2,
+    "Crime": 15.85,
+    "Income": 32.31
+  },
+  {
+    "Region": "G023",
+    "X": 11,
+    "Y": 2,
+    "Crime": 15.41,
+    "Income": 31.92
+  },
+  {
+    "Region": "G024",
+    "X": 12,
+    "Y": 2,
+    "Crime": 16.59,
+    "Income": 29
+  },
+  {
+    "Region": "G025",
+    "X": 1,
+    "Y": 3,
+    "Crime": 12.04,
+    "Income": 39.09
+  },
+  {
+    "Region": "G026",
+    "X": 2,
+    "Y": 3,
+    "Crime": 10.25,
+    "Income": 40.96
+  },
+  {
+    "Region": "G027",
+    "X": 3,
+    "Y": 3,
+    "Crime": 10.05,
+    "Income": 36.01
+  },
+  {
+    "Region": "G028",
+    "X": 4,
+    "Y": 3,
+    "Crime": 11.14,
+    "Income": 36.54
+  },
+  {
+    "Region": "G029",
+    "X": 5,
+    "Y": 3,
+    "Crime": 11.26,
+    "Income": 34.59
+  },
+  {
+    "Region": "G030",
+    "X": 6,
+    "Y": 3,
+    "Crime": 10.3,
+    "Income": 34.47
+  },
+  {
+    "Region": "G031",
+    "X": 7,
+    "Y": 3,
+    "Crime": 10.2,
+    "Income": 34
+  },
+  {
+    "Region": "G032",
+    "X": 8,
+    "Y": 3,
+    "Crime": 14.55,
+    "Income": 33.71
+  },
+  {
+    "Region": "G033",
+    "X": 9,
+    "Y": 3,
+    "Crime": 15.92,
+    "Income": 31.26
+  },
+  {
+    "Region": "G034",
+    "X": 10,
+    "Y": 3,
+    "Crime": 14.2,
+    "Income": 34.06
+  },
+  {
+    "Region": "G035",
+    "X": 11,
+    "Y": 3,
+    "Crime": 14.42,
+    "Income": 30.95
+  },
+  {
+    "Region": "G036",
+    "X": 12,
+    "Y": 3,
+    "Crime": 15.78,
+    "Income": 28.69
+  },
+  {
+    "Region": "G037",
+    "X": 1,
+    "Y": 4,
+    "Crime": 11.93,
+    "Income": 39.85
+  },
+  {
+    "Region": "G038",
+    "X": 2,
+    "Y": 4,
+    "Crime": 12.43,
+    "Income": 41.21
+  },
+  {
+    "Region": "G039",
+    "X": 3,
+    "Y": 4,
+    "Crime": 17.08,
+    "Income": 36.56
+  },
+  {
+    "Region": "G040",
+    "X": 4,
+    "Y": 4,
+    "Crime": 15.26,
+    "Income": 40.54
+  },
+  {
+    "Region": "G041",
+    "X": 5,
+    "Y": 4,
+    "Crime": 15.8,
+    "Income": 36.58
+  },
+  {
+    "Region": "G042",
+    "X": 6,
+    "Y": 4,
+    "Crime": 17.03,
+    "Income": 30.09
+  },
+  {
+    "Region": "G043",
+    "X": 7,
+    "Y": 4,
+    "Crime": 16.57,
+    "Income": 30.98
+  },
+  {
+    "Region": "G044",
+    "X": 8,
+    "Y": 4,
+    "Crime": 15.54,
+    "Income": 35.57
+  },
+  {
+    "Region": "G045",
+    "X": 9,
+    "Y": 4,
+    "Crime": 17.84,
+    "Income": 36.86
+  },
+  {
+    "Region": "G046",
+    "X": 10,
+    "Y": 4,
+    "Crime": 16.18,
+    "Income": 32.56
+  },
+  {
+    "Region": "G047",
+    "X": 11,
+    "Y": 4,
+    "Crime": 17.08,
+    "Income": 28.19
+  },
+  {
+    "Region": "G048",
+    "X": 12,
+    "Y": 4,
+    "Crime": 19.29,
+    "Income": 28.19
+  },
+  {
+    "Region": "G049",
+    "X": 1,
+    "Y": 5,
+    "Crime": 13.26,
+    "Income": 39.94
+  },
+  {
+    "Region": "G050",
+    "X": 2,
+    "Y": 5,
+    "Crime": 12.95,
+    "Income": 37.01
+  },
+  {
+    "Region": "G051",
+    "X": 3,
+    "Y": 5,
+    "Crime": 13.44,
+    "Income": 38.49
+  },
+  {
+    "Region": "G052",
+    "X": 4,
+    "Y": 5,
+    "Crime": 16.61,
+    "Income": 38.51
+  },
+  {
+    "Region": "G053",
+    "X": 5,
+    "Y": 5,
+    "Crime": 17.65,
+    "Income": 36.68
+  },
+  {
+    "Region": "G054",
+    "X": 6,
+    "Y": 5,
+    "Crime": 15.34,
+    "Income": 30.7
+  },
+  {
+    "Region": "G055",
+    "X": 7,
+    "Y": 5,
+    "Crime": 17.07,
+    "Income": 34.35
+  },
+  {
+    "Region": "G056",
+    "X": 8,
+    "Y": 5,
+    "Crime": 16.73,
+    "Income": 33.07
+  },
+  {
+    "Region": "G057",
+    "X": 9,
+    "Y": 5,
+    "Crime": 17.89,
+    "Income": 36.86
+  },
+  {
+    "Region": "G058",
+    "X": 10,
+    "Y": 5,
+    "Crime": 19.98,
+    "Income": 36.23
+  },
+  {
+    "Region": "G059",
+    "X": 11,
+    "Y": 5,
+    "Crime": 21.04,
+    "Income": 33.14
+  },
+  {
+    "Region": "G060",
+    "X": 12,
+    "Y": 5,
+    "Crime": 20.01,
+    "Income": 35.33
+  },
+  {
+    "Region": "G061",
+    "X": 1,
+    "Y": 6,
+    "Crime": 13.7,
+    "Income": 40.29
+  },
+  {
+    "Region": "G062",
+    "X": 2,
+    "Y": 6,
+    "Crime": 13.44,
+    "Income": 38.92
+  },
+  {
+    "Region": "G063",
+    "X": 3,
+    "Y": 6,
+    "Crime": 13.03,
+    "Income": 38.37
+  },
+  {
+    "Region": "G064",
+    "X": 4,
+    "Y": 6,
+    "Crime": 15.67,
+    "Income": 35.81
+  },
+  {
+    "Region": "G065",
+    "X": 5,
+    "Y": 6,
+    "Crime": 14.91,
+    "Income": 35.39
+  },
+  {
+    "Region": "G066",
+    "X": 6,
+    "Y": 6,
+    "Crime": 14.17,
+    "Income": 38.88
+  },
+  {
+    "Region": "G067",
+    "X": 7,
+    "Y": 6,
+    "Crime": 16.49,
+    "Income": 33.18
+  },
+  {
+    "Region": "G068",
+    "X": 8,
+    "Y": 6,
+    "Crime": 16.75,
+    "Income": 34.5
+  },
+  {
+    "Region": "G069",
+    "X": 9,
+    "Y": 6,
+    "Crime": 17.67,
+    "Income": 30.57
+  },
+  {
+    "Region": "G070",
+    "X": 10,
+    "Y": 6,
+    "Crime": 17.71,
+    "Income": 35.1
+  },
+  {
+    "Region": "G071",
+    "X": 11,
+    "Y": 6,
+    "Crime": 17.21,
+    "Income": 25.97
+  },
+  {
+    "Region": "G072",
+    "X": 12,
+    "Y": 6,
+    "Crime": 19.34,
+    "Income": 32.66
+  },
+  {
+    "Region": "G073",
+    "X": 1,
+    "Y": 7,
+    "Crime": 12.27,
+    "Income": 40.57
+  },
+  {
+    "Region": "G074",
+    "X": 2,
+    "Y": 7,
+    "Crime": 16.44,
+    "Income": 39.87
+  },
+  {
+    "Region": "G075",
+    "X": 3,
+    "Y": 7,
+    "Crime": 17.34,
+    "Income": 37.27
+  },
+  {
+    "Region": "G076",
+    "X": 4,
+    "Y": 7,
+    "Crime": 17.54,
+    "Income": 34.26
+  },
+  {
+    "Region": "G077",
+    "X": 5,
+    "Y": 7,
+    "Crime": 16.19,
+    "Income": 33.47
+  },
+  {
+    "Region": "G078",
+    "X": 6,
+    "Y": 7,
+    "Crime": 16.76,
+    "Income": 36.33
+  },
+  {
+    "Region": "G079",
+    "X": 7,
+    "Y": 7,
+    "Crime": 13.39,
+    "Income": 34.13
+  },
+  {
+    "Region": "G080",
+    "X": 8,
+    "Y": 7,
+    "Crime": 13.9,
+    "Income": 32.36
+  },
+  {
+    "Region": "G081",
+    "X": 9,
+    "Y": 7,
+    "Crime": 17.02,
+    "Income": 32.65
+  },
+  {
+    "Region": "G082",
+    "X": 10,
+    "Y": 7,
+    "Crime": 16,
+    "Income": 29.68
+  },
+  {
+    "Region": "G083",
+    "X": 11,
+    "Y": 7,
+    "Crime": 14.39,
+    "Income": 29.78
+  },
+  {
+    "Region": "G084",
+    "X": 12,
+    "Y": 7,
+    "Crime": 17.21,
+    "Income": 33.06
+  },
+  {
+    "Region": "G085",
+    "X": 1,
+    "Y": 8,
+    "Crime": 10.13,
+    "Income": 41.97
+  },
+  {
+    "Region": "G086",
+    "X": 2,
+    "Y": 8,
+    "Crime": 10.46,
+    "Income": 36.84
+  },
+  {
+    "Region": "G087",
+    "X": 3,
+    "Y": 8,
+    "Crime": 12.75,
+    "Income": 36.35
+  },
+  {
+    "Region": "G088",
+    "X": 4,
+    "Y": 8,
+    "Crime": 15.3,
+    "Income": 31.69
+  },
+  {
+    "Region": "G089",
+    "X": 5,
+    "Y": 8,
+    "Crime": 17.36,
+    "Income": 33.75
+  },
+  {
+    "Region": "G090",
+    "X": 6,
+    "Y": 8,
+    "Crime": 15.21,
+    "Income": 34.92
+  },
+  {
+    "Region": "G091",
+    "X": 7,
+    "Y": 8,
+    "Crime": 15.61,
+    "Income": 33.68
+  },
+  {
+    "Region": "G092",
+    "X": 8,
+    "Y": 8,
+    "Crime": 15.15,
+    "Income": 32.19
+  },
+  {
+    "Region": "G093",
+    "X": 9,
+    "Y": 8,
+    "Crime": 17.29,
+    "Income": 30.87
+  },
+  {
+    "Region": "G094",
+    "X": 10,
+    "Y": 8,
+    "Crime": 18.79,
+    "Income": 30.99
+  },
+  {
+    "Region": "G095",
+    "X": 11,
+    "Y": 8,
+    "Crime": 17.45,
+    "Income": 30.51
+  },
+  {
+    "Region": "G096",
+    "X": 12,
+    "Y": 8,
+    "Crime": 17.68,
+    "Income": 28.74
+  },
+  {
+    "Region": "G097",
+    "X": 1,
+    "Y": 9,
+    "Crime": 13.2,
+    "Income": 39.98
+  },
+  {
+    "Region": "G098",
+    "X": 2,
+    "Y": 9,
+    "Crime": 13.91,
+    "Income": 35.46
+  },
+  {
+    "Region": "G099",
+    "X": 3,
+    "Y": 9,
+    "Crime": 13.7,
+    "Income": 35.44
+  },
+  {
+    "Region": "G100",
+    "X": 4,
+    "Y": 9,
+    "Crime": 11.12,
+    "Income": 37.64
+  },
+  {
+    "Region": "G101",
+    "X": 5,
+    "Y": 9,
+    "Crime": 10.81,
+    "Income": 35.89
+  },
+  {
+    "Region": "G102",
+    "X": 6,
+    "Y": 9,
+    "Crime": 15.95,
+    "Income": 34.2
+  },
+  {
+    "Region": "G103",
+    "X": 7,
+    "Y": 9,
+    "Crime": 18.52,
+    "Income": 33.05
+  },
+  {
+    "Region": "G104",
+    "X": 8,
+    "Y": 9,
+    "Crime": 18.24,
+    "Income": 32.51
+  },
+  {
+    "Region": "G105",
+    "X": 9,
+    "Y": 9,
+    "Crime": 15.16,
+    "Income": 33.44
+  },
+  {
+    "Region": "G106",
+    "X": 10,
+    "Y": 9,
+    "Crime": 15.24,
+    "Income": 36.18
+  },
+  {
+    "Region": "G107",
+    "X": 11,
+    "Y": 9,
+    "Crime": 17.57,
+    "Income": 29.77
+  },
+  {
+    "Region": "G108",
+    "X": 12,
+    "Y": 9,
+    "Crime": 15.62,
+    "Income": 33.14
+  },
+  {
+    "Region": "G109",
+    "X": 1,
+    "Y": 10,
+    "Crime": 13.21,
+    "Income": 41.27
+  },
+  {
+    "Region": "G110",
+    "X": 2,
+    "Y": 10,
+    "Crime": 12.6,
+    "Income": 36.97
+  },
+  {
+    "Region": "G111",
+    "X": 3,
+    "Y": 10,
+    "Crime": 12.08,
+    "Income": 40.37
+  },
+  {
+    "Region": "G112",
+    "X": 4,
+    "Y": 10,
+    "Crime": 13.78,
+    "Income": 34.38
+  },
+  {
+    "Region": "G113",
+    "X": 5,
+    "Y": 10,
+    "Crime": 15.34,
+    "Income": 34.37
+  },
+  {
+    "Region": "G114",
+    "X": 6,
+    "Y": 10,
+    "Crime": 17.86,
+    "Income": 34.02
+  },
+  {
+    "Region": "G115",
+    "X": 7,
+    "Y": 10,
+    "Crime": 17.6,
+    "Income": 33.4
+  },
+  {
+    "Region": "G116",
+    "X": 8,
+    "Y": 10,
+    "Crime": 16.32,
+    "Income": 33.41
+  },
+  {
+    "Region": "G117",
+    "X": 9,
+    "Y": 10,
+    "Crime": 17.13,
+    "Income": 33.46
+  },
+  {
+    "Region": "G118",
+    "X": 10,
+    "Y": 10,
+    "Crime": 19.66,
+    "Income": 34.48
+  },
+  {
+    "Region": "G119",
+    "X": 11,
+    "Y": 10,
+    "Crime": 20.16,
+    "Income": 32.93
+  },
+  {
+    "Region": "G120",
+    "X": 12,
+    "Y": 10,
+    "Crime": 17.9,
+    "Income": 28.99
+  },
+  {
+    "Region": "G121",
+    "X": 1,
+    "Y": 11,
+    "Crime": 12.35,
+    "Income": 39.31
+  },
+  {
+    "Region": "G122",
+    "X": 2,
+    "Y": 11,
+    "Crime": 10.21,
+    "Income": 38.94
+  },
+  {
+    "Region": "G123",
+    "X": 3,
+    "Y": 11,
+    "Crime": 13.91,
+    "Income": 40.22
+  },
+  {
+    "Region": "G124",
+    "X": 4,
+    "Y": 11,
+    "Crime": 17.08,
+    "Income": 37.5
+  },
+  {
+    "Region": "G125",
+    "X": 5,
+    "Y": 11,
+    "Crime": 16.24,
+    "Income": 38.15
+  },
+  {
+    "Region": "G126",
+    "X": 6,
+    "Y": 11,
+    "Crime": 16.33,
+    "Income": 35.95
+  },
+  {
+    "Region": "G127",
+    "X": 7,
+    "Y": 11,
+    "Crime": 20.2,
+    "Income": 32.78
+  },
+  {
+    "Region": "G128",
+    "X": 8,
+    "Y": 11,
+    "Crime": 17.86,
+    "Income": 31.94
+  },
+  {
+    "Region": "G129",
+    "X": 9,
+    "Y": 11,
+    "Crime": 16.22,
+    "Income": 31.73
+  },
+  {
+    "Region": "G130",
+    "X": 10,
+    "Y": 11,
+    "Crime": 19.46,
+    "Income": 34.82
+  },
+  {
+    "Region": "G131",
+    "X": 11,
+    "Y": 11,
+    "Crime": 18.66,
+    "Income": 31.89
+  },
+  {
+    "Region": "G132",
+    "X": 12,
+    "Y": 11,
+    "Crime": 20.02,
+    "Income": 29.91
+  },
+  {
+    "Region": "G133",
+    "X": 1,
+    "Y": 12,
+    "Crime": 12.48,
+    "Income": 39.77
+  },
+  {
+    "Region": "G134",
+    "X": 2,
+    "Y": 12,
+    "Crime": 15.77,
+    "Income": 38.26
+  },
+  {
+    "Region": "G135",
+    "X": 3,
+    "Y": 12,
+    "Crime": 18.22,
+    "Income": 37.74
+  },
+  {
+    "Region": "G136",
+    "X": 4,
+    "Y": 12,
+    "Crime": 17.65,
+    "Income": 35.47
+  },
+  {
+    "Region": "G137",
+    "X": 5,
+    "Y": 12,
+    "Crime": 16.5,
+    "Income": 35.81
+  },
+  {
+    "Region": "G138",
+    "X": 6,
+    "Y": 12,
+    "Crime": 15.49,
+    "Income": 36.59
+  },
+  {
+    "Region": "G139",
+    "X": 7,
+    "Y": 12,
+    "Crime": 15.74,
+    "Income": 34.39
+  },
+  {
+    "Region": "G140",
+    "X": 8,
+    "Y": 12,
+    "Crime": 16.38,
+    "Income": 37.1
+  },
+  {
+    "Region": "G141",
+    "X": 9,
+    "Y": 12,
+    "Crime": 17.07,
+    "Income": 35.63
+  },
+  {
+    "Region": "G142",
+    "X": 10,
+    "Y": 12,
+    "Crime": 19.71,
+    "Income": 33.92
+  },
+  {
+    "Region": "G143",
+    "X": 11,
+    "Y": 12,
+    "Crime": 20.05,
+    "Income": 30.88
+  },
+  {
+    "Region": "G144",
+    "X": 12,
+    "Y": 12,
+    "Crime": 18.29,
+    "Income": 32.64
+  }
+]

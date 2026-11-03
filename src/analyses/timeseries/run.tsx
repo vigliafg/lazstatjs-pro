@@ -1,5 +1,6 @@
 import { timeSeriesReport, timeSeriesTables, acfTable } from '../../stats/timeseries';
 import { arimaAnalysis } from '../../stats/arima';
+import { buildHoltWintersOutput, buildSpectralOutput, buildUnitRootOutput } from './modes';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { numericColumnValues } from '../shared/data';
@@ -22,9 +23,35 @@ export const buildTimeSeriesOutput = ({
   params,
   ciLevel,
 }: TimeSeriesInput): AnalysisRunResult => {
-  const { variable, period, horizon, differenceMode, seasonalDifferenceMode } = params;
+  const { variable, period, horizon, differenceMode, seasonalDifferenceMode, mode, xregVariable } = params;
 
-  const values = numericColumnValues(grid, variable);
+  if (mode === 'holtwinters' || mode === 'unitroot' || mode === 'spectral') {
+    const builder =
+      mode === 'holtwinters'
+        ? buildHoltWintersOutput
+        : mode === 'unitroot'
+          ? buildUnitRootOutput
+          : buildSpectralOutput;
+    return builder({ grid, params, ciLevel });
+  }
+
+  let values = numericColumnValues(grid, variable);
+  let xreg: number[][] | undefined;
+  let xregName = '';
+  if (mode === 'arimax') {
+    if (xregVariable < 0) {
+      return { ok: false, reason: 'Select an exogenous regressor for ARIMAX' };
+    }
+    const regressor = numericColumnValues(grid, xregVariable);
+    const pairs: { y: number; x: number }[] = [];
+    values.forEach((y, index) => {
+      const x = regressor[index];
+      if (Number.isFinite(y) && Number.isFinite(x)) pairs.push({ y, x });
+    });
+    values = pairs.map(pair => pair.y);
+    xreg = pairs.map(pair => [pair.x]);
+    xregName = grid.cols[xregVariable]?.name ?? 'X';
+  }
 
   if (values.length < 5) {
     return {
@@ -47,6 +74,13 @@ export const buildTimeSeriesOutput = ({
     level: ciLevel,
     d: differenceMode === 'auto' ? 'auto' : Number(differenceMode),
     D: seasonalDifferenceMode === 'auto' ? 'auto' : Number(seasonalDifferenceMode),
+    ...(xreg
+      ? {
+          xreg,
+          xregNames: [xregName],
+          xregFuture: Array.from({ length: steps }, () => xreg![xreg!.length - 1]),
+        }
+      : {}),
   });
 
   const baseTables = timeSeriesTables({ values, period, horizon: steps, level: ciLevel });
@@ -58,6 +92,28 @@ export const buildTimeSeriesOutput = ({
   const tables = arima.fit
     ? [...baseTables.filter(spec => spec.id !== 'ts-forecast'), ...arima.tables]
     : baseTables;
+
+  if (mode === 'arimax' && arima.fit && xreg) {
+    tables.push({
+      id: 'ts-arimax-xreg',
+      title: copy('Regressore esterno'),
+      columns: [
+        { key: 'metric', label: copy('Voce'), format: 'text' },
+        { key: 'value', label: copy('Valore'), format: 'text' },
+      ],
+      rows: [
+        { metric: copy('Regressore'), value: xregName },
+        { metric: copy('Coefficiente'), value: arima.fit.coefficients.find(c => c.term === xregName)?.estimate ?? NaN },
+        {
+          metric: copy('Previsione futura'),
+          value: copy('il valore del regressore è mantenuto costante all’ultimo osservato'),
+        },
+      ],
+      notes: [
+        copy('Il modello è una regressione con errori ARMA: il coefficiente del regressore misura l’effetto sul livello della serie al netto della memoria degli errori.'),
+      ],
+    });
+  }
 
   const acfRows = (baseTables.find(spec => spec.id === 'ts-acf')?.rows ?? []).filter(
     row => Number(row.lag) >= 1
@@ -316,6 +372,23 @@ export const buildTimeSeriesOutput = ({
     );
   }
 
+  if (mode === 'arimax' && xreg) {
+    charts.push(
+      makeChart({
+        id: 'ts-arimax-scatter',
+        kind: 'scatter',
+        title: copy('Serie e regressore esterno'),
+        subtitle: copy('{s1} osservazioni complete', { s1: values.length }),
+        note: copy('La nuvola mostra l’associazione grezza; il coefficiente ARIMAX è aggiustato per la memoria temporale degli errori.'),
+        data: {
+          points: values.map((value, index) => ({ x: xreg![index][0], y: value })),
+        },
+        fields: { xLabel: xregName, yLabel: grid.cols[variable]?.name ?? 'Y' },
+        options: { fit: 'none', band: 'none' } as never,
+      })
+    );
+  }
+
   const header = `Series: ${grid.cols[variable]?.name ?? 'Y'} · ${values.length} observations · period ${period >= 2 ? period : 'none'}`;
 
   // L3 time-series report: series/forecast, ACF/PACF and decomposition.
@@ -327,11 +400,29 @@ export const buildTimeSeriesOutput = ({
     tables,
   });
 
+  const baseReport = timeSeriesReport(tables, ciLevel);
+  const report =
+    mode === 'arimax' && xreg
+      ? {
+          ...baseReport,
+          intro: [
+            ...baseReport.intro,
+            copy('Con il regressore {s1} il modello diventa una regressione con errori ARMA: l’effetto del regressore è stimato al netto della memoria temporale.', {
+              s1: xregName,
+            }),
+          ],
+          limitations: [
+            ...baseReport.limitations,
+            copy('Le previsioni mantengono il regressore costante all’ultimo valore osservato: non è una previsione congiunta del regressore.'),
+          ],
+        }
+      : baseReport;
+
   return {
     ok: true,
     title: copy('Serie temporale: {s1}', { s1: seriesName }),
     tables,
-    report: timeSeriesReport(tables, ciLevel),
+    report,
     charts,
     ...(panel ? { panels: [panel] } : {}),
     header,

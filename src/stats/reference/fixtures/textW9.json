@@ -1,0 +1,23 @@
+{
+  "source": "Base R tokenisation/TF-IDF/cosine and NMF::nmf(method='lee')",
+  "documents": ["model data regression estimate sample variable model", "patient treatment clinical trial dose outcome patient", "market price customer demand product sales market", "regression model estimate sample data variable regression", "clinical trial patient dose treatment outcome trial", "price demand market product customer sales price", "data model sample regression estimate model data", "treatment patient outcome clinical dose trial patient", "product price sales market demand customer product", "variable estimate regression model sample data estimate", "dose outcome patient trial clinical treatment dose", "sales customer product price market demand sales"],
+  "terms": ["model", "patient", "data", "dose", "estimate", "market", "price", "product", "regression", "sales", "trial", "clinical", "customer", "demand", "outcome"],
+  "counts": [6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4],
+  "documents_per_term": [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+  "idf": [1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744, 1.95551144502744],
+  "average_tfidf": [0.349435786874667, 0.345688850866701, 0.287842965809391, 0.288074042388918, 0.297903535567885, 0.271598811809366, 0.271598811809366, 0.271598811809366, 0.297903535567885, 0.271598811809366, 0.288074042388918, 0.230459233911134, 0.217279049447493, 0.217279049447493, 0.230459233911134],
+  "similarity": [
+    [1, 0, 0, 0.857142857142857, 0, 0, 0.956182887467515, 0, 0, 0.857142857142857, 0, 0],
+    [0, 1, 0, 0, 0.875, 0, 0, 1, 0, 0, 0.875, 0],
+    [0, 0, 1, 0, 0, 0.888888888888889, 0, 0, 0.888888888888889, 0, 0, 0.888888888888889],
+    [0.857142857142857, 0, 0, 1, 0, 0, 0.836660026534076, 0, 0, 0.857142857142857, 0, 0],
+    [0, 0.875, 0, 0, 1, 0, 0, 0.875, 0, 0, 0.875, 0],
+    [0, 0, 0.888888888888889, 0, 0, 1, 0, 0, 0.888888888888889, 0, 0, 0.888888888888889],
+    [0.956182887467515, 0, 0, 0.836660026534076, 0, 0, 1, 0, 0, 0.836660026534076, 0, 0],
+    [0, 1, 0, 0, 0.875, 0, 0, 1, 0, 0, 0.875, 0],
+    [0, 0, 0.888888888888889, 0, 0, 0.888888888888889, 0, 0, 1, 0, 0, 0.888888888888889],
+    [0.857142857142857, 0, 0, 0.857142857142857, 0, 0, 0.836660026534076, 0, 0, 1, 0, 0],
+    [0, 0.875, 0, 0, 0.875, 0, 0, 0.875, 0, 0, 1, 0],
+    [0, 0, 0.888888888888889, 0, 0, 0.888888888888889, 0, 0, 0.888888888888889, 0, 0, 1]
+  ]
+}

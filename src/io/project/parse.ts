@@ -12,7 +12,7 @@ import type { ChartOutputGroup } from '../../charts/outputs';
 import { normalizeCustomThemes, resolveThemeId } from '../../theme/custom';
 import { normalizeOutputAppearance } from '../../theme/outputAppearance';
 import {
-  DEFAULT_PARAMS, DEFAULT_SETTINGS,
+  DEFAULT_PARAMS, DEFAULT_SETTINGS, DESCRIPTIVE_MODES,
   type ProjectParams, type ProjectSettings,
   type TimeSeriesDifferenceMode, type TimeSeriesSeasonalDifferenceMode,
 } from './types';
@@ -66,6 +66,13 @@ const SAMPLE_SIZE_DESIGNS: readonly SampleSizeDesign[] = [
   'twoProportions',
   'correlation',
   'anova',
+  'tost',
+  'survival',
+  'oneProportion',
+  'variance',
+  'oneRate',
+  'regression',
+  'logistic',
 ];
 
 const parseSampleSizeDesign = (value: unknown, fallback: SampleSizeDesign): SampleSizeDesign =>
@@ -142,6 +149,54 @@ const parseContingencyCell = (value: unknown): string => {
   return '0';
 };
 
+const CONTINGENCY_MODES = ['chi2', 'mantelHaenszel', 'trend', 'exact'] as const;
+
+const parseContingencyMode = (
+  value: unknown,
+  fallback: (typeof CONTINGENCY_MODES)[number]
+): (typeof CONTINGENCY_MODES)[number] =>
+  typeof value === 'string' && (CONTINGENCY_MODES as readonly string[]).includes(value)
+    ? (value as (typeof CONTINGENCY_MODES)[number])
+    : fallback;
+
+const MAX_STRATA = 20;
+
+/** A Mantel–Haenszel stratum is always a 2×2 table of counts. */
+const parseContingencyStrata = (
+  value: unknown,
+  fallback: ProjectParams['contingency']['strata']
+): ProjectParams['contingency']['strata'] => {
+  if (!Array.isArray(value)) return fallback.map(stratum => ({ ...stratum, values: stratum.values.map(row => [...row]) }));
+  const strata = value
+    .filter((entry): entry is Record<string, unknown> => isRecord(entry))
+    .slice(0, MAX_STRATA)
+    .map((entry, index) => ({
+      label: typeof entry.label === 'string' && entry.label.trim() ? entry.label.trim() : `Stratum ${index + 1}`,
+      values: [0, 1].map(row =>
+        [0, 1].map(column => {
+          const source = Array.isArray(entry.values) && Array.isArray(entry.values[row])
+            ? (entry.values[row] as unknown[])[column]
+            : '0';
+          return parseContingencyCell(source);
+        })
+      ),
+    }));
+  return strata.length >= 1
+    ? strata
+    : fallback.map(stratum => ({ ...stratum, values: stratum.values.map(row => [...row]) }));
+};
+
+/** Trend scores: one finite number per row, defaulting to 1..R. */
+const parseTrendScores = (value: unknown, rowCount: number): string[] => {
+  const fallback = Array.from({ length: rowCount }, (_, index) => String(index + 1));
+  if (!Array.isArray(value)) return fallback;
+  return fallback.map((_, index) => {
+    const raw = value[index];
+    const num = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw.trim()) : NaN;
+    return Number.isFinite(num) ? String(num) : fallback[index];
+  });
+};
+
 const parseContingencyValues = (
   value: unknown,
   rows: readonly string[],
@@ -152,6 +207,26 @@ const parseContingencyValues = (
     const source = Array.isArray(value[rowIndex]) ? value[rowIndex] : [];
     return cols.map((_, colIndex) => parseContingencyCell(source[colIndex]));
   });
+};
+
+/** Series/parallel stages of a reliability block diagram: 1–8 stages, 1–8 components. */
+const parseReliabilityStages = (value: unknown, fallback: string[][]): string[][] => {
+  if (!Array.isArray(value)) return fallback.map(stage => [...stage]);
+  const stages = value
+    .filter(Array.isArray)
+    .slice(0, 8)
+    .map(stage =>
+      (stage as unknown[])
+        .slice(0, 8)
+        .map(cell => {
+          const text = parseCell(cell).trim();
+          const number = Number(text.replace(',', '.'));
+          return Number.isFinite(number) ? String(Math.min(1, Math.max(0, number))) : '0';
+        })
+        .filter(Boolean)
+    )
+    .filter(stage => stage.length > 0);
+  return stages.length > 0 ? stages : fallback.map(stage => [...stage]);
 };
 
 const parseCell = (value: unknown): string => {
@@ -255,6 +330,10 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const raw = isRecord(value) ? value : {};
   const ttest = isRecord(raw.ttest) ? raw.ttest : {};
   const anova = isRecord(raw.anova) ? raw.anova : {};
+  const glm = isRecord(raw.glm) ? raw.glm : {};
+  const quantile = isRecord(raw.quantile) ? raw.quantile : {};
+  const nonlinear = isRecord(raw.nonlinear) ? raw.nonlinear : {};
+  const multinomial = isRecord(raw.multinomial) ? raw.multinomial : {};
   const reg = isRecord(raw.reg) ? raw.reg : {};
   const corr = isRecord(raw.corr) ? raw.corr : {};
   const chisq = isRecord(raw.chisq) ? raw.chisq : {};
@@ -264,7 +343,11 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const cox = isRecord(raw.cox) ? raw.cox : {};
   const survival = isRecord(raw.survival) ? raw.survival : {};
   const timeseries = isRecord(raw.timeseries) ? raw.timeseries : {};
+  const varParams = isRecord(raw.var) ? raw.var : {};
+  const garch = isRecord(raw.garch) ? raw.garch : {};
+  const statespace = isRecord(raw.statespace) ? raw.statespace : {};
   const contingency = isRecord(raw.contingency) ? raw.contingency : null;
+  const loglinear = isRecord(raw.loglinear) ? raw.loglinear : null;
   const ancova = isRecord(raw.ancova) ? raw.ancova : {};
   const factorial = isRecord(raw.factorial) ? raw.factorial : {};
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
@@ -279,15 +362,43 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const mi = isRecord(raw.mi) ? raw.mi : {};
   const ordinal = isRecord(raw.ordinal) ? raw.ordinal : {};
   const lmm = isRecord(raw.lmm) ? raw.lmm : {};
+  const glmm = isRecord(raw.glmm) ? raw.glmm : {};
+  const pls = isRecord(raw.pls) ? raw.pls : {};
+  const mars = isRecord(raw.mars) ? raw.mars : {};
+  const iv = isRecord(raw.iv) ? raw.iv : {};
+  const panel = isRecord(raw.panel) ? raw.panel : {};
+  const selection = isRecord(raw.selection) ? raw.selection : {};
+  const mediation = isRecord(raw.mediation) ? raw.mediation : {};
+  const propensity = isRecord(raw.propensity) ? raw.propensity : {};
   const countreg = isRecord(raw.countreg) ? raw.countreg : {};
   const agreement = isRecord(raw.agreement) ? raw.agreement : {};
   const tost = isRecord(raw.tost) ? raw.tost : {};
   const wizard = isRecord(raw.wizard) ? raw.wizard : {};
   const partition = isRecord(raw.partition) ? raw.partition : {};
   const quality = isRecord(raw.quality) ? raw.quality : {};
+  const proportions = isRecord(raw.proportions) ? raw.proportions : {};
+  const variances = isRecord(raw.variances) ? raw.variances : {};
   const cluster = isRecord(raw.cluster) ? raw.cluster : {};
+  const canonical = isRecord(raw.canonical) ? raw.canonical : {};
+  const mds = isRecord(raw.mds) ? raw.mds : {};
+  const correspondence = isRecord(raw.correspondence) ? raw.correspondence : {};
+  const sem = isRecord(raw.sem) ? raw.sem : {};
+  const latentclass = isRecord(raw.latentclass) ? raw.latentclass : {};
+  const irt = isRecord(raw.irt) ? raw.irt : {};
+  const conjoint = isRecord(raw.conjoint) ? raw.conjoint : {};
   const discriminant = isRecord(raw.discriminant) ? raw.discriminant : {};
   const doe = isRecord(raw.doe) ? raw.doe : {};
+  const competing = isRecord(raw.competing) ? raw.competing : {};
+  const recurrent = isRecord(raw.recurrent) ? raw.recurrent : {};
+  const alt = isRecord(raw.alt) ? raw.alt : {};
+  const reliability = isRecord(raw.reliability) ? raw.reliability : {};
+  const survey = isRecord(raw.survey) ? raw.survey : {};
+  const ml = isRecord(raw.ml) ? raw.ml : {};
+  const textMining = isRecord(raw.text) ? raw.text : {};
+  const choice = isRecord(raw.choice) ? raw.choice : {};
+  const meta = isRecord(raw.meta) ? raw.meta : {};
+  const bayes = isRecord(raw.bayes) ? raw.bayes : {};
+  const spatial = isRecord(raw.spatial) ? raw.spatial : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -295,16 +406,155 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const contingencyCols = contingency
     ? parseContingencyLabels(contingency.cols, d.contingency.cols)
     : [...d.contingency.cols];
+  const loglinearRows = loglinear
+    ? parseContingencyLabels(loglinear.rows, d.loglinear.rows)
+    : [...d.loglinear.rows];
+  const loglinearCols = loglinear
+    ? parseContingencyLabels(loglinear.cols, d.loglinear.cols)
+    : [...d.loglinear.cols];
+  const correspondenceRows = correspondence
+    ? parseContingencyLabels(correspondence.rows, d.correspondence.rows)
+    : [...d.correspondence.rows];
+  const correspondenceCols = correspondence
+    ? parseContingencyLabels(correspondence.cols, d.correspondence.cols)
+    : [...d.correspondence.cols];
+  const canonicalX = indexList(canonical.x, d.canonical.x, width);
+  const canonicalY = indexList(canonical.y, d.canonical.y, width).filter(
+    value => !canonicalX.includes(value)
+  );
+  const semSelected = indexList(sem.selected, d.sem.selected, width);
+  const semFactors = Math.max(1, Math.min(4, integer(sem.factors, d.sem.factors)));
+  const semGroups = semSelected.map((_, position) => {
+    const value = Array.isArray(sem.groups) ? sem.groups[position] : undefined;
+    const group = typeof value === 'number' ? Math.trunc(value) : -1;
+    return group >= 0 && group < semFactors
+      ? group
+      : position < Math.ceil(semSelected.length / 2)
+        ? 0
+        : Math.min(semFactors - 1, 1);
+  });
+  const irtSelected = indexList(irt.selected, d.irt.selected, width);
+  const conjointResponse = index(conjoint.response, d.conjoint.response, width);
+  const conjointAttributes = indexList(
+    conjoint.attributes,
+    d.conjoint.attributes,
+    width
+  ).filter(value => value !== conjointResponse);
   const ancovaResponse = index(ancova.response, d.ancova.response, width);
   const ancovaFactor = index(ancova.factor, d.ancova.factor, width);
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
   const coxTime = index(cox.timeVariable, d.cox.timeVariable, width);
   const coxEvent = index(cox.eventVariable, d.cox.eventVariable, width);
+  const coxFrailty = optionalIndex(
+    cox.frailtyVariable,
+    d.cox.frailtyVariable ?? -1,
+    width
+  );
+  const survivalUpper = optionalIndex(
+    survival.upperVariable,
+    d.survival.upperVariable ?? -1,
+    width
+  );
+  const parametricUpper = optionalIndex(
+    parametric.upperVariable,
+    d.parametric.upperVariable ?? -1,
+    width
+  );
+  const reliabilityStages = parseReliabilityStages(reliability.stages, d.reliability.stages);
+  const mlOutcome = index(ml.outcome, d.ml.outcome, width);
+  const mlPredictors = indexList(ml.predictors, d.ml.predictors, width).filter(
+    value => value !== mlOutcome
+  );
+  const bayesOutcome = index(bayes.outcome, d.bayes.outcome, width);
+  const bayesPredictors = indexList(bayes.predictors, d.bayes.predictors, width).filter(
+    value => value !== bayesOutcome
+  );
+  const spatialVariable = index(spatial.variable, d.spatial.variable, width);
+  const surveyVariable = index(survey.variable, d.survey.variable, width);
 
   return {
     descVars: indexList(raw.descVars, d.descVars, width),
+    descMode:
+      typeof raw.descMode === 'string' && (DESCRIPTIVE_MODES as readonly string[]).includes(raw.descMode)
+        ? (raw.descMode as ProjectParams['descMode'])
+        : d.descMode,
+    variances: {
+      mode: variances.mode === 'two' ? 'two' : d.variances.mode,
+      variable: index(variances.variable, d.variances.variable, width),
+      group: optionalIndex(variances.group, d.variances.group, width),
+      nullVariance: Math.max(1e-9, finite(variances.nullVariance, d.variances.nullVariance)),
+    },
+    glm: {
+      dep: index(glm.dep, d.glm.dep, width),
+      indeps: indexList(glm.indeps, d.glm.indeps, width).filter(
+        (value) => value !== index(glm.dep, d.glm.dep, width)
+      ),
+      family:
+        glm.family === 'gaussian' ||
+        glm.family === 'binomial' ||
+        glm.family === 'poisson' ||
+        glm.family === 'gamma'
+          ? glm.family
+          : d.glm.family,
+      link:
+        glm.link === 'identity' ||
+        glm.link === 'log' ||
+        glm.link === 'logit' ||
+        glm.link === 'probit' ||
+        glm.link === 'inverse'
+          ? glm.link
+          : d.glm.link,
+    },
+    quantile: {
+      dep: index(quantile.dep, d.quantile.dep, width),
+      indeps: indexList(quantile.indeps, d.quantile.indeps, width).filter(
+        (value) => value !== index(quantile.dep, d.quantile.dep, width)
+      ),
+      tau: Math.min(0.99, Math.max(0.01, finite(quantile.tau, d.quantile.tau))),
+    },
+    nonlinear: {
+      dep: index(nonlinear.dep, d.nonlinear.dep, width),
+      predictor: index(nonlinear.predictor, d.nonlinear.predictor, width),
+      model:
+        nonlinear.model === 'exponential' ||
+        nonlinear.model === 'logistic' ||
+        nonlinear.model === 'gompertz' ||
+        nonlinear.model === 'power' ||
+        nonlinear.model === 'michaelis'
+          ? nonlinear.model
+          : d.nonlinear.model,
+    },
+    multinomial: {
+      outcome: index(multinomial.outcome, d.multinomial.outcome, width),
+      predictors: indexList(multinomial.predictors, d.multinomial.predictors, width).filter(
+        (value) => value !== index(multinomial.outcome, d.multinomial.outcome, width)
+      ),
+    },
+    proportions: {
+      mode:
+        proportions.mode === 'twoProp' ||
+        proportions.mode === 'oneRate' ||
+        proportions.mode === 'twoRate'
+          ? proportions.mode
+          : d.proportions.mode,
+      variable: index(proportions.variable, d.proportions.variable, width),
+      group: optionalIndex(proportions.group, d.proportions.group, width),
+      successLevel:
+        typeof proportions.successLevel === 'string'
+          ? proportions.successLevel
+          : d.proportions.successLevel,
+      nullP: Math.max(0.0001, Math.min(0.9999, finite(proportions.nullP, d.proportions.nullP))),
+      nullRate: Math.max(1e-9, finite(proportions.nullRate, d.proportions.nullRate)),
+      exposure: Math.max(1e-9, finite(proportions.exposure, d.proportions.exposure)),
+    },
     ttest: {
-      type: ttest.type === 'ind' || ttest.type === 'dep' || ttest.type === 'one' ? ttest.type : d.ttest.type,
+      type:
+        ttest.type === 'ind' ||
+        ttest.type === 'dep' ||
+        ttest.type === 'one' ||
+        ttest.type === 'sign'
+          ? ttest.type
+          : d.ttest.type,
       var1: index(ttest.var1, d.ttest.var1, width),
       var2: index(ttest.var2, d.ttest.var2, width),
       mu: finite(ttest.mu, d.ttest.mu),
@@ -312,6 +562,10 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       equalVar: bool(ttest.equalVar, d.ttest.equalVar),
     },
     anova: {
+      mode:
+        anova.mode === 'median' || anova.mode === 'nested' || anova.mode === 'anom'
+          ? anova.mode
+          : d.anova.mode,
       dep: index(anova.dep, d.anova.dep, width),
       grp: index(anova.grp, d.anova.grp, width),
       posthoc: text(anova.posthoc, d.anova.posthoc),
@@ -320,6 +574,8 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
         anova.kwPosthoc === 'none' || anova.kwPosthoc === 'bonferroni' || anova.kwPosthoc === 'holm' || anova.kwPosthoc === 'fdr'
           ? anova.kwPosthoc
           : d.anova.kwPosthoc,
+      inner: optionalIndex(anova.inner, d.anova.inner ?? -1, width),
+      alpha: Math.min(0.5, Math.max(1e-6, finite(anova.alpha, d.anova.alpha ?? 0.05))),
     },
     reg: {
       dep: index(reg.dep, d.reg.dep, width),
@@ -327,6 +583,29 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       useNonParam: bool(reg.useNonParam, d.reg.useNonParam),
       robustEstimator: text(reg.robustEstimator, d.reg.robustEstimator),
       robustSE: reg.robustSE === 'HC1' || reg.robustSE === 'HC3' ? reg.robustSE : d.reg.robustSE,
+      mode:
+        reg.mode === 'selection' || reg.mode === 'polynomial' || reg.mode === 'penalized'
+          ? reg.mode
+          : 'linear',
+      degree: Math.min(12, Math.max(1, Math.round(finite(reg.degree, d.reg.degree ?? 2)))),
+      selectionDirection:
+        reg.selectionDirection === 'forward' || reg.selectionDirection === 'backward'
+          ? reg.selectionDirection
+          : d.reg.selectionDirection ?? 'both',
+      selectionCriterion:
+        reg.selectionCriterion === 'aic' ||
+        reg.selectionCriterion === 'adjR2' ||
+        reg.selectionCriterion === 'r2' ||
+        reg.selectionCriterion === 'cp' ||
+        reg.selectionCriterion === 'p'
+          ? reg.selectionCriterion
+          : d.reg.selectionCriterion ?? 'bic',
+      penalty:
+        reg.penalty === 'ridge' || reg.penalty === 'elasticnet' || reg.penalty === 'lasso'
+          ? reg.penalty
+          : d.reg.penalty ?? 'lasso',
+      lambda: Math.max(0, finite(reg.lambda, d.reg.lambda ?? 0.1)),
+      penaltyAlpha: Math.min(1, Math.max(0, finite(reg.penaltyAlpha, d.reg.penaltyAlpha ?? 0.5))),
     },
     corr: {
       vars: indexList(corr.vars, d.corr.vars, width),
@@ -335,6 +614,9 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       showKendall: bool(corr.showKendall, d.corr.showKendall),
     },
     chisq: {
+      mode: chisq.mode === 'gof' ? 'gof' : d.chisq.mode,
+      gofVariable: index(chisq.gofVariable, d.chisq.gofVariable, width),
+      gofExpected: text(chisq.gofExpected, d.chisq.gofExpected),
       row1col1: finite(chisq.row1col1, d.chisq.row1col1),
       row1col2: finite(chisq.row1col2, d.chisq.row1col2),
       row2col1: finite(chisq.row2col1, d.chisq.row2col1),
@@ -358,10 +640,16 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       f: finite(samplesize.f, d.samplesize.f),
       margin: finite(samplesize.margin, d.samplesize.margin),
       hazardRatio: finite(samplesize.hazardRatio, d.samplesize.hazardRatio),
+      ratio: Math.max(1e-9, finite(samplesize.ratio, d.samplesize.ratio)),
       eventRate: finite(samplesize.eventRate, d.samplesize.eventRate),
+      predictors: Math.max(1, Math.min(100, integer(samplesize.predictors, d.samplesize.predictors))),
+      f2: Math.max(1e-6, finite(samplesize.f2, d.samplesize.f2)),
+      oddsRatio: Math.max(1e-6, finite(samplesize.oddsRatio, d.samplesize.oddsRatio)),
     },
     distfit: {
+      mode: distfit.mode === 'ks' ? 'ks' : d.distfit.mode,
       variable: index(distfit.variable, d.distfit.variable, width),
+      group: optionalIndex(distfit.group, d.distfit.group, width),
       selected: parseDistributionList(distfit.selected, d.distfit.selected),
     },
     logistic: {
@@ -371,6 +659,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       ),
       cutoff: finite(logistic.cutoff, d.logistic.cutoff),
       penalized: bool(logistic.penalized, d.logistic.penalized),
+      link: logistic.link === 'probit' ? 'probit' : 'logit',
     },
     cox: {
       timeVariable: coxTime,
@@ -378,13 +667,28 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       covariates: indexList(cox.covariates, d.cox.covariates, width).filter(
         (value) => value !== coxTime && value !== coxEvent
       ),
+      mode: cox.mode === 'frailty' ? 'frailty' : 'standard',
+      frailtyVariable: coxFrailty,
     },
     survival: {
       timeVariable: index(survival.timeVariable, d.survival.timeVariable, width),
       eventVariable: index(survival.eventVariable, d.survival.eventVariable, width),
       groupVariable: optionalIndex(survival.groupVariable, d.survival.groupVariable, width),
+      mode:
+        survival.mode === 'life' || survival.mode === 'interval'
+          ? survival.mode
+          : 'km',
+      upperVariable: survivalUpper,
+      intervals: Math.max(0, Math.min(30, integer(survival.intervals, d.survival.intervals ?? 0))),
     },
     timeseries: {
+      mode:
+        timeseries.mode === 'holtwinters' ||
+        timeseries.mode === 'unitroot' ||
+        timeseries.mode === 'spectral' ||
+        timeseries.mode === 'arimax'
+          ? timeseries.mode
+          : 'arima',
       variable: index(timeseries.variable, d.timeseries.variable, width),
       period: integer(timeseries.period, d.timeseries.period),
       horizon: integer(timeseries.horizon, d.timeseries.horizon),
@@ -393,8 +697,32 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
         timeseries.seasonalDifferenceMode,
         d.timeseries.seasonalDifferenceMode
       ),
+      seasonalModel: timeseries.seasonalModel === 'multiplicative' ? 'multiplicative' : 'additive',
+      xregVariable:
+        timeseries.xregVariable === undefined || timeseries.xregVariable === null
+          ? d.timeseries.xregVariable
+          : timeseries.xregVariable === -1
+            ? -1
+            : index(timeseries.xregVariable, d.timeseries.xregVariable, width),
+    },
+    var: {
+      mode: varParams.mode === 'vecm' ? 'vecm' : 'var',
+      variables: indexList(varParams.variables, d.var.variables, width),
+      lags: Math.max(0, Math.min(12, integer(varParams.lags, d.var.lags))),
+      horizon: Math.max(1, Math.min(40, integer(varParams.horizon, d.var.horizon))),
+    },
+    garch: {
+      variable: index(garch.variable, d.garch.variable, width),
+      horizon: Math.max(1, Math.min(40, integer(garch.horizon, d.garch.horizon))),
+    },
+    statespace: {
+      mode: statespace.mode === 'markov' ? 'markov' : 'local',
+      variable: index(statespace.variable, d.statespace.variable, width),
+      horizon: Math.max(1, Math.min(40, integer(statespace.horizon, d.statespace.horizon))),
+      trend: statespace.trend === undefined ? d.statespace.trend : statespace.trend === true,
     },
     contingency: {
+      mode: contingency ? parseContingencyMode(contingency.mode, d.contingency.mode) : d.contingency.mode,
       rows: contingencyRows,
       cols: contingencyCols,
       values: contingency
@@ -404,6 +732,23 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       monteCarlo: contingency
         ? bool(contingency.monteCarlo, d.contingency.monteCarlo)
         : d.contingency.monteCarlo,
+      strata: contingency
+        ? parseContingencyStrata(contingency.strata, d.contingency.strata)
+        : d.contingency.strata.map((stratum) => ({
+            ...stratum,
+            values: stratum.values.map((row) => [...row]),
+          })),
+      scores: contingency
+        ? parseTrendScores(contingency.scores, contingencyRows.length)
+        : [...d.contingency.scores],
+    },
+    loglinear: {
+      rows: loglinearRows,
+      cols: loglinearCols,
+      values: loglinear
+        ? parseContingencyValues(loglinear.values, loglinearRows, loglinearCols)
+        : d.loglinear.values.map((row) => [...row]),
+      model: loglinear?.model === 'saturated' ? 'saturated' : d.loglinear.model,
     },
     ancova: {
       response: ancovaResponse,
@@ -472,7 +817,14 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       time: index(parametric.time, d.parametric.time, width),
       event: index(parametric.event, d.parametric.event, width),
       predictors: indexList(parametric.predictors, d.parametric.predictors, width),
-      distribution: parametric.distribution === 'exponential' ? 'exponential' : d.parametric.distribution,
+      distribution:
+        parametric.distribution === 'exponential' ||
+        parametric.distribution === 'lognormal' ||
+        parametric.distribution === 'loglogistic' ||
+        parametric.distribution === 'gompertz'
+          ? parametric.distribution
+          : d.parametric.distribution,
+      upperVariable: parametricUpper,
     },
     mixedanova: {
       group: index(mixedanova.group, d.mixedanova.group, width),
@@ -482,7 +834,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       variables: indexList(mi.variables, d.mi.variables, width),
       imputations: Math.max(2, Math.min(50, integer(mi.imputations, d.mi.imputations))),
       iterations: Math.max(1, Math.min(50, integer(mi.iterations, d.mi.iterations))),
-      model: mi.model === 'linear' ? 'linear' : d.mi.model,
+      model: mi.model === 'linear' || mi.model === 'categorical' ? mi.model : d.mi.model,
       outcome: index(mi.outcome, d.mi.outcome, width),
       predictors: indexList(mi.predictors, d.mi.predictors, width),
     },
@@ -494,6 +846,88 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       dep: index(lmm.dep, d.lmm.dep, width),
       indeps: indexList(lmm.indeps, d.lmm.indeps, width),
       group: index(lmm.group, d.lmm.group, width),
+      randomSlope: bool(lmm.randomSlope, d.lmm.randomSlope ?? false),
+    },
+    glmm: (() => {
+      const family =
+        glmm.family === 'binomial' || glmm.family === 'poisson' ? glmm.family : 'gaussian';
+      const dep = index(glmm.dep, d.glmm.dep, width);
+      const group = index(glmm.group, d.glmm.group, width);
+      const rawSlope = optionalIndex(glmm.slope, d.glmm.slope, width);
+      return {
+        dep,
+        indeps: indexList(glmm.indeps, d.glmm.indeps, width).filter(
+          (value) => value !== dep && value !== group
+        ),
+        group,
+        family,
+        link: (family === 'binomial' ? 'logit' : family === 'poisson' ? 'log' : 'identity') as
+          | 'identity'
+          | 'logit'
+          | 'log',
+        slope: rawSlope === dep || rawSlope === group ? -1 : rawSlope,
+      };
+    })(),
+    pls: {
+      dep: index(pls.dep, d.pls.dep, width),
+      indeps: indexList(pls.indeps, d.pls.indeps, width).filter(
+        (value) => value !== index(pls.dep, d.pls.dep, width)
+      ),
+      components: Math.max(1, Math.min(20, integer(pls.components, d.pls.components))),
+      cvFolds: Math.max(0, Math.min(20, integer(pls.cvFolds, d.pls.cvFolds))),
+    },
+    mars: {
+      dep: index(mars.dep, d.mars.dep, width),
+      indeps: indexList(mars.indeps, d.mars.indeps, width).filter(
+        (value) => value !== index(mars.dep, d.mars.dep, width)
+      ),
+      degree: mars.degree === 2 ? 2 : 1,
+      maxTerms: Math.max(1, Math.min(200, integer(mars.maxTerms, d.mars.maxTerms))),
+      penalty: Math.max(0, finite(mars.penalty, d.mars.penalty)),
+      prune: bool(mars.prune, d.mars.prune),
+    },
+    iv: {
+      dep: index(iv.dep, d.iv.dep, width),
+      endog: indexList(iv.endog, d.iv.endog, width),
+      instruments: indexList(iv.instruments, d.iv.instruments, width),
+      exog: indexList(iv.exog, d.iv.exog, width),
+      robust: bool(iv.robust, d.iv.robust),
+    },
+    panel: {
+      dep: index(panel.dep, d.panel.dep, width),
+      indeps: indexList(panel.indeps, d.panel.indeps, width),
+      entity: index(panel.entity, d.panel.entity, width),
+      time: index(panel.time, d.panel.time, width),
+      model:
+        panel.model === 'fe' || panel.model === 're' ? panel.model : d.panel.model,
+    },
+    selection: {
+      mode: selection.mode === 'heckman' ? 'heckman' : d.selection.mode,
+      dep: index(selection.dep, d.selection.dep, width),
+      indeps: indexList(selection.indeps, d.selection.indeps, width),
+      lower: finite(selection.lower, d.selection.lower),
+      upper:
+        typeof selection.upper === 'number' && Number.isFinite(selection.upper)
+          ? selection.upper
+          : null,
+      selection: optionalIndex(selection.selection, d.selection.selection, width),
+      selectIndeps: indexList(selection.selectIndeps, d.selection.selectIndeps, width),
+    },
+    mediation: {
+      outcome: index(mediation.outcome, d.mediation.outcome, width),
+      predictor: index(mediation.predictor, d.mediation.predictor, width),
+      mediator: index(mediation.mediator, d.mediation.mediator, width),
+      covariates: indexList(mediation.covariates, d.mediation.covariates, width),
+      bootstrap: Math.max(0, Math.min(5000, integer(mediation.bootstrap, d.mediation.bootstrap))),
+      seed: integer(mediation.seed, d.mediation.seed),
+    },
+    propensity: {
+      treatment: index(propensity.treatment, d.propensity.treatment, width),
+      outcome: index(propensity.outcome, d.propensity.outcome, width),
+      covariates: indexList(propensity.covariates, d.propensity.covariates, width),
+      method: propensity.method === 'ipw' ? 'ipw' : d.propensity.method,
+      caliper: Math.max(0, finite(propensity.caliper, d.propensity.caliper)),
+      ratio: Math.max(1, Math.min(10, integer(propensity.ratio, d.propensity.ratio))),
     },
     countreg: {
       dep: index(countreg.dep, d.countreg.dep, width),
@@ -533,7 +967,14 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
     },
     quality: {
       mode:
-        quality.mode === 'capability' || quality.mode === 'pareto' || quality.mode === 'variability'
+        quality.mode === 'capability' ||
+        quality.mode === 'pareto' ||
+        quality.mode === 'variability' ||
+        quality.mode === 'tolerance' ||
+        quality.mode === 'cusum' ||
+        quality.mode === 'msa' ||
+        quality.mode === 'acceptance' ||
+        quality.mode === 'mcontrol'
           ? quality.mode
           : d.quality.mode,
       variable: index(quality.variable, d.quality.variable, width),
@@ -547,25 +988,226 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       lsl: finite(quality.lsl, d.quality.lsl),
       usl: finite(quality.usl, d.quality.usl),
       target: finite(quality.target, d.quality.target),
+      toleranceP: Math.max(0.5, Math.min(0.9999, finite(quality.toleranceP, d.quality.toleranceP))),
+      part: index(quality.part, d.quality.part, width),
+      operator: index(quality.operator, d.quality.operator, width),
+      variables: indexList(quality.variables, d.quality.variables, width),
+      planN: Math.max(1, Math.min(100000, integer(quality.planN, d.quality.planN))),
+      planC: Math.max(0, Math.min(1000, integer(quality.planC, d.quality.planC))),
+      lotSize: Math.max(0, Math.min(10000000, integer(quality.lotSize, d.quality.lotSize))),
     },
     cluster: {
       selected: indexList(cluster.selected, d.cluster.selected, width),
       method:
-        cluster.method === 'complete' || cluster.method === 'single' || cluster.method === 'ward'
+        cluster.method === 'complete' ||
+        cluster.method === 'single' ||
+        cluster.method === 'ward' ||
+        cluster.method === 'kmeans' ||
+        cluster.method === 'kmedians'
           ? cluster.method
           : d.cluster.method,
       clusters: Math.max(0, Math.min(20, integer(cluster.clusters, d.cluster.clusters))),
       standardize: bool(cluster.standardize, d.cluster.standardize),
     },
+    canonical: {
+      x: canonicalX,
+      y: canonicalY,
+    },
+    mds: {
+      selected: indexList(mds.selected, d.mds.selected, width),
+      dimensions: Math.max(1, Math.min(10, integer(mds.dimensions, d.mds.dimensions))),
+      metric: mds.metric === 'nonmetric' ? 'nonmetric' : d.mds.metric,
+    },
+    correspondence: {
+      rows: correspondenceRows,
+      cols: correspondenceCols,
+      values: correspondence
+        ? parseContingencyValues(correspondence.values, correspondenceRows, correspondenceCols)
+        : d.correspondence.values.map(row => [...row]),
+    },
+    sem: {
+      selected: semSelected,
+      factors: semFactors,
+      groups: semGroups,
+      structural: bool(sem.structural, d.sem.structural),
+    },
+    latentclass: {
+      selected: indexList(latentclass.selected, d.latentclass.selected, width),
+      classes: Math.max(2, Math.min(10, integer(latentclass.classes, d.latentclass.classes))),
+      maxIterations: Math.max(50, Math.min(2000, integer(latentclass.maxIterations, d.latentclass.maxIterations))),
+    },
+    irt: {
+      selected: irtSelected,
+      model: irt.model === 'rasch' ? 'rasch' : d.irt.model,
+      quadrature: Math.max(5, Math.min(61, integer(irt.quadrature, d.irt.quadrature))),
+    },
+    conjoint: {
+      attributes: conjointAttributes,
+      response: conjointResponse,
+    },
     discriminant: {
+      mode: discriminant.mode === 'mancova' ? 'mancova' : 'classic',
       group: index(discriminant.group, d.discriminant.group, width),
       predictors: indexList(discriminant.predictors, d.discriminant.predictors, width),
+      covariates: indexList(
+        discriminant.covariates,
+        d.discriminant.covariates ?? [],
+        width
+      ),
     },
     doe: {
+      mode: doe.mode === 'design' ? 'design' : d.doe.mode,
       response: index(doe.response, d.doe.response, width),
       factorA: index(doe.factorA, d.doe.factorA, width),
       factorB: index(doe.factorB, d.doe.factorB, width),
       model: doe.model === 'linear' ? 'linear' : d.doe.model,
+      designType:
+        doe.designType === 'half' ||
+        doe.designType === 'ccd' ||
+        doe.designType === 'boxBehnken'
+          ? doe.designType
+          : d.doe.designType,
+      factors: Math.max(2, Math.min(7, integer(doe.factors, d.doe.factors))),
+      centerPoints: Math.max(0, Math.min(50, integer(doe.centerPoints, d.doe.centerPoints))),
+    },
+    competing: {
+      time: index(competing.time, d.competing.time, width),
+      event: index(competing.event, d.competing.event, width),
+      cause: Math.max(1, integer(competing.cause, d.competing.cause)),
+      covariates: indexList(competing.covariates, d.competing.covariates, width).filter(
+        value =>
+          value !== index(competing.time, d.competing.time, width) &&
+          value !== index(competing.event, d.competing.event, width)
+      ),
+    },
+    recurrent: {
+      id: index(recurrent.id, d.recurrent.id, width),
+      start: index(recurrent.start, d.recurrent.start, width),
+      stop: index(recurrent.stop, d.recurrent.stop, width),
+      event: index(recurrent.event, d.recurrent.event, width),
+      covariates: indexList(recurrent.covariates, d.recurrent.covariates, width),
+      model: recurrent.model === 'wlw' ? 'wlw' : 'ag',
+    },
+    alt: {
+      time: index(alt.time, d.alt.time, width),
+      event: index(alt.event, d.alt.event, width),
+      stress: index(alt.stress, d.alt.stress, width),
+      covariates: indexList(alt.covariates, d.alt.covariates, width).filter(
+        value =>
+          value !== index(alt.time, d.alt.time, width) &&
+          value !== index(alt.event, d.alt.event, width) &&
+          value !== index(alt.stress, d.alt.stress, width)
+      ),
+      model:
+        alt.model === 'inversePower' || alt.model === 'exponential'
+          ? alt.model
+          : 'arrhenius',
+      useStress: finite(alt.useStress, d.alt.useStress),
+    },
+    reliability: {
+      mode: reliability.mode === 'rbd' ? 'rbd' : 'growth',
+      time: index(reliability.time, d.reliability.time, width),
+      failures: index(reliability.failures, d.reliability.failures, width),
+      stages: reliabilityStages,
+    },
+    survey: {
+      mode:
+        survey.mode === 'total' ||
+        survey.mode === 'proportion' ||
+        survey.mode === 'regression'
+          ? survey.mode
+          : d.survey.mode,
+      variable: surveyVariable,
+      category: index(survey.category, d.survey.category, width),
+      successLevel: text(survey.successLevel, d.survey.successLevel),
+      weight: optionalIndex(survey.weight, d.survey.weight, width),
+      strata: optionalIndex(survey.strata, d.survey.strata, width),
+      cluster: optionalIndex(survey.cluster, d.survey.cluster, width),
+      predictors: indexList(survey.predictors, d.survey.predictors, width).filter(
+        value => value !== surveyVariable
+      ),
+    },
+    ml: {
+      mode:
+        ml.mode === 'boosting' || ml.mode === 'nnet' ? ml.mode : d.ml.mode,
+      task: ml.task === 'classification' ? 'classification' : d.ml.task,
+      outcome: mlOutcome,
+      predictors: mlPredictors,
+      trees: Math.max(10, Math.min(2000, integer(ml.trees, d.ml.trees))),
+      minNode: Math.max(1, Math.min(100, integer(ml.minNode, d.ml.minNode))),
+      mtry: Math.max(0, Math.min(50, integer(ml.mtry, d.ml.mtry))),
+      shrinkage: Math.max(0.001, Math.min(1, finite(ml.shrinkage, d.ml.shrinkage))),
+      hidden: Math.max(1, Math.min(20, integer(ml.hidden, d.ml.hidden))),
+      iterations: Math.max(50, Math.min(5000, integer(ml.iterations, d.ml.iterations))),
+      seed: integer(ml.seed, d.ml.seed),
+    },
+    text: {
+      mode:
+        textMining.mode === 'tfidf' ||
+        textMining.mode === 'similarity' ||
+        textMining.mode === 'topics'
+          ? textMining.mode
+          : d.text.mode,
+      text: index(textMining.text, d.text.text, width),
+      group: optionalIndex(textMining.group, d.text.group, width),
+      maxTerms: Math.max(3, Math.min(200, integer(textMining.maxTerms, d.text.maxTerms))),
+      minDocFreq: Math.max(1, Math.min(100, integer(textMining.minDocFreq, d.text.minDocFreq))),
+      topics: Math.max(2, Math.min(12, integer(textMining.topics, d.text.topics))),
+      iterations: Math.max(20, Math.min(3000, integer(textMining.iterations, d.text.iterations))),
+      seed: integer(textMining.seed, d.text.seed),
+      stopwords: bool(textMining.stopwords, d.text.stopwords),
+    },
+    choice: {
+      mode: choice.mode === 'maxdiff' ? 'maxdiff' : d.choice.mode,
+      set: index(choice.set, d.choice.set, width),
+      alternative: index(choice.alternative, d.choice.alternative, width),
+      chosen: index(choice.chosen, d.choice.chosen, width),
+      best: index(choice.best, d.choice.best, width),
+      worst: index(choice.worst, d.choice.worst, width),
+      attributes: indexList(choice.attributes, d.choice.attributes, width),
+    },
+    meta: {
+      effect: index(meta.effect, d.meta.effect, width),
+      se: index(meta.se, d.meta.se, width),
+      study: optionalIndex(meta.study, d.meta.study, width),
+      method:
+        meta.method === 'REML' || meta.method === 'FE' ? meta.method : d.meta.method,
+      egger: bool(meta.egger, d.meta.egger),
+    },
+    bayes: {
+      mode:
+        bayes.mode === 'proportion' ||
+        bayes.mode === 'rate' ||
+        bayes.mode === 'regression' ||
+        bayes.mode === 'hierarchical'
+          ? bayes.mode
+          : d.bayes.mode,
+      outcome: bayesOutcome,
+      predictors: bayesPredictors,
+      group: optionalIndex(bayes.group, d.bayes.group, width),
+      priorMean: finite(bayes.priorMean, d.bayes.priorMean),
+      priorSd: Math.max(1e-6, finite(bayes.priorSd, d.bayes.priorSd)),
+      iterations: Math.max(100, Math.min(100000, integer(bayes.iterations, d.bayes.iterations))),
+      burnin: Math.max(0, Math.min(50000, integer(bayes.burnin, d.bayes.burnin))),
+      chains: Math.max(1, Math.min(8, integer(bayes.chains, d.bayes.chains))),
+      seed: integer(bayes.seed, d.bayes.seed),
+    },
+    spatial: {
+      mode:
+        spatial.mode === 'geary' ||
+        spatial.mode === 'lisa' ||
+        spatial.mode === 'sar'
+          ? spatial.mode
+          : d.spatial.mode,
+      variable: spatialVariable,
+      predictors: indexList(spatial.predictors, d.spatial.predictors, width).filter(
+        value => value !== spatialVariable
+      ),
+      x: index(spatial.x, d.spatial.x, width),
+      y: index(spatial.y, d.spatial.y, width),
+      k: Math.max(1, Math.min(20, integer(spatial.k, d.spatial.k))),
+      permutations: Math.max(99, Math.min(9999, integer(spatial.permutations, d.spatial.permutations))),
+      seed: integer(spatial.seed, d.spatial.seed),
     },
   };
 };

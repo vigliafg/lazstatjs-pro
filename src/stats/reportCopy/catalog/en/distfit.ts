@@ -108,4 +108,56 @@ export const distfitCopy: Record<string, string> = {
     'The percentiles are those of the estimated distribution, not the observed percentiles.',
   'Con N piccolo le code sono le più incerte: evita di leggere P1 o P99 come limiti affidabili.':
     'With small N the tails are the most uncertain: avoid reading P1 or P99 as reliable limits.',
+  'A differenza di un test sulla media, non richiede la normalità: descrive tutta la distribuzione, non solo il centro.':
+    'Unlike a test on the mean, it does not require normality: it describes the whole distribution, not just the centre.',
+  'Asymptotic':
+    'Asymptotic',
+  'Con molti valori uguali il p è approssimato: i ranghi con ties riducono la precisione.':
+    'With many tied values p is approximate: tied ranks reduce precision.',
+  'D':
+    'D',
+  'D = {s1}: la massima distanza verticale tra le due distribuzioni cumulative.':
+    'D = {s1}: the maximum vertical distance between the two cumulative distributions.',
+  'D = {s1}; p = {s2} ({s3}).':
+    'D = {s1}; p = {s2} ({s3}).',
+  'D è la distanza verticale massima tra le due curve: 0 significa distribuzioni identiche, 1 nessuna sovrapposizione.':
+    'D is the maximum vertical distance between the two curves: 0 means identical distributions, 1 no overlap.',
+  'Distanza massima tra {s1} e {s2} per {s3}: {s4} (p = {s5}).':
+    'Maximum distance between {s1} and {s2} for {s3}: {s4} (p = {s5}).',
+  'Exact':
+    'Exact',
+  'Group':
+    'Group',
+  'I due campioni devono essere indipendenti.':
+    'The two samples must be independent.',
+  'Il p esatto enumera i ranghi possibili; con campioni grandi si usa l’approssimazione di Kolmogorov.':
+    'The exact p enumerates the possible ranks; with large samples the Kolmogorov approximation is used.',
+  'Il p è {s1}.':
+    'p is {s1}.',
+  'Il test bilaterale confronta le due distribuzioni cumulative: un p piccolo indica che non provengono dalla stessa popolazione.':
+    'The two-sided test compares the two cumulative distributions: a small p means they do not come from the same population.',
+  'Il test di Kolmogorov–Smirnov confronta le due distribuzioni cumulative: è sensibile a differenze di posizione, dispersione e forma.':
+    'The Kolmogorov–Smirnov test compares the two cumulative distributions: it is sensitive to differences in location, spread and shape.',
+  'Il test è bilaterale: rifiuta sia uno spostamento sia una differenza di forma.':
+    'The test is two-sided: it rejects both a shift and a difference in shape.',
+  'Kolmogorov–Smirnov (due campioni)':
+    'Kolmogorov–Smirnov (two samples)',
+  'Method':
+    'Method',
+  'Report di lettura — Kolmogorov–Smirnov':
+    'Reading report — Kolmogorov–Smirnov',
+  'Statistica e p-value':
+    'Statistic and p-value',
+  'Un p piccolo non dice quale aspetto differisca: guarda le due curve cumulative.':
+    'A small p does not say which aspect differs: look at the two cumulative curves.',
+  'asintotico':
+    'asymptotic',
+  'asintotico (serie di Kolmogorov)':
+    'asymptotic (Kolmogorov series)',
+  'esatto':
+    'exact',
+  'esatto (enumerazione dei ranghi)':
+    'exact (rank enumeration)',
+  '{s1}: {s2} osservazioni; {s3}: {s4} osservazioni.':
+    '{s1}: {s2} observations; {s3}: {s4} observations.',
 };

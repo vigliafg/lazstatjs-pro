@@ -34,4 +34,6 @@ export interface LogisticModel {
   separation: boolean;
   penalized?: boolean;
   penalizedLogLik?: number;
+  /** Link function used by the fit; defaults to the logit when absent. */
+  link?: 'logit' | 'probit';
 }

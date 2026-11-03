@@ -17,5 +17,12 @@ export const defaultQualityParams = (grid: GridData): QualityParams => {
     lsl: 0,
     usl: 10,
     target: 5,
+    toleranceP: 0.95,
+    part: first,
+    operator: category >= 0 ? category : Math.max(0, grid.cols.length - 1),
+    variables: numeric.slice(0, 2),
+    planN: 50,
+    planC: 2,
+    lotSize: 500,
   };
 };

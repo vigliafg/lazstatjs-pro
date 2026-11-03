@@ -193,6 +193,9 @@ test('agreement, TOST, ANOVA, survival and selected time-series charts expose th
         horizon: 3,
         differenceMode: 'auto',
         seasonalDifferenceMode: 'auto',
+        mode: 'arima',
+        seasonalModel: 'additive',
+        xregVariable: -1,
       },
       ciLevel: 95,
     })

@@ -22,6 +22,7 @@ export const ParametricForm = ({
   setParametricParams,
 }: ParametricFormProps) => {
   const { time, event, predictors, distribution } = parametricParams;
+  const upperVariable = parametricParams.upperVariable ?? -1;
   return (
     <div className="flex flex-col gap-3">
       <VariableSelect
@@ -35,8 +36,15 @@ export const ParametricForm = ({
         label={t('form.event')}
         value={event}
         options={variableOptions(grid.cols)}
-        disabledValues={[time]}
+        disabledValues={[time, upperVariable]}
         onChange={value => setParametricParams(prev => ({ ...prev, event: value }))}
+      />
+      <VariableSelect
+        label={t('form.upperBound')}
+        value={upperVariable}
+        options={[{ value: -1, label: t('form.noUpperBound') }, ...variableOptions(grid.cols)]}
+        disabledValues={[time, event]}
+        onChange={value => setParametricParams(prev => ({ ...prev, upperVariable: value }))}
       />
       <VariableList
         label={t('form.predictorsX')}
@@ -44,7 +52,7 @@ export const ParametricForm = ({
         only={continuousColumnIndexes(grid)}
       emptyText={t('form.noNumericColumns')}
         selected={predictors}
-        disabled={[time, event]}
+        disabled={[time, event, upperVariable]}
         showType
         hint={t('hint.parametric')}
         onToggle={(index, checked) =>
@@ -70,6 +78,9 @@ export const ParametricForm = ({
         >
           <option value="weibull">{t('form.weibull')}</option>
           <option value="exponential">{t('form.exponential')}</option>
+          <option value="lognormal">{t('form.lognormal')}</option>
+          <option value="loglogistic">{t('form.loglogistic')}</option>
+          <option value="gompertz">{t('form.gompertz')}</option>
         </select>
       </Field>
     </div>

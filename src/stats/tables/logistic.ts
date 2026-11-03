@@ -13,10 +13,18 @@ export const logisticTables = (
   const critical = zCrit(level);
   const tables: TableSpec[] = [];
 
+  const probit = model.link === 'probit';
   tables.push({
     id: 'logit-fit',
-    title: copy('Modello logistico'),
-    subtitle: copy('{s1} · N = {s2}', { s1: model.penalized ? copy('Firth penalized likelihood') : copy('stima di massima verosimiglianza'), s2: model.n }),
+    title: probit ? copy('Modello probit') : copy('Modello logistico'),
+    subtitle: copy('{s1} · N = {s2}', {
+      s1: probit
+        ? copy('stima di massima verosimiglianza (probit)')
+        : model.penalized
+          ? copy('Firth penalized likelihood')
+          : copy('stima di massima verosimiglianza'),
+      s2: model.n,
+    }),
     columns: [
       { key: 'metric', label: copy('Metrica'), format: 'text' },
       { key: 'value', label: copy('Valore'), format: 'text' },
@@ -44,7 +52,7 @@ export const logisticTables = (
 
   tables.push({
     id: 'logit-coefficients',
-    title: copy('Coefficienti e odds ratio'),
+    title: probit ? copy('Coefficienti ed exp(B)') : copy('Coefficienti e odds ratio'),
     subtitle: copy('CI {s1}%', { s1: level }),
     columns: [
       { key: 'predictor', label: copy('Predittore'), format: 'text' },
@@ -52,9 +60,9 @@ export const logisticTables = (
       { key: 'se', label: copy('SE'), format: 'dec4' },
       { key: 'z', label: copy('Wald z'), format: 'dec3' },
       { key: 'p', label: copy('p'), format: 'p' },
-      { key: 'or', label: copy('OR'), format: 'dec3' },
-      { key: 'orLo', label: copy('OR CI low'), format: 'dec3' },
-      { key: 'orHi', label: copy('OR CI high'), format: 'dec3' },
+      { key: 'or', label: probit ? copy('exp(B)') : copy('OR'), format: 'dec3' },
+      { key: 'orLo', label: probit ? copy('exp(B) CI low') : copy('OR CI low'), format: 'dec3' },
+      { key: 'orHi', label: probit ? copy('exp(B) CI high') : copy('OR CI high'), format: 'dec3' },
     ],
     rows: model.names.map((name, index) => {
       const isIntercept = index === 0;
@@ -69,11 +77,17 @@ export const logisticTables = (
         orHi: isIntercept ? NaN : Math.exp(model.beta[index] + critical * model.se[index]),
       };
     }),
-    notes: [
-      copy('OR > 1 aumenta le probabilità dell’esito per un’unità in più del predittore; OR < 1 le riduce. OR = 1 non ha effetto.'),
-      copy('L’intervallo dell’OR è calcolato su scala logaritmica: exp(B ± z·SE). Se contiene 1, l’effetto non è significativo.'),
-      copy('Il p è di Wald (z = B/SE): con campioni piccoli o effetti forti può essere meno affidabile del test LR.'),
-    ],
+    notes: probit
+      ? [
+          copy('Nel modello probit B è il coefficiente sulla scala normale latente: exp(B) non è un odds ratio ma un fattore moltiplicativo sul predittore latente.'),
+          copy('Un B positivo aumenta la probabilità dell’esito; l’effetto marginale dipende dal punto in cui viene valutato.'),
+          copy('Il p è di Wald (z = B/SE): con campioni piccoli o effetti forti può essere meno affidabile del test LR.'),
+        ]
+      : [
+          copy('OR > 1 aumenta le probabilità dell’esito per un’unità in più del predittore; OR < 1 le riduce. OR = 1 non ha effetto.'),
+          copy('L’intervallo dell’OR è calcolato su scala logaritmica: exp(B ± z·SE). Se contiene 1, l’effetto non è significativo.'),
+          copy('Il p è di Wald (z = B/SE): con campioni piccoli o effetti forti può essere meno affidabile del test LR.'),
+        ],
   });
 
   tables.push({

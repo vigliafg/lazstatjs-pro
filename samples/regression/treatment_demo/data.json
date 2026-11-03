@@ -1,0 +1,4202 @@
+[
+  {
+    "Treatment": 1,
+    "Outcome": 5.480632,
+    "Age": 57.930258,
+    "Score": 92.607416,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.618864,
+    "Age": 64.267248,
+    "Score": 98.368528,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.920607,
+    "Age": 37.144689,
+    "Score": 114.854372,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.443462,
+    "Age": 52.223013,
+    "Score": 82.978439,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.028929,
+    "Age": 64.465674,
+    "Score": 103.528229,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.274025,
+    "Age": 48.09541,
+    "Score": 114.419729,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.720429,
+    "Age": 56.283938,
+    "Score": 80.465557,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.389702,
+    "Age": 45.258094,
+    "Score": 100.261088,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.160047,
+    "Age": 57.035199,
+    "Score": 93.702515,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.388382,
+    "Age": 52.563758,
+    "Score": 83.888862,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.7965,
+    "Age": 62.034126,
+    "Score": 84.002891,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.110577,
+    "Age": 30.026367,
+    "Score": 107.118292,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.99493,
+    "Age": 57.900604,
+    "Score": 143.119038,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.36622,
+    "Age": 47.179855,
+    "Score": 72.790726,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.46013,
+    "Age": 39.96775,
+    "Score": 105.611936,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.156591,
+    "Age": 46.356972,
+    "Score": 92.109473,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.64287,
+    "Age": 49.304522,
+    "Score": 87.778586,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.181508,
+    "Age": 40.55797,
+    "Score": 96.119214,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.370243,
+    "Age": 57.576507,
+    "Score": 118.524222,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.821732,
+    "Age": 50.406991,
+    "Score": 71.454678,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.930487,
+    "Age": 44.186319,
+    "Score": 100.904059,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.252041,
+    "Age": 39.786424,
+    "Score": 124.161577,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.821668,
+    "Age": 52.222496,
+    "Score": 109.869936,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.568385,
+    "Age": 50.609344,
+    "Score": 97.312057,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.016734,
+    "Age": 53.348164,
+    "Score": 98.569721,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.153231,
+    "Age": 60.794477,
+    "Score": 96.098942,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.869496,
+    "Age": 64.63238,
+    "Score": 94.064453,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.181066,
+    "Age": 39.638172,
+    "Score": 110.259889,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.915186,
+    "Age": 54.455111,
+    "Score": 98.49975,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -1.195777,
+    "Age": 17.962626,
+    "Score": 83.588678,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.497982,
+    "Age": 53.655974,
+    "Score": 108.352511,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.750698,
+    "Age": 38.650867,
+    "Score": 130.364285,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.910343,
+    "Age": 49.031073,
+    "Score": 105.811237,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.897743,
+    "Age": 61.144098,
+    "Score": 101.122884,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.927498,
+    "Age": 29.595095,
+    "Score": 107.226652,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.921025,
+    "Age": 56.664002,
+    "Score": 110.918562,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.65311,
+    "Age": 52.018824,
+    "Score": 68.446954,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.416407,
+    "Age": 56.399738,
+    "Score": 102.390561,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.495282,
+    "Age": 55.914186,
+    "Score": 90.895351,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.630675,
+    "Age": 27.871606,
+    "Score": 84.064039,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -1.19617,
+    "Age": 30.21374,
+    "Score": 68.721335,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.721894,
+    "Age": 48.92363,
+    "Score": 119.270722,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.864075,
+    "Age": 45.904653,
+    "Score": 101.915157,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.341074,
+    "Age": 52.55718,
+    "Score": 72.750209,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.000199,
+    "Age": 40.033587,
+    "Score": 113.482764,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.21723,
+    "Age": 52.134656,
+    "Score": 92.458812,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.211881,
+    "Age": 49.501558,
+    "Score": 112.700802,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.359825,
+    "Age": 45.561735,
+    "Score": 80.87788,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.117683,
+    "Age": 70.784149,
+    "Score": 84.226989,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.400921,
+    "Age": 48.472594,
+    "Score": 86.945044,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.072087,
+    "Age": 11.753603,
+    "Score": 114.662694,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.810664,
+    "Age": 71.896759,
+    "Score": 99.919531,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.951768,
+    "Age": 42.826099,
+    "Score": 107.708826,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.094001,
+    "Age": 47.54611,
+    "Score": 96.099378,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.887388,
+    "Age": 19.198306,
+    "Score": 133.889118,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.883057,
+    "Age": 51.32746,
+    "Score": 118.516285,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.136532,
+    "Age": 53.149986,
+    "Score": 81.373179,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.70932,
+    "Age": 32.894323,
+    "Score": 92.930946,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.606352,
+    "Age": 67.866457,
+    "Score": 95.334803,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.943797,
+    "Age": 62.242115,
+    "Score": 67.867683,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.310664,
+    "Age": 58.050615,
+    "Score": 102.694556,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.109889,
+    "Age": 37.684133,
+    "Score": 66.537275,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.600295,
+    "Age": 57.129623,
+    "Score": 114.206054,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.482206,
+    "Age": 38.783014,
+    "Score": 89.52812,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.532139,
+    "Age": 46.975633,
+    "Score": 94.422649,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.886873,
+    "Age": 51.955833,
+    "Score": 97.521917,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.735003,
+    "Age": 50.46289,
+    "Score": 71.576738,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.641648,
+    "Age": 39.255298,
+    "Score": 105.750578,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.515551,
+    "Age": 50.212728,
+    "Score": 102.924701,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.746658,
+    "Age": 33.100888,
+    "Score": 92.20125,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.251104,
+    "Age": 20.499468,
+    "Score": 91.832526,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.576776,
+    "Age": 31.355358,
+    "Score": 93.504622,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.244678,
+    "Age": 38.47762,
+    "Score": 76.970407,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.630151,
+    "Age": 27.43467,
+    "Score": 88.924885,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.714402,
+    "Age": 41.774946,
+    "Score": 109.764375,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.666681,
+    "Age": 50.837744,
+    "Score": 108.426154,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.532198,
+    "Age": 26.311387,
+    "Score": 104.714183,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.579716,
+    "Age": 53.054488,
+    "Score": 84.896715,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.042681,
+    "Age": 46.819219,
+    "Score": 123.507518,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.558773,
+    "Age": 48.265547,
+    "Score": 110.226025,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.631576,
+    "Age": 49.538821,
+    "Score": 83.618238,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.744161,
+    "Age": 36.119205,
+    "Score": 112.272948,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.495412,
+    "Age": 28.060984,
+    "Score": 86.994342,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.266041,
+    "Age": 40.425076,
+    "Score": 137.493956,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.565105,
+    "Age": 56.789008,
+    "Score": 103.921883,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.164381,
+    "Age": 56.621377,
+    "Score": 123.510345,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.409227,
+    "Age": 33.74597,
+    "Score": 102.524601,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.073138,
+    "Age": 32.010152,
+    "Score": 112.225892,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.983022,
+    "Age": 45.143417,
+    "Score": 91.098752,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.91116,
+    "Age": 18.498822,
+    "Score": 120.301505,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.582184,
+    "Age": 58.235952,
+    "Score": 98.41018,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.16176,
+    "Age": 31.752932,
+    "Score": 78.176156,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.354556,
+    "Age": 54.539228,
+    "Score": 87.798491,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.914763,
+    "Age": 27.956299,
+    "Score": 97.971981,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.38925,
+    "Age": 63.194821,
+    "Score": 107.953841,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.146601,
+    "Age": 26.065315,
+    "Score": 89.867207,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.598481,
+    "Age": 63.323464,
+    "Score": 117.466988,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.088467,
+    "Age": 40.271028,
+    "Score": 111.519726,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.653542,
+    "Age": 31.67804,
+    "Score": 114.599155,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.203606,
+    "Age": 53.250704,
+    "Score": 92.729303,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.506273,
+    "Age": 51.725573,
+    "Score": 122.934334,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.848601,
+    "Age": 49.447154,
+    "Score": 78.380344,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.157817,
+    "Age": 37.431726,
+    "Score": 83.783426,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.983299,
+    "Age": 39.124158,
+    "Score": 76.211803,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.507105,
+    "Age": 63.289184,
+    "Score": 68.611241,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.202443,
+    "Age": 54.270822,
+    "Score": 95.273727,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.41819,
+    "Age": 57.357725,
+    "Score": 91.369187,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.903899,
+    "Age": 52.145322,
+    "Score": 112.47726,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.678715,
+    "Age": 39.319776,
+    "Score": 111.156469,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.595204,
+    "Age": 54.662934,
+    "Score": 93.201103,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.97061,
+    "Age": 35.622725,
+    "Score": 81.645989,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.525205,
+    "Age": 33.108729,
+    "Score": 95.822554,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.244329,
+    "Age": 32.018901,
+    "Score": 87.58407,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.801791,
+    "Age": 52.202631,
+    "Score": 118.837391,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.449971,
+    "Age": 45.661524,
+    "Score": 107.387839,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.88256,
+    "Age": 42.196755,
+    "Score": 103.37976,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.665118,
+    "Age": 37.951159,
+    "Score": 98.993033,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.71898,
+    "Age": 67.22471,
+    "Score": 89.807082,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.670027,
+    "Age": 38.319877,
+    "Score": 71.795294,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.695554,
+    "Age": 33.062007,
+    "Score": 84.334787,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.290065,
+    "Age": 26.381111,
+    "Score": 111.188264,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.940961,
+    "Age": 44.857896,
+    "Score": 121.794534,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.745032,
+    "Age": 41.736481,
+    "Score": 98.407863,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.162638,
+    "Age": 46.944549,
+    "Score": 101.325749,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.955857,
+    "Age": 40.582421,
+    "Score": 95.888016,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.507692,
+    "Age": 49.722775,
+    "Score": 125.923579,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.12384,
+    "Age": 41.558921,
+    "Score": 97.170478,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.143898,
+    "Age": 34.077077,
+    "Score": 105.389126,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.201991,
+    "Age": 40.290811,
+    "Score": 71.90651,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.024347,
+    "Age": 41.564012,
+    "Score": 71.321461,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.667044,
+    "Age": 17.611167,
+    "Score": 100.202585,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.889174,
+    "Age": 45.50441,
+    "Score": 108.917111,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.329874,
+    "Age": 54.398073,
+    "Score": 71.957196,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.056246,
+    "Age": 32.778932,
+    "Score": 93.09185,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.343695,
+    "Age": 49.341471,
+    "Score": 95.837194,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.886892,
+    "Age": 56.434357,
+    "Score": 96.493586,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.446534,
+    "Age": 10.489793,
+    "Score": 92.834249,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.880625,
+    "Age": 42.235007,
+    "Score": 113.799707,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.144106,
+    "Age": 31.907715,
+    "Score": 114.125994,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.533249,
+    "Age": 37.51778,
+    "Score": 101.563804,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.88837,
+    "Age": 49.873758,
+    "Score": 91.541154,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.745058,
+    "Age": 48.997806,
+    "Score": 74.769043,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.211651,
+    "Age": 49.162527,
+    "Score": 110.822508,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.841706,
+    "Age": 55.906314,
+    "Score": 91.533237,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.561637,
+    "Age": 35.183031,
+    "Score": 81.479536,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.350623,
+    "Age": 27.573979,
+    "Score": 89.259843,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.717005,
+    "Age": 51.901774,
+    "Score": 104.366593,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.523729,
+    "Age": 24.467946,
+    "Score": 95.780442,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.93106,
+    "Age": 24.259482,
+    "Score": 79.252423,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.470672,
+    "Age": 43.23541,
+    "Score": 105.975365,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.999198,
+    "Age": 35.509662,
+    "Score": 110.570963,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.08868,
+    "Age": 22.252147,
+    "Score": 91.731541,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.626008,
+    "Age": 65.878833,
+    "Score": 104.641978,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.41038,
+    "Age": 46.83307,
+    "Score": 123.190063,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.119877,
+    "Age": 42.408372,
+    "Score": 103.846824,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.516606,
+    "Age": 66.518377,
+    "Score": 86.538478,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.663524,
+    "Age": 42.335057,
+    "Score": 94.369016,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.459776,
+    "Age": 50.34554,
+    "Score": 99.512293,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.584084,
+    "Age": 54.693975,
+    "Score": 77.042411,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.13479,
+    "Age": 52.065053,
+    "Score": 116.179432,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.30271,
+    "Age": 54.651976,
+    "Score": 102.423806,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.6364,
+    "Age": 40.742749,
+    "Score": 80.779063,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.410355,
+    "Age": 57.717974,
+    "Score": 95.79445,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.550972,
+    "Age": 33.400837,
+    "Score": 74.486028,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.893213,
+    "Age": 45.830553,
+    "Score": 105.4584,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.868135,
+    "Age": 65.522126,
+    "Score": 95.308327,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.300924,
+    "Age": 36.601469,
+    "Score": 116.101846,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.092112,
+    "Age": 55.536448,
+    "Score": 114.98689,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.091249,
+    "Age": 66.45329,
+    "Score": 103.62933,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.281205,
+    "Age": 29.880566,
+    "Score": 95.200857,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.434071,
+    "Age": 22.132933,
+    "Score": 93.839886,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.058709,
+    "Age": 37.62973,
+    "Score": 98.221562,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.249077,
+    "Age": 65.095105,
+    "Score": 96.850339,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.438253,
+    "Age": 39.055025,
+    "Score": 54.204795,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.095322,
+    "Age": 48.473765,
+    "Score": 100.526576,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.340011,
+    "Age": 39.419596,
+    "Score": 93.53635,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.243158,
+    "Age": 56.830015,
+    "Score": 95.344337,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.4764,
+    "Age": 34.287761,
+    "Score": 78.590461,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.806427,
+    "Age": 42.35276,
+    "Score": 106.160711,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.501692,
+    "Age": 43.990221,
+    "Score": 82.780482,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.909638,
+    "Age": 69.248627,
+    "Score": 135.127548,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.022351,
+    "Age": 57.04112,
+    "Score": 94.613904,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.183996,
+    "Age": 38.978559,
+    "Score": 102.746119,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.446738,
+    "Age": 23.48825,
+    "Score": 115.311758,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.719417,
+    "Age": 31.829191,
+    "Score": 94.997198,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.434537,
+    "Age": 61.260155,
+    "Score": 91.546137,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.984463,
+    "Age": 57.028783,
+    "Score": 111.440457,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.368559,
+    "Age": 60.702649,
+    "Score": 110.245579,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.752192,
+    "Age": 62.270889,
+    "Score": 104.977164,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.396229,
+    "Age": 46.825013,
+    "Score": 114.059389,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.837723,
+    "Age": 43.141412,
+    "Score": 101.623365,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.46813,
+    "Age": 62.996628,
+    "Score": 136.300329,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.22133,
+    "Age": 49.89092,
+    "Score": 85.861919,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.264376,
+    "Age": 22.479347,
+    "Score": 82.469964,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.957905,
+    "Age": 32.682869,
+    "Score": 118.426304,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.697936,
+    "Age": 68.097292,
+    "Score": 127.018019,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.703085,
+    "Age": 58.75613,
+    "Score": 102.436854,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.15183,
+    "Age": 55.500124,
+    "Score": 97.096285,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.052613,
+    "Age": 40.041144,
+    "Score": 93.744069,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.984829,
+    "Age": 54.298171,
+    "Score": 112.184363,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.420647,
+    "Age": 18.068057,
+    "Score": 92.986519,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.942282,
+    "Age": 56.429443,
+    "Score": 98.722626,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.672633,
+    "Age": 37.446011,
+    "Score": 95.969778,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.987188,
+    "Age": 56.167006,
+    "Score": 106.6401,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.836983,
+    "Age": 42.206519,
+    "Score": 123.323402,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.799939,
+    "Age": 54.064893,
+    "Score": 103.963504,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.075309,
+    "Age": 35.331058,
+    "Score": 109.48903,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.257769,
+    "Age": 47.704989,
+    "Score": 105.805079,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.020987,
+    "Age": 34.56753,
+    "Score": 75.109797,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.184024,
+    "Age": 32.39653,
+    "Score": 95.598954,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.713026,
+    "Age": 35.176088,
+    "Score": 113.997442,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.445886,
+    "Age": 35.164727,
+    "Score": 65.060978,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.206565,
+    "Age": 60.95025,
+    "Score": 86.153326,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.967312,
+    "Age": 71.330203,
+    "Score": 81.641789,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.10061,
+    "Age": 35.935538,
+    "Score": 99.973916,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.334838,
+    "Age": 55.648799,
+    "Score": 112.02104,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.222476,
+    "Age": 52.987431,
+    "Score": 121.998769,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.520217,
+    "Age": 45.769417,
+    "Score": 112.169889,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.436069,
+    "Age": 40.102104,
+    "Score": 93.988591,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.961359,
+    "Age": 32.194748,
+    "Score": 79.454101,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.995064,
+    "Age": 41.025113,
+    "Score": 85.9408,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.422305,
+    "Age": 58.233752,
+    "Score": 118.634891,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.665736,
+    "Age": 48.694853,
+    "Score": 114.755267,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.417836,
+    "Age": 18.732628,
+    "Score": 114.672256,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.385214,
+    "Age": 43.488507,
+    "Score": 85.180466,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.082526,
+    "Age": 53.459029,
+    "Score": 101.706265,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.521227,
+    "Age": 49.196731,
+    "Score": 101.310917,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.120954,
+    "Age": 38.962673,
+    "Score": 109.877268,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.749805,
+    "Age": 58.156347,
+    "Score": 108.667547,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.843604,
+    "Age": 39.983251,
+    "Score": 100.434482,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.231114,
+    "Age": 58.699828,
+    "Score": 108.949047,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.473089,
+    "Age": 50.429823,
+    "Score": 105.648359,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.478354,
+    "Age": 38.326794,
+    "Score": 78.784628,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.048266,
+    "Age": 22.80133,
+    "Score": 107.400556,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.913815,
+    "Age": 25.574198,
+    "Score": 89.684234,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.850502,
+    "Age": 37.160345,
+    "Score": 101.464776,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.699576,
+    "Age": 51.284069,
+    "Score": 120.82295,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.508451,
+    "Age": 62.112468,
+    "Score": 86.82418,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.629343,
+    "Age": 50.736087,
+    "Score": 94.021346,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.205075,
+    "Age": 56.924038,
+    "Score": 67.606189,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.399793,
+    "Age": 47.070135,
+    "Score": 107.639006,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.891838,
+    "Age": 31.270923,
+    "Score": 120.687371,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.80254,
+    "Age": 41.628897,
+    "Score": 84.396891,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.587064,
+    "Age": 47.957443,
+    "Score": 81.350124,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.275705,
+    "Age": 60.068613,
+    "Score": 90.032834,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.457995,
+    "Age": 61.764308,
+    "Score": 93.499237,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.734463,
+    "Age": 49.263061,
+    "Score": 95.666723,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.686106,
+    "Age": 47.992291,
+    "Score": 112.259806,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.995918,
+    "Age": 41.077607,
+    "Score": 121.293372,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.197873,
+    "Age": 51.676248,
+    "Score": 107.335334,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.86355,
+    "Age": 37.924089,
+    "Score": 119.377777,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.371557,
+    "Age": 35.791024,
+    "Score": 96.828896,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.867475,
+    "Age": 45.91696,
+    "Score": 138.29087,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.848227,
+    "Age": 54.127763,
+    "Score": 96.737382,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.54159,
+    "Age": 58.768072,
+    "Score": 89.747813,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.349585,
+    "Age": 66.773056,
+    "Score": 131.709536,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.820043,
+    "Age": 55.113888,
+    "Score": 104.334649,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.16887,
+    "Age": 41.72135,
+    "Score": 118.461555,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.551345,
+    "Age": 65.452615,
+    "Score": 93.43553,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.975604,
+    "Age": 44.696608,
+    "Score": 109.659442,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.355016,
+    "Age": 37.912257,
+    "Score": 122.285911,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.00754,
+    "Age": 45.615098,
+    "Score": 86.50288,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.308134,
+    "Age": 44.377161,
+    "Score": 92.288645,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.211606,
+    "Age": 47.274462,
+    "Score": 97.430861,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.538531,
+    "Age": 45.261879,
+    "Score": 94.122776,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.843833,
+    "Age": 38.592017,
+    "Score": 105.625628,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.219047,
+    "Age": 37.414324,
+    "Score": 91.024096,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.404205,
+    "Age": 39.577068,
+    "Score": 106.269061,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.997033,
+    "Age": 18.787919,
+    "Score": 100.089871,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.49645,
+    "Age": 40.317527,
+    "Score": 116.613517,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.6259,
+    "Age": 44.995092,
+    "Score": 100.630153,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.404175,
+    "Age": 23.72128,
+    "Score": 112.319761,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.469704,
+    "Age": 47.011936,
+    "Score": 90.422015,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.722655,
+    "Age": 46.693265,
+    "Score": 80.455136,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.178631,
+    "Age": 42.327208,
+    "Score": 96.390959,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.76911,
+    "Age": 42.921554,
+    "Score": 126.813324,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.369657,
+    "Age": 35.821262,
+    "Score": 96.200061,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.513301,
+    "Age": 41.433095,
+    "Score": 99.781487,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.11116,
+    "Age": 59.553967,
+    "Score": 110.224851,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.146413,
+    "Age": 38.923238,
+    "Score": 120.066582,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.564634,
+    "Age": 58.822769,
+    "Score": 85.912115,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.578118,
+    "Age": 58.832644,
+    "Score": 118.354625,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.131444,
+    "Age": 42.817537,
+    "Score": 107.838483,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.001541,
+    "Age": 48.500994,
+    "Score": 94.352115,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.314523,
+    "Age": 34.78573,
+    "Score": 76.261889,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.759098,
+    "Age": 36.301395,
+    "Score": 106.468186,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.931638,
+    "Age": 58.651795,
+    "Score": 87.505553,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.542275,
+    "Age": 38.206366,
+    "Score": 107.804108,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.460169,
+    "Age": 38.038724,
+    "Score": 76.357036,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.02208,
+    "Age": 55.762799,
+    "Score": 90.574055,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.386481,
+    "Age": 67.058191,
+    "Score": 81.142982,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.295694,
+    "Age": 47.633477,
+    "Score": 96.936455,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.70448,
+    "Age": 41.282334,
+    "Score": 118.973553,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.946475,
+    "Age": 58.925014,
+    "Score": 115.898595,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.150354,
+    "Age": 44.473278,
+    "Score": 102.574512,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.281265,
+    "Age": 35.841405,
+    "Score": 97.522233,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.48162,
+    "Age": 42.358006,
+    "Score": 115.930841,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.480703,
+    "Age": 34.289857,
+    "Score": 83.143161,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.454074,
+    "Age": 63.008346,
+    "Score": 114.03743,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.569216,
+    "Age": 29.667943,
+    "Score": 95.087128,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.013621,
+    "Age": 41.397543,
+    "Score": 76.040818,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.863586,
+    "Age": 29.608367,
+    "Score": 93.034574,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.005212,
+    "Age": 60.256074,
+    "Score": 104.171501,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.513831,
+    "Age": 40.859604,
+    "Score": 111.927089,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.588087,
+    "Age": 26.062838,
+    "Score": 114.724894,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.529457,
+    "Age": 48.832015,
+    "Score": 100.181299,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.345287,
+    "Age": 18.776679,
+    "Score": 83.561613,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.383042,
+    "Age": 47.153628,
+    "Score": 96.912541,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.556875,
+    "Age": 50.769452,
+    "Score": 77.377431,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.174203,
+    "Age": 49.574365,
+    "Score": 89.244286,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.016967,
+    "Age": 34.949692,
+    "Score": 107.468437,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.239826,
+    "Age": 51.037594,
+    "Score": 102.562498,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.849463,
+    "Age": 52.821591,
+    "Score": 80.906465,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.682448,
+    "Age": 28.827417,
+    "Score": 110.354061,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.627435,
+    "Age": 69.264747,
+    "Score": 78.782332,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.171668,
+    "Age": 45.645871,
+    "Score": 114.017333,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.016885,
+    "Age": 56.728111,
+    "Score": 134.594313,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.169372,
+    "Age": 36.239078,
+    "Score": 112.787954,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.262815,
+    "Age": 39.712859,
+    "Score": 112.862051,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.974366,
+    "Age": 45.630282,
+    "Score": 111.784661,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.595978,
+    "Age": 33.727472,
+    "Score": 127.266331,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.231549,
+    "Age": 44.428244,
+    "Score": 104.139727,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.698967,
+    "Age": 43.896862,
+    "Score": 113.850556,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.807797,
+    "Age": 54.757745,
+    "Score": 100.66659,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.651396,
+    "Age": 20.253113,
+    "Score": 95.678245,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.578988,
+    "Age": 57.210787,
+    "Score": 120.162421,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.711576,
+    "Age": 31.768787,
+    "Score": 108.734421,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.055333,
+    "Age": 21.112817,
+    "Score": 103.205461,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.356266,
+    "Age": 59.369184,
+    "Score": 98.829399,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.885457,
+    "Age": 48.017536,
+    "Score": 101.109472,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.043596,
+    "Age": 46.174874,
+    "Score": 65.983843,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.662233,
+    "Age": 53.838317,
+    "Score": 90.785514,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.007014,
+    "Age": 36.028212,
+    "Score": 91.801631,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.368279,
+    "Age": 48.054229,
+    "Score": 87.970605,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.635646,
+    "Age": 37.273049,
+    "Score": 96.485745,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.767936,
+    "Age": 35.896065,
+    "Score": 109.307266,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.694362,
+    "Age": 33.65687,
+    "Score": 124.005464,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.273307,
+    "Age": 31.290313,
+    "Score": 90.066646,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.35321,
+    "Age": 68.272376,
+    "Score": 112.04314,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.828558,
+    "Age": 35.179968,
+    "Score": 116.302566,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.915032,
+    "Age": 55.378116,
+    "Score": 113.481156,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.202465,
+    "Age": 40.737507,
+    "Score": 97.081279,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.184151,
+    "Age": 38.931347,
+    "Score": 90.12382,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.783492,
+    "Age": 55.603175,
+    "Score": 92.922996,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.909348,
+    "Age": 38.419388,
+    "Score": 97.899062,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.893154,
+    "Age": 59.404682,
+    "Score": 102.245846,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.433149,
+    "Age": 38.373515,
+    "Score": 99.482207,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.432645,
+    "Age": 35.328678,
+    "Score": 107.623478,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.51922,
+    "Age": 31.302421,
+    "Score": 90.718459,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.687095,
+    "Age": 47.221239,
+    "Score": 114.399994,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.378418,
+    "Age": 46.092816,
+    "Score": 84.944733,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.713872,
+    "Age": 38.92559,
+    "Score": 89.41496,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.519166,
+    "Age": 47.01131,
+    "Score": 103.948821,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.250504,
+    "Age": 42.118237,
+    "Score": 110.090156,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.019894,
+    "Age": 33.157533,
+    "Score": 94.490517,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.214754,
+    "Age": 38.528444,
+    "Score": 85.987086,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.529511,
+    "Age": 44.070095,
+    "Score": 99.259079,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.021212,
+    "Age": 53.281429,
+    "Score": 87.213482,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.652975,
+    "Age": 50.196734,
+    "Score": 92.791428,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.363881,
+    "Age": 51.357732,
+    "Score": 103.0446,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.376457,
+    "Age": 35.756709,
+    "Score": 89.504178,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.580909,
+    "Age": 29.072509,
+    "Score": 83.566296,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.831084,
+    "Age": 56.095153,
+    "Score": 91.129267,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.962429,
+    "Age": 35.948023,
+    "Score": 99.83315,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.973988,
+    "Age": 43.557561,
+    "Score": 90.109375,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.835072,
+    "Age": 38.116379,
+    "Score": 98.347866,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.779867,
+    "Age": 45.850109,
+    "Score": 100.307252,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.62216,
+    "Age": 64.714497,
+    "Score": 89.201628,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.915882,
+    "Age": 40.912621,
+    "Score": 95.674464,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.48033,
+    "Age": 63.634923,
+    "Score": 100.007545,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.793356,
+    "Age": 56.324995,
+    "Score": 90.610481,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.449967,
+    "Age": 16.746289,
+    "Score": 92.432649,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.137872,
+    "Age": 61.174921,
+    "Score": 135.716653,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.788084,
+    "Age": 51.455373,
+    "Score": 87.320093,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.080682,
+    "Age": 44.869673,
+    "Score": 102.12993,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.202359,
+    "Age": 58.002379,
+    "Score": 108.169224,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.650775,
+    "Age": 65.266639,
+    "Score": 79.54697,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.753145,
+    "Age": 57.957199,
+    "Score": 68.352465,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.705978,
+    "Age": 42.549052,
+    "Score": 120.841831,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.266526,
+    "Age": 47.106262,
+    "Score": 127.980424,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.965383,
+    "Age": 57.937275,
+    "Score": 121.333851,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.220116,
+    "Age": 51.519957,
+    "Score": 106.452044,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.035621,
+    "Age": 31.201951,
+    "Score": 122.469964,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.568423,
+    "Age": 68.802476,
+    "Score": 107.122582,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.389728,
+    "Age": 50.432939,
+    "Score": 95.946289,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.050865,
+    "Age": 43.024263,
+    "Score": 80.633067,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.173851,
+    "Age": 35.067269,
+    "Score": 93.702183,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.571235,
+    "Age": 41.338345,
+    "Score": 85.305499,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.506896,
+    "Age": 50.548994,
+    "Score": 92.24238,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.098671,
+    "Age": 38.687458,
+    "Score": 107.342202,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.589953,
+    "Age": 34.778578,
+    "Score": 103.952239,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.717772,
+    "Age": 43.042128,
+    "Score": 78.560334,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.542202,
+    "Age": 36.7599,
+    "Score": 127.770971,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.114225,
+    "Age": 54.515278,
+    "Score": 100.415233,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.876891,
+    "Age": 31.342434,
+    "Score": 85.946727,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.125177,
+    "Age": 44.0935,
+    "Score": 85.79857,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.661734,
+    "Age": 33.523674,
+    "Score": 109.937309,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.346158,
+    "Age": 40.332474,
+    "Score": 91.611344,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.491128,
+    "Age": 45.975036,
+    "Score": 103.054323,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.300128,
+    "Age": 35.292603,
+    "Score": 97.515164,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.033526,
+    "Age": 33.689216,
+    "Score": 105.994816,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.897391,
+    "Age": 31.62374,
+    "Score": 101.963631,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.86706,
+    "Age": 48.161674,
+    "Score": 117.82463,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.997329,
+    "Age": 31.562822,
+    "Score": 101.66638,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.85545,
+    "Age": 44.521229,
+    "Score": 85.897559,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.676391,
+    "Age": 69.734368,
+    "Score": 109.477913,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.722714,
+    "Age": 38.486296,
+    "Score": 94.716685,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.714006,
+    "Age": 52.611769,
+    "Score": 115.091041,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.887572,
+    "Age": 34.015153,
+    "Score": 109.714371,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.531495,
+    "Age": 53.775189,
+    "Score": 81.738464,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.134459,
+    "Age": 36.558338,
+    "Score": 77.411484,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.194648,
+    "Age": 43.985013,
+    "Score": 89.687615,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.44995,
+    "Age": 37.057865,
+    "Score": 96.514464,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.852866,
+    "Age": 34.394945,
+    "Score": 109.909137,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.159487,
+    "Age": 39.27493,
+    "Score": 72.219125,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.135012,
+    "Age": 52.066294,
+    "Score": 99.69681,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.625798,
+    "Age": 52.662038,
+    "Score": 107.965019,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.394772,
+    "Age": 53.415406,
+    "Score": 104.699084,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.499885,
+    "Age": 56.777741,
+    "Score": 84.931062,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.56921,
+    "Age": 51.374231,
+    "Score": 73.570091,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.118132,
+    "Age": 52.022915,
+    "Score": 93.557245,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.259538,
+    "Age": 54.933685,
+    "Score": 114.382455,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.423649,
+    "Age": 43.807722,
+    "Score": 97.809912,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.213275,
+    "Age": 30.799719,
+    "Score": 116.296088,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.696344,
+    "Age": 72.320358,
+    "Score": 90.100575,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.550138,
+    "Age": 26.70197,
+    "Score": 87.514839,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 2.96854,
+    "Age": 40.733116,
+    "Score": 83.977398,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.372216,
+    "Age": 37.580757,
+    "Score": 80.141953,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.899466,
+    "Age": 52.17513,
+    "Score": 92.452042,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.782967,
+    "Age": 41.929034,
+    "Score": 106.328434,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.258549,
+    "Age": 28.40503,
+    "Score": 92.082875,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.500037,
+    "Age": 48.88387,
+    "Score": 87.411311,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.049297,
+    "Age": 55.537334,
+    "Score": 95.010331,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.64555,
+    "Age": 20.224573,
+    "Score": 83.874403,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.241581,
+    "Age": 50.368164,
+    "Score": 103.654616,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.233261,
+    "Age": 47.127713,
+    "Score": 93.745128,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.606587,
+    "Age": 68.307585,
+    "Score": 94.021993,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.690461,
+    "Age": 59.921323,
+    "Score": 101.478,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.616412,
+    "Age": 34.104383,
+    "Score": 114.304612,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.867898,
+    "Age": 51.305111,
+    "Score": 118.80628,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.823595,
+    "Age": 45.95693,
+    "Score": 77.497888,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.325824,
+    "Age": 42.355279,
+    "Score": 132.223071,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.54761,
+    "Age": 38.957757,
+    "Score": 110.44097,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.584093,
+    "Age": 40.445133,
+    "Score": 118.042857,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.763553,
+    "Age": 33.423734,
+    "Score": 85.964818,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.198027,
+    "Age": 30.036915,
+    "Score": 128.104942,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.980903,
+    "Age": 52.862558,
+    "Score": 102.025777,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.83232,
+    "Age": 51.308571,
+    "Score": 130.379783,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.018229,
+    "Age": 41.659648,
+    "Score": 113.913654,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.960162,
+    "Age": 43.563533,
+    "Score": 112.35823,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.271016,
+    "Age": 12.805689,
+    "Score": 79.337198,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.855185,
+    "Age": 39.978755,
+    "Score": 110.667841,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.499044,
+    "Age": 46.78928,
+    "Score": 109.594931,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.112071,
+    "Age": 14.94442,
+    "Score": 105.342835,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.299164,
+    "Age": 59.143877,
+    "Score": 91.448637,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.884239,
+    "Age": 47.718188,
+    "Score": 114.731283,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.333689,
+    "Age": 33.755116,
+    "Score": 99.523412,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.253555,
+    "Age": 47.166303,
+    "Score": 95.557215,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.140352,
+    "Age": 48.377707,
+    "Score": 116.033086,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.304527,
+    "Age": 28.011564,
+    "Score": 112.772641,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.355178,
+    "Age": 34.167146,
+    "Score": 84.72625,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.078794,
+    "Age": 57.726879,
+    "Score": 114.467063,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.676732,
+    "Age": 38.619596,
+    "Score": 140.745398,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.805514,
+    "Age": 61.856532,
+    "Score": 138.041326,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.988593,
+    "Age": 66.318134,
+    "Score": 94.144412,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.625976,
+    "Age": 30.175545,
+    "Score": 105.235504,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.345255,
+    "Age": 35.748859,
+    "Score": 105.025759,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.979255,
+    "Age": 39.066547,
+    "Score": 99.335921,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.671783,
+    "Age": 33.756882,
+    "Score": 107.493521,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.51199,
+    "Age": 52.82317,
+    "Score": 107.937078,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.664245,
+    "Age": 50.356073,
+    "Score": 98.284774,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.994674,
+    "Age": 37.369317,
+    "Score": 128.02272,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.365415,
+    "Age": 38.351216,
+    "Score": 81.883322,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.378049,
+    "Age": 56.149603,
+    "Score": 78.783953,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.477847,
+    "Age": 57.795176,
+    "Score": 107.487537,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.748518,
+    "Age": 55.130236,
+    "Score": 93.809416,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.174157,
+    "Age": 20.25778,
+    "Score": 109.253707,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.097073,
+    "Age": 54.460531,
+    "Score": 126.182594,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.582696,
+    "Age": 51.013782,
+    "Score": 94.881435,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.382523,
+    "Age": 23.200796,
+    "Score": 85.412632,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.830775,
+    "Age": 41.076142,
+    "Score": 121.922955,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.13342,
+    "Age": 43.961577,
+    "Score": 87.404927,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.52193,
+    "Age": 43.045605,
+    "Score": 97.378738,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.620092,
+    "Age": 46.967539,
+    "Score": 93.23522,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.856794,
+    "Age": 51.693903,
+    "Score": 101.742912,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.830544,
+    "Age": 35.440706,
+    "Score": 106.454988,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.067312,
+    "Age": 30.335406,
+    "Score": 131.504665,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.978511,
+    "Age": 40.359983,
+    "Score": 75.956351,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.083605,
+    "Age": 24.714426,
+    "Score": 78.724835,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.754565,
+    "Age": 57.551996,
+    "Score": 92.110291,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.463778,
+    "Age": 19.106055,
+    "Score": 107.326432,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.414035,
+    "Age": 42.191256,
+    "Score": 101.199375,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.632895,
+    "Age": 42.577491,
+    "Score": 90.017769,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.66116,
+    "Age": 46.051564,
+    "Score": 89.812143,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.143061,
+    "Age": 53.952577,
+    "Score": 124.927807,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.545862,
+    "Age": 62.671202,
+    "Score": 98.723844,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.696202,
+    "Age": 44.405237,
+    "Score": 81.817871,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.096083,
+    "Age": 40.847653,
+    "Score": 91.462506,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.975447,
+    "Age": 32.101472,
+    "Score": 110.068158,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.382869,
+    "Age": 39.417159,
+    "Score": 110.073622,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.695259,
+    "Age": 52.82662,
+    "Score": 89.563374,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.740215,
+    "Age": 46.313063,
+    "Score": 116.201117,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.617552,
+    "Age": 53.658488,
+    "Score": 96.164606,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.024759,
+    "Age": 34.098937,
+    "Score": 120.719805,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.303538,
+    "Age": 41.214001,
+    "Score": 97.352328,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.353356,
+    "Age": 30.723501,
+    "Score": 79.984324,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.883149,
+    "Age": 70.144301,
+    "Score": 88.913459,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.945668,
+    "Age": 24.419042,
+    "Score": 100.017099,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.302127,
+    "Age": 59.05073,
+    "Score": 109.274,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.809069,
+    "Age": 49.506211,
+    "Score": 104.42799,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.170828,
+    "Age": 53.179089,
+    "Score": 104.261264,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.49487,
+    "Age": 43.981549,
+    "Score": 78.111424,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.973303,
+    "Age": 43.998651,
+    "Score": 117.008407,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.095536,
+    "Age": 25.593463,
+    "Score": 100.602382,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.509454,
+    "Age": 42.018423,
+    "Score": 122.035051,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.528338,
+    "Age": 31.220548,
+    "Score": 120.98158,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.926505,
+    "Age": 64.641789,
+    "Score": 80.933226,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.648577,
+    "Age": 32.02406,
+    "Score": 100.186036,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.156381,
+    "Age": 32.098555,
+    "Score": 99.263965,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.39325,
+    "Age": 45.66521,
+    "Score": 136.615611,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.431399,
+    "Age": 50.306482,
+    "Score": 92.858017,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.265555,
+    "Age": 37.807193,
+    "Score": 81.147525,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.8847,
+    "Age": 60.361029,
+    "Score": 118.342889,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.905454,
+    "Age": 51.734105,
+    "Score": 143.710166,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.079427,
+    "Age": 54.439138,
+    "Score": 81.299585,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.187357,
+    "Age": 38.369142,
+    "Score": 100.743268,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.360877,
+    "Age": 46.475258,
+    "Score": 89.312971,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.453615,
+    "Age": 68.96326,
+    "Score": 100.125696,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.718349,
+    "Age": 30.593491,
+    "Score": 109.827399,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.054142,
+    "Age": 54.731274,
+    "Score": 103.815673,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.249169,
+    "Age": 47.143227,
+    "Score": 114.372007,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.35865,
+    "Age": 31.576144,
+    "Score": 90.661389,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.186154,
+    "Age": 40.8919,
+    "Score": 71.785832,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 1.996442,
+    "Age": 41.7417,
+    "Score": 81.124081,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.560829,
+    "Age": 48.473419,
+    "Score": 114.214142,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 6.564582,
+    "Age": 34.780802,
+    "Score": 114.982237,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.109343,
+    "Age": 50.123433,
+    "Score": 94.160437,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.444105,
+    "Age": 49.48301,
+    "Score": 114.265041,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.620134,
+    "Age": 35.969945,
+    "Score": 103.852124,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.243248,
+    "Age": 60.365935,
+    "Score": 96.762945,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.916842,
+    "Age": 33.260379,
+    "Score": 94.799767,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.928899,
+    "Age": 40.612222,
+    "Score": 81.013305,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.503684,
+    "Age": 25.489169,
+    "Score": 112.747866,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.417629,
+    "Age": 37.996325,
+    "Score": 95.115593,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 4.941758,
+    "Age": 36.863873,
+    "Score": 127.290328,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.072499,
+    "Age": 49.503517,
+    "Score": 88.306255,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.422045,
+    "Age": 49.080028,
+    "Score": 80.959676,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.676561,
+    "Age": 37.58855,
+    "Score": 85.471095,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.161826,
+    "Age": 44.656052,
+    "Score": 83.612286,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.931372,
+    "Age": 33.813133,
+    "Score": 122.159872,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.006975,
+    "Age": 45.938234,
+    "Score": 72.979244,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.414418,
+    "Age": 60.979837,
+    "Score": 96.154262,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.163222,
+    "Age": 59.317429,
+    "Score": 99.882493,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.693731,
+    "Age": 58.161868,
+    "Score": 127.834789,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.768928,
+    "Age": 41.881923,
+    "Score": 93.257163,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.944827,
+    "Age": 38.716129,
+    "Score": 91.900459,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.644807,
+    "Age": 44.636092,
+    "Score": 108.574173,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.240424,
+    "Age": 36.723735,
+    "Score": 93.637225,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.678401,
+    "Age": 29.013558,
+    "Score": 73.540263,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.445464,
+    "Age": 41.223528,
+    "Score": 104.614902,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.068581,
+    "Age": 24.649559,
+    "Score": 110.239897,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.917593,
+    "Age": 41.14961,
+    "Score": 115.035531,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.600284,
+    "Age": 48.092493,
+    "Score": 87.704334,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.316031,
+    "Age": 33.85334,
+    "Score": 107.359638,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.416691,
+    "Age": 43.216806,
+    "Score": 76.670648,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.94124,
+    "Age": 41.406494,
+    "Score": 107.145854,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.851041,
+    "Age": 33.800647,
+    "Score": 84.478159,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.026478,
+    "Age": 52.63372,
+    "Score": 76.70846,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.850877,
+    "Age": 64.167151,
+    "Score": 102.004847,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.592871,
+    "Age": 37.168899,
+    "Score": 82.219592,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.715428,
+    "Age": 37.98217,
+    "Score": 109.345781,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.183948,
+    "Age": 45.219787,
+    "Score": 89.313332,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.910808,
+    "Age": 72.41814,
+    "Score": 78.046704,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.922052,
+    "Age": 14.713262,
+    "Score": 73.565953,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.273977,
+    "Age": 63.432541,
+    "Score": 102.346156,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.713242,
+    "Age": 49.251571,
+    "Score": 97.259381,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.339282,
+    "Age": 26.236102,
+    "Score": 97.291749,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.899194,
+    "Age": 56.548096,
+    "Score": 89.647716,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.742691,
+    "Age": 23.577846,
+    "Score": 131.589603,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.541742,
+    "Age": 39.003495,
+    "Score": 119.751247,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.55959,
+    "Age": 65.857693,
+    "Score": 119.716471,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.617137,
+    "Age": 39.93684,
+    "Score": 104.464208,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.870013,
+    "Age": 42.028959,
+    "Score": 100.385268,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 5.085681,
+    "Age": 45.838542,
+    "Score": 132.633355,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.748764,
+    "Age": 24.538321,
+    "Score": 116.352559,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.272717,
+    "Age": 65.205635,
+    "Score": 103.71604,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": -0.890358,
+    "Age": 30.923451,
+    "Score": 75.683305,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 3.652792,
+    "Age": 46.005516,
+    "Score": 102.234419,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.280926,
+    "Age": 29.305136,
+    "Score": 109.561608,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.44392,
+    "Age": 72.218115,
+    "Score": 82.903653,
+    "Sex": 1
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 7.163993,
+    "Age": 68.664215,
+    "Score": 136.336547,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.688093,
+    "Age": 37.917129,
+    "Score": 104.844361,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.528323,
+    "Age": 50.262758,
+    "Score": 108.831766,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.668645,
+    "Age": 41.441756,
+    "Score": 84.592753,
+    "Sex": 1
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.583997,
+    "Age": 43.273274,
+    "Score": 125.021953,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 1.176201,
+    "Age": 52.337775,
+    "Score": 110.494447,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 3.601881,
+    "Age": 60.619262,
+    "Score": 123.591548,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 0.995135,
+    "Age": 36.50825,
+    "Score": 85.950689,
+    "Sex": 0
+  },
+  {
+    "Treatment": 1,
+    "Outcome": 4.615152,
+    "Age": 42.991956,
+    "Score": 128.957106,
+    "Sex": 0
+  },
+  {
+    "Treatment": 0,
+    "Outcome": 2.301187,
+    "Age": 43.955139,
+    "Score": 97.067505,
+    "Sex": 1
+  }
+]

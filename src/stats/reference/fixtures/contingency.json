@@ -1,0 +1,119 @@
+{
+  "source": "R stats::mantelhaen.test(), stats::prop.trend.test(), stats::fisher.test() and base-R exact enumeration",
+  "generatedBy": "src/stats/reference/r/contingency.R",
+  "mantelHaenszel": {
+    "name": "three-strata-zero-cell",
+    "strata": [
+      [
+        [12, 20],
+        [18, 9]
+      ],
+      [
+        [7, 15],
+        [19, 11]
+      ],
+      [
+        [0, 8],
+        [6, 10]
+      ]
+    ],
+    "labels": ["Stratum A", "Stratum B", "Stratum C"],
+    "expected": {
+      "oddsRatio": 0.256298374728031,
+      "logOddsRatio": -1.36141298691965,
+      "standardError": 0.385952851060197,
+      "lo": -2.11786667472819,
+      "hi": -0.60495929911111,
+      "chi2": 11.5135528245453,
+      "p": 0.000690905989808158,
+      "strata": [
+        {
+          "label": "Stratum A",
+          "oddsRatio": 0.3,
+          "logOddsRatio": -1.20397280432594,
+          "weight": 6.10169491525424,
+          "corrected": false
+        },
+        {
+          "label": "Stratum B",
+          "oddsRatio": 0.270175438596491,
+          "logOddsRatio": -1.30868375841497,
+          "weight": 5.48076923076923,
+          "corrected": false
+        },
+        {
+          "label": "Stratum C",
+          "oddsRatio": 0.0950226244343891,
+          "logOddsRatio": -2.35364026379433,
+          "weight": 2.125,
+          "corrected": true
+        }
+      ]
+    }
+  },
+  "mantelHaenszelNoZero": {
+    "name": "three-strata-no-zero-cell",
+    "strata": [
+      [
+        [12, 20],
+        [18, 9]
+      ],
+      [
+        [7, 15],
+        [19, 11]
+      ],
+      [
+        [5, 9],
+        [11, 4]
+      ]
+    ],
+    "labels": ["Stratum A", "Stratum B", "Stratum D"],
+    "expected": {
+      "oddsRatio": 0.266795428432667,
+      "chi2": 12.4983687860734,
+      "p": 0.000407307498743578
+    }
+  },
+  "trend": {
+    "name": "four-by-two",
+    "observed": [
+      [18, 12],
+      [25, 15],
+      [32, 8],
+      [40, 5]
+    ],
+    "scores": [1, 2, 3, 4],
+    "statistic": 11.0461965973535,
+    "p": 0.00088869325624427,
+    "proportions": [0.6, 0.625, 0.8, 0.888888888888889]
+  },
+  "exact": {
+    "twoByTwo": {
+      "observed": [
+        [30, 20],
+        [15, 35]
+      ],
+      "p": 0.00463502018079892
+    },
+    "threeByTwo": {
+      "observed": [
+        [12, 7],
+        [8, 10],
+        [5, 13]
+      ],
+      "p": 0.142734388700892,
+      "statistic": 13.4545454545455,
+      "tables": 274
+    },
+    "threeByThree": {
+      "observed": [
+        [10, 5, 3],
+        [6, 12, 4],
+        [2, 3, 9]
+      ],
+      "p": 0.00249213519734969,
+      "statistic": 25.4074074074074,
+      "tables": 15195
+    }
+  }
+}

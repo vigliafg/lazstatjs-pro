@@ -174,4 +174,42 @@ export const chisquareCopy: Record<string, string> = {
     'Warning: one or more expected frequencies are < 5. Yates or Fisher are preferable; for larger tables the exact test or the bootstrap is needed.',
   'Le frequenze attese soddisfano la regola di Cochran.':
     'The expected frequencies satisfy Cochran\'s rule.',
+  'Category':
+    'Category',
+  'Con molte categorie e pochi casi il test diventa fragile: raggruppa le categorie rare.':
+    'With many categories and few cases the test becomes fragile: group rare categories.',
+  'Con proporzioni stimate dai dati il test perde gradi di libertà: qui le proporzioni sono fissate a priori.':
+    'With proportions estimated from the data the test loses degrees of freedom: here the proportions are fixed in advance.',
+  'Expected':
+    'Expected',
+  'Il test confronta le frequenze osservate con le proporzioni attese: verifica se le categorie sono distribuite come previsto.':
+    'The test compares the observed frequencies with the expected proportions: it checks whether the categories are distributed as planned.',
+  'Il χ² confronta (osservato − atteso)²/atteso sommato su tutte le categorie.':
+    'The χ² sums (observed − expected)²/expected over all categories.',
+  'Le attese dovrebbero essere almeno 5 per categoria: sotto questa soglia il χ² è inaffidabile.':
+    'Expected counts should be at least 5 per category: below that the χ² is unreliable.',
+  'Le attese sono la proporzione indicata moltiplicata per il totale ({s1}).':
+    'The expected counts are the stated proportion multiplied by the total ({s1}).',
+  'Le osservazioni devono essere indipendenti e ogni caso deve cadere in una sola categoria.':
+    'Observations must be independent and each case must fall into exactly one category.',
+  'Observed':
+    'Observed',
+  'Proporzioni attese: {s1}.':
+    'Expected proportions: {s1}.',
+  'Report di lettura — Bontà di adattamento':
+    'Reading report — Goodness of fit',
+  'Residual':
+    'Residual',
+  'Serve per controllare se una categoria domina, non per stimare la sua proporzione: per quello usa l’intervallo di Wilson.':
+    'It is used to check whether one category dominates, not to estimate its proportion: use the Wilson interval for that.',
+  'Test χ²':
+    'χ² test',
+  'Totale {s1}; categoria più frequente: “{s2}” con {s3} casi.':
+    'Total {s1}; most frequent category: “{s2}” with {s3} cases.',
+  'Un p piccolo indica che la distribuzione osservata si discosta da quella attesa; non dice quale categoria pesa di più.':
+    'A small p means the observed distribution departs from the expected one; it does not say which category weighs most.',
+  'df = numero di categorie − 1.':
+    'df = number of categories − 1.',
+  '{s1} categorie in {s2}: χ² = {s3}, p = {s4}.':
+    '{s1} categories in {s2}: χ² = {s3}, p = {s4}.',
 };

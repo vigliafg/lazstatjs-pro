@@ -200,4 +200,266 @@ export const descriptiveCopy: Record<string, string> = {
     'Variance',
   'z':
     'z',
+  'Frequenze':
+    'Fréquences',
+  'Value':
+    'Valeur',
+  'Count':
+    'Effectif',
+  'Percent':
+    'Pourcentage',
+  'Cumulative count':
+    'Effectif cumulé',
+  'Cumulative %':
+    '% cumulé',
+  'Chi-square':
+    'Khi-deux',
+  'p-value':
+    'valeur p',
+  'Low':
+    'Bas',
+  'High':
+    'Haut',
+  'Outlier':
+    'Valeur aberrante',
+  'Regolare':
+    'Régulier',
+  'Test per valori anomali':
+    'Tests de valeurs aberrantes',
+  'Statistic':
+    'Statistique',
+  'Critical value':
+    'Valeur critique',
+  'Side':
+    'Côté',
+  'Verdict':
+    'Verdict',
+  'Test delle sequenze':
+    'Test des séquences',
+  'Cut point':
+    'Point de coupure',
+  'Above cut':
+    'Au-dessus du seuil',
+  'Below cut':
+    'Au-dessous du seuil',
+  'Runs':
+    'Séquences',
+  'Expected runs':
+    'Séquences attendues',
+  'Exact p':
+    'p exact',
+  'Conteggi':
+    'Effectifs',
+  'Risultato per variabile':
+    'Résultat par variable',
+  'Percentuali calcolate sulle osservazioni non mancanti ({s1} su {s2}).':
+    'Pourcentages calculés sur les observations non manquantes ({s1} sur {s2}).',
+  'Intervallo di Wilson al {s1}% per la proporzione di ogni modalità.':
+    'Intervalle de Wilson à {s1} % pour la proportion de chaque modalité.',
+  'Bontà di adattamento (quote uguali)':
+    'Ajustement (parts égales)',
+  'Confronta le frequenze osservate con quote uguali tra le modalità: un p piccolo indica modalità più rappresentate di altre.':
+    'Compare les effectifs observés à des parts égales entre modalités : un p petit indique que certaines modalités sont plus représentées.',
+  'Grubbs: test bilaterale sull’osservazione più lontana dalla media, con correzione per il numero di candidati.':
+    'Grubbs : test bilatéral sur l’observation la plus éloignée de la moyenne, corrigé pour le nombre de candidats.',
+  'Dixon: rapporto fra le differenze adiacenti; definito solo per 3–30 osservazioni e più robusto agli estremi.':
+    'Dixon : rapport des différences adjacentes ; défini seulement pour 3–30 observations et plus robuste aux extrêmes.',
+  'Le osservazioni sono divise in due lati rispetto al punto di taglio (mediana per default); un numero di sequenze troppo basso indica clustering, troppo alto alternanza.':
+    'Les observations sont divisées de part et d’autre du point de coupure (médiane par défaut) ; trop peu de séquences indique un regroupement, trop de séquences une alternance.',
+  'Il p asintotico usa l’approssimazione normale con correzione di continuità; il p esatto è disponibile fino a 50 osservazioni.':
+    'Le p asymptotique utilise l’approximation normale avec correction de continuité ; le p exact est disponible jusqu’à 50 observations.',
+  'Livello di confidenza: {s1}%.':
+    'Niveau de confiance : {s1} %.',
+  '{s1} modalità su {s2} osservazioni non mancanti':
+    '{s1} modalités sur {s2} observations non manquantes',
+  'la più frequente è “{s1}” con {s2} casi':
+    'la plus fréquente est « {s1} » avec {s2} cas',
+  'le quote uguali sono rifiutate (χ² = {s1}, p = {s2})':
+    'les parts égales sont rejetées (χ² = {s1}, p = {s2})',
+  'le quote uguali non sono rifiutate (χ² = {s1}, p = {s2})':
+    'les parts égales ne sont pas rejetées (χ² = {s1}, p = {s2})',
+  '{s1}: {s2}; {s3}{s4}.':
+    '{s1} : {s2} ; {s3}{s4}.',
+  'Report di lettura — Frequenze':
+    'Rapport de lecture — Fréquences',
+  'La variabile {s1} ha {s2} modalità distinte.':
+    'La variable {s1} a {s2} modalités distinctes.',
+  'Frequenze di {s1} variabili, {s2} modalità in tutto.':
+    'Fréquences de {s1} variables, {s2} modalités au total.',
+  'La tabella di frequenza conta quante volte compare ogni modalità e mostra la percentuale sul totale delle osservazioni valide.':
+    'Le tableau de fréquences compte combien de fois chaque modalité apparaît et affiche son pourcentage sur les observations valides.',
+  'L’intervallo di Wilson tiene conto della numerosità: con pochi casi è largo anche quando la percentuale sembra precisa.':
+    'L’intervalle de Wilson tient compte de l’effectif : avec peu de cas il est large même si le pourcentage semble précis.',
+  'Il conteggio ignora le celle vuote; la percentuale è calcolata sul totale non mancante, non sul numero di righe.':
+    'Le décompte ignore les cellules vides ; le pourcentage est calculé sur le total non manquant, pas sur le nombre de lignes.',
+  'Il test di bontà di adattamento confronta le modalità con quote uguali: serve a capire se una categoria domina, non a stimare la sua proporzione.':
+    'Le test d’ajustement compare les modalités à des parts égales : il indique si une catégorie domine, pas quelle est sa proportion.',
+  'Con molte modalità il test χ² diventa fragile: raggruppa le categorie rare prima di leggerlo.':
+    'Avec beaucoup de modalités le test χ² devient fragile : regroupez les catégories rares avant de l’interpréter.',
+  'Le frequenze descrivono il campione osservato: non dicono nulla sulla popolazione senza un modello o un disegno di campionamento.':
+    'Les fréquences décrivent l’échantillon observé : elles ne disent rien de la population sans modèle ni plan d’échantillonnage.',
+  'Una variabile continua con molti valori distinti non va conteggiata: usa la sintesi descrittiva o crea classi.':
+    'Une variable continue à nombreuses valeurs distinctes ne se décompte pas : utilisez la synthèse descriptive ou créez des classes.',
+  'Le percentuali non sono indipendenti tra loro: sommano a 100 e un intervallo alla volta non corregge per i confronti multipli.':
+    'Les pourcentages ne sont pas indépendants : ils totalisent 100 et un intervalle à la fois ne corrige pas les comparaisons multiples.',
+  '{s1}: nessuno dei due test segnala valori anomali.':
+    '{s1} : aucun des deux tests ne signale de valeur aberrante.',
+  '{s1}: Grubbs e Dixon segnalano entrambi un valore anomalo.':
+    '{s1} : Grubbs et Dixon signalent tous deux une valeur aberrante.',
+  '{s1}: Grubbs segnala un valore anomalo, Dixon no.':
+    '{s1} : Grubbs signale une valeur aberrante, Dixon non.',
+  '{s1}: Dixon segnala un valore anomalo, Grubbs no.':
+    '{s1} : Dixon signale une valeur aberrante, Grubbs non.',
+  'Grubbs G = {s1}, p = {s2}':
+    'Grubbs G = {s1}, p = {s2}',
+  'Dixon {s1} = {s2}, p = {s3}':
+    'Dixon {s1} = {s2}, p = {s3}',
+  'Dixon non applicabile (servono 3–30 osservazioni)':
+    'Dixon non applicable (3–30 observations nécessaires)',
+  'Report di lettura — Valori anomali':
+    'Rapport de lecture — Valeurs aberrantes',
+  'Test dei valori anomali per {s1}.':
+    'Tests de valeurs aberrantes pour {s1}.',
+  'Test dei valori anomali per {s1} variabili: {s2} con almeno un segnale.':
+    'Tests de valeurs aberrantes pour {s1} variables : {s2} avec au moins un signal.',
+  'Grubbs e Dixon rispondono alla stessa domanda — l’osservazione più estrema è compatibile con le altre? — ma con assunzioni diverse.':
+    'Grubbs et Dixon répondent à la même question — l’observation la plus extrême est-elle compatible avec les autres ? — mais avec des hypothèses différentes.',
+  'Un test significativo non prova che il dato sia un errore: dice che è improbabile estrarlo da una popolazione normale con la stessa media e dispersione.':
+    'Un test significatif ne prouve pas que la donnée soit une erreur : il dit qu’il est improbable de la tirer d’une population normale de même moyenne et dispersion.',
+  'Grubbs standardizza lo scarto dalla media con la deviazione standard: risente degli estremi e va usato con campioni non troppo piccoli.':
+    'Grubbs standardise l’écart à la moyenne par l’écart-type : il est sensible aux extrêmes et demande des échantillons pas trop petits.',
+  'Dixon confronta differenze adiacenti ed è più robusto, ma è definito solo tra 3 e 30 osservazioni.':
+    'Dixon compare des différences adjacentes et est plus robuste, mais n’est défini qu’entre 3 et 30 observations.',
+  'Il p-value è già corretto per il fatto che il candidato è il massimo scarto, non un’osservazione scelta a priori.':
+    'La valeur p tient déjà compte du fait que le candidat est l’écart maximal, pas une observation choisie a priori.',
+  'Entrambi i test assumono una popolazione normale: con distribuzioni asimmetriche il p-value non è affidabile.':
+    'Les deux tests supposent une population normale : avec des distributions asymétriques la valeur p n’est pas fiable.',
+  'Un outlier può essere un caso reale e importante: verifica la fonte prima di escluderlo.':
+    'Une valeur aberrante peut être un cas réel et important : vérifiez la source avant de l’exclure.',
+  'Con molti valori estremi il test segnala solo il più lontano: ripetilo dopo aver rimosso il caso o usa una regola robusta come MAD.':
+    'Avec beaucoup de valeurs extrêmes le test ne signale que la plus éloignée : répétez-le après avoir retiré ce cas ou utilisez une règle robuste comme le MAD.',
+  'meno sequenze del previsto: le osservazioni tendono a raggrupparsi':
+    'moins de séquences que prévu : les observations tendent à se regrouper',
+  'più sequenze del previsto: le osservazioni tendono ad alternarsi':
+    'plus de séquences que prévu : les observations tendent à alterner',
+  '; p esatto {s1}':
+    ' ; p exact {s1}',
+  '{s1}: {s2} sequenze su {s3} osservazioni (attese {s4}); {s5} (p = {s6}{s7}).':
+    '{s1} : {s2} séquences sur {s3} observations (attendues {s4}) ; {s5} (p = {s6}{s7}).',
+  'Report di lettura — Test delle sequenze':
+    'Rapport de lecture — Test des séquences',
+  'Sequenze di {s1} rispetto al punto di taglio {s2}.':
+    'Séquences de {s1} autour du point de coupure {s2}.',
+  'Test delle sequenze per {s1} variabili: {s2} con ordine non casuale.':
+    'Test des séquences pour {s1} variables : {s2} avec un ordre non aléatoire.',
+  'Il test delle sequenze controlla se l’ordine delle righe è casuale: conta quante volte il valore attraversa il punto di taglio.':
+    'Le test des séquences vérifie si l’ordre des lignes est aléatoire : il compte combien de fois la valeur franchit le point de coupure.',
+  'Serve per dati raccolti in sequenza — tempo, ordine di produzione, righe di un foglio — dove una tendenza o un ciclo rompe l’indipendenza.':
+    'Il sert aux données recueillies en séquence — temps, ordre de production, lignes d’un tableur — où une tendance ou un cycle rompt l’indépendance.',
+  'Il punto di taglio predefinito è la mediana, così i due lati hanno all’incirca lo stesso numero di osservazioni.':
+    'Le point de coupure par défaut est la médiane, de sorte que les deux côtés comptent à peu près le même nombre d’observations.',
+  'Il z confronta le sequenze osservate con quelle attese sotto casualità; la correzione di continuità rende il test più prudente.':
+    'Le z compare les séquences observées à celles attendues sous hasard ; la correction de continuité rend le test plus prudent.',
+  'Il p esatto enumera tutte le disposizioni possibili: è il riferimento quando il campione è piccolo e l’approssimazione normale è dubbia.':
+    'Le p exact énumère toutes les dispositions possibles : c’est la référence quand l’échantillon est petit et l’approximation normale douteuse.',
+  'Il test rileva dipendenza dall’ordine, non la forma della dipendenza: un p piccolo non distingue tendenza, ciclo e cluster.':
+    'Le test détecte une dépendance à l’ordre, pas sa forme : un p petit ne distingue pas tendance, cycle et regroupement.',
+  'Le osservazioni con valore uguale al punto di taglio finiscono nel lato basso: con molti pareggi il test diventa conservativo.':
+    'Les observations égales au point de coupure vont du côté bas : avec beaucoup d’ex æquo le test devient conservateur.',
+  'Il test assume che le osservazioni siano altrimenti identicamente distribuite: un cambiamento di livello a metà serie lo fa rifiutare anche senza vera dipendenza. Il livello usato è {s1}.':
+    'Le test suppose que les observations sont par ailleurs identiquement distribuées : un changement de niveau au milieu de la série le fait rejeter même sans dépendance réelle. Le niveau utilisé est {s1}.',
+  'Intervallo di tolleranza':
+    'Intervalle de tolérance',
+  'Population proportion':
+    'Proportion de la population',
+  'Confidence':
+    'Confiance',
+  'Factor k':
+    'Facteur k',
+  'Lower bound':
+    'Borne inférieure',
+  'Upper bound':
+    'Borne supérieure',
+  'Observed coverage':
+    'Couverture observée',
+  'x̄ ± k·s: l’intervallo contiene la proporzione indicata della popolazione, non della media.':
+    'x̄ ± k·s : l’intervalle contient la proportion indiquée de la population, pas de la moyenne.',
+  'Fattore calcolato con l’approssimazione di Howe; il metodo esatto basato sulla t non centrale differisce di circa lo 0,1% per n = 10.':
+    'Facteur calculé avec l’approximation de Howe ; la méthode exacte fondée sur la t non centrale diffère d’environ 0,1 % pour n = 10.',
+  'Report di lettura — Intervallo di tolleranza':
+    'Rapport de lecture — Intervalle de tolérance',
+  '{s1}% della popolazione di {s2} è compreso tra {s3} e {s4}, con confidenza {s5}%.':
+    '{s1} % de la population de {s2} se situe entre {s3} et {s4}, avec une confiance de {s5} %.',
+  'Intervallo':
+    'Intervalle',
+  'L’intervallo di tolleranza risponde a una domanda diversa dal CI della media: non dove sta la media, ma quale intervallo coprirà una quota della popolazione.':
+    'L’intervalle de tolérance répond à une autre question que le CI de la moyenne : non pas où se trouve la moyenne, mais quel intervalle couvrira une part de la population.',
+  'Serve per specifiche, limiti di accettazione e valori di riferimento, dove conta la dispersione individuale e non l’incertezza della stima.':
+    'Il sert aux spécifications, limites d’acceptation et valeurs de référence, où compte la dispersion individuelle et non l’incertitude de l’estimation.',
+  'Risultato':
+    'Résultat',
+  'Media {s1}, deviazione standard {s2}, fattore k = {s3}.':
+    'Moyenne {s1}, écart-type {s2}, facteur k = {s3}.',
+  'Intervallo: da {s1} a {s2}; copre il {s3}% della popolazione con confidenza {s4}%.':
+    'Intervalle : de {s1} à {s2} ; il couvre {s3} % de la population avec une confiance de {s4} %.',
+  'Ampiezza dell’intervallo: {s1}. Si restringe aumentando n o riducendo la confidenza richiesta.':
+    'Largeur de l’intervalle : {s1}. Il se resserre en augmentant n ou en réduisant la confiance demandée.',
+  'La confidenza riguarda la procedura: se ripetessi il campionamento, una quota pari alla confidenza degli intervalli costruiti coprirebbe davvero la proporzione richiesta.':
+    'La confiance concerne la procédure : si l’on répétait l’échantillonnage, une part des intervalles égale à la confiance couvrirait réellement la proportion demandée.',
+  'Con pochi casi k è grande: un intervallo di tolleranza al 95/95 su dieci osservazioni è largo oltre tre deviazioni standard per lato.':
+    'Avec peu de cas k est grand : un intervalle de tolérance 95/95 sur dix observations dépasse trois écarts-types de chaque côté.',
+  'La copertura osservata nel campione non è la copertura della popolazione: con n piccolo è quasi sempre vicina al 100%.':
+    'La couverture observée dans l’échantillon n’est pas celle de la population : avec un petit n elle est presque toujours proche de 100 %.',
+  'L’intervallo assume una popolazione normale e osservazioni indipendenti: con distribuzioni asimmetriche va usato un metodo non parametrico.':
+    'L’intervalle suppose une population normale et des observations indépendantes : avec des distributions asymétriques il faut une méthode non paramétrique.',
+  'Non sostituisce un’analisi di capacità: Cp/Cpk confrontano la dispersione con le specifiche, l’intervallo di tolleranza stima dove cadono le unità.':
+    'Il ne remplace pas une analyse de capacité : Cp/Cpk comparent la dispersion aux spécifications, l’intervalle de tolérance estime où tombent les unités.',
+  'Con campioni molto piccoli l’approssimazione di Howe può differire leggermente dal fattore esatto della t non centrale.':
+    'Avec de très petits échantillons l’approximation de Howe peut différer légèrement du facteur exact de la t non centrale.',
+  'Observation':
+    'Observation',
+  'C+':
+    'C+',
+  'C−':
+    'C−',
+  'Signal':
+    'Signal',
+  'C+ accumula gli scostamenti sopra il target, C− quelli sotto: entrambi partono da zero e non scendono mai sotto zero.':
+    'C+ accumule les écarts au-dessus de la cible, C− ceux en dessous : les deux partent de zéro et ne descendent jamais en dessous.',
+  'k = {s1}·σ (allowance), h = {s2}·σ (intervallo di decisione); il primo punto oltre h è il segnale.':
+    'k = {s1}·σ (allowance), h = {s2}·σ (intervalle de décision) ; le premier point au-delà de h est le signal.',
+  'Report di lettura — CUSUM':
+    'Rapport de lecture — CUSUM',
+  'CUSUM di {s1}: {s2}':
+    'CUSUM de {s1} : {s2}',
+  'Il primo segnale è al punto {s1} verso l’alto e al punto {s2} verso il basso.':
+    'Le premier signal est au point {s1} vers le haut et au point {s2} vers le bas.',
+  'Il primo segnale è al punto {s1}, verso l’alto.':
+    'Le premier signal est au point {s1}, vers le haut.',
+  'Il primo segnale è al punto {s1}, verso il basso.':
+    'Le premier signal est au point {s1}, vers le bas.',
+  'Nessun punto supera l’intervallo di decisione: il processo resta sotto controllo.':
+    'Aucun point ne dépasse l’intervalle de décision : le processus reste sous contrôle.',
+  'La CUSUM somma gli scostamenti dal target: piccoli spostamenti persistenti si accumulano e superano il limite anche quando nessun punto singolo esce dai limiti di una carta Shewhart.':
+    'La CUSUM additionne les écarts à la cible : de petits décalages persistants s’accumulent et franchissent la limite même si aucun point isolé ne sort des limites d’une carte Shewhart.',
+  'È la carta giusta per turni, lotti e processi continui, dove conta la deriva lenta e non il singolo valore anomalo.':
+    'C’est la carte adaptée aux équipes, lots et processus continus, où compte la dérive lente et non la valeur isolée.',
+  'Target {s1}, σ {s2}; allowance k = {s3}·σ, intervallo h = {s4}·σ (limite {s5}).':
+    'Cible {s1}, σ {s2} ; allowance k = {s3}·σ, intervalle h = {s4}·σ (limite {s5}).',
+  'Valore finale di C+: {s1}; di C−: {s2}.':
+    'Valeur finale de C+ : {s1} ; de C− : {s2}.',
+  'C+ misura quanto il processo è stato sopra il target, C− quanto è stato sotto; i due lati si leggono separatamente.':
+    'C+ mesure combien le processus a été au-dessus de la cible, C− combien en dessous ; les deux côtés se lisent séparément.',
+  'Dopo un segnale la carta va azzerata o ricalcolata: la somma continua a crescere e non dice più quando è avvenuto il cambiamento.':
+    'Après un signal la carte doit être remise à zéro ou recalculée : la somme continue de croître et ne dit plus quand le changement a eu lieu.',
+  'k = 0,5σ è la scelta classica per uno spostamento di 1σ; h = 4σ dà pochi falsi allarmi, h = 5σ è ancora più prudente.':
+    'k = 0,5σ est le choix classique pour un décalage de 1σ ; h = 4σ donne peu de fausses alarmes, h = 5σ est encore plus prudent.',
+  'La CUSUM assume osservazioni indipendenti e in ordine cronologico: con autocorrelazione i falsi allarmi aumentano.':
+    'La CUSUM suppose des observations indépendantes et en ordre chronologique : avec autocorrélation les fausses alarmes augmentent.',
+  'Non stima il punto di cambiamento: per quello servono metodi di change-point o la lettura congiunta con la carta di controllo.':
+    'Il n’estime pas le point de changement : il faut des méthodes de change-point ou une lecture conjointe avec la carte de contrôle.',
+  'Target e σ devono venire da una fase stabile: usarli da un processo fuori controllo rende il grafico fuorviante.':
+    'La cible et σ doivent provenir d’une phase stable : les prendre sur un processus hors contrôle rend le graphique trompeur.',
+  'CUSUM':
+    'CUSUM',
 };

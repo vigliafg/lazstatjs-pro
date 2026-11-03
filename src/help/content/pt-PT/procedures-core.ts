@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Selecione as variáveis numéricas (Score, Age) e mantenha o nível de confiança em 95%.',
         'Prima Executar análise e leia a linha de cada variável.',
         'Verifique a coluna dos omissos e o teste de normalidade antes de comparar grupos.',
+        'Mude o seletor Procedimento para Frequências numa coluna categórica, para Valores atípicos em Grubbs/Dixon, ou para Sequências para verificar a ordem das linhas.',
       ],
       expected: 'Uma linha por variável com N, média, desvio-padrão, mediana, quartis, mínimo e máximo, mais o resultado da normalidade.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Uma média longe da mediana sugere assimetria ou valores extremos.',
         'Os testes de normalidade são indicativos: com N grande são demasiado sensíveis, com N pequeno têm pouca potência.',
+        'As frequências descrevem as categorias de uma variável categórica; o teste de sequências verifica se a ordem das linhas é aleatória; Grubbs e Dixon assinalam a observação mais extrema.',
       ],
       pitfalls: [
         'Nunca apresente o desvio-padrão como erro padrão: são quantidades diferentes.',
@@ -63,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Um AIC/BIC mais baixo significa um melhor ajustamento.',
         'Um valor p de qualidade do ajustamento não prova a normalidade: apenas mede a evidência contra ela.',
+        'O modo KS de duas amostras compara dois grupos sem assumir uma família de distribuições.',
       ],
       pitfalls: ['Escolher a distribuição a partir dos dados e depois testá-la nos mesmos dados sobrestima o ajustamento.'],
       glossary: [
@@ -98,6 +101,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'O valor p responde a «quão compatível é isto com a ausência de diferença», não à probabilidade de a hipótese nula ser verdadeira.',
         'O intervalo de confiança também mostra a dimensão possível da diferença: avalie a relevância prática.',
+        'Com dados emparelhados não normais, o teste dos sinais usa apenas a direção das diferenças.',
       ],
       pitfalls: [
         'Comparar muitos pares sem correção inflaciona os falsos positivos.',
@@ -130,6 +134,7 @@ export const coreTopics: HelpTopic[] = [
       whenToUse: ['Um fator entre sujeitos com três ou mais níveis.'],
       whenNotToUse: ['Medidas repetidas (use a ANOVA de medidas repetidas) ou dois grupos (o teste t é equivalente).'],
       reading: [
+        'O teste da mediana de Mood compara medianas sem assumir normalidade: use-o quando valores atípicos ou assimetria tornam a média pouco fiável.',
         'Um p significativo diz que pelo menos uma média difere: o post-hoc diz qual.',
         'Um Levene significativo sugere variâncias desiguais: prefira Welch ou Kruskal-Wallis.',
       ],

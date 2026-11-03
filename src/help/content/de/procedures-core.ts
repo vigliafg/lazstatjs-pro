@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         "Wählen Sie die numerischen Variablen (Score, Age) und lassen Sie das Konfidenzniveau bei 95 %.",
         "Drücken Sie „Analyse ausführen“ und lesen Sie die Zeile jeder Variable.",
         "Prüfen Sie die Spalte der fehlenden Werte und den Normalitätstest, bevor Sie Gruppen vergleichen.",
+        "Wechseln Sie den Auswahlschalter Verfahren auf Häufigkeiten für eine kategoriale Spalte, auf Ausreißer für Grubbs/Dixon oder auf Runs, um die Zeilenreihenfolge zu prüfen.",
       ],
       expected: "Eine Zeile pro Variable mit N, Mittelwert, Standardabweichung, Median, Quartilen, Minimum und Maximum sowie dem Ergebnis der Normalitätsprüfung.",
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         "Ein weit vom Median entfernter Mittelwert deutet auf Schiefe oder extreme Werte hin.",
         "Normalitätstests sind hinweisend: Bei großem N sind sie überempfindlich, bei kleinem N zu schwach.",
+        "Häufigkeiten beschreiben die Ausprägungen einer kategorialen Variablen; der Runs-Test prüft, ob die Zeilenreihenfolge zufällig ist; Grubbs und Dixon melden die extremste Beobachtung.",
       ],
       pitfalls: [
         "Geben Sie die Standardabweichung niemals als Standardfehler aus: Es sind verschiedene Größen.",
@@ -66,6 +68,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         "Ein niedrigeres AIC/BIC bedeutet eine bessere Anpassung.",
         "Ein p-Wert der Anpassungsgüte beweist keine Normalität: Er misst nur die Evidenz dagegen.",
+        "Der Zweistichproben-KS-Modus vergleicht zwei Gruppen, ohne eine Verteilungsfamilie vorauszusetzen.",
       ],
       pitfalls: [
         "Die Verteilung aus den Daten zu wählen und sie dann an denselben Daten zu prüfen, überschätzt die Anpassung.",
@@ -103,6 +106,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         "Der p-Wert beantwortet „wie vereinbar ist das mit keiner Differenz“, nicht die Wahrscheinlichkeit, dass die Nullhypothese wahr ist.",
         "Das Konfidenzintervall zeigt auch, wie groß die Differenz sein könnte: Beurteilen Sie die praktische Relevanz.",
+        "Bei nicht normalen gepaarten Daten nutzt der Vorzeichentest nur die Richtung der Differenzen.",
       ],
       pitfalls: [
         "Viele Paare ohne Korrektur zu vergleichen bläht falsch positive Ergebnisse auf.",
@@ -137,6 +141,7 @@ export const coreTopics: HelpTopic[] = [
         "Wiederholte Messungen (verwenden Sie die Messwiederholungs-ANOVA) oder zwei Gruppen (der t-Test ist äquivalent).",
       ],
       reading: [
+        'Der Mood-Median-Test vergleicht Mediane ohne Normalitätsannahme: Verwenden Sie ihn, wenn Ausreißer oder Schiefe den Mittelwert unzuverlässig machen.',
         "Ein signifikantes p sagt, dass mindestens ein Mittelwert abweicht: Der Post-hoc-Test sagt, welcher.",
         "Ein signifikanter Levene-Test deutet auf ungleiche Varianzen hin: Bevorzugen Sie Welch oder Kruskal-Wallis.",
       ],

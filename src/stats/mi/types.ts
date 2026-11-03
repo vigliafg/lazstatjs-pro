@@ -4,8 +4,8 @@ export interface MiOptions {
   imputations: number;
   iterations: number;
   level: number;
-  /** 'descriptives' = solo medie/SD; 'linear' = pooled OLS. */
-  model?: 'descriptives' | 'linear';
+  /** 'descriptives' = solo medie/SD; 'linear' = pooled OLS; 'categorical' = MICE categoriale. */
+  model?: 'descriptives' | 'linear' | 'categorical';
   outcome?: number;
   predictors?: number[];
 }
@@ -41,6 +41,41 @@ export interface MiRegression {
   coefficients: MiCoefficient[];
 }
 
+/** Pooled proportion of one observed category after multiple imputation. */
+export interface MiCategoryEstimate {
+  /** Category code as observed in the data (sorted numerically). */
+  category: number;
+  /** Rows where the category was observed. */
+  observed: number;
+  /** Rows assigned to the category in the last completed dataset. */
+  completed: number;
+  /** Observed count divided by the observed (non-missing) rows. */
+  observedProportion: number;
+  /** Completed count divided by all rows in the last imputation. */
+  completedProportion: number;
+  /** Rubin-pooled proportion across imputations. */
+  proportion: number;
+  /** Mean within-imputation variance of the proportion. */
+  within: number;
+  /** Between-imputation variance of the proportion. */
+  between: number;
+  se: number;
+  df: number;
+  lo: number;
+  hi: number;
+  fmi: number;
+}
+
+/** Categorical summary for one imputed variable. */
+export interface MiCategoricalVariable {
+  name: string;
+  observed: number;
+  missing: number;
+  /** Observed categories, sorted numerically. */
+  categories: number[];
+  proportions: MiCategoryEstimate[];
+}
+
 export interface MiStats {
   n: number;
   imputations: number;
@@ -52,4 +87,6 @@ export interface MiStats {
   /** Mean of the completed values at each iteration, averaged over imputations. */
   chainMeans: number[][];
   regression: MiRegression | null;
+  /** Present only for the categorical MICE path. */
+  categories?: MiCategoricalVariable[];
 }

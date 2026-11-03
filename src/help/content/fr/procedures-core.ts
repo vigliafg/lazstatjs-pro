@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Sélectionnez les variables numériques (Score, Age) et laissez le niveau de confiance à 95 %.',
         'Appuyez sur Lancer l’analyse et lisez la ligne de chaque variable.',
         'Contrôlez la colonne des manquantes et le test de normalité avant de comparer des groupes.',
+        'Basculez le sélecteur Procédure sur Fréquences pour une colonne catégorielle, sur Valeurs aberrantes pour Grubbs/Dixon, ou sur Séquences pour vérifier l’ordre des lignes.',
       ],
       expected: 'Une ligne par variable avec N, moyenne, écart-type, médiane, quartiles, minimum et maximum, plus le résultat du test de normalité.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Une moyenne éloignée de la médiane suggère une asymétrie ou des valeurs extrêmes.',
         'Les tests de normalité sont indicatifs : avec un grand N ils sont trop sensibles, avec un petit N ils manquent de puissance.',
+        'Les fréquences décrivent les modalités d’une variable catégorielle ; le test des séquences vérifie si l’ordre des lignes est aléatoire ; Grubbs et Dixon signalent l’observation la plus extrême.',
       ],
       pitfalls: [
         'Ne présentez jamais l’écart-type comme une erreur standard : ce sont des quantités différentes.',
@@ -63,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Un AIC/BIC plus bas signifie un meilleur ajustement.',
         'Une p-value d’adéquation ne prouve pas la normalité : elle mesure seulement la preuve contre elle.',
+        'Le mode KS à deux échantillons compare deux groupes sans supposer une famille de distributions.',
       ],
       pitfalls: ['Choisir la distribution à partir des données puis la tester sur ces mêmes données surestime l’ajustement.'],
       glossary: [
@@ -102,6 +105,7 @@ export const coreTopics: HelpTopic[] = [
       pitfalls: [
         'Comparer de nombreuses paires sans correction gonfle les faux positifs.',
         'Un résultat non significatif ne prouve pas l’égalité : regardez l’intervalle.',
+        'Avec des données appariées non normales, le test des signes n’utilise que la direction des différences.',
       ],
       glossary: [
         { term: 'Welch', definition: 'La variante du test t qui ne suppose pas des variances égales.' },
@@ -130,6 +134,7 @@ export const coreTopics: HelpTopic[] = [
       whenToUse: ['Un facteur inter-sujet avec trois niveaux ou plus.'],
       whenNotToUse: ['Mesures répétées (utilisez l’ANOVA à mesures répétées) ou deux groupes (le test t est équivalent).'],
       reading: [
+        'Le test de la médiane de Mood compare les médianes sans supposer la normalité : utilisez-le quand les valeurs aberrantes ou l’asymétrie rendent la moyenne peu fiable.',
         'Une p significative dit qu’au moins une moyenne diffère : le post-hoc dit laquelle.',
         'Un Levene significatif suggère des variances inégales : préférez Welch ou Kruskal-Wallis.',
       ],

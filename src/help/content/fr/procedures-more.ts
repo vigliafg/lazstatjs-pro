@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Observations indépendantes ; effectifs attendus assez grands pour le khi-deux.'],
       whenToUse: ['Deux variables catégorielles à deux niveaux chacune.'],
       whenNotToUse: ['Tableaux plus grands (utilisez R×C) ou mesures appariées (McNemar).'],
-      reading: ['Avec de faibles effectifs attendus, la p de Fisher est plus fiable que le khi-deux.'],
+      reading: [
+        'Avec de faibles effectifs attendus, la p de Fisher est plus fiable que le khi-deux.',
+        'Le mode ajustement compare une variable catégorielle à des proportions planifiées.',
+      ],
       pitfalls: ['Des pourcentages calculés sur la mauvaise marge conduisent à des conclusions inversées.'],
       glossary: [
         { term: 'Effectif attendu', definition: 'L’effectif que l’on observerait si les deux variables étaient indépendantes.' },
@@ -117,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'Tableaux de contingence R×C',
-    summary: 'Tableaux plus grands que 2×2, avec mesures d’association et Monte-Carlo.',
+    summary: 'Tableaux R×C avec khi-deux, Mantel–Haenszel, tendance et tests exacts.',
     tutorial: {
       goal: 'Vérifier l’association entre classe d’âge et préférence.',
       dataset: 'score-groups.csv',
@@ -140,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Résidu standardisé', definition: 'Observé moins attendu, en unités d’écart-type.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -333,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Stationnarité après différenciation ; résidus proches d’un bruit blanc.'],
       whenToUse: ['Séries avec une structure d’autocorrélation et assez d’observations.'],
       whenNotToUse: ['Séries très courtes ou ruptures structurelles non modélisées.'],
-      reading: ['Les ordres p, d, q décrivent la mémoire, la différenciation et la moyenne mobile ; un AIC plus bas est préférable à spécification égale.'],
+      reading: ['Le menu Type d’analyse propose aussi Holt–Winters, les tests de racine unitaire, l’analyse spectrale et ARIMAX avec un régresseur exogène.', 'Les ordres p, d, q décrivent la mémoire, la différenciation et la moyenne mobile ; un AIC plus bas est préférable à spécification égale.'],
       pitfalls: ['Les prévisions à long horizon ont des intervalles larges : ne les présentez pas comme certaines.'],
       glossary: [
         { term: 'Stationnarité', definition: 'Moyenne et variance stables au cours du temps.' },
@@ -346,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Données manquantes (imputation multiple)',
-    summary: 'Imputation par équations chaînées avec mise en commun de Rubin.',
+    summary: 'Imputation par équations chaînées pour variables numériques et catégorielles, avec mise en commun de Rubin.',
     tutorial: {
       goal: 'Traiter les données manquantes sans supprimer de cas.',
       dataset: 'score-groups.csv',
@@ -380,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Choisissez le plan (p. ex. Deux moyennes indépendantes).',
-        'Saisissez la différence attendue, l’écart-type, α et la puissance souhaitée.',
+        'Saisissez la différence attendue, l’écart-type, α et la puissance souhaitée ; pour la régression indiquez les prédicteurs et f², pour la logistique le taux d’événements et le rapport de cotes.',
         'Lancez l’analyse et lisez n par groupe et n total.',
       ],
       expected: 'Taille d’échantillon par groupe et totale, avec des notes sur l’arrondi et les abandons attendus.',
@@ -389,7 +392,11 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['La différence et la variabilité sont des hypothèses de plan, pas des résultats.'],
       whenToUse: ['Avant de collecter des données ; pour juger la puissance d’une étude déjà réalisée.'],
       whenNotToUse: ['N’utilisez pas la puissance post-hoc observée comme preuve de validité.'],
-      reading: ['Des différences attendues plus petites ou une puissance requise plus élevée augmentent fortement n.'],
+      reading: [
+        'Des différences attendues plus petites ou une puissance requise plus élevée augmentent fortement n.',
+        'Le planificateur couvre moyennes, proportions, variances, taux de Poisson, régression multiple et régression logistique : choisissez le design du test que vous exécuterez.',
+        'En régression, n est le nombre d’observations du test F global ; en logistique, le nombre de sujets pour un rapport de cotes binaire.',
+      ],
       pitfalls: ['Une différence attendue gonflée produit une étude sous-dimensionnée.'],
       glossary: [
         { term: 'Puissance', definition: 'La probabilité de détecter un effet qui existe réellement.' },

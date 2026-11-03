@@ -42,6 +42,38 @@ export interface CoxPhRow {
   p: number;
 }
 
+/** One group-level frailty effect. */
+export interface FrailtyEffect {
+  group: string;
+  subjects: number;
+  events: number;
+  /** Empirical Bayes estimate of the multiplicative frailty. */
+  mean: number;
+}
+
+/** Shared gamma frailty Cox model. */
+export interface FrailtyFit {
+  n: number;
+  groups: number;
+  events: number;
+  censored: number;
+  k: number;
+  coefficients: CoxCoefficient[];
+  /** Gamma frailty variance (theta = 0 is no heterogeneity). */
+  theta: number;
+  /** Approximate standard error of theta. */
+  thetaSe: number;
+  /** Weighted partial log-likelihood at the final estimates. */
+  logLik: number;
+  aic: number;
+  lr: number;
+  lrP: number;
+  iterations: number;
+  converged: boolean;
+  effects: FrailtyEffect[];
+  warnings: string[];
+}
+
 export interface CoxFit {
   n: number;
   events: number;

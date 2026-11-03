@@ -2,6 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { capabilityStats, controlChart, paretoCounts } from './quality';
 
+const close = (actual: number, expected: number, tolerance = 1e-9) =>
+  assert.ok(Math.abs(actual - expected) < tolerance, `${actual} != ${expected}`);
+
 test('XBar-R chart estimates limits from subgroup means and ranges', () => {
   const values = [10, 11, 9, 10, 12, 10, 11, 9, 10, 11];
   const result = controlChart(values, 'xbar', 5);
@@ -49,4 +52,21 @@ test('Pareto counts are sorted and cumulative reaches 100', () => {
   assert.equal(result!.rows[0].count, 3);
   assert.equal(result!.rows.at(-1)!.cumulative, 100);
   assert.equal(paretoCounts(['', ' ']), null);
+});
+
+test('XBar-R limits and capability match the closed-form references', () => {
+  const chart = controlChart([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'xbar', 5);
+  assert.ok(chart);
+  close(chart!.center, 5.5);
+  close(chart!.rCenter ?? Number.NaN, 4);
+  close(chart!.sigma, 1.7196904557179706);
+  close(chart!.ucl, 7.8072068555457843);
+  close(chart!.lcl, 3.1927931444542157);
+  close(chart!.rUcl ?? Number.NaN, 8.456);
+  close(chart!.rLcl ?? Number.NaN, 0);
+
+  const capability = capabilityStats([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0, 12, 6);
+  assert.ok(capability);
+  close(capability!.cp, 0.6605782590758163);
+  close(capability!.cpk, 0.6055300708194984);
 });

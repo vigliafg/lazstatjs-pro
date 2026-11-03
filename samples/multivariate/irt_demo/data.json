@@ -1,0 +1,4802 @@
+[
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 1,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 0,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 0,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 0,
+    "Item6": 0
+  },
+  {
+    "Item1": 1,
+    "Item2": 0,
+    "Item3": 0,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  },
+  {
+    "Item1": 1,
+    "Item2": 1,
+    "Item3": 1,
+    "Item4": 1,
+    "Item5": 1,
+    "Item6": 1
+  }
+]

@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Observaciones independientes; frecuencias esperadas suficientemente grandes para el chi-cuadrado.'],
       whenToUse: ['Dos variables categóricas con dos niveles cada una.'],
       whenNotToUse: ['Tablas mayores (usa R×C) o medidas emparejadas (McNemar).'],
-      reading: ['Con frecuencias esperadas bajas, el valor p de Fisher es más fiable que el chi-cuadrado.'],
+      reading: [
+        'Con frecuencias esperadas bajas, el valor p de Fisher es más fiable que el chi-cuadrado.',
+        'El modo de bondad de ajuste compara una variable categórica con proporciones planificadas.',
+      ],
       pitfalls: ['Porcentajes calculados sobre el margen equivocado llevan a conclusiones invertidas.'],
       glossary: [
         { term: 'Frecuencia esperada', definition: 'El recuento que se vería si las dos variables fueran independientes.' },
@@ -117,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'Tablas de contingencia R×C',
-    summary: 'Tablas mayores que 2×2, con medidas de asociación y Monte Carlo.',
+    summary: 'Tablas R×C con chi-cuadrado, Mantel–Haenszel, tendencia y pruebas exactas.',
     tutorial: {
       goal: 'Comprobar la asociación entre un tramo de edad y la preferencia.',
       dataset: 'score-groups.csv',
@@ -140,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Residuo tipificado', definition: 'Observado menos esperado, en unidades de desviación estándar.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -333,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Estacionariedad tras la diferenciación; residuos cercanos al ruido blanco.'],
       whenToUse: ['Series con estructura de autocorrelación y suficientes observaciones.'],
       whenNotToUse: ['Series muy cortas o rupturas estructurales que no se modelan.'],
-      reading: ['Los órdenes p, d, q describen la memoria, la diferenciación y la media móvil; un AIC más bajo es preferible para la misma especificación.'],
+      reading: ['El menú Tipo de análisis también ofrece Holt–Winters, pruebas de raíz unitaria, análisis espectral y ARIMAX con un regresor externo.', 'Los órdenes p, d, q describen la memoria, la diferenciación y la media móvil; un AIC más bajo es preferible para la misma especificación.'],
       pitfalls: ['Las previsiones a largo plazo tienen intervalos anchos: no las presentes como certezas.'],
       glossary: [
         { term: 'Estacionariedad', definition: 'Media y varianza estables a lo largo del tiempo.' },
@@ -346,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Datos ausentes (imputación múltiple)',
-    summary: 'Imputación por ecuaciones encadenadas con pooling de Rubin.',
+    summary: 'Imputación por ecuaciones encadenadas para variables numéricas y categóricas, con pooling de Rubin.',
     tutorial: {
       goal: 'Tratar los datos ausentes sin eliminar casos.',
       dataset: 'score-groups.csv',
@@ -380,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Elige el diseño (p. ej. Dos medias independientes).',
-        'Introduce la diferencia esperada, la desviación estándar, α y la potencia deseada.',
+        'Introduce la diferencia esperada, la desviación estándar, α y la potencia deseada; para la regresión indica predictores y f², para la logística la tasa de eventos y la razón de momios.',
         'Ejecútalo y lee n por grupo y la n total.',
       ],
       expected: 'Tamaño de muestra por grupo y total, con notas sobre el redondeo y las pérdidas esperadas.',
@@ -389,7 +392,11 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['La diferencia y la variabilidad son hipótesis de diseño, no resultados.'],
       whenToUse: ['Antes de recoger datos; para juzgar la potencia de un estudio ya hecho.'],
       whenNotToUse: ['No uses la potencia observada a posteriori como prueba de validez.'],
-      reading: ['Diferencias esperadas más pequeñas o una potencia requerida mayor aumentan n de forma marcada.'],
+      reading: [
+        'Diferencias esperadas más pequeñas o una potencia requerida mayor aumentan n de forma marcada.',
+        'El planificador cubre medias, proporciones, varianzas, tasas de Poisson, regresión múltiple y regresión logística: elige el diseño de la prueba que ejecutarás.',
+        'En regresión n es el número de observaciones de la prueba F global; en logística, el número de sujetos para una razón de momios binaria.',
+      ],
       pitfalls: ['Una diferencia esperada inflada produce un estudio con poca potencia.'],
       glossary: [
         { term: 'Potencia', definition: 'La probabilidad de detectar un efecto que realmente existe.' },

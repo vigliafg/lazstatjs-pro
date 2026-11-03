@@ -3,6 +3,7 @@ import { parseNum } from '../core';
 import { tCrit, twoSidedTP } from '../distributions';
 import { eigenSymmetric } from '../linalg';
 import { mulberry32 } from './distributions';
+import { miCategoricalStats } from './miCategorical';
 import type { MiCoefficient, MiOptions, MiRegression, MiStats, MiVariable } from '../mi/types';
 
 type Matrix = number[][];
@@ -85,24 +86,32 @@ const regressionDraw = (X: Matrix, y: number[], rng: () => number): Draw | null 
 
 const imputeColumn = (
   data: (number | null)[][],
+  observed: (number | null)[][],
   column: number,
   variables: number[],
   rng: () => number
 ): void => {
-  const rows = data.map((row, index) => ({ row, index })).filter(entry => entry.row[column] !== null);
+  // `data` holds the current chain values (observed + already imputed cells);
+  // the conditional model is fitted only on the rows where this variable was
+  // actually observed, so the placeholders never leak into the estimates.
+  const rows = data
+    .map((row, index) => ({ row, index }))
+    .filter(entry => observed[entry.index][column] !== null);
+  const targets = data
+    .map((row, index) => ({ row, index }))
+    .filter(entry => observed[entry.index][column] === null);
   const predictors = variables.filter(index => index !== column);
-  if (rows.length < predictors.length + 2) return;
+  if (rows.length < predictors.length + 2 || targets.length === 0) return;
   const X = rows.map(entry => [1, ...predictors.map(index => entry.row[index] as number)]);
   const y = rows.map(entry => entry.row[column] as number);
   const draw = regressionDraw(X, y, rng);
   if (!draw) return;
-  data.forEach(row => {
-    if (row[column] !== null) return;
+  targets.forEach(entry => {
     const eta = draw.beta[0] + predictors.reduce(
-      (sum, index, position) => sum + draw.beta[position + 1] * (row[index] as number),
+      (sum, index, position) => sum + draw.beta[position + 1] * (entry.row[index] as number),
       0
     );
-    row[column] = eta + normal(rng) * Math.sqrt(Math.max(1e-12, draw.variance));
+    entry.row[column] = eta + normal(rng) * Math.sqrt(Math.max(0, draw.variance));
   });
 };
 
@@ -198,6 +207,7 @@ const poolCoefficients = (
 
 /** Imputazione multipla (MICE numerica) con pooling di Rubin per media e SD. */
 export const miStats = (options: MiOptions): MiStats | null => {
+  if (options.model === 'categorical') return miCategoricalStats(options);
   const { rows, variables, level } = options;
   if (variables.length === 0) return null;
   const imputations = Math.max(2, Math.min(50, Math.round(options.imputations)));
@@ -236,7 +246,7 @@ export const miStats = (options: MiOptions): MiStats | null => {
     const data = observed.map(row => row.map((value, j) => (value === null ? means[j] : value)));
     for (let iteration = 0; iteration < iterations; iteration++) {
       variables.forEach((_, j) => {
-        if (missingCounts[j] > 0) imputeColumn(data, j, variables.map((__, index) => index), rng);
+        if (missingCounts[j] > 0) imputeColumn(data, observed, j, variables.map((__, index) => index), rng);
       });
       variables.forEach((_, j) => {
         const mean = data.reduce((sum, row) => sum + (row[j] as number), 0) / data.length;

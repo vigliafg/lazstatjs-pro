@@ -306,7 +306,18 @@ export interface QualityPanelOptions {
  * tested contract, not a card produced by the current runners.
  */
 export const qualityPanel = (options: QualityPanelOptions): PanelChart | null => {
-  const prefixes = ['control', 'capab', 'pareto', 'variab', 'quality', 'xbar', 'ewma'];
+  const prefixes = [
+    'control',
+    'capab',
+    'pareto',
+    'variab',
+    'quality',
+    'xbar',
+    'ewma',
+    'msa',
+    'accept',
+    'mcontrol',
+  ];
   const children = options.charts.filter(chart =>
     prefixes.some(prefix => chart.id.toLowerCase().startsWith(prefix))
   );

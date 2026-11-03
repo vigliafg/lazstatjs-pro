@@ -1,8 +1,13 @@
 import { miStats } from '../../stats/kernels/mi';
+import { miCategoricalIssue } from '../../stats/kernels/miCategorical';
 import { miTables } from '../../stats/tables/mi';
+import { miCategoricalTables } from '../../stats/tables/miCategorical';
 import { miReport } from '../../stats/reports/mi';
+import { miCategoricalReport } from '../../stats/reports/miCategorical';
 import { copy } from '../../stats/reportCopy';
 import { makeChart, ecdfRows } from '../../charts/kits/common';
+import type { AnalysisChart } from '../../stats/charts';
+import type { MiStats } from '../../stats/mi/types';
 import type { Dataset } from '../../grid/types';
 import type { MiParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -15,10 +20,128 @@ export interface MiInput {
   ciLevel: number;
 }
 
-/** Imputazione multipla numerica con pooling di Rubin. */
+const categoricalCharts = (
+  stats: MiStats,
+  names: string[],
+  grid: Dataset,
+  params: MiParams,
+  level: number
+): AnalysisChart[] => {
+  const variables = stats.categories ?? [];
+  const categoryBars = variables.flatMap((variable, variableIndex) =>
+    variable.proportions.flatMap(entry => [
+      {
+        category: `${names[variableIndex] ?? variable.name} · ${entry.category}`,
+        value: entry.observedProportion * 100,
+        series: copy('Osservato'),
+      },
+      {
+        category: `${names[variableIndex] ?? variable.name} · ${entry.category}`,
+        value: entry.completedProportion * 100,
+        series: copy('Completato'),
+      },
+    ])
+  );
+  const missingBars = variables.flatMap((variable, index) => [
+    { category: names[index] ?? variable.name, value: variable.observed, series: copy('Osservato') },
+    { category: names[index] ?? variable.name, value: variable.missing, series: copy('Mancante') },
+  ]);
+  const pooled = variables.flatMap((variable, index) =>
+    variable.proportions
+      .filter(entry => Number.isFinite(entry.proportion) && Number.isFinite(entry.lo) && Number.isFinite(entry.hi))
+      .map(entry => ({
+        label: `${names[index] ?? variable.name} · ${entry.category}`,
+        estimate: entry.proportion,
+        lo: entry.lo,
+        hi: entry.hi,
+      }))
+  );
+  const maxMatrixRows = 120;
+  const step = Math.max(1, Math.ceil(grid.rows.length / maxMatrixRows));
+  const matrixCells = names.flatMap((name, column) =>
+    grid.rows
+      .map((row, index) => ({ row, index }))
+      .filter(entry => entry.index % step === 0)
+      .map(entry => ({
+        x: name,
+        y: `#${entry.index + 1}`,
+        state: Number.isFinite(parseNum(entry.row[params.variables[column] ?? -1]))
+          ? copy('Osservato')
+          : copy('Mancante'),
+      }))
+  );
+
+  const charts: AnalysisChart[] = [
+    makeChart({
+      id: 'mi-categorical-bars',
+      kind: 'bar',
+      title: copy('Proporzioni osservate e completate per categoria'),
+      subtitle: copy('Percentuale di righe · {s1} imputazioni', { s1: stats.imputations }),
+      note: copy('Le barre confrontano la distribuzione osservata con quella ricostruita dall’ultima imputazione: differenze sistematiche indicano un modello da rivedere.'),
+      data: { bars: categoryBars },
+      fields: { xLabel: copy('Variabile · categoria'), yLabel: copy('Percentuale'), series: copy('Stato') },
+      options: { valueLabels: true } as never,
+    }),
+    makeChart({
+      id: 'mi-categorical-missing',
+      kind: 'bar',
+      title: copy('Valori osservati e mancanti'),
+      subtitle: copy('{s1} righe · {s2} variabili categoriche', { s1: stats.n, s2: variables.length }),
+      note: copy('La barra dei mancanti misura le celle che l’imputazione categorica ricostruisce.'),
+      data: { bars: missingBars },
+      fields: { xLabel: copy('Variabile'), yLabel: copy('Conteggio'), series: copy('Stato') },
+      options: { showLabels: true } as never,
+    }),
+    makeChart({
+      id: 'mi-categorical-missingness-matrix',
+      kind: 'missingness',
+      title: copy('Matrice dei valori mancanti'),
+      subtitle: copy('{s1} righe mostrate · {s2} variabili', {
+        s1: Math.ceil(grid.rows.length / step),
+        s2: names.length,
+      }),
+      note: copy('Ogni cella è una riga del dataset: il colore distingue valori osservati e mancanti. Le righe sono campionate se il dataset è molto grande.'),
+      data: { cells: matrixCells },
+      fields: { xLabel: copy('Variabile'), yLabel: copy('Riga'), series: copy('Stato') },
+      options: { display: 'matrix' } as never,
+    }),
+  ];
+
+  if (pooled.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'mi-categorical-pooled-forest',
+        kind: 'forest',
+        title: copy('Proporzioni pooled per categoria'),
+        subtitle: copy('Stima e IC {s1}% dopo il pooling di Rubin', { s1: level }),
+        note: copy('Punto: proporzione pooled. Segmento: intervallo di confidenza; le proporzioni di una variabile sommano a 1.'),
+        data: { points: pooled },
+        fields: { xLabel: copy('Proporzione'), yLabel: copy('Variabile · categoria') },
+        options: { reference: 'zero' } as never,
+      })
+    );
+  }
+
+  return charts;
+};
+
+/** Imputazione multipla numerica o categorica con pooling di Rubin. */
 export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunResult => {
   if (params.variables.length === 0) {
     return { ok: false, reason: 'Select at least one variable' };
+  }
+  if (params.model === 'categorical') {
+    const issue = miCategoricalIssue({
+      rows: grid.rows,
+      variables: params.variables,
+      imputations: params.imputations,
+      iterations: params.iterations,
+      level: ciLevel,
+      model: params.model,
+      outcome: params.outcome,
+      predictors: params.predictors,
+    });
+    if (issue) return { ok: false, reason: issue };
   }
   if (!isFiniteNumber(params.imputations) || params.imputations < 2) {
     return { ok: false, reason: 'Imputations must be a finite number of at least 2' };
@@ -39,12 +162,25 @@ export const buildMiOutput = ({ grid, params, ciLevel }: MiInput): AnalysisRunRe
   if (!stats) {
     return {
       ok: false,
-      reason: 'Multiple imputation needs at least two observed values per selected variable',
+      reason:
+        params.model === 'categorical'
+          ? 'Categorical imputation could not be fitted: check separation, rare categories and the number of variables'
+          : 'Multiple imputation needs at least two observed values per selected variable',
     };
   }
 
   const names = params.variables.map(index => grid.cols[index]?.name ?? `V${index + 1}`);
   const predictorNames = params.predictors.map(index => grid.cols[index]?.name ?? `X${index + 1}`);
+  if (params.model === 'categorical') {
+    const tables = miCategoricalTables(stats, names, ciLevel);
+    return {
+      ok: true,
+      title: copy('Imputazione multipla categorica: {s1}', { s1: names.join(', ') }),
+      tables,
+      report: miCategoricalReport(tables, stats, names, ciLevel),
+      charts: categoricalCharts(stats, names, grid, params, ciLevel),
+    };
+  }
   const tables = miTables(stats, names, ciLevel, predictorNames);
   const bars = names.flatMap((name, index) => {
     const variable = stats.variables[index];

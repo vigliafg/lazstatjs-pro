@@ -31,9 +31,12 @@ Every dataset is written in **five formats** with the same contents:
 | `data.json` | Array of records, `null` = missing |
 
 `manifest.json` is the machine-readable index: title, source, row/column
-counts, formats, analysis ids and ready-to-use column mappings. The unit test
-`src/io/samples.test.ts` parses every file in every format and checks the
-manifest against the real data.
+counts, formats, analysis ids and ready-to-use column mappings. Its contract is
+documented in `manifest.schema.json` and enforced, together with the
+cross-field invariants (unique ids, `dir = family/id`, examples that only cite
+declared procedures and columns), by `src/io/sampleManifest.ts` and the unit
+test `src/io/samples.test.ts`, which parses every file in every format and
+checks the manifest against the real data.
 
 ## Datasets
 

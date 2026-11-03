@@ -110,7 +110,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ["Unabhängige Beobachtungen; für Chi-Quadrat ausreichend große erwartete Häufigkeiten."],
       whenToUse: ["Zwei kategoriale Variablen mit je zwei Stufen."],
       whenNotToUse: ["Größere Tabellen (verwenden Sie R×C) oder gepaarte Messungen (McNemar)."],
-      reading: ["Bei niedrigen erwarteten Häufigkeiten ist Fishers p zuverlässiger als Chi-Quadrat."],
+      reading: [
+        "Bei niedrigen erwarteten Häufigkeiten ist Fishers p zuverlässiger als Chi-Quadrat.",
+        "Der Anpassungsmodus vergleicht eine kategoriale Variable mit geplanten Anteilen.",
+      ],
       pitfalls: [
         "Prozentsätze, die auf der falschen Randverteilung berechnet werden, führen zu umgekehrten Schlussfolgerungen.",
       ],
@@ -125,7 +128,7 @@ export const moreTopics: HelpTopic[] = [
     id: "contingency",
     area: "procedures",
     title: "R×C-Kontingenztabellen",
-    summary: "Tabellen größer als 2×2, mit Assoziationsmaßen und Monte Carlo.",
+    summary: "R×C-Tabellen mit Chi-Quadrat, Mantel–Haenszel, Trend und exakten Tests.",
     tutorial: {
       goal: "Den Zusammenhang zwischen Altersgruppe und Präferenz prüfen.",
       dataset: "score-groups.csv",
@@ -150,7 +153,7 @@ export const moreTopics: HelpTopic[] = [
         { term: "Standardisiertes Residuum", definition: "Beobachtet minus erwartet, in Standardabweichungseinheiten." },
       ],
     },
-    seeAlso: ["chisquare", "agreement"],
+    seeAlso: ["chisquare", "agreement", "loglinear"],
   },
   {
     id: "agreement",
@@ -360,9 +363,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ["Stationarität nach der Differenzenbildung; Residuen nahe an weißem Rauschen."],
       whenToUse: ["Reihen mit Autokorrelationsstruktur und genügend Beobachtungen."],
       whenNotToUse: ["Sehr kurze Reihen oder strukturelle Brüche, die nicht modelliert werden."],
-      reading: [
-        "Die Ordnungen p, d, q beschreiben Gedächtnis, Differenzenbildung und gleitenden Durchschnitt; bei gleicher Spezifikation ist ein niedrigeres AIC vorzuziehen.",
-      ],
+      reading: ['Das Menü Analysetyp bietet außerdem Holt–Winters, Einheitswurzeltests, Spektralanalyse und ARIMAX mit einer exogenen Variable.', "Die Ordnungen p, d, q beschreiben Gedächtnis, Differenzenbildung und gleitenden Durchschnitt; bei gleicher Spezifikation ist ein niedrigeres AIC vorzuziehen.",],
       pitfalls: ["Prognosen über lange Horizonte haben breite Intervalle: Stellen Sie sie nicht als sicher dar."],
       glossary: [
         { term: "Stationarität", definition: "Mittelwert und Varianz bleiben über die Zeit stabil." },
@@ -375,7 +376,7 @@ export const moreTopics: HelpTopic[] = [
     id: "mi",
     area: "procedures",
     title: "Fehlende Daten (multiple Imputation)",
-    summary: "Imputation mit verketteten Gleichungen und Rubin-Pooling.",
+    summary: "Imputation mit verketteten Gleichungen für numerische und kategoriale Variablen, mit Rubin-Pooling.",
     tutorial: {
       goal: "Fehlende Daten behandeln, ohne Fälle zu löschen.",
       dataset: "score-groups.csv",
@@ -409,7 +410,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: "score-groups.csv",
       steps: [
         "Wählen Sie das Design (z. B. Zwei unabhängige Mittelwerte).",
-        "Geben Sie die erwartete Differenz, die Standardabweichung, α und die gewünschte Power ein.",
+        "Geben Sie die erwartete Differenz, die Standardabweichung, α und die gewünschte Power ein; für die Regression Prädiktoren und f², für die Logistik Ereignisrate und Odds Ratio.",
         "Führen Sie die Berechnung aus und lesen Sie n pro Gruppe und das Gesamt-n.",
       ],
       expected: "Stichprobengröße pro Gruppe und insgesamt, mit Hinweisen zu Rundung und erwarteten Dropouts.",
@@ -418,7 +419,11 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ["Differenz und Streuung sind Designhypothesen, keine Ergebnisse."],
       whenToUse: ["Vor der Datenerhebung; um die Power einer bereits durchgeführten Studie zu beurteilen."],
       whenNotToUse: ["Verwenden Sie die beobachtete Post-hoc-Power nicht als Beweis für die Validität."],
-      reading: ["Kleinere erwartete Differenzen oder eine höhere geforderte Power erhöhen n deutlich."],
+      reading: [
+        "Kleinere erwartete Differenzen oder eine höhere geforderte Power erhöhen n deutlich.",
+        "Der Planer deckt Mittelwerte, Anteile, Varianzen, Poisson-Raten, multiple Regression und logistische Regression ab: Wählen Sie das Design des Tests, den Sie ausführen werden.",
+        "Bei der Regression ist n die Zahl der Beobachtungen für den globalen F-Test, bei der Logistik die Zahl der Personen für ein binäres Odds Ratio.",
+      ],
       pitfalls: ["Eine zu hoch angesetzte erwartete Differenz erzeugt eine unterpowerte Studie."],
       glossary: [
         { term: "Power", definition: "Die Wahrscheinlichkeit, einen tatsächlich vorhandenen Effekt zu entdecken." },

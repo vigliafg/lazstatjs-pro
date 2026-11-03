@@ -12,6 +12,7 @@ import { buildRegressionOutput } from './regression/run';
 import { buildTTestOutput } from './ttest/run';
 import { buildDescriptiveOutput } from './descriptive/run';
 import { buildDistributionFitOutput } from './distfit/run';
+import { buildGlmmOutput } from './glmm/run';
 import { DEFAULT_PARAMS } from '../io/project';
 import { meanCI } from '../stats/distributions';
 import type { AnalysisRunResult } from './types';
@@ -206,4 +207,42 @@ test('one-sample t-test draws the test-value rule', () => {
     buildTTestOutput({ grid, ttestParams: { type: 'one', var1: 0, var2: 0, mu: 5, useNonParam: true, equalVar: true }, ciLevel: 95 })
   );
   assert.deepEqual(charts[0].data.rules, [{ y: 5 }]);
+});
+
+test('GLMM charts compile for the gaussian and binomial families', () => {
+  const groups = Array.from({ length: 6 }, (_, index) => `G${index + 1}`);
+  const rows = groups.flatMap((group, groupIndex) =>
+    Array.from({ length: 6 }, (_, time) => [
+      String(4 + groupIndex * 1.2 + 0.8 * time + 0.1 * Math.sin(groupIndex + time)),
+      String(time),
+      group,
+    ])
+  );
+  const gaussian = chartsOf(
+    buildGlmmOutput({
+      grid: { cols: numeric(['Y', 'Time']).concat([{ name: 'Group', type: 'cat' }]), rows },
+      params: { ...DEFAULT_PARAMS.glmm, dep: 0, indeps: [1], group: 2, slope: 1 },
+      ciLevel: 95,
+    })
+  );
+  assert.ok(gaussian.some(chart => chart.id === 'glmm-random-slopes'));
+
+  const binary = chartsOf(
+    buildGlmmOutput({
+      grid: {
+        cols: numeric(['Y', 'Time']).concat([{ name: 'Group', type: 'cat' }]),
+        rows: rows.map((row, index) => [index % 3 === 0 ? '1' : '0', row[1], row[2]]),
+      },
+      params: {
+        ...DEFAULT_PARAMS.glmm,
+        dep: 0,
+        indeps: [1],
+        group: 2,
+        family: 'binomial',
+        link: 'logit',
+      },
+      ciLevel: 95,
+    })
+  );
+  assert.ok(binary.some(chart => chart.id === 'glmm-random-effects'));
 });

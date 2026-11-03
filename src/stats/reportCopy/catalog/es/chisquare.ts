@@ -206,4 +206,42 @@ export const chisquareCopy: Record<string, string> = {
     'φ = {s1}: asociación {s2} (0.1 débil, 0.3 moderada, 0.5 fuerte en tablas 2×2).',
   'φ non calcolabile.':
     'φ no calculable.',
+  'Category':
+    'Categoría',
+  'Con molte categorie e pochi casi il test diventa fragile: raggruppa le categorie rare.':
+    'Con muchas categorías y pocos casos la prueba se vuelve frágil: agrupa las categorías raras.',
+  'Con proporzioni stimate dai dati il test perde gradi di libertà: qui le proporzioni sono fissate a priori.':
+    'Con proporciones estimadas a partir de los datos la prueba pierde grados de libertad: aquí las proporciones están fijadas de antemano.',
+  'Expected':
+    'Esperado',
+  'Il test confronta le frequenze osservate con le proporzioni attese: verifica se le categorie sono distribuite come previsto.':
+    'La prueba compara las frecuencias observadas con las proporciones esperadas: comprueba si las categorías se distribuyen como se previó.',
+  'Il χ² confronta (osservato − atteso)²/atteso sommato su tutte le categorie.':
+    'El χ² suma (observado − esperado)²/esperado sobre todas las categorías.',
+  'Le attese dovrebbero essere almeno 5 per categoria: sotto questa soglia il χ² è inaffidabile.':
+    'Los recuentos esperados deberían ser al menos 5 por categoría: por debajo el χ² no es fiable.',
+  'Le attese sono la proporzione indicata moltiplicata per il totale ({s1}).':
+    'Los recuentos esperados son la proporción indicada multiplicada por el total ({s1}).',
+  'Le osservazioni devono essere indipendenti e ogni caso deve cadere in una sola categoria.':
+    'Las observaciones deben ser independientes y cada caso debe caer en una sola categoría.',
+  'Observed':
+    'Observado',
+  'Proporzioni attese: {s1}.':
+    'Proporciones esperadas: {s1}.',
+  'Report di lettura — Bontà di adattamento':
+    'Informe de lectura — Bondad de ajuste',
+  'Residual':
+    'Residuo',
+  'Serve per controllare se una categoria domina, non per stimare la sua proporzione: per quello usa l’intervallo di Wilson.':
+    'Sirve para comprobar si una categoría domina, no para estimar su proporción: para eso usa el intervalo de Wilson.',
+  'Test χ²':
+    'Prueba χ²',
+  'Totale {s1}; categoria più frequente: “{s2}” con {s3} casi.':
+    'Total {s1}; categoría más frecuente: «{s2}» con {s3} casos.',
+  'Un p piccolo indica che la distribuzione osservata si discosta da quella attesa; non dice quale categoria pesa di più.':
+    'Un p pequeño indica que la distribución observada se aparta de la esperada; no dice qué categoría pesa más.',
+  'df = numero di categorie − 1.':
+    'df = número de categorías − 1.',
+  '{s1} categorie in {s2}: χ² = {s3}, p = {s4}.':
+    '{s1} categorías en {s2}: χ² = {s3}, p = {s4}.',
 };

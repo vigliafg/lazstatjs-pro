@@ -4,6 +4,10 @@ import { analysisLabel } from './registry';
 import { t, type MessageKey } from '../i18n';
 import { isContinuousColumn, isGroupColumn } from '../grid/types';
 import { L4_ROLES } from './rolesL4';
+import { W5_ROLES } from './rolesW5';
+import { W6_ROLES } from './rolesW6';
+import { W7_ROLES } from './rolesW7';
+import { W9_ROLES } from './rolesW9';
 
 export type RoleKind = 'continuous' | 'group' | 'any';
 
@@ -62,6 +66,40 @@ const ROLE_SUFFIX_KEYS: Record<string, MessageKey> = {
   stratum: 'form.stratum',
   cluster: 'form.cluster',
   measurements: 'form.measurements',
+  endogenous: 'form.endogenous',
+  'endogenous predictors': 'form.endogenous',
+  instruments: 'form.instruments',
+  exogenous: 'form.exogenous',
+  'exogenous predictors': 'form.exogenous',
+  entity: 'form.entity',
+  selection: 'form.selection',
+  'selection indicator': 'form.selection',
+  'selection predictors': 'form.selectionPredictors',
+  predictor: 'form.predictor',
+  mediator: 'form.mediator',
+  treatment: 'form.treatment',
+  indicators: 'form.variables',
+  items: 'form.variables',
+  attributes: 'form.factor',
+  rating: 'form.responseY',
+  'x variables': 'form.variables2',
+  'y variables': 'form.variables3',
+  subject: 'form.subject',
+  stress: 'form.stress',
+  failures: 'form.failures',
+  'frailty group': 'form.frailtyGroup',
+  'upper bound': 'form.upperBound',
+  weight: 'form.weight',
+  strata: 'form.strata',
+  alternative: 'form.alternative',
+  chosen: 'form.chosen',
+  best: 'form.best',
+  worst: 'form.worst',
+  effect: 'form.effectSize',
+  'standard error': 'form.standardError',
+  'text column': 'form.textColumn',
+  'x coordinate': 'form.xCoordinate',
+  'y coordinate': 'form.yCoordinate',
 };
 
 /** Localised role label: "ANOVA: dependent variable" becomes the active UI language. */
@@ -80,6 +118,38 @@ const ROLES: Record<string, AnalysisRole[]> = {
       kind: 'continuous',
       get: p => p.descVars,
       set: (p, c) => ({ ...p, descVars: append(p.descVars, c) }),
+    },
+  ],
+  variances: [
+    {
+      key: 'variable',
+      label: 'Variances: variable',
+      kind: 'continuous',
+      get: p => [p.variances.variable],
+      set: (p, c) => ({ ...p, variances: { ...p.variances, variable: c } }),
+    },
+    {
+      key: 'group',
+      label: 'Variances: group',
+      kind: 'group',
+      get: p => (p.variances.group < 0 ? [] : [p.variances.group]),
+      set: (p, c) => ({ ...p, variances: { ...p.variances, group: c } }),
+    },
+  ],
+  proportions: [
+    {
+      key: 'variable',
+      label: 'Proportions: variable',
+      kind: 'any',
+      get: p => [p.proportions.variable],
+      set: (p, c) => ({ ...p, proportions: { ...p.proportions, variable: c } }),
+    },
+    {
+      key: 'group',
+      label: 'Proportions: group',
+      kind: 'any',
+      get: p => (p.proportions.group < 0 ? [] : [p.proportions.group]),
+      set: (p, c) => ({ ...p, proportions: { ...p.proportions, group: c } }),
     },
   ],
   ttest: [
@@ -112,6 +182,73 @@ const ROLES: Record<string, AnalysisRole[]> = {
       kind: 'group',
       get: p => [p.anova.grp],
       set: (p, c) => ({ ...p, anova: { ...p.anova, grp: c } }),
+    },
+  ],
+  glm: [
+    {
+      key: 'dep',
+      label: 'GLM: dependent variable',
+      kind: 'continuous',
+      get: p => [p.glm.dep],
+      set: (p, c) => ({ ...p, glm: { ...p.glm, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'GLM: predictors',
+      kind: 'continuous',
+      get: p => p.glm.indeps,
+      set: (p, c) => ({ ...p, glm: { ...p.glm, indeps: append(p.glm.indeps, c) } }),
+    },
+  ],
+  quantile: [
+    {
+      key: 'dep',
+      label: 'Quantile: dependent variable',
+      kind: 'continuous',
+      get: p => [p.quantile.dep],
+      set: (p, c) => ({ ...p, quantile: { ...p.quantile, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'Quantile: predictors',
+      kind: 'continuous',
+      get: p => p.quantile.indeps,
+      set: (p, c) => ({ ...p, quantile: { ...p.quantile, indeps: append(p.quantile.indeps, c) } }),
+    },
+  ],
+  nonlinear: [
+    {
+      key: 'dep',
+      label: 'Nonlinear: dependent variable',
+      kind: 'continuous',
+      get: p => [p.nonlinear.dep],
+      set: (p, c) => ({ ...p, nonlinear: { ...p.nonlinear, dep: c } }),
+    },
+    {
+      key: 'predictor',
+      label: 'Nonlinear: predictor',
+      kind: 'continuous',
+      get: p => [p.nonlinear.predictor],
+      set: (p, c) => ({ ...p, nonlinear: { ...p.nonlinear, predictor: c } }),
+    },
+  ],
+  multinomial: [
+    {
+      key: 'outcome',
+      label: 'Multinomial: outcome',
+      kind: 'any',
+      get: p => [p.multinomial.outcome],
+      set: (p, c) => ({ ...p, multinomial: { ...p.multinomial, outcome: c } }),
+    },
+    {
+      key: 'predictors',
+      label: 'Multinomial: predictors',
+      kind: 'continuous',
+      get: p => p.multinomial.predictors,
+      set: (p, c) => ({
+        ...p,
+        multinomial: { ...p.multinomial, predictors: append(p.multinomial.predictors, c) },
+      }),
     },
   ],
   regression: [
@@ -220,6 +357,13 @@ const ROLES: Record<string, AnalysisRole[]> = {
       kind: 'continuous',
       get: p => [p.timeseries.variable],
       set: (p, c) => ({ ...p, timeseries: { ...p.timeseries, variable: c } }),
+    },
+    {
+      key: 'xreg',
+      label: 'Time Series: exogenous regressor',
+      kind: 'continuous',
+      get: p => [p.timeseries.xregVariable],
+      set: (p, c) => ({ ...p, timeseries: { ...p.timeseries, xregVariable: c } }),
     },
   ],
   ancova: [
@@ -547,6 +691,226 @@ const ROLES: Record<string, AnalysisRole[]> = {
       set: (p, c) => ({ ...p, lmm: { ...p.lmm, group: c } }),
     },
   ],
+  glmm: [
+    {
+      key: 'dep',
+      label: 'GLMM: outcome',
+      kind: 'continuous',
+      get: p => [p.glmm.dep],
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'GLMM: predictors',
+      kind: 'continuous',
+      get: p => p.glmm.indeps,
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, indeps: append(p.glmm.indeps, c) } }),
+    },
+    {
+      key: 'group',
+      label: 'GLMM: group',
+      kind: 'group',
+      get: p => [p.glmm.group],
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, group: c } }),
+    },
+    {
+      key: 'slope',
+      label: 'GLMM: random slope',
+      kind: 'continuous',
+      get: p => (p.glmm.slope >= 0 ? [p.glmm.slope] : []),
+      set: (p, c) => ({ ...p, glmm: { ...p.glmm, slope: c } }),
+    },
+  ],
+  pls: [
+    {
+      key: 'dep',
+      label: 'PLS: dependent variable',
+      kind: 'continuous',
+      get: p => [p.pls.dep],
+      set: (p, c) => ({ ...p, pls: { ...p.pls, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'PLS: predictors',
+      kind: 'continuous',
+      get: p => p.pls.indeps,
+      set: (p, c) => ({ ...p, pls: { ...p.pls, indeps: append(p.pls.indeps, c) } }),
+    },
+  ],
+  mars: [
+    {
+      key: 'dep',
+      label: 'MARS: dependent variable',
+      kind: 'continuous',
+      get: p => [p.mars.dep],
+      set: (p, c) => ({ ...p, mars: { ...p.mars, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'MARS: predictors',
+      kind: 'continuous',
+      get: p => p.mars.indeps,
+      set: (p, c) => ({ ...p, mars: { ...p.mars, indeps: append(p.mars.indeps, c) } }),
+    },
+  ],
+  iv: [
+    {
+      key: 'dep',
+      label: 'IV: outcome',
+      kind: 'continuous',
+      get: p => [p.iv.dep],
+      set: (p, c) => ({ ...p, iv: { ...p.iv, dep: c } }),
+    },
+    {
+      key: 'endog',
+      label: 'IV: endogenous predictors',
+      kind: 'continuous',
+      get: p => p.iv.endog,
+      set: (p, c) => ({ ...p, iv: { ...p.iv, endog: append(p.iv.endog, c) } }),
+    },
+    {
+      key: 'instruments',
+      label: 'IV: instruments',
+      kind: 'continuous',
+      get: p => p.iv.instruments,
+      set: (p, c) => ({
+        ...p,
+        iv: { ...p.iv, instruments: append(p.iv.instruments, c) },
+      }),
+    },
+    {
+      key: 'exog',
+      label: 'IV: exogenous predictors',
+      kind: 'continuous',
+      get: p => p.iv.exog,
+      set: (p, c) => ({ ...p, iv: { ...p.iv, exog: append(p.iv.exog, c) } }),
+    },
+  ],
+  panel: [
+    {
+      key: 'dep',
+      label: 'Panel: outcome',
+      kind: 'continuous',
+      get: p => [p.panel.dep],
+      set: (p, c) => ({ ...p, panel: { ...p.panel, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'Panel: predictors',
+      kind: 'continuous',
+      get: p => p.panel.indeps,
+      set: (p, c) => ({ ...p, panel: { ...p.panel, indeps: append(p.panel.indeps, c) } }),
+    },
+    {
+      key: 'entity',
+      label: 'Panel: entity',
+      kind: 'any',
+      get: p => [p.panel.entity],
+      set: (p, c) => ({ ...p, panel: { ...p.panel, entity: c } }),
+    },
+    {
+      key: 'time',
+      label: 'Panel: time',
+      kind: 'any',
+      get: p => [p.panel.time],
+      set: (p, c) => ({ ...p, panel: { ...p.panel, time: c } }),
+    },
+  ],
+  selection: [
+    {
+      key: 'dep',
+      label: 'Selection: outcome',
+      kind: 'continuous',
+      get: p => [p.selection.dep],
+      set: (p, c) => ({ ...p, selection: { ...p.selection, dep: c } }),
+    },
+    {
+      key: 'indeps',
+      label: 'Selection: predictors',
+      kind: 'continuous',
+      get: p => p.selection.indeps,
+      set: (p, c) => ({
+        ...p,
+        selection: { ...p.selection, indeps: append(p.selection.indeps, c) },
+      }),
+    },
+    {
+      key: 'selection',
+      label: 'Selection: selection indicator',
+      kind: 'any',
+      get: p => (p.selection.selection >= 0 ? [p.selection.selection] : []),
+      set: (p, c) => ({ ...p, selection: { ...p.selection, selection: c } }),
+    },
+    {
+      key: 'selectIndeps',
+      label: 'Selection: selection predictors',
+      kind: 'continuous',
+      get: p => p.selection.selectIndeps,
+      set: (p, c) => ({
+        ...p,
+        selection: { ...p.selection, selectIndeps: append(p.selection.selectIndeps, c) },
+      }),
+    },
+  ],
+  mediation: [
+    {
+      key: 'outcome',
+      label: 'Mediation: outcome',
+      kind: 'continuous',
+      get: p => [p.mediation.outcome],
+      set: (p, c) => ({ ...p, mediation: { ...p.mediation, outcome: c } }),
+    },
+    {
+      key: 'predictor',
+      label: 'Mediation: predictor',
+      kind: 'continuous',
+      get: p => [p.mediation.predictor],
+      set: (p, c) => ({ ...p, mediation: { ...p.mediation, predictor: c } }),
+    },
+    {
+      key: 'mediator',
+      label: 'Mediation: mediator',
+      kind: 'continuous',
+      get: p => [p.mediation.mediator],
+      set: (p, c) => ({ ...p, mediation: { ...p.mediation, mediator: c } }),
+    },
+    {
+      key: 'covariates',
+      label: 'Mediation: covariates',
+      kind: 'continuous',
+      get: p => p.mediation.covariates,
+      set: (p, c) => ({
+        ...p,
+        mediation: { ...p.mediation, covariates: append(p.mediation.covariates, c) },
+      }),
+    },
+  ],
+  propensity: [
+    {
+      key: 'treatment',
+      label: 'Propensity: treatment',
+      kind: 'any',
+      get: p => [p.propensity.treatment],
+      set: (p, c) => ({ ...p, propensity: { ...p.propensity, treatment: c } }),
+    },
+    {
+      key: 'outcome',
+      label: 'Propensity: outcome',
+      kind: 'continuous',
+      get: p => [p.propensity.outcome],
+      set: (p, c) => ({ ...p, propensity: { ...p.propensity, outcome: c } }),
+    },
+    {
+      key: 'covariates',
+      label: 'Propensity: covariates',
+      kind: 'continuous',
+      get: p => p.propensity.covariates,
+      set: (p, c) => ({
+        ...p,
+        propensity: { ...p.propensity, covariates: append(p.propensity.covariates, c) },
+      }),
+    },
+  ],
   countreg: [
     {
       key: 'dep',
@@ -618,6 +982,10 @@ const ROLES: Record<string, AnalysisRole[]> = {
     },
   ],
   ...L4_ROLES,
+  ...W5_ROLES,
+  ...W6_ROLES,
+  ...W7_ROLES,
+  ...W9_ROLES,
 };
 
 /** Assignable column roles for an analysis, primary role first. */
@@ -660,6 +1028,9 @@ export const validateRoleTypes = (
 ): string[] => {
   const errors: string[] = [];
   for (const role of analysisRoles(analysisId)) {
+    // Categorical MI treats the selected variables as category codes, so their
+    // columns need not be numeric; the covariates keep the continuous rule.
+    if (analysisId === 'mi' && params.mi.model === 'categorical' && role.key !== 'predictors') continue;
     for (const index of role.get(params)) {
       if (index < 0 || index >= grid.cols.length) continue;
       const col = grid.cols[index];

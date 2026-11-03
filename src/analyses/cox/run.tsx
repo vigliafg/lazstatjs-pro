@@ -1,4 +1,5 @@
-import { coxReport, coxTables, fitCox } from '../../stats/cox';
+import { coxReport, coxTables, fitCox, frailtyReport, frailtyTables } from '../../stats/cox';
+import { fitFrailtyCox } from '../../stats/kernels/cox';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
@@ -87,8 +88,18 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     return { ok: false, reason: 'The selected covariates contain no usable values' };
   }
 
+  const mode = params.mode ?? 'standard';
+  const frailtyVariable = params.frailtyVariable ?? -1;
+  if (mode === 'frailty' && frailtyVariable < 0) {
+    return { ok: false, reason: 'Select a group column for the frailty model' };
+  }
+  if (mode === 'frailty' && (frailtyVariable === timeVariable || frailtyVariable === eventVariable)) {
+    return { ok: false, reason: 'The frailty group cannot be the time or event column' };
+  }
+
   const times: number[] = [];
   const events: number[] = [];
+  const groupLabels: string[] = [];
   const covariateValues: number[][] = encoded.map(() => []);
   grid.rows.forEach((row, rowIndex) => {
     const time = parseNum(row[timeVariable]);
@@ -98,6 +109,9 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     if (values.some(value => !Number.isFinite(value))) return;
     times.push(time);
     events.push(label === eventLevels[1] ? 1 : 0);
+    groupLabels.push(
+      mode === 'frailty' ? String(row[frailtyVariable] ?? '').trim() || 'All' : 'All'
+    );
     values.forEach((value, index) => covariateValues[index].push(value));
   });
 
@@ -105,6 +119,78 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     return {
       ok: false,
       reason: 'Not enough complete rows: time, event and all covariates must be present',
+    };
+  }
+
+  if (mode === 'frailty') {
+    const groupNames = Array.from(new Set(groupLabels)).sort();
+    if (groupNames.length < 2) {
+      return { ok: false, reason: 'The frailty model needs at least two groups' };
+    }
+    const groupIndex = groupLabels.map(label => groupNames.indexOf(label));
+    const fit = fitFrailtyCox({
+      time: times,
+      event: events,
+      covariates: encoded.map((column, index) => ({
+        name: column.name,
+        values: covariateValues[index],
+      })),
+      groups: groupIndex,
+      groupNames,
+      level: ciLevel,
+    });
+    if (!fit) {
+      return {
+        ok: false,
+        reason:
+          'The frailty model could not be estimated: every group needs at least one event and enough complete rows',
+      };
+    }
+    const tables = frailtyTables(fit, ciLevel);
+    return {
+      ok: true,
+      title: copy('Cox con fragilità'),
+      header: copy('{s1} osservazioni · {s2} gruppi · {s3} eventi', {
+        s1: fit.n,
+        s2: fit.groups,
+        s3: fit.events,
+      }),
+      tables,
+      report: frailtyReport(tables, ciLevel),
+      charts: [
+        makeChart({
+          id: 'frailty-effects',
+          kind: 'bar',
+          title: copy('Fragilità per gruppo'),
+          subtitle: copy('Media posteriore · 1 = nessun eccesso di rischio'),
+          note: copy('Barre sopra 1 indicano gruppi con rischio di base più alto.'),
+          data: {
+            bars: fit.effects.map(effect => ({
+              category: effect.group,
+              value: effect.mean,
+            })),
+          },
+          fields: { xLabel: copy('Gruppo'), yLabel: copy('Fragilità media') },
+          options: { referenceLine: 'one' } as never,
+        }),
+        makeChart({
+          id: 'frailty-forest',
+          kind: 'forest',
+          title: copy('Hazard ratio condizionati'),
+          subtitle: copy('IC {s1}%', { s1: ciLevel }),
+          note: copy('Gli intervalli non includono l’incertezza della fragilità.'),
+          data: {
+            points: fit.coefficients.map(coefficient => ({
+              label: coefficient.term,
+              estimate: coefficient.hr,
+              lo: coefficient.lo,
+              hi: coefficient.hi,
+            })),
+          },
+          fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
+          stats: { n: fit.n, events: fit.events },
+        }),
+      ],
     };
   }
 

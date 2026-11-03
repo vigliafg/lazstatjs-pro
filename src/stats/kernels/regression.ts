@@ -1,6 +1,7 @@
 import { jStat } from '../jstat';
 import { parseNum } from '../core';
-import { calcTheilSen } from './index';
+import { calcTheilSen, calcTheilSenCapped } from './index';
+import { THEIL_SEN_MAX_ROWS, sampleEvenly } from './guards';
 import {
   bootstrapCI,
   chi2SF,
@@ -25,7 +26,7 @@ const multiplyVector = (matrix: Matrix, vector: number[]): number[] =>
 const dot = (a: number[], b: number[]): number =>
   a.reduce((sum, value, i) => sum + value * b[i], 0);
 
-interface OlsFit {
+export interface OlsFit {
   coef: number[];
   fitted: number[];
   residuals: number[];
@@ -45,7 +46,7 @@ interface OlsFit {
   k: number;
 }
 
-const fitOls = (Y: number[], X: Matrix): OlsFit | null => {
+export const fitOls = (Y: number[], X: Matrix): OlsFit | null => {
   const n = Y.length;
   const p = X[0].length;
   const k = p - 1;
@@ -363,14 +364,22 @@ export const regressionStats = (
   const theilSen =
     k === 1
       ? (() => {
-          const result = calcTheilSen(predictors[0], Y);
+          // Exact Theil–Sen is O(n²): cap the points so the bootstrap below
+          // resamples a bounded vector instead of a 50 000-row grid.
+          const indices = sampleEvenly(
+            predictors[0].map((_, index) => index),
+            THEIL_SEN_MAX_ROWS
+          );
+          const xs = indices.map(index => predictors[0][index]);
+          const ys = indices.map(index => Y[index]);
+          const result = calcTheilSen(xs, ys);
           const ci = bootstrapCI(rnd => {
             const sampleX: number[] = [];
             const sampleY: number[] = [];
-            for (let i = 0; i < n; i++) {
-              const index = Math.floor(rnd() * n);
-              sampleX.push(predictors[0][index]);
-              sampleY.push(Y[index]);
+            for (let i = 0; i < xs.length; i++) {
+              const index = Math.floor(rnd() * xs.length);
+              sampleX.push(xs[index]);
+              sampleY.push(ys[index]);
             }
             return calcTheilSen(sampleX, sampleY).slope;
           }, level, 600);
@@ -485,7 +494,7 @@ export const regressionStats = (
   }
 
   const univariateSlopes =
-    k > 1 ? predictors.map(values => calcTheilSen(values, Y).slope) : [];
+    k > 1 ? predictors.map(values => calcTheilSenCapped(values, Y).slope) : [];
 
   return {
     n,

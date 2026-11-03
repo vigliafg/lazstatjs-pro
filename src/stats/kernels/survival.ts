@@ -1,5 +1,12 @@
 import { chi2SF, zCrit } from '../distributions';
-import type { KMPoint, KMResult, SurvivalGroup } from '../survival/types';
+import type {
+  KMPoint,
+  KMResult,
+  LifeTableRow,
+  SurvivalGroup,
+  TurnbullInterval,
+  TurnbullResult,
+} from '../survival/types';
 
 export const kaplanMeier = (time: number[], event: number[], level = 95): KMResult => {
   const n = time.length;
@@ -197,14 +204,6 @@ export const logRankTest = (groups: SurvivalGroup[], level = 95): LogRankResult 
   };
 };
 
-export interface LifeTableRow {
-  start: number;
-  end: number;
-  atRisk: number;
-  events: number;
-  censored: number;
-  survival: number;
-}
 
 export const lifeTable = (time: number[], event: number[], intervals?: number): LifeTableRow[] => {
   const observations = time
@@ -217,6 +216,7 @@ export const lifeTable = (time: number[], event: number[], intervals?: number): 
   const width = maxTime / k || 1;
   const rows: LifeTableRow[] = [];
   let survival = 1;
+  let greenwood = 0;
 
   for (let index = 0; index < k; index++) {
     const isLast = index === k - 1;
@@ -227,9 +227,153 @@ export const lifeTable = (time: number[], event: number[], intervals?: number): 
     const events = observations.filter(item => inInterval(item.time) && item.event === 1).length;
     const censored = observations.filter(item => inInterval(item.time) && item.event === 0).length;
     const effective = atRisk - censored / 2;
-    if (effective > 0) survival *= 1 - events / effective;
-    rows.push({ start, end, atRisk, events, censored, survival });
+    const q = effective > 0 ? Math.min(1, events / effective) : 0;
+    const p = 1 - q;
+    if (effective > 0) {
+      survival *= p;
+      greenwood += events / Math.max(1, effective * (effective - events));
+    }
+    rows.push({
+      start,
+      end,
+      atRisk,
+      events,
+      censored,
+      effective,
+      q,
+      p,
+      survival,
+      se: survival * Math.sqrt(greenwood),
+    });
   }
 
   return rows;
+};
+
+/**
+ * Turnbull non-parametric maximum likelihood for interval-censored data.
+ *
+ * Every observation is an interval `(lower, upper]`; `upper = Infinity` is
+ * right censoring, `lower = 0` left censoring and `lower === upper` an exact
+ * event. The support is the set of innermost intervals built from the observed
+ * endpoints; an EM algorithm distributes mass over them.
+ */
+export const turnbull = (
+  intervals: readonly TurnbullInterval[],
+  maxIterations = 5000
+): TurnbullResult => {
+  const scale = Math.max(
+    1,
+    ...intervals.map(item => (Number.isFinite(item.upper) ? item.upper : item.lower))
+  );
+  const epsilon = 1e-6 * scale;
+  const usable = intervals
+    .map(item => {
+      const lower = Number.isFinite(item.lower) && item.lower >= 0 ? item.lower : 0;
+      const upper = Number.isFinite(item.upper) ? item.upper : Infinity;
+      // An exact event is a zero-width interval: widen it by epsilon so the
+      // half-open support can carry its mass.
+      return upper <= lower
+        ? { lower: Math.max(0, lower - epsilon), upper: lower }
+        : { lower, upper };
+    })
+    .filter(item => Number.isFinite(item.lower) && (Number.isFinite(item.upper) || item.upper === Infinity));
+  const n = usable.length;
+  if (n === 0) return { points: [], n: 0, iterations: 0, converged: true };
+
+  const endpoints = Array.from(
+    new Set(
+      usable.flatMap(item => [
+        item.lower,
+        ...(Number.isFinite(item.upper) ? [item.upper] : []),
+      ])
+    )
+  ).sort((left, right) => left - right);
+  if (endpoints.length < 2) {
+    return {
+      points: [{ time: endpoints[0] ?? 0, survival: 0, mass: 1 }],
+      n,
+      iterations: 0,
+      converged: true,
+    };
+  }
+
+  const elementary = endpoints.slice(1).map((upper, index) => ({
+    lower: endpoints[index],
+    upper,
+  }));
+
+  // Membership of every observation in every elementary cell.
+  const elementaryMembership = usable.map(item =>
+    elementary
+      .map((cell, index) =>
+        cell.lower >= item.lower && cell.upper <= item.upper ? index : -1
+      )
+      .filter(index => index >= 0)
+  );
+
+  // Turnbull intervals: merge adjacent elementary cells that belong to exactly
+  // the same set of observations. The NPMLE is identifiable only on these
+  // maximal intervals, not on the elementary cells.
+  const cells: { lower: number; upper: number; mass: number }[] = [];
+  let current: { lower: number; upper: number; signature: string } | null = null;
+  elementary.forEach((cell, index) => {
+    const signature = elementaryMembership
+      .map(indices => (indices.includes(index) ? '1' : '0'))
+      .join('');
+    if (current && current.signature === signature) {
+      current.upper = cell.upper;
+    } else {
+      if (current) cells.push({ lower: current.lower, upper: current.upper, mass: 1 });
+      current = { lower: cell.lower, upper: cell.upper, signature };
+    }
+  });
+  if (current) cells.push({ lower: current.lower, upper: current.upper, mass: 1 });
+  cells.forEach(cell => {
+    cell.mass = 1 / cells.length;
+  });
+
+  const membership = usable.map(item =>
+    cells
+      .map((cell, index) =>
+        cell.lower >= item.lower && cell.upper <= item.upper ? index : -1
+      )
+      .filter(index => index >= 0)
+  );
+
+  let converged = false;
+  let iterations = 0;
+  for (; iterations < maxIterations; iterations += 1) {
+    let largestChange = 0;
+    const nextMass = new Array<number>(cells.length).fill(0);
+    membership.forEach(indices => {
+      const total = indices.reduce((sum, index) => sum + cells[index].mass, 0);
+      if (total <= 0) return;
+      indices.forEach(index => {
+        nextMass[index] += cells[index].mass / total / n;
+      });
+    });
+    cells.forEach((cell, index) => {
+      largestChange = Math.max(largestChange, Math.abs(nextMass[index] - cell.mass));
+      cell.mass = nextMass[index];
+    });
+    if (largestChange < 1e-11) {
+      converged = true;
+      iterations += 1;
+      break;
+    }
+  }
+
+  // Survival is a step function dropping by the mass ending at each endpoint.
+  // Cells that received no mass are not identifiable support points and are
+  // omitted from the reported curve.
+  let cumulative = 0;
+  const points = cells
+    .map(cell => {
+      cumulative += cell.mass;
+      return { time: cell.upper, survival: 1 - cumulative, mass: cell.mass };
+    })
+    .filter(point => point.mass > 1e-10);
+
+  return { points, n, iterations, converged };
 };

@@ -2,20 +2,14 @@
 export const parametricCopy: Record<string, string> = {
   '{s1} · CI {s2}%':
     '{s1} · IC {s2} %',
-  '{s1} AFT su {s2} osservazioni e {s3} eventi.':
-    '{s1} AFT sur {s2} observations et {s3} événements.',
   'AIC':
     'AIC',
   'BIC':
     'BIC',
   'Coefficienti':
     'Coefficients',
-  'Con la distribuzione esponenziale la scala è fissata a 1.':
-    'Avec la distribution exponentielle, l’échelle est fixée à 1.',
   'Eventi':
     'Événements',
-  'Exponenziale AFT':
-    'Exponentielle AFT',
   'Il livello di confidenza è {s1}%; con pochi eventi le stime sono instabili.':
     'Le niveau de confiance est de {s1} % ; avec peu d’événements, les estimations sont instables.',
   'Il modello AFT stima l’effetto dei predittori sul log del tempo di sopravvivenza: un time ratio maggiore di 1 indica tempi più lunghi.':
@@ -24,14 +18,10 @@ export const parametricCopy: Record<string, string> = {
     'Intercept (μ)',
   'La censura è assunta non informativa.':
     'La censure est supposée non informative.',
-  'La forma della distribuzione (Weibull o esponenziale) è un’assunzione: va confrontata con KM e con l’AIC rispetto ad altre famiglie.':
-    'La forme de la distribution (Weibull ou exponentielle) est une hypothèse : elle doit être comparée aux courbes KM et à l’AIC d’autres familles.',
   'Log-verosimiglianza':
     'Log-vraisemblance',
   'Metrica':
     'Métrique',
-  'Modello AFT: log(T) = μ + Xβ + σ·W, con W extreme-value.':
-    'Modèle AFT : log(T) = μ + Xβ + σ·W, avec W de type valeur extrême.',
   'Modello stimato':
     'Modèle estimé',
   'N':

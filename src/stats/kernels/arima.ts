@@ -3,7 +3,7 @@ import type { TableSpec } from '../types';
 import { fmtEst, fmtP } from '../format';
 import { chi2SF, zCrit, zTwoSidedP } from '../distributions';
 import { isDecided } from '../reportKit';
-import { autocorrelation, ljungBox, runsTest } from '../timeseries';
+import { autocorrelation, ljungBox, runsTest } from './timeseries';
 
 /**
  * ARIMA / SARIMA models (Box–Jenkins).
@@ -85,6 +85,8 @@ export interface ArimaFit {
   invertible: boolean;
   converged: boolean;
   holdout?: ArimaHoldout;
+  /** Names of the exogenous regressors, when the model is an ARIMAX. */
+  xregNames?: string[];
 }
 
 export interface ArimaSelection {
@@ -107,6 +109,10 @@ export interface ArimaAnalysisOptions {
   d?: number | 'auto';
   /** Explicit seasonal order of differencing, or 'auto' (heuristic). */
   D?: number | 'auto';
+  /** Exogenous regressors aligned with `values`. */
+  xreg?: number[][];
+  xregNames?: string[];
+  xregFuture?: number[][];
 }
 
 export interface ArimaAnalysisResult {
@@ -168,6 +174,28 @@ interface PreparedSeries {
   work: number[];
 }
 
+/** Apply the same differencing to each exogenous series. */
+const prepareXreg = (
+  xreg: number[][] | undefined,
+  d: number,
+  D: number,
+  s: number
+): number[][] | undefined => {
+  if (!xreg || xreg.length === 0) return undefined;
+  let rows = xreg.map(row => row.slice());
+  for (let order = 0; order < d; order++) {
+    const previous = rows;
+    rows = previous.slice(1).map((row, index) => row.map((value, column) => value - previous[index][column]));
+  }
+  if (D > 0 && s >= 2) {
+    for (let order = 0; order < D; order++) {
+      const previous = rows;
+      rows = previous.slice(s).map((row, index) => row.map((value, column) => value - previous[index][column]));
+    }
+  }
+  return rows;
+};
+
 const prepareSeries = (values: number[], d: number, D: number, s: number): PreparedSeries => {
   const levels: number[][] = [values.slice()];
   const steps: { lag: number }[] = [];
@@ -215,7 +243,7 @@ export const integrateForecast = (
 // ---------------------------------------------------------------------------
 
 /** Moduli of the roots; coefficients are given in ascending order (constant first). */
-const polynomialRootModuli = (coefficients: number[]): number[] => {
+export const polynomialRootModuli = (coefficients: number[]): number[] => {
   let coeffs = coefficients.slice().reverse();
   while (coeffs.length > 1 && Math.abs(coeffs[0]) < 1e-12) coeffs.shift();
   const degree = coeffs.length - 1;
@@ -376,10 +404,18 @@ interface CssResult {
   start: number;
 }
 
-const cssResiduals = (z: number[], c: number, ar: number[], ma: number[]): CssResult => {
+const cssResiduals = (
+  z: number[],
+  c: number,
+  ar: number[],
+  ma: number[],
+  xreg?: number[][],
+  beta?: number[]
+): CssResult => {
   const n = z.length;
   const p = ar.length;
   const q = ma.length;
+  const kx = beta?.length ?? 0;
   const start = Math.max(p, q);
   const residuals = new Array<number>(n).fill(0);
   let sse = 0;
@@ -387,6 +423,13 @@ const cssResiduals = (z: number[], c: number, ar: number[], ma: number[]): CssRe
     let value = z[t] - c;
     for (let i = 1; i <= p; i++) value -= ar[i - 1] * z[t - i];
     for (let j = 1; j <= q; j++) value -= ma[j - 1] * residuals[t - j];
+    if (kx > 0 && xreg) {
+      for (let j = 0; j < kx; j++) {
+        let regressor = xreg[t]?.[j] ?? 0;
+        for (let i = 1; i <= p; i++) regressor -= ar[i - 1] * (xreg[t - i]?.[j] ?? 0);
+        value -= (beta?.[j] ?? 0) * regressor;
+      }
+    }
     residuals[t] = value;
     sse += value * value;
   }
@@ -399,13 +442,14 @@ interface Unpacked {
   Phi: number[];
   theta: number[];
   Theta: number[];
+  beta: number[];
   ar: number[];
   ma: number[];
   arPoly: number[];
   maPoly: number[];
 }
 
-const unpack = (params: number[], order: ArimaOrder): Unpacked => {
+const unpack = (params: number[], order: ArimaOrder, regressors = 0): Unpacked => {
   let index = 0;
   const c = params[index++] ?? 0;
   const phi = params.slice(index, index + order.p);
@@ -415,6 +459,8 @@ const unpack = (params: number[], order: ArimaOrder): Unpacked => {
   const theta = params.slice(index, index + order.q);
   index += order.q;
   const Theta = params.slice(index, index + order.Q);
+  index += order.Q;
+  const beta = params.slice(index, index + regressors);
 
   const arPoly = convolve(
     arPolynomial(phi),
@@ -430,6 +476,7 @@ const unpack = (params: number[], order: ArimaOrder): Unpacked => {
     Phi,
     theta,
     Theta,
+    beta,
     ar: arPoly.slice(1).map(value => -value),
     ma: maPoly.slice(1),
     arPoly,
@@ -437,8 +484,8 @@ const unpack = (params: number[], order: ArimaOrder): Unpacked => {
   };
 };
 
-const parameterCount = (order: ArimaOrder): number =>
-  1 + order.p + order.P + order.q + order.Q;
+const parameterCount = (order: ArimaOrder, regressors = 0): number =>
+  1 + order.p + order.P + order.q + order.Q + regressors;
 
 // ---------------------------------------------------------------------------
 // Nelder–Mead
@@ -538,7 +585,24 @@ const nelderMead = (
 // Starting values (Hannan–Rissanen)
 // ---------------------------------------------------------------------------
 
-const startValues = (z: number[], order: ArimaOrder): number[] => {
+const startValues = (z: number[], order: ArimaOrder, xreg?: number[][]): number[] => {
+  const regressors = xreg?.[0]?.length ?? 0;
+  if (regressors > 0 && xreg) {
+    const rows = z.map((_, index) => [1, ...(xreg[index] ?? [])]);
+    const fit = olsWithErrors(z, rows);
+    if (fit) {
+      const betas = fit.beta.slice(1);
+      const adjusted = z.map((value, index) => {
+        let residual = value - fit.beta[0];
+        for (let j = 0; j < betas.length; j++) residual -= betas[j] * (xreg[index]?.[j] ?? 0);
+        return residual;
+      });
+      const base = startValues(adjusted, order);
+      base[0] = fit.beta[0];
+      return [...base, ...betas];
+    }
+  }
+
   const n = z.length;
   const count = parameterCount(order);
   const fallback = new Array<number>(count).fill(0);
@@ -603,7 +667,10 @@ export const arimaLabel = (order: ArimaOrder): string => {
   return `SARIMA(${order.p},${order.d},${order.q})(${order.P},${order.D},${order.Q})[${order.s}]`;
 };
 
-const coefficientTerms = (order: ArimaOrder): { term: string; index: number }[] => {
+const coefficientTerms = (
+  order: ArimaOrder,
+  xregNames: string[] = []
+): { term: string; index: number }[] => {
   const terms: { term: string; index: number }[] = [
     { term: order.d > 0 || order.D > 0 ? 'Drift' : 'Costante', index: 0 },
   ];
@@ -612,6 +679,7 @@ const coefficientTerms = (order: ArimaOrder): { term: string; index: number }[] 
   for (let i = 1; i <= order.P; i++) terms.push({ term: `SAR(${i}) [${order.s}]`, index: index++ });
   for (let i = 1; i <= order.q; i++) terms.push({ term: `MA(${i})`, index: index++ });
   for (let i = 1; i <= order.Q; i++) terms.push({ term: `SMA(${i}) [${order.s}]`, index: index++ });
+  xregNames.forEach((name, position) => terms.push({ term: name || `X${position + 1}`, index: index++ }));
   return terms;
 };
 
@@ -633,6 +701,11 @@ const jarqueBeraTest = (values: number[]): { stat: number; p: number } => {
 export interface ArimaFitOptions {
   horizon?: number;
   level?: number;
+  /** Exogenous regressors aligned with `values` (one row per observation). */
+  xreg?: number[][];
+  xregNames?: string[];
+  /** Future regressors for the forecast horizon; the last observed row is repeated when absent. */
+  xregFuture?: number[][];
 }
 
 export const fitArima = (
@@ -656,27 +729,37 @@ export const fitArima = (
 
   const prepared = prepareSeries(values, d, D, s);
   const z = prepared.work;
+  const xWork = prepareXreg(options.xreg, d, D, s);
+  const kx = xWork?.[0]?.length ?? 0;
+  if (kx > 0) {
+    if (
+      xWork!.length !== z.length ||
+      options.xreg!.some(row => row.length !== kx || row.some(value => !Number.isFinite(value)))
+    ) {
+      return null;
+    }
+  }
   const pE = p + P * s;
   const qE = q + Q * s;
   const start = Math.max(pE, qE);
   const nWork = z.length;
   const nEff = nWork - start;
-  const k = parameterCount(ord);
+  const k = parameterCount(ord, kx);
   if (nEff - k < 4 || nEff < 8) return null;
 
   const objective = (params: number[]): number => {
-    const model = unpack(params, ord);
+    const model = unpack(params, ord, kx);
     if (model.ar.some(value => Math.abs(value) > 20) || model.ma.some(value => Math.abs(value) > 20)) {
       return 1e15;
     }
-    const { sse } = cssResiduals(z, model.c, model.ar, model.ma);
+    const { sse } = cssResiduals(z, model.c, model.ar, model.ma, xWork, model.beta);
     return Number.isFinite(sse) ? sse : 1e15;
   };
 
-  const optimized = nelderMead(objective, startValues(z, ord));
+  const optimized = nelderMead(objective, startValues(z, ord, xWork));
   const params = optimized.x;
-  const model = unpack(params, ord);
-  const css = cssResiduals(z, model.c, model.ar, model.ma);
+  const model = unpack(params, ord, kx);
+  const css = cssResiduals(z, model.c, model.ar, model.ma, xWork, model.beta);
   if (!Number.isFinite(css.sse)) return null;
 
   const scale = Math.max(1, z.reduce((sum, value) => sum + value * value, 0));
@@ -692,8 +775,8 @@ export const fitArima = (
 
   // Gauss–Newton standard errors: cov = σ² (J'J)⁻¹ with J = ∂e/∂θ.
   const residualSlice = (theta: number[]): number[] => {
-    const candidate = unpack(theta, ord);
-    return cssResiduals(z, candidate.c, candidate.ar, candidate.ma).residuals.slice(start);
+    const candidate = unpack(theta, ord, kx);
+    return cssResiduals(z, candidate.c, candidate.ar, candidate.ma, xWork, candidate.beta).residuals.slice(start);
   };
   const baseResiduals = css.residuals.slice(start);
   const jacobian: number[][] = [];
@@ -723,7 +806,7 @@ export const fitArima = (
   });
 
   const critical = zCrit(level);
-  const coefficients: ArimaCoefficient[] = coefficientTerms(ord).map(({ term, index }) => {
+  const coefficients: ArimaCoefficient[] = coefficientTerms(ord, options.xregNames).map(({ term, index }) => {
     const estimate = params[index] ?? NaN;
     const se = standardErrors[index] ?? NaN;
     const zValue = se > 0 ? estimate / se : NaN;
@@ -775,16 +858,30 @@ export const fitArima = (
   }
 
   const forecastMeans: number[] = [];
+  const eta =
+    kx > 0 && xWork
+      ? z.map((value, index) => {
+          let adjusted = value;
+          for (let j = 0; j < kx; j++) adjusted -= model.beta[j] * (xWork[index]?.[j] ?? 0);
+          return adjusted;
+        })
+      : z;
+  const forecastEta: number[] = [];
   for (let step = 1; step <= horizon; step++) {
     const position = nWork + step - 1;
     let value = model.c;
     for (let i = 1; i <= model.ar.length; i++) {
       const at = position - i;
-      value += model.ar[i - 1] * (at < nWork ? z[at] : forecastMeans[at - nWork]);
+      value += model.ar[i - 1] * (at < nWork ? eta[at] : forecastEta[at - nWork]);
     }
     for (let j = 1; j <= model.ma.length; j++) {
       const at = position - j;
       value += model.ma[j - 1] * (at < nWork ? css.residuals[at] : 0);
+    }
+    forecastEta.push(value);
+    if (kx > 0 && xWork) {
+      const row = options.xregFuture?.[step - 1] ?? xWork[xWork.length - 1];
+      for (let j = 0; j < kx; j++) value += model.beta[j] * (row?.[j] ?? 0);
     }
     forecastMeans.push(value);
   }
@@ -805,7 +902,7 @@ export const fitArima = (
 
   return {
     order: ord,
-    label: arimaLabel(ord),
+    label: kx > 0 ? `${arimaLabel(ord)} + X` : arimaLabel(ord),
     coefficients,
     constant: model.c,
     sigma2,
@@ -830,6 +927,7 @@ export const fitArima = (
     stationary,
     invertible,
     converged: optimized.converged,
+    ...(kx > 0 ? { xregNames: options.xregNames ?? Array.from({ length: kx }, (_, index) => `X${index + 1}`) } : {}),
   };
 };
 
@@ -839,25 +937,31 @@ const sqrtOrNaN = (value: number): number => (value >= 0 && Number.isFinite(valu
 // Differencing choice
 // ---------------------------------------------------------------------------
 
-/** Dickey–Fuller critical values for the constant-only case (MacKinnon). */
-const adfCriticalValue = (probability: number, n: number): number => {
-  const table: Record<string, [number, number, number]> = {
-    '0.01': [-3.43035, -6.5393, -16.786],
-    '0.05': [-2.86154, -2.8903, -4.234],
-    '0.10': [-2.56677, -1.5384, -2.809],
-  };
+/** Dickey–Fuller critical values (MacKinnon); constant-only or with trend. */
+const adfCriticalValue = (probability: number, n: number, trend: boolean): number => {
+  const table: Record<string, [number, number, number]> = trend
+    ? {
+        '0.01': [-3.95877, -9.0531, -28.428],
+        '0.05': [-3.41049, -4.3904, -9.036],
+        '0.10': [-3.12705, -2.5856, -5.767],
+      }
+    : {
+        '0.01': [-3.43035, -6.5393, -16.786],
+        '0.05': [-2.86154, -2.8903, -4.234],
+        '0.10': [-2.56677, -1.5384, -2.809],
+      };
   const [intercept, slope, quadratic] = table[probability.toFixed(2)];
   return intercept + slope / n + quadratic / (n * n);
 };
 
-/** Piecewise-linear approximation of the Dickey–Fuller p-value (constant case). */
-const adfPValue = (statistic: number, n: number): number => {
+/** Piecewise-linear approximation of the Dickey–Fuller p-value. */
+const adfPValue = (statistic: number, n: number, trend: boolean): number => {
   if (!Number.isFinite(statistic)) return NaN;
   const anchors: [number, number][] = [
     [-4.5, 0.0002],
-    [adfCriticalValue(0.01, n), 0.01],
-    [adfCriticalValue(0.05, n), 0.05],
-    [adfCriticalValue(0.1, n), 0.1],
+    [adfCriticalValue(0.01, n, trend), 0.01],
+    [adfCriticalValue(0.05, n, trend), 0.05],
+    [adfCriticalValue(0.1, n, trend), 0.1],
     [-1.94, 0.25],
     [-1.62, 0.5],
     [-1.0, 0.75],
@@ -877,20 +981,27 @@ const adfPValue = (statistic: number, n: number): number => {
 
 /** Augmented Dickey–Fuller test with a constant and AIC-selected lag length. */
 export const adfTest = (
-  values: number[]
+  values: number[],
+  options: { lags?: number; trend?: boolean } = {}
 ): { stat: number; p: number; lags: number; cv5: number } => {
   const n = values.length;
   if (n < 12) return { stat: NaN, p: NaN, lags: 0, cv5: NaN };
+  const withTrend = options.trend === true;
   const differences = differenceSeries(values, 1, 1);
   const maxLag = Math.min(8, Math.max(1, Math.floor(Math.cbrt(n))));
+  const lagList =
+    options.lags === undefined
+      ? Array.from({ length: maxLag + 1 }, (_, index) => index)
+      : [Math.max(0, Math.min(maxLag, Math.floor(options.lags)))];
   let best: { stat: number; lags: number; aic: number } | null = null;
 
-  for (let lags = 0; lags <= maxLag; lags++) {
+  for (const lags of lagList) {
     const rows: number[][] = [];
     const y: number[] = [];
     for (let t = lags + 1; t < n; t++) {
       const row = [1, values[t - 1]];
       for (let i = 1; i <= lags; i++) row.push(differences[t - 1 - i]);
+      if (withTrend) row.push(t);
       rows.push(row);
       y.push(differences[t - 1]);
     }
@@ -905,9 +1016,9 @@ export const adfTest = (
   if (!best) return { stat: NaN, p: NaN, lags: 0, cv5: NaN };
   return {
     stat: best.stat,
-    p: adfPValue(best.stat, n),
+    p: adfPValue(best.stat, n, withTrend),
     lags: best.lags,
-    cv5: adfCriticalValue(0.05, n),
+    cv5: adfCriticalValue(0.05, n, withTrend),
   };
 };
 
@@ -985,8 +1096,8 @@ export const arimaAnalysis = (options: ArimaAnalysisOptions): ArimaAnalysisResul
   const effectiveLength = values.length - d - D * s;
   if (effectiveLength < 10) return { ...empty, selection };
 
-  const maxP = effectiveLength >= 30 ? 2 : 1;
-  const maxQ = effectiveLength >= 30 ? 2 : 1;
+  const maxP = effectiveLength >= 30 && !options.xreg ? 2 : 1;
+  const maxQ = effectiveLength >= 30 && !options.xreg ? 2 : 1;
   const seasonalOrders = s >= 2 && values.length >= 3 * s ? 1 : 0;
 
   const candidates: ArimaFit[] = [];
@@ -997,7 +1108,13 @@ export const arimaAnalysis = (options: ArimaAnalysisOptions): ArimaAnalysisResul
         for (let Q = 0; Q <= seasonalOrders; Q++) {
           if (p + q + P + Q > 6) continue;
           const order: ArimaOrder = { p, d, q, P, D, Q, s };
-          const fit = fitArima(values, order, { horizon, level });
+          const fit = fitArima(values, order, {
+            horizon,
+            level,
+            xreg: options.xreg,
+            xregNames: options.xregNames,
+            xregFuture: options.xregFuture,
+          });
           if (!fit) continue;
           if (fit.stationary && fit.invertible) candidates.push(fit);
           else if (!fallback) fallback = fit;
@@ -1020,7 +1137,15 @@ export const arimaAnalysis = (options: ArimaAnalysisOptions): ArimaAnalysisResul
   const test = values.slice(values.length - holdoutSteps);
   let holdout: ArimaHoldout | undefined;
   if (train.length >= 16) {
-    const trainFit = fitArima(train, best.order, { horizon: holdoutSteps, level });
+    const xregTrain = options.xreg?.slice(0, train.length);
+    const xregTest = options.xreg?.slice(train.length, train.length + holdoutSteps);
+    const trainFit = fitArima(train, best.order, {
+      horizon: holdoutSteps,
+      level,
+      xreg: xregTrain,
+      xregNames: options.xregNames,
+      xregFuture: xregTest,
+    });
     if (trainFit) {
       holdout = holdoutMetrics(test, trainFit.forecast.map(point => point.mean));
     }

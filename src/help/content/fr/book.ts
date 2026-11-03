@@ -4,6 +4,13 @@ import { areaTopics } from './areas';
 import { coreTopics } from './procedures-core';
 import { moreTopics } from './procedures-more';
 import { l4Topics } from '../l4-fr';
+import { w2Topics } from '../w2-fr';
+import { w3Topics } from '../w3-fr';
+import { w4Topics } from '../w4-fr';
+import { w5Topics } from '../w5-fr';
+import { w6Topics } from '../w6-fr';
+import { w7Topics } from '../w7-fr';
+import { w9Topics } from '../w9-fr';
 
 import { chartGuides } from './charts';
 
@@ -48,7 +55,7 @@ export const frBook: HelpBook = {
     updated: 'Manuel aligné sur les fonctionnalités actuelles du programme',
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics, ...w5Topics, ...w6Topics, ...w7Topics, ...w9Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

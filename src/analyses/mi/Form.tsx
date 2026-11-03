@@ -23,7 +23,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
     <VariableList
       label={t('form.variables')}
       cols={grid.cols}
-      only={continuousColumnIndexes(grid)}
+      only={miParams.model === 'categorical' ? undefined : continuousColumnIndexes(grid)}
       emptyText={t('form.noNumericColumns')}
       selected={miParams.variables}
       showType
@@ -48,6 +48,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
       >
         <option value="descriptives">{t('form.descriptives')}</option>
         <option value="linear">{t('form.linearRegression')}</option>
+        <option value="categorical">{t('form.categorical')}</option>
       </select>
     </Field>
     {miParams.model === 'linear' && (
@@ -62,7 +63,7 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
           label={t('form.predictorsX')}
           cols={grid.cols}
           only={continuousColumnIndexes(grid)}
-      emptyText={t('form.noNumericColumns')}
+          emptyText={t('form.noNumericColumns')}
           selected={miParams.predictors}
           disabled={[miParams.outcome]}
           onToggle={(index, checked) =>
@@ -75,6 +76,24 @@ export const MiForm = ({ grid, miParams, setMiParams }: MiFormProps) => (
           }
         />
       </>
+    )}
+    {miParams.model === 'categorical' && (
+      <VariableList
+        label={t('form.covariatesX')}
+        cols={grid.cols}
+        only={continuousColumnIndexes(grid)}
+        emptyText={t('form.noNumericCovariates')}
+        selected={miParams.predictors}
+        disabled={miParams.variables}
+        onToggle={(index, checked) =>
+          setMiParams(prev => ({
+            ...prev,
+            predictors: checked
+              ? [...prev.predictors, index]
+              : prev.predictors.filter(item => item !== index),
+          }))
+        }
+      />
     )}
     <div className="flex gap-2">
       <NumberField

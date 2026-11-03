@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Select the numeric variables (Score, Age) and keep the confidence level at 95%.',
         'Press Run analysis and read the row of each variable.',
         'Check the missing column and the normality test before comparing groups.',
+        'Switch the Procedure selector to Frequencies for a categorical column, to Outliers for Grubbs/Dixon, or to Runs to check the row order.',
       ],
       expected: 'One row per variable with N, mean, standard deviation, median, quartiles, min and max, plus the normality outcome.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'A mean far from the median suggests skewness or extreme values.',
         'Normality tests are indicative: with large N they are over-sensitive, with small N underpowered.',
+        'Frequencies describe categorical levels; the runs test checks whether the row order is random; Grubbs and Dixon flag the most extreme observation.',
       ],
       pitfalls: [
         'Never report the standard deviation as a standard error: they are different quantities.',
@@ -63,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Lower AIC/BIC means a better fit.',
         'A goodness-of-fit p-value does not prove normality: it only measures evidence against it.',
+        'The two-sample KS mode compares two groups without assuming a distribution family.',
       ],
       pitfalls: ['Choosing the distribution from the data and then testing it on the same data overstates the fit.'],
       glossary: [
@@ -102,6 +105,7 @@ export const coreTopics: HelpTopic[] = [
       pitfalls: [
         'Comparing many pairs without correction inflates false positives.',
         'A non-significant result does not prove equality: look at the interval.',
+        'With paired data that are not normal, the sign test uses only the direction of the differences.',
       ],
       glossary: [
         { term: 'Welch', definition: 'The t-test variant that does not assume equal variances.' },
@@ -130,6 +134,7 @@ export const coreTopics: HelpTopic[] = [
       whenToUse: ['One between-subject factor with three or more levels.'],
       whenNotToUse: ['Repeated measures (use repeated-measures ANOVA) or two groups (the t-test is equivalent).'],
       reading: [
+        'The Mood median test compares medians without assuming normality; use it when outliers or skewness make the mean unreliable.',
         'A significant p says at least one mean differs: the post-hoc says which.',
         'A significant Levene suggests unequal variances: prefer Welch or Kruskal-Wallis.',
       ],

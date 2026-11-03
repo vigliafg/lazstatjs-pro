@@ -2,9 +2,23 @@ import type { AnalysisRunResult } from './types';
 import type { Dataset } from '../grid/types';
 import type { ProjectParams } from '../io/project';
 import { buildDescriptiveOutput } from './descriptive/run';
+import { buildProportionsOutput } from './proportions/run';
+import { buildVariancesOutput } from './variances/run';
 import { buildTTestOutput } from './ttest/run';
 import { buildAnovaOutput } from './anova/run';
 import { buildRegressionOutput } from './regression/run';
+import { buildGlmOutput } from './glm/run';
+import { buildQuantileOutput } from './quantile/run';
+import { buildNonlinearOutput } from './nonlinear/run';
+import { buildMultinomialOutput } from './multinomial/run';
+import { buildGlmmOutput } from './glmm/run';
+import { buildPlsOutput } from './pls/run';
+import { buildMarsOutput } from './mars/run';
+import { buildIvOutput } from './iv/run';
+import { buildPanelOutput } from './panel/run';
+import { buildSelectionOutput } from './selection/run';
+import { buildMediationOutput } from './mediation/run';
+import { buildPropensityOutput } from './propensity/run';
 import { buildCorrelationOutput } from './correlation/run';
 import { buildChiSquareOutput } from './chisquare/run';
 import { buildSampleSizeOutput } from './samplesize/run';
@@ -14,6 +28,7 @@ import { buildCoxOutput } from './cox/run';
 import { buildSurvivalOutput } from './survival/run';
 import { buildTimeSeriesOutput } from './timeseries/run';
 import { buildContingencyOutput } from './contingency/run';
+import { buildLoglinearOutput } from './loglinear/run';
 import { buildAncovaOutput } from './ancova/run';
 import { buildFactorialOutput } from './factorial/run';
 import { buildRepeatedAnovaOutput } from './repeatedanova/run';
@@ -35,8 +50,29 @@ import { buildTdCoxOutput } from './tdcox/run';
 import { buildPartitionOutput } from './partition/run';
 import { buildQualityOutput } from './quality/run';
 import { buildClusterOutput } from './cluster/run';
+import { buildCanonicalOutput } from './canonical/run';
+import { buildMdsOutput } from './mds/run';
+import { buildCorrespondenceOutput } from './correspondence/run';
+import { buildSemOutput } from './sem/run';
+import { buildLatentClassOutput } from './latentclass/run';
+import { buildIrtOutput } from './irt/run';
+import { buildConjointOutput } from './conjoint/run';
 import { buildDiscriminantOutput } from './discriminant/run';
 import { buildDoeOutput } from './doe/run';
+import { buildCompetingOutput } from './competing/run';
+import { buildRecurrentOutput } from './recurrent/run';
+import { buildAltOutput } from './alt/run';
+import { buildReliabilityOutput } from './reliability/run';
+import { buildVarOutput } from './var/run';
+import { buildGarchOutput } from './garch/run';
+import { buildStateSpaceOutput } from './statespace/run';
+import { buildSurveyOutput } from './survey/run';
+import { buildMlOutput } from './ml/run';
+import { buildTextOutput } from './text/run';
+import { buildChoiceOutput } from './choice/run';
+import { buildMetaOutput } from './meta/run';
+import { buildBayesOutput } from './bayes/run';
+import { buildSpatialOutput } from './spatial/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -59,13 +95,42 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
       columnNames: grid.cols.map(col => col.name),
       indices: params.descVars,
       level: ciLevel,
+      mode: params.descMode,
     }),
+  variances: ({ grid, params, ciLevel }) =>
+    buildVariancesOutput({ grid, params: params.variances, ciLevel }),
+  proportions: ({ grid, params, ciLevel }) =>
+    buildProportionsOutput({ grid, params: params.proportions, ciLevel }),
   ttest: ({ grid, params, ciLevel }) =>
     buildTTestOutput({ grid, ttestParams: params.ttest, ciLevel }),
   anova: ({ grid, params, ciLevel }) =>
     buildAnovaOutput({ grid, anovaParams: params.anova, ciLevel }),
   regression: ({ grid, params, ciLevel }) =>
     buildRegressionOutput({ grid, regParams: params.reg, ciLevel }),
+  glm: ({ grid, params, ciLevel }) =>
+    buildGlmOutput({ grid, params: params.glm, ciLevel }),
+  quantile: ({ grid, params }) =>
+    buildQuantileOutput({ grid, params: params.quantile }),
+  nonlinear: ({ grid, params, ciLevel }) =>
+    buildNonlinearOutput({ grid, params: params.nonlinear, ciLevel }),
+  multinomial: ({ grid, params, ciLevel }) =>
+    buildMultinomialOutput({ grid, params: params.multinomial, ciLevel }),
+  glmm: ({ grid, params, ciLevel }) =>
+    buildGlmmOutput({ grid, params: params.glmm, ciLevel }),
+  pls: ({ grid, params, ciLevel }) =>
+    buildPlsOutput({ grid, params: params.pls, ciLevel }),
+  mars: ({ grid, params, ciLevel }) =>
+    buildMarsOutput({ grid, params: params.mars, ciLevel }),
+  iv: ({ grid, params, ciLevel }) =>
+    buildIvOutput({ grid, params: params.iv, ciLevel }),
+  panel: ({ grid, params, ciLevel }) =>
+    buildPanelOutput({ grid, params: params.panel, ciLevel }),
+  selection: ({ grid, params, ciLevel }) =>
+    buildSelectionOutput({ grid, params: params.selection, ciLevel }),
+  mediation: ({ grid, params, ciLevel }) =>
+    buildMediationOutput({ grid, params: params.mediation, ciLevel }),
+  propensity: ({ grid, params, ciLevel }) =>
+    buildPropensityOutput({ grid, params: params.propensity, ciLevel }),
   correlation: ({ grid, params, ciLevel }) =>
     buildCorrelationOutput({ grid, corrParams: params.corr, ciLevel }),
   chisquare: ({ grid, params, ciLevel }) =>
@@ -83,6 +148,8 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildTimeSeriesOutput({ grid, params: params.timeseries, ciLevel }),
   contingency: ({ params, ciLevel }) =>
     buildContingencyOutput({ params: params.contingency, ciLevel }),
+  loglinear: ({ params, ciLevel }) =>
+    buildLoglinearOutput({ params: params.loglinear, ciLevel }),
   ancova: ({ grid, params, ciLevel }) =>
     buildAncovaOutput({ grid, params: params.ancova, ciLevel }),
   factorial: ({ grid, params, ciLevel }) =>
@@ -125,8 +192,40 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildQualityOutput({ grid, params: params.quality, ciLevel }),
   cluster: ({ grid, params, ciLevel }) =>
     buildClusterOutput({ grid, params: params.cluster, ciLevel }),
+  canonical: ({ grid, params }) =>
+    buildCanonicalOutput({ grid, params: params.canonical }),
+  mds: ({ grid, params }) => buildMdsOutput({ grid, params: params.mds }),
+  correspondence: ({ params }) =>
+    buildCorrespondenceOutput({ params: params.correspondence }),
+  sem: ({ grid, params }) => buildSemOutput({ grid, params: params.sem }),
+  latentclass: ({ grid, params }) =>
+    buildLatentClassOutput({ grid, params: params.latentclass }),
+  irt: ({ grid, params }) => buildIrtOutput({ grid, params: params.irt }),
+  conjoint: ({ grid, params }) =>
+    buildConjointOutput({ grid, params: params.conjoint }),
   discriminant: ({ grid, params, ciLevel }) =>
     buildDiscriminantOutput({ grid, params: params.discriminant, ciLevel }),
   doe: ({ grid, params, ciLevel }) =>
     buildDoeOutput({ grid, params: params.doe, ciLevel }),
+  competing: ({ grid, params, ciLevel }) =>
+    buildCompetingOutput({ grid, params: params.competing, ciLevel }),
+  recurrent: ({ grid, params, ciLevel }) =>
+    buildRecurrentOutput({ grid, params: params.recurrent, ciLevel }),
+  alt: ({ grid, params, ciLevel }) => buildAltOutput({ grid, params: params.alt, ciLevel }),
+  reliability: ({ grid, params, ciLevel }) =>
+    buildReliabilityOutput({ grid, params: params.reliability, ciLevel }),
+  var: ({ grid, params, ciLevel }) => buildVarOutput({ grid, params: params.var, ciLevel }),
+  garch: ({ grid, params, ciLevel }) => buildGarchOutput({ grid, params: params.garch, ciLevel }),
+  statespace: ({ grid, params, ciLevel }) =>
+    buildStateSpaceOutput({ grid, params: params.statespace, ciLevel }),
+  survey: ({ grid, params, ciLevel }) =>
+    buildSurveyOutput({ grid, params: params.survey, ciLevel }),
+  ml: ({ grid, params }) => buildMlOutput({ grid, params: params.ml }),
+  text: ({ grid, params }) => buildTextOutput({ grid, params: params.text }),
+  choice: ({ grid, params }) => buildChoiceOutput({ grid, params: params.choice }),
+  meta: ({ grid, params, ciLevel }) =>
+    buildMetaOutput({ grid, params: params.meta, ciLevel }),
+  bayes: ({ grid, params }) => buildBayesOutput({ grid, params: params.bayes }),
+  spatial: ({ grid, params }) =>
+    buildSpatialOutput({ grid, params: params.spatial }),
 };

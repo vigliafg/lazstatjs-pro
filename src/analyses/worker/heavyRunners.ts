@@ -9,6 +9,29 @@ import { buildParametricOutput } from '../parametric/run';
 import { buildTimeSeriesOutput } from '../timeseries/run';
 import { buildMiOutput } from '../mi/run';
 import { buildResamplingOutput } from '../resampling/run';
+import { buildQuantileOutput } from '../quantile/run';
+import { buildNonlinearOutput } from '../nonlinear/run';
+import { buildMultinomialOutput } from '../multinomial/run';
+import { buildGlmmOutput } from '../glmm/run';
+import { buildPlsOutput } from '../pls/run';
+import { buildMarsOutput } from '../mars/run';
+import { buildPanelOutput } from '../panel/run';
+import { buildSelectionOutput } from '../selection/run';
+import { buildMediationOutput } from '../mediation/run';
+import { buildPropensityOutput } from '../propensity/run';
+import { buildSemOutput } from '../sem/run';
+import { buildLatentClassOutput } from '../latentclass/run';
+import { buildIrtOutput } from '../irt/run';
+import { buildCompetingOutput } from '../competing/run';
+import { buildRecurrentOutput } from '../recurrent/run';
+import { buildAltOutput } from '../alt/run';
+import { buildVarOutput } from '../var/run';
+import { buildGarchOutput } from '../garch/run';
+import { buildStateSpaceOutput } from '../statespace/run';
+import { buildMlOutput } from '../ml/run';
+import { buildTextOutput } from '../text/run';
+import { buildBayesOutput } from '../bayes/run';
+import { buildSpatialOutput } from '../spatial/run';
 import type { HeavyAnalysisId } from './heavyIds';
 
 /**
@@ -38,4 +61,40 @@ export const HEAVY_RUNNERS: Record<
     buildMiOutput({ grid, params: params.mi, ciLevel }),
   resampling: ({ grid, params, ciLevel }) =>
     buildResamplingOutput({ grid, params: params.resampling, ciLevel }),
+  quantile: ({ grid, params }) => buildQuantileOutput({ grid, params: params.quantile }),
+  nonlinear: ({ grid, params, ciLevel }) =>
+    buildNonlinearOutput({ grid, params: params.nonlinear, ciLevel }),
+  multinomial: ({ grid, params, ciLevel }) =>
+    buildMultinomialOutput({ grid, params: params.multinomial, ciLevel }),
+  glmm: ({ grid, params, ciLevel }) =>
+    buildGlmmOutput({ grid, params: params.glmm, ciLevel }),
+  pls: ({ grid, params, ciLevel }) =>
+    buildPlsOutput({ grid, params: params.pls, ciLevel }),
+  mars: ({ grid, params, ciLevel }) =>
+    buildMarsOutput({ grid, params: params.mars, ciLevel }),
+  panel: ({ grid, params, ciLevel }) =>
+    buildPanelOutput({ grid, params: params.panel, ciLevel }),
+  selection: ({ grid, params, ciLevel }) =>
+    buildSelectionOutput({ grid, params: params.selection, ciLevel }),
+  mediation: ({ grid, params, ciLevel }) =>
+    buildMediationOutput({ grid, params: params.mediation, ciLevel }),
+  propensity: ({ grid, params, ciLevel }) =>
+    buildPropensityOutput({ grid, params: params.propensity, ciLevel }),
+  sem: ({ grid, params }) => buildSemOutput({ grid, params: params.sem }),
+  latentclass: ({ grid, params }) =>
+    buildLatentClassOutput({ grid, params: params.latentclass }),
+  irt: ({ grid, params }) => buildIrtOutput({ grid, params: params.irt }),
+  competing: ({ grid, params, ciLevel }) =>
+    buildCompetingOutput({ grid, params: params.competing, ciLevel }),
+  recurrent: ({ grid, params, ciLevel }) =>
+    buildRecurrentOutput({ grid, params: params.recurrent, ciLevel }),
+  alt: ({ grid, params, ciLevel }) => buildAltOutput({ grid, params: params.alt, ciLevel }),
+  var: ({ grid, params, ciLevel }) => buildVarOutput({ grid, params: params.var, ciLevel }),
+  garch: ({ grid, params, ciLevel }) => buildGarchOutput({ grid, params: params.garch, ciLevel }),
+  statespace: ({ grid, params, ciLevel }) =>
+    buildStateSpaceOutput({ grid, params: params.statespace, ciLevel }),
+  ml: ({ grid, params }) => buildMlOutput({ grid, params: params.ml }),
+  text: ({ grid, params }) => buildTextOutput({ grid, params: params.text }),
+  bayes: ({ grid, params }) => buildBayesOutput({ grid, params: params.bayes }),
+  spatial: ({ grid, params }) => buildSpatialOutput({ grid, params: params.spatial }),
 };

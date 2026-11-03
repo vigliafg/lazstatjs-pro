@@ -102,6 +102,14 @@ export const buildSampleSizeOutput = (params: SampleSizeParams): AnalysisRunResu
       if (value === params.p1) continue;
       trySensitivity({ p2: value }, value);
     }
+  } else if (params.design === 'regression') {
+    for (let f2 = 1; f2 <= 35; f2 += 2) {
+      trySensitivity({ f2: f2 / 100 }, f2 / 100);
+    }
+  } else if (params.design === 'logistic') {
+    for (let odds = 12; odds <= 40; odds += 2) {
+      trySensitivity({ oddsRatio: odds / 10 }, odds / 10);
+    }
   }
   if (sensitivityRows.length > 1) {
     charts.push(

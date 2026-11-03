@@ -1,13 +1,7 @@
 {
   "version": 1,
   "generatedBy": "samples/generate.R",
-  "formats": [
-    "csv",
-    "sav",
-    "dta",
-    "xlsx",
-    "json"
-  ],
+  "formats": ["csv", "sav", "dta", "xlsx", "json"],
   "datasets": [
     {
       "id": "iris",
@@ -38,18 +32,23 @@
         "wizard",
         "partition",
         "cluster",
-        "discriminant"
+        "discriminant",
+        "canonical"
       ],
       "examples": [
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "Sepal_Length",
-              "Sepal_Width",
-              "Petal_Length",
-              "Petal_Width"
-            ]
+            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Species"
+          },
+          "options": {
+            "mode": "frequency"
           }
         },
         {
@@ -61,23 +60,13 @@
         {
           "analysis": "correlation",
           "columns": {
-            "variables": [
-              "Sepal_Length",
-              "Sepal_Width",
-              "Petal_Length",
-              "Petal_Width"
-            ]
+            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
           }
         },
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": [
-              "Sepal_Length",
-              "Sepal_Width",
-              "Petal_Length",
-              "Petal_Width"
-            ]
+            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
           }
         },
         {
@@ -85,6 +74,33 @@
           "columns": {
             "outcome": "Sepal_Length",
             "group": "Species"
+          }
+        },
+        {
+          "analysis": "partition",
+          "columns": {
+            "response": "Sepal_Length",
+            "predictors": ["Sepal_Width", "Petal_Length", "Petal_Width"]
+          }
+        },
+        {
+          "analysis": "cluster",
+          "columns": {
+            "variables": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+          }
+        },
+        {
+          "analysis": "canonical",
+          "columns": {
+            "x": ["Sepal_Length", "Sepal_Width"],
+            "y": ["Petal_Length", "Petal_Width"]
+          }
+        },
+        {
+          "analysis": "discriminant",
+          "columns": {
+            "group": "Species",
+            "predictors": ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
           }
         }
       ],
@@ -116,10 +132,7 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "Eruptions",
-              "Waiting"
-            ]
+            "variables": ["Eruptions", "Waiting"]
           }
         },
         {
@@ -153,7 +166,8 @@
         "anova",
         "descriptive",
         "wizard",
-        "quality"
+        "quality",
+        "variances"
       ],
       "examples": [
         {
@@ -161,6 +175,35 @@
           "columns": {
             "dependent": "weight",
             "group": "group"
+          }
+        },
+        {
+          "analysis": "anova",
+          "columns": {
+            "dependent": "weight",
+            "group": "group"
+          },
+          "options": {
+            "mode": "median"
+          }
+        },
+        {
+          "analysis": "variances",
+          "columns": {
+            "variable": "weight",
+            "group": "group"
+          },
+          "options": {
+            "mode": "two"
+          }
+        },
+        {
+          "analysis": "variances",
+          "columns": {
+            "variable": "weight"
+          },
+          "options": {
+            "mode": "one"
           }
         },
         {
@@ -174,6 +217,31 @@
           "columns": {
             "outcome": "weight",
             "group": "group"
+          }
+        },
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "weight",
+            "group": "group"
+          }
+        },
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "weight"
+          },
+          "options": {
+            "mode": "tolerance"
+          }
+        },
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "weight"
+          },
+          "options": {
+            "mode": "cusum"
           }
         }
       ],
@@ -271,6 +339,13 @@
             "factor": "Supplement",
             "covariates": "Dose_num"
           }
+        },
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "Length",
+            "group": "Supplement"
+          }
         }
       ],
       "notes": "A two-factor design (supplement x dose) with the numeric dose kept as a covariate in Dose_num."
@@ -308,6 +383,16 @@
           },
           "options": {
             "type": "dep"
+          }
+        },
+        {
+          "analysis": "ttest",
+          "columns": {
+            "var1": "Extra_1",
+            "var2": "Extra_2"
+          },
+          "options": {
+            "type": "sign"
           }
         },
         {
@@ -364,11 +449,7 @@
         {
           "analysis": "nonparamrm",
           "columns": {
-            "selected": [
-              "Before",
-              "After",
-              "Follow_up"
-            ]
+            "selected": ["Before", "After", "Follow_up"]
           },
           "options": {
             "mode": "cochran"
@@ -410,41 +491,20 @@
         {
           "analysis": "repeatedanova",
           "columns": {
-            "conditions": [
-              "Weight_0",
-              "Weight_4",
-              "Weight_8",
-              "Weight_12",
-              "Weight_16",
-              "Weight_20"
-            ]
+            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
           }
         },
         {
           "analysis": "mixedanova",
           "columns": {
             "group": "Diet",
-            "conditions": [
-              "Weight_0",
-              "Weight_4",
-              "Weight_8",
-              "Weight_12",
-              "Weight_16",
-              "Weight_20"
-            ]
+            "conditions": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
           }
         },
         {
           "analysis": "nonparamrm",
           "columns": {
-            "selected": [
-              "Weight_0",
-              "Weight_4",
-              "Weight_8",
-              "Weight_12",
-              "Weight_16",
-              "Weight_20"
-            ]
+            "selected": ["Weight_0", "Weight_4", "Weight_8", "Weight_12", "Weight_16", "Weight_20"]
           }
         }
       ],
@@ -485,39 +545,135 @@
         "partition",
         "cluster",
         "discriminant",
-        "doe"
+        "doe",
+        "glm",
+        "quantile",
+        "nonlinear",
+        "multinomial",
+        "glmm",
+        "pls",
+        "mars",
+        "mediation"
       ],
       "examples": [
         {
           "analysis": "regression",
           "columns": {
             "dependent": "mpg",
-            "predictors": [
-              "wt",
-              "hp",
-              "disp"
-            ]
+            "predictors": ["wt", "hp", "disp"]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": [
-              "mpg",
-              "wt",
-              "hp",
-              "disp"
-            ]
+            "variables": ["mpg", "wt", "hp", "disp"]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "mpg",
-              "wt",
-              "hp"
-            ]
+            "variables": ["mpg", "wt", "hp"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["mpg", "wt", "hp"]
+          },
+          "options": {
+            "mode": "outliers"
+          }
+        },
+        {
+          "analysis": "partition",
+          "columns": {
+            "response": "mpg",
+            "predictors": ["wt", "hp", "disp"]
+          }
+        },
+        {
+          "analysis": "cluster",
+          "columns": {
+            "variables": ["mpg", "wt", "hp", "disp"]
+          }
+        },
+        {
+          "analysis": "discriminant",
+          "columns": {
+            "group": "am",
+            "predictors": ["mpg", "wt", "hp", "disp"]
+          }
+        },
+        {
+          "analysis": "doe",
+          "columns": {
+            "response": "mpg",
+            "factorA": "hp",
+            "factorB": "wt"
+          }
+        },
+        {
+          "analysis": "glm",
+          "columns": {
+            "dependent": "mpg",
+            "predictors": ["wt", "hp"]
+          },
+          "options": {
+            "family": "gaussian"
+          }
+        },
+        {
+          "analysis": "quantile",
+          "columns": {
+            "dependent": "mpg",
+            "predictors": ["wt", "hp"]
+          },
+          "options": {
+            "tau": 0.5
+          }
+        },
+        {
+          "analysis": "nonlinear",
+          "columns": {
+            "dependent": "mpg",
+            "predictor": "hp"
+          }
+        },
+        {
+          "analysis": "multinomial",
+          "columns": {
+            "outcome": "cyl",
+            "predictors": ["mpg", "wt", "hp"]
+          }
+        },
+        {
+          "analysis": "glmm",
+          "columns": {
+            "outcome": "mpg",
+            "predictors": ["wt", "hp"],
+            "group": "cyl"
+          }
+        },
+        {
+          "analysis": "pls",
+          "columns": {
+            "dependent": "mpg",
+            "predictors": ["wt", "hp", "disp"]
+          }
+        },
+        {
+          "analysis": "mars",
+          "columns": {
+            "dependent": "mpg",
+            "predictors": ["wt", "hp", "disp"]
+          }
+        },
+        {
+          "analysis": "mediation",
+          "columns": {
+            "outcome": "mpg",
+            "predictor": "hp",
+            "mediator": "wt"
           }
         }
       ],
@@ -559,36 +715,20 @@
           "analysis": "logistic",
           "columns": {
             "outcome": "Low",
-            "predictors": [
-              "Age",
-              "Lwt",
-              "Smoke",
-              "Ptl",
-              "Ht",
-              "Ui",
-              "Bwt"
-            ]
+            "predictors": ["Age", "Lwt", "Smoke", "Ptl", "Ht", "Ui", "Bwt"]
           }
         },
         {
           "analysis": "regression",
           "columns": {
             "dependent": "Bwt",
-            "predictors": [
-              "Age",
-              "Lwt",
-              "Smoke"
-            ]
+            "predictors": ["Age", "Lwt", "Smoke"]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "Age",
-              "Lwt",
-              "Bwt"
-            ]
+            "variables": ["Age", "Lwt", "Bwt"]
           }
         }
       ],
@@ -627,20 +767,13 @@
           "analysis": "countreg",
           "columns": {
             "dependent": "Days",
-            "predictors": [
-              "Age_num",
-              "Sex_male",
-              "Lrn_SL"
-            ]
+            "predictors": ["Age_num", "Sex_male", "Lrn_SL"]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "Days",
-              "Age_num"
-            ]
+            "variables": ["Days", "Age_num"]
           }
         }
       ],
@@ -678,19 +811,13 @@
           "analysis": "ordinal",
           "columns": {
             "outcome": "Sat_num",
-            "predictors": [
-              "Infl_num",
-              "Cont_num"
-            ]
+            "predictors": ["Infl_num", "Cont_num"]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "Sat_num",
-              "Infl_num"
-            ]
+            "variables": ["Sat_num", "Infl_num"]
           }
         }
       ],
@@ -741,10 +868,7 @@
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "Weight",
-              "Time"
-            ]
+            "variables": ["Weight", "Time"]
           }
         }
       ],
@@ -774,29 +898,26 @@
       "procedures": [
         "multivariate",
         "correlation",
-        "descriptive"
+        "descriptive",
+        "mds"
       ],
       "examples": [
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": [
-              "Murder",
-              "Assault",
-              "UrbanPop",
-              "Rape"
-            ]
+            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
+          }
+        },
+        {
+          "analysis": "mds",
+          "columns": {
+            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": [
-              "Murder",
-              "Assault",
-              "UrbanPop",
-              "Rape"
-            ]
+            "variables": ["Murder", "Assault", "UrbanPop", "Rape"]
           }
         }
       ],
@@ -834,33 +955,192 @@
         {
           "analysis": "multivariate",
           "columns": {
-            "variables": [
-              "rating",
-              "complaints",
-              "privileges",
-              "learning",
-              "raises",
-              "critical",
-              "advance"
-            ]
+            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": [
-              "rating",
-              "complaints",
-              "privileges",
-              "learning",
-              "raises",
-              "critical",
-              "advance"
-            ]
+            "variables": ["rating", "complaints", "privileges", "learning", "raises", "critical", "advance"]
           }
         }
       ],
       "notes": "Seven survey items on 30 departments, useful for Cronbach's alpha and exploratory factor analysis."
+    },
+    {
+      "id": "sem_demo",
+      "title": "Two correlated latent abilities",
+      "family": "multivariate",
+      "dir": "multivariate/sem_demo",
+      "source": "Synthetic, seeded with set.seed(20261105)",
+      "rows": 320,
+      "columns": [
+        "Verbal1",
+        "Verbal2",
+        "Verbal3",
+        "Math1",
+        "Math2",
+        "Math3"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "sem",
+        "multivariate",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "sem",
+          "columns": {
+            "indicators": ["Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"]
+          }
+        },
+        {
+          "analysis": "multivariate",
+          "columns": {
+            "variables": ["Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Verbal1", "Verbal2", "Verbal3", "Math1", "Math2", "Math3"]
+          }
+        }
+      ],
+      "notes": "Six indicators generated from two correlated factors, for CFA and a two-factor structural model."
+    },
+    {
+      "id": "latent_demo",
+      "title": "Three latent response profiles",
+      "family": "multivariate",
+      "dir": "multivariate/latent_demo",
+      "source": "Synthetic, seeded with set.seed(20261105)",
+      "rows": 450,
+      "columns": [
+        "Item1",
+        "Item2",
+        "Item3",
+        "Item4"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "latentclass",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "latentclass",
+          "columns": {
+            "indicators": ["Item1", "Item2", "Item3", "Item4"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Item1", "Item2", "Item3", "Item4"]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "Four categorical indicators drawn from three classes with distinct response probabilities."
+    },
+    {
+      "id": "irt_demo",
+      "title": "Binary responses to six items",
+      "family": "multivariate",
+      "dir": "multivariate/irt_demo",
+      "source": "Synthetic 2PL, seeded with set.seed(20261105)",
+      "rows": 600,
+      "columns": [
+        "Item1",
+        "Item2",
+        "Item3",
+        "Item4",
+        "Item5",
+        "Item6"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "irt",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "irt",
+          "columns": {
+            "items": ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6"]
+          }
+        }
+      ],
+      "notes": "Six dichotomous items with a range of difficulties, generated from a two-parameter logistic model."
+    },
+    {
+      "id": "conjoint_demo",
+      "title": "Conjoint profiles with ratings",
+      "family": "multivariate",
+      "dir": "multivariate/conjoint_demo",
+      "source": "Synthetic, seeded with set.seed(20261105)",
+      "rows": 18,
+      "columns": [
+        "Brand",
+        "Price",
+        "Warranty",
+        "Rating"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "conjoint",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "conjoint",
+          "columns": {
+            "attributes": ["Brand", "Price", "Warranty"],
+            "rating": "Rating"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Rating"
+          }
+        }
+      ],
+      "notes": "Full factorial design of three attributes with a rating that follows additive part-worth utilities."
     },
     {
       "id": "agreement_ratings",
@@ -890,10 +1170,7 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": [
-              "Method_A",
-              "Method_B"
-            ]
+            "columns": ["Method_A", "Method_B"]
           },
           "options": {
             "mode": "icc"
@@ -902,10 +1179,7 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": [
-              "Method_A",
-              "Method_B"
-            ]
+            "columns": ["Method_A", "Method_B"]
           },
           "options": {
             "mode": "bland"
@@ -914,10 +1188,7 @@
         {
           "analysis": "agreement",
           "columns": {
-            "columns": [
-              "Rater_A",
-              "Rater_B"
-            ]
+            "columns": ["Rater_A", "Rater_B"]
           },
           "options": {
             "mode": "kappa",
@@ -975,11 +1246,7 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "covariates": [
-              "Age",
-              "Sex_male",
-              "Ph_ecog"
-            ]
+            "covariates": ["Age", "Sex_male", "Ph_ecog"]
           }
         },
         {
@@ -987,10 +1254,7 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "covariates": [
-              "Age",
-              "Ph_ecog"
-            ],
+            "covariates": ["Age", "Ph_ecog"],
             "stratum": "Sex"
           }
         },
@@ -999,11 +1263,7 @@
           "columns": {
             "time": "Time",
             "event": "Event",
-            "predictors": [
-              "Age",
-              "Sex_male",
-              "Ph_ecog"
-            ]
+            "predictors": ["Age", "Sex_male", "Ph_ecog"]
           }
         }
       ],
@@ -1044,11 +1304,7 @@
             "start": "Start",
             "stop": "Stop",
             "event": "Event",
-            "covariates": [
-              "Age",
-              "Surgery",
-              "Transplant"
-            ]
+            "covariates": ["Age", "Surgery", "Transplant"]
           }
         },
         {
@@ -1136,40 +1392,30 @@
         {
           "analysis": "mi",
           "columns": {
-            "variables": [
-              "Ozone",
-              "Solar_R",
-              "Wind",
-              "Temp"
-            ],
+            "variables": ["Ozone", "Solar_R", "Wind", "Temp"],
             "outcome": "Ozone",
-            "predictors": [
-              "Solar_R",
-              "Wind",
-              "Temp"
-            ]
+            "predictors": ["Solar_R", "Wind", "Temp"]
           }
         },
         {
           "analysis": "descriptive",
           "columns": {
-            "variables": [
-              "Ozone",
-              "Solar_R",
-              "Wind",
-              "Temp"
-            ]
+            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Ozone"
+          },
+          "options": {
+            "mode": "runs"
           }
         },
         {
           "analysis": "correlation",
           "columns": {
-            "variables": [
-              "Ozone",
-              "Solar_R",
-              "Wind",
-              "Temp"
-            ]
+            "variables": ["Ozone", "Solar_R", "Wind", "Temp"]
           }
         }
       ],
@@ -1213,6 +1459,1343 @@
         }
       ],
       "notes": "The same ten control and ten treated plants as plantgrowth_wide, in long form for permutation and bootstrap inference."
+    },
+    {
+      "id": "two_groups_binary",
+      "title": "Two independent groups with a binary outcome and event counts",
+      "family": "compare",
+      "dir": "compare/two_groups_binary",
+      "source": "Synthetic, seeded with set.seed(20261103)",
+      "rows": 120,
+      "columns": [
+        "Group",
+        "Outcome",
+        "Events"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "proportions",
+        "distfit",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "proportions",
+          "columns": {
+            "outcome": "Outcome"
+          },
+          "options": {
+            "mode": "oneProp",
+            "successLevel": "Yes",
+            "nullP": 0.5
+          }
+        },
+        {
+          "analysis": "proportions",
+          "columns": {
+            "outcome": "Outcome",
+            "group": "Group"
+          },
+          "options": {
+            "mode": "twoProp",
+            "successLevel": "Yes"
+          }
+        },
+        {
+          "analysis": "proportions",
+          "columns": {
+            "count": "Events",
+            "group": "Group"
+          },
+          "options": {
+            "mode": "twoRate",
+            "exposure": 1
+          }
+        },
+        {
+          "analysis": "distfit",
+          "columns": {
+            "variable": "Events",
+            "group": "Group"
+          },
+          "options": {
+            "mode": "ks"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Events"
+          }
+        }
+      ],
+      "notes": "120 subjects: Control has a lower success proportion and a lower event rate than Treatment."
+    },
+    {
+      "id": "categorical_gof",
+      "title": "Five categories with unequal observed frequencies",
+      "family": "categorical",
+      "dir": "categorical/categorical_gof",
+      "source": "Synthetic, fixed counts",
+      "rows": 100,
+      "columns": [
+        "Category"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "chisquare"
+      ],
+      "examples": [
+        {
+          "analysis": "chisquare",
+          "columns": {
+            "variable": "Category"
+          },
+          "options": {
+            "mode": "gof"
+          }
+        }
+      ],
+      "notes": "100 observations in five categories, designed to show a goodness-of-fit test against equal shares."
+    },
+    {
+      "id": "iv_demo",
+      "title": "Instrumental-variables demo",
+      "family": "regression",
+      "dir": "regression/iv_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 220,
+      "columns": [
+        "Y",
+        "X",
+        "Z1",
+        "Z2",
+        "W"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "iv",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "iv",
+          "columns": {
+            "dependent": "Y",
+            "endogenous": "X",
+            "instruments": ["Z1", "Z2"],
+            "exogenous": "W"
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Y",
+            "predictors": ["W", "X"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Y", "X", "W"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Y", "X", "Z1", "W"]
+          }
+        }
+      ],
+      "notes": "220 observations with an endogenous regressor X, two excluded instruments and one exogenous control."
+    },
+    {
+      "id": "panel_demo",
+      "title": "Balanced panel demo",
+      "family": "regression",
+      "dir": "regression/panel_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 300,
+      "columns": [
+        "ID",
+        "Time",
+        "Y",
+        "X1",
+        "X2"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "panel",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "panel",
+          "columns": {
+            "dependent": "Y",
+            "predictors": ["X1", "X2"],
+            "entity": "ID",
+            "time": "Time"
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Y",
+            "predictors": ["X1", "X2"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Y", "X1", "X2"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Y", "X1", "X2"]
+          }
+        }
+      ],
+      "notes": "30 entities observed for 10 periods, with a persistent entity effect and two time-varying predictors."
+    },
+    {
+      "id": "selection_demo",
+      "title": "Tobit and Heckman selection demo",
+      "family": "regression",
+      "dir": "regression/selection_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 450,
+      "columns": [
+        "Wage",
+        "Wage_obs",
+        "Selected",
+        "Education",
+        "Experience",
+        "Kids"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "selection",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "selection",
+          "columns": {
+            "dependent": "Wage",
+            "predictors": ["Education", "Experience"]
+          }
+        },
+        {
+          "analysis": "selection",
+          "columns": {
+            "dependent": "Wage_obs",
+            "predictors": ["Education", "Experience"],
+            "selection": "Selected",
+            "selectionPredictors": ["Education", "Experience", "Kids"]
+          },
+          "options": {
+            "mode": "heckman"
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Wage",
+            "predictors": ["Education", "Experience"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Wage", "Wage_obs", "Education", "Experience"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Wage", "Education", "Experience"]
+          }
+        }
+      ],
+      "notes": "450 observations with a lower-censored wage for Tobit and a 0/1 selection indicator with the Kids exclusion restriction for Heckman."
+    },
+    {
+      "id": "treatment_demo",
+      "title": "Propensity-score demo",
+      "family": "regression",
+      "dir": "regression/treatment_demo",
+      "source": "Simulated (samples/generate.R, seed 20261103)",
+      "rows": 600,
+      "columns": [
+        "Treatment",
+        "Outcome",
+        "Age",
+        "Score",
+        "Sex"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "propensity",
+        "regression",
+        "descriptive",
+        "correlation"
+      ],
+      "examples": [
+        {
+          "analysis": "propensity",
+          "columns": {
+            "treatment": "Treatment",
+            "outcome": "Outcome",
+            "covariates": ["Age", "Score", "Sex"]
+          }
+        },
+        {
+          "analysis": "regression",
+          "columns": {
+            "dependent": "Outcome",
+            "predictors": ["Treatment", "Age", "Score"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Outcome", "Age", "Score"]
+          }
+        },
+        {
+          "analysis": "correlation",
+          "columns": {
+            "variables": ["Outcome", "Age", "Score"]
+          }
+        }
+      ],
+      "notes": "600 observations with a binary treatment assigned by a known propensity score and a continuous outcome."
+    },
+    {
+      "id": "competing_demo",
+      "title": "Competing risks by cause",
+      "family": "survival",
+      "dir": "survival/competing_demo",
+      "source": "Synthetic, seeded with set.seed(20261106)",
+      "rows": 280,
+      "columns": [
+        "Time",
+        "Cause",
+        "Age",
+        "Sex",
+        "Center"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "competing",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "competing",
+          "columns": {
+            "time": "Time",
+            "event": "Cause",
+            "covariates": ["Age", "Sex"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Time", "Age"]
+          }
+        }
+      ],
+      "notes": "280 subjects with three competing causes and administrative censoring coded as zero."
+    },
+    {
+      "id": "recurrent_demo",
+      "title": "Recurrent events in a clinical cohort",
+      "family": "survival",
+      "dir": "survival/recurrent_demo",
+      "source": "Synthetic, seeded with set.seed(20261106)",
+      "rows": 286,
+      "columns": [
+        "Id",
+        "Start",
+        "Stop",
+        "Event",
+        "Treatment",
+        "Age"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "recurrent",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "recurrent",
+          "columns": {
+            "subject": "Id",
+            "start": "Start",
+            "stop": "Stop",
+            "event": "Event",
+            "covariates": ["Age", "Treatment"]
+          },
+          "options": {
+            "model": "ag"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Stop", "Age"]
+          }
+        }
+      ],
+      "notes": "150 subjects with repeated events in start-stop format and a binary treatment."
+    },
+    {
+      "id": "alt_demo",
+      "title": "Accelerated life test",
+      "family": "survival",
+      "dir": "survival/alt_demo",
+      "source": "Synthetic Weibull AFT, seeded with set.seed(20261106)",
+      "rows": 180,
+      "columns": [
+        "Time",
+        "Event",
+        "Stress",
+        "Temperature",
+        "Batch"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "alt",
+        "parametric",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "alt",
+          "columns": {
+            "time": "Time",
+            "event": "Event",
+            "stress": "Stress",
+            "covariates": "Temperature"
+          },
+          "options": {
+            "model": "inversePower",
+            "useStress": 0.7
+          }
+        },
+        {
+          "analysis": "parametric",
+          "columns": {
+            "time": "Time",
+            "event": "Event",
+            "predictors": ["Stress", "Temperature"]
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Time", "Stress", "Temperature"]
+          }
+        }
+      ],
+      "notes": "180 units tested at five stress levels, with temperature as a secondary covariate."
+    },
+    {
+      "id": "reliability_demo",
+      "title": "Reliability growth failures",
+      "family": "survival",
+      "dir": "survival/reliability_demo",
+      "source": "Synthetic Crow–AMSAA process, seeded with set.seed(20261106)",
+      "rows": 20,
+      "columns": [
+        "Time",
+        "Failures"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "reliability",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "reliability",
+          "columns": {
+            "time": "Time",
+            "failures": "Failures"
+          },
+          "options": {
+            "mode": "growth"
+          }
+        },
+        {
+          "analysis": "reliability",
+          "columns": {
+            "time": "Time"
+          },
+          "options": {
+            "mode": "rbd"
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": "Time"
+          }
+        }
+      ],
+      "notes": "Twenty cumulative failure times from a repairable system with a decreasing failure rate."
+    },
+    {
+      "id": "stratified_2x2",
+      "title": "Binary outcome in three strata",
+      "family": "categorical",
+      "dir": "categorical/stratified_2x2",
+      "source": "Synthetic, seeded with set.seed(20261103)",
+      "rows": 300,
+      "columns": [
+        "Stratum",
+        "Exposure",
+        "Outcome"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Stratum", "Exposure", "Outcome"]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "Three strata of 100 rows each with a binary exposure and a binary outcome: the counts can be entered in the Mantel-Haenszel table."
+    },
+    {
+      "id": "ordinal_table",
+      "title": "Binary response across an ordered dose",
+      "family": "categorical",
+      "dir": "categorical/ordinal_table",
+      "source": "Synthetic, seeded with set.seed(20261103)",
+      "rows": 240,
+      "columns": [
+        "Dose",
+        "Response"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Dose", "Response"]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "Four ordered dose levels with an increasing response proportion: the 4×2 counts feed the Cochran-Armitage trend test."
+    },
+    {
+      "id": "categorical_table",
+      "title": "Two categorical variables with missing codes",
+      "family": "categorical",
+      "dir": "categorical/categorical_table",
+      "source": "Synthetic, seeded with set.seed(20261103)",
+      "rows": 160,
+      "columns": [
+        "Treatment",
+        "Severity",
+        "Age"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "mi",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "mi",
+          "columns": {
+            "variables": ["Treatment", "Severity"],
+            "predictors": "Age"
+          },
+          "options": {
+            "model": "categorical",
+            "imputations": 5,
+            "iterations": 5
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": ["Treatment", "Severity", "Age"]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "160 rows with a binary treatment, a three-level severity and a numeric age; 12 treatment and 10 severity codes are missing for the categorical imputation."
+    },
+    {
+      "id": "msa_demo",
+      "title": "Gage R&R crossed study",
+      "family": "design",
+      "dir": "design/msa_demo",
+      "source": "Synthetic, seeded with set.seed(20261106)",
+      "rows": 90,
+      "columns": [
+        "Part",
+        "Operator",
+        "Replicate",
+        "Measurement",
+        "Width"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "quality"
+      ],
+      "examples": [
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "Measurement",
+            "part": "Part",
+            "operator": "Operator",
+            "variables": ["Measurement", "Width"]
+          },
+          "options": {
+            "mode": "msa"
+          }
+        },
+        {
+          "analysis": "quality",
+          "columns": {
+            "variables": ["Measurement", "Width"]
+          },
+          "options": {
+            "mode": "mcontrol",
+            "subgroup": 3
+          }
+        }
+      ],
+      "notes": "90 rows: 10 parts measured by 3 operators with 3 replicates; Measurement has a part effect around 1.0 and a repeatability SD around 0.35, Width is a second correlated characteristic for the T² chart."
+    },
+    {
+      "id": "acceptance_demo",
+      "title": "Acceptance sampling lots",
+      "family": "design",
+      "dir": "design/acceptance_demo",
+      "source": "Synthetic, seeded with set.seed(20261107)",
+      "rows": 30,
+      "columns": [
+        "Lot",
+        "Inspected",
+        "Defectives"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "quality"
+      ],
+      "examples": [
+        {
+          "analysis": "quality",
+          "columns": {
+            "variable": "Defectives"
+          },
+          "options": {
+            "mode": "acceptance",
+            "planN": 50,
+            "planC": 2,
+            "lotSize": 500
+          }
+        }
+      ],
+      "notes": "30 lots of 50 inspected units with about 4% defectives; the acceptance mode uses the plan parameters, the data document the historical inspection."
+    },
+    {
+      "id": "doe_demo",
+      "title": "Two-factor response surface with a third factor",
+      "family": "design",
+      "dir": "design/doe_demo",
+      "source": "Synthetic, seeded with set.seed(20261108)",
+      "rows": 11,
+      "columns": [
+        "A",
+        "B",
+        "C",
+        "Y"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "doe"
+      ],
+      "examples": [
+        {
+          "analysis": "doe",
+          "columns": {
+            "response": "Y",
+            "factorA": "A",
+            "factorB": "B"
+          },
+          "options": {
+            "mode": "surface",
+            "model": "quadratic"
+          }
+        },
+        {
+          "analysis": "doe",
+          "columns": {
+            "response": "Y",
+            "factorA": "A",
+            "factorB": "B"
+          },
+          "options": {
+            "mode": "design",
+            "designType": "ccd",
+            "factors": 3,
+            "centerPoints": 3
+          }
+        }
+      ],
+      "notes": "11 runs: a 2^3 factorial plus three centre points; Y follows a quadratic surface in A and B with a linear effect of C."
+    },
+    {
+      "id": "var_demo",
+      "title": "Bivariate VAR(2) with correlated innovations",
+      "family": "timeseries",
+      "dir": "timeseries/var_demo",
+      "source": "Synthetic, seeded with set.seed(20261104)",
+      "rows": 200,
+      "columns": [
+        "y1",
+        "y2"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "var"
+      ],
+      "examples": [
+        {
+          "analysis": "var",
+          "columns": {
+            "variables": ["y1", "y2"]
+          },
+          "options": {
+            "mode": "var",
+            "lags": 0,
+            "horizon": 12
+          }
+        }
+      ],
+      "notes": "200 observations of a stable bivariate VAR(2) with a 0.3 residual correlation; Granger causality runs from y1 to y2."
+    },
+    {
+      "id": "garch_demo",
+      "title": "GARCH(1,1) returns",
+      "family": "timeseries",
+      "dir": "timeseries/garch_demo",
+      "source": "Synthetic, seeded with set.seed(20261104)",
+      "rows": 500,
+      "columns": [
+        "Return"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "garch"
+      ],
+      "examples": [
+        {
+          "analysis": "garch",
+          "columns": {
+            "variable": "Return"
+          },
+          "options": {
+            "horizon": 10
+          }
+        }
+      ],
+      "notes": "500 returns with conditional variance omega = 0.05, alpha = 0.10, beta = 0.85: clear volatility clustering."
+    },
+    {
+      "id": "statespace_demo",
+      "title": "Local trend and two-regime Markov series",
+      "family": "timeseries",
+      "dir": "timeseries/statespace_demo",
+      "source": "Synthetic, seeded with set.seed(20261104)",
+      "rows": 300,
+      "columns": [
+        "Local",
+        "Markov"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "statespace"
+      ],
+      "examples": [
+        {
+          "analysis": "statespace",
+          "columns": {
+            "variable": "Local"
+          },
+          "options": {
+            "mode": "local",
+            "trend": true,
+            "horizon": 10
+          }
+        },
+        {
+          "analysis": "statespace",
+          "columns": {
+            "variable": "Markov"
+          },
+          "options": {
+            "mode": "markov",
+            "horizon": 10
+          }
+        }
+      ],
+      "notes": "300 observations: Local is a noisy local linear trend; Markov alternates a low-volatility regime around -1 and a high-volatility regime around 2."
+    },
+    {
+      "id": "survey_demo",
+      "title": "Stratified cluster sample of income",
+      "family": "design",
+      "dir": "design/survey_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 120,
+      "columns": [
+        "Stratum",
+        "Cluster",
+        "Weight",
+        "Income",
+        "Age",
+        "Employed"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "survey",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "survey",
+          "columns": {
+            "variable": "Income",
+            "weight": "Weight",
+            "strata": "Stratum",
+            "cluster": "Cluster"
+          },
+          "options": {
+            "mode": "mean"
+          }
+        },
+        {
+          "analysis": "survey",
+          "columns": {
+            "category": "Employed"
+          },
+          "options": {
+            "mode": "proportion",
+            "successLevel": "1"
+          }
+        },
+        {
+          "analysis": "survey",
+          "columns": {
+            "variable": "Income",
+            "predictors": "Age",
+            "weight": "Weight",
+            "strata": "Stratum",
+            "cluster": "Cluster"
+          },
+          "options": {
+            "mode": "regression"
+          }
+        }
+      ],
+      "notes": "120 rows in six strata with four clusters each; Income depends on age and stratum, Employed is a binary outcome."
+    },
+    {
+      "id": "ml_demo",
+      "title": "Non-linear regression with interactions",
+      "family": "ml",
+      "dir": "ml/ml_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 160,
+      "columns": [
+        "X1",
+        "X2",
+        "X3",
+        "Y"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "ml",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "ml",
+          "columns": {
+            "outcome": "Y",
+            "predictors": ["X1", "X2", "X3"]
+          },
+          "options": {
+            "mode": "rf",
+            "trees": 200,
+            "seed": 20261110
+          }
+        },
+        {
+          "analysis": "ml",
+          "columns": {
+            "outcome": "Y",
+            "predictors": ["X1", "X2", "X3"]
+          },
+          "options": {
+            "mode": "boosting",
+            "trees": 200,
+            "shrinkage": 0.05,
+            "seed": 20261110
+          }
+        }
+      ],
+      "notes": "160 rows: Y is a non-linear function of X1, X2 and the interaction X2*X3, plus Gaussian noise."
+    },
+    {
+      "id": "text_demo",
+      "title": "Three-topic short-text corpus",
+      "family": "text",
+      "dir": "text/text_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 36,
+      "columns": [
+        "Document",
+        "Text",
+        "Group"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "text",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "text",
+          "columns": {
+            "text": "Text"
+          },
+          "options": {
+            "mode": "frequency",
+            "maxTerms": 20,
+            "minDocFreq": 1,
+            "stopwords": false
+          }
+        },
+        {
+          "analysis": "text",
+          "columns": {
+            "text": "Text",
+            "group": "Group"
+          },
+          "options": {
+            "mode": "topics",
+            "topics": 3,
+            "iterations": 300,
+            "seed": 20261110,
+            "stopwords": false
+          }
+        }
+      ],
+      "notes": "36 short documents generated from three vocabularies; Group records the generating topic."
+    },
+    {
+      "id": "choice_demo",
+      "title": "Discrete choice experiment with price and quality",
+      "family": "design",
+      "dir": "design/choice_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 270,
+      "columns": [
+        "Respondent",
+        "Set",
+        "Alternative",
+        "Price",
+        "Quality",
+        "Chosen"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "choice",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "choice",
+          "columns": {
+            "set": "Set",
+            "alternative": "Alternative",
+            "chosen": "Chosen",
+            "attributes": ["Price", "Quality"]
+          },
+          "options": {
+            "mode": "choice"
+          }
+        }
+      ],
+      "notes": "90 choice sets of three alternatives; the chosen alternative follows a utility with a negative price effect and a positive quality effect."
+    },
+    {
+      "id": "maxdiff_demo",
+      "title": "MaxDiff best-worst blocks",
+      "family": "design",
+      "dir": "design/maxdiff_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 320,
+      "columns": [
+        "Block",
+        "Item",
+        "Best",
+        "Worst"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "choice",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "choice",
+          "columns": {
+            "set": "Block",
+            "alternative": "Item",
+            "best": "Best",
+            "worst": "Worst"
+          },
+          "options": {
+            "mode": "maxdiff"
+          }
+        }
+      ],
+      "notes": "80 blocks of four items; each block marks one best and one worst item."
+    },
+    {
+      "id": "meta_demo",
+      "title": "Nine studies with effect sizes and standard errors",
+      "family": "design",
+      "dir": "design/meta_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 9,
+      "columns": [
+        "Study",
+        "Effect",
+        "SE"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "meta",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "meta",
+          "columns": {
+            "effect": "Effect",
+            "se": "SE",
+            "study": "Study"
+          },
+          "options": {
+            "method": "DL",
+            "egger": true
+          }
+        }
+      ],
+      "notes": "Nine studies with small positive effects and heterogeneous standard errors."
+    },
+    {
+      "id": "bayes_demo",
+      "title": "Score with age and a binary treatment",
+      "family": "design",
+      "dir": "design/bayes_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 80,
+      "columns": [
+        "Score",
+        "Age",
+        "Treatment"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "bayes",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "bayes",
+          "columns": {
+            "outcome": "Score"
+          },
+          "options": {
+            "mode": "normal",
+            "priorMean": 50,
+            "priorSd": 20,
+            "iterations": 4000,
+            "burnin": 1000,
+            "chains": 2,
+            "seed": 20261110
+          }
+        },
+        {
+          "analysis": "bayes",
+          "columns": {
+            "outcome": "Score",
+            "predictors": ["Age", "Treatment"]
+          },
+          "options": {
+            "mode": "regression",
+            "priorMean": 0,
+            "priorSd": 20,
+            "iterations": 4000,
+            "burnin": 1000,
+            "chains": 2,
+            "seed": 20261110
+          }
+        }
+      ],
+      "notes": "80 rows: Score increases with age and with the binary treatment, with Gaussian noise."
+    },
+    {
+      "id": "spatial_demo",
+      "title": "Regular grid with spatial autocorrelation",
+      "family": "design",
+      "dir": "design/spatial_demo",
+      "source": "Synthetic, seeded with set.seed(20261110)",
+      "rows": 144,
+      "columns": [
+        "Region",
+        "X",
+        "Y",
+        "Crime",
+        "Income"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "spatial",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "spatial",
+          "columns": {
+            "variable": "Crime",
+            "x": "X",
+            "y": "Y"
+          },
+          "options": {
+            "mode": "moran",
+            "k": 4,
+            "permutations": 999,
+            "seed": 20261110
+          }
+        },
+        {
+          "analysis": "spatial",
+          "columns": {
+            "variable": "Crime",
+            "predictors": "Income",
+            "x": "X",
+            "y": "Y"
+          },
+          "options": {
+            "mode": "sar",
+            "k": 4,
+            "permutations": 999,
+            "seed": 20261110
+          }
+        }
+      ],
+      "notes": "144 cells of a 12x12 grid; Crime follows a gradient plus spatially autocorrelated noise, Income is a predictor."
     }
   ]
 }

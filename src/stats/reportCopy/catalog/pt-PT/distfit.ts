@@ -120,4 +120,56 @@ export const distfitCopy: Record<string, string> = {
     'Um bom AIC não compensa um delineamento de amostragem enviesado.',
   'Valore stimato':
     'Valor estimado',
+  'A differenza di un test sulla media, non richiede la normalità: descrive tutta la distribuzione, non solo il centro.':
+    'Ao contrário de um teste sobre a média, não exige normalidade: descreve toda a distribuição, não apenas o centro.',
+  'Asymptotic':
+    'Assintótico',
+  'Con molti valori uguali il p è approssimato: i ranghi con ties riducono la precisione.':
+    'Com muitos valores iguais p é aproximado: os rangos empatados reduzem a precisão.',
+  'D':
+    'D',
+  'D = {s1}: la massima distanza verticale tra le due distribuzioni cumulative.':
+    'D = {s1}: a distância vertical máxima entre as duas distribuições acumuladas.',
+  'D = {s1}; p = {s2} ({s3}).':
+    'D = {s1}; p = {s2} ({s3}).',
+  'D è la distanza verticale massima tra le due curve: 0 significa distribuzioni identiche, 1 nessuna sovrapposizione.':
+    'D é a distância vertical máxima entre as duas curvas: 0 significa distribuições idênticas, 1 nenhuma sobreposição.',
+  'Distanza massima tra {s1} e {s2} per {s3}: {s4} (p = {s5}).':
+    'Distância máxima entre {s1} e {s2} para {s3}: {s4} (p = {s5}).',
+  'Exact':
+    'Exato',
+  'Group':
+    'Grupo',
+  'I due campioni devono essere indipendenti.':
+    'As duas amostras devem ser independentes.',
+  'Il p esatto enumera i ranghi possibili; con campioni grandi si usa l’approssimazione di Kolmogorov.':
+    'O p exato enumera os rangos possíveis; com amostras grandes usa-se a aproximação de Kolmogorov.',
+  'Il p è {s1}.':
+    'p é {s1}.',
+  'Il test bilaterale confronta le due distribuzioni cumulative: un p piccolo indica che non provengono dalla stessa popolazione.':
+    'O teste bilateral compara as duas distribuições acumuladas: um p pequeno indica que não provêm da mesma população.',
+  'Il test di Kolmogorov–Smirnov confronta le due distribuzioni cumulative: è sensibile a differenze di posizione, dispersione e forma.':
+    'O teste de Kolmogorov–Smirnov compara as duas distribuições acumuladas: é sensível a diferenças de posição, dispersão e forma.',
+  'Il test è bilaterale: rifiuta sia uno spostamento sia una differenza di forma.':
+    'O teste é bilateral: rejeita tanto um deslocamento como uma diferença de forma.',
+  'Kolmogorov–Smirnov (due campioni)':
+    'Kolmogorov–Smirnov (duas amostras)',
+  'Method':
+    'Método',
+  'Report di lettura — Kolmogorov–Smirnov':
+    'Relatório de leitura — Kolmogorov–Smirnov',
+  'Statistica e p-value':
+    'Estatística e valor p',
+  'Un p piccolo non dice quale aspetto differisca: guarda le due curve cumulative.':
+    'Um p pequeno não diz que aspeto difere: veja as duas curvas acumuladas.',
+  'asintotico':
+    'assintótico',
+  'asintotico (serie di Kolmogorov)':
+    'assintótico (série de Kolmogorov)',
+  'esatto':
+    'exato',
+  'esatto (enumerazione dei ranghi)':
+    'exato (enumeração dos rangos)',
+  '{s1}: {s2} osservazioni; {s3}: {s4} osservazioni.':
+    '{s1}: {s2} observações; {s3}: {s4} observações.',
 };

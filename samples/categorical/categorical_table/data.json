@@ -1,0 +1,802 @@
+[
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 39.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 65.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 41.7
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 63.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 45.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 61.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": null,
+    "Age": 46.4
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 48.1
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 47.5
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 48.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 60.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 42.1
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 37.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": null,
+    "Age": 56.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 57.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": null,
+    "Age": 42
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 54.1
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 75.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 39.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 58.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 60.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 69.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 49.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 54.9
+  },
+  {
+    "Treatment": null,
+    "Severity": 0,
+    "Age": 46.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 64.7
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 47
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 55.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 58.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 60.9
+  },
+  {
+    "Treatment": null,
+    "Severity": 1,
+    "Age": 58.8
+  },
+  {
+    "Treatment": null,
+    "Severity": 0,
+    "Age": 44
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 54.1
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 50.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 55.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 43.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 42.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 61.6
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 52.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 52.4
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 59.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 48.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 43.5
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 38.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 40.7
+  },
+  {
+    "Treatment": null,
+    "Severity": 0,
+    "Age": 52
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 39.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 43.3
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 55.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 47.2
+  },
+  {
+    "Treatment": null,
+    "Severity": 2,
+    "Age": 51.1
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 44.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 58.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 61.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": null,
+    "Age": 76
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 66.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 41.5
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 38.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 27.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 44.6
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 60
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 48.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 57
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 59.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 57.3
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 54.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 48.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 45.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 28.3
+  },
+  {
+    "Treatment": null,
+    "Severity": 0,
+    "Age": 53.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 61.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 46.1
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 46.2
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 66.1
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 57.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 58.1
+  },
+  {
+    "Treatment": null,
+    "Severity": 2,
+    "Age": 58.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 39.3
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 41.5
+  },
+  {
+    "Treatment": null,
+    "Severity": 2,
+    "Age": 61.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 50.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 52.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 70.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 70.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 47.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 32
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 48.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 54.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 38.1
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 49.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 50.2
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 44.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 45.2
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 34.6
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 42.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 48.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 53.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 57
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 48.1
+  },
+  {
+    "Treatment": 1,
+    "Severity": null,
+    "Age": 49.4
+  },
+  {
+    "Treatment": null,
+    "Severity": 0,
+    "Age": 51.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 48.3
+  },
+  {
+    "Treatment": null,
+    "Severity": 0,
+    "Age": 53.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 52.3
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 52.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 53.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 39.6
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 43.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 60.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 50.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 32.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 44.1
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 51.4
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 54
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 49.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 47.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 46.5
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 45.1
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 43.7
+  },
+  {
+    "Treatment": 0,
+    "Severity": null,
+    "Age": 54
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 36.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 48.7
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 57.4
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 40.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 58.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 50.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 57.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": null,
+    "Age": 60.9
+  },
+  {
+    "Treatment": null,
+    "Severity": 2,
+    "Age": 45.6
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 43.2
+  },
+  {
+    "Treatment": null,
+    "Severity": 1,
+    "Age": 56.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 41.2
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 50.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 54.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 28.7
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 56.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 44.6
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 58.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 32.9
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 51.4
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 56.2
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 54.8
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 49.6
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 54.4
+  },
+  {
+    "Treatment": 0,
+    "Severity": null,
+    "Age": 47.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": 2,
+    "Age": 57.3
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 51.2
+  },
+  {
+    "Treatment": 1,
+    "Severity": null,
+    "Age": 46.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 34.3
+  },
+  {
+    "Treatment": 0,
+    "Severity": 2,
+    "Age": 46.6
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 46.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 55.2
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 55.3
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 53.8
+  },
+  {
+    "Treatment": 0,
+    "Severity": 1,
+    "Age": 45.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": null,
+    "Age": 33.3
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 52.9
+  },
+  {
+    "Treatment": 0,
+    "Severity": 0,
+    "Age": 41.4
+  },
+  {
+    "Treatment": 1,
+    "Severity": 0,
+    "Age": 41.5
+  },
+  {
+    "Treatment": 1,
+    "Severity": 1,
+    "Age": 34
+  }
+]

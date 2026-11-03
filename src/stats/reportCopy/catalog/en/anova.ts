@@ -240,4 +240,38 @@ export const anovaCopy: Record<string, string> = {
     'Bonferroni correction',
   'Dunn usa la varianza dei ranghi con correzione per i pari; p corretto con Holm o Bonferroni.':
     'Dunn uses the rank variance with a correction for ties; p corrected with Holm or Bonferroni.',
+  'Above median':
+    'Above median',
+  'Below median':
+    'Below median',
+  'Con molti valori uguali alla mediana il test diventa conservativo.':
+    'With many values equal to the median the test becomes conservative.',
+  'Il test confronta le mediane, non le medie: una differenza di media può non emergere.':
+    'The test compares medians, not means: a difference in means may not show up.',
+  'Il test di Mood classifica ogni osservazione rispetto alla mediana comune e confronta quanti casi cadono sopra e sotto in ogni gruppo.':
+    'The Mood test classifies each observation against the common median and compares how many cases fall above and below in each group.',
+  'Il test χ² confronta le frequenze osservate sopra/sotto con quelle attese se le mediane fossero uguali.':
+    'The χ² test compares the observed above/below counts with those expected if the medians were equal.',
+  'La correzione (N − 1)/N è quella di coin::median_test; con gruppi molto piccoli il p è approssimato.':
+    'The (N − 1)/N correction is the one used by coin::median_test; with very small groups p is approximate.',
+  'Mediana comune di {s1}: {s2}; il test χ² confronta {s3} gruppi di {s4} (p = {s5}).':
+    'Common median of {s1}: {s2}; the χ² test compares {s3} groups of {s4} (p = {s5}).',
+  'Mediana comune: {s1}; {s2} osservazioni sopra e {s3} sotto (o uguali).':
+    'Common median: {s1}; {s2} observations above and {s3} below (or equal).',
+  'Mood: osservazioni sopra e sotto la mediana':
+    'Mood: observations above and below the median',
+  'Mood: test χ²':
+    'Mood: χ² test',
+  'Osservazioni sopra la mediana: {s1}; sotto o uguali: {s2}.':
+    'Observations above the median: {s1}; below or equal: {s2}.',
+  'Report di lettura — Test della mediana di Mood':
+    'Reading report — Mood median test',
+  'Statistica di Brown–Mood con correzione (N − 1)/N, come coin::median_test.':
+    'Brown–Mood statistic with the (N − 1)/N correction, as in coin::median_test.',
+  'Un p non significativo non dimostra l’uguaglianza delle mediane.':
+    'A non-significant p does not prove equality of medians.',
+  'È un test non parametrico sull’uguaglianza delle mediane: non assume la normalità e resiste agli outlier.':
+    'It is a non-parametric test of equality of medians: it does not assume normality and resists outliers.',
+  'χ² = {s1}, df = {s2}, p = {s3}.':
+    'χ² = {s1}, df = {s2}, p = {s3}.',
 };

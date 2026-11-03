@@ -29,3 +29,19 @@ test('sample-size builder rejects a zero effect size with the panel message', ()
   if (!('reason' in result)) return;
   assert.match(result.reason, /greater than zero/);
 });
+
+test('the new one-proportion, variance and rate designs produce a full plan', () => {
+  for (const design of ['oneProportion', 'variance', 'oneRate'] as const) {
+    const result = buildSampleSizeOutput({
+      ...DEFAULT_PARAMS.samplesize,
+      design,
+      p1: design === 'oneRate' ? 2 : 0.6,
+      p2: design === 'oneRate' ? 1 : 0.5,
+      ratio: 2,
+    });
+    assert.ok('ok' in result && result.ok, design);
+    if (!('ok' in result) || !result.ok) continue;
+    assert.ok(result.tables.some(spec => spec.id === 'ss-result'), design);
+    assert.ok(result.tables.some(spec => spec.id === 'ss-curve'), design);
+  }
+});

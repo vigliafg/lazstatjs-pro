@@ -15,6 +15,7 @@ export const coreTopics: HelpTopic[] = [
         'Seleziona le variabili numeriche (Score, Age) e lascia il livello di confidenza al 95%.',
         'Premi Esegui analisi e leggi la riga di ogni variabile.',
         'Controlla la colonna dei mancanti e il test di normalità prima di passare ai confronti.',
+        'Cambia il selettore Procedura su Frequenze per una colonna categorica, su Valori anomali per Grubbs/Dixon o su Sequenze per controllare l’ordine delle righe.',
       ],
       expected: 'Una riga per variabile con N, media, deviazione standard, mediana, quartili, minimo e massimo, più l’esito dei controlli di normalità.',
     },
@@ -28,6 +29,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Media molto diversa dalla mediana suggerisce asimmetria o valori estremi.',
         'Il test di normalità è indicativo: con N grande diventa iper-sensibile, con N piccolo ha poca potenza.',
+        'Le frequenze descrivono i livelli di una categorica; il test delle sequenze controlla se l’ordine delle righe è casuale; Grubbs e Dixon segnalano l’osservazione più estrema.',
       ],
       pitfalls: [
         'Non riportare la deviazione standard come errore standard: sono grandezze diverse.',
@@ -63,6 +65,7 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Valori più bassi di AIC/BIC indicano adattamento migliore.',
         'Il p-value di un test di adattamento non «prova» la normalità: misura solo l’evidenza contraria.',
+        'La modalità KS a due campioni confronta due gruppi senza assumere una famiglia di distribuzioni.',
       ],
       pitfalls: ['Scegliere la distribuzione guardando i dati e poi testarla sugli stessi dati gonfia l’ottimismo.'],
       glossary: [
@@ -102,6 +105,7 @@ export const coreTopics: HelpTopic[] = [
       pitfalls: [
         'Confrontare molte coppie di gruppi senza correzione aumenta i falsi positivi.',
         'Un risultato non significativo non dimostra l’uguaglianza: guarda l’intervallo.',
+        'Con dati appaiati non normali, il test dei segni usa solo la direzione delle differenze.',
       ],
       glossary: [
         { term: 'Welch', definition: 'Versione del test t che non assume varianze uguali.' },
@@ -130,6 +134,7 @@ export const coreTopics: HelpTopic[] = [
       whenToUse: ['Un fattore tra soggetti con tre o più livelli.'],
       whenNotToUse: ['Misure ripetute (usa ANOVA per misure ripetute) o due soli gruppi (test t è equivalente).'],
       reading: [
+        'Il test della mediana di Mood confronta le mediane senza assumere la normalità: usalo quando outlier o asimmetria rendono la media inaffidabile.',
         'Un p significativo dice che almeno una media differisce: i post-hoc dicono quale.',
         'Levene significativo suggerisce varianze diverse: preferisci Welch o Kruskal-Wallis.',
       ],

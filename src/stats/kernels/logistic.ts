@@ -3,7 +3,23 @@ import type { LogisticModel, LogisticPredictor } from '../logistic/types';
 
 const EPS = 1e-10;
 
+export type LogisticLink = 'logit' | 'probit';
+
 const sigmoid = (value: number): number => 1 / (1 + Math.exp(-value));
+
+const inverseLink = (eta: number, link: LogisticLink): number =>
+  link === 'probit' ? jStat.normal.cdf(eta, 0, 1) : sigmoid(eta);
+
+const etaDerivative = (eta: number, mu: number, link: LogisticLink): number =>
+  link === 'probit'
+    ? 1 / Math.max(EPS, jStat.normal.pdf(eta, 0, 1))
+    : 1 / Math.max(EPS, mu * (1 - mu));
+
+/** IRLS weight (information per observation). */
+const irlsWeight = (eta: number, mu: number, link: LogisticLink): number =>
+  link === 'probit'
+    ? Math.pow(jStat.normal.pdf(eta, 0, 1), 2) / Math.max(EPS, mu * (1 - mu))
+    : Math.max(EPS, mu * (1 - mu));
 
 const invert = (matrix: number[][]): number[][] | null => {
   const size = matrix.length;
@@ -34,11 +50,11 @@ const invert = (matrix: number[][]): number[][] | null => {
   return work.map(row => row.slice(size));
 };
 
-const devianceOf = (beta: number[], X: number[][], y: number[]): number => {
+const devianceOf = (beta: number[], X: number[][], y: number[], link: LogisticLink): number => {
   let deviance = 0;
   for (let i = 0; i < y.length; i++) {
     const eta = X[i].reduce((sum, value, j) => sum + value * beta[j], 0);
-    const p = Math.min(1 - 1e-12, Math.max(1e-12, sigmoid(eta)));
+    const p = Math.min(1 - 1e-12, Math.max(1e-12, inverseLink(eta, link)));
     deviance -= 2 * (y[i] === 1 ? Math.log(p) : Math.log(1 - p));
   }
   return deviance;
@@ -71,7 +87,8 @@ export const fitLogistic = (
   predictors: LogisticPredictor[],
   level = 95,
   cutoff = 0.5,
-  penalized = false
+  penalized = false,
+  link: LogisticLink = 'logit'
 ): LogisticModel | null => {
   const n = y.length;
   if (n < 3 || predictors.length === 0) return null;
@@ -87,14 +104,14 @@ export const fitLogistic = (
 
   let beta = new Array<number>(k).fill(0);
   beta[0] = Math.log(events / nonEvents);
-  let deviance = devianceOf(beta, X, y);
+  let deviance = devianceOf(beta, X, y, link);
 
   for (let iteration = 0; iteration < 100; iteration++) {
     const xtwx = Array.from({ length: k }, () => new Array<number>(k).fill(0));
     for (let i = 0; i < n; i++) {
       const eta = X[i].reduce((sum, value, j) => sum + value * beta[j], 0);
-      const p = sigmoid(eta);
-      const weight = Math.max(EPS, p * (1 - p));
+      const p = inverseLink(eta, link);
+      const weight = irlsWeight(eta, p, link);
       for (let j = 0; j < k; j++) {
         for (let l = 0; l <= j; l++) xtwx[j][l] += X[i][j] * weight * X[i][l];
       }
@@ -109,8 +126,8 @@ export const fitLogistic = (
     const xtwz = new Array<number>(k).fill(0);
     for (let i = 0; i < n; i++) {
       const eta = X[i].reduce((sum, value, j) => sum + value * beta[j], 0);
-      const p = sigmoid(eta);
-      const weight = Math.max(EPS, p * (1 - p));
+      const p = inverseLink(eta, link);
+      const weight = irlsWeight(eta, p, link);
       const leverage = penalized
         ? weight * X[i].reduce(
             (sum, value, j) =>
@@ -119,7 +136,7 @@ export const fitLogistic = (
           )
         : 0;
       const adjustment = penalized ? leverage * (0.5 - p) : 0;
-      const z = eta + (y[i] - p + adjustment) / weight;
+      const z = eta + (y[i] - p + adjustment) * etaDerivative(eta, p, link);
       for (let j = 0; j < k; j++) xtwz[j] += X[i][j] * weight * z;
     }
 
@@ -130,11 +147,11 @@ export const fitLogistic = (
     // Step halving keeps the deviance monotone, which matters near separation.
     let step = 1;
     let next = candidate;
-    let nextDeviance = devianceOf(next, X, y);
+    let nextDeviance = devianceOf(next, X, y, link);
     while (nextDeviance > deviance + 1e-12 && step > 1e-6) {
       step /= 2;
       next = beta.map((value, j) => value + step * (candidate[j] - value));
-      nextDeviance = devianceOf(next, X, y);
+      nextDeviance = devianceOf(next, X, y, link);
     }
 
     const change = Math.abs(deviance - nextDeviance);
@@ -143,7 +160,9 @@ export const fitLogistic = (
     if (change < 1e-10) break;
   }
 
-  const fitted = X.map(row => sigmoid(row.reduce((sum, value, j) => sum + value * beta[j], 0)));
+  const fitted = X.map(row =>
+    inverseLink(row.reduce((sum, value, j) => sum + value * beta[j], 0), link)
+  );
   const logLik = fitted.reduce(
     (sum, p, i) => sum + (y[i] === 1 ? Math.log(Math.max(EPS, p)) : Math.log(Math.max(EPS, 1 - p))),
     0
@@ -154,7 +173,8 @@ export const fitLogistic = (
   // Standard errors from the inverse of the information matrix at convergence.
   const xtwx = Array.from({ length: k }, () => new Array<number>(k).fill(0));
   X.forEach((row, i) => {
-    const weight = Math.max(EPS, fitted[i] * (1 - fitted[i]));
+    const eta = row.reduce((sum, value, j) => sum + value * beta[j], 0);
+    const weight = irlsWeight(eta, fitted[i], link);
     for (let j = 0; j < k; j++) {
       for (let l = 0; l <= j; l++) xtwx[j][l] += row[j] * weight * row[l];
     }
@@ -222,6 +242,7 @@ export const fitLogistic = (
     separation: beta.some(value => Math.abs(value) > 20),
     penalized,
     penalizedLogLik: penalized ? logLik + 0.5 * logDet(xtwx) : undefined,
+    link,
   };
 };
 
@@ -248,7 +269,7 @@ export const logisticProfileCurve = (
       model.beta[0] +
       model.beta[1] * x +
       otherMeans.reduce((sum, value, offset) => sum + model.beta[offset + 2] * value, 0);
-    return { x, y: sigmoid(eta) * 100 };
+    return { x, y: inverseLink(eta, model.link ?? 'logit') * 100 };
   });
 };
 
@@ -264,7 +285,7 @@ export const logisticCurve = (
   return Array.from({ length: points }, (_, index) => {
     const x = min + step * index;
     const eta = model.beta[0] + model.beta[1] * x;
-    return { x, y: sigmoid(eta) * 100 };
+    return { x, y: inverseLink(eta, model.link ?? 'logit') * 100 };
   });
 };
 

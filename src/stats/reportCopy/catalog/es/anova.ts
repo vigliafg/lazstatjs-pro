@@ -268,4 +268,38 @@ export const anovaCopy: Record<string, string> = {
     'ω²',
   'ω² = {s1}: stima meno distorta della quota di varianza spiegata nella popolazione.':
     'ω² = {s1}: estimación menos sesgada de la proporción de varianza explicada en la población.',
+  'Above median':
+    'Por encima de la mediana',
+  'Below median':
+    'Por debajo de la mediana',
+  'Con molti valori uguali alla mediana il test diventa conservativo.':
+    'Con muchos valores iguales a la mediana la prueba se vuelve conservadora.',
+  'Il test confronta le mediane, non le medie: una differenza di media può non emergere.':
+    'La prueba compara medianas, no medias: una diferencia de medias puede no aparecer.',
+  'Il test di Mood classifica ogni osservazione rispetto alla mediana comune e confronta quanti casi cadono sopra e sotto in ogni gruppo.':
+    'La prueba de Mood clasifica cada observación respecto a la mediana común y compara cuántos casos caen por encima y por debajo en cada grupo.',
+  'Il test χ² confronta le frequenze osservate sopra/sotto con quelle attese se le mediane fossero uguali.':
+    'La prueba χ² compara los recuentos observados por encima/por debajo con los esperados si las medianas fueran iguales.',
+  'La correzione (N − 1)/N è quella di coin::median_test; con gruppi molto piccoli il p è approssimato.':
+    'La corrección (N − 1)/N es la de coin::median_test; con grupos muy pequeños p es aproximado.',
+  'Mediana comune di {s1}: {s2}; il test χ² confronta {s3} gruppi di {s4} (p = {s5}).':
+    'Mediana común de {s1}: {s2}; la prueba χ² compara {s3} grupos de {s4} (p = {s5}).',
+  'Mediana comune: {s1}; {s2} osservazioni sopra e {s3} sotto (o uguali).':
+    'Mediana común: {s1}; {s2} observaciones por encima y {s3} por debajo (o iguales).',
+  'Mood: osservazioni sopra e sotto la mediana':
+    'Mood: observaciones por encima y por debajo de la mediana',
+  'Mood: test χ²':
+    'Mood: prueba χ²',
+  'Osservazioni sopra la mediana: {s1}; sotto o uguali: {s2}.':
+    'Observaciones por encima de la mediana: {s1}; por debajo o iguales: {s2}.',
+  'Report di lettura — Test della mediana di Mood':
+    'Informe de lectura — Prueba de la mediana de Mood',
+  'Statistica di Brown–Mood con correzione (N − 1)/N, come coin::median_test.':
+    'Estadístico de Brown–Mood con corrección (N − 1)/N, como coin::median_test.',
+  'Un p non significativo non dimostra l’uguaglianza delle mediane.':
+    'Un p no significativo no demuestra la igualdad de medianas.',
+  'È un test non parametrico sull’uguaglianza delle mediane: non assume la normalità e resiste agli outlier.':
+    'Es una prueba no paramétrica de igualdad de medianas: no supone normalidad y resiste a los valores atípicos.',
+  'χ² = {s1}, df = {s2}, p = {s3}.':
+    'χ² = {s1}, df = {s2}, p = {s3}.',
 };

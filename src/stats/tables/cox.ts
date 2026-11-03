@@ -2,7 +2,7 @@ import { fmtEst } from '../format';
 import { copy } from '../reportCopy';
 import { isDecided } from '../reportKit';
 import type { TableSpec } from '../types';
-import type { CoxFit } from '../cox/types';
+import type { CoxFit, FrailtyFit } from '../cox/types';
 
 const PH_SENTENCE = (p: number, level: number): string => {
   if (!Number.isFinite(p)) return copy('non verificabile con questi dati');
@@ -189,4 +189,83 @@ export const coxTables = (fit: CoxFit, level: number): TableSpec[] => {
   });
 
   return tables;
+};
+
+/** Tables for the shared gamma frailty Cox model. */
+export const frailtyTables = (fit: FrailtyFit, level: number): TableSpec[] => {
+  const summary: TableSpec = {
+    id: 'frailty-summary',
+    title: copy('Sintesi del modello con fragilità'),
+    subtitle: copy('{s1} osservazioni · {s2} gruppi · {s3} eventi', {
+      s1: fit.n,
+      s2: fit.groups,
+      s3: fit.events,
+    }),
+    columns: [
+      { key: 'metric', label: copy('Voce'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'text' },
+    ],
+    rows: [
+      { metric: copy('Osservazioni'), value: String(fit.n), raw: fit.n },
+      { metric: copy('Gruppi'), value: String(fit.groups), raw: fit.groups },
+      { metric: copy('Eventi'), value: String(fit.events), raw: fit.events },
+      { metric: copy('Covariati'), value: String(fit.k), raw: fit.k },
+      { metric: copy('Varianza della fragilità (θ)'), value: fmtEst(fit.theta, 4), raw: fit.theta },
+      { metric: copy('SE di θ (approssimato)'), value: fmtEst(fit.thetaSe, 4), raw: fit.thetaSe },
+      { metric: copy('Log-verosimiglianza parziale'), value: fmtEst(fit.logLik, 3), raw: fit.logLik },
+      { metric: copy('AIC (approssimato)'), value: fmtEst(fit.aic, 3), raw: fit.aic },
+      { metric: copy('Iterazioni'), value: String(fit.iterations), raw: fit.iterations },
+      { metric: copy('Convergenza'), value: fit.converged ? 'sì' : 'no', raw: NaN },
+      ...fit.warnings.map((warning, index) => ({
+        metric: copy('Avviso {s1}', { s1: index + 1 }),
+        value: warning,
+        raw: NaN,
+      })),
+    ],
+    notes: [
+      copy('θ = 0 significa nessuna eterogeneità tra gruppi: il modello si riduce a un Cox ordinario.'),
+      copy('θ grande indica che i gruppi differiscono molto per rischio di base non spiegato dalle covariariate.'),
+      copy('La fragilità è un effetto casuale moltiplicativo con distribuzione gamma e media 1.'),
+    ],
+  };
+
+  const coefficients: TableSpec = {
+    id: 'frailty-coefficients',
+    title: copy('Coefficienti del modello con fragilità'),
+    subtitle: copy('Hazard ratio condizionati alla fragilità · CI {s1}%', { s1: level }),
+    columns: [
+      { key: 'term', label: copy('Termine'), format: 'text' },
+      { key: 'beta', label: copy('β'), format: 'dec4' },
+      { key: 'se', label: copy('SE'), format: 'dec4' },
+      { key: 'z', label: copy('z'), format: 'dec3' },
+      { key: 'p', label: copy('p'), format: 'p' },
+      { key: 'hr', label: copy('HR'), format: 'dec4' },
+      { key: 'lo', label: copy('HR low'), format: 'dec4' },
+      { key: 'hi', label: copy('HR high'), format: 'dec4' },
+    ],
+    rows: fit.coefficients.map(row => ({ ...row })),
+    notes: [
+      copy('Gli hazard ratio sono condizionati al valore della fragilità del gruppo.'),
+      copy('Gli errori standard non includono l’incertezza della varianza di fragilità: sono leggermente ottimistici.'),
+    ],
+  };
+
+  const effects: TableSpec = {
+    id: 'frailty-effects',
+    title: copy('Effetti di fragilità per gruppo'),
+    subtitle: copy('Media posteriore della fragilità moltiplicativa'),
+    columns: [
+      { key: 'group', label: copy('Gruppo'), format: 'text' },
+      { key: 'subjects', label: copy('Soggetti'), format: 'int' },
+      { key: 'events', label: copy('Eventi'), format: 'int' },
+      { key: 'mean', label: copy('Fragilità media'), format: 'dec4' },
+    ],
+    rows: fit.effects.map(row => ({ ...row })),
+    notes: [
+      copy('Valori sopra 1 indicano gruppi con rischio di base più alto, valori sotto 1 gruppi più protetti.'),
+      copy('La media è una stima empirica bayesiana: i gruppi piccoli sono trascinati verso 1.'),
+    ],
+  };
+
+  return [summary, coefficients, effects];
 };

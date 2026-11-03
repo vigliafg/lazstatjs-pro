@@ -5,6 +5,7 @@ import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 import {
   CheckboxField,
+  Field,
   VariableList,
   NumberField,
   VariableSelect,
@@ -18,9 +19,25 @@ export interface LogisticFormProps {
 }
 
 export const LogisticForm = ({ grid, logisticParams, setLogisticParams }: LogisticFormProps) => {
-  const { outcome, predictors, cutoff, penalized } = logisticParams;
+  const { outcome, predictors, cutoff, penalized, link } = logisticParams;
   return (
     <div className="flex flex-col gap-3">
+      <Field label={t('form.link')}>
+        <select
+          aria-label={t('form.link')}
+          className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={link ?? 'logit'}
+          onChange={event =>
+            setLogisticParams(prev => ({
+              ...prev,
+              link: event.target.value === 'probit' ? 'probit' : 'logit',
+            }))
+          }
+        >
+          <option value="logit">{t('form.logit')}</option>
+          <option value="probit">{t('form.probit')}</option>
+        </select>
+      </Field>
       <VariableSelect
         label={t('form.outcomeBinary')}
         value={outcome}

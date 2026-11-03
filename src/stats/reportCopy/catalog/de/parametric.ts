@@ -1,15 +1,10 @@
 /** de: report and table prose (normalised). */
 export const parametricCopy: Record<string, string> = {
   '{s1} · CI {s2}%': '{s1} · CI {s2} %',
-  '{s1} AFT su {s2} osservazioni e {s3} eventi.':
-    '{s1} AFT mit {s2} Beobachtungen und {s3} Ereignissen.',
   AIC: 'AIC',
   BIC: 'BIC',
   Coefficienti: 'Koeffizienten',
-  'Con la distribuzione esponenziale la scala è fissata a 1.':
-    'Bei der Exponentialverteilung ist die Skala auf 1 festgelegt.',
   Eventi: 'Ereignisse',
-  'Exponenziale AFT': 'Exponentiell AFT',
   'Il livello di confidenza è {s1}%; con pochi eventi le stime sono instabili.':
     'Das Konfidenzniveau beträgt {s1} %; bei wenigen Ereignissen sind die Schätzungen instabil.',
   'Il modello AFT stima l’effetto dei predittori sul log del tempo di sopravvivenza: un time ratio maggiore di 1 indica tempi più lunghi.':
@@ -17,12 +12,8 @@ export const parametricCopy: Record<string, string> = {
   'Intercetta (μ)': 'Achsenabschnitt (μ)',
   'La censura è assunta non informativa.':
     'Die Zensierung wird als nicht informativ angenommen.',
-  'La forma della distribuzione (Weibull o esponenziale) è un’assunzione: va confrontata con KM e con l’AIC rispetto ad altre famiglie.':
-    'Die Form der Verteilung (Weibull oder Exponential) ist eine Annahme: Sie ist mit Kaplan–Meier und über das AIC gegenüber anderen Familien zu prüfen.',
   'Log-verosimiglianza': 'Log-Likelihood',
   Metrica: 'Metrik',
-  'Modello AFT: log(T) = μ + Xβ + σ·W, con W extreme-value.':
-    'AFT-Modell: log(T) = μ + Xβ + σ·W, mit W extremwertverteilt.',
   'Modello stimato': 'Modell geschätzt',
   N: 'N',
   'Non sono inclusi effetti casuali, fragilità o rischi competitivi.':

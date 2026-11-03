@@ -249,7 +249,7 @@ cartella della procedura madre; il form aggiunge un selettore di modalità.
 | ID | Quando | Contenuto | Giorni | Serve a |
 |---|---|---|---:|---|
 | F4 | Prima di W5 | EM/latent helpers, inizializzazioni, BIC/entropia | 8 | M-05, M-06, N-01 |
-| F5 | Prima di W6 | verosimiglianze di sopravvivenza, censoring, frailty | 8 | S-02, S-03, S-04, S-07 |
+| F5 | Prima di W6 | verosimiglianze di sopravvivenza, censoring, frailty — **fatto** | 8 | S-02, S-03, S-04, S-07 |
 | F6 | Prima di W7 | Kalman, smoothing, filtri | 8 | T-03, T-06, T-07 |
 | F8 | Prima di W9 | MCMC, ensemble, survey variance | 20 | N-02, L-01, A-01, A-03 |
 
@@ -378,9 +378,9 @@ Obiettivo: passare da OLS/logistica/count a una cassetta di modelli completa.
 | R-10 | GAM/MARS | new `mars` | `kernels/mars.ts` | `mars/Form.tsx` | `earth` | `mtcars` | 9 | W0-03 |
 | R-11 | IV/2SLS | new `iv` | `kernels/iv.ts` | `iv/Form.tsx` | `AER::ivreg` | `iv_demo*` | 9 | W0-03 |
 | R-12 | Panel FE/RE | new `panel` | `kernels/panel.ts` | `panel/Form.tsx` | `plm` | `panel_demo*` | 9 | R-11 |
-| R-13 | Tobit/selection | new `selection` | `kernels/selection.ts` | `selection/Form.tsx` | `sampleSelection` | `selection_demo*` | 9 | W0-01 |
-| R-14 | Mediazione | new `mediation` | `kernels/mediation.ts` | `mediation/Form.tsx` | `mediation` | `mtcars` | 4 | — |
-| R-15 | Propensity score | new `propensity` | `kernels/propensity.ts` | `propensity/Form.tsx` | `MatchIt` | `treatment_demo*` | 4 | R-05 |
+| R-13 | Tobit/selection | new `selection` | `kernels/tobit.ts` | `selection/Form.tsx` | `AER::tobit` + base R two-step | `selection_demo*` | 9 | W0-01 |
+| R-14 | Mediazione | new `mediation` | `kernels/mediation.ts` | `mediation/Form.tsx` | `lavaan` + bootstrap per proprietà | `mtcars` | 4 | — |
+| R-15 | Propensity score | new `propensity` | `kernels/propensity.ts` | `propensity/Form.tsx` | `MatchIt` + base R IPW | `treatment_demo*` | 4 | R-05 |
 
 **Note**
 
@@ -392,6 +392,21 @@ Obiettivo: passare da OLS/logistica/count a una cassetta di modelli completa.
 
 **Rischi**: panel e selection richiedono bilanciamento/struttura dati; prevedere
 adattatori e messaggi espliciti.
+
+**Deviazioni decise in W3** (dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5d):
+
+- R-13 usa `kernels/tobit.ts` perché `kernels/selection.ts` è già la selezione
+  stepwise di R-01. La voce resta `selection`.
+- `sampleSelection` e `mediation` non sono installati: il riferimento di
+  Heckman è base R two-step, quello della mediazione è `lavaan` per le stime
+  puntuali e il bootstrap è validato per proprietà.
+- L'ML di Heckman resta fuori da W3 ed è dichiarato come limite.
+
+**Stato W3 (2026-11-03)**: R-09…R-15 chiusi, gate G3 verde. Kernel, reference
+R, voci/UI, help e `reportCopy` in 6 lingue completati; `npm run check`
+1161/1161, `test:samples` 7/7, locale check 6/6. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5e e registro §6.
 
 ---
 
@@ -417,6 +432,14 @@ adattatori e messaggi espliciti.
 
 **Rischi**: SEM e IRT hanno molti parametri di output; definire prima i TableSpec
 minimi per non esplodere.
+
+**Stato W5 (2026-11-03)**: M-01…M-08 chiusi, gate G5 verde. Cluster esteso a
+k-means/k-medians; nuove voci `canonical`, `mds`, `correspondence`, `sem`,
+`latentclass`, `irt`, `conjoint`; F4 in `kernels/latent.ts` (entropia, BIC,
+quadratura, gradiente numerico). Reference R: `kmeans`, `cancor`, `cmdscale`/
+`isoMDS`, `ca`, `lavaan`, `poLCA`, `mirt`, `conjoint`/`lm`. `npm run check`
+1206/1206, `test:samples` 7/7, locale check 6/6. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5g e registro §6.
 
 ---
 
@@ -455,6 +478,9 @@ minimi per non esplodere.
 - S-01/S-05/S-06 sono estensioni a basso rischio.
 - S-02/S-03/S-04 richiedono F5.
 - S-07/S-08 sono P1/P2, più industriali.
+- **Stato**: W6 chiusa il 2026-11-03; gate G6 verde (1227/1227 test,
+  `test:samples` 7/7, locale check 6/6). F5 realizzata nei kernel di
+  sopravvivenza (`survival`, `cox`, `parametric`).
 
 ---
 
@@ -475,6 +501,10 @@ minimi per non esplodere.
 - T-01/T-02/T-04/T-05 condividono il motore ARIMA esistente.
 - T-05 è propedeutico a T-03.
 - T-06/T-07 richiedono F6.
+- **Stato**: W7 chiusa il 2026-11-03; gate G7 verde (1241/1241 test,
+  `test:samples` 7/7, locale check 6/6). F6 realizzata nei kernel
+  `statespace` (Kalman/RTS) e `garch` (filtro di volatilità), con
+  ottimizzatore condiviso in `minimize.ts`.
 
 ---
 
@@ -492,6 +522,13 @@ minimi per non esplodere.
 - P-01/P-02 sono quasi gratuiti.
 - Q-05 è un builder di matrici fattoriali, distinto dall’analisi RSM.
 
+**Stato W8 (2026-11-03)**: Q-01 (Gage R&R), Q-02 (acceptance/OC), Q-03
+(T² di Hotelling), P-03 (potenza regressione/logistica) e Q-05 (generatore
+DOE) chiusi; gate G8 verde. Reference: ANOVA base R, `pbinom`/`phyper`,
+covarianza pooled + `qf`, `pwr::pwr.f2.test` + formula Hsieh, `expand.grid`.
+Sample: `msa_demo`, `acceptance_demo`, `doe_demo`. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5j.
+
 ---
 
 ### 7.9 Missing data (2 metodi, 1 nuova voce)
@@ -504,7 +541,21 @@ minimi per non esplodere.
 **Note**
 
 - N-01 parte in W4 con l’imputazione categorica; il FIML si chiude dopo M-05.
-- N-02 è trasversale e richiede F8.
+- N-02 è trasversale e richiede F8 (assorbita nel kernel `survey.ts`).
+
+**Stato W4 (2026-11-03)**: K-01…K-04 e N-01 chiusi, gate G4 verde. Kernel,
+reference R (`mantelhaen.test`, `prop.trend.test`, enumerazione esatta,
+`glm` Poisson, `mice`), voci/UI, help `w4-*.ts` e `reportCopy` in 6 lingue
+completati; `npm run check` 1196/1196, `test:samples` 7/7, locale check 6/6.
+K-03 è una voce autonoma: il modello saturo risolve direttamente
+`Xβ = log(y)` perché `glmFit` richiede p < n. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5f e registro §6.
+
+**Stato W9 (2026-11-03)**: N-02 chiuso come voce `survey`, con medie, totali,
+proporzioni e regressione ponderata; varianza di linearizzazione con PSU
+aggregate negli strati. Reference `survey::svydesign`/`svymean`/`svytotal`/
+`svyglm`. Sample `survey_demo`. Dettaglio in `2026-11-02-gap-procedure-stato.md`
+§5k.
 
 ---
 
@@ -512,15 +563,21 @@ minimi per non esplodere.
 
 | ID | Metodo | Tipo | Kernel / moduli | Form / params | Test reference | Sample | gg | Dip. |
 |---|---|---|---|---|---:|---|---:|---|
-| L-01 | RF/boosting/reti neurali | new `ml` | `kernels/ml.ts` | `ml/Form.tsx` | `randomForest`, `xgboost`, `nnet` | `iris`, `birthwt` | 17 | F8 |
-| L-02 | Text mining | new `text` | `kernels/text.ts` | `text/Form.tsx` | `quanteda`, `topicmodels` | `text_demo*` | 17 | — |
-| L-03 | Choice/MaxDiff | new `choice` | `kernels/choice.ts` | `choice/Form.tsx` | `mlogit`, `ChoiceModelR` | `choice_demo*` | 17 | R-04 |
+| L-01 | RF/boosting/reti neurali | new `ml` | `kernels/ml.ts` | `ml/Form.tsx` | `randomForest`, `gbm`, `nnet` | `ml_demo*` | 17 | F8 |
+| L-02 | Text mining | new `text` | `kernels/text.ts` | `text/Form.tsx` | base R + `NMF` | `text_demo*` | 17 | — |
+| L-03 | Choice/MaxDiff | new `choice` | `kernels/choice.ts` | `choice/Form.tsx` | `optim` + conteggi esatti | `choice_demo*`, `maxdiff_demo*` | 17 | R-04 |
 
 **Note**
 
-- L-01 parte da random forest e gradient boosting; reti neurali in seconda fase.
-- L-02 richiede pipeline testuale e formato dedicato.
+- L-01 copre random forest, gradient boosting e rete a uno strato nascosto per
+  regressione e classificazione one-vs-rest.
+- L-02 usa LDA con Gibbs collapsing; il reference è `scikit-learn` LDA.
 - L-03 condivide il logit condizionale con R-04.
+
+**Stato W9 (2026-11-03)**: L-01…L-03 chiusi; reference `randomForest` + `gbm`
++ `nnet`, base R + `NMF`, `optim`. Sample `ml_demo`, `text_demo`,
+`choice_demo`, `maxdiff_demo`. Dettaglio in `2026-11-02-gap-procedure-stato.md`
+§5k.
 
 ---
 
@@ -528,9 +585,16 @@ minimi per non esplodere.
 
 | ID | Metodo | Tipo | Kernel / moduli | Form / params | Test reference | Sample | gg | Dip. |
 |---|---|---|---|---|---:|---|---:|---|
-| A-01 | Analisi bayesiana | new `bayes` | `kernels/bayes.ts` | `bayes/Form.tsx` | `rstan`, `brms` | `mtcars` | 17 | F8 |
-| A-02 | Meta-analisi | new `meta` | `kernels/meta.ts` | `meta/Form.tsx` | `metafor` | `meta_demo*` | 9 | — |
+| A-01 | Analisi bayesiana | new `bayes` | `kernels/bayes.ts` | `bayes/Form.tsx` | posteriori coniugate, `lm` | `bayes_demo*` | 17 | F8 |
+| A-02 | Meta-analisi | new `meta` | `kernels/meta.ts` | `meta/Form.tsx` | `metafor`, `lm` pesata | `meta_demo*` | 9 | — |
 | A-03 | Statistica spaziale | new `spatial` | `kernels/spatial.ts` | `spatial/Form.tsx` | `spdep`, `spatialreg` | `spatial_demo*` | 17 | F8, W0-03 |
+
+**Stato W9 (2026-11-03)**: A-01…A-03 chiusi; F8 assorbita in `mcmc.ts`,
+`ensemble.ts` e `survey.ts`. Reference: posteriori coniugate + `lm` + `lme4`
+per il modello gerarchico,
+`metafor::rma` + `lm` pesata, `spdep` + `spatialreg::lagsarlm`. Sample
+`bayes_demo`, `meta_demo`, `spatial_demo`. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5k.
 
 ---
 
@@ -709,12 +773,12 @@ numerica, salvo il Wizard che non è una procedura statistica.
 | Release | Contenuto | Criterio di uscita |
 |---|---|---|
 | v0.13 | W0 + W1 (14 metodi) | G1 verde, help 6 lingue, 2 nuove voci |
-| v0.14 | W2 (12 metodi) | GLM/GLMM reference, 5 nuove voci |
-| v0.15 | W3 (7 metodi) | 7 modelli avanzati, 7 nuove voci |
+| v0.14 | W2 (12 metodi) — **chiuso 2026-11-03, G2 verde** | GLM/GLMM reference, 5 nuove voci |
+| v0.15 | W3 (7 metodi) — **chiuso 2026-11-03, G3 verde** | 7 modelli avanzati, 7 nuove voci |
 | v0.16 | W4 + W5 (13 metodi) | Categorical, MI, SEM/IRT/latent |
 | v0.17 | W6 + W7 (15 metodi) | Survival e time series |
-| v0.18 | W8 (5 metodi) | Quality/DOE/power |
-| v0.19 | W9 (7 metodi) | Survey/ML/Advanced, copertura 73/73 |
+| v0.18 | W8 (5 metodi) — **chiuso 2026-11-03, G8 verde** | Quality/DOE/power |
+| v0.19 | W9 (7 metodi) — **chiuso 2026-11-03, G9 verde** | Survey/ML/Advanced, copertura 73/73 |
 
 Ogni release:
 
@@ -764,7 +828,7 @@ moduli condivisi.
 | 6-7 | W4+W5 chiusi, v0.16 |
 | 8 | W6+W7 chiusi, v0.17 |
 | 9 | W8 chiuso, v0.18 |
-| 10 | W9 chiuso, v0.19, copertura 73/73 |
+| 10 | W9 chiuso, v0.19, copertura 73/73 — **completato 2026-11-03, G9 verde** |
 
 ---
 
@@ -1131,3 +1195,72 @@ Totale: **14 checkpoint obbligatori** + checkpoint liberi ogni 2-3 item.
 - Non aggiornare i conteggi globali prima del gate di ondata.
 - Non usare il documento di stato per duplicare il piano: deve rimandare alle
   sezioni del piano, non ricopiarle.
+
+---
+
+## 17. Uso dei subagenti (regole vincolanti)
+
+Obiettivo: **un solo scrittore** e subagenti solo in lettura, quando costano
+meno della lettura diretta. Le regole di economia del contesto sono in
+`AGENTS.md` e prevalgono in caso di conflitto.
+
+### 17.1 Regola del proprietario unico
+
+Ogni file ha **un solo scrittore per sessione**: l'agente principale. I file
+condivisi sono di competenza esclusiva dell'agente principale:
+
+- `src/analyses/registry.ts`;
+- `src/io/project/{types,parse}.ts`;
+- `src/analyses/{params,roles,runners,paramsSnapshot}.ts`;
+- `src/ui/analysis/AnalysisForm.tsx`;
+- cataloghi `src/i18n/catalog/*` e `src/stats/reportCopy/catalog/*`;
+- help book (`src/help/content/*`, `order.ts`);
+- `package.json`, `AGENTS.md`, documenti di piano.
+
+I subagenti **non scrivono** kernel, tabelle, report, form, test, traduzioni,
+help o integrazione. Se un compito tocca più file, si serializza nel main.
+
+### 17.2 Schema per ondata
+
+1. Agente principale: ricognizione diretta con `grep -n`, `wc -l` e `sed -n`.
+   Un solo `explore` in lettura è ammesso se evita molte letture manuali.
+2. Agente principale, un item alla volta: kernel + test mirato → tabelle/report
+   → form/run → integrazione nei file condivisi → test mirato.
+3. `council-luna` / `council-glm` in sola lettura: solo alla revisione del
+   gate, non durante l'implementazione.
+4. Agente principale: gate completo (`npm run check`, `test:samples`, locale
+   check), aggiornamento dello stato, commit e push.
+
+### 17.3 Contratto per un subagente in lettura
+
+Se viene usato, l'incarico dichiara:
+
+- perimetro esatto dei file o della domanda;
+- cosa cercare e perché la lettura diretta costerebbe di più;
+- criterio di stop;
+- risposta breve: file/righe rilevanti, rischi, nessuna proposta di modifica.
+
+L'agente principale verifica sempre con test mirati e resta l'unico a
+modificare i file.
+
+### 17.4 Cosa non delegare
+
+- Scrittura di codice, test, traduzioni, help o documenti.
+- Decisioni di prodotto o architettura.
+- Modifiche distruttive o irreversibili.
+- Bump di versione e release.
+- Aggiornamento del documento di stato e del registro checkpoint.
+- Merge di worktree sovrapposti.
+
+### 17.5 Worktree
+
+Worktree separati solo per rami davvero indipendenti. Per le ondate normali si
+usa lo stesso albero con un solo scrittore: meno merge, meno conflitti, meno
+token sprecati.
+
+### 17.6 Economia del contesto
+
+Test mirati durante gli step e gate completo solo a fine ondata; lettura
+selettiva e output filtrati; niente rigenerazioni massive dei sample; script
+una tantum per il lavoro ripetitivo; checkpoint e risposte finali brevi.
+Dettaglio vincolante in `AGENTS.md`, sezione “Economia del contesto”.

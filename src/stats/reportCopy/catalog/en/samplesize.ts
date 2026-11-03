@@ -98,4 +98,20 @@ export const samplesizeCopy: Record<string, string> = {
     'Power',
   'La curva si appiattisce: oltre il punto calcolato ogni osservazione in più compra sempre meno potenza.':
     'The curve flattens out: beyond the computed point every extra observation buys less and less power.',
+  'Proporzione alternativa':
+    'Alternative proportion',
+  'Proporzione nulla':
+    'Null proportion',
+  'Rapporto tra varianze':
+    'Variance ratio',
+  'Tasso alternativo':
+    'Alternative rate',
+  'Tasso nullo':
+    'Null rate',
+  'Un tasso di Poisson':
+    'One Poisson rate',
+  'Una proporzione':
+    'One proportion',
+  'Una varianza':
+    'One variance',
 };

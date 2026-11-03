@@ -1,0 +1,3602 @@
+[
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.528555,
+    "Experience": 6.456874,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.592775,
+    "Wage_obs": 0.592775,
+    "Selected": 1,
+    "Education": 10.797257,
+    "Experience": 10.113255,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.594281,
+    "Wage_obs": 2.594281,
+    "Selected": 1,
+    "Education": 12.827465,
+    "Experience": 14.046351,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.2648,
+    "Wage_obs": 2.2648,
+    "Selected": 1,
+    "Education": 10.223194,
+    "Experience": 7.844648,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.670707,
+    "Experience": 5.79603,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.522746,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.113408,
+    "Experience": 14.559233,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.800017,
+    "Wage_obs": 0.800017,
+    "Selected": 1,
+    "Education": 9.249096,
+    "Experience": 13.293746,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.776933,
+    "Experience": 3.048283,
+    "Kids": 0
+  },
+  {
+    "Wage": 3.701567,
+    "Wage_obs": 3.701567,
+    "Selected": 1,
+    "Education": 12.572402,
+    "Experience": 14.610226,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.827998,
+    "Wage_obs": 0.827998,
+    "Selected": 1,
+    "Education": 13.106494,
+    "Experience": 11.627406,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.237881,
+    "Experience": 9.285623,
+    "Kids": 4
+  },
+  {
+    "Wage": 2.332586,
+    "Wage_obs": 2.332586,
+    "Selected": 1,
+    "Education": 14.40041,
+    "Experience": 4.791214,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.042322,
+    "Experience": 6.42275,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.097274,
+    "Experience": 6.574893,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 12.662714,
+    "Experience": 9.599672,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.097847,
+    "Wage_obs": 0.097847,
+    "Selected": 1,
+    "Education": 9.247438,
+    "Experience": 13.137549,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.479086,
+    "Wage_obs": 0.479086,
+    "Selected": 1,
+    "Education": 13.590259,
+    "Experience": 9.603145,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.940636,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.197199,
+    "Experience": 11.614836,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.097923,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.931959,
+    "Experience": 15.417787,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.458092,
+    "Experience": 14.778869,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.075131,
+    "Wage_obs": 3.075131,
+    "Selected": 1,
+    "Education": 14.012832,
+    "Experience": 17.384997,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.974967,
+    "Wage_obs": 3.974967,
+    "Selected": 1,
+    "Education": 13.305233,
+    "Experience": 14.285014,
+    "Kids": 1
+  },
+  {
+    "Wage": 6.32783,
+    "Wage_obs": 6.32783,
+    "Selected": 1,
+    "Education": 12.888623,
+    "Experience": 2.711154,
+    "Kids": 1
+  },
+  {
+    "Wage": 5.266834,
+    "Wage_obs": 5.266834,
+    "Selected": 1,
+    "Education": 13.035605,
+    "Experience": 5.867896,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.357098,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.591558,
+    "Experience": 6.89029,
+    "Kids": 4
+  },
+  {
+    "Wage": 2.563681,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.95519,
+    "Experience": 10.781831,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.343592,
+    "Experience": 6.836849,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.94284,
+    "Wage_obs": 0.94284,
+    "Selected": 1,
+    "Education": 9.117834,
+    "Experience": 12.530078,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.702061,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.230531,
+    "Experience": 4.791857,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.504144,
+    "Experience": 10.596999,
+    "Kids": 0
+  },
+  {
+    "Wage": 3.679536,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.695405,
+    "Experience": 5.05045,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.682448,
+    "Wage_obs": 0.682448,
+    "Selected": 1,
+    "Education": 10.175654,
+    "Experience": 20.25665,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.585547,
+    "Wage_obs": 1.585547,
+    "Selected": 1,
+    "Education": 11.274197,
+    "Experience": 15.789408,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.696499,
+    "Wage_obs": 0.696499,
+    "Selected": 1,
+    "Education": 9.843459,
+    "Experience": 14.68425,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.748527,
+    "Wage_obs": 0.748527,
+    "Selected": 1,
+    "Education": 13.608636,
+    "Experience": 16.062832,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.672853,
+    "Wage_obs": 1.672853,
+    "Selected": 1,
+    "Education": 13.86984,
+    "Experience": 12.32562,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.34744,
+    "Experience": 15.885583,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.289205,
+    "Experience": 12.373737,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.3495,
+    "Experience": 20.31373,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.435435,
+    "Experience": 8.314247,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.297499,
+    "Wage_obs": 2.297499,
+    "Selected": 1,
+    "Education": 18.651503,
+    "Experience": 6.712305,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.466254,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.88193,
+    "Experience": 12.462295,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 12.393111,
+    "Experience": 1.048327,
+    "Kids": 0
+  },
+  {
+    "Wage": 4.628446,
+    "Wage_obs": 4.628446,
+    "Selected": 1,
+    "Education": 16.694018,
+    "Experience": 10.145983,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.31729,
+    "Wage_obs": 1.31729,
+    "Selected": 1,
+    "Education": 9.595107,
+    "Experience": 8.550598,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.494247,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.984245,
+    "Experience": 11.061178,
+    "Kids": 3
+  },
+  {
+    "Wage": 4.440739,
+    "Wage_obs": 4.440739,
+    "Selected": 1,
+    "Education": 7.735087,
+    "Experience": 7.965895,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.611199,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.197679,
+    "Experience": 11.938181,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.162178,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.96133,
+    "Experience": 13.640036,
+    "Kids": 4
+  },
+  {
+    "Wage": 3.577627,
+    "Wage_obs": 3.577627,
+    "Selected": 1,
+    "Education": 12.316584,
+    "Experience": 12.205912,
+    "Kids": 1
+  },
+  {
+    "Wage": 6.09876,
+    "Wage_obs": 6.09876,
+    "Selected": 1,
+    "Education": 17.651366,
+    "Experience": 11.194984,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.797205,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.980552,
+    "Experience": 4.180299,
+    "Kids": 4
+  },
+  {
+    "Wage": 1.387894,
+    "Wage_obs": 1.387894,
+    "Selected": 1,
+    "Education": 12.600068,
+    "Experience": 19.469549,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.565307,
+    "Wage_obs": 0.565307,
+    "Selected": 1,
+    "Education": 15.365456,
+    "Experience": 6.202695,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.305818,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.172794,
+    "Experience": 5.541438,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.004162,
+    "Wage_obs": 2.004162,
+    "Selected": 1,
+    "Education": 12.464365,
+    "Experience": 15.120423,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.334986,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.877419,
+    "Experience": 9.22045,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.627928,
+    "Wage_obs": 2.627928,
+    "Selected": 1,
+    "Education": 11.898562,
+    "Experience": 14.897903,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.364023,
+    "Wage_obs": 1.364023,
+    "Selected": 1,
+    "Education": 11.673787,
+    "Experience": -0.807061,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.008104,
+    "Wage_obs": 0.008104,
+    "Selected": 1,
+    "Education": 10.373814,
+    "Experience": 9.407827,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.131099,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.896668,
+    "Experience": 10.173658,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.408907,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.801625,
+    "Experience": 8.814255,
+    "Kids": 4
+  },
+  {
+    "Wage": 1.170586,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.795495,
+    "Experience": 4.871283,
+    "Kids": 1
+  },
+  {
+    "Wage": 5.366584,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 16.485206,
+    "Experience": 7.200981,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.864919,
+    "Experience": 7.390008,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.474665,
+    "Experience": 9.143827,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.257403,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.17964,
+    "Experience": 19.768924,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.213421,
+    "Wage_obs": 2.213421,
+    "Selected": 1,
+    "Education": 12.456283,
+    "Experience": 13.441052,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.522729,
+    "Experience": 7.014929,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.41206,
+    "Wage_obs": 2.41206,
+    "Selected": 1,
+    "Education": 12.852275,
+    "Experience": 15.125563,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.870791,
+    "Wage_obs": 1.870791,
+    "Selected": 1,
+    "Education": 14.037476,
+    "Experience": 9.838211,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.44281,
+    "Wage_obs": 2.44281,
+    "Selected": 1,
+    "Education": 11.282325,
+    "Experience": 10.893637,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.715598,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.843353,
+    "Experience": 9.966889,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 7.26532,
+    "Experience": 6.269138,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.528228,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.546821,
+    "Experience": 13.849138,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.265429,
+    "Experience": 9.989461,
+    "Kids": 5
+  },
+  {
+    "Wage": 0.734169,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.303229,
+    "Experience": 12.955429,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.360982,
+    "Wage_obs": 2.360982,
+    "Selected": 1,
+    "Education": 11.836789,
+    "Experience": 10.139981,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.210026,
+    "Experience": 9.205903,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.747881,
+    "Wage_obs": 0.747881,
+    "Selected": 1,
+    "Education": 10.581964,
+    "Experience": 10.523734,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.651451,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.367992,
+    "Experience": 7.953032,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.086874,
+    "Experience": 8.227334,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.220072,
+    "Wage_obs": 1.220072,
+    "Selected": 1,
+    "Education": 10.832272,
+    "Experience": 4.393907,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.933748,
+    "Wage_obs": 0.933748,
+    "Selected": 1,
+    "Education": 10.958792,
+    "Experience": 10.609,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.344716,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.292559,
+    "Experience": 20.113427,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.986259,
+    "Wage_obs": 1.986259,
+    "Selected": 1,
+    "Education": 16.397998,
+    "Experience": 4.143319,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.240487,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.463555,
+    "Experience": 8.916005,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.524441,
+    "Experience": 11.399322,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.550997,
+    "Wage_obs": 0.550997,
+    "Selected": 1,
+    "Education": 13.943805,
+    "Experience": 6.936129,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 7.473776,
+    "Experience": 11.081222,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.508162,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.814715,
+    "Experience": 8.561336,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.232423,
+    "Wage_obs": 0.232423,
+    "Selected": 1,
+    "Education": 9.349483,
+    "Experience": 17.234303,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.117698,
+    "Wage_obs": 2.117698,
+    "Selected": 1,
+    "Education": 16.441664,
+    "Experience": 7.012605,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.234507,
+    "Wage_obs": 2.234507,
+    "Selected": 1,
+    "Education": 13.167397,
+    "Experience": 9.22195,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.95895,
+    "Wage_obs": 1.95895,
+    "Selected": 1,
+    "Education": 14.548395,
+    "Experience": 17.941855,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.781867,
+    "Wage_obs": 1.781867,
+    "Selected": 1,
+    "Education": 8.803916,
+    "Experience": 9.930082,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.019278,
+    "Wage_obs": 0.019278,
+    "Selected": 1,
+    "Education": 11.937002,
+    "Experience": -1.475206,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 6.52403,
+    "Experience": 1.76754,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.871719,
+    "Wage_obs": 1.871719,
+    "Selected": 1,
+    "Education": 10.135254,
+    "Experience": 13.597527,
+    "Kids": 1
+  },
+  {
+    "Wage": 4.333885,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 7.409976,
+    "Experience": 16.777155,
+    "Kids": 5
+  },
+  {
+    "Wage": 0.085987,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.56661,
+    "Experience": 11.560598,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.278861,
+    "Wage_obs": 1.278861,
+    "Selected": 1,
+    "Education": 11.640742,
+    "Experience": 9.303482,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.281542,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.748094,
+    "Experience": 11.461184,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.705624,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.818005,
+    "Experience": 10.710003,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.726643,
+    "Experience": 4.375554,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.650963,
+    "Wage_obs": 2.650963,
+    "Selected": 1,
+    "Education": 9.018836,
+    "Experience": 9.715033,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.202261,
+    "Wage_obs": 2.202261,
+    "Selected": 1,
+    "Education": 14.659866,
+    "Experience": 13.257829,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 12.67509,
+    "Experience": 7.387337,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.930661,
+    "Wage_obs": 1.930661,
+    "Selected": 1,
+    "Education": 15.404665,
+    "Experience": 12.24191,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.879556,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.124716,
+    "Experience": 8.827689,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 12.495111,
+    "Experience": 9.705437,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.365663,
+    "Wage_obs": 2.365663,
+    "Selected": 1,
+    "Education": 12.624723,
+    "Experience": 2.103427,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.568975,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.663131,
+    "Experience": 11.45003,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.689817,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.12887,
+    "Experience": 8.393267,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 13.164823,
+    "Experience": 11.257636,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.556296,
+    "Experience": 15.672999,
+    "Kids": 1
+  },
+  {
+    "Wage": 4.087542,
+    "Wage_obs": 4.087542,
+    "Selected": 1,
+    "Education": 10.454987,
+    "Experience": 8.407529,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.241747,
+    "Experience": 7.411757,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.175342,
+    "Wage_obs": 1.175342,
+    "Selected": 1,
+    "Education": 9.711599,
+    "Experience": 11.640689,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.352887,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.222025,
+    "Experience": 2.558064,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.206835,
+    "Wage_obs": 2.206835,
+    "Selected": 1,
+    "Education": 12.342258,
+    "Experience": 14.740094,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.012479,
+    "Wage_obs": 1.012479,
+    "Selected": 1,
+    "Education": 10.659332,
+    "Experience": 6.706606,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 7.589076,
+    "Experience": 9.507546,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.134177,
+    "Wage_obs": 3.134177,
+    "Selected": 1,
+    "Education": 11.190247,
+    "Experience": 12.719623,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.242177,
+    "Wage_obs": 0.242177,
+    "Selected": 1,
+    "Education": 10.306943,
+    "Experience": 12.350137,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 14.240388,
+    "Experience": 15.487517,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.028266,
+    "Experience": 12.198314,
+    "Kids": 6
+  },
+  {
+    "Wage": 0.655115,
+    "Wage_obs": 0.655115,
+    "Selected": 1,
+    "Education": 11.014431,
+    "Experience": 4.369221,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.913874,
+    "Wage_obs": 1.913874,
+    "Selected": 1,
+    "Education": 16.208947,
+    "Experience": 6.85749,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.152916,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.433787,
+    "Experience": 9.490552,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.973312,
+    "Wage_obs": 1.973312,
+    "Selected": 1,
+    "Education": 12.54295,
+    "Experience": 9.481283,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.262058,
+    "Wage_obs": 1.262058,
+    "Selected": 1,
+    "Education": 12.333884,
+    "Experience": 10.671178,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.56954,
+    "Experience": 1.39854,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.470666,
+    "Wage_obs": 3.470666,
+    "Selected": 1,
+    "Education": 9.083107,
+    "Experience": 5.31789,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.914402,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.438598,
+    "Experience": 15.437607,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.93323,
+    "Experience": 5.018386,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.26324,
+    "Wage_obs": 2.26324,
+    "Selected": 1,
+    "Education": 10.976761,
+    "Experience": 4.423111,
+    "Kids": 1
+  },
+  {
+    "Wage": 5.278973,
+    "Wage_obs": 5.278973,
+    "Selected": 1,
+    "Education": 13.782932,
+    "Experience": 7.338817,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.15772,
+    "Experience": 7.463245,
+    "Kids": 4
+  },
+  {
+    "Wage": 1.799099,
+    "Wage_obs": 1.799099,
+    "Selected": 1,
+    "Education": 13.20074,
+    "Experience": 8.960185,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.603824,
+    "Experience": 12.34537,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.859339,
+    "Experience": 9.925796,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.979249,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.405197,
+    "Experience": 12.412622,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.828867,
+    "Wage_obs": 0.828867,
+    "Selected": 1,
+    "Education": 8.818276,
+    "Experience": 7.953165,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.764321,
+    "Wage_obs": 4.764321,
+    "Selected": 1,
+    "Education": 13.181636,
+    "Experience": 17.215937,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.456618,
+    "Wage_obs": 2.456618,
+    "Selected": 1,
+    "Education": 14.250802,
+    "Experience": 10.598392,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.95337,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.05385,
+    "Experience": 12.90299,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 13.037124,
+    "Experience": 7.294407,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.231871,
+    "Wage_obs": 1.231871,
+    "Selected": 1,
+    "Education": 13.701547,
+    "Experience": 15.241317,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.278517,
+    "Wage_obs": 3.278517,
+    "Selected": 1,
+    "Education": 13.252296,
+    "Experience": 6.988748,
+    "Kids": 1
+  },
+  {
+    "Wage": 4.260341,
+    "Wage_obs": 4.260341,
+    "Selected": 1,
+    "Education": 15.329228,
+    "Experience": 6.291824,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.76558,
+    "Wage_obs": 2.76558,
+    "Selected": 1,
+    "Education": 14.998917,
+    "Experience": 9.316012,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.095481,
+    "Wage_obs": 0.095481,
+    "Selected": 1,
+    "Education": 16.183808,
+    "Experience": 12.555087,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.030514,
+    "Wage_obs": 2.030514,
+    "Selected": 1,
+    "Education": 12.688177,
+    "Experience": 9.761544,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 16.873452,
+    "Experience": 9.990791,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.523743,
+    "Wage_obs": 1.523743,
+    "Selected": 1,
+    "Education": 13.704545,
+    "Experience": 16.764827,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.668916,
+    "Experience": 10.898199,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.131145,
+    "Experience": 11.294637,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.931502,
+    "Experience": 5.603096,
+    "Kids": 0
+  },
+  {
+    "Wage": 3.375282,
+    "Wage_obs": 3.375282,
+    "Selected": 1,
+    "Education": 14.524731,
+    "Experience": 10.953137,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 9.799546,
+    "Experience": 5.078236,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.198544,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.403556,
+    "Experience": 8.911252,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.547379,
+    "Experience": 3.226278,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.126577,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.722142,
+    "Experience": 4.891933,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.566199,
+    "Wage_obs": 3.566199,
+    "Selected": 1,
+    "Education": 16.364505,
+    "Experience": 9.040994,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.718773,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.083549,
+    "Experience": 14.266823,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.17424,
+    "Experience": 4.462294,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.435626,
+    "Experience": 13.834522,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.738747,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.660196,
+    "Experience": 15.037795,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.728615,
+    "Experience": 4.730378,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.128862,
+    "Wage_obs": 3.128862,
+    "Selected": 1,
+    "Education": 15.256655,
+    "Experience": 7.202178,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.39214,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.006663,
+    "Experience": 8.342083,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.659638,
+    "Experience": 6.245052,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.416272,
+    "Experience": 8.29777,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.107548,
+    "Wage_obs": 1.107548,
+    "Selected": 1,
+    "Education": 10.328194,
+    "Experience": 11.085456,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.383833,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.135315,
+    "Experience": 10.8024,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.900182,
+    "Experience": 5.47328,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.481452,
+    "Experience": 2.474506,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.556583,
+    "Wage_obs": 2.556583,
+    "Selected": 1,
+    "Education": 14.694087,
+    "Experience": 7.980453,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.539701,
+    "Wage_obs": 2.539701,
+    "Selected": 1,
+    "Education": 10.831611,
+    "Experience": 14.529063,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.201306,
+    "Experience": 10.200583,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.704415,
+    "Wage_obs": 1.704415,
+    "Selected": 1,
+    "Education": 10.530444,
+    "Experience": 7.999506,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.150623,
+    "Wage_obs": 0.150623,
+    "Selected": 1,
+    "Education": 12.165004,
+    "Experience": 10.794935,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.816088,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.876306,
+    "Experience": 4.546321,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.545559,
+    "Wage_obs": 3.545559,
+    "Selected": 1,
+    "Education": 11.577687,
+    "Experience": 11.556144,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.698758,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.431634,
+    "Experience": 8.085245,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.452013,
+    "Experience": 7.871444,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.324041,
+    "Wage_obs": 4.324041,
+    "Selected": 1,
+    "Education": 14.883338,
+    "Experience": 6.521971,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.526834,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.909871,
+    "Experience": 7.542868,
+    "Kids": 5
+  },
+  {
+    "Wage": 7.575655,
+    "Wage_obs": 7.575655,
+    "Selected": 1,
+    "Education": 13.129681,
+    "Experience": 17.987856,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.615954,
+    "Wage_obs": 1.615954,
+    "Selected": 1,
+    "Education": 11.235584,
+    "Experience": 19.591758,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.119034,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.512412,
+    "Experience": 11.73576,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.275053,
+    "Experience": 11.650382,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.80963,
+    "Experience": 3.675752,
+    "Kids": 4
+  },
+  {
+    "Wage": 2.213926,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.672051,
+    "Experience": 8.709196,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.233555,
+    "Wage_obs": 3.233555,
+    "Selected": 1,
+    "Education": 12.623196,
+    "Experience": 15.46002,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.480031,
+    "Experience": 5.246913,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.20232,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.308608,
+    "Experience": 4.144834,
+    "Kids": 5
+  },
+  {
+    "Wage": 1.417689,
+    "Wage_obs": 1.417689,
+    "Selected": 1,
+    "Education": 10.201189,
+    "Experience": 2.099227,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.617642,
+    "Wage_obs": 0.617642,
+    "Selected": 1,
+    "Education": 13.81214,
+    "Experience": 9.11978,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.233227,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.059907,
+    "Experience": 8.835862,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.389904,
+    "Wage_obs": 1.389904,
+    "Selected": 1,
+    "Education": 12.898706,
+    "Experience": 5.182539,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.770138,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.251572,
+    "Experience": 17.094199,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.618777,
+    "Wage_obs": 3.618777,
+    "Selected": 1,
+    "Education": 19.598806,
+    "Experience": 9.825368,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.95359,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 15.173848,
+    "Experience": 12.307912,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.460188,
+    "Experience": 6.60736,
+    "Kids": 4
+  },
+  {
+    "Wage": 2.048505,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.990557,
+    "Experience": 8.695491,
+    "Kids": 5
+  },
+  {
+    "Wage": 1.063274,
+    "Wage_obs": 1.063274,
+    "Selected": 1,
+    "Education": 13.588845,
+    "Experience": 11.771167,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.16407,
+    "Experience": 9.236241,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.023234,
+    "Wage_obs": 1.023234,
+    "Selected": 1,
+    "Education": 13.556014,
+    "Experience": 10.017863,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.940741,
+    "Wage_obs": 1.940741,
+    "Selected": 1,
+    "Education": 12.625191,
+    "Experience": 9.956404,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.677677,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.072373,
+    "Experience": 7.544509,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.189102,
+    "Wage_obs": 2.189102,
+    "Selected": 1,
+    "Education": 9.496358,
+    "Experience": 6.736673,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.950443,
+    "Wage_obs": 2.950443,
+    "Selected": 1,
+    "Education": 11.472498,
+    "Experience": 17.160927,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.504752,
+    "Wage_obs": 0.504752,
+    "Selected": 1,
+    "Education": 13.446954,
+    "Experience": 12.965584,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.483395,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.296908,
+    "Experience": 15.569134,
+    "Kids": 5
+  },
+  {
+    "Wage": 0.802878,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.853849,
+    "Experience": 13.595018,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 14.479451,
+    "Experience": 9.751812,
+    "Kids": 3
+  },
+  {
+    "Wage": 5.380154,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.510253,
+    "Experience": 7.604923,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.00043,
+    "Experience": 4.937743,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.700527,
+    "Experience": 8.741551,
+    "Kids": 4
+  },
+  {
+    "Wage": 0.716668,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 15.598,
+    "Experience": 10.250811,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.339631,
+    "Experience": 10.179191,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.632733,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.085144,
+    "Experience": 14.224588,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.200384,
+    "Wage_obs": 3.200384,
+    "Selected": 1,
+    "Education": 14.747529,
+    "Experience": 15.033758,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.931325,
+    "Experience": 16.209703,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.493378,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.288976,
+    "Experience": 6.581102,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.789612,
+    "Wage_obs": 2.789612,
+    "Selected": 1,
+    "Education": 11.761729,
+    "Experience": 9.063877,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.20159,
+    "Experience": 8.707787,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.926775,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.823317,
+    "Experience": 6.790687,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.348065,
+    "Wage_obs": 2.348065,
+    "Selected": 1,
+    "Education": 13.028565,
+    "Experience": 15.06225,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.713898,
+    "Experience": 5.165364,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.187336,
+    "Wage_obs": 2.187336,
+    "Selected": 1,
+    "Education": 13.013968,
+    "Experience": 5.801093,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.282758,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.280296,
+    "Experience": 6.494649,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.086352,
+    "Experience": 5.972666,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.486793,
+    "Wage_obs": 1.486793,
+    "Selected": 1,
+    "Education": 15.850815,
+    "Experience": 8.592893,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.430932,
+    "Experience": 7.543823,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.918937,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.267219,
+    "Experience": 12.780108,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.349292,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.632516,
+    "Experience": 3.310569,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.983066,
+    "Experience": 11.673538,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.315739,
+    "Wage_obs": 1.315739,
+    "Selected": 1,
+    "Education": 14.244384,
+    "Experience": 8.010038,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.211115,
+    "Wage_obs": 3.211115,
+    "Selected": 1,
+    "Education": 13.751432,
+    "Experience": 12.248364,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.084399,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.838578,
+    "Experience": 4.000496,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.778101,
+    "Wage_obs": 2.778101,
+    "Selected": 1,
+    "Education": 12.512797,
+    "Experience": 6.699538,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.96536,
+    "Wage_obs": 1.96536,
+    "Selected": 1,
+    "Education": 14.837057,
+    "Experience": 9.093026,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.989466,
+    "Experience": 9.378899,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.304902,
+    "Wage_obs": 3.304902,
+    "Selected": 1,
+    "Education": 11.568336,
+    "Experience": 13.273002,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.980395,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.400305,
+    "Experience": 11.02101,
+    "Kids": 4
+  },
+  {
+    "Wage": 3.683144,
+    "Wage_obs": 3.683144,
+    "Selected": 1,
+    "Education": 13.092198,
+    "Experience": 9.897722,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.366893,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.829075,
+    "Experience": 12.33604,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.412862,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.710866,
+    "Experience": 8.640529,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.047806,
+    "Wage_obs": 0.047806,
+    "Selected": 1,
+    "Education": 9.268014,
+    "Experience": 10.929672,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 13.951041,
+    "Experience": 7.975015,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.164446,
+    "Wage_obs": 3.164446,
+    "Selected": 1,
+    "Education": 12.647504,
+    "Experience": 8.584481,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.244408,
+    "Wage_obs": 2.244408,
+    "Selected": 1,
+    "Education": 10.969291,
+    "Experience": 10.155742,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.56259,
+    "Experience": 10.754382,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.560214,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 16.083214,
+    "Experience": 12.897583,
+    "Kids": 7
+  },
+  {
+    "Wage": 2.51316,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.058014,
+    "Experience": 15.781226,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.462201,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.396012,
+    "Experience": 6.186326,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.193517,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.702066,
+    "Experience": 14.232387,
+    "Kids": 0
+  },
+  {
+    "Wage": 4.259026,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 15.066839,
+    "Experience": 13.092933,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.370212,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.329191,
+    "Experience": 14.4539,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.491731,
+    "Wage_obs": 3.491731,
+    "Selected": 1,
+    "Education": 14.238194,
+    "Experience": 9.578931,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.411361,
+    "Wage_obs": 1.411361,
+    "Selected": 1,
+    "Education": 8.979013,
+    "Experience": 7.755203,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.355536,
+    "Wage_obs": 2.355536,
+    "Selected": 1,
+    "Education": 12.880204,
+    "Experience": 7.723278,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.350649,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.71922,
+    "Experience": 5.659262,
+    "Kids": 0
+  },
+  {
+    "Wage": 3.159495,
+    "Wage_obs": 3.159495,
+    "Selected": 1,
+    "Education": 15.074601,
+    "Experience": 17.19303,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.966647,
+    "Wage_obs": 2.966647,
+    "Selected": 1,
+    "Education": 14.37091,
+    "Experience": 13.238494,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.367652,
+    "Wage_obs": 2.367652,
+    "Selected": 1,
+    "Education": 10.362532,
+    "Experience": 13.299338,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 13.556658,
+    "Experience": 5.089282,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.492187,
+    "Wage_obs": 3.492187,
+    "Selected": 1,
+    "Education": 12.258372,
+    "Experience": 10.314229,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.169335,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.146858,
+    "Experience": 9.490568,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.875154,
+    "Experience": 7.038418,
+    "Kids": 3
+  },
+  {
+    "Wage": 4.28923,
+    "Wage_obs": 4.28923,
+    "Selected": 1,
+    "Education": 15.439963,
+    "Experience": 5.496248,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.356776,
+    "Experience": 8.612979,
+    "Kids": 7
+  },
+  {
+    "Wage": 2.871917,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.023441,
+    "Experience": 12.013164,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.305285,
+    "Wage_obs": 2.305285,
+    "Selected": 1,
+    "Education": 10.311768,
+    "Experience": 15.586939,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.860998,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.099385,
+    "Experience": 12.092195,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.338526,
+    "Experience": 10.446261,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.753868,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.502979,
+    "Experience": 12.833911,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.599073,
+    "Experience": 10.626881,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.269685,
+    "Wage_obs": 3.269685,
+    "Selected": 1,
+    "Education": 15.468013,
+    "Experience": 7.040026,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 13.424112,
+    "Experience": 12.559045,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.002741,
+    "Wage_obs": 3.002741,
+    "Selected": 1,
+    "Education": 13.252122,
+    "Experience": 9.714827,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.953143,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.822298,
+    "Experience": 10.081983,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.193236,
+    "Wage_obs": 1.193236,
+    "Selected": 1,
+    "Education": 13.239621,
+    "Experience": 11.129048,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.260567,
+    "Wage_obs": 0.260567,
+    "Selected": 1,
+    "Education": 9.921971,
+    "Experience": 10.142524,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.546042,
+    "Experience": 2.174054,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.732865,
+    "Experience": 17.095846,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 13.064152,
+    "Experience": 10.218299,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.548385,
+    "Wage_obs": 3.548385,
+    "Selected": 1,
+    "Education": 11.852003,
+    "Experience": 10.042973,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 9.860395,
+    "Experience": 7.205602,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.234357,
+    "Wage_obs": 3.234357,
+    "Selected": 1,
+    "Education": 10.81974,
+    "Experience": 15.166091,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.548992,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.685115,
+    "Experience": 3.652915,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.40578,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.895842,
+    "Experience": 6.557405,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.679495,
+    "Experience": 8.539565,
+    "Kids": 3
+  },
+  {
+    "Wage": 4.37875,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.697965,
+    "Experience": 10.040611,
+    "Kids": 5
+  },
+  {
+    "Wage": 1.327388,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.883292,
+    "Experience": 10.590053,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.742407,
+    "Wage_obs": 2.742407,
+    "Selected": 1,
+    "Education": 13.428915,
+    "Experience": 9.043416,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.22653,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.456486,
+    "Experience": 9.859881,
+    "Kids": 6
+  },
+  {
+    "Wage": 1.325748,
+    "Wage_obs": 1.325748,
+    "Selected": 1,
+    "Education": 10.260643,
+    "Experience": 3.707442,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.126693,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.715156,
+    "Experience": 7.902577,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.095834,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.827986,
+    "Experience": 9.937677,
+    "Kids": 3
+  },
+  {
+    "Wage": 4.064829,
+    "Wage_obs": 4.064829,
+    "Selected": 1,
+    "Education": 14.151582,
+    "Experience": 11.428006,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.60151,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 7.270671,
+    "Experience": 10.348065,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 6.452751,
+    "Experience": 10.241603,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.525982,
+    "Experience": 15.242776,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 13.003282,
+    "Experience": 11.501617,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.471396,
+    "Experience": 10.754358,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.426616,
+    "Experience": 10.777862,
+    "Kids": 5
+  },
+  {
+    "Wage": 2.62877,
+    "Wage_obs": 2.62877,
+    "Selected": 1,
+    "Education": 11.522394,
+    "Experience": 17.522728,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.601083,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.680692,
+    "Experience": 8.72912,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.463762,
+    "Wage_obs": 1.463762,
+    "Selected": 1,
+    "Education": 12.039069,
+    "Experience": 12.907549,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.974732,
+    "Experience": 8.544218,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.396662,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.888127,
+    "Experience": 8.646937,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.449465,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.371002,
+    "Experience": 12.64064,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.511585,
+    "Wage_obs": 0.511585,
+    "Selected": 1,
+    "Education": 10.707922,
+    "Experience": 6.732338,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.842085,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.162764,
+    "Experience": 10.843423,
+    "Kids": 5
+  },
+  {
+    "Wage": 1.140276,
+    "Wage_obs": 1.140276,
+    "Selected": 1,
+    "Education": 9.586377,
+    "Experience": 4.203528,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.970284,
+    "Experience": 6.06603,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.005417,
+    "Experience": 8.490273,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.786684,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.44836,
+    "Experience": 7.666889,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.561888,
+    "Wage_obs": 1.561888,
+    "Selected": 1,
+    "Education": 9.826327,
+    "Experience": 14.006267,
+    "Kids": 1
+  },
+  {
+    "Wage": 4.326348,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.192457,
+    "Experience": 7.191339,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.241912,
+    "Experience": 13.566315,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.425864,
+    "Experience": 1.390454,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.138855,
+    "Experience": 8.499057,
+    "Kids": 1
+  },
+  {
+    "Wage": 4.678463,
+    "Wage_obs": 4.678463,
+    "Selected": 1,
+    "Education": 13.150597,
+    "Experience": 12.196248,
+    "Kids": 2
+  },
+  {
+    "Wage": 4.096086,
+    "Wage_obs": 4.096086,
+    "Selected": 1,
+    "Education": 17.43213,
+    "Experience": 17.535975,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.242817,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 15.010643,
+    "Experience": 6.791368,
+    "Kids": 5
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.333972,
+    "Experience": 11.22512,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.983321,
+    "Experience": 11.772162,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.744253,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.841312,
+    "Experience": 8.522137,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.891985,
+    "Wage_obs": 2.891985,
+    "Selected": 1,
+    "Education": 10.969413,
+    "Experience": 11.659497,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.83524,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.785924,
+    "Experience": 14.819031,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.94599,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.770738,
+    "Experience": 12.252794,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.079266,
+    "Experience": 7.357685,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.549831,
+    "Wage_obs": 0.549831,
+    "Selected": 1,
+    "Education": 9.538512,
+    "Experience": 12.999822,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.514232,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.860993,
+    "Experience": 12.123737,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.304381,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.899474,
+    "Experience": 7.114542,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.953029,
+    "Experience": 8.684772,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.495016,
+    "Experience": 11.590881,
+    "Kids": 3
+  },
+  {
+    "Wage": 5.932935,
+    "Wage_obs": 5.932935,
+    "Selected": 1,
+    "Education": 15.029831,
+    "Experience": 18.535863,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.745512,
+    "Experience": 11.784495,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.520742,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.748718,
+    "Experience": 5.529123,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.829243,
+    "Experience": 12.796435,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.896765,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.317708,
+    "Experience": 12.21929,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.941662,
+    "Experience": 11.48013,
+    "Kids": 0
+  },
+  {
+    "Wage": 5.540419,
+    "Wage_obs": 5.540419,
+    "Selected": 1,
+    "Education": 14.195387,
+    "Experience": 4.325325,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.663742,
+    "Wage_obs": 2.663742,
+    "Selected": 1,
+    "Education": 14.88189,
+    "Experience": 11.409658,
+    "Kids": 0
+  },
+  {
+    "Wage": 6.871885,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.822806,
+    "Experience": 10.289387,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.305705,
+    "Wage_obs": 1.305705,
+    "Selected": 1,
+    "Education": 13.539742,
+    "Experience": 15.152183,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.467014,
+    "Wage_obs": 2.467014,
+    "Selected": 1,
+    "Education": 12.611526,
+    "Experience": 20.16982,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.743017,
+    "Experience": 3.918314,
+    "Kids": 4
+  },
+  {
+    "Wage": 0.528982,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.787186,
+    "Experience": 6.747738,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.310295,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.342298,
+    "Experience": 13.003882,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.174767,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.791238,
+    "Experience": 12.520414,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 8.67576,
+    "Experience": 10.775925,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.339564,
+    "Experience": 15.659997,
+    "Kids": 0
+  },
+  {
+    "Wage": 0.710447,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.270996,
+    "Experience": 8.638436,
+    "Kids": 5
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.210728,
+    "Experience": 0.631351,
+    "Kids": 3
+  },
+  {
+    "Wage": 5.190918,
+    "Wage_obs": 5.190918,
+    "Selected": 1,
+    "Education": 13.003207,
+    "Experience": 4.445596,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.869421,
+    "Wage_obs": 1.869421,
+    "Selected": 1,
+    "Education": 9.88879,
+    "Experience": 11.40533,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.018894,
+    "Wage_obs": 3.018894,
+    "Selected": 1,
+    "Education": 12.839858,
+    "Experience": 9.065187,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.098342,
+    "Experience": 6.558589,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.145369,
+    "Experience": 11.177616,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.841097,
+    "Wage_obs": 3.841097,
+    "Selected": 1,
+    "Education": 12.444103,
+    "Experience": 10.775987,
+    "Kids": 1
+  },
+  {
+    "Wage": 6.09346,
+    "Wage_obs": 6.09346,
+    "Selected": 1,
+    "Education": 14.906969,
+    "Experience": 2.945199,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.849125,
+    "Experience": 4.826278,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.912762,
+    "Experience": 7.242234,
+    "Kids": 3
+  },
+  {
+    "Wage": 1.224212,
+    "Wage_obs": 1.224212,
+    "Selected": 1,
+    "Education": 15.761886,
+    "Experience": 6.775372,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.946079,
+    "Wage_obs": 1.946079,
+    "Selected": 1,
+    "Education": 13.677649,
+    "Experience": 6.955136,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.460452,
+    "Experience": 11.373305,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.710313,
+    "Wage_obs": 0.710313,
+    "Selected": 1,
+    "Education": 15.332767,
+    "Experience": 6.613289,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.104922,
+    "Experience": 3.919455,
+    "Kids": 3
+  },
+  {
+    "Wage": 3.48922,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.153236,
+    "Experience": 15.162988,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.664221,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 14.09209,
+    "Experience": 7.357189,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.271216,
+    "Wage_obs": 0.271216,
+    "Selected": 1,
+    "Education": 15.076897,
+    "Experience": 9.211568,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.499605,
+    "Wage_obs": 1.499605,
+    "Selected": 1,
+    "Education": 14.437444,
+    "Experience": 5.625468,
+    "Kids": 0
+  },
+  {
+    "Wage": 3.193962,
+    "Wage_obs": 3.193962,
+    "Selected": 1,
+    "Education": 10.760266,
+    "Experience": 10.177403,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.03837,
+    "Experience": 8.482336,
+    "Kids": 0
+  },
+  {
+    "Wage": 5.301698,
+    "Wage_obs": 5.301698,
+    "Selected": 1,
+    "Education": 11.561863,
+    "Experience": 11.329099,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.229667,
+    "Experience": 4.333881,
+    "Kids": 5
+  },
+  {
+    "Wage": 1.591964,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.665693,
+    "Experience": 11.235252,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 7.967329,
+    "Experience": 4.88133,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.43937,
+    "Wage_obs": 1.43937,
+    "Selected": 1,
+    "Education": 10.731255,
+    "Experience": 14.950812,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.62293,
+    "Wage_obs": 2.62293,
+    "Selected": 1,
+    "Education": 10.043328,
+    "Experience": 11.20392,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.964714,
+    "Experience": 11.470985,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.206687,
+    "Wage_obs": 3.206687,
+    "Selected": 1,
+    "Education": 9.290611,
+    "Experience": 9.469437,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.920748,
+    "Wage_obs": 1.920748,
+    "Selected": 1,
+    "Education": 11.833581,
+    "Experience": 5.672511,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.347523,
+    "Experience": 3.549747,
+    "Kids": 5
+  },
+  {
+    "Wage": 0.420934,
+    "Wage_obs": 0.420934,
+    "Selected": 1,
+    "Education": 12.971858,
+    "Experience": 8.024026,
+    "Kids": 1
+  },
+  {
+    "Wage": 5.89528,
+    "Wage_obs": 5.89528,
+    "Selected": 1,
+    "Education": 13.92788,
+    "Experience": 18.577683,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.471864,
+    "Wage_obs": 0.471864,
+    "Selected": 1,
+    "Education": 13.924898,
+    "Experience": 7.76524,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.980409,
+    "Wage_obs": 1.980409,
+    "Selected": 1,
+    "Education": 13.529364,
+    "Experience": 5.186545,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 16.696591,
+    "Experience": 2.559657,
+    "Kids": 5
+  },
+  {
+    "Wage": 1.258412,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.934255,
+    "Experience": 11.585974,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.754797,
+    "Wage_obs": 1.754797,
+    "Selected": 1,
+    "Education": 11.912021,
+    "Experience": 8.104009,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.768685,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.687829,
+    "Experience": 13.430329,
+    "Kids": 5
+  },
+  {
+    "Wage": 3.351661,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.451282,
+    "Experience": 17.791593,
+    "Kids": 4
+  },
+  {
+    "Wage": 1.52592,
+    "Wage_obs": 1.52592,
+    "Selected": 1,
+    "Education": 12.489577,
+    "Experience": 10.875542,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.061443,
+    "Wage_obs": 3.061443,
+    "Selected": 1,
+    "Education": 8.054026,
+    "Experience": 10.964221,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.226608,
+    "Wage_obs": 2.226608,
+    "Selected": 1,
+    "Education": 13.461069,
+    "Experience": 10.323518,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.042536,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.133737,
+    "Experience": 11.681638,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.166463,
+    "Experience": 8.655338,
+    "Kids": 4
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.402912,
+    "Experience": 6.300605,
+    "Kids": 0
+  },
+  {
+    "Wage": 1.508369,
+    "Wage_obs": 1.508369,
+    "Selected": 1,
+    "Education": 12.367398,
+    "Experience": 4.582772,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.491518,
+    "Experience": 5.633519,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 12.859507,
+    "Experience": 1.691168,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 12.741162,
+    "Experience": 8.886501,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.900674,
+    "Wage_obs": 1.900674,
+    "Selected": 1,
+    "Education": 13.069661,
+    "Experience": 7.082698,
+    "Kids": 1
+  },
+  {
+    "Wage": 3.569848,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.768197,
+    "Experience": 11.21669,
+    "Kids": 3
+  },
+  {
+    "Wage": 2.952911,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.066529,
+    "Experience": 15.522364,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.730542,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.942765,
+    "Experience": 13.129138,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 10.589449,
+    "Experience": 3.433042,
+    "Kids": 2
+  },
+  {
+    "Wage": 5.165723,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.846149,
+    "Experience": 7.174802,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.640171,
+    "Wage_obs": 2.640171,
+    "Selected": 1,
+    "Education": 11.780071,
+    "Experience": 13.761654,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.82533,
+    "Wage_obs": 3.82533,
+    "Selected": 1,
+    "Education": 13.012371,
+    "Experience": 16.47842,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.156769,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.354456,
+    "Experience": 15.699916,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.645744,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.078158,
+    "Experience": 17.727533,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.629646,
+    "Wage_obs": 0.629646,
+    "Selected": 1,
+    "Education": 10.897381,
+    "Experience": 10.915611,
+    "Kids": 2
+  },
+  {
+    "Wage": 0.317332,
+    "Wage_obs": 0.317332,
+    "Selected": 1,
+    "Education": 10.658012,
+    "Experience": 13.822536,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.434433,
+    "Wage_obs": 1.434433,
+    "Selected": 1,
+    "Education": 9.305302,
+    "Experience": 17.766496,
+    "Kids": 0
+  },
+  {
+    "Wage": 2.923682,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.015412,
+    "Experience": 8.589038,
+    "Kids": 7
+  },
+  {
+    "Wage": 1.304332,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.428082,
+    "Experience": 11.581863,
+    "Kids": 0
+  },
+  {
+    "Wage": 3.540706,
+    "Wage_obs": 3.540706,
+    "Selected": 1,
+    "Education": 17.719883,
+    "Experience": 11.805758,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.389326,
+    "Experience": 8.79786,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.990303,
+    "Wage_obs": 1.990303,
+    "Selected": 1,
+    "Education": 10.415377,
+    "Experience": 13.004843,
+    "Kids": 1
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 8.227249,
+    "Experience": 12.993165,
+    "Kids": 1
+  },
+  {
+    "Wage": 7.618612,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.408956,
+    "Experience": 12.645499,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.107676,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.394538,
+    "Experience": 9.742282,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 11.924413,
+    "Experience": 10.836466,
+    "Kids": 5
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.20041,
+    "Experience": 9.678303,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 9.034026,
+    "Experience": 5.429406,
+    "Kids": 2
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 11.517796,
+    "Experience": 14.766088,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.078285,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.578686,
+    "Experience": 11.605923,
+    "Kids": 1
+  },
+  {
+    "Wage": 6.511455,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.258293,
+    "Experience": 7.857069,
+    "Kids": 2
+  },
+  {
+    "Wage": 1.172224,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.739582,
+    "Experience": 5.521465,
+    "Kids": 6
+  },
+  {
+    "Wage": 0.709009,
+    "Wage_obs": 0.709009,
+    "Selected": 1,
+    "Education": 13.886162,
+    "Experience": 10.222945,
+    "Kids": 3
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.586226,
+    "Experience": 6.603343,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.391063,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 13.094737,
+    "Experience": 10.766617,
+    "Kids": 5
+  },
+  {
+    "Wage": 1.135879,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.859627,
+    "Experience": 7.375706,
+    "Kids": 0
+  },
+  {
+    "Wage": 7.750729,
+    "Wage_obs": 7.750729,
+    "Selected": 1,
+    "Education": 13.876357,
+    "Experience": 10.551017,
+    "Kids": 2
+  },
+  {
+    "Wage": 2.339765,
+    "Wage_obs": 2.339765,
+    "Selected": 1,
+    "Education": 12.067691,
+    "Experience": 12.773084,
+    "Kids": 1
+  },
+  {
+    "Wage": 1.687168,
+    "Wage_obs": 1.687168,
+    "Selected": 1,
+    "Education": 13.708193,
+    "Experience": 8.597239,
+    "Kids": 1
+  },
+  {
+    "Wage": 0.119232,
+    "Wage_obs": 0.119232,
+    "Selected": 1,
+    "Education": 10.789529,
+    "Experience": 13.770449,
+    "Kids": 2
+  },
+  {
+    "Wage": 3.400401,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 12.618722,
+    "Experience": 7.985502,
+    "Kids": 3
+  },
+  {
+    "Wage": 0.89742,
+    "Wage_obs": 0,
+    "Selected": 0,
+    "Education": 10.755996,
+    "Experience": 8.667955,
+    "Kids": 0
+  },
+  {
+    "Wage": 0,
+    "Wage_obs": 0,
+    "Selected": 1,
+    "Education": 17.182713,
+    "Experience": 8.637301,
+    "Kids": 1
+  },
+  {
+    "Wage": 2.438829,
+    "Wage_obs": 2.438829,
+    "Selected": 1,
+    "Education": 9.870708,
+    "Experience": 12.894566,
+    "Kids": 0
+  }
+]

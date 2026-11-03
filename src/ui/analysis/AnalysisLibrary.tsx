@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
+  Atom,
+  Brain,
   ChevronDown,
   ChevronRight,
   Clock3,
@@ -45,6 +47,8 @@ const FAMILY_ICONS: Record<AnalysisFamilyId, LucideIcon> = {
   timeseries: LineChart,
   missing: DatabaseZap,
   design: FlaskConical,
+  ml: Brain,
+  advanced: Atom,
 };
 
 export interface AnalysisLibraryProps {

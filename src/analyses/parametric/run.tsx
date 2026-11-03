@@ -4,6 +4,7 @@ import { parametricReport } from '../../stats/reports/parametric';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
+import { jStat } from '../../stats/jstat';
 import type { ChartRow } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { ParametricSurvivalParams } from '../../io/project';
@@ -31,6 +32,7 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
     timeIdx: params.time,
     eventIdx: params.event,
     indepIdxs: params.predictors,
+    upperIdx: params.upperVariable ?? -1,
     distribution: params.distribution,
     level: ciLevel,
   });
@@ -65,15 +67,46 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
   const maxTime = times.length ? Math.max(...times) : 1;
   const upper = maxTime > minTime ? maxTime * 1.5 : Math.max(2, maxTime * 2);
   const gridPoints = Array.from({ length: 80 }, (_, index) => minTime + ((upper - minTime) * index) / 79);
+  const distribution = stats.distribution;
+  const gompertzRate = Math.exp(stats.mu);
+  const gompertzGrowth = stats.sigma;
+  const survivalAt = (eta: number, time: number): number => {
+    if (distribution === 'gompertz') {
+      const growth = (gompertzRate / gompertzGrowth) * (Math.exp(gompertzGrowth * time) - 1);
+      return Math.exp(-growth);
+    }
+    const z = (Math.log(time) - eta) / stats.sigma;
+    if (distribution === 'weibull' || distribution === 'exponential') {
+      return Math.exp(-Math.exp(Math.min(50, z)));
+    }
+    if (distribution === 'lognormal') {
+      return Math.max(0, 1 - jStat.normal.cdf(z, 0, 1));
+    }
+    return 1 / (1 + Math.exp(Math.min(50, z)));
+  };
+  const hazardAt = (eta: number, time: number): number => {
+    if (distribution === 'gompertz') {
+      return gompertzRate * Math.exp(gompertzGrowth * time + eta);
+    }
+    const z = (Math.log(time) - eta) / stats.sigma;
+    if (distribution === 'weibull' || distribution === 'exponential') {
+      return (1 / (stats.sigma * time)) * Math.exp(Math.min(50, z));
+    }
+    if (distribution === 'lognormal') {
+      const density = Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+      return density / Math.max(1e-12, stats.sigma * time * survivalAt(eta, time));
+    }
+    const survival = 1 / (1 + Math.exp(Math.min(50, z)));
+    return Math.exp(Math.min(50, z)) / Math.max(1e-12, stats.sigma * time) * survival;
+  };
   const curveKind = (kind: 'survival' | 'hazard' | 'cumhazard' | 'density'): ChartRow[] =>
     profiles.flatMap(profile => {
       const values = predictorMeans.map((mean, column) => (column === 0 ? profile : mean));
       const eta = stats.mu + stats.coefficients.reduce((sum, coefficient, column) => sum + coefficient.beta * values[column], 0);
       const label = `${predNames[0]} = ${profile.toFixed(3)}`;
       return gridPoints.map(time => {
-        const z = (Math.log(time) - eta) / stats.sigma;
-        const survival = Math.exp(-Math.exp(Math.min(50, z)));
-        const hazard = (1 / (stats.sigma * time)) * Math.exp(Math.min(50, z));
+        const survival = survivalAt(eta, time);
+        const hazard = hazardAt(eta, time);
         const value =
           kind === 'survival'
             ? survival
@@ -95,23 +128,41 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
     lo: row.lo,
     hi: row.hi,
   }));
+  const medianAt = (eta: number): number => {
+    if (distribution === 'gompertz') {
+      return Math.log(1 + (gompertzGrowth / Math.max(1e-12, gompertzRate)) * Math.log(2)) / gompertzGrowth;
+    }
+    if (distribution === 'lognormal' || distribution === 'loglogistic') {
+      return Math.exp(eta);
+    }
+    return Math.exp(eta + stats.sigma * Math.log(Math.log(2)));
+  };
   const medianRows = profiles.map(profile => {
     const values = predictorMeans.map((mean, column) => (column === 0 ? profile : mean));
     const eta = stats.mu + stats.coefficients.reduce((sum, coefficient, column) => sum + coefficient.beta * values[column], 0);
-    const median = Math.exp(eta + stats.sigma * Math.log(Math.log(2)));
-    return { category: `${predNames[0]} = ${profile.toFixed(3)}`, value: median };
+    return { category: `${predNames[0]} = ${profile.toFixed(3)}`, value: medianAt(eta) };
   });
   const meanEta = stats.mu + stats.coefficients.reduce(
     (sum, coefficient, column) => sum + coefficient.beta * (predictorMeans[column] ?? 0),
     0
   );
   const sortedTimes = complete.map(entry => entry.time).sort((a, b) => a - b);
+  const theoreticalQuantile = (p: number): number => {
+    if (distribution === 'gompertz') {
+      const value = 1 - (gompertzGrowth / Math.max(1e-12, gompertzRate)) * Math.log(1 - p);
+      return Math.log(Math.max(1e-12, value)) / gompertzGrowth;
+    }
+    if (distribution === 'lognormal') {
+      return Math.exp(meanEta + stats.sigma * jStat.normal.inv(p, 0, 1));
+    }
+    if (distribution === 'loglogistic') {
+      return Math.exp(meanEta + stats.sigma * Math.log(p / Math.max(1e-12, 1 - p)));
+    }
+    return Math.exp(meanEta + stats.sigma * Math.log(-Math.log(1 - p)));
+  };
   const qq = sortedTimes.map((time, index) => {
     const p = (index + 1 - 0.375) / (sortedTimes.length + 0.25);
-    return {
-      x: Math.exp(meanEta + stats.sigma * Math.log(-Math.log(1 - p))),
-      y: time,
-    };
+    return { x: theoreticalQuantile(p), y: time };
   });
   const charts = [
     makeChart({
@@ -156,15 +207,18 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
     }),
   ];
   if (coefficientPoints.length > 0) {
+    const ph = stats.parameterization === 'ph';
     charts.push(
       makeChart({
         id: 'parametric-coefficients',
         kind: 'forest',
-        title: copy('Rapporti dei tempi per predittore'),
+        title: ph ? copy('Hazard ratio per predittore') : copy('Rapporti dei tempi per predittore'),
         subtitle: copy('IC {s1}% · riferimento 1', { s1: ciLevel }),
-        note: copy('Punto: rapporto dei tempi (time ratio). Valori sopra 1 allungano il tempo all’evento; se l’intervallo contiene 1 il predittore non è distinguibile da nessun effetto.'),
+        note: ph
+          ? copy('Punto: hazard ratio del modello di Gompertz. Valori sopra 1 aumentano il rischio istantaneo; se l’intervallo contiene 1 il predittore non è distinguibile da nessun effetto.')
+          : copy('Punto: rapporto dei tempi (time ratio). Valori sopra 1 allungano il tempo all’evento; se l’intervallo contiene 1 il predittore non è distinguibile da nessun effetto.'),
         data: { points: coefficientPoints },
-        fields: { xLabel: copy('Rapporto dei tempi'), yLabel: copy('Predittore') },
+        fields: { xLabel: ph ? copy('Hazard ratio') : copy('Rapporto dei tempi'), yLabel: copy('Predittore') },
         options: { reference: 'one' } as never,
       })
     );

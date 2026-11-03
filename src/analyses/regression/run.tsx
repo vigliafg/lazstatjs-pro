@@ -2,7 +2,7 @@ import { jStat } from '../../stats/jstat';
 import { parseNum } from '../../stats/core';
 import { regressionTables } from '../../stats/regression';
 import { regressionReport } from '../../stats/report';
-import { calcNormalityTests, calcTheilSen } from '../../stats/kernels';
+import { calcNormalityTests, calcTheilSenCapped } from '../../stats/kernels';
 import { copy } from '../../stats/reportCopy';
 import { makeChart, boxRows, qqBand } from '../../charts/kits/common';
 import type { AnalysisChart, ChartRow } from '../../stats/charts';
@@ -10,6 +10,9 @@ import { fitModelPanel, regressionDiagnosticPanel } from '../../charts/panels';
 import type { Dataset } from '../../grid/types';
 import type { RegParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
+import { buildPolynomialOutput } from './polynomial';
+import { buildSelectionOutput } from './selection';
+import { buildPenalizedOutput } from './penalized';
 
 export interface RegressionRunInput {
   grid: Dataset;
@@ -55,6 +58,10 @@ const qqReference = (points: ChartRow[]): ChartRow[] => {
 /** Regressione lineare multipla: tabelle, diagnostica, grafici e report. */
 export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunResult => {
   const { grid, regParams, ciLevel } = input;
+  const mode = regParams.mode ?? 'linear';
+  if (mode === 'polynomial') return buildPolynomialOutput(input);
+  if (mode === 'selection') return buildSelectionOutput(input);
+  if (mode === 'penalized') return buildPenalizedOutput(input);
   const { dep, indeps, useNonParam } = regParams;
   if (indeps.length === 0) return { ok: false, reason: 'Select at least one predictor' };
 
@@ -171,7 +178,7 @@ export const buildRegressionOutput = (input: RegressionRunInput): AnalysisRunRes
   if (k === 1 && scatterData.length > 0) {
     const xs = scatterData.map(d => d.x);
     const ys = scatterData.map(d => d.y);
-    const tsResult = calcTheilSen(xs, ys);
+    const tsResult = calcTheilSenCapped(xs, ys);
     tsSlope = tsResult.slope;
     tsIntercept = tsResult.intercept;
   }

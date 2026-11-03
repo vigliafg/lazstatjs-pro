@@ -268,4 +268,38 @@ export const anovaCopy: Record<string, string> = {
     'ω²',
   'ω² = {s1}: stima meno distorta della quota di varianza spiegata nella popolazione.':
     'ω² = {s1} : estimation moins biaisée de la part de variance expliquée dans la population.',
+  'Above median':
+    'Au-dessus de la médiane',
+  'Below median':
+    'Au-dessous de la médiane',
+  'Con molti valori uguali alla mediana il test diventa conservativo.':
+    'Avec beaucoup de valeurs égales à la médiane le test devient conservateur.',
+  'Il test confronta le mediane, non le medie: una differenza di media può non emergere.':
+    'Le test compare les médianes, pas les moyennes : une différence de moyennes peut ne pas apparaître.',
+  'Il test di Mood classifica ogni osservazione rispetto alla mediana comune e confronta quanti casi cadono sopra e sotto in ogni gruppo.':
+    'Le test de Mood classe chaque observation par rapport à la médiane commune et compare combien de cas tombent au-dessus et au-dessous dans chaque groupe.',
+  'Il test χ² confronta le frequenze osservate sopra/sotto con quelle attese se le mediane fossero uguali.':
+    'Le test χ² compare les effectifs observés au-dessus/en dessous avec ceux attendus si les médianes étaient égales.',
+  'La correzione (N − 1)/N è quella di coin::median_test; con gruppi molto piccoli il p è approssimato.':
+    'La correction (N − 1)/N est celle de coin::median_test ; avec de très petits groupes p est approximatif.',
+  'Mediana comune di {s1}: {s2}; il test χ² confronta {s3} gruppi di {s4} (p = {s5}).':
+    'Médiane commune de {s1} : {s2} ; le test χ² compare {s3} groupes de {s4} (p = {s5}).',
+  'Mediana comune: {s1}; {s2} osservazioni sopra e {s3} sotto (o uguali).':
+    'Médiane commune : {s1} ; {s2} observations au-dessus et {s3} au-dessous (ou égales).',
+  'Mood: osservazioni sopra e sotto la mediana':
+    'Mood : observations au-dessus et au-dessous de la médiane',
+  'Mood: test χ²':
+    'Mood : test χ²',
+  'Osservazioni sopra la mediana: {s1}; sotto o uguali: {s2}.':
+    'Observations au-dessus de la médiane : {s1} ; au-dessous ou égales : {s2}.',
+  'Report di lettura — Test della mediana di Mood':
+    'Rapport de lecture — Test de la médiane de Mood',
+  'Statistica di Brown–Mood con correzione (N − 1)/N, come coin::median_test.':
+    'Statistique de Brown–Mood avec correction (N − 1)/N, comme coin::median_test.',
+  'Un p non significativo non dimostra l’uguaglianza delle mediane.':
+    'Un p non significatif ne prouve pas l’égalité des médianes.',
+  'È un test non parametrico sull’uguaglianza delle mediane: non assume la normalità e resiste agli outlier.':
+    'C’est un test non paramétrique d’égalité des médianes : il ne suppose pas la normalité et résiste aux valeurs aberrantes.',
+  'χ² = {s1}, df = {s2}, p = {s3}.':
+    'χ² = {s1}, df = {s2}, p = {s3}.',
 };

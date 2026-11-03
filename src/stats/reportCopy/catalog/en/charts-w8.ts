@@ -1,0 +1,47 @@
+/** English copy for the wave-8 chart titles, notes and labels. */
+export const w8ChartCopy: Record<string, string> = {
+  'Gage R&R — {s1}': 'Gage R&R — {s1}',
+  '{s1} parti × {s2} operatori × {s3} repliche': '{s1} parts × {s2} operators × {s3} replicates',
+  'Componenti di varianza': 'Variance components',
+  'Gage R&R = {s1}% della variabilità': 'Gage R&R = {s1}% of variation',
+  'Le barre separano la variabilità dello strumento (ripetibilità), quella tra operatori (riproducibilità) e quella reale tra i pezzi. Un Gage R&R alto significa che il sistema di misura non distingue i pezzi.':
+    'The bars separate instrument variability (repeatability), variation between operators (reproducibility) and real variation between parts. A high Gage R&R means the measurement system cannot tell parts apart.',
+  Componente: 'Component',
+  'Deviazione standard': 'Standard deviation',
+  'Campionamento di accettazione': 'Acceptance sampling',
+  'n {s1} · c {s2} · lotto {s3}': 'n {s1} · c {s2} · lot {s3}',
+  'Curva operativa (OC)': 'Operating characteristic (OC)',
+  'Probabilità di accettare un lotto con qualità p': 'Probability of accepting a lot with quality p',
+  'La curva scende al crescere della difettosità in ingresso: AQL è il punto in cui si accetta ancora nel 95% dei casi, LTPD quello in cui si accetta solo nel 10%.':
+    'The curve falls as incoming defectiveness rises: AQL is where the lot is still accepted in 95% of cases, LTPD where it is accepted in only 10%.',
+  'Difettosità in ingresso': 'Incoming defectiveness',
+  'Probabilità di accettazione': 'Probability of acceptance',
+  'Qualità media in uscita (AOQ)': 'Average outgoing quality (AOQ)',
+  'L’AOQ è la difettosità media che esce dal piano dopo l’ispezione: ha un massimo, l’AOQL. Non scende a zero perché i lotti accettati conservano i difettosi non trovati.':
+    'AOQ is the average defectiveness leaving the plan after inspection: it has a maximum, the AOQL. It does not fall to zero because accepted lots keep the defectives that were not found.',
+  'Carta T² — {s1}': 'T² chart — {s1}',
+  '{s1} sottogruppi di {s2} · UCL {s3}': '{s1} subgroups of {s2} · UCL {s3}',
+  'La distanza T² combina le variabili con la loro covarianza. Un punto oltre il limite dice che la combinazione è insolita, non quale variabile ha causato il segnale.':
+    'The T² distance combines the variables through their covariance. A point beyond the limit says the combination is unusual, not which variable caused the signal.',
+  Sottogruppo: 'Subgroup',
+  'Mappa del disegno': 'Design map',
+  '{s1} e {s2} in livelli codificati': '{s1} and {s2} in coded levels',
+  'Ogni punto è un run. I vertici definiscono il dominio sperimentale, i punti assiali stimano la curvatura e i punti centrali misurano l’errore puro.':
+    'Each point is a run. Corners define the experimental region, axial points estimate curvature and centre points measure pure error.',
+  Tipo: 'Type',
+  'Disegno sperimentale (DOE)': 'Experimental design (DOE)',
+  '{s1} · {s2} run · {s3} fattori': '{s1} · {s2} runs · {s3} factors',
+  Centro: 'Centre',
+  Assiale: 'Axial',
+  Vertice: 'Corner',
+  Ripetibilità: 'Repeatability',
+  Riproducibilità: 'Reproducibility',
+  Parti: 'Parts',
+  infinito: 'infinite',
+  'AOQL = {s1}': 'AOQL = {s1}',
+  'Carta T² di Hotelling': 'Hotelling T² chart',
+  'Fattoriale completo': 'Full factorial',
+  'Fattoriale frazionario (metà)': 'Fractional factorial (half)',
+  'Disegno composto centrale (CCD)': 'Central composite design (CCD)',
+  'Box-Behnken': 'Box-Behnken',
+};

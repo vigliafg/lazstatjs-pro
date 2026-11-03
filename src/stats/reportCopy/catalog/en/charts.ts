@@ -5,8 +5,14 @@ import { distfitTTestChartCopy } from './charts-distfit-ttest';
 import { lmmChartCopy } from './charts-lmm';
 import { remainingChartCopy } from './charts-remaining';
 import { l4ChartCopy } from './charts-l4';
+import { w6ChartCopy } from './charts-w6';
+import { w7ChartCopy } from './charts-w7';
+import { w8ChartCopy } from './charts-w8';
 
 export const chartCopy: Record<string, string> = {
+  ...w6ChartCopy,
+  ...w7ChartCopy,
+  ...w8ChartCopy,
   " Con stime instabili gli intervalli non finiti sono omessi dal grafico.":
     " With unstable estimates, non-finite intervals are omitted from the chart.",
   "ANCOVA: {s1} per {s2}":
@@ -643,4 +649,112 @@ export const chartCopy: Record<string, string> = {
   ...remainingChartCopy,
   ...l4ChartCopy,
   ...categoricalMultivariateChartCopy,
+  "Row":
+    "Row",
+  "Run length":
+    "Run length",
+  "Frequenze: {s1}":
+    "Frequencies: {s1}",
+  "{s1} osservazioni, {s2} modalità":
+    "{s1} observations, {s2} levels",
+  "Distribuzione e valori estremi":
+    "Distribution and extreme values",
+  "Scatola e baffi delle variabili selezionate":
+    "Box plot of the selected variables",
+  "Valori anomali":
+    "Outliers",
+  "Sequenza osservata: {s1}":
+    "Observed sequence: {s1}",
+  "Valori nell’ordine delle righe, punto di taglio {s1}":
+    "Values in row order, cut point {s1}",
+  "Una tendenza o un ciclo visibile spiega perché il test rifiuta la casualità; il test non localizza il punto di rottura.":
+    "A visible trend or cycle explains why the test rejects randomness; the test does not locate the break point.",
+  "Lunghezza delle sequenze: {s1}":
+    "Run lengths: {s1}",
+  "{s1} sequenze osservate":
+    "{s1} observed runs",
+  "Count": "Count",
+  "Frequenze": "Frequencies",
+  "Variable": "Variable",
+  "Value": "Value",
+  "Test delle sequenze": "Runs test",
+  "Intervallo di tolleranza": "Tolerance interval",
+  "C+ e C− sono le somme cumulative sopra e sotto il target; la linea tratteggiata è l’intervallo di decisione. Un punto oltre la linea è il segnale.": "C+ and C− are the cumulative sums above and below the target; the dashed line is the decision interval. A point beyond the line is the signal.",
+  "CUSUM": "CUSUM",
+  "CUSUM — {s1}": "CUSUM — {s1}",
+  "Lato": "Side",
+  "Somma cumulata": "Cumulative sum",
+  "k = {s1}σ · h = {s2}σ": "k = {s1}σ · h = {s2}σ",
+  "target {s1} · h {s2}σ": "target {s1} · h {s2}σ",
+  "Intervallo di tolleranza — {s1}": "Tolerance interval — {s1}",
+  "{s1}% popolazione · confidenza {s2}%": "{s1}% population · {s2}% confidence",
+  "Copre il {s1}% della popolazione con confidenza {s2}%": "Covers {s1}% of the population with {s2}% confidence",
+  "La barra va dal limite inferiore al limite superiore; il punto è la media. Non è un intervallo di confidenza della media: descrive dove cadono le singole osservazioni.": "The bar runs from the lower to the upper bound; the point is the mean. It is not a confidence interval for the mean: it describes where individual observations fall.",
+  "C+": "C+",
+  "C−": "C−",
+  "Due proporzioni — {s1} per {s2}": "Two proportions — {s1} by {s2}",
+  "Due tassi — {s1} per {s2}": "Two rates — {s1} by {s2}",
+  "Proporzione osservata": "Observed proportion",
+  "Proporzione — {s1}": "Proportion — {s1}",
+  "Proporzioni per gruppo": "Proportions by group",
+  "Rapporto tra tassi": "Rate ratio",
+  "Rapporto {s1}": "Ratio {s1}",
+  "Rate": "Rate",
+  "Rate ratio": "Rate ratio",
+  "Tasso di Poisson — {s1}": "Poisson rate — {s1}",
+  "Tasso osservato": "Observed rate",
+  "{s1} eventi su esposizione {s2}": "{s1} events over exposure {s2}",
+  "“{s1}” in {s2}": "“{s1}” in {s2}",
+  "Confronta l’altezza delle scatole e la lunghezza dei baffi: varianze uguali danno dispersioni simili.": "Compare the box heights and whisker lengths: equal variances give similar spreads.",
+  "Dispersione per gruppo": "Spread by group",
+  "Varianza e intervallo": "Variance and interval",
+  "Varianza — {s1}": "Variance — {s1}",
+  "Varianze — {s1} per {s2}": "Variances — {s1} by {s2}",
+  "Variance": "Variance",
+  "Differenze appaiate": "Paired differences",
+  "Il test dei segni guarda solo da che parte cadono le differenze: la forma della distribuzione non conta.": "The sign test only looks at which side the differences fall on: the shape of the distribution does not matter.",
+  "Test dei segni": "Sign test",
+  "Zero": "Zero",
+  "{s1} coppie, {s2} zeri esclusi": "{s1} pairs, {s2} zeros excluded",
+  "{s1} − {s2}": "{s1} − {s2}",
+  "Distribuzioni cumulative": "Cumulative distributions",
+  "Kolmogorov–Smirnov — {s1}": "Kolmogorov–Smirnov — {s1}",
+  "La distanza verticale massima tra le due curve è la statistica D; più le curve sono vicine, più le distribuzioni sono simili.": "The maximum vertical distance between the two curves is the D statistic; the closer the curves, the more similar the distributions.",
+  "{s1} vs {s2}": "{s1} vs {s2}",
+  "Distribuzione per gruppo": "Distribution by group",
+  "La linea centrale di ogni scatola è la mediana del gruppo; il test confronta quante osservazioni cadono sopra e sotto la mediana comune.": "The centre line of each box is the group median; the test compares how many observations fall above and below the common median.",
+  "Mediana comune {s1}": "Common median {s1}",
+  "Test della mediana — {s1} per {s2}": "Median test — {s1} by {s2}",
+  "Bontà di adattamento — {s1}": "Goodness of fit — {s1}",
+  "Frequenze osservate": "Observed frequencies",
+  "Le barre sono i conteggi osservati; confrontali con le attese riportate nella tabella.": "The bars are the observed counts; compare them with the expected values in the table.",
+  "MH pooled": "MH pooled",
+  "Log odds ratio per strato": "Log odds ratio by stratum",
+  "Punto: log-OR dello strato o pooled. Segmento: intervallo di confidenza. Linea tratteggiata: log-OR = 0, cioè nessuna associazione.": "Point: stratum or pooled log-OR. Segment: confidence interval. Dashed line: log-OR = 0, i.e. no association.",
+  "Log odds ratio": "Log odds ratio",
+  "Mantel–Haenszel · {s1} strati": "Mantel–Haenszel · {s1} strata",
+  "Proporzione per punteggio": "Proportion by score",
+  "{s1} righe ordinate per punteggio": "{s1} rows ordered by score",
+  "Ogni punto è la proporzione della prima colonna sul totale di riga; la linea collega i punteggi in ordine crescente.": "Each point is the proportion of the first column over the row total; the line connects the scores in increasing order.",
+  "Punteggio": "Score",
+  "Trend di Cochran–Armitage · {s1} × 2": "Cochran–Armitage trend · {s1} × 2",
+  "Residui standardizzati (test esatto)": "Standardised residuals (exact test)",
+  "Il colore mostra quali celle si discostano di più dall’indipendenza; il test esatto misura quanto l’intera tabella è compatibile con i margini osservati.": "The colour shows which cells depart most from independence; the exact test measures how compatible the whole table is with the observed margins.",
+  "Test esatto {s1} × {s2}": "Exact test {s1} × {s2}",
+  "Proporzioni osservate e completate per categoria": "Observed and completed proportions by category",
+  "Percentuale di righe · {s1} imputazioni": "Percentage of rows · {s1} imputations",
+  "Le barre confrontano la distribuzione osservata con quella ricostruita dall’ultima imputazione: differenze sistematiche indicano un modello da rivedere.": "The bars compare the observed distribution with the one reconstructed by the last imputation: systematic differences indicate a model to revise.",
+  "Variabile · categoria": "Variable · category",
+  "Percentuale": "Percentage",
+  "{s1} righe · {s2} variabili categoriche": "{s1} rows · {s2} categorical variables",
+  "La barra dei mancanti misura le celle che l’imputazione categorica ricostruisce.": "The missing bar measures the cells that categorical imputation reconstructs.",
+  "Proporzioni pooled per categoria": "Pooled proportions by category",
+  "Punto: proporzione pooled. Segmento: intervallo di confidenza; le proporzioni di una variabile sommano a 1.": "Point: pooled proportion. Segment: confidence interval; the proportions of one variable sum to 1.",
+  "Imputazione multipla categorica: {s1}": "Categorical multiple imputation: {s1}",
+  "Confronto tra conteggi osservati e attesi": "Observed versus expected counts",
+  "Modello log-lineare {s1} × {s2}": "Log-linear model {s1} × {s2}",
+  "(O − E) / √E per ogni cella": "(O − E) / √E for each cell",
+  "Osservato e atteso per cella": "Observed and expected by cell",
+  "Valori positivi indicano celle più frequenti dell’atteso del modello; valori negativi meno frequenti. Con il modello saturo i residui sono nulli per costruzione.": "Positive values indicate cells more frequent than the model expects; negative values less frequent. With the saturated model the residuals are zero by construction.",
+  "Barre vicine indicano che il modello riproduce bene la cella; scarti sistematici in una riga o colonna suggeriscono che l’effetto mancante è proprio lì.": "Close bars indicate that the model reproduces the cell well; systematic gaps in a row or column suggest that the missing effect is right there.",
 };

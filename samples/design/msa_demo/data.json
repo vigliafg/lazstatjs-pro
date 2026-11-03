@@ -1,0 +1,632 @@
+[
+  {
+    "Part": "P01",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 18.819,
+    "Width": 9.911
+  },
+  {
+    "Part": "P01",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 18.887,
+    "Width": 9.56
+  },
+  {
+    "Part": "P01",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 19.611,
+    "Width": 9.449
+  },
+  {
+    "Part": "P01",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 19.277,
+    "Width": 10.048
+  },
+  {
+    "Part": "P01",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 18.877,
+    "Width": 9.734
+  },
+  {
+    "Part": "P01",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 19.468,
+    "Width": 10.015
+  },
+  {
+    "Part": "P01",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 19.278,
+    "Width": 10.047
+  },
+  {
+    "Part": "P01",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 18.503,
+    "Width": 9.218
+  },
+  {
+    "Part": "P01",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 19.67,
+    "Width": 9.304
+  },
+  {
+    "Part": "P02",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 19.99,
+    "Width": 10.333
+  },
+  {
+    "Part": "P02",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 19.595,
+    "Width": 9.922
+  },
+  {
+    "Part": "P02",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 19.487,
+    "Width": 9.867
+  },
+  {
+    "Part": "P02",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 20.157,
+    "Width": 9.526
+  },
+  {
+    "Part": "P02",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 19.22,
+    "Width": 10.184
+  },
+  {
+    "Part": "P02",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 19.537,
+    "Width": 10.809
+  },
+  {
+    "Part": "P02",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 19.553,
+    "Width": 10.408
+  },
+  {
+    "Part": "P02",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 19.288,
+    "Width": 9.388
+  },
+  {
+    "Part": "P02",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 19.704,
+    "Width": 10.151
+  },
+  {
+    "Part": "P03",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 18.264,
+    "Width": 8.338
+  },
+  {
+    "Part": "P03",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 18.34,
+    "Width": 9.496
+  },
+  {
+    "Part": "P03",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 18.378,
+    "Width": 9.637
+  },
+  {
+    "Part": "P03",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 18.477,
+    "Width": 8.606
+  },
+  {
+    "Part": "P03",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 19.498,
+    "Width": 9.333
+  },
+  {
+    "Part": "P03",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 18.665,
+    "Width": 10.341
+  },
+  {
+    "Part": "P03",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 18.092,
+    "Width": 9.18
+  },
+  {
+    "Part": "P03",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 17.982,
+    "Width": 9.496
+  },
+  {
+    "Part": "P03",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 19.187,
+    "Width": 9.612
+  },
+  {
+    "Part": "P04",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 20.277,
+    "Width": 9.261
+  },
+  {
+    "Part": "P04",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 20.428,
+    "Width": 10.108
+  },
+  {
+    "Part": "P04",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 20.444,
+    "Width": 10.805
+  },
+  {
+    "Part": "P04",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 20.948,
+    "Width": 10.599
+  },
+  {
+    "Part": "P04",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 20.085,
+    "Width": 10.342
+  },
+  {
+    "Part": "P04",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 20.496,
+    "Width": 10.571
+  },
+  {
+    "Part": "P04",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 20.32,
+    "Width": 10.552
+  },
+  {
+    "Part": "P04",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 19.998,
+    "Width": 10.686
+  },
+  {
+    "Part": "P04",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 20.491,
+    "Width": 10.913
+  },
+  {
+    "Part": "P05",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 18.818,
+    "Width": 9.493
+  },
+  {
+    "Part": "P05",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 18.336,
+    "Width": 9.147
+  },
+  {
+    "Part": "P05",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 18.127,
+    "Width": 9.287
+  },
+  {
+    "Part": "P05",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 18.629,
+    "Width": 8.647
+  },
+  {
+    "Part": "P05",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 19.199,
+    "Width": 9.395
+  },
+  {
+    "Part": "P05",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 18.979,
+    "Width": 8.971
+  },
+  {
+    "Part": "P05",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 18.038,
+    "Width": 9.135
+  },
+  {
+    "Part": "P05",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 18.36,
+    "Width": 9.302
+  },
+  {
+    "Part": "P05",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 18.421,
+    "Width": 8.95
+  },
+  {
+    "Part": "P06",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 18.045,
+    "Width": 9.468
+  },
+  {
+    "Part": "P06",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 18.371,
+    "Width": 9.155
+  },
+  {
+    "Part": "P06",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 18.932,
+    "Width": 8.909
+  },
+  {
+    "Part": "P06",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 18.891,
+    "Width": 9.54
+  },
+  {
+    "Part": "P06",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 19.066,
+    "Width": 9.116
+  },
+  {
+    "Part": "P06",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 18.682,
+    "Width": 9.271
+  },
+  {
+    "Part": "P06",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 18.07,
+    "Width": 8.734
+  },
+  {
+    "Part": "P06",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 18.602,
+    "Width": 9.439
+  },
+  {
+    "Part": "P06",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 18.14,
+    "Width": 8.999
+  },
+  {
+    "Part": "P07",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 22.233,
+    "Width": 10.636
+  },
+  {
+    "Part": "P07",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 21.47,
+    "Width": 10.698
+  },
+  {
+    "Part": "P07",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 20.475,
+    "Width": 11.095
+  },
+  {
+    "Part": "P07",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 21.951,
+    "Width": 10.682
+  },
+  {
+    "Part": "P07",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 21.776,
+    "Width": 10.395
+  },
+  {
+    "Part": "P07",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 22.649,
+    "Width": 10.977
+  },
+  {
+    "Part": "P07",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 21.435,
+    "Width": 11.118
+  },
+  {
+    "Part": "P07",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 21.752,
+    "Width": 10.628
+  },
+  {
+    "Part": "P07",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 21.888,
+    "Width": 10.564
+  },
+  {
+    "Part": "P08",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 18.957,
+    "Width": 9.667
+  },
+  {
+    "Part": "P08",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 19.051,
+    "Width": 9.93
+  },
+  {
+    "Part": "P08",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 18.663,
+    "Width": 10.513
+  },
+  {
+    "Part": "P08",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 19.119,
+    "Width": 9.831
+  },
+  {
+    "Part": "P08",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 19.148,
+    "Width": 10.449
+  },
+  {
+    "Part": "P08",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 18.99,
+    "Width": 9.309
+  },
+  {
+    "Part": "P08",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 19.272,
+    "Width": 9.244
+  },
+  {
+    "Part": "P08",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 18.6,
+    "Width": 9.376
+  },
+  {
+    "Part": "P08",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 19.816,
+    "Width": 9.459
+  },
+  {
+    "Part": "P09",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 19.794,
+    "Width": 10.736
+  },
+  {
+    "Part": "P09",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 20.707,
+    "Width": 10.581
+  },
+  {
+    "Part": "P09",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 19.93,
+    "Width": 9.75
+  },
+  {
+    "Part": "P09",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 20.481,
+    "Width": 9.877
+  },
+  {
+    "Part": "P09",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 20.622,
+    "Width": 10.517
+  },
+  {
+    "Part": "P09",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 20.305,
+    "Width": 10.524
+  },
+  {
+    "Part": "P09",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 20.213,
+    "Width": 9.682
+  },
+  {
+    "Part": "P09",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 19.511,
+    "Width": 9.8
+  },
+  {
+    "Part": "P09",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 20.46,
+    "Width": 10.133
+  },
+  {
+    "Part": "P10",
+    "Operator": "A",
+    "Replicate": 1,
+    "Measurement": 21.295,
+    "Width": 10.763
+  },
+  {
+    "Part": "P10",
+    "Operator": "A",
+    "Replicate": 2,
+    "Measurement": 21.868,
+    "Width": 10.401
+  },
+  {
+    "Part": "P10",
+    "Operator": "A",
+    "Replicate": 3,
+    "Measurement": 21.606,
+    "Width": 10.789
+  },
+  {
+    "Part": "P10",
+    "Operator": "B",
+    "Replicate": 1,
+    "Measurement": 22.017,
+    "Width": 10.264
+  },
+  {
+    "Part": "P10",
+    "Operator": "B",
+    "Replicate": 2,
+    "Measurement": 21.192,
+    "Width": 11.019
+  },
+  {
+    "Part": "P10",
+    "Operator": "B",
+    "Replicate": 3,
+    "Measurement": 21.303,
+    "Width": 11.008
+  },
+  {
+    "Part": "P10",
+    "Operator": "C",
+    "Replicate": 1,
+    "Measurement": 21.792,
+    "Width": 10.239
+  },
+  {
+    "Part": "P10",
+    "Operator": "C",
+    "Replicate": 2,
+    "Measurement": 21.352,
+    "Width": 10.572
+  },
+  {
+    "Part": "P10",
+    "Operator": "C",
+    "Replicate": 3,
+    "Measurement": 21.132,
+    "Width": 10.592
+  }
+]

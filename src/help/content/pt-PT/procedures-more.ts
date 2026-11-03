@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Observações independentes; frequências esperadas suficientemente grandes para o qui-quadrado.'],
       whenToUse: ['Duas variáveis categóricas com dois níveis cada.'],
       whenNotToUse: ['Tabelas maiores (use R×C) ou medidas emparelhadas (McNemar).'],
-      reading: ['Com frequências esperadas baixas, o p de Fisher é mais fiável do que o qui-quadrado.'],
+      reading: [
+        'Com frequências esperadas baixas, o p de Fisher é mais fiável do que o qui-quadrado.',
+        'O modo de ajustamento compara uma variável categórica com proporções planeadas.',
+      ],
       pitfalls: ['Percentagens calculadas na margem errada levam a conclusões invertidas.'],
       glossary: [
         { term: 'Frequência esperada', definition: 'A contagem que se veria se as duas variáveis fossem independentes.' },
@@ -117,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'Tabelas de contingência R×C',
-    summary: 'Tabelas maiores do que 2×2, com medidas de associação e Monte Carlo.',
+    summary: 'Tabelas R×C com qui-quadrado, Mantel–Haenszel, tendência e testes exatos.',
     tutorial: {
       goal: 'Verificar a associação entre faixa de idade e preferência.',
       dataset: 'score-groups.csv',
@@ -140,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Resíduo estandardizado', definition: 'Observado menos esperado, em unidades de desvio-padrão.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -333,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Estacionariedade depois da diferenciação; resíduos próximos de ruído branco.'],
       whenToUse: ['Séries com estrutura de autocorrelação e observações suficientes.'],
       whenNotToUse: ['Séries muito curtas ou ruturas estruturais não modeladas.'],
-      reading: ['As ordens p, d, q descrevem memória, diferenciação e média móvel; um AIC mais baixo é preferível para a mesma especificação.'],
+      reading: ['O menu Tipo de análise também oferece Holt–Winters, testes de raiz unitária, análise espetral e ARIMAX com um regressor exógeno.', 'As ordens p, d, q descrevem memória, diferenciação e média móvel; um AIC mais baixo é preferível para a mesma especificação.'],
       pitfalls: ['As previsões a longo prazo têm intervalos largos: não as apresente como certas.'],
       glossary: [
         { term: 'Estacionariedade', definition: 'Média e variância estáveis ao longo do tempo.' },
@@ -346,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Dados omissos (imputação múltipla)',
-    summary: 'Imputação por equações encadeadas com agregação de Rubin.',
+    summary: 'Imputação por equações encadeadas para variáveis numéricas e categóricas, com agregação de Rubin.',
     tutorial: {
       goal: 'Tratar dados omissos sem eliminar casos.',
       dataset: 'score-groups.csv',
@@ -380,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Escolha o delineamento (por exemplo Duas médias independentes).',
-        'Introduza a diferença esperada, o desvio-padrão, o α e a potência desejada.',
+        'Introduza a diferença esperada, o desvio-padrão, o α e a potência desejada; para a regressão indique preditores e f², para a logística a taxa de eventos e o odds ratio.',
         'Execute e leia o n por grupo e o n total.',
       ],
       expected: 'Dimensão da amostra por grupo e total, com notas sobre arredondamento e desistências esperadas.',
@@ -389,7 +392,11 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['A diferença e a variabilidade são hipóteses de delineamento, não resultados.'],
       whenToUse: ['Antes de recolher dados; para avaliar a potência de um estudo já feito.'],
       whenNotToUse: ['Não use a potência observada a posteriori como prova de validade.'],
-      reading: ['Diferenças esperadas menores ou potência exigida maior aumentam n de forma acentuada.'],
+      reading: [
+        'Diferenças esperadas menores ou potência exigida maior aumentam n de forma acentuada.',
+        'O planeador cobre médias, proporções, variâncias, taxas de Poisson, regressão múltipla e regressão logística: escolha o desenho do teste que vai executar.',
+        'Na regressão, n é o número de observações para o teste F global; na logística, o número de sujeitos para um odds ratio binário.',
+      ],
       pitfalls: ['Uma diferença esperada inflacionada produz um estudo com pouca potência.'],
       glossary: [
         { term: 'Potência', definition: 'A probabilidade de detetar um efeito que realmente existe.' },

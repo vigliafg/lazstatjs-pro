@@ -104,7 +104,10 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Independent observations; expected frequencies large enough for chi-square.'],
       whenToUse: ['Two categorical variables with two levels each.'],
       whenNotToUse: ['Larger tables (use R×C) or paired measures (McNemar).'],
-      reading: ['With low expected frequencies Fisher’s p is more reliable than chi-square.'],
+      reading: [
+        'With low expected frequencies Fisher’s p is more reliable than chi-square.',
+        'The goodness-of-fit mode compares one categorical variable with planned proportions.',
+      ],
       pitfalls: ['Percentages computed on the wrong margin lead to reversed conclusions.'],
       glossary: [
         { term: 'Expected frequency', definition: 'The count you would see if the two variables were independent.' },
@@ -117,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'R×C contingency tables',
-    summary: 'Tables larger than 2×2, with association measures and Monte Carlo.',
+    summary: 'R×C tables with chi-square, Mantel–Haenszel, trend and exact tests.',
     tutorial: {
       goal: 'Check the association between age band and preference.',
       dataset: 'score-groups.csv',
@@ -140,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Standardised residual', definition: 'Observed minus expected, in standard deviation units.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -333,7 +336,7 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Stationarity after differencing; residuals close to white noise.'],
       whenToUse: ['Series with autocorrelation structure and enough observations.'],
       whenNotToUse: ['Very short series or structural breaks that are not modelled.'],
-      reading: ['Orders p, d, q describe memory, differencing and moving average; a lower AIC is preferable for the same specification.'],
+      reading: ['The Analysis type menu also offers Holt–Winters, unit-root tests, spectral analysis and ARIMAX with an exogenous regressor.', 'Orders p, d, q describe memory, differencing and moving average; a lower AIC is preferable for the same specification.'],
       pitfalls: ['Long-horizon forecasts have wide intervals: do not present them as certain.'],
       glossary: [
         { term: 'Stationarity', definition: 'Mean and variance stable over time.' },
@@ -346,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Missing data (multiple imputation)',
-    summary: 'Chained-equations imputation with Rubin pooling.',
+    summary: 'Chained-equations imputation for numeric and categorical variables, with Rubin pooling.',
     tutorial: {
       goal: 'Handle missing data without deleting cases.',
       dataset: 'score-groups.csv',
@@ -380,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Choose the design (e.g. Two independent means).',
-        'Enter the expected difference, the standard deviation, α and the desired power.',
+        'Enter the expected difference, the standard deviation, α and the desired power; for regression enter the predictors and f², for logistic the event rate and odds ratio.',
         'Run it and read n per group and total n.',
       ],
       expected: 'Sample size per group and total, with notes on rounding and expected dropout.',
@@ -389,7 +392,11 @@ export const moreTopics: HelpTopic[] = [
       assumptions: ['Difference and variability are design hypotheses, not results.'],
       whenToUse: ['Before collecting data; to judge the power of a study already done.'],
       whenNotToUse: ['Do not use observed post-hoc power as proof of validity.'],
-      reading: ['Smaller expected differences or higher required power increase n sharply.'],
+      reading: [
+        'Smaller expected differences or higher required power increase n sharply.',
+        'The planner covers means, proportions, variances, Poisson rates, multiple regression and logistic regression: pick the design that matches the test you will run.',
+        'For regression n is the number of observations for the overall F test; for logistic it is the number of subjects for a binary odds ratio.',
+      ],
       pitfalls: ['An inflated expected difference produces an underpowered study.'],
       glossary: [
         { term: 'Power', definition: 'The probability of detecting an effect that truly exists.' },

@@ -6,6 +6,9 @@ import { calcFisherExact } from '../../stats/kernels';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { mosaicCells } from '../../charts/kits/categorical';
+import { goodnessOfFit } from '../../stats/kernels/goodness';
+import { goodnessTables } from '../../stats/tables/goodness';
+import { goodnessReport } from '../../stats/reports/goodness';
 import type { Dataset } from '../../grid/types';
 import type { ChiSqParams } from '../../io/project';
 import type { AnalysisRunResult } from '../types';
@@ -19,6 +22,7 @@ export interface ChiSquareRunInput {
 /** Chi-quadro 2x2: tabelle, grafici e report. Estratto da App.tsx senza cambi di comportamento. */
   export const buildChiSquareOutput = (input: ChiSquareRunInput): AnalysisRunResult => {
   const { grid, chisqParams, ciLevel } = input;
+    if (chisqParams.mode === 'gof') return buildGoodnessOutput(input);
     const { row1col1, row1col2, row2col1, row2col2, row1Label, row2Label, col1Label, col2Label, runFisherExact } = chisqParams;
 
     if (row1col1 < 0 || row1col2 < 0 || row2col1 < 0 || row2col2 < 0) {
@@ -167,3 +171,64 @@ export interface ChiSquareRunInput {
         : [],
     };
   };
+
+/** Goodness-of-fit mode for one categorical variable. */
+const buildGoodnessOutput = ({ grid, chisqParams, ciLevel }: ChiSquareRunInput): AnalysisRunResult => {
+  const index = chisqParams.gofVariable;
+  if (index < 0 || index >= grid.cols.length) {
+    return { ok: false, reason: 'Select a categorical variable' };
+  }
+  const counts = new Map<string, number>();
+  grid.rows.forEach(row => {
+    const value = String(row[index] ?? '').trim();
+    if (value === '') return;
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  });
+  const labels = [...counts.keys()].sort((left, right) => (left < right ? -1 : left > right ? 1 : 0));
+  if (labels.length < 2) {
+    return { ok: false, reason: 'The goodness-of-fit test needs a variable with at least two categories' };
+  }
+  const expected = chisqParams.gofExpected
+    .split(/[,;\s]+/)
+    .map(token => Number.parseFloat(token))
+    .filter(value => Number.isFinite(value) && value > 0);
+  const result = goodnessOfFit(
+    labels,
+    labels.map(label => counts.get(label) ?? 0),
+    expected.length > 0 ? expected : undefined
+  );
+  if (!result) {
+    return {
+      ok: false,
+      reason:
+        'The goodness-of-fit test needs non-negative counts and one positive expected proportion per category',
+    };
+  }
+  const variableName = grid.cols[index].name;
+  return {
+    ok: true,
+    title: copy('Bontà di adattamento — {s1}', { s1: variableName }),
+    tables: goodnessTables(result),
+    report: goodnessReport(result, variableName, ciLevel),
+    charts: [
+      makeChart({
+        id: 'gof-bar',
+        kind: 'bar',
+        title: copy('Frequenze osservate'),
+        subtitle: copy('{s1} categorie · {s2} osservazioni', {
+          s1: result.labels.length,
+          s2: result.total,
+        }),
+        note: copy('Le barre sono i conteggi osservati; confrontali con le attese riportate nella tabella.'),
+        data: {
+          bars: result.labels.map((label, position) => ({
+            category: label,
+            value: result.observed[position],
+          })),
+        },
+        fields: { xLabel: variableName, yLabel: copy('Count') },
+        options: { valueLabels: true } as never,
+      }),
+    ],
+  };
+};

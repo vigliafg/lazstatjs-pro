@@ -7,6 +7,21 @@ import {
   controlChart,
   paretoCounts,
 } from '../../stats/kernels/quality';
+import { toleranceInterval } from '../../stats/kernels/tolerance';
+import { cusumChart } from '../../stats/kernels/cusum';
+import { gageRr } from '../../stats/kernels/msa';
+import { acceptancePlan } from '../../stats/kernels/acceptance';
+import { multiControlChart } from '../../stats/kernels/mcontrol';
+import { toleranceTables } from '../../stats/tables/tolerance';
+import { cusumTables } from '../../stats/tables/cusum';
+import { msaTables } from '../../stats/tables/msa';
+import { acceptanceTables } from '../../stats/tables/acceptance';
+import { mcontrolTables } from '../../stats/tables/mcontrol';
+import { toleranceReport } from '../../stats/reports/tolerance';
+import { cusumReport } from '../../stats/reports/cusum';
+import { msaReport } from '../../stats/reports/msa';
+import { acceptanceReport } from '../../stats/reports/acceptance';
+import { mcontrolReport } from '../../stats/reports/mcontrol';
 import {
   capabilityTables,
   controlTables,
@@ -38,6 +53,7 @@ const numericValues = (grid: Dataset, index: number): number[] =>
 export const buildQualityOutput = ({
   grid,
   params,
+  ciLevel,
 }: QualityInput): AnalysisRunResult => {
   const variableName = grid.cols[params.variable]?.name ?? 'Y';
   const performed: string[] = [];
@@ -47,8 +63,97 @@ export const buildQualityOutput = ({
   let title = 'Qualità del processo';
   let header: string | undefined;
 
-  if (params.mode === 'pareto') {
-    const categoryName = grid.cols[params.category]?.name ?? 'Categoria';
+  if (params.mode === 'tolerance') {
+    const values = numericValues(grid, params.variable);
+    const result = toleranceInterval(values, params.toleranceP, ciLevel / 100);
+    if (!result) {
+      return {
+        ok: false,
+        reason:
+          'The tolerance interval needs at least two numeric observations with a positive standard deviation and a proportion between 0 and 1',
+      };
+    }
+    tables = toleranceTables(result, values, variableName);
+    report = toleranceReport(result, variableName);
+    title = copy('Intervallo di tolleranza — {s1}', { s1: variableName });
+    header = copy('{s1}% popolazione · confidenza {s2}%', {
+      s1: (result.proportion * 100).toFixed(1),
+      s2: (result.confidence * 100).toFixed(0),
+    });
+    performed.push('tolerance');
+    charts.push(
+      makeChart({
+        id: 'tolerance-interval',
+        kind: 'interval',
+        title: copy('Intervallo di tolleranza'),
+        subtitle: copy('Copre il {s1}% della popolazione con confidenza {s2}%', {
+          s1: (result.proportion * 100).toFixed(1),
+          s2: (result.confidence * 100).toFixed(0),
+        }),
+        note: copy('La barra va dal limite inferiore al limite superiore; il punto è la media. Non è un intervallo di confidenza della media: descrive dove cadono le singole osservazioni.'),
+        data: {
+          intervals: [
+            {
+              category: variableName,
+              estimate: result.mean,
+              lo: result.lo,
+              hi: result.hi,
+            },
+          ],
+        },
+        fields: { xLabel: copy('Variabile'), yLabel: variableName },
+      })
+    );
+  } else if (params.mode === 'cusum') {
+    const values = numericValues(grid, params.variable);
+    const result = cusumChart(values);
+    if (!result) {
+      return {
+        ok: false,
+        reason: 'CUSUM needs at least four consecutive numeric observations with a positive standard deviation',
+      };
+    }
+    tables = cusumTables(result, variableName);
+    report = cusumReport(result, variableName);
+    title = copy('CUSUM — {s1}', { s1: variableName });
+    header = copy('target {s1} · h {s2}σ', {
+      s1: result.center.toFixed(2),
+      s2: result.h.toFixed(1),
+    });
+    performed.push('cusum');
+    charts.push(
+      makeChart({
+        id: 'cusum-chart',
+        kind: 'line',
+        title: copy('CUSUM'),
+        subtitle: copy('k = {s1}σ · h = {s2}σ', {
+          s1: result.k.toFixed(1),
+          s2: result.h.toFixed(1),
+        }),
+        note: copy('C+ e C− sono le somme cumulative sopra e sotto il target; la linea tratteggiata è l’intervallo di decisione. Un punto oltre la linea è il segnale.'),
+        data: {
+          series: [
+            ...result.points.map(point => ({
+              x: point.index,
+              y: point.cplus,
+              series: copy('C+'),
+            })),
+            ...result.points.map(point => ({
+              x: point.index,
+              y: point.cminus,
+              series: copy('C−'),
+            })),
+          ],
+          rules: [
+            { value: result.upper, label: 'h' },
+            { value: 0, label: '0' },
+          ],
+        },
+        fields: { xLabel: copy('Osservazione'), yLabel: copy('Somma cumulata'), series: copy('Lato') },
+        options: { showMarkers: true, showBand: false, showLegend: true } as never,
+      })
+    );
+  } else if (params.mode === 'pareto') {    const categoryName = grid.cols[params.category]?.name ?? 'Categoria';
     const labels = grid.rows.map(row => String(row[params.category] ?? ''));
     const result = paretoCounts(labels);
     if (!result) {
@@ -134,6 +239,159 @@ export const buildQualityOutput = ({
         data: { summary: boxes.summary, points: boxes.points, outliers: boxes.outliers },
         fields: { xLabel: groupName, yLabel: variableName },
         options: { showPoints: true, showMean: true } as never,
+      })
+    );
+  } else if (params.mode === 'msa') {
+    const partName = grid.cols[params.part]?.name ?? 'Parte';
+    const operatorName = grid.cols[params.operator]?.name ?? 'Operatore';
+    if (params.part === params.operator) {
+      return { ok: false, reason: 'Gage R&R needs two different columns: part and operator' };
+    }
+    const rows = grid.rows
+      .map(row => ({
+        part: String(row[params.part] ?? '').trim(),
+        operator: String(row[params.operator] ?? '').trim(),
+        value: parseNum(row[params.variable]),
+      }))
+      .filter(row => row.part !== '' && row.operator !== '' && Number.isFinite(row.value));
+    const result = gageRr(rows);
+    if (!result) {
+      return {
+        ok: false,
+        reason:
+          'Gage R&R needs a balanced crossed design: at least two parts, two operators and the same non-empty replicates for every part-operator cell',
+      };
+    }
+    tables = msaTables(result, variableName);
+    report = msaReport(result, variableName);
+    title = copy('Gage R&R — {s1}', { s1: variableName });
+    header = copy('{s1} parti × {s2} operatori × {s3} repliche', {
+      s1: result.parts,
+      s2: result.operators,
+      s3: result.replicates,
+    });
+    performed.push('msa');
+    charts.push(
+      makeChart({
+        id: 'msa-variance',
+        kind: 'bar',
+        title: copy('Componenti di varianza'),
+        subtitle: copy('Gage R&R = {s1}% della variabilità', {
+          s1: result.pctStudyVariation.toFixed(1),
+        }),
+        note: copy('Le barre separano la variabilità dello strumento (ripetibilità), quella tra operatori (riproducibilità) e quella reale tra i pezzi. Un Gage R&R alto significa che il sistema di misura non distingue i pezzi.'),
+        data: {
+          bars: [
+            { category: copy('Ripetibilità'), value: result.sd.repeatability },
+            { category: copy('Riproducibilità'), value: result.sd.reproducibility },
+            { category: copy('Parti'), value: result.sd.part },
+          ],
+        },
+        fields: { xLabel: copy('Componente'), yLabel: copy('Deviazione standard') },
+        options: { valueLabels: true, referenceLine: 'none' } as never,
+      })
+    );
+  } else if (params.mode === 'acceptance') {
+    const result = acceptancePlan({
+      n: params.planN,
+      c: params.planC,
+      lotSize: params.lotSize,
+    });
+    if (!result) {
+      return {
+        ok: false,
+        reason:
+          'Acceptance sampling needs a sample size of at least one, an acceptance number below the sample size and a lot at least as large as the sample',
+      };
+    }
+    tables = acceptanceTables(result);
+    report = acceptanceReport(result);
+    title = copy('Campionamento di accettazione');
+    header = copy('n {s1} · c {s2} · lotto {s3}', {
+      s1: result.n,
+      s2: result.c,
+      s3: result.lotSize > 0 ? result.lotSize : copy('infinito'),
+    });
+    performed.push('acceptance');
+    charts.push(
+      makeChart({
+        id: 'accept-oc',
+        kind: 'line',
+        title: copy('Curva operativa (OC)'),
+        subtitle: copy('Probabilità di accettare un lotto con qualità p'),
+        note: copy('La curva scende al crescere della difettosità in ingresso: AQL è il punto in cui si accetta ancora nel 95% dei casi, LTPD quello in cui si accetta solo nel 10%.'),
+        data: {
+          series: result.points.map(point => ({ x: point.p, y: point.pa })),
+          rules: [
+            { value: 0.95, label: 'AQL' },
+            { value: 0.1, label: 'LTPD' },
+          ],
+        },
+        fields: { xLabel: copy('Difettosità in ingresso'), yLabel: copy('Probabilità di accettazione') },
+        options: { showMarkers: false, showBand: false } as never,
+      }),
+      makeChart({
+        id: 'accept-aoq',
+        kind: 'line',
+        title: copy('Qualità media in uscita (AOQ)'),
+        subtitle: copy('AOQL = {s1}', { s1: result.aoql.toFixed(4) }),
+        note: copy('L’AOQ è la difettosità media che esce dal piano dopo l’ispezione: ha un massimo, l’AOQL. Non scende a zero perché i lotti accettati conservano i difettosi non trovati.'),
+        data: {
+          series: result.points.map(point => ({ x: point.p, y: point.aoq })),
+          rules: [{ value: result.aoql, label: 'AOQL' }],
+        },
+        fields: { xLabel: copy('Difettosità in ingresso'), yLabel: 'AOQ' },
+        options: { showMarkers: false, showBand: false } as never,
+      })
+    );
+  } else if (params.mode === 'mcontrol') {
+    const variables = params.variables.filter(
+      (value, index, values) => values.indexOf(value) === index
+    );
+    if (variables.length < 2) {
+      return { ok: false, reason: 'The T² chart needs at least two numeric variables' };
+    }
+    const rows = grid.rows.map(row =>
+      variables.map(variable => parseNum(row[variable]))
+    );
+    const result = multiControlChart({
+      rows,
+      variableNames: variables.map(variable => grid.cols[variable]?.name ?? `X${variable + 1}`),
+      subgroup: params.subgroup,
+      alpha: 0.05,
+    });
+    if (!result) {
+      return {
+        ok: false,
+        reason:
+          'The T² chart needs complete rows, at least two subgroups and more observations than variables',
+      };
+    }
+    tables = mcontrolTables(result);
+    report = mcontrolReport(result);
+    title = copy('Carta T² — {s1}', { s1: result.variables.join(', ') });
+    header = copy('{s1} sottogruppi di {s2} · UCL {s3}', {
+      s1: result.groups,
+      s2: result.subgroup,
+      s3: result.ucl.toFixed(3),
+    });
+    performed.push('mcontrol');
+    charts.push(
+      makeChart({
+        id: 'mcontrol-chart',
+        kind: 'line',
+        title: copy('Carta T² di Hotelling'),
+        subtitle: copy('{s1} punti fuori controllo su {s2}', {
+          s1: result.outCount,
+          s2: result.points.length,
+        }),
+        note: copy('La distanza T² combina le variabili con la loro covarianza. Un punto oltre il limite dice che la combinazione è insolita, non quale variabile ha causato il segnale.'),
+        data: {
+          series: result.points.map(point => ({ x: point.index, y: point.t2 })),
+          rules: [{ value: result.ucl, label: 'UCL' }],
+        },
+        fields: { xLabel: copy('Sottogruppo'), yLabel: 'T²' },
+        options: { showMarkers: true, showBand: false } as never,
       })
     );
   } else if (params.mode === 'capability') {

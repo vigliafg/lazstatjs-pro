@@ -17,6 +17,7 @@ import { geeCopy } from './gee';
 import { lmmCopy } from './lmm';
 import { l4Copy } from './l4';
 import { logisticCopy } from './logistic';
+import { loglinearCopy } from './loglinear';
 import { miCopy } from './mi';
 import { mixedanovaCopy } from './mixedanova';
 import { multivariateCopy } from './multivariate';
@@ -35,6 +36,17 @@ import { timeseriesCopy } from './timeseries';
 import { tostCopy } from './tost';
 import { ttestCopy } from './ttest';
 import { wizardCopy } from './wizard';
+import { w2Copy } from './w2';
+import { w3Copy } from './w3';
+import { w3RegressionCopy } from './w3-regression';
+import { w3EconometricsCopy } from './w3-econometrics';
+import { proportionsCopy as frProportionsCopy } from './proportions';
+import { w5Copy } from './w5';
+import { w6Copy } from './w6';
+import { w7Copy } from './w7';
+import { w8Copy } from './w8';
+import { w9Copy } from './w9';
+import { variancesCopy as frVariancesCopy } from './variances';
 
 export const frReportCopy: Record<string, string> = {
   ...agreementCopy,
@@ -52,6 +64,7 @@ export const frReportCopy: Record<string, string> = {
   ...lmmCopy,
   ...l4Copy,
   ...logisticCopy,
+  ...loglinearCopy,
   ...miCopy,
   ...mixedanovaCopy,
   ...multivariateCopy,
@@ -70,4 +83,15 @@ export const frReportCopy: Record<string, string> = {
   ...tostCopy,
   ...ttestCopy,
   ...wizardCopy,
+  ...frProportionsCopy,
+  ...frVariancesCopy,
+  ...w2Copy,
+  ...w3Copy,
+  ...w3RegressionCopy,
+  ...w3EconometricsCopy,
+  ...w5Copy,
+  ...w6Copy,
+  ...w7Copy,
+  ...w8Copy,
+  ...w9Copy,
 };

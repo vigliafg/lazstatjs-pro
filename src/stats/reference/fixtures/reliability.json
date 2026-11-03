@@ -1,0 +1,20 @@
+{
+  "source": "Crow–AMSAA maximum likelihood and closed-form RBD",
+  "generatedBy": "src/stats/reference/r/reliability.R",
+  "data": {
+    "time": [12, 28, 41, 63, 88, 101, 140, 176, 199, 245, 287, 321, 380, 412, 455, 510, 548, 602, 666, 720],
+    "failures": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  },
+  "beta": 0.670416920256933,
+  "lambda": 0.242899121037698,
+  "logLik": -20.6750614965314,
+  "mtbfCumulative": 36,
+  "mtbfInstantaneous": 53.6979287250137,
+  "stages": [
+    [0.95, 0.9],
+    0.99,
+    [0.92, 0.93, 0.97]
+  ],
+  "stageReliability": [0.995, 0.99, 0.999832],
+  "system": 0.9848845116
+}
