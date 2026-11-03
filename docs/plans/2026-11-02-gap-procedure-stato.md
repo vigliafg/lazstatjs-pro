@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (checkpoint W2: 11/12 metodi chiusi, C-10 aperta)
+**Ultimo aggiornamento**: 2026-11-03 (checkpoint W2: 11/12; C-10 deciso = GLMM completo)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
 **Stato**: W0 e W1 chiuse; W2 a 11/12 metodi, gate non ancora dichiarato per C-10 (GLMM/pendenze casuali)
-**Prossima ondata**: chiusura C-10, poi W3
+**Prossima ondata**: chiusura C-10 con GLMM completo (Laplace), poi W3
 
 ---
 
@@ -41,7 +41,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | Estensioni | 19 / 37 |
 | Reference baseline | 35 / 35 procedure statistiche (W0-09 chiuso) |
 | Blocchi | nessuno |
-| Prossimo gate | G2 — fine W2, bloccato da C-10 (GLMM/pendenze casuali) |
+| Prossimo gate | G2 — fine W2, dopo C-10 (GLMM completo con Laplace) |
 
 ---
 
@@ -51,7 +51,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|---:|---:|---|---|
 | W0 | Fondazioni condivise + retrofit | — | — | **chiusa** (G0 verde) | G0 |
 | W1 | Descriptive + test di base | 14 | 2 | **chiusa** (G1 verde) | G1 |
-| W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | **in corso** (11/12; C-10 aperta) | G2 |
+| W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | **in corso** (11/12; C-10 deciso: GLMM completo) | G2 |
 | W3 | Regressione avanzata | 7 | 7 | non iniziata | G3 |
 | W4 | Categorical + MI categorica | 5 | 1 | non iniziata | G4 |
 | W5 | Multivariate avanzata | 8 | 7 | non iniziata | G5 |
@@ -285,12 +285,48 @@ Obiettivo: ANOVA/GLMM + nucleo regressione, **12 metodi, 5 nuove voci**.
 | R-07 | Quantile | voce `quantile` | `kernels/quantile.ts` (Barrodale–Roberts), reference `quantreg` |
 | R-08 | Ridge/LASSO/elastic net | mode `regression` | `kernels/penalized.ts`, reference `glmnet` |
 
-### Aperto (1)
+### Aperto (1) — C-10, decisione presa: GLMM completo
 
-- **C-10 — Pendenze casuali / GLMM**: richiede un kernel GLMM (Laplace o PQL) e
-  l'estensione dell'LMM a pendenze casuali. È l'unico item che impedisce G2.
-  Decisione consigliata: trattarlo come primo item della sessione successiva,
-  con reference `lme4::lmer/glmer` e tolleranze Monte Carlo/Laplace dichiarate.
+**Decisione (2026-11-03)**: implementare il GLMM completo con approssimazione
+di Laplace, non solo le pendenze casuali gaussiane. Famiglie gaussiana,
+binomiale e Poisson; effetti casuali a intercetta e a pendenza (un predittore);
+un solo fattore di raggruppamento.
+
+**Kernel** `src/stats/kernels/glmm.ts` (nuovo):
+- Modello: `η_i = X_iβ + Z_i b_{g(i)}`, `b_g ~ N(0, D)`, con `D` 1×1
+  (random intercept) o 2×2 (intercept + slope, con covarianza).
+- Famiglie/link: gaussian/identity, binomial/logit, poisson/log.
+- Log-verosimiglianza approssimata di Laplace: per ogni gruppo, modo `b_g`
+  con Newton 1D/2D e correzione `0.5 log|H_g|`; `β` e i parametri di `D`
+  ottimizzati con BFGS (gradiente numerico) e inizializzazione da GLM/LMM.
+- SE da Hessiana numerica della log-verosimiglianza approssimata; IC e test
+  z/t dichiarati; output: coefficienti fissi, varianze/correlazione random,
+  BLUP per gruppo, fitted, logLik, AIC, ICC, iterazioni, convergenza.
+- Guardie: gruppi sufficienti, `D` non singolare, varianza al bordo (→0),
+  separazione binomiale, convergenza fallita.
+
+**Reference R**:
+- `lme4::lmer` per gaussiano con pendenza casuale (`chickweight_long`:
+  `Weight ~ Time + (Time | Chick)`).
+- `lme4::glmer` per binomiale (`birthwt`/`cbpp`) e Poisson (`quine`).
+- Script in `src/stats/reference/r/glmm.R`, fixture `fixtures/glmm.json`;
+  tolleranze dichiarate (Laplace vs lme4): coefficienti 1e-4–1e-3, varianze
+  5e-2, con motivazione nel test.
+
+**Integrazione**:
+- `GlmmParams` in `types.ts` + default + `parse.ts` + `params.ts` + `roles.ts`.
+- Registry/runners/AnalysisForm/worker heavy/`analysisKinds`.
+- Form: esito, predittori, gruppo, famiglia, link, pendenza casuale.
+- Runner + tabelle + report + grafici (osservati/stimati, caterpillar dei
+  random effects, residui).
+- Help 6 lingue (`w2-*.ts` o nuovo `w3-*.ts`), cataloghi reportCopy 6 lingue,
+  sample manifest (`chickweight_long`, `quine`, `birthwt`).
+
+**Conteggi attesi dopo C-10**: 26/73 metodi, 7/36 nuove voci (`glmm`),
+20/37 estensioni (parte `mode` di C-10).
+
+**Rischi**: stabilità numerica del Laplace; separazione; varianza al bordo;
+differenze con l’ottimizzatore di lme4; runtime (procedura heavy nel worker).
 
 ### Reference aggiunte in W2
 
@@ -335,53 +371,45 @@ MANCOVA, modalità ANOVA/regressione/logistica, integrazione e gate.
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
 
-### Handoff — 2026-11-03 / checkpoint W2 (11/12)
+### Handoff — 2026-11-03 / pre-compattazione, C-10 deciso
 
-- Ondata: W2 a 11/12 metodi; G2 non dichiarato per C-10 aperta.
+- Ondata: W2 a 11/12; C-10 (GLMM completo) è il prossimo lavoro.
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: codice `7bf4e84`; documenti aggiornati in questo commit.
-- Item chiusi (ID): W1 completa (D-01…D-04, Q-04, C-01…C-07, P-01/P-02);
-  W2: C-08, C-09, C-11, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08.
-- Item in corso (ID): C-10 — pendenze casuali / GLMM.
-- Item bloccati (ID + motivo): C-10 richiede un kernel GLMM (Laplace/PQL) e
-  l'estensione dell'LMM a pendenze casuali; decisione architetturale rinviata
-  a inizio sessione successiva.
-- Test eseguiti e risultato: `npm run check` **verde** (lint, 1052/1052 test,
-  depcruise, madge, file size); `npm run test:samples` 7/7; locale check 6/6.
-- File/moduli toccati: contratti `types/parse/params/roles/registry/runners`,
-  Form/run di anova, regression, logistic, discriminant; nuove voci `glm`,
-  `quantile`, `nonlinear`, `multinomial`; kernel `nestedAnova`, `anom`,
-  `polynomial`, `selection`, `penalized`, `mancova`, `quantile`, `nonlinear`,
-  `multinomial`; 10 reference R; help 6 lingue; manifest sample.
+- Ultimo commit: `e6588d9` (documenti); codice `7bf4e84`.
+- Item chiusi (ID): W1 completa; W2: C-08, C-09, C-11, R-01…R-08 tranne C-10.
+- Item in corso (ID): C-10 — GLMM completo con Laplace (decisione presa).
+- Item bloccati (ID + motivo): nessuno.
+- Test eseguiti e risultato: `npm run check` **verde** (1052/1052),
+  `test:samples` 7/7, locale 6/6, depcruise/madge/filesize verdi.
+- File/moduli toccati: vedi §5c; nessuna modifica di codice dopo `7bf4e84`.
 - Decisioni prese / deviazioni dal piano:
-  - R-06 copre Gaussiana/Binomiale/Poisson/Gamma; Tweedie non inclusa.
-  - ANOM usa l'approssimazione Bonferroni-t (documentata) invece della SMM.
-  - C-09 è implementata come modalità `mancova` di `discriminant`.
-  - 4 voci nuove effettive in W2 (`glm`, `quantile`, `nonlinear`,
-    `multinomial`), la quinta (`glmm`) dipende da C-10.
+  - C-10 = GLMM completo: famiglie gaussiana/binomiale/Poisson, random
+    intercept e random slope, Laplace + BFGS, reference `lme4`.
+  - R-06 senza Tweedie (solo Gamma), documentato.
+  - ANOM con Bonferroni-t, documentato.
 - Prossimi 3 passi:
-  1. Implementare C-10: kernel GLMM random-intercept (Laplace) + pendenze
-     casuali per LMM gaussiano, reference `lme4`/`glmmTMB`.
-  2. Integrare la voce `glmm` e la modalità pendenze casuali in `lmm`; help,
-     sample, worker e 6 lingue.
-  3. Eseguire `npm run check` e dichiarare G2; aggiornare i conteggi globali.
-- Domande aperte: confermare se C-10 va chiuso con GLMM completo (Laplace)
-  o con solo pendenze casuali gaussiane come primo passo.
-- Rischi attivi: il Laplace GLMM è numericamente delicato; le reference
-  `lme4`/`glmmTMB` richiedono tolleranze dichiarate e fixture committate.
+  1. `kernels/glmm.ts` + unit test + `reference/r/glmm.R` + fixture
+     (`lmer`/`glmer` su chickweight_long, birthwt/cbpp, quine).
+  2. Contratti condivisi e voce `glmm` (form, runner, tabelle, report,
+     grafici), worker heavy, `analysisKinds`.
+  3. Help 6 lingue, cataloghi reportCopy, sample manifest, `npm run check`,
+     dichiarazione G2 e conteggi 26/73, 7/36, 20/37.
+- Domande aperte: nessuna; C-10 è deciso.
+- Rischi attivi: stabilità del Laplace, separazione, varianza al bordo,
+  differenze con l’ottimizzatore lme4, runtime heavy.
 
 ### Riassunto di 10 righe
 
-1. Ondata e obiettivo: W2 a 11/12; resta C-10 (GLMM/pendenze casuali).
-2. Cosa è chiuso: 25 metodi totali (14 W1 + 11 W2); 6 voci nuove; 19 estensioni.
-3. Cosa è in corso: C-10, non iniziato.
-4. Cosa è bloccato: C-10 per decisione architetturale sul motore GLMM.
-5. Ultimo commit: `7bf4e84` su `feat/gap-wave-1`.
-6. Test: `npm run check` verde, 1052/1052; sample 7/7; locale 6/6.
-7. Decisioni: 3 batch di subagenti; Tweedie esclusa; ANOM Bonferroni-t.
-8. Prossimi 3 passi: C-10 kernel, voce `glmm` + pendenze casuali, G2.
-9. Domande: GLMM completo o solo pendenze casuali gaussiane?
-10. Rischi: stabilità numerica del Laplace; reference R da committare.
+1. Ondata e obiettivo: W2 11/12; C-10 = GLMM completo (deciso).
+2. Cosa è chiuso: 25 metodi, 6 voci nuove, 19 estensioni; gate verde.
+3. Cosa è in corso: C-10 non ancora iniziato.
+4. Cosa è bloccato: nulla.
+5. Ultimo commit: `e6588d9` su `feat/gap-wave-1`.
+6. Test: `npm run check` 1052/1052; sample 7/7; locale 6/6.
+7. Decisioni: GLMM con Laplace, random intercept + slope, lme4 reference.
+8. Prossimi 3 passi: kernel glmm + reference, voce/UI, help/sample/G2.
+9. Domande: nessuna.
+10. Rischi: numerica del Laplace e tolleranze vs lme4.
 
 ```md
 ## Handoff — YYYY-MM-DD / W?
@@ -427,7 +455,7 @@ Rimandare al piano §3. Decisioni già prese:
 
 ## 9. Domande aperte
 
-Nessuna al momento.
+Nessuna: C-10 è stato deciso come **GLMM completo con Laplace** (2026-11-03).
 
 ---
 
