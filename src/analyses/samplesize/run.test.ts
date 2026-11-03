@@ -21,6 +21,11 @@ test('sample-size builder returns tables, a report and the power curve', () => {
   const sensitivity = (result.charts ?? []).find(chart => chart.id === 'samplesize-sensitivity');
   assert.ok(sensitivity);
   assert.ok((sensitivity?.data.series ?? []).length > 1);
+  // F9.1: the three charts (power, precision, sensitivity) are the whole set.
+  assert.deepEqual(
+    (result.charts ?? []).map(chart => chart.id),
+    ['samplesize-power', 'samplesize-precision', 'samplesize-sensitivity']
+  );
 });
 
 test('sample-size builder rejects a zero effect size with the panel message', () => {

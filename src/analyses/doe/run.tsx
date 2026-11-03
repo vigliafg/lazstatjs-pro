@@ -7,9 +7,10 @@ import { doeTables } from '../../stats/tables/doe';
 import { doeDesignTables } from '../../stats/tables/doeDesign';
 import { doeReport } from '../../stats/reports/doe';
 import { doeDesignReport } from '../../stats/reports/doeDesign';
-import type { AnalysisChart } from '../../stats/charts';
+import type { AnalysisChart, ChartRow } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { DoeParams } from '../../io/project';
+import type { DoeDesignResult } from '../../stats/kernels/doeDesign';
 import type { AnalysisRunResult } from '../types';
 
 export interface DoeInput {
@@ -17,6 +18,52 @@ export interface DoeInput {
   params: DoeParams;
   ciLevel: number;
 }
+
+/** Pearson correlation of two coded columns; 0 when either column is constant. */
+const columnCorrelation = (left: number[], right: number[]): number => {
+  const n = Math.min(left.length, right.length);
+  if (n < 2) return 0;
+  const meanLeft = left.slice(0, n).reduce((sum, value) => sum + value, 0) / n;
+  const meanRight = right.slice(0, n).reduce((sum, value) => sum + value, 0) / n;
+  const centered = Array.from({ length: n }, (_, index) => ({
+    left: left[index] - meanLeft,
+    right: right[index] - meanRight,
+  }));
+  const sxy = centered.reduce((sum, pair) => sum + pair.left * pair.right, 0);
+  const sxx = centered.reduce((sum, pair) => sum + pair.left * pair.left, 0);
+  const syy = centered.reduce((sum, pair) => sum + pair.right * pair.right, 0);
+  if (!(sxx > 0) || !(syy > 0)) return 0;
+  return sxy / Math.sqrt(sxx * syy);
+};
+
+/**
+ * Alias matrix: the correlation between the terms of the design matrix.
+ * Main effects are always present; two-factor interactions join the matrix up
+ * to four factors, beyond which the matrix would stop being readable.
+ */
+export const designAliasCells = (design: DoeDesignResult): ChartRow[] => {
+  const levels = design.rows.map(row => row.levels);
+  const terms: { label: string; column: number[] }[] = design.factorNames.map((name, index) => ({
+    label: name,
+    column: levels.map(row => row[index]),
+  }));
+  if (design.factors <= 4) {
+    for (let first = 0; first < design.factors; first += 1) {
+      for (let second = first + 1; second < design.factors; second += 1) {
+        terms.push({
+          label: `${design.factorNames[first]}${design.factorNames[second]}`,
+          column: levels.map(row => row[first] * row[second]),
+        });
+      }
+    }
+  }
+  return terms.flatMap(row =>
+    terms.map(column => {
+      const value = columnCorrelation(row.column, column.column);
+      return { x: column.label, y: row.label, value, label: value.toFixed(2) };
+    })
+  );
+};
 
 /** Quadratic response surface with projected mesh, contours and coefficients. */
 export const buildDoeOutput = ({ grid, params }: DoeInput): AnalysisRunResult => {
@@ -77,6 +124,16 @@ export const buildDoeOutput = ({ grid, params }: DoeInput): AnalysisRunResult =>
           data: { series: points },
           fields: { xLabel: design.factorNames[0], yLabel: design.factorNames[1] ?? '', series: copy('Tipo') },
           options: { showFit: false, showBand: false, showPoints: true, showLegend: true } as never,
+        }),
+        makeChart({
+          id: 'doe-alias',
+          kind: 'heatmap',
+          title: copy('Matrice di alias'),
+          subtitle: copy('correlazione tra i termini del disegno'),
+          note: copy('Valori vicini a ±1 indicano termini confusi tra loro: la metà frazione non li distingue. Lo zero indica termini ortogonali; con più di quattro fattori la matrice si limita agli effetti principali.'),
+          data: { cells: designAliasCells(design) },
+          fields: { xLabel: copy('Termine'), yLabel: copy('Termine') },
+          options: { showValues: true, diverging: true, sort: 'none' } as never,
         }),
       ],
     };

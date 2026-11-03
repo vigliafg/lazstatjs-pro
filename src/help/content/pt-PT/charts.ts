@@ -45,4 +45,5 @@ export const chartGuides: Record<string, string[]> = {
   "var": ["Respostas impulsivas (uma linha por choque → variável) e decomposição da variância no horizonte escolhido; no VECM, barras de α por equação, com os valores negativos a corrigir o desvio."],
   "garch": ["Série e SD condicional, autocorrelação dos resíduos estandardizados e Q-Q desses resíduos com o envelope: se o GARCH explica a volatilidade, os pontos ficam próximos da diagonal."],
   "statespace": ["Nível latente filtrado e suavizado com a previsão; no Markov switching, a série com a previsão e a probabilidade do regime 2."],
+  "doe": ["Mapa do desenho nos dois primeiros fatores (vértices, axiais, centro) e matriz de alias: a correlação entre os termos do desenho mostra que efeitos a fração confunde (±1) e quais ficam ortogonais (0)."],
 };

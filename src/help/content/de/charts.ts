@@ -45,4 +45,5 @@ export const chartGuides: Record<string, string[]> = {
   "var": ["Impulsantworten (eine Linie je Schock → Variable) und Varianzzerlegung am gewählten Horizont; im VECM α-Balken je Gleichung, wobei negative Werte die Abweichung korrigieren."],
   "garch": ["Reihe und bedingte SD, Autokorrelation der standardisierten Residuen und deren Q-Q-Diagramm mit Hülle: Erklärt das GARCH die Volatilität, bleiben die Punkte nahe der Diagonale."],
   "statespace": ["Gefiltertes und geglättetes latentes Niveau mit Prognose; beim Markov-Switching die Reihe mit Prognose und der Wahrscheinlichkeit von Regime 2."],
+  "doe": ["Versuchsplan in den ersten beiden Faktoren (Eck-, Achsen- und Mittelpunkte) und Alias-Matrix: Die Korrelation zwischen den Termen zeigt, welche Effekte die Fraktion vermengt (±1) und welche orthogonal bleiben (0)."],
 };

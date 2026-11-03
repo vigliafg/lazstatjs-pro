@@ -45,4 +45,5 @@ export const chartGuides: Record<string, string[]> = {
   "var": ["Impulse responses (one line per shock → variable) and the variance decomposition at the chosen horizon; in the VECM, α bars per equation, where negative values correct the deviation."],
   "garch": ["Series and conditional SD, autocorrelation of the standardised residuals and their Q-Q plot with the envelope: if GARCH explains the volatility the points stay close to the diagonal."],
   "statespace": ["Filtered and smoothed latent level with the forecast; in Markov switching, the series with its forecast and the probability of regime 2."],
+  "doe": ["Design map in the first two factors (corners, axial points, centre) and the alias matrix: the correlation between the design terms shows which effects the fraction confounds (±1) and which stay orthogonal (0)."],
 };

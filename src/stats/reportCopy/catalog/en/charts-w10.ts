@@ -148,4 +148,8 @@ export const w10ChartCopy: Record<string, string> = {
   "N = {s1} · Jarque–Bera = {s2} (p = {s3})": "N = {s1} · Jarque–Bera = {s2} (p = {s3})",
   "I punti vicini alla diagonale indicano residui standardizzati compatibili con la normale; code pesanti o asimmetria segnalano che il GARCH gaussiano non descrive bene le innovazioni.":
     "Points close to the diagonal indicate standardised residuals compatible with normality; heavy tails or skewness mean the Gaussian GARCH does not describe the innovations well.",
+  "Matrice di alias": "Alias matrix",
+  "correlazione tra i termini del disegno": "correlation between the terms of the design",
+  "Valori vicini a ±1 indicano termini confusi tra loro: la metà frazione non li distingue. Lo zero indica termini ortogonali; con più di quattro fattori la matrice si limita agli effetti principali.":
+    "Values close to ±1 mean the terms are confounded: the half fraction does not separate them. Zero means orthogonal terms; beyond four factors the matrix is limited to the main effects.",
 };

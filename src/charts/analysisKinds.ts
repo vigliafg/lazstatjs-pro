@@ -84,7 +84,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   irt: ['bar', 'line'],
   conjoint: ['bar'],
   discriminant: ['heatmap', 'line', 'scatter'],
-  doe: ['bar', 'scatter', 'surface'],
+  doe: ['bar', 'heatmap', 'scatter', 'surface'],
   competing: ['forest', 'line'],
   recurrent: ['forest', 'line'],
   alt: ['bar', 'forest'],

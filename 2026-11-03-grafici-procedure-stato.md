@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1 e F8.2 chiuse)
-- **Fase corrente**: F9.1 — sample size, resampling, DOE
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2 e F9.1 chiuse)
+- **Fase corrente**: F9.2a — survey e MI
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,12 +12,12 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F8.2 Q-Q dei residui GARCH`.
-- **Chiuso**: F0.1 → F8.2; ondata O8 chiusa con `npm run check` exit 0
-  (lint, suite completa e guard). Gate mirato: 23 test (garch, copy,
-  analysisKinds, buildSpec), `check-locale` verde su it/en/fr/es/de/pt-PT,
-  `help:build` con 498 topic in 6 lingue.
-- **Da riprendere**: **F9.1** (sample size, resampling, DOE), poi F9.2a.
+- **Ultimo commit**: `feat(charts): F9.1 matrice di alias del disegno DOE`.
+- **Chiuso**: F0.1 → F9.1. O8 chiusa con `npm run check` exit 0; F9.1 con gate
+  mirato: 30 test (doe, samplesize, resampling, copy, analysisKinds,
+  buildSpec), `tsc --noEmit` exit 0, `check-locale` verde su
+  it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
+- **Da riprendere**: **F9.2a** (survey e MI), poi F9.2b.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -97,7 +97,7 @@ con motivo.
 | F7.3b | parametric, reliability | 30 | ✅ | idem (solo verifica, nessuna modifica) | `check` verde, 7 grafici parametrici coerenti |
 | F8.1 | Holt-Winters, unit root, spettrale | 45 | ✅ | `feat(charts): F8.1 Holt-Winters, radici unitarie e spettrale` | 16 test + `lint` + `locales:check` + `help:build` verdi |
 | F8.2 | VAR, GARCH, state-space | 60 | ✅ | `feat(charts): F8.2 Q-Q dei residui GARCH` | 23 test + `lint` + `locales:check` + `help:build` verdi |
-| F9.1 | sample size, resampling, DOE | 60 | ⬜ | — | — |
+| F9.1 | sample size, resampling, DOE | 60 | ✅ | `feat(charts): F9.1 matrice di alias del disegno DOE` | 30 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.2a | survey, MI | 45 | ⬜ | — | — |
 | F9.2b | ML, text, choice | 30 | ⬜ | — | — |
 | F9.3a | Bayes PPC, meta | 45 | ⬜ | — | — |
@@ -202,6 +202,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F8.2 | `garch-qq` usa `qqPoints`/`qqReference`/`qqBand` di `kits/common`, non helper nuovi | sono gli stessi usati da `countreg` e dagli altri Q-Q: una sola definizione di punti, retta ed envelope |
 | 2026-11-03 | F8.2 | La banda del Q-Q GARCH usa il `ciLevel` della procedura | l’envelope è un intervallo, quindi deve seguire il livello scelto dall’utente, non un 95% fisso |
 | 2026-11-03 | F8.2 | Jarque–Bera va nel sottotitolo, non in un grafico | il kernel espone solo statistica e p; un istogramma dei residui non aggiungerebbe informazione alla diagonale |
+| 2026-11-03 | F9.1 | La matrice di alias è la correlazione tra i termini del disegno (effetti principali + interazioni a due vie), calcolata nel runner da `designAliasCells` | il kernel del disegno restituisce solo le colonne codificate; la correlazione è pura algebra e non richiede una modifica kernel |
+| 2026-11-03 | F9.1 | Oltre quattro fattori la matrice si limita agli effetti principali | con 7 fattori i termini diventano 28 e la heatmap non è più leggibile; la nota lo dichiara |
+| 2026-11-03 | F9.1 | `samplesize` e `resampling` restano ai tre grafici ciascuno, con un’asserzione sui loro id nei test | la fase chiedeva la verifica: il test blocca l’aggiunta o la perdita silenziosa di un grafico |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -701,6 +704,32 @@ sotto-blocco aperto):
   gate di fine ondata `npm run check` exit 0.
 - **Commit**: `feat(charts): F8.2 Q-Q dei residui GARCH`
 
+### F9.1 — Sample size, resampling, DOE
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `doe-alias` [heatmap]: correlazione tra i termini del disegno (effetti
+    principali e, fino a quattro fattori, interazioni a due vie) calcolata da
+    `designAliasCells`; rettangolo colorato divergente e valore numerico in
+    ogni cella, con nota su ±1 (confusione) e 0 (ortogonalità).
+  - `analysisKinds.doe` dichiara ora anche `heatmap`.
+  - Guida `doe` aggiunta nelle 6 lingue (prima mancava).
+- **Verificato**: `samplesize` resta a tre grafici (potenza, precisione,
+  sensibilità), ora bloccati da un’asserzione sugli id; `resampling` resta a
+  tre (bootstrap, permutazione, Q-Q) ed era già fissato nel suo test.
+- **File toccati**: `src/analyses/doe/run.tsx`,
+  `src/analyses/doe/charts.test.ts` (nuovo),
+  `src/analyses/samplesize/run.test.ts`, `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: doe + samplesize + resampling + copy + analysisKinds + buildSpec
+  → 30/30 verdi; `tsc --noEmit` exit 0; `check-locale` verde sulle 6 lingue;
+  `help:build` verde (498 topic).
+- **Nota**: nella metà frazione con tre fattori A è confuso con BC e il test lo
+  verifica (|r| = 1); nel fattoriale completo tutti i valori fuori diagonale
+  sono zero.
+- **Commit**: `feat(charts): F9.1 matrice di alias del disegno DOE`
+
 ### F7.3b — Parametric e reliability
 
 - **Stato**: ✅ chiusa (2026-11-03, solo verifica)
@@ -758,6 +787,7 @@ sotto-blocco aperto):
 | F8.1 | `unitroot-series` ♻️ | `timeseries` | `line` | LZ | `timeseries/charts.test.ts` | ✅ |
 | F8.1 | `spectral-density` ♻️ | `timeseries` | `line` | LZ | `timeseries/charts.test.ts` | ✅ |
 | F8.2 | `garch-qq` | `garch` | `qq` | LZ | `garch/charts.test.ts` | ✅ |
+| F9.1 | `doe-alias` | `doe` | `heatmap` | LZ | `doe/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -768,10 +798,10 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F9.1: sample size, resampling, DOE (`doe-alias`).
-2. F9.2a: survey e MI (con il cap di 24 grafici).
-3. Tradurre in F11.1a–b le nuove note del life-stress plot, delle modalità
-   `timeseries` e del Q-Q GARCH.
+1. F9.2a: survey e MI (`survey-deff`, cap di 24 grafici per `mi`).
+2. F9.2b: coerenza di ML, text e choice.
+3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH e
+   matrice di alias.
 
 ---
 

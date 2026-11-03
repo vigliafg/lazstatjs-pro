@@ -45,4 +45,5 @@ export const chartGuides: Record<string, string[]> = {
   "var": ["Réponses impulsives (une ligne par choc → variable) et décomposition de la variance à l’horizon choisi ; dans le VECM, barres de α par équation, les valeurs négatives corrigeant l’écart."],
   "garch": ["Série et écart-type conditionnel, autocorrélation des résidus standardisés et Q-Q de ces résidus avec l’enveloppe : si le GARCH explique la volatilité, les points restent proches de la diagonale."],
   "statespace": ["Niveau latent filtré et lissé avec la prévision ; en Markov switching, la série avec sa prévision et la probabilité du régime 2."],
+  "doe": ["Carte du plan dans les deux premiers facteurs (sommets, points axiaux, centre) et matrice d’alias : la corrélation entre les termes du plan montre quels effets la fraction confond (±1) et lesquels restent orthogonaux (0)."],
 };
