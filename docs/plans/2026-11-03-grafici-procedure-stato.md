@@ -16,6 +16,8 @@
 - **Chiuso**: F0.1 → F10.3. Ondata O10 completa. Gate mirato verde (box
   layers, layers, styles, copy, analysisKinds, anova, nonparamrm, quality),
   `tsc --noEmit` exit 0, `check-locale` 6/6, `help:build` verde.
+- **Gate d'ondata O10**: `npm run check` exit 0 (test completi, depcruise,
+  madge senza cicli, filesize con le 5 eccezioni abbassate).
 - **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
   moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
 - **Da riprendere**: **F11.1a** (traduzioni fr/es), poi F11.1b.

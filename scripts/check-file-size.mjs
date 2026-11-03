@@ -18,11 +18,11 @@ const EXCEPTIONS = new Map([
   ['src/analyses/params.ts', 1475], // normalizzazione/validazione di tutte le procedure (W9)
   ['src/analyses/roles.ts', 1045], // mappa ruoli/colonne di tutte le procedure (W9)
   ['src/analyses/registry.ts', 747], // registro unico delle procedure: una voce per analisi (W9)
-  ['src/stats/reportCopy/catalog/en/charts.ts', 754], // catalogo inglese dei grafici, un blocco per famiglia (W4)
-  ['src/stats/reportCopy/catalog/de/charts-extra.ts', 928], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
-  ['src/stats/reportCopy/catalog/fr/charts-extra.ts', 928], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
-  ['src/stats/reportCopy/catalog/es/charts-extra.ts', 928], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
-  ['src/stats/reportCopy/catalog/pt-PT/charts-extra.ts', 928], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
+  ['src/stats/reportCopy/catalog/en/charts.ts', 752], // catalogo inglese dei grafici, un blocco per famiglia (W4)
+  ['src/stats/reportCopy/catalog/de/charts-extra.ts', 927], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
+  ['src/stats/reportCopy/catalog/fr/charts-extra.ts', 927], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
+  ['src/stats/reportCopy/catalog/es/charts-extra.ts', 927], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
+  ['src/stats/reportCopy/catalog/pt-PT/charts-extra.ts', 927], // catalogo grafici localizzato, una riga per messaggio (W6-W9)
   ['src/stats/kernels/cox.ts', 854], // Cox PH e fragilità gamma condivisa, con verosimiglianze e EM (W6)
 ]);
 
