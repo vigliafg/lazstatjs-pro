@@ -95,7 +95,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   choice: ['bar', 'forest', 'interval'],
   meta: ['bar', 'forest', 'scatter'],
   bayes: ['histogram', 'interval', 'line', 'scatter'],
-  spatial: ['bar', 'forest', 'scatter'],
+  spatial: ['bar', 'forest', 'line', 'scatter'],
 };
 
 export const chartKindsFor = (analysisId: string): ChartKind[] =>

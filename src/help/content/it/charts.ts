@@ -52,4 +52,5 @@ export const chartGuides: Record<string, string[]> = {
   "choice": ["Punteggi MaxDiff e quote con intervallo; nel logit condizionale forest dei coefficienti e quote osservate/previste per alternativa."],
   "bayes": ["Istogramma e intervalli a posteriori, posteriori congiunte nella regressione, medie dei gruppi nel gerarchico e controllo predittivo (repliche posteriori contro il valore osservato) per normale e proporzione."],
   "meta": ["Forest con stima pooled, funnel plot effetto × precisione e pesi degli studi; la scala è quella dell’effetto e la linea di riferimento è zero."],
+  "spatial": ["Mappa dei valori e quadranti LISA, variogramma sperimentale, indicatori locali più forti e forest dei coefficienti SAR; le distanze sono euclidee sulle coordinate scelte."],
 };

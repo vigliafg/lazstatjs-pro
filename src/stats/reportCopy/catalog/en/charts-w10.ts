@@ -169,4 +169,9 @@ export const w10ChartCopy: Record<string, string> = {
   "Numero di successi": "Number of successes",
   "Media": "Mean",
   "Densità": "Density",
+  "Variogramma sperimentale": "Experimental variogram",
+  "Semivarianza · {s1} classi di distanza": "Semivariance · {s1} distance classes",
+  "Ogni punto è la semivarianza media delle coppie in una classe di distanza, calcolata solo fino a metà della distanza massima: oltre, le coppie sono troppo poche e la stima instabile.":
+    "Each point is the mean semivariance of the pairs in one distance class, computed only up to half the maximum distance: beyond that, pairs are too few and the estimate unstable.",
+  "Semivarianza": "Semivariance",
 };

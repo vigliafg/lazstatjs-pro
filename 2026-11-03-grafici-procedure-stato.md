@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b e F9.3a chiuse)
-- **Fase corrente**: F9.3b — variogramma spaziale
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b, F9.3a e F9.3b chiuse)
+- **Fase corrente**: F10.1 — varianti JMP su forest, survival e line
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,11 +12,11 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F9.3a controllo predittivo bayesiano e funnel`.
-- **Chiuso**: F0.1 → F9.3a. Gate mirato verde (bayes, scatter layers, copy,
-  analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
+- **Ultimo commit**: `feat(charts): F9.3b variogramma sperimentale spaziale`.
+- **Chiuso**: F0.1 → F9.3b. Ondata O9 completa. Gate mirato verde (variogramma,
+  spatial, copy, analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
   it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
-- **Da riprendere**: **F9.3b** (variogramma spaziale), poi F10.1.
+- **Da riprendere**: **F10.1** (forest/survival/line in stile JMP), poi F10.2.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -100,7 +100,7 @@ con motivo.
 | F9.2a | survey, MI | 45 | ✅ | `feat(charts): F9.2a effetto del disegno survey` | 31 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.2b | ML, text, choice | 30 | ✅ | `fix(charts): F9.2b note di text, kind dichiarati e guide ML` | 35 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.3a | Bayes PPC, meta | 45 | ✅ | `feat(charts): F9.3a controllo predittivo bayesiano e funnel` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
-| F9.3b | spatial variogram | 45 | ⬜ | — | — |
+| F9.3b | spatial variogram | 45 | ✅ | `feat(charts): F9.3b variogramma sperimentale spaziale` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ⬜ | — | — |
 | F10.2 | bar, Pareto, mosaico, heatmap, interval, dot | 45 | ⬜ | — | — |
 | F10.3 | box, scatter, Q-Q: default per procedura | 45 | ⬜ | — | — |
@@ -215,6 +215,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F9.3a | Per la normale la DS è quella a posteriori media | i draw di σ non sono in `samples`; la media è l’approssimazione dichiarata nella nota |
 | 2026-11-03 | F9.3a | Il valore osservato è una serie verticale a due punti, non una regola | il layer `line` disegna solo regole orizzontali; la serie esprime la stessa informazione senza un nuovo layer |
 | 2026-11-03 | F9.3a | Lo scatter ora disegna una regola verticale quando riceve solo `x` | il funnel meta passava `{ x: pooled }` e la regola non veniva disegnata: ora il riferimento pooled compare |
+| 2026-11-03 | F9.3b | `variogram` sta nel kernel `spatial`, non nel runner | il piano lo ammette come eccezione al vincolo “solo runner”: è una funzione pura con test numerico su punti noti |
+| 2026-11-03 | F9.3b | Il variogramma usa solo le coppie entro metà della distanza massima | oltre quella soglia le coppie sono poche e la stima instabile; è il default abituale e la nota lo dichiara |
+| 2026-11-03 | F9.3b | Classi a larghezza costante sul semirange, 10 per default | classi a quantili richiederebbero un parametro di analisi nuovo, fuori perimetro |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -789,6 +792,28 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### F9.3b — Spatial: variogramma
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `variogram(points, { bins, maxDistance })` nel kernel `spatial`: stimatore
+    di Matheron su classi di distanza a larghezza costante, solo coppie entro
+    metà della distanza massima, classi vuote scartate.
+  - `spatial-variogram` [line]: semivarianza media per classe, marker attivi,
+    distanza media della classe sull'asse X.
+  - `analysisKinds.spatial` include `line`.
+- **Verificato**: su punti allineati con valori uguali alla coordinata il
+  variogramma dà 0,5 / 2 / 4,5 a distanza 1 / 2 / 3 e 3 / 2 / 1 coppie.
+- **File toccati**: `src/stats/kernels/spatial.ts`,
+  `src/stats/kernels/spatial.test.ts` (nuovo), `src/analyses/spatial/run.tsx`,
+  `src/analyses/spatial/charts.test.ts` (nuovo),
+  `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: kernel + spatial + copy + analysisKinds verdi (12 test); `tsc
+  --noEmit` exit 0; `check-locale` verde sulle 6 lingue; `help:build` verde.
+- **Commit**: `feat(charts): F9.3b variogramma sperimentale spaziale`
+
 ### F9.3a — Bayes e meta
 
 - **Stato**: ✅ chiusa (2026-11-03)
@@ -871,6 +896,7 @@ sotto-blocco aperto):
 | F9.1 | `doe-alias` | `doe` | `heatmap` | LZ | `doe/charts.test.ts` | ✅ |
 | F9.2a | `survey-deff` | `survey` | `bar` | LZ | `survey/charts.test.ts` | ✅ |
 | F9.3a | `bayes-ppc` | `bayes` | `line` | LZ | `bayes/charts.test.ts` | ✅ |
+| F9.3b | `spatial-variogram` | `spatial` | `line` | LZ | `spatial/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -881,10 +907,10 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F9.3b: variogramma spaziale con funzione pura testata.
-2. F10.1: varianti JMP su forest, survival e line.
+1. F10.1: varianti JMP su forest, survival e line.
+2. F10.2: bar, Pareto, mosaico, heatmap, interval, dot.
 3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH,
-   matrice di alias, DEFF survey, text mining e PPC bayesiano.
+   matrice di alias, DEFF survey, text mining, PPC bayesiano e variogramma.
 
 ---
 

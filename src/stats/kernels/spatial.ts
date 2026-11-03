@@ -427,3 +427,54 @@ export const spatialAnalysis = (
     },
   };
 };
+
+export interface VariogramBin {
+  distance: number;
+  semivariance: number;
+  pairs: number;
+}
+
+/**
+ * Matheron experimental variogram over equal-width distance classes.
+ *
+ * Only pairs within half the maximum distance enter the estimate: at longer
+ * lags there are too few pairs and a handful of outliers dominates the mean.
+ */
+export const variogram = (
+  points: readonly SpatialPoint[],
+  options: { bins?: number; maxDistance?: number } = {}
+): VariogramBin[] => {
+  const rows = points.filter(
+    point => Number.isFinite(point.x) && Number.isFinite(point.y) && Number.isFinite(point.value)
+  );
+  if (rows.length < 2) return [];
+  let largest = 0;
+  for (let i = 0; i < rows.length; i += 1) {
+    for (let j = i + 1; j < rows.length; j += 1) {
+      largest = Math.max(largest, distance(rows[i], rows[j]));
+    }
+  }
+  const half = largest / 2;
+  const maxDistance = options.maxDistance !== undefined && options.maxDistance > 0 ? options.maxDistance : half;
+  if (!(maxDistance > 0)) return [];
+  const bins = Math.max(1, Math.min(30, Math.round(options.bins ?? 10)));
+  const width = maxDistance / bins;
+  const sums = Array.from({ length: bins }, () => ({ squared: 0, distance: 0, pairs: 0 }));
+  for (let i = 0; i < rows.length; i += 1) {
+    for (let j = i + 1; j < rows.length; j += 1) {
+      const d = distance(rows[i], rows[j]);
+      if (!(d > 0) || d > maxDistance) continue;
+      const bin = sums[Math.min(bins - 1, Math.floor(d / width))];
+      bin.squared += (rows[i].value - rows[j].value) ** 2;
+      bin.distance += d;
+      bin.pairs += 1;
+    }
+  }
+  return sums
+    .filter(bin => bin.pairs > 0)
+    .map(bin => ({
+      distance: bin.distance / bin.pairs,
+      semivariance: bin.squared / (2 * bin.pairs),
+      pairs: bin.pairs,
+    }));
+};

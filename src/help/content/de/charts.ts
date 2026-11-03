@@ -52,4 +52,5 @@ export const chartGuides: Record<string, string[]> = {
   "choice": ["MaxDiff-Scores und Anteile mit Intervallen; im konditionalen Logit Koeffizienten-Forest und beobachtete/vorhergesagte Anteile je Alternative."],
   "bayes": ["Posterior-Histogramm und Intervalle, gemeinsame Posteriori in der Regression, Gruppenmittel im hierarchischen Modell und posterior predictive check (Posterior-Replikate gegen den beobachteten Wert) für Normal- und Anteilsmodell."],
   "meta": ["Forest mit gepoolter Schätzung, Funnel-Plot Effekt × Präzision und Studiengewichte; die Skala ist die des Effekts, die Referenzlinie ist null."],
+  "spatial": ["Werte-Karte und LISA-Quadranten, experimentelles Variogramm, stärkste lokale Indikatoren und SAR-Koeffizienten-Forest; die Distanzen sind euklidisch auf den gewählten Koordinaten."],
 };

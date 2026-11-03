@@ -1,7 +1,7 @@
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
-import { spatialAnalysis, type SpatialPoint } from '../../stats/kernels/spatial';
+import { spatialAnalysis, variogram, type SpatialPoint } from '../../stats/kernels/spatial';
 import { spatialTables } from '../../stats/tables/spatial';
 import { spatialReport } from '../../stats/reports/spatial';
 import type { AnalysisChart } from '../../stats/charts';
@@ -75,6 +75,32 @@ export const buildSpatialOutput = ({ grid, params }: SpatialInput): AnalysisRunR
       options: { fit: 'none', band: 'none' } as never,
     }),
   ];
+
+  const bins = variogram(points);
+  if (bins.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'spatial-variogram',
+        kind: 'line',
+        title: copy('Variogramma sperimentale'),
+        subtitle: copy('Semivarianza · {s1} classi di distanza', { s1: bins.length }),
+        note: copy('Ogni punto è la semivarianza media delle coppie in una classe di distanza, calcolata solo fino a metà della distanza massima: oltre, le coppie sono troppo poche e la stima instabile.'),
+        data: {
+          series: bins.map(bin => ({
+            x: bin.distance,
+            y: bin.semivariance,
+            series: copy('Semivarianza'),
+          })),
+        },
+        fields: {
+          xLabel: copy('Distanza'),
+          yLabel: copy('Semivarianza'),
+          series: copy('Semivarianza'),
+        },
+        options: { showMarkers: true } as never,
+      })
+    );
+  }
 
   if (result.lisa.length > 0) {
     const top = result.lisa
