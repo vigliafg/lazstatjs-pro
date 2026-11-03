@@ -33,7 +33,7 @@ passi; per il resto rimandare alle sezioni del piano.
 |---|---|
 | Ondata corrente | W8 chiusa (gate G8 verde); prossima W9 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | chiusura W8 (quality/DOE/power) |
+| Ultimo commit di codice | `f1a93dc` (chiusura W8) |
 | Ultimo commit documentale | questo aggiornamento |
 | Test | `npm run check` verde; `npm test` 1266/1266 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 66 / 73; W8 chiusa |
@@ -646,7 +646,7 @@ Obiettivo raggiunto: 5 metodi quality/DOE/power, nessuna nuova voce.
 
 - Ondata: W8 chiusa, gate G8 verde; prossima W9.
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: chiusura W8 su `feat/gap-wave-1`.
+- Ultimo commit: `f1a93dc` (chiusura W8) su `feat/gap-wave-1`.
 - Item chiusi (ID): Q-01, Q-02, Q-03, P-03, Q-05.
 - Item in corso (ID): nessuno.
 - Item bloccati (ID + motivo): nessuno.
@@ -685,7 +685,7 @@ Obiettivo raggiunto: 5 metodi quality/DOE/power, nessuna nuova voce.
 | 2026-11-03 | Chiusura W5 / G5 | `09c67cc` | `npm run check` 1206/1206 + `test:samples` 7/7 + locale 6/6 | verde | M-01…M-08 (8/8); 46/73 metodi, 22/36 voci, 25/37 estensioni; 8 reference W5; F4 e reportCopy 5 lingue complete |
 | 2026-11-03 | Chiusura W6 / G6 | chiusura W6 | `npm run check` + `test:samples` + locale 6/6 | verde | S-01…S-08 (8/8); 54/73 metodi, 26/36 voci; 5 reference W6 |
 | 2026-11-03 | Chiusura W7 / G7 | `994a5d4` + `515062c` | `npm run check` 1241/1241 + `test:samples` 7/7 + locale 6/6 | verde | T-01…T-07 (7/7); 61/73 metodi, 29/36 voci; 7 reference W7 |
-| 2026-11-03 | Chiusura W8 / G8 | chiusura W8 | `npm run check` 1266/1266 + `test:samples` 7/7 + locale 6/6 | verde | Q-01…Q-03, P-03, Q-05 (5/5); 66/73 metodi, 29/36 voci; 5 reference W8, 3 sample nuovi |
+| 2026-11-03 | Chiusura W8 / G8 | `f1a93dc` + docs | `npm run check` 1266/1266 + `test:samples` 7/7 + locale 6/6 | verde | Q-01…Q-03, P-03, Q-05 (5/5); 66/73 metodi, 29/36 voci; 5 reference W8, 3 sample nuovi |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
