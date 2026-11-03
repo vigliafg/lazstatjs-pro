@@ -177,6 +177,9 @@ export const remapParams = (
   const qualityVariable = one(params.quality.variable, 'Quality: variable');
   const qualityCategory = one(params.quality.category, 'Quality: category');
   const qualityGroup = optional(params.quality.group);
+  const qualityPart = one(params.quality.part, 'Quality: part');
+  const qualityOperator = one(params.quality.operator, 'Quality: operator');
+  const qualityVariables = list(params.quality.variables, 'Quality: variables');
   const clusterSelected = list(params.cluster.selected, 'Cluster: variables');
   const canonicalX = list(params.canonical.x, 'Canonical: X variables');
   const canonicalY = list(params.canonical.y, 'Canonical: Y variables');
@@ -502,6 +505,9 @@ export const remapParams = (
         variable: qualityVariable,
         category: qualityCategory,
         group: qualityGroup,
+        part: qualityPart,
+        operator: qualityOperator,
+        variables: qualityVariables,
       },
       cluster: {
         ...params.cluster,
@@ -713,6 +719,9 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.quality.variable, 'Quality: variable', width, errors);
   checkOne(params.quality.category, 'Quality: category', width, errors);
   checkOne(params.quality.group, 'Quality: group', width, errors, true);
+  checkOne(params.quality.part, 'Quality: part', width, errors);
+  checkOne(params.quality.operator, 'Quality: operator', width, errors);
+  checkList(params.quality.variables, 'Quality: variables', width, errors);
   checkList(params.cluster.selected, 'Cluster: variables', width, errors);
   checkList(params.canonical.x, 'Canonical: X variables', width, errors);
   checkList(params.canonical.y, 'Canonical: Y variables', width, errors);
@@ -979,6 +988,9 @@ export const validateAnalysisColumnRefs = (
       one(params.quality.variable, 'Quality: variable');
       one(params.quality.category, 'Quality: category');
       one(params.quality.group, 'Quality: group', true);
+      one(params.quality.part, 'Quality: part');
+      one(params.quality.operator, 'Quality: operator');
+      list(params.quality.variables, 'Quality: variables');
       break;
     case 'cluster':
       list(params.cluster.selected, 'Cluster: variables');

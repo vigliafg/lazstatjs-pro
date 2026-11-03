@@ -71,6 +71,8 @@ const SAMPLE_SIZE_DESIGNS: readonly SampleSizeDesign[] = [
   'oneProportion',
   'variance',
   'oneRate',
+  'regression',
+  'logistic',
 ];
 
 const parseSampleSizeDesign = (value: unknown, fallback: SampleSizeDesign): SampleSizeDesign =>
@@ -623,6 +625,9 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       hazardRatio: finite(samplesize.hazardRatio, d.samplesize.hazardRatio),
       ratio: Math.max(1e-9, finite(samplesize.ratio, d.samplesize.ratio)),
       eventRate: finite(samplesize.eventRate, d.samplesize.eventRate),
+      predictors: Math.max(1, Math.min(100, integer(samplesize.predictors, d.samplesize.predictors))),
+      f2: Math.max(1e-6, finite(samplesize.f2, d.samplesize.f2)),
+      oddsRatio: Math.max(1e-6, finite(samplesize.oddsRatio, d.samplesize.oddsRatio)),
     },
     distfit: {
       mode: distfit.mode === 'ks' ? 'ks' : d.distfit.mode,
@@ -949,7 +954,10 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
         quality.mode === 'pareto' ||
         quality.mode === 'variability' ||
         quality.mode === 'tolerance' ||
-        quality.mode === 'cusum'
+        quality.mode === 'cusum' ||
+        quality.mode === 'msa' ||
+        quality.mode === 'acceptance' ||
+        quality.mode === 'mcontrol'
           ? quality.mode
           : d.quality.mode,
       variable: index(quality.variable, d.quality.variable, width),
@@ -964,6 +972,12 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       usl: finite(quality.usl, d.quality.usl),
       target: finite(quality.target, d.quality.target),
       toleranceP: Math.max(0.5, Math.min(0.9999, finite(quality.toleranceP, d.quality.toleranceP))),
+      part: index(quality.part, d.quality.part, width),
+      operator: index(quality.operator, d.quality.operator, width),
+      variables: indexList(quality.variables, d.quality.variables, width),
+      planN: Math.max(1, Math.min(100000, integer(quality.planN, d.quality.planN))),
+      planC: Math.max(0, Math.min(1000, integer(quality.planC, d.quality.planC))),
+      lotSize: Math.max(0, Math.min(10000000, integer(quality.lotSize, d.quality.lotSize))),
     },
     cluster: {
       selected: indexList(cluster.selected, d.cluster.selected, width),
@@ -1025,10 +1039,19 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       ),
     },
     doe: {
+      mode: doe.mode === 'design' ? 'design' : d.doe.mode,
       response: index(doe.response, d.doe.response, width),
       factorA: index(doe.factorA, d.doe.factorA, width),
       factorB: index(doe.factorB, d.doe.factorB, width),
       model: doe.model === 'linear' ? 'linear' : d.doe.model,
+      designType:
+        doe.designType === 'half' ||
+        doe.designType === 'ccd' ||
+        doe.designType === 'boxBehnken'
+          ? doe.designType
+          : d.doe.designType,
+      factors: Math.max(2, Math.min(7, integer(doe.factors, d.doe.factors))),
+      centerPoints: Math.max(0, Math.min(50, integer(doe.centerPoints, d.doe.centerPoints))),
     },
     competing: {
       time: index(competing.time, d.competing.time, width),

@@ -113,7 +113,7 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.mi.description': 'Multiple Imputation mit Rubin-Pooling.',
   'meta.analysis.samplesize.label': 'Stichprobengröße / Power',
   'meta.analysis.samplesize.description':
-    'Stichprobengröße und Power für gängige Designs.',
+    'Stichprobengröße und Power für Mittelwerte, Anteile, Raten, Regression und Logistik.',
   'meta.analysis.resampling.label': 'Resampling',
   'meta.analysis.resampling.description':
     'Permutations- und Bootstrap-Inferenz.',
@@ -122,7 +122,7 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
     'Regressionsbaum mit Teilungsregeln, Blattbericht und Variablenbedeutung.',
   'meta.analysis.quality.label': 'Qualität (SPC)',
   'meta.analysis.quality.description':
-    'Regelkarten, Prozessfähigkeit, Pareto und Variabilität.',
+    'Regelkarten, Fähigkeit, Pareto, Gage R&R, Annahmestichproben und T²-Karten.',
   'meta.analysis.cluster.label': 'Clusteranalyse',
   'meta.analysis.cluster.description':
     'Hierarchisches Clustering mit Dendrogramm und Clusterprofilen.',
@@ -131,7 +131,7 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
     'Lineare Diskriminanzfunktionen, kanonisches Diagramm und einfaktorielle MANOVA.',
   'meta.analysis.doe.label': 'Responsefläche (DOE)',
   'meta.analysis.doe.description':
-    'Quadratische Responsefläche mit Konturplot und stationärem Punkt.',
+    'Responseflächenanalyse und Generator für faktorielle und zentral zusammengesetzte Pläne.',
   'meta.family.ml.label': 'Maschinelles Lernen',
   'meta.family.ml.description': 'Vorhersage, Klassifikation und Text',
   'meta.family.advanced.label': 'Fortgeschritten & Bayesianisch',

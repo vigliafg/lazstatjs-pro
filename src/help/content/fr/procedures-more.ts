@@ -383,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Choisissez le plan (p. ex. Deux moyennes indépendantes).',
-        'Saisissez la différence attendue, l’écart-type, α et la puissance souhaitée.',
+        'Saisissez la différence attendue, l’écart-type, α et la puissance souhaitée ; pour la régression indiquez les prédicteurs et f², pour la logistique le taux d’événements et le rapport de cotes.',
         'Lancez l’analyse et lisez n par groupe et n total.',
       ],
       expected: 'Taille d’échantillon par groupe et totale, avec des notes sur l’arrondi et les abandons attendus.',
@@ -394,7 +394,8 @@ export const moreTopics: HelpTopic[] = [
       whenNotToUse: ['N’utilisez pas la puissance post-hoc observée comme preuve de validité.'],
       reading: [
         'Des différences attendues plus petites ou une puissance requise plus élevée augmentent fortement n.',
-        'Le planificateur couvre moyennes, proportions, variances et taux de Poisson : choisissez le design du test que vous exécuterez.',
+        'Le planificateur couvre moyennes, proportions, variances, taux de Poisson, régression multiple et régression logistique : choisissez le design du test que vous exécuterez.',
+        'En régression, n est le nombre d’observations du test F global ; en logistique, le nombre de sujets pour un rapport de cotes binaire.',
       ],
       pitfalls: ['Une différence attendue gonflée produit une étude sous-dimensionnée.'],
       glossary: [

@@ -410,7 +410,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: "score-groups.csv",
       steps: [
         "Wählen Sie das Design (z. B. Zwei unabhängige Mittelwerte).",
-        "Geben Sie die erwartete Differenz, die Standardabweichung, α und die gewünschte Power ein.",
+        "Geben Sie die erwartete Differenz, die Standardabweichung, α und die gewünschte Power ein; für die Regression Prädiktoren und f², für die Logistik Ereignisrate und Odds Ratio.",
         "Führen Sie die Berechnung aus und lesen Sie n pro Gruppe und das Gesamt-n.",
       ],
       expected: "Stichprobengröße pro Gruppe und insgesamt, mit Hinweisen zu Rundung und erwarteten Dropouts.",
@@ -421,7 +421,8 @@ export const moreTopics: HelpTopic[] = [
       whenNotToUse: ["Verwenden Sie die beobachtete Post-hoc-Power nicht als Beweis für die Validität."],
       reading: [
         "Kleinere erwartete Differenzen oder eine höhere geforderte Power erhöhen n deutlich.",
-        "Der Planer deckt Mittelwerte, Anteile, Varianzen und Poisson-Raten ab: Wählen Sie das Design des Tests, den Sie ausführen werden.",
+        "Der Planer deckt Mittelwerte, Anteile, Varianzen, Poisson-Raten, multiple Regression und logistische Regression ab: Wählen Sie das Design des Tests, den Sie ausführen werden.",
+        "Bei der Regression ist n die Zahl der Beobachtungen für den globalen F-Test, bei der Logistik die Zahl der Personen für ein binäres Odds Ratio.",
       ],
       pitfalls: ["Eine zu hoch angesetzte erwartete Differenz erzeugt eine unterpowerte Studie."],
       glossary: [

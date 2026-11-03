@@ -522,6 +522,13 @@ quadratura, gradiente numerico). Reference R: `kmeans`, `cancor`, `cmdscale`/
 - P-01/P-02 sono quasi gratuiti.
 - Q-05 è un builder di matrici fattoriali, distinto dall’analisi RSM.
 
+**Stato W8 (2026-11-03)**: Q-01 (Gage R&R), Q-02 (acceptance/OC), Q-03
+(T² di Hotelling), P-03 (potenza regressione/logistica) e Q-05 (generatore
+DOE) chiusi; gate G8 verde. Reference: ANOVA base R, `pbinom`/`phyper`,
+covarianza pooled + `qf`, `pwr::pwr.f2.test` + formula Hsieh, `expand.grid`.
+Sample: `msa_demo`, `acceptance_demo`, `doe_demo`. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5j.
+
 ---
 
 ### 7.9 Missing data (2 metodi, 1 nuova voce)
@@ -751,7 +758,7 @@ numerica, salvo il Wizard che non è una procedura statistica.
 | v0.15 | W3 (7 metodi) — **chiuso 2026-11-03, G3 verde** | 7 modelli avanzati, 7 nuove voci |
 | v0.16 | W4 + W5 (13 metodi) | Categorical, MI, SEM/IRT/latent |
 | v0.17 | W6 + W7 (15 metodi) | Survival e time series |
-| v0.18 | W8 (5 metodi) | Quality/DOE/power |
+| v0.18 | W8 (5 metodi) — **chiuso 2026-11-03, G8 verde** | Quality/DOE/power |
 | v0.19 | W9 (7 metodi) | Survey/ML/Advanced, copertura 73/73 |
 
 Ogni release:

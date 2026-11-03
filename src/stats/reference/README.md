@@ -77,3 +77,8 @@ the test file and in `docs/plans/2026-11-02-gap-procedure-stato.md`.
 | `mediation.json` | `r/mediation.R` | `kernels/mediation.ts` |
 | `panel.json` | `r/panel.R` | `kernels/panel.ts` |
 | `propensity.json` | `r/propensity.R` | `kernels/propensity.ts` |
+| `msa.json` | `r/msa.R` | `kernels/msa.ts` |
+| `acceptance.json` | `r/acceptance.R` | `kernels/acceptance.ts` |
+| `mcontrol.json` | `r/mcontrol.R` | `kernels/mcontrol.ts` |
+| `doeDesign.json` | `r/doeDesign.R` | `kernels/doeDesign.ts` |
+| `samplesizeW8.json` | `r/samplesizeW8.R` | `kernels/samplesize.ts` |

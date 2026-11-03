@@ -51,6 +51,7 @@ import { w3EconometricsCopy as enW3EconometricsCopy } from './en/w3-econometrics
 import { w5Copy as enW5Copy } from './en/w5';
 import { w6Copy as enW6Copy } from './en/w6';
 import { w7Copy as enW7Copy } from './en/w7';
+import { w8Copy as enW8Copy } from './en/w8';
 
 export const enReportCopy: Record<string, string> = {
   ...agreementCopy,
@@ -96,6 +97,7 @@ export const enReportCopy: Record<string, string> = {
   ...enW5Copy,
   ...enW6Copy,
   ...enW7Copy,
+  ...enW8Copy,
 };
 
 const CATALOGS: Partial<Record<ReportLocale, Record<string, string>>> = {

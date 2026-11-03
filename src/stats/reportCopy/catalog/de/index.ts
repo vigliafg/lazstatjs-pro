@@ -41,6 +41,7 @@ import { proportionsCopy as deProportionsCopy } from './proportions';
 import { w5Copy } from './w5';
 import { w6Copy } from './w6';
 import { w7Copy } from './w7';
+import { w8Copy } from './w8';
 import { variancesCopy as deVariancesCopy } from './variances';
 
 export const deReportCopy: Record<string, string> = {
@@ -87,4 +88,5 @@ export const deReportCopy: Record<string, string> = {
   ...w5Copy,
   ...w6Copy,
   ...w7Copy,
+  ...w8Copy,
 };

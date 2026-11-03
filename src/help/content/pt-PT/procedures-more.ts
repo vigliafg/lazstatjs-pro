@@ -383,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Escolha o delineamento (por exemplo Duas médias independentes).',
-        'Introduza a diferença esperada, o desvio-padrão, o α e a potência desejada.',
+        'Introduza a diferença esperada, o desvio-padrão, o α e a potência desejada; para a regressão indique preditores e f², para a logística a taxa de eventos e o odds ratio.',
         'Execute e leia o n por grupo e o n total.',
       ],
       expected: 'Dimensão da amostra por grupo e total, com notas sobre arredondamento e desistências esperadas.',
@@ -394,7 +394,8 @@ export const moreTopics: HelpTopic[] = [
       whenNotToUse: ['Não use a potência observada a posteriori como prova de validade.'],
       reading: [
         'Diferenças esperadas menores ou potência exigida maior aumentam n de forma acentuada.',
-        'O planeador cobre médias, proporções, variâncias e taxas de Poisson: escolha o desenho do teste que vai executar.',
+        'O planeador cobre médias, proporções, variâncias, taxas de Poisson, regressão múltipla e regressão logística: escolha o desenho do teste que vai executar.',
+        'Na regressão, n é o número de observações para o teste F global; na logística, o número de sujeitos para um odds ratio binário.',
       ],
       pitfalls: ['Uma diferença esperada inflacionada produz um estudo com pouca potência.'],
       glossary: [

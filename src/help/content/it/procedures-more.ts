@@ -383,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Scegli il disegno (es. Due medie indipendenti).',
-        'Inserisci differenza attesa, deviazione standard, α e potenza desiderata.',
+        'Inserisci differenza attesa, deviazione standard, α e potenza desiderata; per la regressione indica predittori e f², per la logistica tasso di eventi e odds ratio.',
         'Esegui e leggi N per gruppo e N totale.',
       ],
       expected: 'Numerosità per gruppo e totale, con nota sugli arrotondamenti e sull’eventuale abbandono previsto.',
@@ -394,7 +394,8 @@ export const moreTopics: HelpTopic[] = [
       whenNotToUse: ['Non usare la potenza osservata a posteriori come prova di validità.'],
       reading: [
         'Ridurre la differenza attesa o la potenza richiesta aumenta molto N.',
-        'Il pianificatore copre medie, proporzioni, varianze e tassi di Poisson: scegli il disegno del test che eseguirai.',
+        'Il pianificatore copre medie, proporzioni, varianze, tassi di Poisson, regressione multipla e regressione logistica: scegli il disegno del test che eseguirai.',
+        'Nella regressione N è il numero di osservazioni per il test F complessivo; nella logistica è il numero di soggetti per un odds ratio binario.',
       ],
       pitfalls: ['Una differenza attesa gonfiata produce uno studio sottodimensionato.'],
       glossary: [

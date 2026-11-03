@@ -55,6 +55,30 @@ export const L4_ROLES: Record<string, L4Role[]> = {
       get: p => [p.quality.group],
       set: (p, c) => ({ ...p, quality: { ...p.quality, group: c } }),
     },
+    {
+      key: 'part',
+      label: 'MSA: part',
+      kind: 'any',
+      get: p => [p.quality.part],
+      set: (p, c) => ({ ...p, quality: { ...p.quality, part: c } }),
+    },
+    {
+      key: 'operator',
+      label: 'MSA: operator',
+      kind: 'any',
+      get: p => [p.quality.operator],
+      set: (p, c) => ({ ...p, quality: { ...p.quality, operator: c } }),
+    },
+    {
+      key: 'variables',
+      label: 'Multivariate control: variables',
+      kind: 'continuous',
+      get: p => p.quality.variables,
+      set: (p, c) => ({
+        ...p,
+        quality: { ...p.quality, variables: append(p.quality.variables, c) },
+      }),
+    },
   ],
   cluster: [
     {

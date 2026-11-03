@@ -64,17 +64,18 @@ export const l4Topics: HelpTopic[] = [
     area: "procedures",
     title: "Calidad (SPC)",
     summary:
-      "Gráficos de control, capacidad, Pareto y variabilidad en una sola plataforma.",
+      "Gráficos de control, capacidad, Pareto, sistemas de medida, muestreo de aceptación y control multivariante.",
     tutorial: {
-      goal: "Comprobar si un proceso es estable y capaz.",
+      goal: "Comprobar si un proceso es estable, capaz y se mide de forma fiable.",
       steps: [
-        "Elige el modo: gráfico de control, capacidad, Pareto, variabilidad, intervalo de tolerancia o CUSUM.",
+        "Elige el modo: gráfico de control, capacidad, Pareto, variabilidad, intervalo de tolerancia, CUSUM, Gage R&R, muestreo de aceptación o carta T².",
         "Selecciona la variable numérica (o la categoría para Pareto).",
+        "Para Gage R&R elige las columnas pieza y operador; para el muestreo fija n, c y el tamaño del lote; para T² selecciona al menos dos variables medidas juntas.",
         "Fija los límites de especificación, el tamaño del subgrupo y la proporción de población del intervalo de tolerancia cuando sea necesario.",
         "Ejecútalo y lee el gráfico, los índices y el informe de lectura.",
       ],
       expected:
-        "Un gráfico de control con límites, índices de capacidad o un gráfico de Pareto, además de las tablas.",
+        "Un gráfico de control con límites, índices de capacidad, una tabla Gage R&R, una curva OC o una carta T², además de las tablas.",
     },
     advanced: {
       assumptions: [
@@ -91,10 +92,15 @@ export const l4Topics: HelpTopic[] = [
         "Cp es el margen potencial; Cpk penaliza además una media alejada del centro de las especificaciones.",
         "La línea acumulada del Pareto muestra qué categorías abordar primero.",
         "El intervalo de tolerancia cubre una proporción de la población, no la media; la CUSUM acumula pequeños desplazamientos persistentes.",
+        "Un Gage R&R por debajo del 10 % es aceptable, entre el 10 % y el 30 % es marginal y por encima del 30 % las decisiones sobre piezas son arriesgadas.",
+        "En la curva OC, el AQL es la calidad aceptada el 95 % de las veces y el LTPD la aceptada solo el 10 %.",
+        "Un punto T² fuera del límite indica una combinación inusual de las variables, no cuál se movió.",
       ],
       pitfalls: [
         "Los límites de control no son límites de especificación.",
         "La capacidad supone normalidad y un proceso estable.",
+        "Un estudio Gage R&R exige un diseño cruzado equilibrado: cada pieza medida por cada operador.",
+        "La carta T² supone observaciones independientes y aproximadamente normales.",
       ],
       charts: [
         "Gráfico de control",
@@ -102,6 +108,9 @@ export const l4Topics: HelpTopic[] = [
         "Gráfico de Pareto",
         "Diagrama de caja de variabilidad",
         "Intervalo de tolerancia",
+        "Componentes de varianza Gage R&R",
+        "Curvas OC y AOQ",
+        "Carta T² de Hotelling",
       ],
       glossary: [
         {
@@ -113,6 +122,16 @@ export const l4Topics: HelpTopic[] = [
           term: "Cpk",
           definition:
             "Índice de capacidad que tiene en cuenta la distancia entre la media y los límites de especificación.",
+        },
+        {
+          term: "Gage R&R",
+          definition:
+            "Parte de la variabilidad total debida al sistema de medida: repetibilidad más reproducibilidad.",
+        },
+        {
+          term: "AQL",
+          definition:
+            "Nivel de calidad aceptable: defectuosos entrantes aceptados con probabilidad del 95 %.",
         },
       ],
     },
@@ -228,18 +247,19 @@ export const l4Topics: HelpTopic[] = [
   {
     id: "doe",
     area: "procedures",
-    title: "Superficie de respuesta (DOE)",
+    title: "Superficie de respuesta y diseños DOE",
     summary:
-      "Superficie cuadrática y mapa de curvas de nivel para dos factores continuos.",
+      "Superficie cuadrática para dos factores y generador de diseños factoriales y de superficie de respuesta.",
     tutorial: {
-      goal: "Encontrar la combinación de dos factores que optimiza una respuesta.",
+      goal: "Encontrar la combinación de dos factores que optimiza una respuesta, o planificar los ensayos que hay que recoger.",
       steps: [
-        "Selecciona la respuesta numérica y dos factores numéricos.",
-        "Elige un modelo lineal o cuadrático.",
-        "Ejecútalo y lee la superficie, las curvas de nivel y el punto estacionario.",
+        "Elige el modo: superficie de respuesta para analizar datos existentes o generador de diseños para crear una matriz de ensayos.",
+        "Para la superficie selecciona la respuesta y dos factores numéricos y elige un modelo lineal o cuadrático.",
+        "Para el generador elige el tipo de diseño, el número de factores y los puntos centrales.",
+        "Ejecútalo y lee la superficie y el punto estacionario, o la matriz y el mapa del diseño.",
       ],
       expected:
-        "Una superficie proyectada, curvas de nivel, coeficientes del modelo y un punto estacionario.",
+        "Una superficie proyectada con su punto estacionario, o una matriz con ensayos, puntos axiales, puntos centrales y alias.",
     },
     advanced: {
       assumptions: [
@@ -254,15 +274,19 @@ export const l4Topics: HelpTopic[] = [
       reading: [
         "Las curvas de nivel unen combinaciones de factores con la misma respuesta prevista.",
         "Un punto de silla no es un óptimo: sube en una dirección y baja en la otra.",
+        "Un factorial completo enumera todos los vértices; una fracción mitad cambia algunos efectos por menos ensayos.",
+        "En un diseño compuesto central los puntos axiales estiman la curvatura y los centrales el error puro.",
       ],
       pitfalls: [
         "La superficie solo es válida dentro del intervalo observado de los factores.",
         "Un ajuste cuadrático no sustituye un experimento diseñado.",
+        "Los ensayos generados deben aleatorizarse y protegerse de factores de molestia.",
       ],
       charts: [
         "Superficie de respuesta",
         "Mapa de curvas de nivel",
         "Coeficientes del modelo",
+        "Mapa del diseño",
       ],
       glossary: [
         {
@@ -272,6 +296,14 @@ export const l4Topics: HelpTopic[] = [
         {
           term: "Curva de nivel",
           definition: "Una línea de respuesta prevista constante.",
+        },
+        {
+          term: "CCD",
+          definition: "Diseño compuesto central: vértices factoriales, puntos axiales y puntos centrales.",
+        },
+        {
+          term: "Resolución",
+          definition: "Grado de confusión de los efectos principales con interacciones en una fracción.",
         },
       ],
     },

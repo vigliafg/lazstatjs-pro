@@ -154,6 +154,12 @@ export interface SampleSizeParams {
   eventRate: number;
   /** Rapporto tra varianze da rilevare (disegno 'variance'). */
   ratio: number;
+  /** Numero di predittori (disegno 'regression'). */
+  predictors: number;
+  /** Cohen's f² (disegno 'regression'). */
+  f2: number;
+  /** Odds ratio da rilevare (disegno 'logistic'). */
+  oddsRatio: number;
 }
 
 /** Parametri del fit delle distribuzioni. */
@@ -600,7 +606,10 @@ export type QualityMode =
   | 'pareto'
   | 'variability'
   | 'tolerance'
-  | 'cusum';
+  | 'cusum'
+  | 'msa'
+  | 'acceptance'
+  | 'mcontrol';
 
 /** Parametri della piattaforma qualità. */
 export interface QualityParams {
@@ -618,6 +627,15 @@ export interface QualityParams {
   target: number;
   /** Quota di popolazione coperta dall’intervallo di tolleranza (0–1). */
   toleranceP: number;
+  /** MSA: parte e operatore del disegno incrociato. */
+  part: number;
+  operator: number;
+  /** Controllo multivariato: variabili sorvegliate insieme. */
+  variables: number[];
+  /** Campionamento di accettazione: piano e lotto. */
+  planN: number;
+  planC: number;
+  lotSize: number;
 }
 
 export type ClusterMethod =
@@ -699,12 +717,17 @@ export interface ConjointParams {
   covariates?: number[];
 }
 
-/** Parametri della superficie di risposta (DOE). */
+/** Parametri della superficie di risposta (DOE) e del generatore di disegni. */
 export interface DoeParams {
+  mode: 'surface' | 'design';
   response: number;
   factorA: number;
   factorB: number;
   model: 'linear' | 'quadratic';
+  /** Generatore di disegni: tipo, numero di fattori e punti centrali. */
+  designType: 'full' | 'half' | 'ccd' | 'boxBehnken';
+  factors: number;
+  centerPoints: number;
 }
 
 /**
@@ -971,6 +994,9 @@ export const DEFAULT_PARAMS: ProjectParams = {
     hazardRatio: 0.7,
     eventRate: 0.5,
     ratio: 2,
+    predictors: 3,
+    f2: 0.15,
+    oddsRatio: 2,
   },
   distfit: {
     mode: 'fit',
@@ -1251,6 +1277,12 @@ export const DEFAULT_PARAMS: ProjectParams = {
     usl: 10,
     target: 5,
     toleranceP: 0.95,
+    part: 1,
+    operator: 2,
+    variables: [0, 1],
+    planN: 50,
+    planC: 2,
+    lotSize: 500,
   },
   cluster: {
     selected: [0, 1],
@@ -1302,10 +1334,14 @@ export const DEFAULT_PARAMS: ProjectParams = {
     covariates: [],
   },
   doe: {
+    mode: 'surface',
     response: 0,
     factorA: 1,
     factorB: 2,
     model: 'quadratic',
+    designType: 'full',
+    factors: 3,
+    centerPoints: 3,
   },
   competing: {
     time: 0,

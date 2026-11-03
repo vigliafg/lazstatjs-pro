@@ -40,6 +40,7 @@ import { proportionsCopy as esProportionsCopy } from './proportions';
 import { w5Copy } from './w5';
 import { w6Copy } from './w6';
 import { w7Copy } from './w7';
+import { w8Copy } from './w8';
 import { variancesCopy as esVariancesCopy } from './variances';
 
 /** Spanish report and table prose, merged from the per-procedure files. */
@@ -87,4 +88,5 @@ export const esReportCopy: Record<string, string> = {
   ...w5Copy,
   ...w6Copy,
   ...w7Copy,
+  ...w8Copy,
 };

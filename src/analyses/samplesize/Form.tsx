@@ -31,6 +31,10 @@ const designLabel = (design: SampleSizeDesign): string => {
       return t('samplesize.variance');
     case 'oneRate':
       return t('samplesize.oneRate');
+    case 'regression':
+      return t('samplesize.regression');
+    case 'logistic':
+      return t('samplesize.logistic');
     default:
       return t('samplesize.twoMeans');
   }
@@ -48,11 +52,30 @@ const DESIGNS: SampleSizeDesign[] = [
   'oneProportion',
   'variance',
   'oneRate',
+  'regression',
+  'logistic',
 ];
 
 export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: SampleSizeFormProps) => {
-  const { design, alpha, power, delta, sd, p1, p2, r, groups, f, margin, hazardRatio, eventRate, ratio } =
-    samplesizeParams;
+  const {
+    design,
+    alpha,
+    power,
+    delta,
+    sd,
+    p1,
+    p2,
+    r,
+    groups,
+    f,
+    margin,
+    hazardRatio,
+    eventRate,
+    ratio,
+    predictors,
+    f2,
+    oddsRatio,
+  } = samplesizeParams;
   const meanDesign = design === 'twoMeans' || design === 'oneMean' || design === 'paired';
   const tostDesign = design === 'tost';
   const survivalDesign = design === 'survival';
@@ -219,6 +242,46 @@ export const SampleSizeForm = ({ samplesizeParams, setSamplesizeParams }: Sample
               step="0.01"
               min="0"
               onChange={value => update({ f: value })}
+            />
+          </>
+        )}
+
+        {design === 'regression' && (
+          <>
+            <NumberField
+              label={t('samplesize.predictors')}
+              value={predictors}
+              min="1"
+              step="1"
+              integer
+              onChange={value => update({ predictors: value })}
+            />
+            <NumberField
+              label={t('samplesize.cohensF2')}
+              value={f2}
+              step="0.01"
+              min="0.001"
+              onChange={value => update({ f2: value })}
+            />
+          </>
+        )}
+
+        {design === 'logistic' && (
+          <>
+            <NumberField
+              label={t('samplesize.eventRate')}
+              value={p1}
+              step="0.01"
+              min="0.01"
+              max="0.99"
+              onChange={value => update({ p1: value })}
+            />
+            <NumberField
+              label={t('samplesize.oddsRatio')}
+              value={oddsRatio}
+              step="0.1"
+              min="1.01"
+              onChange={value => update({ oddsRatio: value })}
             />
           </>
         )}

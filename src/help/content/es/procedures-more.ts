@@ -383,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Elige el diseño (p. ej. Dos medias independientes).',
-        'Introduce la diferencia esperada, la desviación estándar, α y la potencia deseada.',
+        'Introduce la diferencia esperada, la desviación estándar, α y la potencia deseada; para la regresión indica predictores y f², para la logística la tasa de eventos y la razón de momios.',
         'Ejecútalo y lee n por grupo y la n total.',
       ],
       expected: 'Tamaño de muestra por grupo y total, con notas sobre el redondeo y las pérdidas esperadas.',
@@ -394,7 +394,8 @@ export const moreTopics: HelpTopic[] = [
       whenNotToUse: ['No uses la potencia observada a posteriori como prueba de validez.'],
       reading: [
         'Diferencias esperadas más pequeñas o una potencia requerida mayor aumentan n de forma marcada.',
-        'El planificador cubre medias, proporciones, varianzas y tasas de Poisson: elige el diseño de la prueba que ejecutarás.',
+        'El planificador cubre medias, proporciones, varianzas, tasas de Poisson, regresión múltiple y regresión logística: elige el diseño de la prueba que ejecutarás.',
+        'En regresión n es el número de observaciones de la prueba F global; en logística, el número de sujetos para una razón de momios binaria.',
       ],
       pitfalls: ['Una diferencia esperada inflada produce un estudio con poca potencia.'],
       glossary: [

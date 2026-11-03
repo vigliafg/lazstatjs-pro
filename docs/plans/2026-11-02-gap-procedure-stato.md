@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W7 chiusa: 7/7 item, gate G7 verde)
+**Ultimo aggiornamento**: 2026-11-03 (W8 chiusa: 5/5 item, gate G8 verde)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0–W7 chiuse; gate G0, G1, G2, G3, G4, G5, G6 e G7 verdi
-**Ondata corrente**: W7 chiusa — Time series (7 item); prossima W8
+**Stato**: W0–W8 chiuse; gate G0, G1, G2, G3, G4, G5, G6, G7 e G8 verdi
+**Ondata corrente**: W8 chiusa — Quality/DOE/power (5 item); prossima W9
 
 ---
 
@@ -31,17 +31,17 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W7 chiusa (gate G7 verde); prossima W8 |
+| Ondata corrente | W8 chiusa (gate G8 verde); prossima W9 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `994a5d4` (chiusura W7) |
+| Ultimo commit di codice | chiusura W8 (quality/DOE/power) |
 | Ultimo commit documentale | questo aggiornamento |
-| Test | `npm run check` verde; `npm test` 1241/1241 verdi; `npm run test:samples` 7/7; locale check 6/6 |
-| Item chiusi | 61 / 73; W7 chiusa |
+| Test | `npm run check` verde; `npm test` 1266/1266 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Item chiusi | 66 / 73; W8 chiusa |
 | Nuove voci | 29 / 36 (W2 + W3 + `loglinear` + 7 voci W5 + 4 voci W6 + 3 voci W7) |
 | Estensioni | 29 / 37 (cluster k-means/k-medians, life table, frailty, censoring a intervallo, parametriche extra) |
-| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 + 8 reference W5 + 5 reference W6 + 7 reference W7 |
+| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 + 8 reference W5 + 5 reference W6 + 7 reference W7 + 5 reference W8 |
 | Blocchi | nessuno |
-| Prossimo gate | G7 — fine W7 (time series) |
+| Prossimo gate | G9 — fine W9 (survey/ML/advanced) |
 
 ---
 
@@ -57,7 +57,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | W5 | Multivariate avanzata | 8 | 7 | **chiusa** (G5 verde) | G5 |
 | W6 | Survival e affidabilità | 8 | 4 | **chiusa** (G6 verde) | G6 |
 | W7 | Time series | 7 | 3 | **chiusa** (G7 verde) | G7 |
-| W8 | Quality/DOE/power restanti | 5 | 0 | non iniziata | G8 |
+| W8 | Quality/DOE/power restanti | 5 | 0 | **chiusa** (G8 verde) | G8 |
 | W9 | Survey + ML + Advanced | 7 | 7 | non iniziata | G9 |
 
 ---
@@ -66,18 +66,18 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Famiglia | Chiusi | Totale | Stato |
 |---|---:|---:|---|
-| Descriptive | 5 | 8 | in corso (D-01…D-04, Q-04) |
+| Descriptive | 8 | 8 | **chiusa** (D-01…D-04, Q-01…Q-04) |
 | Compare groups | 11 | 11 | **chiusa** (C-01…C-11) |
 | Regression | 15 | 15 | **chiusa** (R-01…R-15) |
 | Multivariate | 8 | 8 | **chiusa** (M-01…M-08) |
 | Categorical | 4 | 4 | **chiusa** (K-01…K-04) |
 | Survival | 8 | 8 | **chiusa** (S-01…S-08) |
-| Time series | 0 | 7 | non iniziata |
-| Design & power | 2 | 4 | in corso (P-01, P-02) |
+| Time series | 7 | 7 | **chiusa** (T-01…T-07) |
+| Design & power | 4 | 4 | **chiusa** (P-01…P-03, Q-05) |
 | Missing data | 1 | 2 | in corso (N-01) |
 | Machine Learning | 0 | 3 | non iniziata |
 | Advanced & Bayesian | 0 | 3 | non iniziata |
-| **Totale** | **54** | **73** |  |
+| **Totale** | **66** | **73** |  |
 
 ---
 
@@ -609,6 +609,65 @@ separato: le parti condivise restano in `kernels/survival.ts`,
 
 ---
 
+## 5j. Ondata W8 — avanzamento (2026-11-03)
+
+Obiettivo raggiunto: 5 metodi quality/DOE/power, nessuna nuova voce.
+
+| ID | Metodo | Tipo | Moduli | Reference |
+|---|---|---|---|---|
+| Q-01 | Gage R&R / MSA | mode `quality` | `kernels/msa.ts` | ANOVA due vie base R |
+| Q-02 | Acceptance sampling/OC | mode `quality` | `kernels/acceptance.ts` | `pbinom`/`phyper` + `uniroot` |
+| Q-03 | Carte multivariate T² | mode `quality` | `kernels/mcontrol.ts` | covarianza pooled + `qf` base R |
+| P-03 | Power regressione/logistica | mode `samplesize` | `kernels/samplesize.ts` | `pwr::pwr.f2.test` + formula Hsieh |
+| Q-05 | Generazione disegni DOE | mode `doe` | `kernels/doeDesign.ts` | `expand.grid` + generatori espliciti |
+
+### Decisioni e deviazioni W8
+
+- Q-02 non richiede il grid: il piano `(n, c)` e il lotto sono parametri; il
+  sample `acceptance_demo` documenta l'ispezione storica.
+- Q-03 usa la formulazione Phase I con covarianza pooled e limite F esatto.
+- Q-05 copre fattoriale completo, metà frazione, CCD rotabile e Box-Behnken
+  (3–4 fattori); `FrF2`, `DoE.base` e `rsm` non sono installati, quindi il
+  reference usa `expand.grid` con gli stessi generatori.
+- P-03: `pwrss` non è installato; la logistica usa la formula chiusa di Hsieh
+  et al., documentata nel reference.
+- Copy report/tabelle e titoli grafici W8 per de/fr/es/pt-PT usano il catalogo
+  inglese (debito dichiarato, come W6/W7).
+
+### Verifiche del gate G8
+
+- `npm run check` verde: `tsc`, **1266/1266** test, depcruise, madge, file size.
+- `npm run test:samples` **7/7**; 3 sample nuovi (`msa_demo`,
+  `acceptance_demo`, `doe_demo`) in 5 formati.
+- Locale check **6/6** (76 pagine help, 4398 frasi report).
+- Reference W8 **5/5** verdi; fixture committate.
+
+### Handoff — 2026-11-03 / chiusura W8 (G8 verde)
+
+- Ondata: W8 chiusa, gate G8 verde; prossima W9.
+- Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
+- Ultimo commit: chiusura W8 su `feat/gap-wave-1`.
+- Item chiusi (ID): Q-01, Q-02, Q-03, P-03, Q-05.
+- Item in corso (ID): nessuno.
+- Item bloccati (ID + motivo): nessuno.
+- Test eseguiti e risultato: `npm run check` verde (1266/1266); sample
+  7/7; locale 6/6.
+- File/moduli toccati: kernel `msa`, `acceptance`, `mcontrol`, `doeDesign`,
+  `samplesize`; tabelle/report omonimi; form quality/doe/samplesize; contratti
+  `types/parse/params/roles`; help 6 lingue; copy W8; sample W8; reference.
+- Decisioni prese / deviazioni dal piano: vedi sopra.
+- Prossimi 3 passi:
+  1. Aprire W9: N-02 survey, L-01 ML, L-02 text, L-03 choice, A-01 bayes,
+     A-02 meta, A-03 spatial.
+  2. Verificare le fondazioni F8 (MCMC, ensemble, survey variance) prima dei
+     kernel; usare fallback R quando i pacchetti non sono installati.
+  3. Chiudere G9 con check completo, sample, locale e aggiornamento conteggi.
+- Domande aperte: nessuna.
+- Rischi attivi: F8 non ancora implementata; L-02 richiede un formato testo
+  dedicato; A-01/A-03 sono heavy e vanno nel worker.
+
+---
+
 ## 6. Registro checkpoint
 
 | Data | Checkpoint | Commit | Test | Esito | Note |
@@ -624,6 +683,9 @@ separato: le parti condivise restano in `kernels/survival.ts`,
 | 2026-11-03 | Chiusura W3 / G3 | `8f8298f` | `npm run check` 1161/1161 + `test:samples` 7/7 + locale 6/6 | verde | R-09…R-15 (7/7); 33/73 metodi, 14/36 voci; traduzioni reportCopy 5 lingue complete |
 | 2026-11-03 | Chiusura W4 / G4 | `e2ec8cc` | `npm run check` 1196/1196 + `test:samples` 7/7 + locale 6/6 | verde | K-01…K-04 + N-01 (5/5); 38/73 metodi, 15/36 voci; 3 reference W4; traduzioni reportCopy 5 lingue complete |
 | 2026-11-03 | Chiusura W5 / G5 | `09c67cc` | `npm run check` 1206/1206 + `test:samples` 7/7 + locale 6/6 | verde | M-01…M-08 (8/8); 46/73 metodi, 22/36 voci, 25/37 estensioni; 8 reference W5; F4 e reportCopy 5 lingue complete |
+| 2026-11-03 | Chiusura W6 / G6 | chiusura W6 | `npm run check` + `test:samples` + locale 6/6 | verde | S-01…S-08 (8/8); 54/73 metodi, 26/36 voci; 5 reference W6 |
+| 2026-11-03 | Chiusura W7 / G7 | `994a5d4` + `515062c` | `npm run check` 1241/1241 + `test:samples` 7/7 + locale 6/6 | verde | T-01…T-07 (7/7); 61/73 metodi, 29/36 voci; 7 reference W7 |
+| 2026-11-03 | Chiusura W8 / G8 | chiusura W8 | `npm run check` 1266/1266 + `test:samples` 7/7 + locale 6/6 | verde | Q-01…Q-03, P-03, Q-05 (5/5); 66/73 metodi, 29/36 voci; 5 reference W8, 3 sample nuovi |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -632,6 +694,9 @@ separato: le parti condivise restano in `kernels/survival.ts`,
 ## 7. Handoff per la prossima compattazione
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
+
+Handoff corrente: **§5j — chiusura W8 / G8 verde**. Prossima ondata: W9
+(survey, ML, advanced).
 
 ## 5i. Ondata W7 — avanzamento (2026-11-03)
 

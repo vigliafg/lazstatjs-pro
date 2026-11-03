@@ -338,6 +338,22 @@ export const powerAt = (options: SampleSizeOptions, nPerGroup: number): number =
       return variancePower(nPerGroup, options.ratio ?? 1, alpha, options.tails);
     case 'oneRate':
       return ratePower(nPerGroup, options.p1 ?? 1, options.p2 ?? 1, alpha, options.tails);
+    case 'regression':
+      return regressionPower(
+        nPerGroup,
+        Math.max(1, Math.round(options.predictors ?? 1)),
+        options.f2 ?? 0.15,
+        alpha,
+        options.tails
+      );
+    case 'logistic':
+      return logisticPower(
+        nPerGroup,
+        options.p1 ?? 0.3,
+        options.oddsRatio ?? 2,
+        alpha,
+        options.tails
+      );
     default:
       return NaN;
   }
@@ -544,5 +560,102 @@ export const sampleSizeOneRate = (
     critical: critical.hi,
     effectSize: lambda1 / lambda0,
     method: 'tasso di Poisson singolo, potenza esatta',
+  };
+};
+
+/**
+ * Power of the overall F test in a multiple regression with `u` predictors,
+ * Cohen's f² and n observations: the noncentrality is f² · n, as in
+ * `pwr::pwr.f2.test`.
+ */
+export const regressionPower = (
+  n: number,
+  u: number,
+  f2: number,
+  alpha = 0.05,
+  tails: 1 | 2 = 2
+): number => {
+  const predictors = Math.max(1, Math.round(u));
+  const v = n - predictors - 1;
+  if (v < 1 || !(f2 > 0)) return Number.NaN;
+  // The overall F test is one-sided by construction; `tails` is ignored.
+  void tails;
+  const critical = jStat.centralF.inv(1 - alpha, predictors, v);
+  return noncentralFSF(critical, predictors, v, f2 * n);
+};
+
+/** Sample size for a multiple regression with `u` predictors and Cohen's f². */
+export const sampleSizeRegression = (
+  predictors: number,
+  f2: number,
+  alpha = 0.05,
+  power = 0.8,
+  tails: 1 | 2 = 2
+): SampleSizeResult => {
+  const u = Math.max(1, Math.round(predictors));
+  const effectSize = Math.abs(f2);
+  if (!(effectSize > 0)) {
+    return { design: 'regression', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize, method: '' };
+  }
+  const target = Math.min(0.9999, Math.max(0.0001, power));
+  let n = u + 2;
+  const maxN = 1_000_000;
+  while (n < maxN && regressionPower(n, u, effectSize, alpha, tails) < target) n += 1;
+  if (n >= maxN) {
+    return { design: 'regression', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize, method: '' };
+  }
+  const v = n - u - 1;
+  return {
+    design: 'regression',
+    nPerGroup: n,
+    total: n,
+    achievedPower: regressionPower(n, u, effectSize, alpha, tails),
+    critical: jStat.centralF.inv(1 - alpha, u, v),
+    effectSize,
+    method: 'regressione multipla, F non centrale (pwr.f2.test)',
+  };
+};
+
+/**
+ * Power of the logistic model with one binary covariate using the Hsieh
+ * approximation: n = (z + z)² / (p (1 − p) log(OR)²), where p is the event
+ * rate at the mean of the covariates.
+ */
+export const logisticPower = (
+  n: number,
+  p: number,
+  oddsRatio: number,
+  alpha = 0.05,
+  tails: 1 | 2 = 2
+): number => {
+  if (!(p > 0 && p < 1) || !(oddsRatio > 0) || oddsRatio === 1 || n < 2) return Number.NaN;
+  const effect = Math.abs(Math.log(oddsRatio));
+  return normalPower(Math.sqrt(n * p * (1 - p)) * effect, zAlpha(alpha, tails));
+};
+
+/** Sample size for a logistic model with one binary covariate (Hsieh et al.). */
+export const sampleSizeLogistic = (
+  p: number,
+  oddsRatio: number,
+  alpha = 0.05,
+  power = 0.8,
+  tails: 1 | 2 = 2
+): SampleSizeResult => {
+  const effect = Math.abs(Math.log(Math.max(1e-12, oddsRatio)));
+  const effectSize = effect;
+  if (!(p > 0 && p < 1) || !(oddsRatio > 0) || oddsRatio === 1) {
+    return { design: 'logistic', nPerGroup: NaN, total: NaN, achievedPower: NaN, critical: NaN, effectSize, method: '' };
+  }
+  const zA = zAlpha(alpha, tails);
+  const zB = zPower(power);
+  const n = Math.max(2, Math.ceil(Math.pow(zA + zB, 2) / (p * (1 - p) * effect * effect)));
+  return {
+    design: 'logistic',
+    nPerGroup: n,
+    total: n,
+    achievedPower: logisticPower(n, p, oddsRatio, alpha, tails),
+    critical: zA,
+    effectSize,
+    method: 'regressione logistica, approssimazione di Hsieh',
   };
 };

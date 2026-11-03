@@ -180,7 +180,7 @@ test('DOE runner emits surface, contour and coefficients', () => {
   const charts = chartsOf(
     buildDoeOutput({
       grid: doeGrid,
-      params: { response: 0, factorA: 1, factorB: 2, model: 'quadratic' },
+      params: { ...DEFAULT_PARAMS.doe, response: 0, factorA: 1, factorB: 2, model: 'quadratic' },
       ciLevel: 95,
     })
   );

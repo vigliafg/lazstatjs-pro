@@ -5,6 +5,8 @@ import {
   Advanced,
   Field,
   GroupSelect,
+  NumberField,
+  VariableList,
   VariableSelect,
   variableOptions,
   variableOptionsFrom,
@@ -38,10 +40,29 @@ export const QualityForm = ({ grid, qualityParams, setQualityParams }: QualityFo
         <option value="variability">{t('quality.variability')}</option>
         <option value="tolerance">{t('quality.tolerance')}</option>
         <option value="cusum">{t('quality.cusum')}</option>
+        <option value="msa">{t('quality.msa')}</option>
+        <option value="acceptance">{t('quality.acceptance')}</option>
+        <option value="mcontrol">{t('quality.mcontrol')}</option>
       </select>
     </Field>
 
-    {qualityParams.mode === 'pareto' ? (
+    {qualityParams.mode === 'acceptance' ? null : qualityParams.mode === 'mcontrol' ? (
+      <VariableList
+        label={t('form.variables')}
+        cols={grid.cols}
+        selected={qualityParams.variables}
+        only={continuousColumnIndexes(grid)}
+        onToggle={(column, checked) =>
+          setQualityParams(previous => ({
+            ...previous,
+            variables: checked
+              ? Array.from(new Set([...previous.variables, column]))
+              : previous.variables.filter(value => value !== column),
+          }))
+        }
+        hint={t('hint.quality.mcontrol')}
+      />
+    ) : qualityParams.mode === 'pareto' ? (
       <VariableSelect
         label={t('form.paretoCategory')}
         value={qualityParams.category}
@@ -55,6 +76,68 @@ export const QualityForm = ({ grid, qualityParams, setQualityParams }: QualityFo
         options={variableOptionsFrom(grid.cols, continuousColumnIndexes(grid))}
         onChange={value => setQualityParams(previous => ({ ...previous, variable: value }))}
       />
+    )}
+
+    {qualityParams.mode === 'msa' && (
+      <Advanced>
+        <VariableSelect
+          label={t('form.part')}
+          value={qualityParams.part}
+          options={variableOptions(grid.cols)}
+          onChange={value => setQualityParams(previous => ({ ...previous, part: value }))}
+        />
+        <VariableSelect
+          label={t('form.operator')}
+          value={qualityParams.operator}
+          options={variableOptions(grid.cols)}
+          disabledValues={[qualityParams.part]}
+          onChange={value => setQualityParams(previous => ({ ...previous, operator: value }))}
+        />
+      </Advanced>
+    )}
+
+    {qualityParams.mode === 'acceptance' && (
+      <Advanced>
+        <NumberField
+          label={t('form.sampleSizeN')}
+          value={qualityParams.planN}
+          min="1"
+          step="1"
+          integer
+          onChange={value => setQualityParams(previous => ({ ...previous, planN: value }))}
+        />
+        <NumberField
+          label={t('form.acceptanceNumber')}
+          value={qualityParams.planC}
+          min="0"
+          step="1"
+          integer
+          onChange={value => setQualityParams(previous => ({ ...previous, planC: value }))}
+        />
+        <NumberField
+          label={t('form.lotSize')}
+          value={qualityParams.lotSize}
+          min="0"
+          step="1"
+          integer
+          hint={t('hint.quality.lotSize')}
+          onChange={value => setQualityParams(previous => ({ ...previous, lotSize: value }))}
+        />
+      </Advanced>
+    )}
+
+    {qualityParams.mode === 'mcontrol' && (
+      <Advanced>
+        <NumberField
+          label={t('form.subgroupSize')}
+          value={qualityParams.subgroup}
+          min="2"
+          max="10"
+          step="1"
+          integer
+          onChange={value => setQualityParams(previous => ({ ...previous, subgroup: value }))}
+        />
+      </Advanced>
     )}
 
     {qualityParams.mode === 'variability' && (

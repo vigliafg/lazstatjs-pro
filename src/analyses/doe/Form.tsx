@@ -1,7 +1,13 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridData } from '../../grid/types';
 import type { DoeParams } from '../../io/project';
-import { Advanced, Field, VariableSelect, variableOptionsFrom } from '../../components/FormFields';
+import {
+  Advanced,
+  Field,
+  NumberField,
+  VariableSelect,
+  variableOptionsFrom,
+} from '../../components/FormFields';
 import { t } from '../../i18n';
 import { continuousColumnIndexes } from '../shared/columns';
 
@@ -15,6 +21,64 @@ export const DoeForm = ({ grid, doeParams, setDoeParams }: DoeFormProps) => {
   const numeric = continuousColumnIndexes(grid);
   return (
     <>
+      <Field label={t('form.procedure')}>
+        <select
+          aria-label={t('form.procedure')}
+          className="min-w-[150px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+          value={doeParams.mode}
+          onChange={event =>
+            setDoeParams(previous => ({
+              ...previous,
+              mode: event.target.value as DoeParams['mode'],
+            }))
+          }
+        >
+          <option value="surface">{t('doe.surface')}</option>
+          <option value="design">{t('doe.design')}</option>
+        </select>
+      </Field>
+
+      {doeParams.mode === 'design' ? (
+        <Advanced>
+          <Field label={t('form.designType')}>
+            <select
+              aria-label={t('form.designType')}
+              className="min-w-[170px] rounded border border-border2 bg-surface3 p-1.5 text-[11px] text-text"
+              value={doeParams.designType}
+              onChange={event =>
+                setDoeParams(previous => ({
+                  ...previous,
+                  designType: event.target.value as DoeParams['designType'],
+                }))
+              }
+            >
+              <option value="full">{t('doe.full')}</option>
+              <option value="half">{t('doe.half')}</option>
+              <option value="ccd">{t('doe.ccd')}</option>
+              <option value="boxBehnken">{t('doe.boxBehnken')}</option>
+            </select>
+          </Field>
+          <NumberField
+            label={t('form.factorCount')}
+            value={doeParams.factors}
+            min="2"
+            max="7"
+            step="1"
+            integer
+            onChange={value => setDoeParams(previous => ({ ...previous, factors: value }))}
+          />
+          <NumberField
+            label={t('form.centerPoints')}
+            value={doeParams.centerPoints}
+            min="0"
+            max="50"
+            step="1"
+            integer
+            onChange={value => setDoeParams(previous => ({ ...previous, centerPoints: value }))}
+          />
+        </Advanced>
+      ) : (
+        <>
       <VariableSelect
         label={t('form.responseY')}
         value={doeParams.response}
@@ -59,6 +123,8 @@ export const DoeForm = ({ grid, doeParams, setDoeParams }: DoeFormProps) => {
           </select>
         </Field>
       </Advanced>
+        </>
+      )}
     </>
   );
 };

@@ -2,8 +2,11 @@ import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
 import { responseSurface } from '../../stats/kernels/doe';
+import { doeDesign } from '../../stats/kernels/doeDesign';
 import { doeTables } from '../../stats/tables/doe';
+import { doeDesignTables } from '../../stats/tables/doeDesign';
 import { doeReport } from '../../stats/reports/doe';
+import { doeDesignReport } from '../../stats/reports/doeDesign';
 import type { AnalysisChart } from '../../stats/charts';
 import type { Dataset } from '../../grid/types';
 import type { DoeParams } from '../../io/project';
@@ -18,6 +21,66 @@ export interface DoeInput {
 /** Quadratic response surface with projected mesh, contours and coefficients. */
 export const buildDoeOutput = ({ grid, params }: DoeInput): AnalysisRunResult => {
   const { response, factorA, factorB, model } = params;
+
+  if (params.mode === 'design') {
+    const design = doeDesign({
+      design: params.designType,
+      factors: params.factors,
+      centerPoints: params.centerPoints,
+    });
+    if (!design) {
+      return {
+        ok: false,
+        reason:
+          'The design builder needs 2–7 factors; Box–Behnken is available for 3 or 4 factors',
+      };
+    }
+    const designLabel: Record<typeof params.designType, string> = {
+      full: copy('Fattoriale completo'),
+      half: copy('Fattoriale frazionario (metà)'),
+      ccd: copy('Disegno composto centrale (CCD)'),
+      boxBehnken: copy('Box-Behnken'),
+    };
+    // A scatter of the first two factors shows the geometry of the plan: the
+    // corners, the axial points and the centre runs.
+    const points = design.rows.map(row => ({
+      x: row.levels[0],
+      y: row.levels[1] ?? 0,
+      series:
+        row.kind === 'center'
+          ? copy('Centro')
+          : row.kind === 'axial'
+            ? copy('Assiale')
+            : copy('Vertice'),
+      label: `#${row.run}`,
+    }));
+    return {
+      ok: true,
+      title: copy('Disegno sperimentale (DOE)'),
+      header: copy('{s1} · {s2} run · {s3} fattori', {
+        s1: designLabel[params.designType],
+        s2: design.runs,
+        s3: design.factors,
+      }),
+      tables: doeDesignTables(design),
+      report: doeDesignReport(design),
+      charts: [
+        makeChart({
+          id: 'doe-design-map',
+          kind: 'scatter',
+          title: copy('Mappa del disegno'),
+          subtitle: copy('{s1} e {s2} in livelli codificati', {
+            s1: design.factorNames[0],
+            s2: design.factorNames[1] ?? '',
+          }),
+          note: copy('Ogni punto è un run. I vertici definiscono il dominio sperimentale, i punti assiali stimano la curvatura e i punti centrali misurano l’errore puro.'),
+          data: { series: points },
+          fields: { xLabel: design.factorNames[0], yLabel: design.factorNames[1] ?? '', series: copy('Tipo') },
+          options: { showFit: false, showBand: false, showPoints: true, showLegend: true } as never,
+        }),
+      ],
+    };
+  }
   if (response === factorA || response === factorB || factorA === factorB) {
     return { ok: false, reason: 'Response and the two factors must be three different columns' };
   }

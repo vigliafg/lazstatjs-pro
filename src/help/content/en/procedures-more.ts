@@ -383,7 +383,7 @@ export const moreTopics: HelpTopic[] = [
       dataset: 'score-groups.csv',
       steps: [
         'Choose the design (e.g. Two independent means).',
-        'Enter the expected difference, the standard deviation, α and the desired power.',
+        'Enter the expected difference, the standard deviation, α and the desired power; for regression enter the predictors and f², for logistic the event rate and odds ratio.',
         'Run it and read n per group and total n.',
       ],
       expected: 'Sample size per group and total, with notes on rounding and expected dropout.',
@@ -394,7 +394,8 @@ export const moreTopics: HelpTopic[] = [
       whenNotToUse: ['Do not use observed post-hoc power as proof of validity.'],
       reading: [
         'Smaller expected differences or higher required power increase n sharply.',
-        'The planner covers means, proportions, variances and Poisson rates: pick the design that matches the test you will run.',
+        'The planner covers means, proportions, variances, Poisson rates, multiple regression and logistic regression: pick the design that matches the test you will run.',
+        'For regression n is the number of observations for the overall F test; for logistic it is the number of subjects for a binary odds ratio.',
       ],
       pitfalls: ['An inflated expected difference produces an underpowered study.'],
       glossary: [

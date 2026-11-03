@@ -9,7 +9,9 @@ export type SampleSizeDesign =
   | 'survival'
   | 'oneProportion'
   | 'variance'
-  | 'oneRate';
+  | 'oneRate'
+  | 'regression'
+  | 'logistic';
 
 export interface SampleSizeOptions {
   design: SampleSizeDesign;
@@ -33,6 +35,12 @@ export interface SampleSizeOptions {
   eventRate?: number;
   /** Variance design: σ₁² / σ₀² to detect. */
   ratio?: number;
+  /** Regression design: number of predictors. */
+  predictors?: number;
+  /** Regression design: Cohen's f². */
+  f2?: number;
+  /** Logistic design: odds ratio to detect. */
+  oddsRatio?: number;
 }
 
 export interface SampleSizeResult {

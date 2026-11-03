@@ -1,0 +1,152 @@
+[
+  {
+    "Lot": "L001",
+    "Inspected": 50,
+    "Defectives": 3
+  },
+  {
+    "Lot": "L002",
+    "Inspected": 50,
+    "Defectives": 1
+  },
+  {
+    "Lot": "L003",
+    "Inspected": 50,
+    "Defectives": 0
+  },
+  {
+    "Lot": "L004",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L005",
+    "Inspected": 50,
+    "Defectives": 3
+  },
+  {
+    "Lot": "L006",
+    "Inspected": 50,
+    "Defectives": 0
+  },
+  {
+    "Lot": "L007",
+    "Inspected": 50,
+    "Defectives": 3
+  },
+  {
+    "Lot": "L008",
+    "Inspected": 50,
+    "Defectives": 1
+  },
+  {
+    "Lot": "L009",
+    "Inspected": 50,
+    "Defectives": 3
+  },
+  {
+    "Lot": "L010",
+    "Inspected": 50,
+    "Defectives": 0
+  },
+  {
+    "Lot": "L011",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L012",
+    "Inspected": 50,
+    "Defectives": 1
+  },
+  {
+    "Lot": "L013",
+    "Inspected": 50,
+    "Defectives": 0
+  },
+  {
+    "Lot": "L014",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L015",
+    "Inspected": 50,
+    "Defectives": 1
+  },
+  {
+    "Lot": "L016",
+    "Inspected": 50,
+    "Defectives": 5
+  },
+  {
+    "Lot": "L017",
+    "Inspected": 50,
+    "Defectives": 3
+  },
+  {
+    "Lot": "L018",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L019",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L020",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L021",
+    "Inspected": 50,
+    "Defectives": 1
+  },
+  {
+    "Lot": "L022",
+    "Inspected": 50,
+    "Defectives": 1
+  },
+  {
+    "Lot": "L023",
+    "Inspected": 50,
+    "Defectives": 3
+  },
+  {
+    "Lot": "L024",
+    "Inspected": 50,
+    "Defectives": 3
+  },
+  {
+    "Lot": "L025",
+    "Inspected": 50,
+    "Defectives": 4
+  },
+  {
+    "Lot": "L026",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L027",
+    "Inspected": 50,
+    "Defectives": 4
+  },
+  {
+    "Lot": "L028",
+    "Inspected": 50,
+    "Defectives": 2
+  },
+  {
+    "Lot": "L029",
+    "Inspected": 50,
+    "Defectives": 4
+  },
+  {
+    "Lot": "L030",
+    "Inspected": 50,
+    "Defectives": 3
+  }
+]

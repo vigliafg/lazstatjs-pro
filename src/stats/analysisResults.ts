@@ -426,3 +426,129 @@ export interface GofResult {
   df: number;
   p: number;
 }
+
+export interface MsaRow {
+  part: string;
+  operator: string;
+  value: number;
+}
+
+export interface MsaResult {
+  parts: number;
+  operators: number;
+  replicates: number;
+  n: number;
+  grandMean: number;
+  anova: {
+    source: 'part' | 'operator' | 'interaction' | 'error' | 'total';
+    df: number;
+    ss: number;
+    ms: number;
+    f: number | null;
+    p: number | null;
+  }[];
+  variance: {
+    repeatability: number;
+    reproducibility: number;
+    interaction: number;
+    part: number;
+    total: number;
+    grr: number;
+  };
+  sd: {
+    repeatability: number;
+    reproducibility: number;
+    grr: number;
+    part: number;
+    total: number;
+  };
+  pctContribution: number;
+  pctStudyVariation: number;
+  ndc: number;
+  operatorP: number | null;
+  interactionP: number | null;
+}
+
+export interface AcceptanceOptions {
+  n: number;
+  c: number;
+  lotSize: number;
+}
+
+export interface AcceptancePoint {
+  p: number;
+  pa: number;
+  aoq: number;
+  ati: number;
+}
+
+export interface AcceptanceResult {
+  n: number;
+  c: number;
+  lotSize: number;
+  distribution: 'binomial' | 'hypergeometric';
+  points: AcceptancePoint[];
+  aql: number;
+  ltpd: number;
+  alpha: number;
+  beta: number;
+  aoql: number;
+  aoqlP: number;
+}
+
+export interface MultiControlOptions {
+  rows: number[][];
+  variableNames: string[];
+  subgroup: number;
+  alpha: number;
+}
+
+export interface MultiControlPoint {
+  index: number;
+  t2: number;
+  out: boolean;
+}
+
+export interface MultiControlResult {
+  variables: string[];
+  subgroup: number;
+  groups: number;
+  n: number;
+  center: number[];
+  covariance: number[][];
+  ucl: number;
+  lcl: number;
+  points: MultiControlPoint[];
+  outCount: number;
+  df1: number;
+  df2: number;
+  critical: number;
+}
+
+export type DoeDesignType = 'full' | 'half' | 'ccd' | 'boxBehnken';
+
+export interface DoeDesignOptions {
+  design: DoeDesignType;
+  factors: number;
+  centerPoints: number;
+}
+
+export interface DoeDesignRow {
+  run: number;
+  levels: number[];
+  kind: 'corner' | 'axial' | 'center';
+}
+
+export interface DoeDesignResult {
+  design: DoeDesignType;
+  factors: number;
+  factorNames: string[];
+  rows: DoeDesignRow[];
+  runs: number;
+  cornerRuns: number;
+  axialRuns: number;
+  centerRuns: number;
+  resolution: number | null;
+  alpha: number | null;
+  aliases: string[];
+}

@@ -1006,15 +1006,87 @@ write_dataset(
 )
 
 ## ---------------------------------------------------------------------------
-## Manifest
+## Wave 8: MSA, acceptance sampling and DOE samples
 ## ---------------------------------------------------------------------------
 
-manifest <- list(
-  version = 1,
-  generatedBy = "samples/generate.R",
-  formats = FORMATS,
-  datasets = datasets
+set.seed(20261106)
+msa_parts <- 10
+msa_operators <- c("A", "B", "C")
+msa_replicates <- 3
+msa_part_effect <- rnorm(msa_parts, sd = 1.0)
+msa_operator_effect <- c(A = 0, B = 0.25, C = -0.15)
+msa_rows <- list()
+for (part in 1:msa_parts) {
+  for (operator in msa_operators) {
+    for (replicate in 1:msa_replicates) {
+      interaction <- rnorm(1, sd = 0.15)
+      measurement <- 20 + msa_part_effect[part] + msa_operator_effect[[operator]] +
+        interaction + rnorm(1, sd = 0.35)
+      width <- 10 + 0.5 * msa_part_effect[part] + 0.2 * msa_operator_effect[[operator]] +
+        rnorm(1, sd = 0.4)
+      msa_rows[[length(msa_rows) + 1]] <- data.frame(
+        Part = sprintf("P%02d", part),
+        Operator = operator,
+        Replicate = replicate,
+        Measurement = round(measurement, 3),
+        Width = round(width, 3)
+      )
+    }
+  }
+}
+msa_sample <- do.call(rbind, msa_rows)
+write_dataset(
+  "design", "msa_demo", msa_sample,
+  "Gage R&R crossed study",
+  "Synthetic, seeded with set.seed(20261106)",
+  c("quality"),
+  list(
+    example("quality", list(variable = "Measurement", part = "Part", operator = "Operator", variables = c("Measurement", "Width")), mode = "msa"),
+    example("quality", list(variables = c("Measurement", "Width")), mode = "mcontrol", subgroup = 3)
+  ),
+  "90 rows: 10 parts measured by 3 operators with 3 replicates; Measurement has a part effect around 1.0 and a repeatability SD around 0.35, Width is a second correlated characteristic for the T² chart."
 )
+
+set.seed(20261107)
+acceptance_sample <- data.frame(
+  Lot = sprintf("L%03d", 1:30),
+  Inspected = rep(50, 30),
+  Defectives = rbinom(30, 50, 0.04)
+)
+write_dataset(
+  "design", "acceptance_demo", acceptance_sample,
+  "Acceptance sampling lots",
+  "Synthetic, seeded with set.seed(20261107)",
+  c("quality"),
+  list(example("quality", list(variable = "Defectives"), mode = "acceptance", planN = 50, planC = 2, lotSize = 500)),
+  "30 lots of 50 inspected units with about 4% defectives; the acceptance mode uses the plan parameters, the data document the historical inspection."
+)
+
+set.seed(20261108)
+doe_codes <- expand.grid(A = c(-1, 1), B = c(-1, 1), C = c(-1, 1))
+doe_center <- data.frame(A = rep(0, 3), B = rep(0, 3), C = rep(0, 3))
+doe_sample <- rbind(doe_codes, doe_center)
+doe_sample$Y <- round(
+  30 + 2.0 * doe_sample$A + 1.2 * doe_sample$B - 0.8 * doe_sample$C +
+    0.9 * doe_sample$A * doe_sample$B - 1.5 * doe_sample$A^2 - 1.1 * doe_sample$B^2 +
+    rnorm(nrow(doe_sample), sd = 0.4),
+  3
+)
+write_dataset(
+  "design", "doe_demo", doe_sample,
+  "Two-factor response surface with a third factor",
+  "Synthetic, seeded with set.seed(20261108)",
+  c("doe"),
+  list(
+    example("doe", list(response = "Y", factorA = "A", factorB = "B"), mode = "surface", model = "quadratic"),
+    example("doe", list(response = "Y", factorA = "A", factorB = "B"), mode = "design", designType = "ccd", factors = 3, centerPoints = 3)
+  ),
+  "11 runs: a 2^3 factorial plus three centre points; Y follows a quadratic surface in A and B with a linear effect of C."
+)
+
+## ---------------------------------------------------------------------------
+## Manifest
+## ---------------------------------------------------------------------------
 
 # Fail before writing so a broken index never reaches the repository. The same
 # invariants are re-checked in TypeScript by src/io/sampleManifest.ts.
@@ -1096,6 +1168,13 @@ write_dataset(
     example("statespace", list(variable = "Markov"), mode = "markov", horizon = 10)
   ),
   "300 observations: Local is a noisy local linear trend; Markov alternates a low-volatility regime around -1 and a high-volatility regime around 2."
+)
+
+manifest <- list(
+  version = 1,
+  generatedBy = "samples/generate.R",
+  formats = FORMATS,
+  datasets = datasets
 )
 
 validate_manifest <- function(manifest) {
