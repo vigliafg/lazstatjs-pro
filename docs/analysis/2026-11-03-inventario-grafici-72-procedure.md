@@ -6,7 +6,7 @@ Comando: `npm run chart:inventory`.
 ## Totali
 
 - Analisi con almeno un grafico: **71**
-- Modelli `AnalysisChart` emessi: **323**
+- Modelli `AnalysisChart` emessi: **325**
 - Kind distinti: **32**
 
 ## Grafici per analisi
@@ -29,7 +29,7 @@ Comando: `npm run chart:inventory`.
 | `correspondence` | 2 |
 | `countreg` | 6 |
 | `cox` | 8 |
-| `descriptive` | 18 |
+| `descriptive` | 20 |
 | `discriminant` | 4 |
 | `distfit` | 5 |
 | `doe` | 4 |
@@ -98,7 +98,7 @@ Comando: `npm run chart:inventory`.
 | `bubble` | 1 |
 | `circles` | 1 |
 | `diamond` | 5 |
-| `dot` | 3 |
+| `dot` | 4 |
 | `ecdf` | 2 |
 | `forest` | 22 |
 | `heatmap` | 17 |
@@ -107,7 +107,7 @@ Comando: `npm run chart:inventory`.
 | `line` | 57 |
 | `missingness` | 3 |
 | `mosaic` | 2 |
-| `pareto` | 1 |
+| `pareto` | 2 |
 | `power` | 1 |
 | `qq` | 11 |
 | `residual` | 8 |
@@ -274,28 +274,30 @@ Comando: `npm run chart:inventory`.
 | `cox-martingale` | `scatter` | `src/analyses/cox/run.tsx:330` |
 | `cox-predicted-survival` | `line` | `src/analyses/cox/run.tsx:367` |
 
-### `descriptive` (18)
+### `descriptive` (20)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `freq-bar-${index + 1}` | `bar` | `src/analyses/descriptive/run.tsx:89` |
-| `outliers-box` | `box` | `src/analyses/descriptive/run.tsx:151` |
-| `runs-sequence-${index + 1}` | `line` | `src/analyses/descriptive/run.tsx:200` |
-| `runs-lengths-${index + 1}` | `bar` | `src/analyses/descriptive/run.tsx:214` |
-| `desc-means` | `bar` | `src/analyses/descriptive/run.tsx:324` |
-| `desc-box` | `box` | `src/analyses/descriptive/run.tsx:333` |
-| `desc-interval` | `interval` | `src/analyses/descriptive/run.tsx:356` |
-| `desc-diamond` | `diamond` | `src/analyses/descriptive/run.tsx:364` |
-| `desc-dot` | `dot` | `src/analyses/descriptive/run.tsx:380` |
-| `desc-spread-level` | `scatter` | `src/analyses/descriptive/run.tsx:392` |
-| `desc-pair-${i + 1}-${j + 1}` | `scatter` | `src/analyses/descriptive/run.tsx:417` |
-| `desc-ecdf` | `ecdf` | `src/analyses/descriptive/run.tsx:444` |
-| `desc-hist-${r.name}` | `histogram` | `src/analyses/descriptive/run.tsx:458` |
-| `desc-shadow-${r.name}` | `shadowgram` | `src/analyses/descriptive/run.tsx:469` |
-| `desc-matrix` | `scattermatrix` | `src/analyses/descriptive/run.tsx:535` |
-| `desc-bubble` | `bubble` | `src/analyses/descriptive/run.tsx:568` |
-| `desc-scatter3d` | `scatter3d` | `src/analyses/descriptive/run.tsx:586` |
-| `desc-qq-${r.name}` | `qq` | `src/analyses/descriptive/run.tsx:603` |
+| `freq-cumulative` | `pareto` | `src/analyses/descriptive/run.tsx:121` |
+| `outliers-box` | `box` | `src/analyses/descriptive/run.tsx:190` |
+| `outliers-strip-${index + 1}` | `dot` | `src/analyses/descriptive/run.tsx:206` |
+| `runs-sequence-${index + 1}` | `line` | `src/analyses/descriptive/run.tsx:267` |
+| `runs-lengths-${index + 1}` | `bar` | `src/analyses/descriptive/run.tsx:281` |
+| `desc-means` | `bar` | `src/analyses/descriptive/run.tsx:391` |
+| `desc-box` | `box` | `src/analyses/descriptive/run.tsx:400` |
+| `desc-interval` | `interval` | `src/analyses/descriptive/run.tsx:423` |
+| `desc-diamond` | `diamond` | `src/analyses/descriptive/run.tsx:431` |
+| `desc-dot` | `dot` | `src/analyses/descriptive/run.tsx:447` |
+| `desc-spread-level` | `scatter` | `src/analyses/descriptive/run.tsx:459` |
+| `desc-pair-${i + 1}-${j + 1}` | `scatter` | `src/analyses/descriptive/run.tsx:484` |
+| `desc-ecdf` | `ecdf` | `src/analyses/descriptive/run.tsx:511` |
+| `desc-hist-${r.name}` | `histogram` | `src/analyses/descriptive/run.tsx:525` |
+| `desc-shadow-${r.name}` | `shadowgram` | `src/analyses/descriptive/run.tsx:536` |
+| `desc-matrix` | `scattermatrix` | `src/analyses/descriptive/run.tsx:602` |
+| `desc-bubble` | `bubble` | `src/analyses/descriptive/run.tsx:635` |
+| `desc-scatter3d` | `scatter3d` | `src/analyses/descriptive/run.tsx:653` |
+| `desc-qq-${r.name}` | `qq` | `src/analyses/descriptive/run.tsx:670` |
 
 ### `discriminant` (4)
 

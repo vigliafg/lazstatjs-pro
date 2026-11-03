@@ -29,6 +29,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
     'histogram',
     'interval',
     'line',
+    'pareto',
     'qq',
     'scatter',
     'scatter3d',

@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F1.2 chiusa)
-- **Fase corrente**: F2.1 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F2.1 chiusa)
+- **Fase corrente**: F2.2 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -60,7 +60,7 @@ con motivo.
 | F1.1a | `factorial`: medie di cella | 45 | ✅ | `feat(charts): F1.1a medie di cella` | 11 test verdi |
 | F1.1b | `recurrent`: mean cumulative function | 45 | ✅ | `feat(charts): F1.1b funzione cumulata media` | 11 test verdi |
 | F1.2 | `tost` e chiusura ampiezza | 45 | ✅ | `feat(charts): F1.2 TOST a intervallo` | 22 test + inventory verdi |
-| F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ⬜ | — | — |
+| F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ✅ | `feat(charts): F2.1 Pareto e strip outlier` | 17 test verdi |
 | F2.2 | `quality`: profilo operatore, contributi carta | 60 | ⬜ | — | — |
 | F3.1 | varianze, sign, KS | 60 | ⬜ | — | — |
 | F3.2 | Mood, GOF, nested | 60 | ⬜ | — | — |
@@ -142,6 +142,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F1.1b | MCF in forma Nelson–Aalen: eventi al tempo / soggetti a rischio, cumulati | è la definizione non parametrica del MCF per eventi ricorrenti |
 | 2026-11-03 | F1.2 | Il layer `interval` disegna anche `regions` (rettangolo dietro le regole) | serve per la regione di equivalenza TOST ed è riusabile da ogni card interval |
 | 2026-11-03 | F1.2 | `tost` resta a 1 grafico (sostituzione, non aggiunta) | §6.2 lo elenca come ♻️; il DoD F1.2 chiede solo `factorial`/`recurrent` a 2 e `tdcox` documentato |
+| 2026-11-03 | F2.1 | La cumulata del Pareto si calcola nel runner dai conteggi del tally | il kernel di frequenza non espone la cumulata e il renderer non deve calcolarla |
+| 2026-11-03 | F2.1 | Lo strip marca il valore segnalato con `flag: 1` nei dati e lo nomina nella nota | il layer `dot` non ha un colore per punto; niente nuovo kind né layer ad hoc |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -263,6 +265,23 @@ sotto-blocco aperto):
   chiede solo `factorial`/`recurrent` a 2. Nessun secondo grafico inventato.
 - **Commit**: `feat(charts): F1.2 TOST a intervallo`
 
+### F2.1 — `descriptive`: frequenze cumulate e outlier
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `freq-cumulative` [pareto] dalla prima variabile categorica (conteggi
+  decrescenti + cumulata calcolata nel runner); `outliers-strip` [dot] per le
+  prime due variabili con test di Grubbs/Dixon, jitter deterministico
+  (`jmp-strip`) e `flag: 1` sul valore segnalato; `pareto` aggiunto ai kind.
+- **File toccati**: `src/analyses/descriptive/run.tsx`,
+  `src/analyses/descriptive/modes.test.ts`, `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{it,en}/charts.ts`.
+- **Test**: `modes.test.ts` + `run.test.ts` + `copy` + `analysisKinds` → 17/17
+  verdi.
+- **Nota**: lo strip non ricolora il punto segnalato (il layer `dot` ha un solo
+  colore); il flag resta nei dati e la nota rimanda alla tabella.
+- **Commit**: `feat(charts): F2.1 Pareto e strip outlier`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -275,6 +294,8 @@ sotto-blocco aperto):
 | F1.1a | `factorial-cells` | `factorial` | `interval` | LZ | `factorial/charts.test.ts` | ✅ |
 | F1.1b | `recurrent-mcf` | `recurrent` | `line` | JMP | `kernels/recurrent.test.ts` | ✅ |
 | F1.2 | `tost-difference` ♻️ | `tost` | `interval` | JMP | `tost/charts.test.ts` | ✅ |
+| F2.1 | `freq-cumulative` | `descriptive` | `pareto` | JMP | `descriptive/modes.test.ts` | ✅ |
+| F2.1 | `outliers-strip` | `descriptive` | `dot` | JMP | `descriptive/modes.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -282,11 +303,11 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F2.1: `freq-cumulative` [pareto] e `outliers-strip` [dot] in `descriptive`.
-2. Aggiungere i kind `pareto` e `dot` a `descriptive` con i test in
-   `descriptive/charts.test.ts`.
-3. F2.2: `msa-operator-profile` [line] e, se resta tempo, i contributi della
-   carta multivariata.
+1. F2.2: `msa-operator-profile` [line] dalle medie parte × operatore già nel
+   runner di `quality`.
+2. Valutare `mcontrol-contribution` [bar]: se il kernel non espone i contributi
+   entro 30 minuti, spostarlo in F2.3 e annotarlo.
+3. Aggiornare help IT/EN di `quality` e committare la fase.
 
 ---
 

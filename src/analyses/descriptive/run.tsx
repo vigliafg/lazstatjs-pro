@@ -102,6 +102,45 @@ const buildFrequencyOutput = (input: DescriptiveInput): DescriptiveOutputResult 
     })
   );
 
+  const primary = entries[0];
+  const total = primary.result.total;
+  let running = 0;
+  const paretoBars = [...primary.result.rows]
+    .sort((left, right) => right.count - left.count)
+    .map(row => {
+      running += row.count;
+      return {
+        category: row.value,
+        value: row.count,
+        pct: (row.count / total) * 100,
+        cumulative: (running / total) * 100,
+      };
+    });
+  if (paretoBars.length > 1) {
+    charts.push(
+      makeChart({
+        id: 'freq-cumulative',
+        kind: 'pareto',
+        title: copy('Pareto delle frequenze: {s1}', { s1: primary.name }),
+        subtitle: copy('{s1} modalità · {s2} osservazioni', {
+          s1: primary.result.distinct,
+          s2: primary.result.total,
+        }),
+        note: copy('Le barre sono i conteggi in ordine decrescente; la linea è la percentuale cumulata. Poche modalità spiegano la maggior parte dei casi.'),
+        data: {
+          bars: paretoBars,
+          cumulative: paretoBars.map(row => ({ x: row.category, y: row.cumulative })),
+        },
+        fields: {
+          xLabel: primary.name,
+          yLabel: copy('Conteggio'),
+          series: copy('Cumulata (%)'),
+        },
+        options: { showCumulative: true, valueLabels: false, sort: 'none' } as never,
+      })
+    );
+  }
+
   return {
     ok: true,
     title: copy('Frequenze'),
@@ -157,6 +196,34 @@ const buildOutliersOutput = (input: DescriptiveInput): DescriptiveOutputResult =
       fields: { xLabel: copy('Variable'), yLabel: copy('Value') },
     }),
   ];
+
+  const columns = numericColumns(input);
+  usable.slice(0, 2).forEach((entry, index) => {
+    const column = columns.find(candidate => candidate.name === entry.name);
+    if (!column || column.values.length === 0) return;
+    const flagged = entry.grubbs?.outlier ?? entry.dixon?.outlier;
+    charts.push(
+      makeChart({
+        id: `outliers-strip-${index + 1}`,
+        kind: 'dot',
+        title: copy('Valori osservati: {s1}', { s1: entry.name }),
+        subtitle: copy('{s1} osservazioni · valore segnalato {s2}', {
+          s1: column.values.length,
+          s2: flagged ?? '—',
+        }),
+        note: copy('Ogni punto è un’osservazione, disposta in orizzontale per ridurre la sovrapposizione; i valori segnalati dal test di Grubbs o Dixon sono riportati nella tabella.'),
+        data: {
+          points: column.values.map(value => ({
+            category: entry.name,
+            value,
+            ...(flagged !== undefined && value === flagged ? { flag: 1 } : {}),
+          })),
+        },
+        fields: { xLabel: copy('Variabile'), yLabel: entry.name },
+        options: { jitter: 'wide', showMean: false } as never,
+      })
+    );
+  });
 
   return {
     ok: true,

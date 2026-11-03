@@ -14,4 +14,12 @@ export const w10ChartCopy: Record<string, string> = {
   "Eventi cumulati per soggetto": "Cumulative events per subject",
   "La differenza stimata è il punto; il segmento è il suo intervallo di confidenza. La fascia colorata è la regione di equivalenza delimitata dai margini tratteggiati: se l’intero intervallo cade dentro, l’equivalenza è supportata.":
     "The estimated difference is the point; the segment is its confidence interval. The shaded band is the equivalence region bounded by the dashed margins: if the whole interval falls inside, equivalence is supported.",
+  "Pareto delle frequenze: {s1}": "Frequency Pareto: {s1}",
+  "{s1} modalità · {s2} osservazioni": "{s1} categories · {s2} observations",
+  "Le barre sono i conteggi in ordine decrescente; la linea è la percentuale cumulata. Poche modalità spiegano la maggior parte dei casi.":
+    "The bars are the counts in descending order; the line is the cumulative percentage. A few categories explain most of the cases.",
+  "Valori osservati: {s1}": "Observed values: {s1}",
+  "{s1} osservazioni · valore segnalato {s2}": "{s1} observations · flagged value {s2}",
+  "Ogni punto è un’osservazione, disposta in orizzontale per ridurre la sovrapposizione; i valori segnalati dal test di Grubbs o Dixon sono riportati nella tabella.":
+    "Each point is an observation, spread horizontally to reduce overlap; values flagged by the Grubbs or Dixon test are reported in the table.",
 };

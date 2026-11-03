@@ -1,6 +1,6 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
-  "descriptive": ["Means bar; box-and-whisker with raw points and outliers; histogram of the first variable with bins, density, rug and mean line; normal Q-Q for the first eight variables."],
+  "descriptive": ["Means bar; box-and-whisker with raw points and outliers; histogram of the first variable with bins, density, rug and mean line; normal Q-Q for the first eight variables.", "Frequency view: count bars and a Pareto chart with the cumulative percentage for the first categorical variable.", "Outlier view: strip of the observed values, with the value flagged by Grubbs or Dixon named in the note."],
   "distfit": ["Chart: probability plot of observed vs theoretical quantiles for the best-fitting distribution, with the reference diagonal."],
   "ttest": ["One-sample box with the test value; Wilcoxon box; independent-groups box and Mann-Whitney rank box; paired box and box of differences."],
   "anova": ["Group box plots; means with confidence intervals; Kruskal-Wallis rank box."],

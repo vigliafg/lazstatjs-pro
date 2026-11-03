@@ -1,6 +1,6 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
-  "descriptive": ["Barre delle medie; scatola e baffi con punti grezzi e outlier; istogramma della prima variabile con classi, densità, rug e linea della media; Q-Q normale per le prime otto variabili."],
+  "descriptive": ["Barre delle medie; scatola e baffi con punti grezzi e outlier; istogramma della prima variabile con classi, densità, rug e linea della media; Q-Q normale per le prime otto variabili.", "Vista frequenze: barre dei conteggi e Pareto con percentuale cumulata sulla prima variabile categorica.", "Vista valori anomali: strip dei valori osservati con il valore segnalato da Grubbs o Dixon riportato nella nota."],
   "distfit": ["Grafico: probability plot dei quantili osservati contro quelli teorici della distribuzione migliore, con la diagonale di riferimento."],
   "ttest": ["Box a un campione con valore di test; box Wilcoxon; box per gruppi indipendenti e box dei ranghi Mann-Whitney; box appaiato e box delle differenze."],
   "anova": ["Box per gruppo; medie con intervalli di confidenza; box dei ranghi Kruskal-Wallis."],

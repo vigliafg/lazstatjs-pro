@@ -38,7 +38,13 @@ test('frequency mode tallies a categorical column and emits the Wilson table', (
     ]
   );
   assert.equal(tally.rows[0].cumCount, 3);
-  assert.equal(result.charts?.[0].kind, 'bar');
+  assert.deepEqual(result.charts?.map(chart => chart.kind), ['bar', 'pareto']);
+  const pareto = result.charts?.[1];
+  assert.equal(pareto?.id, 'freq-cumulative');
+  assert.deepEqual(
+    (pareto?.data.cumulative ?? []).map(row => row.y),
+    [50, 83.33333333333334, 100]
+  );
   assert.ok(result.report?.headline.includes('Group'));
 });
 
@@ -68,7 +74,11 @@ test('outliers mode emits Grubbs and Dixon rows and a box plot', () => {
   const rows = result.tables![0].rows;
   assert.deepEqual(rows.map(row => row.test), ['Grubbs', 'Dixon r21']);
   assert.equal(rows[0].outlier, 40);
-  assert.equal(result.charts?.[0].kind, 'box');
+  assert.deepEqual(result.charts?.map(chart => chart.kind), ['box', 'dot']);
+  const strip = result.charts?.[1];
+  assert.equal(strip?.id, 'outliers-strip-1');
+  assert.equal((strip?.data.points ?? []).length, numericRows.length);
+  assert.ok((strip?.data.points ?? []).some(point => point.flag === 1));
 });
 
 test('outliers mode refuses columns without a positive spread', () => {
