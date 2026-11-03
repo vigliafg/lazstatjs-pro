@@ -13,7 +13,7 @@ export const chartGuides: Record<string, string[]> = {
   "mixedanova": ["Interação grupo × condição e trajetórias dos sujeitos."],
   "nonparamrm": ["Barras de ranks médios Friedman; barras de pares concordantes/discordantes McNemar; barras de proporções de sucesso Cochran; caixas por grupo ordenado Jonckheere."],
   "tost": ["Gráfico: diferença estimada com intervalo de confiança e margens de equivalência."],
-  "regression": ["Dispersão com reta OLS/Theil-Sen e banda IC ou de predição 90/95/99; observados vs ajustados e resíduos vs ajustados na regressão múltipla; caixa dos resíduos e Q-Q dos resíduos; anotações de equação, R² e N."],
+  "regression": ["Dispersão com reta OLS/Theil-Sen e banda IC ou de predição 90/95/99; observados vs ajustados e resíduos vs ajustados na regressão múltipla; caixa dos resíduos e Q-Q dos resíduos; anotações de equação, R² e N; coeficientes do modelo escolhido pela seleção com o respetivo IC; curva polinomial sem banda (o kernel não expõe o erro da média) e percurso dos coeficientes penalizados sem curva de validação cruzada (o kernel não a calcula)."],
   "correlation": ["Dispersão bruta e dispersão de ranks de Spearman para duas variáveis; caixas das variáveis selecionadas quando há mais de duas."],
   "logistic": ["Gráfico: curva de probabilidade estimada com pontos observados."],
   "countreg": ["Contagens observadas vs previstas e resíduos vs valores previstos."],

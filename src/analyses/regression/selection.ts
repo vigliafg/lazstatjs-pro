@@ -56,6 +56,14 @@ export const buildSelectionOutput = ({ grid, regParams, ciLevel }: SelectionRunI
 
   const tables = selectionTables(models, stepwise, names, final, ciLevel);
   const steps = stepwise.steps.filter(step => step.action !== 'start');
+  const selectedBars = final
+    ? final.coefficients.map((coefficient, position) => ({
+        category: names[stepwise.selected[position]] ?? `X${stepwise.selected[position] + 1}`,
+        value: coefficient.b,
+        lo: coefficient.ciLo,
+        hi: coefficient.ciHi,
+      }))
+    : [];
 
   const charts: AnalysisChart[] = [
     makeChart({
@@ -73,6 +81,22 @@ export const buildSelectionOutput = ({ grid, regParams, ciLevel }: SelectionRunI
       fields: { xLabel: copy('Passo'), yLabel: criterion.toUpperCase(), series: copy('Serie') },
       options: { showMarkers: true, showBand: false } as never,
     }),
+    ...(selectedBars.length > 0
+      ? [
+          makeChart({
+            id: 'selection-coefficients',
+            kind: 'bar',
+            title: copy('Coefficienti del modello selezionato'),
+            subtitle: copy('IC {s1}% · {s2} predittori', { s1: ciLevel, s2: selectedBars.length }),
+            note: copy(
+              'Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.'
+            ),
+            data: { bars: selectedBars, rules: [{ value: 0 }] },
+            fields: { xLabel: copy('Predittore'), yLabel: copy('Coefficiente (B)') },
+            options: { error: 'ci', valueLabels: true } as never,
+          }),
+        ]
+      : []),
   ];
 
   return {

@@ -56,4 +56,10 @@ export const w10ChartCopy: Record<string, string> = {
     "Each bar is (O − E)² / E: the categories with the largest contribution are those that push the data furthest from the expectations.",
   "Contributo al χ²": "Contribution to χ²",
   "Cumulata (%)": "Cumulative (%)",
+  "Coefficienti del modello selezionato": "Coefficients of the selected model",
+  "IC {s1}% · {s2} predittori": "CI {s1}% · {s2} predictors",
+  "Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.":
+    "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
+  "Predittore": "Predictor",
+  "Coefficiente (B)": "Coefficient (B)",
 };

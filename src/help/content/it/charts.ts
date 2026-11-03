@@ -11,7 +11,7 @@ export const chartGuides: Record<string, string[]> = {
   "mixedanova": ["Interazione gruppo × condizione e traiettorie dei soggetti."],
   "nonparamrm": ["Barre dei ranghi medi Friedman; barre delle coppie concordanti/discordanti McNemar; barre delle proporzioni di successo Cochran; box per gruppo ordinato Jonckheere."],
   "tost": ["Grafico: differenza stimata con intervallo di confidenza e margini di equivalenza."],
-  "regression": ["Scatter con retta OLS/Theil-Sen e banda IC o di previsione 90/95/99; osservati vs stimati e residui vs stimati nella regressione multipla; box dei residui e Q-Q dei residui; annotazioni di equazione, R² e N."],
+  "regression": ["Scatter con retta OLS/Theil-Sen e banda IC o di previsione 90/95/99; osservati vs stimati e residui vs stimati nella regressione multipla; box dei residui e Q-Q dei residui; annotazioni di equazione, R² e N; coefficienti del modello scelto dalla selezione con il loro IC; curva polinomiale senza banda (il kernel non espone l’errore della media) e percorso dei coefficienti penalizzati senza curva di cross-validazione (il kernel non la calcola)."],
   "correlation": ["Scatter grezzo e scatter dei ranghi di Spearman per due variabili; box delle variabili selezionate quando sono più di due."],
   "logistic": ["Grafico: curva di probabilità stimata con i punti osservati."],
   "countreg": ["Conteggi osservati vs predetti e residui vs valori predetti."],

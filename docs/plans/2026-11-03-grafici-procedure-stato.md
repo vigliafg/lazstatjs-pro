@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F3.3 chiusa, ondata O3 chiusa)
-- **Fase corrente**: F4.1 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F4.1 chiusa)
+- **Fase corrente**: F4.2 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -65,7 +65,7 @@ con motivo.
 | F3.1 | varianze, sign, KS | 60 | ✅ | `feat(charts): F3.1 forest varianze, mediana e KS` | 15 test + help verdi |
 | F3.2 | Mood, GOF, nested | 60 | ✅ | `feat(charts): F3.2 mediane Mood, componenti gerarchiche e contributi GOF` | 9 test + `check` e `locales:check` verdi |
 | F3.3 | GLMM/GEE/LMM polish | 45 | ✅ | `feat(charts): F3.3 guide caterpillar per LMM, GLMM e GEE` | `check` + `locales:check` verdi |
-| F4.1 | stepwise, polynomial, penalized | 60 | ⬜ | — | — |
+| F4.1 | stepwise, polynomial, penalized | 60 | ✅ | `feat(charts): F4.1 coefficienti del modello selezionato` | 6 test + `check` e `locales:check` verdi |
 | F4.2 | multinomial, IV, PLS | 60 | ⬜ | — | — |
 | F4.3 | logistica, conteggi, ordinale | 45 | ⬜ | — | — |
 | F4.4 | diagnostica di regressione | 45 | ⬜ | — | — |
@@ -151,6 +151,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F3.2 | `nested-variance` legge `varianceComponents` del kernel `nestedAnova` | nessun nuovo calcolo né modifica kernel |
 | 2026-11-03 | F3.2 | `gof-contribution` calcola (O−E)²/E nel runner e ordina le barre in modo decrescente | il kernel `goodnessOfFit` espone già observed/expected; con `sort: 'none'` il layer Pareto non riordina |
 | 2026-11-03 | F3.3 | Nessun nuovo grafico: i caterpillar avevano già `sort: 'asc'`, IC e linea dello zero | il polish richiesto è la lettura corretta nelle guide, non un altro kind |
+| 2026-11-03 | F4.1 | `selection-coefficients` mostra solo i predittori scelti, non l’intercetta | l’intercetta resta nella tabella e schiaccerebbe la scala delle barre |
+| 2026-11-03 | F4.1 | Niente banda CI su `polynomial-curve` | `polynomialCurve` restituisce solo `{x, y}`: il kernel non espone `seMean` e aggiungerlo è fuori budget |
+| 2026-11-03 | F4.1 | Niente `penalized-cv` | `penalizedPath` restituisce i fit, non gli errori di cross-validazione |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -357,6 +360,24 @@ sotto-blocco aperto):
   lingue.
 - **Commit**: `feat(charts): F3.3 guide caterpillar per LMM, GLMM e GEE`
 
+### F4.1 — Stepwise, polynomial, penalized
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `selection-coefficients` [bar] con i coefficienti del modello scelto
+  dalla selezione e il loro IC (`error: 'ci'`, regola a zero), più la nota che
+  spiega come leggere le barre che attraversano lo zero.
+- **Verificato**: `polynomial-curve`/`polynomial-residuals` e
+  `penalized-path`/`penalized-coefficients-chart` sono già presenti e coerenti;
+  banda CI e curva di cross-validazione restano fuori perché i kernel non
+  espongono `seMean` né gli errori CV (annotato nelle guide).
+- **File toccati**: `src/analyses/regression/selection.ts`,
+  `src/analyses/regression/charts.test.ts` (nuovo),
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: regression charts + w2 → 6/6 verdi; `npm run check` verde;
+  `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F4.1 coefficienti del modello selezionato`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -378,6 +399,7 @@ sotto-blocco aperto):
 | F3.2 | `mood-median-ci` | `anova` | `interval` | JMP | `anova/mood.test.ts` | ✅ |
 | F3.2 | `nested-variance` | `anova` | `bar` | LZ | `anova/w2.test.ts` | ✅ |
 | F3.2 | `gof-contribution` | `chisquare` | `pareto` | JMP | `chisquare/gof.test.ts` | ✅ |
+| F4.1 | `selection-coefficients` | `regression` | `bar` | JMP | `regression/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -385,10 +407,11 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F4.1: stepwise, polinomiale e penalizzata in `regression` (#11).
-2. F4.2: `multinomial` (#12), `iv` (#13), `pls` (#14).
-3. Gate di fine ondata O4 con `npm run check`, `locales:check` e inventario
-   statico aggiornato.
+1. F4.2: `multinomial-confusion` [heatmap] (#12), `iv-first-stage` [scatter]
+   (#13), `pls-loadings` [heatmap] (#14).
+2. F4.3: allineamento di logistica, conteggi e ordinale (foresta IRR/OR su
+   scala log) e verifica del link probit.
+3. F4.4: diagnostica di regressione mancante; poi gate di fine ondata O4.
 
 ---
 

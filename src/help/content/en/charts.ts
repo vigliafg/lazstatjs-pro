@@ -11,7 +11,7 @@ export const chartGuides: Record<string, string[]> = {
   "mixedanova": ["Group × condition interaction plot and subject trajectories."],
   "nonparamrm": ["Friedman mean-rank bars; McNemar concordant/discordant bars; Cochran success-proportion bars; Jonckheere box plots by ordered group."],
   "tost": ["Chart: estimated difference with confidence interval and equivalence margins."],
-  "regression": ["Scatter with OLS/Theil-Sen fit and 90/95/99 CI or prediction band; observed vs fitted and residuals vs fitted for multiple regression; residual box plot and residual Q-Q; equation, R² and N annotations."],
+  "regression": ["Scatter with OLS/Theil-Sen fit and 90/95/99 CI or prediction band; observed vs fitted and residuals vs fitted for multiple regression; residual box plot and residual Q-Q; equation, R² and N annotations; coefficients of the model chosen by the selection with their CI; polynomial curve without a band (the kernel does not expose the standard error of the mean) and penalized coefficient path without a cross-validation curve (the kernel does not compute one)."],
   "correlation": ["Raw scatter and Spearman rank scatter for two variables; box plots of the selected variables when there are more than two."],
   "logistic": ["Chart: estimated probability curve with observed points."],
   "countreg": ["Observed vs predicted counts and residuals vs predicted values."],

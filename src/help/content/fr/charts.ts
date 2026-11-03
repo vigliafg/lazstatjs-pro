@@ -13,7 +13,7 @@ export const chartGuides: Record<string, string[]> = {
   "mixedanova": ["Interaction groupe × condition et trajectoires des sujets."],
   "nonparamrm": ["Barres des rangs moyens Friedman ; barres des paires concordantes/discordantes McNemar ; barres des proportions de succès Cochran ; boîtes par groupe ordonné Jonckheere."],
   "tost": ["Graphique : différence estimée avec intervalle de confiance et marges d’équivalence."],
-  "regression": ["Nuage avec droite MCO/Theil-Sen et bande IC ou de prédiction 90/95/99 ; observés vs ajustés et résidus vs ajustés en régression multiple ; boîte des résidus et Q-Q des résidus ; annotations équation, R² et N."],
+  "regression": ["Nuage avec droite MCO/Theil-Sen et bande IC ou de prédiction 90/95/99 ; observés vs ajustés et résidus vs ajustés en régression multiple ; boîte des résidus et Q-Q des résidus ; annotations équation, R² et N ; coefficients du modèle retenu par la sélection avec leur IC ; courbe polynomiale sans bande (le noyau n’expose pas l’erreur de la moyenne) et chemin des coefficients pénalisés sans courbe de validation croisée (le noyau ne la calcule pas)."],
   "correlation": ["Nuage brut et nuage des rangs de Spearman pour deux variables ; boîtes des variables sélectionnées lorsqu’il y en a plus de deux."],
   "logistic": ["Graphique : courbe de probabilité estimée avec les points observés."],
   "countreg": ["Comptes observés vs prédits et résidus vs valeurs prédites."],

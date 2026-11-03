@@ -13,7 +13,7 @@ export const chartGuides: Record<string, string[]> = {
   "mixedanova": ["Gruppe × Bedingung-Interaktion und Subjektverläufe."],
   "nonparamrm": ["Friedman-Mittelrangbalken; McNemar-Balken kon-/diskordanter Paare; Cochran-Balken der Erfolgsanteile; Jonckheere-Box-Plots nach geordneter Gruppe."],
   "tost": ["Diagramm: geschätzte Differenz mit Konfidenzintervall und Äquivalenzgrenzen."],
-  "regression": ["Streudiagramm mit OLS/Theil-Sen-Gerade und KI- oder Vorhersageband 90/95/99; beobachtet vs angepasst und Residuen vs angepasst bei multipler Regression; Residuenbox und Residuen-Q-Q; Gleichungs-, R²- und N-Annotationen."],
+  "regression": ["Streudiagramm mit OLS/Theil-Sen-Gerade und KI- oder Vorhersageband 90/95/99; beobachtet vs angepasst und Residuen vs angepasst bei multipler Regression; Residuenbox und Residuen-Q-Q; Gleichungs-, R²- und N-Annotationen; Koeffizienten des von der Selektion gewählten Modells mit KI; Polynomkurve ohne Band (der Kernel liefert keinen Standardfehler des Mittelwerts) und Pfad der penalisierten Koeffizienten ohne Kreuzvalidierungskurve (der Kernel berechnet keine)."],
   "correlation": ["Rohstreuung und Spearman-Rangstreuung für zwei Variablen; Box-Plots der ausgewählten Variablen bei mehr als zwei."],
   "logistic": ["Diagramm: geschätzte Wahrscheinlichkeitskurve mit beobachteten Punkten."],
   "countreg": ["Beobachtete vs vorhergesagte Zählungen und Residuen vs vorhergesagte Werte."],
