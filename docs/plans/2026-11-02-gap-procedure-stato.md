@@ -350,7 +350,7 @@ committate; nessun R richiesto a test-time).
 | 2026-11-03 | Chiusura W1 / G1 | `e10684a` | `npm run check` + `test:samples` + locale 6/6 | verde | 14 metodi (D-01…D-04, Q-04, C-01…C-07, P-01/P-02); 957/957; 2 nuove voci |
 | 2026-11-03 | Handoff pre-compattazione | `bccd8bd` | `npm run check` verde (ultima esecuzione) | verde | W1 chiusa; W2 pianificata con batch di 3 subagenti; nessun file W2 scritto |
 | 2026-11-03 | Checkpoint W2 (11/12) | `7bf4e84` | `npm run check` 1052/1052 + `test:samples` 7/7 + locale 6/6 | verde | C-08/C-09/C-11, R-01…R-08 tranne C-10; 4 nuove voci; 10 reference; G2 non dichiarato |
-| 2026-11-03 | Chiusura W2 / G2 | `863029b` | `npm run check` 1068/1068 + `test:samples` 7/7 + locale 6/6 | verde | C-10 GLMM Laplace + `lmm` random slope; 26/73 metodi, 7/36 voci, 20/37 estensioni |
+| 2026-11-03 | Chiusura W2 / G2 | `863029b` + `3ff1b34` + `7bfb8f4` | `npm run check` 1068/1068 + `test:samples` 7/7 + locale 6/6 | verde | C-10 GLMM Laplace + `lmm` random slope; 26/73 metodi, 7/36 voci, 20/37 estensioni |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -364,7 +364,7 @@ Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d�
 
 - Ondata: W2 chiusa, gate G2 verde; prossima W3 (regressione avanzata).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: codice `863029b`; documenti in questo commit.
+- Ultimo commit: `7bfb8f4` (test SE BLUP); codice `863029b`, documenti `3ff1b34`.
 - Item chiusi (ID): W1 completa; W2 completa — C-08, C-09, C-10, C-11,
   R-01…R-08.
 - Item in corso (ID): nessuno.
