@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W6 chiusa: 8/8 item, gate G6 verde)
+**Ultimo aggiornamento**: 2026-11-03 (W7 chiusa: 7/7 item, gate G7 verde)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0–W6 chiuse; gate G0, G1, G2, G3, G4, G5 e G6 verdi
-**Ondata corrente**: W6 chiusa — Survival e affidabilità (8 item); prossima W7
+**Stato**: W0–W7 chiuse; gate G0, G1, G2, G3, G4, G5, G6 e G7 verdi
+**Ondata corrente**: W7 chiusa — Time series (7 item); prossima W8
 
 ---
 
@@ -31,15 +31,15 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W6 chiusa (gate G6 verde); prossima W7 |
+| Ondata corrente | W7 chiusa (gate G7 verde); prossima W8 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `0bc03fe` (chiusura W6) |
-| Ultimo commit documentale | `19a82bc` (registrazione chiusura W6) |
-| Test | `npm run check` verde; `npm test` 1227/1227 verdi; `npm run test:samples` 7/7; locale check 6/6 |
-| Item chiusi | 54 / 73; W6 chiusa |
-| Nuove voci | 26 / 36 (W2 + W3 + `loglinear` + 7 voci W5 + 4 voci W6) |
+| Ultimo commit di codice | `994a5d4` (chiusura W7) |
+| Ultimo commit documentale | questo aggiornamento |
+| Test | `npm run check` verde; `npm test` 1241/1241 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Item chiusi | 61 / 73; W7 chiusa |
+| Nuove voci | 29 / 36 (W2 + W3 + `loglinear` + 7 voci W5 + 4 voci W6 + 3 voci W7) |
 | Estensioni | 29 / 37 (cluster k-means/k-medians, life table, frailty, censoring a intervallo, parametriche extra) |
-| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 + 8 reference W5 + 5 reference W6 |
+| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 + 8 reference W5 + 5 reference W6 + 7 reference W7 |
 | Blocchi | nessuno |
 | Prossimo gate | G7 — fine W7 (time series) |
 
@@ -56,7 +56,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | W4 | Categorical + MI categorica | 5 | 1 | **chiusa** (G4 verde) | G4 |
 | W5 | Multivariate avanzata | 8 | 7 | **chiusa** (G5 verde) | G5 |
 | W6 | Survival e affidabilità | 8 | 4 | **chiusa** (G6 verde) | G6 |
-| W7 | Time series | 7 | 3 | non iniziata | G7 |
+| W7 | Time series | 7 | 3 | **chiusa** (G7 verde) | G7 |
 | W8 | Quality/DOE/power restanti | 5 | 0 | non iniziata | G8 |
 | W9 | Survey + ML + Advanced | 7 | 7 | non iniziata | G9 |
 
@@ -632,6 +632,71 @@ separato: le parti condivise restano in `kernels/survival.ts`,
 ## 7. Handoff per la prossima compattazione
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
+
+## 5i. Ondata W7 — avanzamento (2026-11-03)
+
+- **Stato**: W7 chiusa il 2026-11-03; gate G7 verde.
+- **Metodi**: T-01 Holt–Winters, T-02 radici unitarie (ADF/KPSS/PP),
+  T-03 VAR/VECM, T-04 analisi spettrale, T-05 ARIMAX, T-06 GARCH(1,1),
+  T-07 state-space locale e Markov switching a due regimi.
+- **Nuove voci**: `var`, `garch`, `statespace`; T-01/T-02/T-04/T-05 sono
+  modalità della voce `timeseries`.
+- **Kernel**: `holtwinters.ts`, `unitroot.ts`, `spectral.ts`, `var.ts`,
+  `garch.ts`, `statespace.ts`; ARIMA esteso con `xreg` per ARIMAX e ADF con
+  trend; ottimizzatore condiviso in `minimize.ts`.
+- **Reference**: 7 test nuovi (`holtwinters`, `unitroot`, `spectral`,
+  `arimax`, `var`, `garch`, `statespace`) con fixture JSON committate.
+  `vars`, `rugarch`, `KFAS`, `MSwM` non sono installati: i reference usano
+  implementazioni indipendenti in R base (`lm`, `optim`, ricorsioni
+  Kalman/Hamilton) e `tseries`/`urca` dove disponibili.
+- **Integrazione**: tipi, parse, params, ruoli (`rolesW7`), registry, runners,
+  worker heavy, form, chart kinds, default, report/tabelle e copy W7.
+- **Help**: 3 nuove pagine in 6 lingue (`w7-*.ts`) e nota sulle modalità nella
+  pagina Time Series.
+- **Sample**: `var_demo`, `garch_demo`, `statespace_demo` in 5 formati.
+- **Test**: `npm run check` verde (1241/1241), `test:samples` 7/7, locale
+  check 6/6 (76 pagine help, 4268 frasi report in inglese).
+- **Debito dichiarato**: il copy report/tabelle e i titoli dei grafici W7 per
+  de/fr/es/pt-PT usano temporaneamente il catalogo inglese, come in W6.
+
+---
+
+### Handoff — 2026-11-03 / chiusura W7 (G7 verde)
+
+- Ondata: W7 chiusa, gate G7 verde; prossima W8 (quality/DOE/power).
+- Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
+- Ultimo commit: `994a5d4` (codice, help, sample e copy W7); documenti in
+  questo commit.
+- Item chiusi (ID): T-01 Holt–Winters, T-02 radici unitarie, T-03 VAR/VECM,
+  T-04 analisi spettrale, T-05 ARIMAX, T-06 GARCH, T-07 state-space/Markov.
+- Item in corso (ID): nessuno.
+- Item bloccati (ID + motivo): nessuno.
+- Test eseguiti e risultato: `npm run check` verde (1241/1241 test, tsc,
+  depcruise, madge, file size); `test:samples` 7/7; locale check 6/6.
+- File/moduli toccati: contratti `types/parse/params/rolesW7/registry/
+  runners/heavyIds/heavyRunners/AnalysisForm/analysisKinds/useProjectParams`;
+  kernel `holtwinters`, `unitroot`, `spectral`, `var`, `garch`, `statespace`,
+  `minimize`; ARIMA con `xreg`; tabelle/report/reportCopy/help W7; 3 sample
+  nuovi; 7 reference test e fixture.
+- Decisioni prese / deviazioni dal piano:
+  - F6 è realizzata dentro `statespace` e `garch`, con ottimizzatore condiviso
+    in `minimize.ts` (non un file Kalman separato).
+  - I reference VAR/VECM e GARCH usano R base (`lm`, `optim`) e
+    `tseries`/`urca` perché `vars`, `rugarch`, `KFAS` e `MSwM` non sono
+    installati; le fixture sono committate e i test non richiedono R.
+  - ARIMAX stima una regressione con errori ARMA (come `forecast::Arima`), non
+    regressori aggiunti alla sola equazione ARIMA.
+  - Il copy W7 per de/fr/es/pt-PT usa temporaneamente il catalogo inglese
+    (debito dichiarato, come W6).
+- Prossimi 3 passi:
+  1. Aprire W8 verificando i metodi quality/DOE/power restanti e i reference.
+  2. Implementare gli item W8 con test mirati per step.
+  3. Chiudere G8 con `npm run check`, `test:samples`, locale check e
+     aggiornamento di stato/piano.
+- Domande aperte: nessuna; restano i debiti di traduzione del copy W6/W7 per
+  de/fr/es/pt-PT.
+- Rischi: la stima locale state-space è lenta su serie lunghe (worker heavy);
+  i reference R base non coprono `vars`/`rugarch`/`KFAS`/`MSwM` originali.
 
 ### Handoff — 2026-11-03 / chiusura W6 (G6 verde)
 

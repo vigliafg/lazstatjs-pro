@@ -501,6 +501,10 @@ quadratura, gradiente numerico). Reference R: `kmeans`, `cancor`, `cmdscale`/
 - T-01/T-02/T-04/T-05 condividono il motore ARIMA esistente.
 - T-05 è propedeutico a T-03.
 - T-06/T-07 richiedono F6.
+- **Stato**: W7 chiusa il 2026-11-03; gate G7 verde (1241/1241 test,
+  `test:samples` 7/7, locale check 6/6). F6 realizzata nei kernel
+  `statespace` (Kalman/RTS) e `garch` (filtro di volatilità), con
+  ottimizzatore condiviso in `minimize.ts`.
 
 ---
 
