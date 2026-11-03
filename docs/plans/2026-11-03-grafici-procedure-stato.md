@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F4.2 chiusa)
-- **Fase corrente**: F4.3 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F4.3 chiusa)
+- **Fase corrente**: F4.4 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -67,7 +67,7 @@ con motivo.
 | F3.3 | GLMM/GEE/LMM polish | 45 | ✅ | `feat(charts): F3.3 guide caterpillar per LMM, GLMM e GEE` | `check` + `locales:check` verdi |
 | F4.1 | stepwise, polynomial, penalized | 60 | ✅ | `feat(charts): F4.1 coefficienti del modello selezionato` | 6 test + `check` e `locales:check` verdi |
 | F4.2 | multinomial, IV, PLS | 60 | ✅ | `feat(charts): F4.2 confusione, primo stadio e loadings PLS` | 21 test + `check` e `locales:check` verdi |
-| F4.3 | logistica, conteggi, ordinale | 45 | ⬜ | — | — |
+| F4.3 | logistica, conteggi, ordinale | 45 | ✅ | `feat(charts): F4.3 foreste su scala log e link dichiarato` | 3 test + `check` e `locales:check` verdi |
 | F4.4 | diagnostica di regressione | 45 | ⬜ | — | — |
 | F5.1 | cluster, canonical, MDS, correspondence | 60 | ⬜ | — | — |
 | F5.2a | SEM, latent class | 45 | ⬜ | — | — |
@@ -157,6 +157,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F4.2 | `pls-loadings` mostra solo i loadings X | `PlsResult` espone `components[].loading` (X); i loadings Y non esistono come campo separato |
 | 2026-11-03 | F4.2 | La matrice di confusione usa `sort: 'none'` | le classi devono restare nell’ordine del modello, non riordinate per margine |
 | 2026-11-03 | F4.2 | Test aggiunti ai `run.test.ts` esistenti invece di nuovi `charts.test.ts` | stessi fixture e stesso kernel: un file per analisi avrebbe duplicato i dati |
+| 2026-11-03 | F4.3 | I forest di IRR/OR hanno `logScale: true` nel runner | allinea i tre runner alla variante `forest.jmp-ratio` senza cambiare il default del kind |
+| 2026-11-03 | F4.3 | Il link della logistica compare nel sottotitolo e la nota probit cita Φ(η) | il grafico deve dire quale curva sta disegnando |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -401,6 +403,25 @@ sotto-blocco aperto):
   `npm run check` verde; `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F4.2 confusione, primo stadio e loadings PLS`
 
+### F4.3 — Logistica, conteggi, ordinale
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Verificato**: il kernel `logistic` usa già la stessa curva per logit e probit
+  (`sigmoid` vs `Φ`); i forest di IRR/OR avevano `reference: 'one'` ma non la
+  scala log.
+- **Fatto**: `logScale: true` nei forest `count-irr-forest`,
+  `ordinal-or-forest` e `logistic-or-forest`; sottotitolo della logistica con
+  il link dichiarato e nota probit che cita Φ(η) al posto della logistica;
+  `chartGuides` aggiornate nelle 6 lingue per `logistic`, `countreg`,
+  `ordinal`.
+- **File toccati**: `src/analyses/logistic/run.tsx`,
+  `src/analyses/countreg/run.tsx`, `src/analyses/ordinal/run.tsx`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: logistic + countreg + ordinal → 3/3 verdi; `npm run check`
+  verde; `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F4.3 foreste su scala log e link dichiarato`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -433,10 +454,10 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F4.3: allineamento di logistica, conteggi e ordinale (foresta IRR/OR su
-   scala log, link probit).
-2. F4.4: diagnostica di regressione mancante; poi gate di fine ondata O4.
-3. F5.1: `cluster` (#15, #16), `canonical` (#17), MDS e correspondence.
+1. F4.4: verificare `jmp-regression`/`jmp-residual` e il pannello
+   `regressionDiagnosticPanel`; poi gate di fine ondata O4.
+2. F5.1: `cluster` (#15, #16), `canonical` (#17), MDS e correspondence.
+3. F5.2a: SEM (#18) e latent class (#19).
 
 ---
 

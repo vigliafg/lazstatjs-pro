@@ -77,4 +77,7 @@ export const w10ChartCopy: Record<string, string> = {
   "{s1} componenti · {s2} predittori": "{s1} components · {s2} predictors",
   "Ogni cella è il loading di un predittore su una componente latente: valori grandi in modulo indicano un legame forte, il segno dà la direzione.":
     "Each cell is the loading of a predictor on a latent component: large absolute values indicate a strong link, the sign gives the direction.",
+  " Con il link probit la curva usa Φ(η) invece della funzione logistica.":
+    " With the probit link the curve uses Φ(η) instead of the logistic function.",
+  "IC {s1}% · link {s2} · riferimento OR = 1": "CI {s1}% · link {s2} · reference OR = 1",
 };

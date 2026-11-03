@@ -89,6 +89,9 @@ export const buildLogisticOutput = ({
   const header = `Outcome: ${outcomeName} · event = "${levels[1]}"`;
 
   const predictorName = predictorData[0].name;
+  const linkNote = (link ?? 'logit') === 'probit'
+    ? copy(' Con il link probit la curva usa Φ(η) invece della funzione logistica.')
+    : '';
   const means = predictorData.map((predictor) =>
     predictor.values.reduce((sum, value) => sum + value, 0) / Math.max(1, predictor.values.length)
   );
@@ -102,9 +105,11 @@ export const buildLogisticOutput = ({
         subtitle: multiple
           ? copy('{s1} · altri predittori alla media', { s1: predictorName })
           : predictorName,
-        note: multiple
-          ? copy('La curva mostra il profilo del primo predittore mantenendo gli altri al valore medio; i punti sono le osservazioni.')
-          : copy('La curva è la probabilità stimata dall’esito (0–100%); i punti in alto sono le osservazioni con esito = 1, quelli in basso con esito = 0.'),
+        note:
+          (multiple
+            ? copy('La curva mostra il profilo del primo predittore mantenendo gli altri al valore medio; i punti sono le osservazioni.')
+            : copy('La curva è la probabilità stimata dall’esito (0–100%); i punti in alto sono le osservazioni con esito = 1, quelli in basso con esito = 0.')) +
+          linkNote,
         data: {
           series: curve.map(point => ({ x: point.x, y: point.y, series: copy('Probabilità stimata') })),
           markers: rows.map(row => ({ x: row.values[0], y: row.y * 100, series: copy('Osservazioni') })),
@@ -260,11 +265,11 @@ export const buildLogisticOutput = ({
         id: 'logistic-or-forest',
         kind: 'forest',
         title: copy('Odds ratio per predittore'),
-        subtitle: copy('IC {s1}% · riferimento OR = 1', { s1: ciLevel }),
+        subtitle: copy('IC {s1}% · link {s2} · riferimento OR = 1', { s1: ciLevel, s2: link ?? 'logit' }),
         note: copy('Punto: odds ratio. Segmento: intervallo di confidenza. Se l’intervallo contiene 1 il predittore non è distinguibile da nessun effetto.'),
         data: { points: orPoints },
         fields: { xLabel: copy('Odds ratio'), yLabel: copy('Predittore') },
-        options: { reference: 'one' } as never,
+        options: { reference: 'one', logScale: true } as never,
       })
     );
   }

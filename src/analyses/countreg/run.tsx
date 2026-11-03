@@ -93,7 +93,7 @@ export const buildCountOutput = ({ grid, params, ciLevel }: CountInput): Analysi
         note: copy('Punto: rapporto di incidenza. Segmento: intervallo di confidenza; se contiene 1 il predittore non è distinguibile da nessun effetto.'),
         data: { points: irrPoints },
         fields: { xLabel: copy('Rapporto di incidenza'), yLabel: copy('Predittore') },
-        options: { reference: 'one' } as never,
+        options: { reference: 'one', logScale: true } as never,
       })
     );
   }

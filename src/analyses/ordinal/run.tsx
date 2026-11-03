@@ -98,7 +98,7 @@ export const buildOrdinalOutput = ({ grid, params, ciLevel }: OrdinalInput): Ana
         note: copy('Punto: odds ratio cumulativo. Segmento: intervallo di confidenza; se contiene 1 il predittore non è distinguibile da nessun effetto.'),
         data: { points: orPoints },
         fields: { xLabel: copy('Odds ratio'), yLabel: copy('Predittore') },
-        options: { reference: 'one' } as never,
+        options: { reference: 'one', logScale: true } as never,
       })
     );
   }
