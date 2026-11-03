@@ -189,6 +189,7 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
           },
           fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
           stats: { n: fit.n, events: fit.events },
+          options: { reference: 'one', logScale: true } as never,
         }),
       ],
     };
@@ -221,13 +222,14 @@ export const buildCoxOutput = ({ grid, params, ciLevel }: CoxInput): AnalysisRun
     id: 'cox-forest',
     kind: 'forest',
     title: copy('Hazard ratio per covariata'),
-    subtitle: copy('IC {s1}% · scala lineare', { s1: ciLevel }),
+    subtitle: copy('IC {s1}% · scala log', { s1: ciLevel }),
     note:
-      copy('Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.') +
+      copy('Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. La scala è logaritmica, quindi HR protettivi e di rischio occupano lo stesso spazio.') +
       (fit.separation ? copy(' Con stime instabili gli intervalli non finiti sono omessi dal grafico.') : ''),
     data: { points: forestPoints },
     fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
     stats: { n: times.length, events: fit.events },
+    options: { reference: 'one', logScale: true } as never,
   });
   charts.push(forest);
   const baseline = fit.baseline.filter(

@@ -117,8 +117,6 @@ export const chartCopy: Record<string, string> = {
     "CI {s1}%",
   "IC {s1}% · N = {s2}":
     "CI {s1}% · N = {s2}",
-  "IC {s1}% · scala lineare":
-    "CI {s1}% · linear scale",
   "Il test confronta i ranghi medi dei gruppi.":
     "The test compares the mean ranks of the groups.",
   "Il test non parametrico confronta i ranghi dei due gruppi.":
@@ -205,8 +203,6 @@ export const chartCopy: Record<string, string> = {
     "Component scores",
   "Punti: osservazioni. Linea rossa tratteggiata: OLS. Linea verde: Theil-Sen. La banda, se attiva, è l’intervallo scelto.":
     "Points: observations. Red dashed line: OLS. Green line: Theil-Sen. The band, when enabled, is the selected interval.",
-  "Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. Il grafico usa una scala lineare, quindi gli HR protettivi sono compressi vicino allo zero.":
-    "Point: HR estimate. Segment: confidence interval. Dashed line: HR = 1, no effect. The chart uses a linear scale, so protective HRs are compressed near zero.",
   "Q-Q dei residui":
     "Residual Q-Q",
   "Q-Q normale: {s1}":

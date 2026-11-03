@@ -83,7 +83,9 @@ export const buildCompetingOutput = ({
         kind: 'line',
         title: copy('Incidenza cumulativa'),
         subtitle: copy('Causa {s1} · profilo medio', { s1: fit.cause }),
-        note: copy('La CIF cresce solo quando accadono eventi della causa scelta: non è il complemento della sopravvivenza globale.'),
+        note: copy(
+          'La CIF cresce solo quando accadono eventi della causa scelta: non è il complemento della sopravvivenza globale. Il modello è stimato per una causa alla volta, quindi non si produce una CIF impilata.'
+        ),
         data: {
           series: [
             { x: 0, y: 0, series: copy('CIF') },

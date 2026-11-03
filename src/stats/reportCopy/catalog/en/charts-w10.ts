@@ -99,6 +99,15 @@ export const w10ChartCopy: Record<string, string> = {
     "The paired bars compare each cell with the frequency expected under independence: the large gaps are the ones that weigh on the exact p value. The exact test does not use the χ² approximation, so read this chart together with the residual table.",
   "Ogni punto è la proporzione della prima colonna sul totale di riga; la linea collega i punteggi in ordine crescente. Qui non c’è una banda di confidenza: il test di Cochran–Armitage verifica il trend con una statistica complessiva e non stima l’incertezza di ogni riga.":
     "Each point is the first-column proportion over the row total; the line joins the scores in increasing order. There is no confidence band here: the Cochran–Armitage test checks the trend with an overall statistic and does not estimate per-row uncertainty.",
+  "Ogni gradino corrisponde alla fine di un intervallo della tavola: la tavola raggruppa il tempo, mentre la curva di Kaplan–Meier scende a ogni evento senza raggruppare.":
+    "Each step is the end of a table interval: the life table groups time, while the Kaplan–Meier curve drops at every event without grouping.",
+  "Le barre mostrano in quali intervalli si concentrano gli eventi; l’altezza va letta insieme al numero di soggetti a rischio dell’intervallo.":
+    "The bars show where the events concentrate; read their height together with the number at risk in the interval.",
+  "La CIF cresce solo quando accadono eventi della causa scelta: non è il complemento della sopravvivenza globale. Il modello è stimato per una causa alla volta, quindi non si produce una CIF impilata.":
+    "The CIF grows only when events of the chosen cause occur: it is not the complement of overall survival. The model is estimated for one cause at a time, so no stacked CIF is produced.",
+  "Punto: stima dell’HR. Segmento: intervallo di confidenza. Linea tratteggiata: HR = 1, cioè nessun effetto. La scala è logaritmica, quindi HR protettivi e di rischio occupano lo stesso spazio.":
+    "Point: HR estimate. Segment: confidence interval. Dashed line: HR = 1, that is, no effect. The scale is logarithmic, so protective and risk HRs take the same space.",
+  "IC {s1}% · scala log": "CI {s1}% · log scale",
   "Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.":
     "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
   "Predittore": "Predictor",

@@ -36,6 +36,8 @@ test('cox builder returns tables, report and the hazard-ratio plot', () => {
   assert.ok(result.report);
   const chart = result.charts?.[0];
   assert.equal(chart?.kind, 'forest');
+  assert.equal(chart?.options.kind === 'forest' && chart.options.logScale, true);
+  assert.equal(chart?.options.kind === 'forest' && chart.options.reference, 'one');
   const ids = (result.charts ?? []).map(item => item.id);
   assert.ok(ids.includes('cox-baseline-hazard'));
   assert.ok(ids.includes('cox-baseline-survival'));

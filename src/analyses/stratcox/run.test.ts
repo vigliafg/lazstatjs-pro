@@ -56,6 +56,9 @@ test('stratified Cox adds the number-at-risk table', () => {
   const result = buildStratifiedCoxOutput({ ...base, grid: largeGrid });
   assert.ok('ok' in result && result.ok);
   if (!('ok' in result) || !result.ok) return;
+  const forest = (result.charts ?? []).find(chart => chart.id === 'stratcox-forest');
+  assert.equal(forest?.options.kind === 'forest' && forest.options.logScale, true);
+  assert.equal(forest?.options.kind === 'forest' && forest.options.reference, 'one');
   const risk = (result.charts ?? []).find(chart => chart.id === 'stratcox-risk');
   assert.equal(risk?.kind, 'risk');
   assert.ok((risk?.data.rows ?? []).length > 0);

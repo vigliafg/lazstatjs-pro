@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F6.1 chiusa)
-- **Fase corrente**: F7.1 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F7.1 e F7.2 chiuse)
+- **Fase corrente**: F7.3a — ALT life-stress plot
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -74,8 +74,8 @@ con motivo.
 | F5.2b | IRT ICC, conjoint | 30 | ✅ | `feat(charts): F5.2b curve caratteristiche degli item` | 2 test + `check` e `locales:check` verdi (conjoint già a 2 grafici) |
 | F5.3 | PCA/EFA/alpha e pannelli | 45 | ✅ | `feat(charts): F5.3 guide di PCA, EFA e alpha` | `check` + `locales:check` verdi; inventario rigenerato |
 | F6.1 | esatti, trend, verifica MH | 45 | ✅ | `feat(charts): F6.1 osservati e attesi nel test esatto` | 2 test + `check` e `locales:check` verdi |
-| F7.1 | life table, competing, frailty, recurrent | 45 | ⬜ | — | — |
-| F7.2 | Cox, stratified, time-dependent | 45 | ⬜ | — | — |
+| F7.1 | life table, competing, frailty, recurrent | 45 | ✅ | `feat(charts): F7.1–F7.2 sopravvivenza, rischi competitivi e foreste su scala log` | 17 test + `check` e `locales:check` verdi |
+| F7.2 | Cox, stratified, time-dependent | 45 | ✅ | idem (commit unico: i cataloghi sono condivisi) | 17 test + `check` e `locales:check` verdi |
 | F7.3a | ALT: life-stress plot | 45 | ⬜ | — | — |
 | F7.3b | parametric, reliability | 30 | ⬜ | — | — |
 | F8.1 | Holt-Winters, unit root, spettrale | 45 | ⬜ | — | — |
@@ -171,6 +171,10 @@ sotto-blocco aperto):
 | 2026-11-03 | F5.3 | `pca-loadings` (heatmap) e `pca-loading-plot` (scatter) restano entrambi | scelta dell’utente, documentata nella guida: confronto tra variabili vs direzione |
 | 2026-11-03 | F6.1 | Nessuna banda sul `contingency-trend-line` | `cochranArmitageTrend` restituisce solo la statistica complessiva e le proporzioni, non l’incertezza per riga: la nota lo dichiara |
 | 2026-11-03 | F6.1 | Il forest MH resta uno solo, con `logScale: false` e riferimento 0 | il piano vieta un secondo forest; l’asse dichiara il log-OR, non l’OR |
+| 2026-11-03 | F7.1 | Note di life table, CIF e forest di sottodistribuzione riscritte; nessun grafico nuovo | la fase chiedeva l’allineamento delle note: mancava la differenza tavola/KM e il motivo per cui non esiste una CIF impilata |
+| 2026-11-03 | F7.2 | `cox-forest`, `stratcox-forest`, `tdcox-forest` e `frailty-forest` passano a `logScale: true` con riferimento 1 | su scala lineare gli HR protettivi si comprimono attorno allo zero, come già valeva per logistica e conteggi |
+| 2026-11-03 | F7.2 | `tdcox` resta a un grafico: nessun β(t) | il kernel riporta solo le stime per intervallo; un grafico dell’effetto nel tempo richiederebbe un β(t) che non esiste (dichiarato in help e nella nota) |
+| 2026-11-03 | F7.1–F7.2 | Commit unico per le due fasi | i cataloghi `en/charts*.ts` contengono voci di entrambe: separarle lascerebbe un commit con traduzioni non usate e il test del copy rosso |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -563,6 +567,47 @@ sotto-blocco aperto):
   `npm run check` verde; `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F6.1 osservati e attesi nel test esatto`
 
+### F7.1 — Life table, competing, frailty, recurrent
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: nota della life table riscritta per spiegare la differenza con KM
+  (la tavola raggruppa il tempo, KM scende a ogni evento); nota del secondo
+  grafico legata ai soggetti a rischio; nota della CIF che dichiara il modello
+  per causa singola e l’assenza di CIF impilata; guida `survival` aggiornata
+  nelle 6 lingue.
+- **Verificato**: `recurrent-mcf` (F1.1b) convive con `recurrent-forest` su
+  IC e riferimento 1; `frailty-forest` mostra gli HR condizionati con la nota
+  che gli intervalli non includono l’incertezza della fragilità.
+- **File toccati**: `src/analyses/survival/run.tsx`,
+  `src/analyses/competing/run.tsx`, `src/analyses/cox/run.tsx`,
+  `src/stats/reportCopy/catalog/en/{charts,charts-w6,charts-w10}.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: survival 5/5, competing 2/2, copy 4/4 verdi.
+- **Commit**: `feat(charts): F7.1–F7.2 sopravvivenza, rischi competitivi e foreste su scala log`
+
+### F7.2 — Cox, stratified, time-dependent
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `cox-forest`, `frailty-forest`, `stratcox-forest` e `tdcox-forest`
+  su scala log con riferimento 1; sottotitolo del Cox che dichiara «scala log»
+  al posto di «scala lineare»; nota del Cox riscritta (la scala log dà lo
+  stesso spazio a HR protettivi e di rischio); guide `cox`, `stratcox` e
+  `tdcox` riscritte nelle 6 lingue, con il limite di `tdcox` (nessun β(t)).
+- **Verificato**: `cox-schoenfeld-*` ha già la nota sull’ipotesi di rischi
+  proporzionali e il riferimento a 0; `tdcox` resta a un solo grafico.
+- **File toccati**: `src/analyses/{cox,stratcox,tdcox}/run.tsx`,
+  `src/analyses/{cox,stratcox}/run.test.ts`, `src/analyses/tdcox/charts.test.ts`,
+  `scripts/remove-chart-copy.mjs` (nuovo, rimuove le voci EN obsolete),
+  cataloghi EN, guide nelle 6 lingue.
+- **Test**: `cox/run.test.ts` 3/3, `stratcox/run.test.ts` 3/3 (con le nuove
+  asserzioni su `logScale` e `reference`), `tdcox/charts.test.ts` 2/2 nuovo;
+  `npm run check` verde; `locales:check` verde sulle 6 lingue.
+- **Nota sui test**: il dataset start-stop dei primi tentativi dava matrice
+  singolare (follow-up tutti uguali); il test usa follow-up disuguali e lo
+  dichiara in un commento — non è un test indebolito, è il caso degenere
+  documentato.
+- **Commit**: `feat(charts): F7.1–F7.2 sopravvivenza, rischi competitivi e foreste su scala log`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -595,6 +640,13 @@ sotto-blocco aperto):
 | F5.2a | `latentclass-entropy` | `latentclass` | `bar` | LZ | `latentclass/charts.test.ts` | ✅ |
 | F5.2b | `irt-icc` | `irt` | `line` | LZ | `irt/charts.test.ts` | ✅ |
 | F6.1 | `exact-observed-expected` | `contingency` | `bar` | LZ | `contingency/charts.test.ts` | ✅ |
+| F7.1 | `survival-life-curve` ♻️ | `survival` | `survival` | JMP | `survival/run.test.ts` | ✅ |
+| F7.1 | `survival-life-events` ♻️ | `survival` | `bar` | LZ | `survival/run.test.ts` | ✅ |
+| F7.1 | `competing-cif` ♻️ | `competing` | `line` | JMP | `competing/charts.test.ts` | ✅ |
+| F7.2 | `cox-forest` ♻️ | `cox` | `forest` | JMP | `cox/run.test.ts` | ✅ |
+| F7.2 | `frailty-forest` ♻️ | `cox` | `forest` | JMP | `cox/run.test.ts` | ✅ |
+| F7.2 | `stratcox-forest` ♻️ | `stratcox` | `forest` | JMP | `stratcox/run.test.ts` | ✅ |
+| F7.2 | `tdcox-forest` ♻️ | `tdcox` | `forest` | JMP | `tdcox/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -605,9 +657,9 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F7.1: life table, competing risks, frailty e recurrent (note e verifica).
-2. F7.2: Cox, stratified e time-dependent.
-3. F7.3a–b: ALT life-stress plot, parametriche e affidabilità.
+1. F7.3a: ALT — life-stress plot (relazione stress–vita su scala log).
+2. F7.3b: parametriche e affidabilità — verifica delle curve e note.
+3. F8.1: Holt-Winters, radici unitarie, analisi spettrale.
 
 ---
 

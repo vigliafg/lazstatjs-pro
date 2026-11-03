@@ -118,6 +118,7 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
     data: { points: stats.coefficients.map(coefficient => ({ label: coefficient.term, estimate: coefficient.hr, lo: coefficient.lo, hi: coefficient.hi })) },
     fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
     stats: { n: stats.n, events: stats.events },
+    options: { reference: 'one', logScale: true } as never,
   });
   const charts = [forest];
   if (curves.length > 0) {

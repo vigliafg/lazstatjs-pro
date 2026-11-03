@@ -186,7 +186,9 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
           kind: 'survival',
           title: copy('Sopravvivenza per intervallo'),
           subtitle: copy('Tavola attuariale'),
-          note: copy('Ogni gradino corrisponde alla fine di un intervallo della tavola.'),
+          note: copy(
+            'Ogni gradino corrisponde alla fine di un intervallo della tavola: la tavola raggruppa il tempo, mentre la curva di Kaplan–Meier scende a ogni evento senza raggruppare.'
+          ),
           data: { curves, censored: [], annotations: [] },
           fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Gruppo') },
         }),
@@ -195,7 +197,9 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
           kind: 'bar',
           title: copy('Eventi per intervallo'),
           subtitle: copy('Conteggio nella prima tavola'),
-          note: copy('Le barre mostrano in quali intervalli si concentrano gli eventi.'),
+          note: copy(
+            'Le barre mostrano in quali intervalli si concentrano gli eventi; l’altezza va letta insieme al numero di soggetti a rischio dell’intervallo.'
+          ),
           data: {
             bars: (withRows[0]?.rows ?? []).map(row => ({
               category: `${row.start.toFixed(2)}–${row.end.toFixed(2)}`,
