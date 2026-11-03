@@ -62,6 +62,26 @@ export const buildCanonicalOutput = ({ grid, params }: CanonicalInput): Analysis
       options: { showFit: true, fit: 'ols', showBand: false } as never,
     }),
     makeChart({
+      id: 'canonical-corr',
+      kind: 'bar',
+      title: copy('Correlazioni canoniche'),
+      subtitle: copy('{s1} funzioni · {s2} osservazioni', {
+        s1: result.functions.length,
+        s2: result.n,
+      }),
+      note: copy(
+        'Ogni barra è la correlazione tra la coppia di variate canoniche: valori alti indicano che i due blocchi condividono una direzione forte. Quante funzioni sono significative lo dicono Wilks e il p nella tabella.'
+      ),
+      data: {
+        bars: result.functions.map(item => ({
+          category: `F${item.index}`,
+          value: item.correlation,
+        })),
+      },
+      fields: { xLabel: copy('Funzione canonica'), yLabel: copy('Correlazione canonica') },
+      options: { valueLabels: true, referenceLine: 'none' } as never,
+    }),
+    makeChart({
       id: 'canonical-loadings',
       kind: 'bar',
       title: copy('Correlazioni di struttura'),

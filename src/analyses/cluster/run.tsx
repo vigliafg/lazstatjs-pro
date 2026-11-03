@@ -1,7 +1,7 @@
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
-import { hierarchicalClusters, partitionClusters } from '../../stats/kernels/cluster';
+import { hierarchicalClusters, partitionClusters, silhouetteByCluster } from '../../stats/kernels/cluster';
 import { GUARD_LIMITS, guardDimensions, sampleEvenly } from '../../stats/kernels/guards';
 import { clusterTables } from '../../stats/tables/cluster';
 import { clusterReport } from '../../stats/reports/cluster';
@@ -85,6 +85,33 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
     category: `C${cluster + 1}`,
     value: result.assignment.filter(value => value === cluster).length,
   }));
+  // The kernel standardises internally with the same n - 1 deviation; the two
+  // plots below need those values, so they are recomputed here instead of
+  // exposing a second field on ClusterResult.
+  const working = (() => {
+    if (!params.standardize) return sample.map(row => row.values);
+    const width = columns.length;
+    const centres = Array.from({ length: width }, (_, column) =>
+      sample.reduce((sum, row) => sum + row.values[column], 0) / sample.length
+    );
+    const deviations = Array.from({ length: width }, (_, column) =>
+      Math.sqrt(
+        sample.reduce((sum, row) => sum + Math.pow(row.values[column] - centres[column], 2), 0) /
+          Math.max(1, sample.length - 1)
+      )
+    );
+    return sample.map(row =>
+      row.values.map((value, column) =>
+        deviations[column] > 0 ? (value - centres[column]) / deviations[column] : 0
+      )
+    );
+  })();
+  const silhouettes = silhouetteByCluster(working, result.assignment, result.k);
+  const clusterPoints = working.map((values, index) => ({
+    x: values[0],
+    y: values[1] ?? 0,
+    group: `C${result.assignment[index] + 1}`,
+  }));
 
   const charts: AnalysisChart[] = [
     ...(partitioned
@@ -118,6 +145,34 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
         xType: 'nominal',
       },
       options: { showMarkers: true, showBand: false } as never,
+    }),
+    ...(silhouettes.length > 0
+      ? [
+          makeChart({
+            id: 'cluster-silhouette',
+            kind: 'bar',
+            title: copy('Silhouette media per cluster'),
+            subtitle: copy('Valori sopra 0,5 indicano cluster ben separati'),
+            note: copy(
+              'La silhouette confronta la distanza media dentro il cluster con quella verso il cluster più vicino: valori vicini a 1 indicano gruppi compatti e separati, valori vicini a 0 o negativi indicano confini ambigui.'
+            ),
+            data: { bars: silhouettes.map((value, cluster) => ({ category: `C${cluster + 1}`, value })) },
+            fields: { xLabel: copy('Cluster'), yLabel: copy('Silhouette media') },
+            options: { valueLabels: true, referenceLine: 'none' } as never,
+          }),
+        ]
+      : []),
+    makeChart({
+      id: 'cluster-scatter',
+      kind: 'scatter',
+      title: copy('Cluster nelle prime due variabili'),
+      subtitle: params.standardize ? copy('Variabili standardizzate') : copy('Variabili originali'),
+      note: copy(
+        'Non è una PCA: gli assi sono le prime due variabili selezionate (standardizzate se richiesto) e il colore è il cluster assegnato. Serve a vedere la separazione, non a ridurre la dimensionalità.'
+      ),
+      data: { points: clusterPoints },
+      fields: { xLabel: variableNames[0], yLabel: variableNames[1] ?? 'V2', series: copy('Cluster') },
+      options: { fit: 'none', band: 'none', showPoints: true } as never,
     }),
     makeChart({
       id: 'cluster-sizes',

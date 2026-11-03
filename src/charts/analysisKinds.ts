@@ -75,7 +75,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   wizard: [],
   partition: ['bar', 'scatter', 'tree'],
   quality: ['bar', 'box', 'histogram', 'interval', 'line', 'pareto'],
-  cluster: ['bar', 'dendrogram', 'line'],
+  cluster: ['bar', 'dendrogram', 'line', 'scatter'],
   canonical: ['bar', 'scatter'],
   mds: ['scatter', 'scree'],
   correspondence: ['heatmap', 'scatter'],

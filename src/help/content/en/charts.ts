@@ -1,5 +1,7 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "cluster": ["Dendrogram, cluster profiles and sizes, mean silhouette per cluster and a scatter of the first two variables (not a PCA)."],
+  "canonical": ["Canonical scores, canonical correlations and the structure correlations of the first function."],
   "multinomial": ["Predicted class distribution, accuracy per class and the observed × predicted confusion matrix."],
   "iv": ["Observed vs fitted, residuals and the first stage: instruments against the endogenous variable, one series per instrument."],
   "pls": ["Observed vs fitted, cumulative R² per component and a heat map of the predictor loadings on the components."],

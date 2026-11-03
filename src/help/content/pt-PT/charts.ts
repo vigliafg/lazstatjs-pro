@@ -1,5 +1,7 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "cluster": ["Dendrograma, perfis e dimensões dos clusters, silhueta média por cluster e dispersão das duas primeiras variáveis (não é uma ACP)."],
+  "canonical": ["Pontuações canónicas, correlações canónicas e correlações de estrutura da primeira função."],
   "multinomial": ["Distribuição das classes previstas, exatidão por classe e matriz de confusão observado × previsto."],
   "iv": ["Observados vs ajustados, resíduos e primeira fase: instrumentos contra a variável endógena, uma série por instrumento."],
   "pls": ["Observados vs ajustados, R² acumulado por componente e heatmap dos loadings dos preditores nas componentes."],

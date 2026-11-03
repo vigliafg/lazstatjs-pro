@@ -59,6 +59,22 @@ export const w10ChartCopy: Record<string, string> = {
   "Coefficienti del modello selezionato": "Coefficients of the selected model",
   "IC {s1}% · {s2} predittori": "CI {s1}% · {s2} predictors",
   "IC {s1}% · {s2} predittore": "CI {s1}% · {s2} predictor",
+  "Silhouette media per cluster": "Mean silhouette per cluster",
+  "Valori sopra 0,5 indicano cluster ben separati": "Values above 0.5 indicate well-separated clusters",
+  "La silhouette confronta la distanza media dentro il cluster con quella verso il cluster più vicino: valori vicini a 1 indicano gruppi compatti e separati, valori vicini a 0 o negativi indicano confini ambigui.":
+    "The silhouette compares the mean distance inside the cluster with the mean distance to the nearest other cluster: values near 1 indicate compact, separated groups; values near 0 or negative indicate ambiguous boundaries.",
+  "Silhouette media": "Mean silhouette",
+  "Cluster nelle prime due variabili": "Clusters in the first two variables",
+  "Variabili standardizzate": "Standardised variables",
+  "Variabili originali": "Original variables",
+  "Non è una PCA: gli assi sono le prime due variabili selezionate (standardizzate se richiesto) e il colore è il cluster assegnato. Serve a vedere la separazione, non a ridurre la dimensionalità.":
+    "This is not a PCA: the axes are the first two selected variables (standardised when requested) and the colour is the assigned cluster. It shows separation, it does not reduce dimensionality.",
+  "Correlazioni canoniche": "Canonical correlations",
+  "{s1} funzioni · {s2} osservazioni": "{s1} functions · {s2} observations",
+  "Ogni barra è la correlazione tra la coppia di variate canoniche: valori alti indicano che i due blocchi condividono una direzione forte. Quante funzioni sono significative lo dicono Wilks e il p nella tabella.":
+    "Each bar is the correlation between the pair of canonical variates: high values mean the two blocks share a strong direction. Wilks and the p value in the table say how many functions are significant.",
+  "Funzione canonica": "Canonical function",
+  "Correlazione canonica": "Canonical correlation",
   "Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.":
     "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
   "Predittore": "Predictor",

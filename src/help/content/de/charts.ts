@@ -1,5 +1,7 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
+  "cluster": ["Dendrogramm, Clusterprofile und -größen, mittlere Silhouette je Cluster und Streudiagramm der ersten beiden Variablen (keine PCA)."],
+  "canonical": ["Kanonische Scores, kanonische Korrelationen und Strukturkorrelationen der ersten Funktion."],
   "multinomial": ["Verteilung der vorhergesagten Klassen, Genauigkeit je Klasse und Konfusionsmatrix beobachtet × vorhergesagt."],
   "iv": ["Beobachtet vs angepasst, Residuen und erste Stufe: Instrumente gegen die endogene Variable, eine Reihe je Instrument."],
   "pls": ["Beobachtet vs angepasst, kumuliertes R² je Komponente und Heatmap der Prädiktor-Loadings auf die Komponenten."],

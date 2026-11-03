@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F4.4 chiusa, ondata O4 chiusa)
-- **Fase corrente**: F5.1 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F5.1 chiusa)
+- **Fase corrente**: F5.2a — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -69,7 +69,7 @@ con motivo.
 | F4.2 | multinomial, IV, PLS | 60 | ✅ | `feat(charts): F4.2 confusione, primo stadio e loadings PLS` | 21 test + `check` e `locales:check` verdi |
 | F4.3 | logistica, conteggi, ordinale | 45 | ✅ | `feat(charts): F4.3 foreste su scala log e link dichiarato` | 3 test + `check` e `locales:check` verdi |
 | F4.4 | diagnostica di regressione | 45 | ✅ | `feat(charts): F4.4 verifica stili JMP della regressione` | 8 test + `check` e `locales:check` verdi |
-| F5.1 | cluster, canonical, MDS, correspondence | 60 | ⬜ | — | — |
+| F5.1 | cluster, canonical, MDS, correspondence | 60 | ✅ | `feat(charts): F5.1 silhouette, scatter dei cluster e correlazioni canoniche` | 3 test + `check` e `locales:check` verdi (MDS/correspondence già a 2 grafici) |
 | F5.2a | SEM, latent class | 45 | ⬜ | — | — |
 | F5.2b | IRT ICC, conjoint | 30 | ⬜ | — | — |
 | F5.3 | PCA/EFA/alpha e pannelli | 45 | ⬜ | — | — |
@@ -162,6 +162,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F4.4 | Nessun cambio ai runner: `reg-scatter` porta già `meanY` e `grid.seMean`, `reg-residual-fitted` porta `residSd` | le varianti `jmp-regression` e `jmp-residual` sono selezionabili senza forzare il default del kind |
 | 2026-11-03 | QA | Lo scatter accetta `series` come osservazioni quando `points` manca | tre runner (IV, polinomio) passavano solo `series`: le card erano vuote e i test non lo vedevano |
 | 2026-11-03 | QA | Il Pareto accetta la cumulata sia come `category` sia come `x` | i runner esistenti usano `x`; il layer leggeva solo `category` |
+| 2026-11-03 | F5.1 | `silhouetteByCluster` è una funzione pura nel kernel, non un campo di `ClusterResult` | il kernel esponeva solo la media globale; il dettaglio per cluster serve ai grafici e ai test |
+| 2026-11-03 | F5.1 | `cluster-scatter` usa le prime due variabili, non le componenti principali | il piano esclude una PCA; la nota lo dichiara esplicitamente |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -467,6 +469,28 @@ sotto-blocco aperto):
   `x`; `npm run check` e `locales:check` verdi.
 - **Commit**: `fix(charts): QA visiva, scatter da series e cumulata del Pareto`
 
+### F5.1 — Cluster, canonical, MDS, correspondence
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `silhouetteByCluster` nel kernel `cluster`: silhouette media per cluster con
+    la stessa definizione della media globale, con test su due gruppi separati.
+  - `cluster-silhouette` [bar] e `cluster-scatter` [scatter] (prime due
+    variabili, colore per cluster, nota che esclude la PCA); `analysisKinds`
+    di `cluster` dichiara ora `scatter`.
+  - `canonical-corr` [bar] con le correlazioni canoniche per funzione.
+- **Verificato**: MDS e correspondence avevano già due grafici ciascuna, nessun
+  intervento richiesto.
+- **File toccati**: `src/stats/kernels/cluster.ts`,
+  `src/analyses/cluster/{run.tsx,charts.test.ts}`,
+  `src/analyses/canonical/{run.tsx,charts.test.ts}`,
+  `src/analyses/l4.test.ts`, `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: cluster + canonical + l4 → 3 nuovi verdi, suite completa verde;
+  `npm run check` verde; `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F5.1 silhouette, scatter dei cluster e correlazioni canoniche`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -492,6 +516,9 @@ sotto-blocco aperto):
 | F4.2 | `multinomial-confusion` | `multinomial` | `heatmap` | LZ | `multinomial/run.test.ts` | ✅ |
 | F4.2 | `iv-first-stage` | `iv` | `scatter` | LZ | `iv/run.test.ts` | ✅ |
 | F4.2 | `pls-loadings` | `pls` | `heatmap` | LZ | `pls/run.test.ts` | ✅ |
+| F5.1 | `cluster-silhouette` | `cluster` | `bar` | LZ | `cluster/charts.test.ts` | ✅ |
+| F5.1 | `cluster-scatter` | `cluster` | `scatter` | LZ | `cluster/charts.test.ts` | ✅ |
+| F5.1 | `canonical-corr` | `canonical` | `bar` | LZ | `canonical/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -502,9 +529,9 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F5.1: `cluster` (#15 silhouette, #16 profilo dei centroidi), `canonical`
-   (#17), verifica di MDS e correspondence.
-2. F5.2a: SEM (#18) e latent class (#19); F5.2b: IRT ICC (#20) e conjoint.
+1. F5.2a: `sem-fit` [bar] (CFI, RMSEA, SRMR con soglie) e
+   `latentclass-entropy` [bar].
+2. F5.2b: IRT ICC e conjoint.
 3. F5.3: PCA/EFA/alpha e pannelli; poi gate di fine ondata O5.
 
 ---

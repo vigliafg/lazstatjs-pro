@@ -323,6 +323,42 @@ const meanSilhouette = (data: number[][], assignment: number[], k: number): numb
 };
 
 /**
+ * Mean silhouette of every cluster, using the same definition as the global
+ * `silhouette` (a = mean distance inside the cluster, b = mean distance to the
+ * nearest other cluster). Members without an own neighbour or without another
+ * cluster score nothing and do not enter the mean; an empty cluster reports 0.
+ */
+export const silhouetteByCluster = (
+  data: number[][],
+  assignment: number[],
+  k: number
+): number[] => {
+  if (k < 2 || data.length < 3) return [];
+  const distances = data.map(row => data.map(other => euclidean(row, other)));
+  const sums = new Array<number>(k).fill(0);
+  const counts = new Array<number>(k).fill(0);
+  data.forEach((_, index) => {
+    const own = assignment[index];
+    const ownMembers = distances[index].filter((__, other) => assignment[other] === own && other !== index);
+    if (ownMembers.length === 0) return;
+    const a = ownMembers.reduce((sum, value) => sum + value, 0) / ownMembers.length;
+    let b = Infinity;
+    for (let cluster = 0; cluster < k; cluster += 1) {
+      if (cluster === own) continue;
+      const members = distances[index].filter((__, other) => assignment[other] === cluster);
+      if (members.length === 0) continue;
+      b = Math.min(b, members.reduce((sum, value) => sum + value, 0) / members.length);
+    }
+    if (!Number.isFinite(b)) return;
+    sums[own] += (b - a) / Math.max(a, b, 1e-12);
+    counts[own] += 1;
+  });
+  return Array.from({ length: k }, (_, cluster) =>
+    counts[cluster] > 0 ? sums[cluster] / counts[cluster] : 0
+  );
+};
+
+/**
  * Lloyd's algorithm for k-means (Euclidean means) or k-medians (component-wise
  * medians). Seeding is deterministic (first row plus farthest-first) so a run
  * is reproducible and the R fixture can pass the same starting centres.

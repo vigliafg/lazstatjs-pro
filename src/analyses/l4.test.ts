@@ -156,6 +156,8 @@ test('cluster runner emits dendrogram, profiles and sizes', () => {
   assert.deepEqual(charts.map(chart => chart.id), [
     'cluster-dendrogram',
     'cluster-profile',
+    'cluster-silhouette',
+    'cluster-scatter',
     'cluster-sizes',
   ]);
   assert.equal(charts[0].kind, 'dendrogram');
