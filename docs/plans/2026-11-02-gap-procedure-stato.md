@@ -34,7 +34,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | Ondata corrente | W4 chiusa (gate G4 verde); prossima W5 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
 | Ultimo commit di codice | `e2ec8cc` (chiusura W4) |
-| Ultimo commit documentale | `3cae69d` (allineamento hash W4) |
+| Ultimo commit documentale | `7541e2d` (regole economia del contesto) |
 | Test | `npm run check` verde; `npm test` 1196/1196 verdi; `npm run test:samples` 7/7; locale check 6/6 |
 | Item chiusi | 38 / 73; W4 chiusa |
 | Nuove voci | 15 / 36 (W2 + W3 + `loglinear`) |
