@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildRegressionOutput } from './run';
+import { styleAvailable, styleById } from '../../charts/styles';
 import { DEFAULT_PARAMS } from '../../io/project';
 import type { ColType, GridData } from '../../grid/types';
 
@@ -18,6 +19,43 @@ const rows: string[][] = Array.from({ length: 30 }, (_, index) => {
 });
 
 const grid: GridData = { cols, rows };
+
+test('the JMP regression styles are offered only when their data is present', () => {
+  const linear: GridData = { cols: cols.slice(0, 2), rows: rows.map(([x, y]) => [x, y]) };
+  const simple = buildRegressionOutput({
+    grid: linear,
+    regParams: { ...DEFAULT_PARAMS.reg, mode: 'linear', dep: 1, indeps: [0] },
+    ciLevel: 95,
+  });
+  assert.ok('ok' in simple && simple.ok);
+  if (!('ok' in simple) || !simple.ok) return;
+  const scatter = simple.charts?.find(chart => chart.id === 'reg-scatter');
+  assert.ok(scatter);
+  const regressionStyle = styleById('scatter', 'jmp-regression');
+  assert.ok(regressionStyle);
+  assert.equal(
+    styleAvailable(regressionStyle!, { chart: scatter, analysisId: 'regression' }),
+    true
+  );
+  assert.equal(
+    styleAvailable(regressionStyle!, { chart: scatter, analysisId: 'logistic' }),
+    false
+  );
+
+  const multiple = buildRegressionOutput({
+    grid,
+    regParams: { ...DEFAULT_PARAMS.reg, mode: 'linear', dep: 1, indeps: [0, 2] },
+    ciLevel: 95,
+  });
+  assert.ok('ok' in multiple && multiple.ok);
+  if (!('ok' in multiple) || !multiple.ok) return;
+  const residual = multiple.charts?.find(chart => chart.id === 'reg-residual-fitted');
+  assert.ok(residual);
+  const residualStyle = styleById('residual', 'jmp-residual');
+  assert.ok(residualStyle);
+  assert.equal(styleAvailable(residualStyle!, { chart: residual }), true);
+  assert.equal(styleAvailable(residualStyle!, { chart: scatter }), false);
+});
 
 test('selection mode plots the selected coefficients with their intervals', () => {
   const result = buildRegressionOutput({

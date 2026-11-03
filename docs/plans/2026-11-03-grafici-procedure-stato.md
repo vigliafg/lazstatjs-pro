@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F4.3 chiusa)
-- **Fase corrente**: F4.4 — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F4.4 chiusa, ondata O4 chiusa)
+- **Fase corrente**: F5.1 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -68,7 +68,7 @@ con motivo.
 | F4.1 | stepwise, polynomial, penalized | 60 | ✅ | `feat(charts): F4.1 coefficienti del modello selezionato` | 6 test + `check` e `locales:check` verdi |
 | F4.2 | multinomial, IV, PLS | 60 | ✅ | `feat(charts): F4.2 confusione, primo stadio e loadings PLS` | 21 test + `check` e `locales:check` verdi |
 | F4.3 | logistica, conteggi, ordinale | 45 | ✅ | `feat(charts): F4.3 foreste su scala log e link dichiarato` | 3 test + `check` e `locales:check` verdi |
-| F4.4 | diagnostica di regressione | 45 | ⬜ | — | — |
+| F4.4 | diagnostica di regressione | 45 | ✅ | `feat(charts): F4.4 verifica stili JMP della regressione` | 8 test + `check` e `locales:check` verdi |
 | F5.1 | cluster, canonical, MDS, correspondence | 60 | ⬜ | — | — |
 | F5.2a | SEM, latent class | 45 | ⬜ | — | — |
 | F5.2b | IRT ICC, conjoint | 30 | ⬜ | — | — |
@@ -159,6 +159,7 @@ sotto-blocco aperto):
 | 2026-11-03 | F4.2 | Test aggiunti ai `run.test.ts` esistenti invece di nuovi `charts.test.ts` | stessi fixture e stesso kernel: un file per analisi avrebbe duplicato i dati |
 | 2026-11-03 | F4.3 | I forest di IRR/OR hanno `logScale: true` nel runner | allinea i tre runner alla variante `forest.jmp-ratio` senza cambiare il default del kind |
 | 2026-11-03 | F4.3 | Il link della logistica compare nel sottotitolo e la nota probit cita Φ(η) | il grafico deve dire quale curva sta disegnando |
+| 2026-11-03 | F4.4 | Nessun cambio ai runner: `reg-scatter` porta già `meanY` e `grid.seMean`, `reg-residual-fitted` porta `residSd` | le varianti `jmp-regression` e `jmp-residual` sono selezionabili senza forzare il default del kind |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -422,6 +423,24 @@ sotto-blocco aperto):
   verde; `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F4.3 foreste su scala log e link dichiarato`
 
+### F4.4 — Diagnostica di regressione
+
+- **Stato**: ✅ chiusa (2026-11-03); ondata O4 chiusa con gate verde
+- **Verificato**:
+  - `reg-scatter` (k = 1) porta `stats.meanY` e `data.grid` con
+    `seMean`/`sePred`: la variante `scatter.jmp-regression` è disponibile e
+    limitata a `regression`.
+  - `reg-observed-fitted` (k ≥ 2) resta punti + diagonale, senza banda: non
+    obiettivo documentato.
+  - `reg-residual-fitted` porta `stats.residSd`, quindi `residual.jmp-residual`
+    è selezionabile e la banda ±2 SD usa il campo già calcolato.
+  - Gli id usati da `regressionDiagnosticPanel` non cambiano.
+- **Fatto**: test in `src/analyses/regression/charts.test.ts` che verifica la
+  disponibilità dei due stili (e il filtro per analisi) sui grafici reali.
+- **Test**: regression charts + panels → 8/8 verdi; `npm run check` verde;
+  `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F4.4 verifica stili JMP della regressione`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -450,14 +469,17 @@ sotto-blocco aperto):
 
 *(compilare a ogni fase; una riga per grafico)*
 
+F3.3, F4.3 e F4.4 sono fasi di allineamento: nessun nuovo id, solo opzioni dei
+runner, guide e test sugli stili esistenti.
+
 ---
 
 ## 7. Prossimi 3 passi
 
-1. F4.4: verificare `jmp-regression`/`jmp-residual` e il pannello
-   `regressionDiagnosticPanel`; poi gate di fine ondata O4.
-2. F5.1: `cluster` (#15, #16), `canonical` (#17), MDS e correspondence.
-3. F5.2a: SEM (#18) e latent class (#19).
+1. F5.1: `cluster` (#15 silhouette, #16 profilo dei centroidi), `canonical`
+   (#17), verifica di MDS e correspondence.
+2. F5.2a: SEM (#18) e latent class (#19); F5.2b: IRT ICC (#20) e conjoint.
+3. F5.3: PCA/EFA/alpha e pannelli; poi gate di fine ondata O5.
 
 ---
 
