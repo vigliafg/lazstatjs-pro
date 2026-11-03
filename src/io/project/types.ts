@@ -203,13 +203,38 @@ export interface TimeSeriesParams {
 }
 
 /** Parametri della tabella di contingenza R×C. */
+export type ContingencyMode = 'chi2' | 'mantelHaenszel' | 'trend' | 'exact';
+
+/** One 2×2 stratum of the Mantel–Haenszel test (counts as strings). */
+export interface ContingencyStratum {
+  label: string;
+  values: string[][];
+}
+
 export interface ContingencyParams {
+  /** Test performed on the table(s). */
+  mode: ContingencyMode;
   rows: string[];
   cols: string[];
   /** Frequenze come stringhe: il calcolo usa parseInt, come il form. */
   values: string[][];
   exact: boolean;
   monteCarlo: boolean;
+  /** 2×2 tables used by the Mantel–Haenszel mode. */
+  strata: ContingencyStratum[];
+  /** Row scores used by the Cochran–Armitage trend mode (default 1..R). */
+  scores: string[];
+}
+
+/** Poisson log-linear model for a two-way table. */
+export type LoglinearModel = 'independence' | 'saturated';
+
+export interface LoglinearParams {
+  rows: string[];
+  cols: string[];
+  /** Frequenze come stringhe, come nella tabella di contingenza. */
+  values: string[][];
+  model: LoglinearModel;
 }
 
 /** Parametri dell'ANCOVA. */
@@ -309,7 +334,7 @@ export interface MiParams {
   variables: number[];
   imputations: number;
   iterations: number;
-  model: 'descriptives' | 'linear';
+  model: 'descriptives' | 'linear' | 'categorical';
   outcome: number;
   predictors: number[];
 }
@@ -586,6 +611,7 @@ export interface ProjectParams {
   survival: SurvivalParams;
   timeseries: TimeSeriesParams;
   contingency: ContingencyParams;
+  loglinear: LoglinearParams;
   ancova: AncovaParams;
   factorial: FactorialParams;
   repeatedanova: RepeatedAnovaParams;
@@ -802,6 +828,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     seasonalDifferenceMode: 'auto',
   },
   contingency: {
+    mode: 'chi2',
     rows: ['Treatment', 'Control'],
     cols: ['Improved', 'Unchanged', 'Worse'],
     values: [
@@ -810,6 +837,33 @@ export const DEFAULT_PARAMS: ProjectParams = {
     ],
     exact: true,
     monteCarlo: true,
+    strata: [
+      {
+        label: 'Stratum 1',
+        values: [
+          ['12', '20'],
+          ['18', '9'],
+        ],
+      },
+      {
+        label: 'Stratum 2',
+        values: [
+          ['7', '15'],
+          ['19', '11'],
+        ],
+      },
+    ],
+    scores: ['1', '2'],
+  },
+  loglinear: {
+    rows: ['Low', 'Medium', 'High'],
+    cols: ['Yes', 'No'],
+    values: [
+      ['20', '80'],
+      ['35', '65'],
+      ['50', '50'],
+    ],
+    model: 'independence',
   },
   ancova: {
     response: 0,

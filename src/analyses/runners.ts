@@ -28,6 +28,7 @@ import { buildCoxOutput } from './cox/run';
 import { buildSurvivalOutput } from './survival/run';
 import { buildTimeSeriesOutput } from './timeseries/run';
 import { buildContingencyOutput } from './contingency/run';
+import { buildLoglinearOutput } from './loglinear/run';
 import { buildAncovaOutput } from './ancova/run';
 import { buildFactorialOutput } from './factorial/run';
 import { buildRepeatedAnovaOutput } from './repeatedanova/run';
@@ -126,6 +127,8 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildTimeSeriesOutput({ grid, params: params.timeseries, ciLevel }),
   contingency: ({ params, ciLevel }) =>
     buildContingencyOutput({ params: params.contingency, ciLevel }),
+  loglinear: ({ params, ciLevel }) =>
+    buildLoglinearOutput({ params: params.loglinear, ciLevel }),
   ancova: ({ grid, params, ciLevel }) =>
     buildAncovaOutput({ grid, params: params.ancova, ciLevel }),
   factorial: ({ grid, params, ciLevel }) =>

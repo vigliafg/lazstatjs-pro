@@ -120,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'Tablas de contingencia R×C',
-    summary: 'Tablas mayores que 2×2, con medidas de asociación y Monte Carlo.',
+    summary: 'Tablas R×C con chi-cuadrado, Mantel–Haenszel, tendencia y pruebas exactas.',
     tutorial: {
       goal: 'Comprobar la asociación entre un tramo de edad y la preferencia.',
       dataset: 'score-groups.csv',
@@ -143,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Residuo tipificado', definition: 'Observado menos esperado, en unidades de desviación estándar.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -349,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Datos ausentes (imputación múltiple)',
-    summary: 'Imputación por ecuaciones encadenadas con pooling de Rubin.',
+    summary: 'Imputación por ecuaciones encadenadas para variables numéricas y categóricas, con pooling de Rubin.',
     tutorial: {
       goal: 'Tratar los datos ausentes sin eliminar casos.',
       dataset: 'score-groups.csv',

@@ -62,6 +62,8 @@ export const metaMessages = {
   'meta.analysis.multivariate.description': 'PCA, α de Cronbach e análise fatorial exploratória.',
   'meta.analysis.chisquare.label': 'Qui-quadrado (χ²)',
   'meta.analysis.chisquare.description': 'Associação 2×2 com teste exato de Fisher.',
+  'meta.analysis.loglinear.label': 'Log-linear',
+  'meta.analysis.loglinear.description': 'Modelo log-linear de Poisson para tabelas de duas vias.',
   'meta.analysis.contingency.label': 'Contingência (R×C)',
   'meta.analysis.contingency.description': 'Tabelas R×C com medidas de associação.',
   'meta.analysis.agreement.label': 'Concordância',

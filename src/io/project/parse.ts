@@ -147,6 +147,54 @@ const parseContingencyCell = (value: unknown): string => {
   return '0';
 };
 
+const CONTINGENCY_MODES = ['chi2', 'mantelHaenszel', 'trend', 'exact'] as const;
+
+const parseContingencyMode = (
+  value: unknown,
+  fallback: (typeof CONTINGENCY_MODES)[number]
+): (typeof CONTINGENCY_MODES)[number] =>
+  typeof value === 'string' && (CONTINGENCY_MODES as readonly string[]).includes(value)
+    ? (value as (typeof CONTINGENCY_MODES)[number])
+    : fallback;
+
+const MAX_STRATA = 20;
+
+/** A Mantel–Haenszel stratum is always a 2×2 table of counts. */
+const parseContingencyStrata = (
+  value: unknown,
+  fallback: ProjectParams['contingency']['strata']
+): ProjectParams['contingency']['strata'] => {
+  if (!Array.isArray(value)) return fallback.map(stratum => ({ ...stratum, values: stratum.values.map(row => [...row]) }));
+  const strata = value
+    .filter((entry): entry is Record<string, unknown> => isRecord(entry))
+    .slice(0, MAX_STRATA)
+    .map((entry, index) => ({
+      label: typeof entry.label === 'string' && entry.label.trim() ? entry.label.trim() : `Stratum ${index + 1}`,
+      values: [0, 1].map(row =>
+        [0, 1].map(column => {
+          const source = Array.isArray(entry.values) && Array.isArray(entry.values[row])
+            ? (entry.values[row] as unknown[])[column]
+            : '0';
+          return parseContingencyCell(source);
+        })
+      ),
+    }));
+  return strata.length >= 1
+    ? strata
+    : fallback.map(stratum => ({ ...stratum, values: stratum.values.map(row => [...row]) }));
+};
+
+/** Trend scores: one finite number per row, defaulting to 1..R. */
+const parseTrendScores = (value: unknown, rowCount: number): string[] => {
+  const fallback = Array.from({ length: rowCount }, (_, index) => String(index + 1));
+  if (!Array.isArray(value)) return fallback;
+  return fallback.map((_, index) => {
+    const raw = value[index];
+    const num = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw.trim()) : NaN;
+    return Number.isFinite(num) ? String(num) : fallback[index];
+  });
+};
+
 const parseContingencyValues = (
   value: unknown,
   rows: readonly string[],
@@ -274,6 +322,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const survival = isRecord(raw.survival) ? raw.survival : {};
   const timeseries = isRecord(raw.timeseries) ? raw.timeseries : {};
   const contingency = isRecord(raw.contingency) ? raw.contingency : null;
+  const loglinear = isRecord(raw.loglinear) ? raw.loglinear : null;
   const ancova = isRecord(raw.ancova) ? raw.ancova : {};
   const factorial = isRecord(raw.factorial) ? raw.factorial : {};
   const repeatedanova = isRecord(raw.repeatedanova) ? raw.repeatedanova : {};
@@ -314,6 +363,12 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const contingencyCols = contingency
     ? parseContingencyLabels(contingency.cols, d.contingency.cols)
     : [...d.contingency.cols];
+  const loglinearRows = loglinear
+    ? parseContingencyLabels(loglinear.rows, d.loglinear.rows)
+    : [...d.loglinear.rows];
+  const loglinearCols = loglinear
+    ? parseContingencyLabels(loglinear.cols, d.loglinear.cols)
+    : [...d.loglinear.cols];
   const ancovaResponse = index(ancova.response, d.ancova.response, width);
   const ancovaFactor = index(ancova.factor, d.ancova.factor, width);
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
@@ -529,6 +584,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       ),
     },
     contingency: {
+      mode: contingency ? parseContingencyMode(contingency.mode, d.contingency.mode) : d.contingency.mode,
       rows: contingencyRows,
       cols: contingencyCols,
       values: contingency
@@ -538,6 +594,23 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       monteCarlo: contingency
         ? bool(contingency.monteCarlo, d.contingency.monteCarlo)
         : d.contingency.monteCarlo,
+      strata: contingency
+        ? parseContingencyStrata(contingency.strata, d.contingency.strata)
+        : d.contingency.strata.map((stratum) => ({
+            ...stratum,
+            values: stratum.values.map((row) => [...row]),
+          })),
+      scores: contingency
+        ? parseTrendScores(contingency.scores, contingencyRows.length)
+        : [...d.contingency.scores],
+    },
+    loglinear: {
+      rows: loglinearRows,
+      cols: loglinearCols,
+      values: loglinear
+        ? parseContingencyValues(loglinear.values, loglinearRows, loglinearCols)
+        : d.loglinear.values.map((row) => [...row]),
+      model: loglinear?.model === 'saturated' ? 'saturated' : d.loglinear.model,
     },
     ancova: {
       response: ancovaResponse,
@@ -616,7 +689,7 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       variables: indexList(mi.variables, d.mi.variables, width),
       imputations: Math.max(2, Math.min(50, integer(mi.imputations, d.mi.imputations))),
       iterations: Math.max(1, Math.min(50, integer(mi.iterations, d.mi.iterations))),
-      model: mi.model === 'linear' ? 'linear' : d.mi.model,
+      model: mi.model === 'linear' || mi.model === 'categorical' ? mi.model : d.mi.model,
       outcome: index(mi.outcome, d.mi.outcome, width),
       predictors: indexList(mi.predictors, d.mi.predictors, width),
     },

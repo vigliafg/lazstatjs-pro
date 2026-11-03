@@ -85,6 +85,8 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.chisquare.label': 'Chi-Quadrat (χ²)',
   'meta.analysis.chisquare.description':
     '2×2-Assoziation mit exaktem Test nach Fisher.',
+  'meta.analysis.loglinear.label': 'Log-linear',
+  'meta.analysis.loglinear.description': 'Poisson-Log-linear-Modell für zweidimensionale Tabellen.',
   'meta.analysis.contingency.label': 'Kontingenz (R×C)',
   'meta.analysis.contingency.description':
     'R×C-Tabellen mit Assoziationsmaßen.',

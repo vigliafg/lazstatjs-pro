@@ -54,3 +54,81 @@ test('contingency builder rejects negative frequencies and a zero total', () => 
   assert.ok('reason' in empty);
   if ('reason' in empty) assert.match(empty.reason, /grand total/);
 });
+
+test('Mantel–Haenszel mode returns pooled and per-stratum tables plus a forest', () => {
+  const params = {
+    ...DEFAULT_PARAMS.contingency,
+    mode: 'mantelHaenszel' as const,
+    strata: [
+      { label: 'A', values: [['12', '20'], ['18', '9']] },
+      { label: 'B', values: [['0', '8'], ['6', '10']] },
+    ],
+  };
+  const result = buildContingencyOutput({ params, ciLevel: 95 });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  assert.deepEqual(result.charts?.map(chart => chart.id), ['contingency-mh-forest']);
+  assert.equal(result.charts?.[0].kind, 'forest');
+  const ids = result.tables.map(table => table.id);
+  assert.ok(ids.includes('cont-mh'));
+  assert.ok(ids.includes('cont-mh-strata'));
+  assert.equal(result.report?.id, 'contingency-mantel-haenszel');
+  const pooled = result.tables.find(table => table.id === 'cont-mh');
+  assert.ok((pooled?.rows.length ?? 0) >= 2);
+
+  const noStrata = buildContingencyOutput({
+    params: {
+      ...params,
+      strata: [{ label: 'empty', values: [['0', '0'], ['0', '0']] }],
+    },
+    ciLevel: 95,
+  });
+  assert.ok('reason' in noStrata);
+  if ('reason' in noStrata) assert.match(noStrata.reason, /positive total/);
+});
+
+test('trend mode uses the first two columns, scores and a proportion line', () => {
+  const params = {
+    ...DEFAULT_PARAMS.contingency,
+    mode: 'trend' as const,
+    values: [
+      ['18', '12', '0'],
+      ['25', '15', '0'],
+      ['32', '8', '0'],
+      ['40', '5', '0'],
+    ],
+    rows: ['1', '2', '3', '4'],
+    scores: ['1', '2', '3', '4'],
+  };
+  const result = buildContingencyOutput({ params, ciLevel: 95 });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  assert.deepEqual(result.charts?.map(chart => chart.id), ['contingency-trend-line']);
+  assert.equal(result.charts?.[0].kind, 'line');
+  assert.ok(result.tables.some(table => table.id === 'cont-trend'));
+  assert.ok(result.tables.some(table => table.id === 'cont-trend-proportions'));
+  assert.equal(result.report?.id, 'contingency-trend');
+});
+
+test('exact mode returns a dedicated table and residual heatmap', () => {
+  const params = {
+    ...DEFAULT_PARAMS.contingency,
+    mode: 'exact' as const,
+    rows: ['A', 'B', 'C'],
+    cols: ['Yes', 'No'],
+    values: [
+      ['12', '7'],
+      ['8', '10'],
+      ['5', '13'],
+    ],
+  };
+  const result = buildContingencyOutput({ params, ciLevel: 95 });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  assert.deepEqual(result.charts?.map(chart => chart.id), ['contingency-exact-residuals']);
+  assert.equal(result.charts?.[0].kind, 'heatmap');
+  const exact = result.tables.find(table => table.id === 'cont-exact');
+  assert.ok(exact);
+  assert.match(String(exact?.rows[0]?.method ?? ''), /Enumerazione/);
+  assert.equal(result.report?.id, 'contingency-exact');
+});

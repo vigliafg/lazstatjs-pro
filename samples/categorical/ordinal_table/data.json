@@ -1,0 +1,962 @@
+[
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "No"
+  },
+  {
+    "Dose": "Low",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "Medium",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "No"
+  },
+  {
+    "Dose": "High",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "No"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  },
+  {
+    "Dose": "Very high",
+    "Response": "Yes"
+  }
+]

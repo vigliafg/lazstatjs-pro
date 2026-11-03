@@ -94,6 +94,8 @@ export const metaMessages = {
   'meta.analysis.chisquare.description': '2×2 association with exact Fisher test.',
   'meta.analysis.contingency.label': 'Contingency (R×C)',
   'meta.analysis.contingency.description': 'R×C tables with association measures.',
+  'meta.analysis.loglinear.label': 'Log-linear',
+  'meta.analysis.loglinear.description': 'Poisson log-linear model for two-way tables.',
   'meta.analysis.agreement.label': 'Agreement',
   'meta.analysis.agreement.description': 'ICC, Bland–Altman and Cohen’s kappa.',
   'meta.analysis.survival.label': 'Survival (KM)',

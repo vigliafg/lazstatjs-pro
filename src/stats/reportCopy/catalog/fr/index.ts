@@ -17,6 +17,7 @@ import { geeCopy } from './gee';
 import { lmmCopy } from './lmm';
 import { l4Copy } from './l4';
 import { logisticCopy } from './logistic';
+import { loglinearCopy } from './loglinear';
 import { miCopy } from './mi';
 import { mixedanovaCopy } from './mixedanova';
 import { multivariateCopy } from './multivariate';
@@ -58,6 +59,7 @@ export const frReportCopy: Record<string, string> = {
   ...lmmCopy,
   ...l4Copy,
   ...logisticCopy,
+  ...loglinearCopy,
   ...miCopy,
   ...mixedanovaCopy,
   ...multivariateCopy,

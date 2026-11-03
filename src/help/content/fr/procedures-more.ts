@@ -120,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'Tableaux de contingence R×C',
-    summary: 'Tableaux plus grands que 2×2, avec mesures d’association et Monte-Carlo.',
+    summary: 'Tableaux R×C avec khi-deux, Mantel–Haenszel, tendance et tests exacts.',
     tutorial: {
       goal: 'Vérifier l’association entre classe d’âge et préférence.',
       dataset: 'score-groups.csv',
@@ -143,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Résidu standardisé', definition: 'Observé moins attendu, en unités d’écart-type.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -349,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Données manquantes (imputation multiple)',
-    summary: 'Imputation par équations chaînées avec mise en commun de Rubin.',
+    summary: 'Imputation par équations chaînées pour variables numériques et catégorielles, avec mise en commun de Rubin.',
     tutorial: {
       goal: 'Traiter les données manquantes sans supprimer de cas.',
       dataset: 'score-groups.csv',

@@ -1,4 +1,18 @@
-import { contingencyReport, contingencyTables } from '../../stats/contingency';
+import {
+  cochranArmitageTrend,
+  exactContingency,
+  mantelHaenszel,
+} from '../../stats/kernels/contingency';
+import {
+  contingencyReport,
+  contingencyTables,
+  contingencyExactReport,
+  contingencyMantelHaenszelReport,
+  contingencyTrendReport,
+  exactTables,
+  mantelHaenszelTables,
+  trendTables,
+} from '../../stats/contingency';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
 import { mosaicCells } from '../../charts/kits/categorical';
@@ -11,13 +25,19 @@ export interface ContingencyInput {
   ciLevel: number;
 }
 
+const parseCount = (value: string | undefined): number =>
+  Number.parseInt(value ?? '0', 10) || 0;
+
+const parseTable = (values: string[][]): number[][] =>
+  values.map(row => row.map(cell => parseCount(cell)));
+
+const hasNegative = (observed: number[][]): boolean =>
+  observed.some(row => row.some(value => value < 0));
+
 /** Chi-quadro / Fisher / Monte Carlo su una tabella R×C. */
-export const buildContingencyOutput = ({
-  params,
-  ciLevel,
-}: ContingencyInput): AnalysisRunResult => {
-  const observed = params.values.map(row => row.map(cell => Number.parseInt(cell, 10) || 0));
-  if (observed.some(row => row.some(value => value < 0))) {
+const buildChi2Output = ({ params, ciLevel }: ContingencyInput): AnalysisRunResult => {
+  const observed = parseTable(params.values);
+  if (hasNegative(observed)) {
     return { ok: false, reason: 'Frequencies must be non-negative' };
   }
   if (observed.flat().reduce((sum, value) => sum + value, 0) === 0) {
@@ -172,4 +192,187 @@ export const buildContingencyOutput = ({
     report: contingencyReport(tables, ciLevel),
     charts,
   };
+};
+
+const buildMantelHaenszelOutput = ({ params, ciLevel }: ContingencyInput): AnalysisRunResult => {
+  const strata = params.strata.map((stratum, index) => ({
+    label: stratum.label?.trim() || `${copy('Strato')} ${index + 1}`,
+    observed: [0, 1].map(row =>
+      [0, 1].map(column => parseCount(stratum.values[row]?.[column]))
+    ),
+  }));
+  if (strata.some(stratum => hasNegative(stratum.observed))) {
+    return { ok: false, reason: 'Frequencies must be non-negative' };
+  }
+
+  const result = mantelHaenszel(strata, { correct: true, level: ciLevel });
+  if (!result) {
+    return { ok: false, reason: 'At least one stratum needs a positive total' };
+  }
+
+  const tables = mantelHaenszelTables(result, ciLevel);
+  const points = result.strata.map(stratum => ({
+    label: stratum.label,
+    estimate: stratum.logOddsRatio,
+    lo: stratum.lo,
+    hi: stratum.hi,
+  }));
+  points.push({
+    label: copy('MH pooled'),
+    estimate: result.logOddsRatio,
+    lo: result.lo,
+    hi: result.hi,
+  });
+
+  const chart = makeChart({
+    id: 'contingency-mh-forest',
+    kind: 'forest',
+    title: copy('Log odds ratio per strato'),
+    subtitle: copy('{s1} strati · IC {s2}%', { s1: result.usedStrata, s2: ciLevel }),
+    note: copy('Punto: log-OR dello strato o pooled. Segmento: intervallo di confidenza. Linea tratteggiata: log-OR = 0, cioè nessuna associazione.'),
+    data: { points },
+    fields: { xLabel: copy('Log odds ratio'), yLabel: copy('Strato') },
+    options: { logScale: false, reference: 'zero', sort: 'none' } as never,
+  });
+
+  return {
+    ok: true,
+    title: copy('Mantel–Haenszel · {s1} strati', { s1: result.usedStrata }),
+    tables,
+    report: contingencyMantelHaenszelReport(tables, ciLevel),
+    charts: [chart],
+  };
+};
+
+const buildTrendOutput = ({ params, ciLevel }: ContingencyInput): AnalysisRunResult => {
+  // The trend editor works on the first two columns only: extra columns of the
+  // main table are ignored instead of rejecting an otherwise valid R×2 setup.
+  const observed = parseTable(params.values).map(row => row.slice(0, 2));
+  if (hasNegative(observed)) {
+    return { ok: false, reason: 'Frequencies must be non-negative' };
+  }
+  if (observed.length < 2 || observed[0]?.length !== 2) {
+    return { ok: false, reason: 'The trend test needs an R×2 table' };
+  }
+  const rowTotals = observed.map(row => row.reduce((sum, value) => sum + value, 0));
+  if (rowTotals.some(total => total <= 0)) {
+    return { ok: false, reason: 'Every row needs at least one observation' };
+  }
+  const scores =
+    params.scores.length === observed.length
+      ? params.scores.map(Number)
+      : observed.map((_, index) => index + 1);
+  if (scores.some(value => !Number.isFinite(value))) {
+    return { ok: false, reason: 'Every row needs a finite trend score' };
+  }
+
+  const result = cochranArmitageTrend(observed, scores);
+  if (!result) {
+    return { ok: false, reason: 'The trend test needs an R×2 table and one score per row' };
+  }
+
+  const tables = trendTables(result, params.rows, params.cols);
+  const series = result.rows
+    .map((row, index) => ({
+      x: result.scores[index],
+      y: row.proportion,
+      series: copy('Proporzione'),
+    }))
+    .sort((a, b) => a.x - b.x);
+
+  const chart = makeChart({
+    id: 'contingency-trend-line',
+    kind: 'line',
+    title: copy('Proporzione per punteggio'),
+    subtitle: copy('{s1} righe ordinate per punteggio', { s1: observed.length }),
+    note: copy('Ogni punto è la proporzione della prima colonna sul totale di riga; la linea collega i punteggi in ordine crescente.'),
+    data: { series },
+    fields: { xLabel: copy('Punteggio'), yLabel: copy('Proporzione'), series: copy('Serie') },
+    options: { showMarkers: true, step: false, showBand: false } as never,
+  });
+
+  return {
+    ok: true,
+    title: copy('Trend di Cochran–Armitage · {s1} × 2', { s1: observed.length }),
+    tables,
+    report: contingencyTrendReport(tables, ciLevel),
+    charts: [chart],
+  };
+};
+
+const buildExactOutput = ({ params, ciLevel }: ContingencyInput): AnalysisRunResult => {
+  const observed = parseTable(params.values);
+  if (hasNegative(observed)) {
+    return { ok: false, reason: 'Frequencies must be non-negative' };
+  }
+  if (observed.flat().reduce((sum, value) => sum + value, 0) === 0) {
+    return { ok: false, reason: 'The grand total cannot be zero' };
+  }
+  if (observed.length < 2 || (observed[0]?.length ?? 0) < 2) {
+    return { ok: false, reason: 'The exact test needs at least a 2×2 table' };
+  }
+  const rowTotals = observed.map(row => row.reduce((sum, value) => sum + value, 0));
+  const colTotals = observed[0].map((_, column) =>
+    observed.reduce((sum, row) => sum + row[column], 0)
+  );
+  if (rowTotals.some(total => total <= 0) || colTotals.some(total => total <= 0)) {
+    return { ok: false, reason: 'Every row and every column needs at least one observation' };
+  }
+
+  const result = exactContingency(observed, {
+    simulations: 10000,
+    seed: 20240517,
+    budget: 200000,
+  });
+  if (result.method === 'unavailable') {
+    return { ok: false, reason: result.reason ?? 'The exact p-value is not available' };
+  }
+
+  const tables = exactTables(result, observed.length, observed[0].length, ciLevel);
+  const total = rowTotals.reduce((sum, value) => sum + value, 0);
+  const cells = observed.flatMap((row, i) =>
+    row.map((value, j) => {
+      const expected = (rowTotals[i] * colTotals[j]) / total;
+      const residual = expected > 0 ? (value - expected) / Math.sqrt(expected) : 0;
+      return {
+        x: params.cols[j] ?? `C${j + 1}`,
+        y: params.rows[i] ?? `R${i + 1}`,
+        value: residual,
+        label: residual.toFixed(2),
+      };
+    })
+  );
+
+  const chart = makeChart({
+    id: 'contingency-exact-residuals',
+    kind: 'heatmap',
+    title: copy('Residui standardizzati (test esatto)'),
+    subtitle: copy('Osservato − atteso, diviso per la radice dell’atteso'),
+    note: copy('Il colore mostra quali celle si discostano di più dall’indipendenza; il test esatto misura quanto l’intera tabella è compatibile con i margini osservati.'),
+    data: { cells },
+    fields: { xLabel: copy('Colonna'), yLabel: copy('Riga') },
+    options: { showValues: true, diverging: true } as never,
+  });
+
+  return {
+    ok: true,
+    title: copy('Test esatto {s1} × {s2}', { s1: observed.length, s2: observed[0].length }),
+    tables,
+    report: contingencyExactReport(tables, ciLevel),
+    charts: [chart],
+  };
+};
+
+/** Contingency runner: Pearson χ² (default), Mantel–Haenszel, trend or exact. */
+export const buildContingencyOutput = (input: ContingencyInput): AnalysisRunResult => {
+  switch (input.params.mode) {
+    case 'mantelHaenszel':
+      return buildMantelHaenszelOutput(input);
+    case 'trend':
+      return buildTrendOutput(input);
+    case 'exact':
+      return buildExactOutput(input);
+    default:
+      return buildChi2Output(input);
+  }
 };

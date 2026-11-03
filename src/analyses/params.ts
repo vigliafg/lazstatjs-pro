@@ -771,7 +771,7 @@ export const validateAnalysisColumnRefs = (
       break;
     case 'mi':
       list(params.mi.variables, 'Missing Data: variables');
-      one(params.mi.outcome, 'Missing Data: outcome');
+      if (params.mi.model !== 'categorical') one(params.mi.outcome, 'Missing Data: outcome');
       list(params.mi.predictors, 'Missing Data: predictors');
       break;
     case 'ordinal':

@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W3: 7/7 item con test verdi; restano traduzioni e gate G3)
+**Ultimo aggiornamento**: 2026-11-03 (W4: 5/5 item con test verdi; gate G4 da dichiarare)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0, W1 e W2 chiuse; W3 numericamente completa; gate G0, G1 e G2 verdi
-**Ondata corrente**: W3 — Regressione avanzata (7 item)
+**Stato**: W0–W3 chiuse; W4 completa con test verdi; gate G0, G1, G2 e G3 verdi
+**Ondata corrente**: W4 — Categorical + MI categorica (5 item)
 
 ---
 
@@ -31,15 +31,15 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W3 chiusa (gate G3 verde); prossima W4 |
+| Ondata corrente | W4 completa (gate G4 da dichiarare); prossima W5 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `8f8298f` (chiusura W3) |
-| Ultimo commit documentale | `bc90227` (allineamento hash W3) |
-| Test | `npm run check` verde; `npm test` 1161/1161 verdi; `npm run test:samples` 7/7; locale check 6/6 |
-| Item chiusi | 33 / 73; W3 chiusa |
-| Nuove voci | 14 / 36 (W2 + `pls`, `mars`, `iv`, `panel`, `selection`, `mediation`, `propensity`) |
-| Estensioni | 20 / 37 |
-| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 |
+| Ultimo commit di codice | `in preparazione` (chiusura W4) |
+| Ultimo commit documentale | `in preparazione` (allineamento hash W4) |
+| Test | `npm run check` verde; `npm test` 1196/1196 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Item chiusi | 38 / 73; W4 chiusa |
+| Nuove voci | 15 / 36 (W2 + W3 + `loglinear`) |
+| Estensioni | 24 / 37 |
+| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 |
 | Blocchi | nessuno |
 | Prossimo gate | G4 — fine W4 (categorical + MI categorica) |
 
@@ -53,7 +53,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | W1 | Descriptive + test di base | 14 | 2 | **chiusa** (G1 verde) | G1 |
 | W2 | ANOVA/GLMM + Regressione nucleo | 12 | 5 | **chiusa** (G2 verde) | G2 |
 | W3 | Regressione avanzata | 7 | 7 | **chiusa** (G3 verde) | G3 |
-| W4 | Categorical + MI categorica | 5 | 1 | non iniziata | G4 |
+| W4 | Categorical + MI categorica | 5 | 1 | **chiusa** (G4 da dichiarare) | G4 |
 | W5 | Multivariate avanzata | 8 | 7 | non iniziata | G5 |
 | W6 | Survival e affidabilità | 8 | 4 | non iniziata | G6 |
 | W7 | Time series | 7 | 3 | non iniziata | G7 |
@@ -70,14 +70,14 @@ passi; per il resto rimandare alle sezioni del piano.
 | Compare groups | 11 | 11 | **chiusa** (C-01…C-11) |
 | Regression | 15 | 15 | **chiusa** (R-01…R-15) |
 | Multivariate | 0 | 8 | non iniziata |
-| Categorical | 0 | 4 | non iniziata |
+| Categorical | 4 | 4 | **chiusa** (K-01…K-04) |
 | Survival | 0 | 8 | non iniziata |
 | Time series | 0 | 7 | non iniziata |
 | Design & power | 2 | 4 | in corso (P-01, P-02) |
-| Missing data | 0 | 2 | non iniziata |
+| Missing data | 1 | 2 | in corso (N-01) |
 | Machine Learning | 0 | 3 | non iniziata |
 | Advanced & Bayesian | 0 | 3 | non iniziata |
-| **Totale** | **33** | **73** |  |
+| **Totale** | **38** | **73** |  |
 
 ---
 
@@ -422,6 +422,65 @@ Nota dataset: `selection_demo` è stato rigenerato con intercette più basse
 (133 censurati su 450, 243 selezionati); la fixture `tobit.json` è stata
 rigenerata sui dati reali e i 18 test selection restano verdi.
 
+## 5f. Ondata W4 — avanzamento (2026-11-03)
+
+Apertura di W4 dopo G3. Nessuna installazione R nuova: le reference usano
+`stats`, `coin`, `mice`, già disponibili. Stato dei cantieri:
+
+| Item | Stato | Note |
+|---|---|---|
+| K-01 Mantel–Haenszel | **test verdi** | modalità `mantelHaenszel` di `contingency`; OR pooled, χ² MH con correzione di continuità, OR di strato; reference `mantelhaen.test` + caso cella zero |
+| K-02 Cochran–Armitage | **test verdi** | modalità `trend`; formula equivalente a `prop.trend.test`, punteggi editabili in UI |
+| K-03 Log-linear | **test verdi** | nuova voce `loglinear`; Poisson su tabella due vie, modelli `independence`/`saturated`; reference `glm(family = poisson)` |
+| K-04 Esatti R×C | **test verdi** | modalità `exact`; Fisher per 2×2, enumerazione a margini fissi con budget, Monte Carlo deterministico oltre il budget |
+| N-01 MI categorica | **test verdi** | modalità `categorical` di `mi`; MICE con logistica/multinomiale, pooling di Rubin sulle proporzioni; reference `mice` (logreg/polyreg), tolleranza 0.06 |
+
+Integrazione condivisa: `ContingencyParams` esteso con `mode`, `strata`,
+`scores`; nuovo `LoglinearParams`; `MiParams.model = 'categorical'`;
+`parse.ts` difensivo; registry con `loglinear`; `paramsSnapshot`,
+`analysisKinds`, `runners`, `AnalysisForm`, validazione ruoli/perimetro e
+default aggiornati. `roles.ts` salta il controllo continuo per le variabili MI
+categoriche. Help `w4-*.ts` in 6 lingue; contingency e MI aggiornati nei
+sommari e nei rimandi. Chiavi i18n `contingency.mode*`, `contingency.strata*`,
+`contingency.scores`, `loglinear.*`, `form.loglinear*`, `form.categorical`,
+`meta.analysis.loglinear.*` in 6 lingue.
+
+Chiusure finali prima di G4:
+
+- traduzioni `reportCopy` complete per `de`, `fr`, `es`, `pt-PT`:
+  **3512/3512** frasi in ciascuna lingua; nuovi moduli `contingency` e
+  `loglinear`, più le frasi dei grafici W4 in `catalog/en/charts.ts`;
+- sample nuovi in `samples/categorical/`: `stratified_2x2` (300 righe),
+  `ordinal_table` (240), `categorical_table` (160, con codici mancanti);
+  `generate.R` e manifest aggiornati, `loglinear` dichiarato manual-only;
+- eccezioni di `scripts/check-file-size.mjs` aggiornate per `types` 1092,
+  `parse` 945, `roles` 1008 e `catalog/en/charts.ts` 754.
+
+Gate G4 (2026-11-03):
+
+| Verifica | Esito |
+|---|---|
+| `npx tsc --noEmit` | pulito |
+| `npm test` | **1196/1196** verdi |
+| `npm run test:samples` | 7/7 verdi |
+| `npm run depcruise` | nessuna violazione (942 moduli) |
+| `npm run madge` | nessuna dipendenza circolare |
+| `npm run filesize` | 926 file sotto 700 righe, 8 eccezioni |
+| `node scripts/check-locale.mjs` it/en/de/fr/es/pt-PT | 6/6 "translation wave complete" |
+
+Decisioni W4:
+
+- K-01/K-02/K-04 restano **modalità** di `contingency`, non nuove voci; la
+  modalità `chi2` conserva tabelle, grafici e note invariati.
+- K-03 è una **voce nuova** perché ha un modello e una UI propri; il modello
+  saturo non passa da `glmFit` (p = n), ma risolve `Xβ = log(y)` e costruisce
+  la covarianza da `(X'WX)⁻¹`. Con una cella zero il saturo è rifiutato.
+- N-01 imputa solo categorie osservate, non introduce codici nuovi; il FIML
+  resta fuori scope e verrà ripreso dopo M-05.
+- Il confronto con `mice` è sulla distribuzione pooled delle proporzioni
+  (tolleranza assoluta 0.06), non sui singoli valori imputati: RNG e schedule
+  delle catene sono diversi.
+
 ## 6. Registro checkpoint
 
 | Data | Checkpoint | Commit | Test | Esito | Note |
@@ -435,6 +494,7 @@ rigenerata sui dati reali e i 18 test selection restano verdi.
 | 2026-11-03 | Checkpoint W2 (11/12) | `7bf4e84` | `npm run check` 1052/1052 + `test:samples` 7/7 + locale 6/6 | verde | C-08/C-09/C-11, R-01…R-08 tranne C-10; 4 nuove voci; 10 reference; G2 non dichiarato |
 | 2026-11-03 | Chiusura W2 / G2 | `863029b` + `3ff1b34` + `7bfb8f4` | `npm run check` 1068/1068 + `test:samples` 7/7 + locale 6/6 | verde | C-10 GLMM Laplace + `lmm` random slope; 26/73 metodi, 7/36 voci, 20/37 estensioni |
 | 2026-11-03 | Chiusura W3 / G3 | `8f8298f` | `npm run check` 1161/1161 + `test:samples` 7/7 + locale 6/6 | verde | R-09…R-15 (7/7); 33/73 metodi, 14/36 voci; traduzioni reportCopy 5 lingue complete |
+| 2026-11-03 | Chiusura W4 / G4 | `in preparazione` | `npm run check` 1196/1196 + `test:samples` 7/7 + locale 6/6 | verde | K-01…K-04 + N-01 (5/5); 38/73 metodi, 15/36 voci; 3 reference W4; traduzioni reportCopy 5 lingue complete |
 
 > A ogni checkpoint aggiungere una riga. Non cancellare le righe precedenti.
 
@@ -444,59 +504,60 @@ rigenerata sui dati reali e i 18 test selection restano verdi.
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
 
-### Handoff — 2026-11-03 / chiusura W3 (G3 verde)
+### Handoff — 2026-11-03 / chiusura W4 (G4 verde)
 
-- Ondata: W3 chiusa, gate G3 verde; prossima W4 (categorical + MI categorica).
+- Ondata: W4 chiusa, gate G4 verde; prossima W5 (multivariate avanzata).
 - Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
-- Ultimo commit: `bc90227` (documenti W3); codice `8f8298f`.
-- Item chiusi (ID): W1, W2 complete; W3 completa — R-09 PLS, R-10 MARS,
-  R-11 IV/2SLS, R-12 panel FE/RE, R-13 Tobit/selection, R-14 mediazione,
-  R-15 propensity score.
+- Ultimo commit: `in preparazione` (chiusura W4).
+- Item chiusi (ID): W3 completa; W4 completa — K-01 Mantel–Haenszel,
+  K-02 Cochran–Armitage, K-03 log-linear, K-04 esatti R×C, N-01 MI categorica.
 - Item in corso (ID): nessuno.
 - Item bloccati (ID + motivo): nessuno.
-- Test eseguiti e risultato: `npm run check` **verde** (1161/1161 test, tsc,
+- Test eseguiti e risultato: `npm run check` **verde** (1196/1196 test, tsc,
   depcruise, madge, file size); `npm run test:samples` 7/7; locale check 6/6
   ("translation wave complete" per it/en/de/fr/es/pt-PT).
-- File/moduli toccati: contratti condivisi `types/parse/params/roles/
-  paramsSnapshot/registry/runners/AnalysisForm/worker/analysisKinds`; kernel
-  `pls`, `mars`, `iv`, `panel`, `tobit`, `mediation`, `propensity`; tabelle e
-  report dedicati; voci `analyses/{pls,mars,iv,panel,selection,mediation,
-  propensity}`; help `w3-*.ts` in 6 lingue; cataloghi `reportCopy`
-  `w3*` in 6 lingue; `samples/generate.R` e manifest con 4 dataset; fixture
-  reference `pls`, `mars`, `iv`, `panel`, `selection`, `tobit`, `mediation`,
-  `propensity`.
+- File/moduli toccati: contratti `types/parse/params/roles/paramsSnapshot/
+  registry/runners/AnalysisForm/analysisKinds`; kernel `contingency`,
+  `loglinear`, `miCategorical`; tabelle/report `contingencyModes`,
+  `loglinear`, `miCategorical`; voci `analyses/loglinear/*` e form/run
+  `contingency`, `mi`; help `w4-*.ts` in 6 lingue; cataloghi reportCopy
+  `contingency`, `loglinear`, `mi`, `charts`; `samples/generate.R` e manifest
+  con 3 dataset; fixture reference `contingency`, `loglinear`, `mi`.
 - Decisioni prese / deviazioni dal piano:
-  - nessuna installazione R: Tobit `AER::tobit`; Heckman base R two-step;
-    mediazione `lavaan` (SE delta/ML) + bootstrap per proprietà; propensity
-    `MatchIt` con confronto su ATT e bilanciamento.
-  - Heckman solo two-step; ML dichiarato fuori scope.
-  - R-13 usa `kernels/tobit.ts` per non collidere con la selezione stepwise
-    di R-01; la voce resta `selection`.
-  - `selection_demo` rigenerato (133 censurati su 450, 243 selezionati).
+  - K-01/K-02/K-04 sono modalità di `contingency`; la modalità `chi2` resta
+    invariata per tabelle, grafici e note.
+  - K-03 è una voce nuova; il saturo risolve direttamente `Xβ = log(y)` perché
+    `glmFit` rifiuta p = n; con celle zero il saturo è rifiutato.
+  - N-01 imputa solo categorie osservate con pooling di Rubin sulle
+    proporzioni; FIML resta fuori scope fino a M-05.
+  - Reference `mice` confrontata sulla distribuzione pooled (tolleranza 0.06).
 - Prossimi 3 passi:
-  1. Aprire W4: C-12…C-16 (categorical) e MI categorica, partendo dalla
-     verifica delle reference R disponibili (`nnet`, `MASS`, `mice`).
-  2. Applicare lo stesso flusso kernel + reference + voce/UI + help/i18n,
-     con subagenti paralleli su file dedicati.
-  3. Chiudere G4 con `npm run check`, `test:samples` e locale check.
+  1. Aprire W5: M-01…M-08 (cluster, CCA, MDS, correspondence, SEM/CFA,
+     latent class, IRT, conjoint), verificando `lavaan`, `poLCA`, `mirt`,
+     `ca` prima di scrivere i kernel.
+  2. Applicare il flusso kernel + fixture R + voce/UI + help/i18n, con
+     subagenti paralleli su file dedicati e contratti condivisi al main.
+  3. Chiudere G5 con `npm run check`, `test:samples` e locale check.
 - Domande aperte: nessuna.
-- Rischi attivi: bootstrap mediazione non confrontabile punto-punto con R
-  (validazione per proprietà); Heckman ML fuori scope; panel senza GMM
-  dinamici; propensity senza stimatori doubly robust.
+- Rischi attivi: `lavaan`/`poLCA`/`mirt`/`ca` potrebbero non essere
+  installati; SEM/IRT hanno molti parametri e vanno limitati i TableSpec
+  minimi prima di implementare.
 
-### Riassunto di 10 righe — W3
+### Riassunto di 10 righe — W4
 
-1. Ondata e obiettivo: W3 chiusa, G3 verde; 33/73 metodi.
-2. Cosa è chiuso: 33 metodi, 14 voci nuove, 20 estensioni.
-3. Cosa è in corso: nulla; W4 pronta a partire.
+1. Ondata e obiettivo: W4 chiusa, G4 verde; 38/73 metodi.
+2. Cosa è chiuso: 5 metodi (K-01…K-04, N-01), 1 voce nuova (`loglinear`),
+   4 estensioni; 15/36 voci e 24/37 estensioni complessive.
+3. Cosa è in corso: nulla; W5 pronta a partire.
 4. Cosa è bloccato: nulla.
-5. Ultimo commit: `8f8298f` su `feat/gap-wave-1`.
-6. Test: `npm run check` 1161/1161; sample 7/7; locale 6/6.
-7. Decisioni: nessuna installazione R; Heckman two-step; mediazione/propensity
-   con reference disponibili e limiti dichiarati.
-8. Prossimi 3 passi: aprire W4, implementare C-12…C-16 + MI categorica, G4.
+5. Ultimo commit: W4 su `feat/gap-wave-1`.
+6. Test: `npm run check` 1196/1196; sample 7/7; locale 6/6.
+7. Decisioni: modalità contingency per MH/trend/esatti; `loglinear` voce
+   autonoma; MI categorica senza FIML, pooling sulle proporzioni.
+8. Prossimi 3 passi: aprire W5, implementare M-01…M-08, chiudere G5.
 9. Domande: nessuna.
-10. Rischi: inferenza dei metodi non-ML validata per proprietà, non punto-punto.
+10. Rischi: reference R di W5 da verificare prima dei kernel; output SEM/IRT
+    da limitare per non esplodere.
 
 ### Handoff — 2026-11-03 / chiusura W2 (G2 verde) — storico
 

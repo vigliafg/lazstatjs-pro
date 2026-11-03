@@ -64,6 +64,8 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.multivariate.description': 'ACP, alpha de Cronbach et analyse factorielle exploratoire.',
   'meta.analysis.chisquare.label': 'Khi-deux (χ²)',
   'meta.analysis.chisquare.description': 'Association 2×2 avec test exact de Fisher.',
+  'meta.analysis.loglinear.label': 'Log-linéaire',
+  'meta.analysis.loglinear.description': 'Modèle log-linéaire de Poisson pour tableaux à deux dimensions.',
   'meta.analysis.contingency.label': 'Contingence (R×C)',
   'meta.analysis.contingency.description': 'Tableaux R×C avec mesures d’association.',
   'meta.analysis.agreement.label': 'Concordance',

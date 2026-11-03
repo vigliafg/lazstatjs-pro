@@ -17,6 +17,7 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   survival: 'survival',
   timeseries: 'timeseries',
   contingency: 'contingency',
+  loglinear: 'loglinear',
   ancova: 'ancova',
   factorial: 'factorial',
   repeatedanova: 'repeatedanova',

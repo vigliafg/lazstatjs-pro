@@ -67,6 +67,7 @@ const SOURCE_IDS = [
   ...idsOf('src/analyses/parametric'),
   ...idsOf('src/analyses/contingency'),
   ...idsOf('src/analyses/mi'),
+  ...idsOf('src/analyses/loglinear'),
   ...idsOf('src/analyses/resampling'),
   ...idsOf('src/analyses/agreement'),
   ...idsOf('src/analyses/partition'),

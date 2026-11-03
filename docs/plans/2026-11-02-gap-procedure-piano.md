@@ -521,6 +521,14 @@ minimi per non esplodere.
 - N-01 parte in W4 con l’imputazione categorica; il FIML si chiude dopo M-05.
 - N-02 è trasversale e richiede F8.
 
+**Stato W4 (2026-11-03)**: K-01…K-04 e N-01 chiusi, gate G4 verde. Kernel,
+reference R (`mantelhaen.test`, `prop.trend.test`, enumerazione esatta,
+`glm` Poisson, `mice`), voci/UI, help `w4-*.ts` e `reportCopy` in 6 lingue
+completati; `npm run check` 1196/1196, `test:samples` 7/7, locale check 6/6.
+K-03 è una voce autonoma: il modello saturo risolve direttamente
+`Xβ = log(y)` perché `glmFit` richiede p < n. Dettaglio in
+`2026-11-02-gap-procedure-stato.md` §5f e registro §6.
+
 ---
 
 ### 7.10 Machine Learning (3 metodi, 3 nuove voci)

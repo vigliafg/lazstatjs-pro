@@ -13,11 +13,11 @@ const EXCEPTIONS = new Map([
   ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
   ['src/App.tsx', 754], // composizione root: preset, salvataggio, temi, comandi desktop e row state L5
   ['src/charts/features.ts', 701], // registro unico dei controlli: una riga in più dopo gli oggetti L4
-  ['src/io/project/types.ts', 1038], // tipi di tutti i parametri persistiti: un blocco per procedura (W3)
-  ['src/io/project/parse.ts', 872], // parsing difensivo di tutti i parametri persistiti (W3)
+  ['src/io/project/types.ts', 1092], // tipi di tutti i parametri persistiti: un blocco per procedura (W4)
+  ['src/io/project/parse.ts', 945], // parsing difensivo di tutti i parametri persistiti (W4)
   ['src/analyses/params.ts', 1023], // normalizzazione/validazione di tutte le procedure (W3)
-  ['src/analyses/roles.ts', 1005], // mappa ruoli/colonne di tutte le procedure (W3)
-  ['src/stats/reportCopy/catalog/en/charts.ts', 725], // catalogo inglese dei grafici, un blocco per famiglia
+  ['src/analyses/roles.ts', 1008], // mappa ruoli/colonne di tutte le procedure (W4)
+  ['src/stats/reportCopy/catalog/en/charts.ts', 754], // catalogo inglese dei grafici, un blocco per famiglia (W4)
 ]);
 
 const walk = directory =>

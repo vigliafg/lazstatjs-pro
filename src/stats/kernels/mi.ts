@@ -3,6 +3,7 @@ import { parseNum } from '../core';
 import { tCrit, twoSidedTP } from '../distributions';
 import { eigenSymmetric } from '../linalg';
 import { mulberry32 } from './distributions';
+import { miCategoricalStats } from './miCategorical';
 import type { MiCoefficient, MiOptions, MiRegression, MiStats, MiVariable } from '../mi/types';
 
 type Matrix = number[][];
@@ -206,6 +207,7 @@ const poolCoefficients = (
 
 /** Imputazione multipla (MICE numerica) con pooling di Rubin per media e SD. */
 export const miStats = (options: MiOptions): MiStats | null => {
+  if (options.model === 'categorical') return miCategoricalStats(options);
   const { rows, variables, level } = options;
   if (variables.length === 0) return null;
   const imputations = Math.max(2, Math.min(50, Math.round(options.imputations)));

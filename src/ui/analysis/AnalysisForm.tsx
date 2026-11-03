@@ -28,6 +28,7 @@ import { CoxForm } from '../../analyses/cox/Form';
 import { SurvivalForm } from '../../analyses/survival/Form';
 import { TimeSeriesForm } from '../../analyses/timeseries/Form';
 import { ContingencyForm } from '../../analyses/contingency/Form';
+import { LoglinearForm } from '../../analyses/loglinear/Form';
 import { AncovaForm } from '../../analyses/ancova/Form';
 import { FactorialForm } from '../../analyses/factorial/Form';
 import { RepeatedAnovaForm } from '../../analyses/repeatedanova/Form';
@@ -427,6 +428,13 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
           <ContingencyForm
             contingencyParams={params.contingency}
             setContingencyParams={setSlice('contingency')}
+          />
+        );
+      case 'loglinear':
+        return (
+          <LoglinearForm
+            loglinearParams={params.loglinear}
+            setLoglinearParams={setSlice('loglinear')}
           />
         );
       case 'partition':

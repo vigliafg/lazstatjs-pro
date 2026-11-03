@@ -66,6 +66,8 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.chisquare.description': 'Associazione 2×2 con test esatto di Fisher.',
   'meta.analysis.contingency.label': 'Contingenza (R×C)',
   'meta.analysis.contingency.description': 'Tabelle R×C con misure di associazione.',
+  'meta.analysis.loglinear.label': 'Log-lineare',
+  'meta.analysis.loglinear.description': 'Modello log-lineare di Poisson per tabelle a due vie.',
   'meta.analysis.agreement.label': 'Accordo',
   'meta.analysis.agreement.description': 'ICC, Bland–Altman e kappa di Cohen.',
   'meta.analysis.survival.label': 'Sopravvivenza (KM)',

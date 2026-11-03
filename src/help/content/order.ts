@@ -43,6 +43,7 @@ export const TOPIC_ORDER = [
   'multivariate',
   'chisquare',
   'contingency',
+  'loglinear',
   'agreement',
   'survival',
   'cox',

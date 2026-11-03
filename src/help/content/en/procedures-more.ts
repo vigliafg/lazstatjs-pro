@@ -120,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'R×C contingency tables',
-    summary: 'Tables larger than 2×2, with association measures and Monte Carlo.',
+    summary: 'R×C tables with chi-square, Mantel–Haenszel, trend and exact tests.',
     tutorial: {
       goal: 'Check the association between age band and preference.',
       dataset: 'score-groups.csv',
@@ -143,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Standardised residual', definition: 'Observed minus expected, in standard deviation units.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -349,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Missing data (multiple imputation)',
-    summary: 'Chained-equations imputation with Rubin pooling.',
+    summary: 'Chained-equations imputation for numeric and categorical variables, with Rubin pooling.',
     tutorial: {
       goal: 'Handle missing data without deleting cases.',
       dataset: 'score-groups.csv',

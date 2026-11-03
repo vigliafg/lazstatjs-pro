@@ -991,6 +991,9 @@ export const validateRoleTypes = (
 ): string[] => {
   const errors: string[] = [];
   for (const role of analysisRoles(analysisId)) {
+    // Categorical MI treats the selected variables as category codes, so their
+    // columns need not be numeric; the covariates keep the continuous rule.
+    if (analysisId === 'mi' && params.mi.model === 'categorical' && role.key !== 'predictors') continue;
     for (const index of role.get(params)) {
       if (index < 0 || index >= grid.cols.length) continue;
       const col = grid.cols[index];

@@ -120,7 +120,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'contingency',
     area: 'procedures',
     title: 'Tabelas de contingência R×C',
-    summary: 'Tabelas maiores do que 2×2, com medidas de associação e Monte Carlo.',
+    summary: 'Tabelas R×C com qui-quadrado, Mantel–Haenszel, tendência e testes exatos.',
     tutorial: {
       goal: 'Verificar a associação entre faixa de idade e preferência.',
       dataset: 'score-groups.csv',
@@ -143,7 +143,7 @@ export const moreTopics: HelpTopic[] = [
         { term: 'Resíduo estandardizado', definition: 'Observado menos esperado, em unidades de desvio-padrão.' },
       ],
     },
-    seeAlso: ['chisquare', 'agreement'],
+    seeAlso: ['chisquare', 'agreement', 'loglinear'],
   },
   {
     id: 'agreement',
@@ -349,7 +349,7 @@ export const moreTopics: HelpTopic[] = [
     id: 'mi',
     area: 'procedures',
     title: 'Dados omissos (imputação múltipla)',
-    summary: 'Imputação por equações encadeadas com agregação de Rubin.',
+    summary: 'Imputação por equações encadeadas para variáveis numéricas e categóricas, com agregação de Rubin.',
     tutorial: {
       goal: 'Tratar dados omissos sem eliminar casos.',
       dataset: 'score-groups.csv',

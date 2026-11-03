@@ -2045,6 +2045,137 @@
         }
       ],
       "notes": "600 observations with a binary treatment assigned by a known propensity score and a continuous outcome."
+    },
+    {
+      "id": "stratified_2x2",
+      "title": "Binary outcome in three strata",
+      "family": "categorical",
+      "dir": "categorical/stratified_2x2",
+      "source": "Synthetic, seeded with set.seed(20261103)",
+      "rows": 300,
+      "columns": [
+        "Stratum",
+        "Exposure",
+        "Outcome"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Stratum",
+              "Exposure",
+              "Outcome"
+            ]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "Three strata of 100 rows each with a binary exposure and a binary outcome: the counts can be entered in the Mantel-Haenszel table."
+    },
+    {
+      "id": "ordinal_table",
+      "title": "Binary response across an ordered dose",
+      "family": "categorical",
+      "dir": "categorical/ordinal_table",
+      "source": "Synthetic, seeded with set.seed(20261103)",
+      "rows": 240,
+      "columns": [
+        "Dose",
+        "Response"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Dose",
+              "Response"
+            ]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "Four ordered dose levels with an increasing response proportion: the 4×2 counts feed the Cochran-Armitage trend test."
+    },
+    {
+      "id": "categorical_table",
+      "title": "Two categorical variables with missing codes",
+      "family": "categorical",
+      "dir": "categorical/categorical_table",
+      "source": "Synthetic, seeded with set.seed(20261103)",
+      "rows": 160,
+      "columns": [
+        "Treatment",
+        "Severity",
+        "Age"
+      ],
+      "formats": [
+        "csv",
+        "sav",
+        "dta",
+        "xlsx",
+        "json"
+      ],
+      "procedures": [
+        "mi",
+        "descriptive"
+      ],
+      "examples": [
+        {
+          "analysis": "mi",
+          "columns": {
+            "variables": [
+              "Treatment",
+              "Severity"
+            ],
+            "predictors": "Age"
+          },
+          "options": {
+            "model": "categorical",
+            "imputations": 5,
+            "iterations": 5
+          }
+        },
+        {
+          "analysis": "descriptive",
+          "columns": {
+            "variables": [
+              "Treatment",
+              "Severity",
+              "Age"
+            ]
+          },
+          "options": {
+            "mode": "frequency"
+          }
+        }
+      ],
+      "notes": "160 rows with a binary treatment, a three-level severity and a numeric age; 12 treatment and 10 severity codes are missing for the categorical imputation."
     }
   ]
 }

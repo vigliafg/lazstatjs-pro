@@ -340,6 +340,14 @@ const ANALYSIS_DEFINITIONS = [
     cost: 'instant',
   },
   {
+    id: 'loglinear',
+    label: 'Log-linear',
+    family: 'categorical',
+    description: 'Poisson log-linear model for two-way tables.',
+    keywords: ['log linear', 'poisson', 'independence', 'interaction', 'table', 'g2'],
+    cost: 'instant',
+  },
+  {
     id: 'agreement',
     label: 'Agreement',
     family: 'categorical',

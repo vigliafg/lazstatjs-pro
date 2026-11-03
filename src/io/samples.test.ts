@@ -69,9 +69,9 @@ test('the sample manifest is coherent with its folders', () => {
 });
 
 test('every data-driven analysis has at least one sample', () => {
-  // Chi-square, contingency and sample size are table/parameter driven and do
-  // not read the grid, so they intentionally have no dataset.
-  const manualOnly = new Set(['chisquare', 'contingency', 'samplesize']);
+  // Chi-square, contingency, log-linear and sample size are table/parameter
+  // driven and do not read the grid, so they intentionally have no dataset.
+  const manualOnly = new Set(['chisquare', 'contingency', 'loglinear', 'samplesize']);
   const covered = new Set(manifest.datasets.flatMap(dataset => dataset.procedures));
   const missing = ANALYSIS_TABS.map(tab => tab.id).filter(
     id => !manualOnly.has(id) && !covered.has(id)

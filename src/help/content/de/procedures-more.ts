@@ -128,7 +128,7 @@ export const moreTopics: HelpTopic[] = [
     id: "contingency",
     area: "procedures",
     title: "R×C-Kontingenztabellen",
-    summary: "Tabellen größer als 2×2, mit Assoziationsmaßen und Monte Carlo.",
+    summary: "R×C-Tabellen mit Chi-Quadrat, Mantel–Haenszel, Trend und exakten Tests.",
     tutorial: {
       goal: "Den Zusammenhang zwischen Altersgruppe und Präferenz prüfen.",
       dataset: "score-groups.csv",
@@ -153,7 +153,7 @@ export const moreTopics: HelpTopic[] = [
         { term: "Standardisiertes Residuum", definition: "Beobachtet minus erwartet, in Standardabweichungseinheiten." },
       ],
     },
-    seeAlso: ["chisquare", "agreement"],
+    seeAlso: ["chisquare", "agreement", "loglinear"],
   },
   {
     id: "agreement",
@@ -378,7 +378,7 @@ export const moreTopics: HelpTopic[] = [
     id: "mi",
     area: "procedures",
     title: "Fehlende Daten (multiple Imputation)",
-    summary: "Imputation mit verketteten Gleichungen und Rubin-Pooling.",
+    summary: "Imputation mit verketteten Gleichungen für numerische und kategoriale Variablen, mit Rubin-Pooling.",
     tutorial: {
       goal: "Fehlende Daten behandeln, ohne Fälle zu löschen.",
       dataset: "score-groups.csv",

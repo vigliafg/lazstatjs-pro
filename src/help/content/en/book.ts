@@ -6,6 +6,7 @@ import { moreTopics } from './procedures-more';
 import { l4Topics } from '../l4';
 import { w2Topics } from '../w2-en';
 import { w3Topics } from '../w3-en';
+import { w4Topics } from '../w4-en';
 
 import { chartGuides } from './charts';
 
@@ -50,7 +51,7 @@ export const enBook: HelpBook = {
     updated: 'Handbook aligned with the current features of the program',
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

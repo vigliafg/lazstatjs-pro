@@ -240,3 +240,5 @@ export const contingencyTables = (options: ContingencyOptions): TableSpec[] => {
 
   return tables;
 };
+
+export * from './contingencyModes';
