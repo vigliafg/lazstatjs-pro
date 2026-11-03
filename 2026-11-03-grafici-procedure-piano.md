@@ -111,11 +111,35 @@ appropriati**, scelti tra il formato **LazStats-like** e il formato
 
 | Voce | Valore |
 |---|---|
-| Fasi | **31** (+2 di contingenza: F2.3, F9.4) |
-| Durata media | 59 min (3 fasi da 90 min e 3 da 75 min, segnalate) |
-| Totale | **~30 h** di modello |
-| Calendario | **8 giorni** a 4 h/giorno |
+| Fasi | **37 micro-fasi**, tutte ≤ 60 min (+1 di contingenza: F2.3) |
+| Durata media | 49 min (13 da 60′, 21 da 45′, 3 da 30′; nessuna > 60′) |
+| Totale | **30,25 h** di modello |
+| Calendario | **10 giorni lavorativi** a 4 h/giorno (8 teorici + buffer) |
 | Gate intermedi | fine di ogni ondata (O0…O11) |
+
+### 1.5 Calendario a 10 giorni (deadline 1 h per fase)
+
+Ogni giorno ha 4 ore di capacità; nessuna fase supera 60 minuti. Il margine
+libero nei giorni 4, 6, 7, 8 e 9 è il buffer per test, commit e imprevisti.
+
+| Giorno | Fasi | Minuti |
+|---|---|---:|
+| 1 | F0.1, F0.2, F1.1a, F1.1b | 210 |
+| 2 | F1.2, F2.1, F2.2, F3.1 | 225 |
+| 3 | F3.2, F3.3, F4.1, F4.2 | 225 |
+| 4 | F4.3, F4.4, F5.1, F5.2a | 195 |
+| 5 | F5.2b, F5.3, F6.1, F7.1, F7.2 | 210 |
+| 6 | F7.3a, F7.3b, F8.1, F8.2 | 180 |
+| 7 | F9.1, F9.2a, F9.2b, F9.3a | 180 |
+| 8 | F9.3b, F10.1, F10.2, F10.3 | 180 |
+| 9 | F11.1a, F11.1b, F11.2 | 150 |
+| 10 | F11.3 + buffer | 60 + 180 |
+| **Totale** | **37 fasi** | **1815 (30,25 h)** |
+
+**Checkpoint**: fine giorno 5 (O0–O7.2, 17,75 h), fine giorno 8 (O0–O10,
+26,75 h), chiusura giorno 10. Se un giorno accumula ritardo, si recupera dal
+buffer dello stesso giorno; se il ritardo supera 60 min, si sposta una fase al
+giorno 10 e si annota nello stato.
 
 ---
 
@@ -372,18 +396,18 @@ Legenda "Stato dati":
 | 15 | `cluster-silhouette` | `cluster` | M-01 k-means | `bar` | silhouette per cluster (oggi solo media) | JMP | 🔧 | F5.1 |
 | 16 | `cluster-scatter` | `cluster` | M-01 | `scatter` | prime due variabili standardizzate + `assignment` | JMP | ✅ | F5.1 |
 | 17 | `canonical-corr` | `canonical` | M-02 | `bar` | `functions[].correlation` | JMP | ✅ | F5.1 |
-| 18 | `sem-fit` | `sem` | M-05 | `bar` | CFI, RMSEA, SRMR | LZ | ✅ | F5.2 |
-| 19 | `latentclass-entropy` | `latentclass` | M-06 | `bar` | entropia da `posterior` | JMP | 🔧 | F5.2 |
-| 20 | `irt-icc` | `irt` | M-07 | `line` | curve da `alpha`/`b` | JMP | 🔧 | F5.2 |
+| 18 | `sem-fit` | `sem` | M-05 | `bar` | CFI, RMSEA, SRMR | LZ | ✅ | F5.2a |
+| 19 | `latentclass-entropy` | `latentclass` | M-06 | `bar` | entropia da `posterior` | JMP | 🔧 | F5.2a |
+| 20 | `irt-icc` | `irt` | M-07 | `line` | curve da `alpha`/`b` | JMP | 🔧 | F5.2b |
 | 21 | `exact-observed-expected` | `contingency` | K-04 esatti R×C | `bar` | osservati vs attesi | LZ | ✅ | F6.1 |
-| 22 | `recurrent-mcf` | `recurrent` | S-04 eventi ricorrenti | `line` | MCF (mean cumulative function) | JMP | 🧠 | F1.1 |
-| 23 | `alt-life-stress` | `alt` | S-07 ALT | `scatter` | vita vs stress + fit su griglia | JMP log | 🔧 | F7.3 |
+| 22 | `recurrent-mcf` | `recurrent` | S-04 eventi ricorrenti | `line` | MCF (mean cumulative function) | JMP | 🧠 | F1.1b |
+| 23 | `alt-life-stress` | `alt` | S-07 ALT | `scatter` | vita vs stress + fit su griglia | JMP log | 🔧 | F7.3a |
 | 24 | `garch-qq` | `garch` | T-06 GARCH | `qq` | `GarchFit.standardized` | JMP | ✅ | F8.2 |
 | 25 | `doe-alias` | `doe` | Q-05 disegni | `heatmap` | correlazioni/alias dalla matrice del disegno | JMP | 🔧 | F9.1 |
-| 26 | `survey-deff` | `survey` | N-02 | `bar` | `SurveyEstimate.deff` | JMP | ✅ | F9.2 |
-| 27 | `bayes-ppc` | `bayes` | A-01 | `line` | repliche da `BayesResult.samples` | LZ | 🔧 | F9.3 |
-| 28 | `spatial-variogram` | `spatial` | A-03 | `line` | variogramma sperimentale | JMP | 🧠 | F9.3 |
-| 29 | `factorial-cells` | `factorial` | fattoriale | `interval` | medie di cella + IC (già in `series`) | LZ | ✅ | F1.1 |
+| 26 | `survey-deff` | `survey` | N-02 | `bar` | `SurveyEstimate.deff` | JMP | ✅ | F9.2a |
+| 27 | `bayes-ppc` | `bayes` | A-01 | `line` | repliche da `BayesResult.samples` | LZ | 🔧 | F9.3a |
+| 28 | `spatial-variogram` | `spatial` | A-03 | `line` | variogramma sperimentale | JMP | 🧠 | F9.3b |
+| 29 | `factorial-cells` | `factorial` | fattoriale | `interval` | medie di cella + IC (già in `series`) | LZ | ✅ | F1.1a |
 | ♻️ | `tost-difference` | `tost` | equivalenza | `interval` | differenza + IC + margini | JMP | 🔧 | F1.2 |
 
 **Nota sugli helper condivisi**: #6 e #8 usano lo stesso
@@ -419,29 +443,29 @@ una fase dedicata e il grafico si rimanda.
 | `cluster` | 3 | #15, #16 | F5.1 |
 | `canonical` | 2 | #17 | F5.1 |
 | `mds`, `correspondence` | 2 ciascuna | nessuno | F5.1 |
-| `sem` | 2 | #18 | F5.2 |
-| `latentclass` | 2 | #19 | F5.2 |
-| `irt` | 2 | #20 | F5.2 |
-| `conjoint` | 2 | nessuno | F5.2 |
+| `sem` | 2 | #18 | F5.2a |
+| `latentclass` | 2 | #19 | F5.2a |
+| `irt` | 2 | #20 | F5.2b |
+| `conjoint` | 2 | nessuno | F5.2b |
 | `contingency` | 8 | #21 | F6.1 |
 | `survival`, `stratcox` | 7 / 4 | nessuno (solo JMP) | F7.1/F7.2 |
 | `cox` | 8 | JMP log default | F7.2 |
-| `recurrent` | 1 | #22 | F1.1 |
+| `recurrent` | 1 | #22 | F1.1b |
 | `tdcox` | 1 | nessuno (β(t) fuori perimetro) | F7.2 |
-| `alt` | 2 | #23 | F7.3 |
-| `parametric`, `reliability` | 7 / 2 | nessuno | F7.3 |
+| `alt` | 2 | #23 | F7.3a |
+| `parametric`, `reliability` | 7 / 2 | nessuno | F7.3b |
 | `competing` | 2 | nessuno (2 grafici già canonici) | F7.1 |
 | `timeseries` | 14 | nessuno | F8.1 |
 | `var`, `statespace` | 3 / 3 | nessuno | F8.2 |
 | `garch` | 2 | #24 | F8.2 |
 | `doe` | 4 | #25 | F9.1 |
-| `mi` | 13 | nessuno | F9.2 |
-| `survey` | 2 | #26 | F9.2 |
-| `ml`, `text`, `choice` | 5 / 4 / 4 | nessuno | F9.2 |
-| `bayes` | 4 | #27 | F9.3 |
-| `meta` | 3 | nessuno | F9.3 |
-| `spatial` | 3 | #28 | F9.3 |
-| `factorial` | 1 | #29 | F1.1 |
+| `mi` | 13 | nessuno | F9.2a |
+| `survey` | 2 | #26 | F9.2a |
+| `ml`, `text`, `choice` | 5 / 4 / 4 | nessuno | F9.2b |
+| `bayes` | 4 | #27 | F9.3a |
+| `meta` | 3 | nessuno | F9.3a |
+| `spatial` | 3 | #28 | F9.3b |
+| `factorial` | 1 | #29 | F1.1a |
 | `tost` | 1 | ♻️ | F1.2 |
 
 ---
@@ -493,9 +517,9 @@ dopo ogni fase):
 2. Verifica l'inventario: `npm run chart:inventory -- --analysis <id>`.
 3. Implementa i grafici; aggiorna `analysisKinds.ts`, `outputs.ts` se serve.
 4. Aggiungi il test in `src/analyses/<id>/charts.test.ts`.
-5. Aggiungi copy IT (sorgente) + EN; le altre lingue si fanno in F11.1.
+5. Aggiungi copy IT (sorgente) + EN; le altre lingue si fanno in F11.1a–b.
 6. Aggiorna `chartGuides` **solo in italiano e inglese** in fase; le altre
-   lingue in F11.1.
+   lingue in F11.1a–b.
 7. Test mirati verdi.
 8. Aggiorna lo stato e committa.
 
@@ -595,7 +619,7 @@ nessuna modifica ai grafici.
 5. Documentare nella §5.3 e nello stato la mappa "procedura → stile JMP".
 
 **Test**: `styles.test.ts`, `buildSpec.test.ts`, `locales:check` (solo chiavi
-chrome; le copy report arrivano in F11.1).
+chrome; le copy report arrivano in F11.1a–b).
 
 **DoD**: tre tile selezionabili, un solo default per kind, nessun cambio ai
 grafici esistenti.
@@ -604,30 +628,42 @@ grafici esistenti.
 
 ### O1 — Ampiezza: le procedure con un solo grafico
 
-#### F1.1 — `factorial`, `recurrent` (90 min)
+#### F1.1a — `factorial`: medie di cella (45 min)
 
-**Obiettivo**: portare a 2 grafici le due procedure più povere rimaste
-(`tdcox` resta a 1: vedi §6.4).
+**Obiettivo**: portare `factorial` a 2 grafici.
 
-**Grafici**
+**Grafico**
 
-1. `factorial-cells` [interval] — riusa `series` già calcolato in
-   `src/analyses/factorial/run.tsx` (medie di cella + IC).
-2. `recurrent-mcf` [line] — mean cumulative function. **Richiede** una funzione
-   pura `meanCumulativeFunction(rows)` in `src/stats/kernels/recurrent.ts` (o
-   file adiacente) con test: tempi ordinati, eventi cumulati / soggetti a
-   rischio.
+- `factorial-cells` [interval] — riusa `series` già calcolato in
+  `src/analyses/factorial/run.tsx` (medie di cella + IC).
 
-**File**: `factorial/run.tsx`, `recurrent/run.tsx`, `analysisKinds.ts`
-(aggiungere `interval` a `factorial`, `line` a `recurrent`), `outputs.ts` se il
-grafico è opzionale, `en/charts-w10.ts`, help IT/EN.
+**File**: `factorial/run.tsx`, `analysisKinds.ts` (aggiungere `interval`),
+`en/charts-w10.ts`, help IT/EN.
 
-**Test**: `src/analyses/factorial/charts.test.ts`,
-`recurrent/charts.test.ts` + test kernel MCF.
+**Test**: `src/analyses/factorial/charts.test.ts`.
 
-**DoD**: `factorial` e `recurrent` hanno 2 grafici compilati; il MCF ha un test
-numerico (tempi noti, valore atteso calcolato a mano). `tdcox` resta a 1 con il
-limite documentato.
+**DoD**: il grafico compila, è editabile e documentato.
+
+---
+
+#### F1.1b — `recurrent`: mean cumulative function (45 min)
+
+**Obiettivo**: portare `recurrent` a 2 grafici.
+
+**Grafico**
+
+- `recurrent-mcf` [line] — mean cumulative function. **Richiede** una funzione
+  pura `meanCumulativeFunction(rows)` in `src/stats/kernels/recurrent.ts` (o
+  file adiacente) con test: tempi ordinati, eventi cumulati / soggetti a
+  rischio.
+
+**File**: `recurrent/run.tsx`, `src/stats/kernels/recurrent.ts`,
+`analysisKinds.ts` (aggiungere `line`), `en/charts-w10.ts`, help IT/EN.
+
+**Test**: `src/analyses/recurrent/charts.test.ts` + test kernel MCF.
+
+**DoD**: il MCF ha un test numerico (tempi noti, valore atteso calcolato a
+mano) e il grafico compila. `tdcox` resta a 1 con il limite documentato.
 
 ---
 
@@ -864,22 +900,37 @@ help.
 
 ---
 
-#### F5.2 — SEM, latent class, IRT, conjoint (75 min)
+#### F5.2a — SEM e latent class (45 min)
 
 **Grafici**
 
 1. `sem-fit` [bar] — CFI, RMSEA, SRMR con soglie (M-05).
 2. `latentclass-entropy` [bar] — entropia di classificazione o percentuale di
    casi assegnati con probabilità alta (M-06).
-3. `irt-icc` [line] — curve caratteristiche degli item (M-07), calcolate dai
-   parametri `alpha`/`b` con una funzione pura testata.
 
-**File**: `sem/run.tsx`, `latentclass/run.tsx`, `irt/run.tsx`,
-`analysisKinds.ts`, copy, help.
+**File**: `sem/run.tsx`, `latentclass/run.tsx`, `analysisKinds.ts`, copy, help.
 
-**Test**: `charts.test.ts` per analisi + test della funzione ICC.
+**Test**: `src/analyses/sem/charts.test.ts`,
+`src/analyses/latentclass/charts.test.ts`.
 
-**DoD**: i tre grafici compilano e hanno note interpretative corrette.
+**DoD**: i due grafici compilano e hanno note interpretative corrette.
+
+---
+
+#### F5.2b — IRT e conjoint (30 min)
+
+**Grafico**
+
+- `irt-icc` [line] — curve caratteristiche degli item (M-07), calcolate dai
+  parametri `alpha`/`b` con una funzione pura testata.
+
+**Verifica**: `conjoint` ha già 2 grafici; controllare solo note e ordine.
+
+**File**: `irt/run.tsx`, `analysisKinds.ts`, copy, help.
+
+**Test**: `src/analyses/irt/charts.test.ts` + test della funzione ICC.
+
+**DoD**: il grafico compila; conjoint resta senza gap.
 
 ---
 
@@ -936,7 +987,7 @@ grafici di competing risks.
 2. Verificare `competing-cif` + `competing-forest`: il modello è stimato per una
    causa alla volta, quindi non si produce una CIF impilata (§6.4). La nota
    deve dirlo.
-3. `recurrent-mcf` è in F1.1: qui si verifica l'integrazione con il forest.
+3. `recurrent-mcf` è in F1.1b: qui si verifica l'integrazione con il forest.
 
 **File**: `competing/run.tsx`, `survival/run.tsx`, copy, help.
 
@@ -967,23 +1018,34 @@ documentato in help e nello stato.
 
 ---
 
-#### F7.3 — Parametric, ALT, reliability (75 min)
+#### F7.3a — ALT: life-stress plot (45 min)
 
-**Grafici**
+**Grafico**
 
-1. `alt-life-stress` [scatter] — vita vs stress con fit su scala log; richiede
-   una griglia di predizione (helper puro con test) se non già disponibile.
-2. Verificare `parametric-*` (7 grafici): nessun nuovo grafico, solo coerenza
-   delle note.
-3. `reliability-growth` e `reliability-rbd`: verificare che il growth plot
+- `alt-life-stress` [scatter] — vita vs stress con fit su scala log; richiede
+  una griglia di predizione (helper puro con test) se non già disponibile.
+
+**File**: `alt/run.tsx`, copy, help.
+
+**Test**: `src/analyses/alt/charts.test.ts` + test dell'helper.
+
+**DoD**: il life-stress plot compila e la nota spiega la trasformazione.
+
+---
+
+#### F7.3b — Parametric e reliability: coerenza (30 min)
+
+**Verifica**
+
+1. `parametric-*` (7 grafici): nessun nuovo grafico, solo coerenza delle note.
+2. `reliability-growth` e `reliability-rbd`: verificare che il growth plot
    mostri i punti osservati e la curva fitted.
 
-**File**: `alt/run.tsx`, `parametric/run.tsx`, `reliability/run.tsx`, copy,
-help.
+**File**: `parametric/run.tsx`, `reliability/run.tsx`, copy, help.
 
-**Test**: `alt/charts.test.ts` + test dell'helper.
+**Test**: test esistenti + compilazione.
 
-**DoD**: ALT ha il life-stress plot; parametric e reliability restano coerenti.
+**DoD**: parametric e reliability restano coerenti.
 
 ---
 
@@ -1039,7 +1101,7 @@ help.
 
 ---
 
-#### F9.2 — MI, survey, ML, text, choice (75 min)
+#### F9.2a — Survey e MI (45 min)
 
 **Grafici**
 
@@ -1048,7 +1110,6 @@ help.
 2. Verificare `mi-*` (13): il cap di 24 grafici non è superato; se un nuovo
    grafico porta la card oltre il cap, ridurre i Q-Q o i pannelli, non
    aumentare il cap.
-3. Verificare `ml-*`, `text-*`, `choice-*`.
 
 **File**: `survey/run.tsx`, `mi/run.tsx`, copy, help.
 
@@ -1058,24 +1119,51 @@ help.
 
 ---
 
-#### F9.3 — Bayes, meta, spatial (90 min)
+#### F9.2b — ML, text, choice: coerenza (30 min)
 
-**Grafici**
+**Verifica**
 
-1. `bayes-ppc` [line] — repliche posteriori vs distribuzione osservata (A-01;
-   `BayesResult.samples` esiste). Se la simulazione per tutte le modalità è
-   troppo costosa, coprire `normal` e `proportion` e documentare le altre.
-2. `spatial-variogram` [line] — variogramma sperimentale (A-03); richiede una
-   funzione pura `variogram(points)` con test. Se il lavoro supera 45 min,
-   spostarlo in F9.4 e chiudere la fase con Bayes + meta.
-3. Verificare `meta-*` (3): funnel e forest su scala corretta.
+- `ml-*` (5), `text-*` (4), `choice-*` (4): nessun nuovo grafico; controllare
+  note, ordine e nomi degli assi.
 
-**File**: `bayes/run.tsx`, `spatial/run.tsx`, `meta/run.tsx`, copy, help.
+**File**: `ml/run.tsx`, `text/run.tsx`, `choice/run.tsx`, copy, help.
 
-**Test**: `bayes/charts.test.ts`, `spatial/charts.test.ts` + test variogramma.
+**Test**: test esistenti + compilazione.
 
-**DoD**: Bayes ha un controllo predittivo; spatial ha il variogramma (o F9.4
-aperta con il solo variogramma).
+**DoD**: le tre procedure restano senza gap e coerenti.
+
+---
+
+#### F9.3a — Bayes: posterior predictive check (45 min)
+
+**Grafico**
+
+- `bayes-ppc` [line] — repliche posteriori vs distribuzione osservata (A-01;
+  `BayesResult.samples` esiste). Se la simulazione per tutte le modalità è
+  troppo costosa, coprire `normal` e `proportion` e documentare le altre.
+
+**Verifica**: `meta-*` (3): funnel e forest su scala corretta.
+
+**File**: `bayes/run.tsx`, `meta/run.tsx`, copy, help.
+
+**Test**: `src/analyses/bayes/charts.test.ts`.
+
+**DoD**: Bayes ha un controllo predittivo; meta resta coerente.
+
+---
+
+#### F9.3b — Spatial: variogramma (45 min)
+
+**Grafico**
+
+- `spatial-variogram` [line] — variogramma sperimentale (A-03); richiede una
+  funzione pura `variogram(points)` con test.
+
+**File**: `spatial/run.tsx`, `src/stats/kernels/spatial.ts`, copy, help.
+
+**Test**: `src/analyses/spatial/charts.test.ts` + test variogramma.
+
+**DoD**: il variogramma compila e ha un test numerico su punti noti.
 
 ---
 
@@ -1140,27 +1228,43 @@ rompere i grafici esistenti.
 
 ### O11 — Chiusura
 
-#### F11.1 — Traduzioni batch (90 min)
+#### F11.1a — Traduzioni: francese e spagnolo (45 min)
 
 **Passi**
 
-1. Creare `src/stats/reportCopy/catalog/<locale>/charts-w10.ts` per
-   `fr, es, de, pt-PT` con le stringhe dei nuovi grafici.
+1. Creare `src/stats/reportCopy/catalog/fr/charts-w10.ts` e
+   `src/stats/reportCopy/catalog/es/charts-w10.ts`.
 2. Mergiare in `src/stats/reportCopy/catalog/charts.ts` (non in
    `charts-extra.ts`, già al limite).
-3. Tradurre `chartGuides` in `src/help/content/<locale>/charts.ts` per le
-   procedure toccate.
-4. Eseguire `npm run locales:check` per ogni lingua.
-5. Revisione a campione: 10 stringhe per lingua, confronto con l'inglese.
+3. Tradurre `chartGuides` per fr/es in `src/help/content/<locale>/charts.ts`.
+4. `npm run locales:check fr` e `npm run locales:check es`.
+5. Revisione a campione: 10 stringhe per lingua.
 
-**Nota**: usare lo skill `copy-translation` per le mappe JSON/TS, ma **non
-fidarsi ciecamente**: le note statistiche vanno riviste a mano.
+**Test**: `npm run locales:check fr`, `npm run locales:check es`.
 
-**Test**: `npm run locales:check`, `src/charts/copy.test.ts`,
-`src/i18n.test.ts`.
+**DoD**: fr ed es non hanno stringhe nuove in inglese; placeholder identici.
 
-**DoD**: nessuna stringa nuova resta in inglese in fr/es/de/pt-PT; i
-placeholder sono identici.
+---
+
+#### F11.1b — Traduzioni: tedesco e portoghese (45 min)
+
+**Passi**
+
+1. Creare `src/stats/reportCopy/catalog/de/charts-w10.ts` e
+   `src/stats/reportCopy/catalog/pt-PT/charts-w10.ts`.
+2. Mergiare in `catalog/charts.ts`.
+3. Tradurre `chartGuides` per de/pt-PT.
+4. `npm run locales:check de` e `npm run locales:check pt-PT`.
+5. Revisione a campione e chiusura delle traduzioni.
+
+**Test**: `npm run locales:check de`, `npm run locales:check pt-PT`,
+`src/charts/copy.test.ts`, `src/i18n.test.ts`.
+
+**DoD**: tutte e quattro le lingue tradotte; nessuna stringa nuova in inglese.
+
+**Nota (valida per F11.1a e F11.1b)**: usare lo skill `copy-translation` per le
+mappe JSON/TS, ma **non fidarsi ciecamente**: le note statistiche vanno riviste
+a mano.
 
 ---
 

@@ -5,6 +5,7 @@
 - **Creato**: 2026-11-03
 - **Ultimo aggiornamento**: 2026-11-03 (baseline)
 - **Fase corrente**: F0.1 — da iniziare
+- **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `main` (creare `grafici-procedure` prima di F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
 - **Versione**: `0.19.0`
@@ -56,10 +57,11 @@ con motivo.
 |---|---|---:|---|---|---|
 | F0.1 | Inventario, guardrail, stato | 60 | ⬜ | — | — |
 | F0.2 | 3 varianti JMP (`forest`, `survival`, `line`) | 60 | ⬜ | — | — |
-| F1.1 | `factorial`, `recurrent` | 90 | ⬜ | — | — |
+| F1.1a | `factorial`: medie di cella | 45 | ⬜ | — | — |
+| F1.1b | `recurrent`: mean cumulative function | 45 | ⬜ | — | — |
 | F1.2 | `tost` e chiusura ampiezza | 45 | ⬜ | — | — |
 | F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ⬜ | — | — |
-| F2.2 | `quality`: MSA, contributi carta multivariata | 60 | ⬜ | — | — |
+| F2.2 | `quality`: profilo operatore, contributi carta | 60 | ⬜ | — | — |
 | F3.1 | varianze, sign, KS | 60 | ⬜ | — | — |
 | F3.2 | Mood, GOF, nested | 60 | ⬜ | — | — |
 | F3.3 | GLMM/GEE/LMM polish | 45 | ⬜ | — | — |
@@ -68,31 +70,34 @@ con motivo.
 | F4.3 | logistica, conteggi, ordinale | 45 | ⬜ | — | — |
 | F4.4 | diagnostica di regressione | 45 | ⬜ | — | — |
 | F5.1 | cluster, canonical, MDS, correspondence | 60 | ⬜ | — | — |
-| F5.2 | SEM, latent class, IRT, conjoint | 75 | ⬜ | — | — |
+| F5.2a | SEM, latent class | 45 | ⬜ | — | — |
+| F5.2b | IRT ICC, conjoint | 30 | ⬜ | — | — |
 | F5.3 | PCA/EFA/alpha e pannelli | 45 | ⬜ | — | — |
 | F6.1 | esatti, trend, verifica MH | 45 | ⬜ | — | — |
 | F7.1 | life table, competing, frailty, recurrent | 45 | ⬜ | — | — |
 | F7.2 | Cox, stratified, time-dependent | 45 | ⬜ | — | — |
-| F7.3 | parametric, ALT, reliability | 75 | ⬜ | — | — |
+| F7.3a | ALT: life-stress plot | 45 | ⬜ | — | — |
+| F7.3b | parametric, reliability | 30 | ⬜ | — | — |
 | F8.1 | Holt-Winters, unit root, spettrale | 45 | ⬜ | — | — |
 | F8.2 | VAR, GARCH, state-space | 60 | ⬜ | — | — |
 | F9.1 | sample size, resampling, DOE | 60 | ⬜ | — | — |
-| F9.2 | MI, survey, ML, text, choice | 75 | ⬜ | — | — |
-| F9.3 | Bayes, meta, spatial | 90 | ⬜ | — | — |
+| F9.2a | survey, MI | 45 | ⬜ | — | — |
+| F9.2b | ML, text, choice | 30 | ⬜ | — | — |
+| F9.3a | Bayes PPC, meta | 45 | ⬜ | — | — |
+| F9.3b | spatial variogram | 45 | ⬜ | — | — |
 | F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ⬜ | — | — |
 | F10.2 | bar, Pareto, mosaico, heatmap, interval, dot | 45 | ⬜ | — | — |
 | F10.3 | box, scatter, Q-Q: default per procedura | 45 | ⬜ | — | — |
-| F11.1 | traduzioni batch | 90 | ⬜ | — | — |
+| F11.1a | traduzioni fr/es | 45 | ⬜ | — | — |
+| F11.1b | traduzioni de/pt-PT | 45 | ⬜ | — | — |
 | F11.2 | help, manuale, inventario | 60 | ⬜ | — | — |
 | F11.3 | gate finale e release | 60 | ⬜ | — | — |
 
-**Fasi di contingenza** (si aggiungono solo se una fase sfora e lascia un
+**Fase di contingenza** (si aggiunge solo se F2.2 sfora e lascia un
 sotto-blocco aperto):
 
 - `F2.3` — contributi della carta multivariata (kernel `mcontrol`), se F2.2
   chiude solo `msa-operator-profile`.
-- `F9.4` — variogramma spaziale (kernel `spatial`), se F9.3 chiude solo Bayes
-  e meta.
 
 ---
 
@@ -105,12 +110,12 @@ sotto-blocco aperto):
 | Regression | `regression`, `logistic`, `glm`, `quantile`, `nonlinear`, `multinomial`, `countreg`, `ordinal`, `lmm`, `glmm`, `gee`, `pls`, `mars`, `iv`, `panel`, `selection`, `mediation`, `propensity` | 4 | F3.3, F4.1–F4.4 | ⬜ |
 | Multivariate | `multivariate`, `cluster`, `canonical`, `mds`, `correspondence`, `sem`, `latentclass`, `irt`, `conjoint`, `discriminant` | 6 | F3.2, F5.1–F5.3 | ⬜ |
 | Categorical | `chisquare`, `contingency`, `loglinear`, `agreement` | 2 | F3.2, F6.1 | ⬜ |
-| Survival | `survival`, `cox`, `stratcox`, `tdcox`, `parametric`, `competing`, `recurrent`, `alt`, `reliability` | 2 | F1.1, F7.1–F7.3 | ⬜ |
+| Survival | `survival`, `cox`, `stratcox`, `tdcox`, `parametric`, `competing`, `recurrent`, `alt`, `reliability` | 2 | F1.1a–b, F7.1–F7.3b | ⬜ |
 | Time series | `timeseries`, `var`, `garch`, `statespace` | 1 | F8.1, F8.2 | ⬜ |
 | Design & power | `samplesize`, `resampling`, `doe` | 1 | F9.1 | ⬜ |
-| Missing data | `mi`, `survey` | 1 | F9.2 | ⬜ |
-| ML | `ml`, `text`, `choice` | 0 | F9.2 | ⬜ |
-| Advanced | `bayes`, `meta`, `spatial` | 2 | F9.3 | ⬜ |
+| Missing data | `mi`, `survey` | 1 | F9.2a | ⬜ |
+| ML | `ml`, `text`, `choice` | 0 | F9.2b | ⬜ |
+| Advanced | `bayes`, `meta`, `spatial` | 2 | F9.3a–b | ⬜ |
 | Guided | `wizard` | 0 (per scelta) | — | ✅ |
 
 ---
@@ -124,7 +129,7 @@ sotto-blocco aperto):
 | 2026-11-03 | piano | Ordine: ampiezza prima, poi profondità | ogni giorno il prodotto resta coerente |
 | 2026-11-03 | piano | 3 nuove varianti JMP: `forest.jmp-ratio`, `survival.jmp-km`, `line.jmp-connected` | coprono i kind statisticamente più scoperti |
 | 2026-11-03 | piano | Nessun nuovo kind salvo eccezione documentata (§10) | evita frammentazione del motore |
-| 2026-11-03 | piano | Le traduzioni si fanno in F11.1, non a ogni grafico | contiene il costo e mantiene le fasi a ~1 h |
+| 2026-11-03 | piano | Le traduzioni si fanno in F11.1a–b, non a ogni grafico | contiene il costo e mantiene le fasi a ~1 h |
 | 2026-11-03 | piano | `tdcox` resta a 1 grafico (forest log) | il kernel non espone β(t); niente grafici finti |
 | 2026-11-03 | piano | `competing` resta a 2 grafici (CIF + forest) | modello stimato per una causa alla volta |
 | 2026-11-03 | piano | MSA: `msa-variance` resta l'unico grafico delle componenti; si aggiunge il profilo parte × operatore | il dettaglio per operatore non è scomposto dal kernel |
@@ -182,7 +187,7 @@ sotto-blocco aperto):
 | # | Domanda | Impatto | Chi decide | Stato |
 |---|---|---|---|---|
 | 1 | `msa-operator-profile`: serve un helper kernel? | F2.2 | modello | chiusa: no, bastano le righe del runner |
-| 2 | `bayes-ppc` copre tutte le modalità? | F9.3 | modello | aperta |
+| 2 | `bayes-ppc` copre tutte le modalità? | F9.3a | modello | aperta |
 | 3 | La banda Actual by Predicted `k ≥ 2` resta fuori perimetro? | F4.4 | committente | aperta |
 
 ---
@@ -194,7 +199,7 @@ sotto-blocco aperto):
 | Copy EN mancante nei sub-runner | aperto | F0.1 estende `copy.test.ts` |
 | File al limite di 700 righe | aperto | file per ondata, split |
 | Forest log con IC ≤ 0 | aperto | regola in F10.1 |
-| Cap 24 grafici per `mi` | aperto | conteggio in F9.2 |
+| Cap 24 grafici per `mi` | aperto | conteggio in F9.2a |
 | Fase che sfora l'ora | ricorrente | split e commit |
 
 ---
