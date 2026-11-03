@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F11.1b chiusa: cataloghi grafici de/pt-PT)
-- **Fase corrente**: F11.2 — help, manuale e inventario dei grafici
+- **Ultimo aggiornamento**: 2026-11-03 (F11.2 chiusa: guide, inventario e convenzioni JMP)
+- **Fase corrente**: F11.3 — gate finale e release
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,7 +12,7 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F11.1b cataloghi grafici in tedesco e portoghese`.
+- **Ultimo commit**: `docs(charts): F11.2 guide help, inventario e convenzioni JMP`.
 - **Chiuso**: F0.1 → F10.3. Ondata O10 completa. Gate mirato verde (box
   layers, layers, styles, copy, analysisKinds, anova, nonparamrm, quality),
   `tsc --noEmit` exit 0, `check-locale` 6/6, `help:build` verde.
@@ -20,7 +20,7 @@
   madge senza cicli, filesize con le 5 eccezioni abbassate).
 - **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
   moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
-- **Da riprendere**: **F11.2** (help, manuale, inventario), poi F11.3.
+- **Da riprendere**: **F11.3** (gate finale, samples, e2e, build, note di release).
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -110,7 +110,7 @@ con motivo.
 | F10.3 | box, scatter, Q-Q: default per procedura | 45 | ✅ | `feat(charts): F10.3 box stile JMP per i confronti tra gruppi` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F11.1a | traduzioni fr/es | 45 | ✅ | `feat(charts): F11.1a cataloghi grafici in francese e spagnolo` | key set e placeholder verificati, `locales:check` fr/es 0, `copy.test` verde |
 | F11.1b | traduzioni de/pt-PT | 45 | ✅ | `feat(charts): F11.1b cataloghi grafici in tedesco e portoghese` | key set e placeholder verificati, `locales:check` de/pt-PT 0 |
-| F11.2 | help, manuale, inventario | 60 | ⬜ | — | — |
+| F11.2 | help, manuale, inventario | 60 | ✅ | `docs(charts): F11.2 guide help, inventario e convenzioni JMP` | guide 71/71 in 6 lingue, inventario rigenerato, `help:build` verde |
 | F11.3 | gate finale e release | 60 | ⬜ | — | — |
 
 **Fase di contingenza** (si aggiunge solo se F2.2 sfora e lascia un
@@ -234,6 +234,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F11.1a | `charts-w10` per fr/es è un file per lingua, mergiato in `catalog/charts.ts` | `charts-extra.ts` è al limite di righe e il merge esplicito rende l’override per locale verificabile |
 | 2026-11-03 | F11.1a | Le guide grafici fr/es erano già tradotte nelle fasi precedenti | `bayes`, `meta`, `spatial`, `ml`, `text`, `choice` sono entrate nelle 6 lingue quando sono state aggiunte; qui si traduce solo il copy dei grafici |
 | 2026-11-03 | F11.1b | de e pt-PT riusano lo stesso schema di F11.1a | un file `charts-w10.ts` per lingua, mergiato in `W10_BY_LOCALE`: nessuna modifica al catalogo inglese |
+| 2026-11-03 | F11.2 | Guide aggiunte alle 18 procedure che ne erano prive | erano rimaste fuori dalle ondate precedenti; senza guida il pannello grafici dell’help resta vuoto per quelle procedure |
+| 2026-11-03 | F11.2 | L’inventario è rigenerato, non corretto a mano | è output di `npm run chart:inventory`: i 349 modelli e i 33 kind ora corrispondono al codice |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -808,6 +810,29 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### F11.2 — Help, manuale, inventario
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `chartGuides` completate per le 18 procedure che ne erano prive
+    (`loglinear`, `proportions`, `mars`, `panel`, `selection`, `mediation`,
+    `propensity`, `glm`, `quantile`, `nonlinear`, `partition`, `mds`,
+    `correspondence`, `conjoint`, `discriminant`, `competing`, `alt`,
+    `reliability`), in tutte e 6 le lingue: 71/71 procedure con almeno un
+    grafico ora hanno la guida.
+  - Inventario rigenerato con `npm run chart:inventory`: 71 analisi, 349
+    modelli, 33 kind.
+  - `docs/CHART-ENGINE.md`: nuova sezione «Convenzioni JMP» con le tre
+    varianti, il filtro log del forest, il box per procedura e le eccezioni
+    dichiarate.
+- **Verificato**: nessuna guida mancante (controllo su `ANALYSIS_CHART_KINDS`);
+  `help:build` verde; `check-locale` 6/6 exit 0.
+- **File toccati**: `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`,
+  `docs/analysis/2026-11-03-inventario-grafici-72-procedure.md`,
+  `docs/CHART-ENGINE.md`.
+- **Test**: `copy.test` + `analysisKinds.test` verdi; `tsc --noEmit` exit 0.
+- **Commit**: `docs(charts): F11.2 guide help, inventario e convenzioni JMP`
+
 ### F11.1b — Traduzioni tedesco e portoghese
 
 - **Stato**: ✅ chiusa (2026-11-03)
@@ -1032,9 +1057,9 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F11.2: help, manuale e inventario dei grafici.
-2. F11.3: gate finale e release.
-3. Controllo a campione delle stringhe de/pt-PT.
+1. F11.3: `npm run check`, `test:samples`, e2e chart-editor/chart-styles, build.
+2. Note di release: grafici per famiglia, convenzioni JMP, test.
+3. Aggiornare `docs/PROJECT-STATUS.md` con i numeri finali.
 
 ---
 

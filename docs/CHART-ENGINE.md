@@ -143,6 +143,24 @@ emettere il default senza modifiche.
 - Le anteprime sono `VegaChart` in miniatura con i dati della card, marcate
   `data-no-export` per non finire negli export PNG.
 
+### Convenzioni JMP
+
+Le varianti sono opt-in e vivono in `src/charts/styles.ts`; nessuna cambia il
+default del kind. Il runner le emette quando la lettura lo richiede.
+
+- `forest.jmp-ratio` — scala log e riferimento 1. Con `logScale` il layer
+  `forest` scarta le righe con stima o estremi non positivi, così l'asse non
+  collassa.
+- `survival.jmp-km` — gradini, IC, censure e mediana: usata da `survival-km`,
+  `stratcox-km` e `survival-life-curve`. `parametric-survival` prende la
+  mediana senza gradini, perché la curva è analitica e non una Kaplan–Meier.
+- `line.jmp-connected` — osservati con marker: `ts-arima-chart`, `hw-series`,
+  `var-irf-chart`.
+- `interval.jmp-mean-diamond` e `dot.jmp-strip` — media con diamante e striscia
+  larga, attive dove la media ha senso (ANOM/Oneway e dot descrittivo).
+- Box JMP nei confronti tra gruppi (`anova`, `nonparamrm`, `quality`): baffi
+  10°–90°, media con IC e jitter; la diagnostica resta sulla coda Tukey.
+
 ## Persistenza e limiti
 
 - `PROJECT_VERSION = 3`; `parseProject` accetta v1, v2 e v3.

@@ -6,25 +6,25 @@ Comando: `npm run chart:inventory`.
 ## Totali
 
 - Analisi con almeno un grafico: **71**
-- Modelli `AnalysisChart` emessi: **342**
-- Kind distinti: **32**
+- Modelli `AnalysisChart` emessi: **349**
+- Kind distinti: **33**
 
 ## Grafici per analisi
 
 | Analisi | Grafici |
 |---|---:|
 | `agreement` | 6 |
-| `alt` | 2 |
+| `alt` | 3 |
 | `ancova` | 4 |
 | `anova` | 13 |
-| `bayes` | 4 |
+| `bayes` | 5 |
 | `canonical` | 3 |
 | `chisquare` | 4 |
 | `choice` | 4 |
 | `cluster` | 5 |
 | `competing` | 2 |
 | `conjoint` | 2 |
-| `contingency` | 8 |
+| `contingency` | 9 |
 | `correlation` | 5 |
 | `correspondence` | 2 |
 | `countreg` | 6 |
@@ -32,9 +32,9 @@ Comando: `npm run chart:inventory`.
 | `descriptive` | 20 |
 | `discriminant` | 4 |
 | `distfit` | 6 |
-| `doe` | 4 |
+| `doe` | 5 |
 | `factorial` | 2 |
-| `garch` | 2 |
+| `garch` | 3 |
 | `gee` | 6 |
 | `glm` | 3 |
 | `glmm` | 4 |
@@ -72,10 +72,10 @@ Comando: `npm run chart:inventory`.
 | `samplesize` | 3 |
 | `selection` | 4 |
 | `sem` | 3 |
-| `spatial` | 3 |
+| `spatial` | 4 |
 | `statespace` | 3 |
 | `stratcox` | 4 |
-| `survey` | 2 |
+| `survey` | 3 |
 | `survival` | 7 |
 | `tdcox` | 1 |
 | `text` | 4 |
@@ -90,8 +90,9 @@ Comando: `npm run chart:inventory`.
 | Kind | Modelli |
 |---|---:|
 | `'dendrogram' as const` | 1 |
+| `'qq' as const` | 1 |
 | `acf` | 4 |
-| `bar` | 67 |
+| `bar` | 69 |
 | `bland` | 1 |
 | `bootstrap` | 3 |
 | `box` | 16 |
@@ -101,10 +102,10 @@ Comando: `npm run chart:inventory`.
 | `dot` | 4 |
 | `ecdf` | 2 |
 | `forest` | 23 |
-| `heatmap` | 19 |
+| `heatmap` | 20 |
 | `histogram` | 9 |
 | `interval` | 31 |
-| `line` | 60 |
+| `line` | 62 |
 | `missingness` | 3 |
 | `mosaic` | 2 |
 | `pareto` | 3 |
@@ -112,7 +113,7 @@ Comando: `npm run chart:inventory`.
 | `qq` | 11 |
 | `residual` | 8 |
 | `risk` | 2 |
-| `scatter` | 49 |
+| `scatter` | 50 |
 | `scatter3d` | 1 |
 | `scattermatrix` | 1 |
 | `score` | 3 |
@@ -133,12 +134,13 @@ Comando: `npm run chart:inventory`.
 | `agreement-icc` | `scatter` | `src/analyses/agreement/run.tsx:140` |
 | `agreement-icc-ci` | `interval` | `src/analyses/agreement/run.tsx:159` |
 
-### `alt` (2)
+### `alt` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `alt-coefficients` | `forest` | `src/analyses/alt/run.tsx:88` |
-| `alt-acceleration` | `bar` | `src/analyses/alt/run.tsx:105` |
+| `alt-coefficients` | `forest` | `src/analyses/alt/run.tsx:99` |
+| `alt-acceleration` | `bar` | `src/analyses/alt/run.tsx:116` |
+| `alt-life-stress` | `scatter` | `src/analyses/alt/run.tsx:128` |
 
 ### `ancova` (4)
 
@@ -167,14 +169,15 @@ Comando: `npm run chart:inventory`.
 | `mood-box` | `box` | `src/analyses/anova/run.tsx:467` |
 | `mood-median-ci` | `interval` | `src/analyses/anova/run.tsx:479` |
 
-### `bayes` (4)
+### `bayes` (5)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `bayes-posterior-density` | `histogram` | `src/analyses/bayes/run.tsx:82` |
-| `bayes-interval` | `interval` | `src/analyses/bayes/run.tsx:94` |
-| `bayes-groups` | `interval` | `src/analyses/bayes/run.tsx:113` |
-| `bayes-joint` | `scatter` | `src/analyses/bayes/run.tsx:136` |
+| `bayes-posterior-density` | `histogram` | `src/analyses/bayes/run.tsx:180` |
+| `bayes-interval` | `interval` | `src/analyses/bayes/run.tsx:192` |
+| `bayes-groups` | `interval` | `src/analyses/bayes/run.tsx:211` |
+| `bayes-joint` | `scatter` | `src/analyses/bayes/run.tsx:234` |
+| `bayes-ppc` | `line` | `src/analyses/bayes/run.tsx:254` |
 
 ### `canonical` (3)
 
@@ -217,7 +220,7 @@ Comando: `npm run chart:inventory`.
 | Grafico | Kind | File |
 |---|---|---|
 | `competing-cif` | `line` | `src/analyses/competing/run.tsx:81` |
-| `competing-forest` | `forest` | `src/analyses/competing/run.tsx:98` |
+| `competing-forest` | `forest` | `src/analyses/competing/run.tsx:100` |
 
 ### `conjoint` (2)
 
@@ -226,7 +229,7 @@ Comando: `npm run chart:inventory`.
 | `conjoint-utilities` | `bar` | `src/analyses/conjoint/run.tsx:59` |
 | `conjoint-importance` | `bar` | `src/analyses/conjoint/run.tsx:75` |
 
-### `contingency` (8)
+### `contingency` (9)
 
 | Grafico | Kind | File |
 |---|---|---|
@@ -237,7 +240,8 @@ Comando: `npm run chart:inventory`.
 | `contingency-ca-inertia` | `bar` | `src/analyses/contingency/run.tsx:176` |
 | `contingency-mh-forest` | `forest` | `src/analyses/contingency/run.tsx:227` |
 | `contingency-trend-line` | `line` | `src/analyses/contingency/run.tsx:283` |
-| `contingency-exact-residuals` | `heatmap` | `src/analyses/contingency/run.tsx:346` |
+| `contingency-exact-residuals` | `heatmap` | `src/analyses/contingency/run.tsx:359` |
+| `exact-observed-expected` | `bar` | `src/analyses/contingency/run.tsx:377` |
 
 ### `correlation` (5)
 
@@ -273,12 +277,12 @@ Comando: `npm run chart:inventory`.
 |---|---|---|
 | `frailty-effects` | `bar` | `src/analyses/cox/run.tsx:161` |
 | `frailty-forest` | `forest` | `src/analyses/cox/run.tsx:176` |
-| `cox-forest` | `forest` | `src/analyses/cox/run.tsx:220` |
-| `cox-baseline-hazard` | `line` | `src/analyses/cox/run.tsx:238` |
-| `cox-baseline-survival` | `line` | `src/analyses/cox/run.tsx:261` |
-| `cox-schoenfeld-${index + 1}` | `scatter` | `src/analyses/cox/run.tsx:294` |
-| `cox-martingale` | `scatter` | `src/analyses/cox/run.tsx:330` |
-| `cox-predicted-survival` | `line` | `src/analyses/cox/run.tsx:367` |
+| `cox-forest` | `forest` | `src/analyses/cox/run.tsx:221` |
+| `cox-baseline-hazard` | `line` | `src/analyses/cox/run.tsx:240` |
+| `cox-baseline-survival` | `line` | `src/analyses/cox/run.tsx:263` |
+| `cox-schoenfeld-${index + 1}` | `scatter` | `src/analyses/cox/run.tsx:296` |
+| `cox-martingale` | `scatter` | `src/analyses/cox/run.tsx:332` |
+| `cox-predicted-survival` | `line` | `src/analyses/cox/run.tsx:369` |
 
 ### `descriptive` (20)
 
@@ -325,14 +329,15 @@ Comando: `npm run chart:inventory`.
 | `ks-ecdf` | `line` | `src/analyses/distfit/run.tsx:208` |
 | `ks-diff` | `line` | `src/analyses/distfit/run.tsx:220` |
 
-### `doe` (4)
+### `doe` (5)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `doe-design-map` | `scatter` | `src/analyses/doe/run.tsx:68` |
-| `doe-surface` | `surface` | `src/analyses/doe/run.tsx:145` |
-| `doe-contour` | `surface` | `src/analyses/doe/run.tsx:170` |
-| `doe-coefficients` | `bar` | `src/analyses/doe/run.tsx:183` |
+| `doe-design-map` | `scatter` | `src/analyses/doe/run.tsx:115` |
+| `doe-alias` | `heatmap` | `src/analyses/doe/run.tsx:128` |
+| `doe-surface` | `surface` | `src/analyses/doe/run.tsx:202` |
+| `doe-contour` | `surface` | `src/analyses/doe/run.tsx:227` |
+| `doe-coefficients` | `bar` | `src/analyses/doe/run.tsx:240` |
 
 ### `factorial` (2)
 
@@ -341,12 +346,13 @@ Comando: `npm run chart:inventory`.
 | `factorial-interaction` | `line` | `src/analyses/factorial/run.tsx:109` |
 | `factorial-cells` | `interval` | `src/analyses/factorial/run.tsx:126` |
 
-### `garch` (2)
+### `garch` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
-| `garch-volatility` | `line` | `src/analyses/garch/run.tsx:49` |
-| `garch-residual-acf` | `acf` | `src/analyses/garch/run.tsx:59` |
+| `garch-volatility` | `line` | `src/analyses/garch/run.tsx:53` |
+| `garch-residual-acf` | `acf` | `src/analyses/garch/run.tsx:63` |
+| `garch-qq` | `'qq' as const` | `src/analyses/garch/run.tsx:80` |
 
 ### `gee` (6)
 
@@ -561,12 +567,12 @@ Comando: `npm run chart:inventory`.
 | Grafico | Kind | File |
 |---|---|---|
 | `parametric-survival` | `survival` | `src/analyses/parametric/run.tsx:168` |
-| `parametric-hazard` | `line` | `src/analyses/parametric/run.tsx:178` |
-| `parametric-cumhazard` | `line` | `src/analyses/parametric/run.tsx:188` |
-| `parametric-density` | `line` | `src/analyses/parametric/run.tsx:198` |
-| `parametric-coefficients` | `forest` | `src/analyses/parametric/run.tsx:212` |
-| `parametric-median` | `bar` | `src/analyses/parametric/run.tsx:228` |
-| `parametric-qq` | `qq` | `src/analyses/parametric/run.tsx:244` |
+| `parametric-hazard` | `line` | `src/analyses/parametric/run.tsx:180` |
+| `parametric-cumhazard` | `line` | `src/analyses/parametric/run.tsx:190` |
+| `parametric-density` | `line` | `src/analyses/parametric/run.tsx:200` |
+| `parametric-coefficients` | `forest` | `src/analyses/parametric/run.tsx:214` |
+| `parametric-median` | `bar` | `src/analyses/parametric/run.tsx:230` |
+| `parametric-qq` | `qq` | `src/analyses/parametric/run.tsx:246` |
 
 ### `partition` (3)
 
@@ -700,13 +706,14 @@ Comando: `npm run chart:inventory`.
 | `sem-loadings` | `bar` | `src/analyses/sem/run.tsx:79` |
 | `sem-residuals` | `heatmap` | `src/analyses/sem/run.tsx:95` |
 
-### `spatial` (3)
+### `spatial` (4)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `spatial-map` | `scatter` | `src/analyses/spatial/run.tsx:67` |
-| `spatial-lisa` | `bar` | `src/analyses/spatial/run.tsx:85` |
-| `spatial-sar-coefficients` | `forest` | `src/analyses/spatial/run.tsx:105` |
+| `spatial-variogram` | `line` | `src/analyses/spatial/run.tsx:82` |
+| `spatial-lisa` | `bar` | `src/analyses/spatial/run.tsx:111` |
+| `spatial-sar-coefficients` | `forest` | `src/analyses/spatial/run.tsx:131` |
 
 ### `statespace` (3)
 
@@ -721,16 +728,17 @@ Comando: `npm run chart:inventory`.
 | Grafico | Kind | File |
 |---|---|---|
 | `stratcox-forest` | `forest` | `src/analyses/stratcox/run.tsx:112` |
-| `stratcox-km` | `survival` | `src/analyses/stratcox/run.tsx:125` |
-| `stratcox-baseline` | `line` | `src/analyses/stratcox/run.tsx:138` |
-| `stratcox-risk` | `risk` | `src/analyses/stratcox/run.tsx:152` |
+| `stratcox-km` | `survival` | `src/analyses/stratcox/run.tsx:126` |
+| `stratcox-baseline` | `line` | `src/analyses/stratcox/run.tsx:141` |
+| `stratcox-risk` | `risk` | `src/analyses/stratcox/run.tsx:155` |
 
-### `survey` (2)
+### `survey` (3)
 
 | Grafico | Kind | File |
 |---|---|---|
 | `survey-coefficients` | `forest` | `src/analyses/survey/run.tsx:76` |
 | `survey-interval` | `interval` | `src/analyses/survey/run.tsx:97` |
+| `survey-deff` | `bar` | `src/analyses/survey/run.tsx:123` |
 
 ### `survival` (7)
 
@@ -739,10 +747,10 @@ Comando: `npm run chart:inventory`.
 | `survival-turnbull` | `survival` | `src/analyses/survival/run.tsx:86` |
 | `survival-turnbull-mass` | `bar` | `src/analyses/survival/run.tsx:102` |
 | `survival-life-curve` | `survival` | `src/analyses/survival/run.tsx:184` |
-| `survival-life-events` | `bar` | `src/analyses/survival/run.tsx:193` |
-| `survival-km` | `survival` | `src/analyses/survival/run.tsx:289` |
-| `survival-rmst` | `bar` | `src/analyses/survival/run.tsx:298` |
-| `survival-risk` | `risk` | `src/analyses/survival/run.tsx:308` |
+| `survival-life-events` | `bar` | `src/analyses/survival/run.tsx:196` |
+| `survival-km` | `survival` | `src/analyses/survival/run.tsx:294` |
+| `survival-rmst` | `bar` | `src/analyses/survival/run.tsx:304` |
+| `survival-risk` | `risk` | `src/analyses/survival/run.tsx:314` |
 
 ### `tdcox` (1)
 
@@ -763,9 +771,9 @@ Comando: `npm run chart:inventory`.
 
 | Grafico | Kind | File |
 |---|---|---|
-| `hw-series` | `line` | `src/analyses/timeseries/modes.tsx:51` |
-| `unitroot-series` | `line` | `src/analyses/timeseries/modes.tsx:85` |
-| `spectral-density` | `line` | `src/analyses/timeseries/modes.tsx:124` |
+| `hw-series` | `line` | `src/analyses/timeseries/modes.tsx:71` |
+| `unitroot-series` | `line` | `src/analyses/timeseries/modes.tsx:112` |
+| `spectral-density` | `line` | `src/analyses/timeseries/modes.tsx:163` |
 | `ts-acf-chart` | `acf` | `src/analyses/timeseries/run.tsx:134` |
 | `ts-pacf-chart` | `acf` | `src/analyses/timeseries/run.tsx:154` |
 | `ts-decomposition-trend` | `line` | `src/analyses/timeseries/run.tsx:178` |
