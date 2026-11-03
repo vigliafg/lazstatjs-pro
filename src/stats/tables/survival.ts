@@ -2,7 +2,7 @@ import { fmtEst, fmtP } from '../format';
 import { copy } from '../reportCopy';
 import type { TableSpec } from '../types';
 import { kaplanMeier, lifeTable, logRankTest } from '../kernels/survival';
-import type { SurvivalGroup } from '../survival/types';
+import type { SurvivalGroup, TurnbullResult } from '../survival/types';
 
 // ---------------------------------------------------------------------------
 // Tables and report
@@ -153,10 +153,96 @@ export const survivalTables = (options: SurvivalTablesOptions): TableSpec[] => {
         { key: 'censored', label: copy('Censurati'), format: 'int' },
         { key: 'survival', label: copy('S(t)'), format: 'dec3' },
       ],
-      rows: overallLife.map(row => ({ ...row })),
+      rows: overallLife.map(row => ({
+        start: row.start,
+        end: row.end,
+        atRisk: row.atRisk,
+        events: row.events,
+        censored: row.censored,
+        survival: row.survival,
+      })),
       notes: [copy('Nella life table i censurati nell’intervallo contribuiscono per metà al tempo a rischio.')],
     });
   }
 
   return tables;
+};
+
+/** Dedicated actuarial life-table output, optionally one table per group. */
+export const lifeTableTables = (
+  groups: { name: string; time: number[]; event: number[] }[],
+  level: number,
+  intervals = 0
+): TableSpec[] =>
+  groups
+    .map(group => {
+      const rows = lifeTable(group.time, group.event, intervals > 0 ? intervals : undefined);
+      if (rows.length === 0) return null;
+      const spec: TableSpec = {
+        id: `surv-life-${group.name}`,
+        title: copy('Life table — {s1}', { s1: group.name }),
+        subtitle: copy('{s1} intervalli · CI {s2}%', { s1: rows.length, s2: level }),
+        columns: [
+          { key: 'start', label: copy('Da'), format: 'dec2' },
+          { key: 'end', label: copy('A'), format: 'dec2' },
+          { key: 'atRisk', label: copy('A rischio'), format: 'int' },
+          { key: 'events', label: copy('Eventi'), format: 'int' },
+          { key: 'censored', label: copy('Censurati'), format: 'int' },
+          { key: 'effective', label: copy('A rischio efficace'), format: 'dec2' },
+          { key: 'q', label: copy('q'), format: 'dec4' },
+          { key: 'p', label: copy('p'), format: 'dec4' },
+          { key: 'survival', label: copy('S(t)'), format: 'dec4' },
+          { key: 'se', label: copy('SE'), format: 'dec4' },
+        ],
+        rows: rows.map(row => ({ ...row })),
+        notes: [
+          copy('La tavola attuariale divide il follow-up in intervalli di uguale ampiezza: q è il rischio condizionato nell’intervallo e S(t) il prodotto dei complementi.'),
+          copy('I censurati dell’intervallo contribuiscono per metà al numero efficace a rischio.'),
+        ],
+      };
+      return spec;
+    })
+    .filter((spec): spec is TableSpec => spec !== null);
+
+/** Turnbull NPMLE tables for interval-censored data. */
+export const turnbullTables = (result: TurnbullResult, level: number): TableSpec[] => {
+  if (result.points.length === 0) return [];
+  const support: TableSpec = {
+    id: 'surv-turnbull',
+    title: copy('Stima NPMLE (Turnbull)'),
+    subtitle: copy('{s1} osservazioni · CI {s2}%', { s1: result.n, s2: level }),
+    columns: [
+      { key: 'time', label: copy('Fine intervallo'), format: 'dec2' },
+      { key: 'mass', label: copy('Massa'), format: 'dec4' },
+      { key: 'survival', label: copy('S(t)'), format: 'dec4' },
+    ],
+    rows: result.points.map(point => ({ ...point })),
+    notes: [
+      copy('La massa è la probabilità assegnata all’intervallo di supporto; la sopravvivenza è il complemento della massa cumulata fino a quel punto.'),
+      result.converged
+        ? copy('L’EM ha raggiunto la convergenza in {s1} iterazioni.', { s1: result.iterations })
+        : copy('L’EM non ha raggiunto la convergenza entro il limite: interpreta la stima con cautela.'),
+    ],
+  };
+  const summary: TableSpec = {
+    id: 'surv-turnbull-summary',
+    title: copy('Sintesi della censura a intervalli'),
+    columns: [
+      { key: 'metric', label: copy('Voce'), format: 'text' },
+      { key: 'value', label: copy('Valore'), format: 'text' },
+    ],
+    rows: [
+      { metric: copy('Osservazioni'), value: String(result.n) },
+      { metric: copy('Punti di supporto'), value: String(result.points.length) },
+      {
+        metric: copy('Sopravvivenza finale'),
+        value: fmtEst(result.points[result.points.length - 1]?.survival ?? 0, 4),
+      },
+      { metric: copy('Iterazioni'), value: String(result.iterations) },
+    ],
+    notes: [
+      copy('La NPMLE non è unica quando il supporto è piatto: la soluzione restituita è una delle stime ammissibili.'),
+    ],
+  };
+  return [support, summary];
 };

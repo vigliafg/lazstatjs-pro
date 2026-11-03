@@ -268,7 +268,9 @@ write_dataset(
   "regression", "mtcars", mtcars_sample,
   "Motor Trend car road tests",
   "datasets::mtcars (R)",
-  c("regression", "correlation", "descriptive", "partition", "cluster", "discriminant", "doe"),
+  c("regression", "correlation", "descriptive", "partition", "cluster",
+    "discriminant", "doe", "glm", "quantile", "nonlinear", "multinomial",
+    "glmm", "pls", "mars", "mediation"),
   list(
     example("regression", list(dependent = "mpg", predictors = c("wt", "hp", "disp"))),
     example("correlation", list(variables = c("mpg", "wt", "hp", "disp"))),
@@ -277,7 +279,15 @@ write_dataset(
     example("partition", list(response = "mpg", predictors = c("wt", "hp", "disp"))),
     example("cluster", list(variables = c("mpg", "wt", "hp", "disp"))),
     example("discriminant", list(group = "am", predictors = c("mpg", "wt", "hp", "disp"))),
-    example("doe", list(response = "mpg", factorA = "hp", factorB = "wt"))
+    example("doe", list(response = "mpg", factorA = "hp", factorB = "wt")),
+    example("glm", list(dependent = "mpg", predictors = c("wt", "hp")), family = "gaussian"),
+    example("quantile", list(dependent = "mpg", predictors = c("wt", "hp")), tau = 0.5),
+    example("nonlinear", list(dependent = "mpg", predictor = "hp")),
+    example("multinomial", list(outcome = "cyl", predictors = c("mpg", "wt", "hp"))),
+    example("glmm", list(outcome = "mpg", predictors = c("wt", "hp"), group = "cyl")),
+    example("pls", list(dependent = "mpg", predictors = c("wt", "hp", "disp"))),
+    example("mars", list(dependent = "mpg", predictors = c("wt", "hp", "disp"))),
+    example("mediation", list(outcome = "mpg", predictor = "hp", mediator = "wt"))
   ),
   "The classic 32-car dataset: continuous performance and design measures plus binary and count codes."
 )
@@ -839,6 +849,160 @@ write_dataset(
     example("correlation", list(variables = c("Outcome", "Age", "Score")))
   ),
   "600 observations with a binary treatment assigned by a known propensity score and a continuous outcome."
+)
+
+## ---------------------------------------------------------------------------
+## Wave 6: survival and reliability
+## ---------------------------------------------------------------------------
+set.seed(20261106)
+
+n_comp <- 280
+comp_age <- round(rnorm(n_comp, 63, 10), 1)
+comp_sex <- sample(c("F", "M"), n_comp, replace = TRUE)
+comp_center <- sample(c("Nord", "Centro", "Sud"), n_comp, replace = TRUE, prob = c(0.4, 0.35, 0.25))
+comp_rate <- exp(-4.4 + 0.018 * comp_age + 0.20 * (comp_sex == "M"))
+comp_time <- rexp(n_comp, rate = comp_rate)
+comp_cause <- sample(0:3, n_comp, replace = TRUE, prob = c(0.18, 0.47, 0.25, 0.10))
+competing_demo <- data.frame(
+  Time = round(comp_time, 3),
+  Cause = comp_cause,
+  Age = comp_age,
+  Sex = comp_sex,
+  Center = comp_center
+)
+write_dataset(
+  "survival", "competing_demo", competing_demo,
+  "Competing risks by cause",
+  "Synthetic, seeded with set.seed(20261106)",
+  c("competing", "descriptive"),
+  list(
+    example("competing", list(time = "Time", event = "Cause", covariates = c("Age", "Sex"))),
+    example("descriptive", list(variables = c("Time", "Age")))
+  ),
+  "280 subjects with three competing causes and administrative censoring coded as zero."
+)
+
+n_recurrent <- 150
+rec_treatment <- sample(c("Standard", "Nuovo"), n_recurrent, replace = TRUE)
+rec_age <- round(rnorm(n_recurrent, 58, 12), 1)
+rec_rows <- vector("list", 0)
+for (subject in seq_len(n_recurrent)) {
+  rate <- exp(-2.8 + 0.018 * rec_age[subject] - 0.25 * (rec_treatment[subject] == "Nuovo"))
+  events <- rpois(1, 2.2) + 1
+  gaps <- rexp(events, rate = rate)
+  times <- cumsum(gaps)
+  censor_time <- 4 + rexp(1, rate = 0.3)
+  previous <- 0
+  for (event_index in seq_len(events)) {
+    if (times[event_index] > censor_time) break
+    rec_rows[[length(rec_rows) + 1]] <- data.frame(
+      Id = subject, Start = round(previous, 3), Stop = round(times[event_index], 3),
+      Event = 1, Treatment = rec_treatment[subject], Age = rec_age[subject]
+    )
+    previous <- times[event_index]
+  }
+  if (previous < censor_time) {
+    rec_rows[[length(rec_rows) + 1]] <- data.frame(
+      Id = subject, Start = round(previous, 3), Stop = round(censor_time, 3),
+      Event = 0, Treatment = rec_treatment[subject], Age = rec_age[subject]
+    )
+  }
+}
+recurrent_demo <- do.call(rbind, rec_rows)
+write_dataset(
+  "survival", "recurrent_demo", recurrent_demo,
+  "Recurrent events in a clinical cohort",
+  "Synthetic, seeded with set.seed(20261106)",
+  c("recurrent", "descriptive"),
+  list(
+    example("recurrent", list(subject = "Id", start = "Start", stop = "Stop", event = "Event", covariates = c("Age", "Treatment")), model = "ag"),
+    example("descriptive", list(variables = c("Stop", "Age")))
+  ),
+  "150 subjects with repeated events in start-stop format and a binary treatment."
+)
+
+n_alt <- 180
+alt_stress <- sample(c(0.8, 1.0, 1.3, 1.8, 2.4), n_alt, replace = TRUE)
+alt_temperature <- round(rnorm(n_alt, 65, 7), 1)
+alt_mu <- 6.4 - 0.62 * log(alt_stress) + 0.010 * alt_temperature
+alt_time <- exp(alt_mu + 0.42 * rnorm(n_alt))
+alt_censor <- exp(7.6 + rnorm(n_alt, 0, 0.2))
+alt_event <- ifelse(alt_time <= alt_censor, 1, 0)
+alt_demo <- data.frame(
+  Time = round(pmin(alt_time, alt_censor), 3),
+  Event = alt_event,
+  Stress = alt_stress,
+  Temperature = alt_temperature,
+  Batch = sample(c("A", "B", "C"), n_alt, replace = TRUE)
+)
+write_dataset(
+  "survival", "alt_demo", alt_demo,
+  "Accelerated life test",
+  "Synthetic Weibull AFT, seeded with set.seed(20261106)",
+  c("alt", "parametric", "descriptive"),
+  list(
+    example("alt", list(time = "Time", event = "Event", stress = "Stress", covariates = "Temperature"), model = "inversePower", useStress = 0.7),
+    example("parametric", list(time = "Time", event = "Event", predictors = c("Stress", "Temperature"))),
+    example("descriptive", list(variables = c("Time", "Stress", "Temperature")))
+  ),
+  "180 units tested at five stress levels, with temperature as a secondary covariate."
+)
+
+reliability_failures <- c(12, 28, 41, 63, 88, 101, 140, 176, 199, 245,
+                          287, 321, 380, 412, 455, 510, 548, 602, 666, 720)
+reliability_demo <- data.frame(
+  Time = reliability_failures,
+  Failures = seq_along(reliability_failures)
+)
+write_dataset(
+  "survival", "reliability_demo", reliability_demo,
+  "Reliability growth failures",
+  "Synthetic Crow–AMSAA process, seeded with set.seed(20261106)",
+  c("reliability", "descriptive"),
+  list(
+    example("reliability", list(time = "Time", failures = "Failures"), mode = "growth"),
+    example("reliability", list(time = "Time"), mode = "rbd"),
+    example("descriptive", list(variables = "Time"))
+  ),
+  "Twenty cumulative failure times from a repairable system with a decreasing failure rate."
+)
+
+## Legacy categorical datasets kept for the categorical procedures.
+legacy_stratified <- read.csv("categorical/stratified_2x2/data.csv", stringsAsFactors = FALSE)
+write_dataset(
+  "categorical", "stratified_2x2", legacy_stratified,
+  "Binary outcome in three strata",
+  "Synthetic, seeded with set.seed(20261103)",
+  c("descriptive"),
+  list(
+    example("descriptive", list(variables = c("Stratum", "Exposure", "Outcome")), mode = "frequency")
+  ),
+  "Three strata of 100 rows each with a binary exposure and a binary outcome: the counts can be entered in the Mantel-Haenszel table."
+)
+
+legacy_ordinal <- read.csv("categorical/ordinal_table/data.csv", stringsAsFactors = FALSE)
+write_dataset(
+  "categorical", "ordinal_table", legacy_ordinal,
+  "Binary response across an ordered dose",
+  "Synthetic, seeded with set.seed(20261103)",
+  c("descriptive"),
+  list(
+    example("descriptive", list(variables = c("Dose", "Response")), mode = "frequency")
+  ),
+  "Four ordered dose levels with an increasing response proportion: the 4×2 counts feed the Cochran-Armitage trend test."
+)
+
+legacy_categorical <- read.csv("categorical/categorical_table/data.csv", stringsAsFactors = FALSE)
+write_dataset(
+  "categorical", "categorical_table", legacy_categorical,
+  "Two categorical variables with missing codes",
+  "Synthetic, seeded with set.seed(20261103)",
+  c("mi", "descriptive"),
+  list(
+    example("mi", list(variables = c("Treatment", "Severity"), predictors = "Age"), model = "categorical", imputations = 5, iterations = 5),
+    example("descriptive", list(variables = c("Treatment", "Severity", "Age")), mode = "frequency")
+  ),
+  "160 rows with a binary treatment, a three-level severity and a numeric age; 12 treatment and 10 severity codes are missing for the categorical imputation."
 )
 
 ## ---------------------------------------------------------------------------

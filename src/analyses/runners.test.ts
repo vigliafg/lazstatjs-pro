@@ -6,11 +6,13 @@ import { ANALYSIS_IDS } from './registry';
 test('the pure-builder registry covers the six legacy analyses and the converted panels', () => {
   assert.deepEqual(Object.keys(ANALYSIS_RUNNERS).sort(), [
     'agreement',
+    'alt',
     'ancova',
     'anova',
     'canonical',
     'chisquare',
     'cluster',
+    'competing',
     'conjoint',
     'contingency',
     'correlation',
@@ -49,7 +51,9 @@ test('the pure-builder registry covers the six legacy analyses and the converted
     'proportions',
     'quality',
     'quantile',
+    'recurrent',
     'regression',
+    'reliability',
     'repeatedanova',
     'resampling',
     'samplesize',

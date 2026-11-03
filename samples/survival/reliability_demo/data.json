@@ -1,0 +1,82 @@
+[
+  {
+    "Time": 12,
+    "Failures": 1
+  },
+  {
+    "Time": 28,
+    "Failures": 2
+  },
+  {
+    "Time": 41,
+    "Failures": 3
+  },
+  {
+    "Time": 63,
+    "Failures": 4
+  },
+  {
+    "Time": 88,
+    "Failures": 5
+  },
+  {
+    "Time": 101,
+    "Failures": 6
+  },
+  {
+    "Time": 140,
+    "Failures": 7
+  },
+  {
+    "Time": 176,
+    "Failures": 8
+  },
+  {
+    "Time": 199,
+    "Failures": 9
+  },
+  {
+    "Time": 245,
+    "Failures": 10
+  },
+  {
+    "Time": 287,
+    "Failures": 11
+  },
+  {
+    "Time": 321,
+    "Failures": 12
+  },
+  {
+    "Time": 380,
+    "Failures": 13
+  },
+  {
+    "Time": 412,
+    "Failures": 14
+  },
+  {
+    "Time": 455,
+    "Failures": 15
+  },
+  {
+    "Time": 510,
+    "Failures": 16
+  },
+  {
+    "Time": 548,
+    "Failures": 17
+  },
+  {
+    "Time": 602,
+    "Failures": 18
+  },
+  {
+    "Time": 666,
+    "Failures": 19
+  },
+  {
+    "Time": 720,
+    "Failures": 20
+  }
+]

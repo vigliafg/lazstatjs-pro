@@ -1,0 +1,1262 @@
+[
+  {
+    "Time": 1288.905,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 64.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 1801.655,
+    "Event": 0,
+    "Stress": 1,
+    "Temperature": 60.5,
+    "Batch": "A"
+  },
+  {
+    "Time": 882.842,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 63.4,
+    "Batch": "B"
+  },
+  {
+    "Time": 1435.515,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 72.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 892.98,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 65.1,
+    "Batch": "C"
+  },
+  {
+    "Time": 908.684,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 67.7,
+    "Batch": "C"
+  },
+  {
+    "Time": 1949.464,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 60.8,
+    "Batch": "A"
+  },
+  {
+    "Time": 1976.224,
+    "Event": 0,
+    "Stress": 1.8,
+    "Temperature": 67.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 703.045,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 54.7,
+    "Batch": "C"
+  },
+  {
+    "Time": 671.813,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 69.7,
+    "Batch": "A"
+  },
+  {
+    "Time": 1357.325,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 59.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 914.371,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 67.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 1111.678,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 63.5,
+    "Batch": "A"
+  },
+  {
+    "Time": 1336.595,
+    "Event": 0,
+    "Stress": 0.8,
+    "Temperature": 57.4,
+    "Batch": "C"
+  },
+  {
+    "Time": 421.038,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 64.9,
+    "Batch": "A"
+  },
+  {
+    "Time": 2046.533,
+    "Event": 0,
+    "Stress": 1,
+    "Temperature": 65.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 1441.542,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 79.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 659.103,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 75.8,
+    "Batch": "A"
+  },
+  {
+    "Time": 1013.781,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 66.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 1139.16,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 57.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 2565.012,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 70.8,
+    "Batch": "A"
+  },
+  {
+    "Time": 646.962,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 82.8,
+    "Batch": "A"
+  },
+  {
+    "Time": 939.392,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 58.5,
+    "Batch": "B"
+  },
+  {
+    "Time": 1991.909,
+    "Event": 0,
+    "Stress": 1.8,
+    "Temperature": 68.2,
+    "Batch": "B"
+  },
+  {
+    "Time": 856.26,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 63.7,
+    "Batch": "A"
+  },
+  {
+    "Time": 963.006,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 68.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 1704.802,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 67.1,
+    "Batch": "A"
+  },
+  {
+    "Time": 1636.957,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 83.1,
+    "Batch": "B"
+  },
+  {
+    "Time": 1390.295,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 59.4,
+    "Batch": "C"
+  },
+  {
+    "Time": 1069.553,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 77,
+    "Batch": "A"
+  },
+  {
+    "Time": 1419.995,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 63.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 1579.953,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 56.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 490.975,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 65.7,
+    "Batch": "A"
+  },
+  {
+    "Time": 1077.226,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 65.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 1209.815,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 74.1,
+    "Batch": "B"
+  },
+  {
+    "Time": 918.02,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 68.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1316.912,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 54.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 639.816,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 61.9,
+    "Batch": "A"
+  },
+  {
+    "Time": 1338.766,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 61.5,
+    "Batch": "A"
+  },
+  {
+    "Time": 1047.664,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 62.9,
+    "Batch": "A"
+  },
+  {
+    "Time": 703.239,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 69.5,
+    "Batch": "B"
+  },
+  {
+    "Time": 1215.138,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 56.8,
+    "Batch": "C"
+  },
+  {
+    "Time": 1830.186,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 74.6,
+    "Batch": "A"
+  },
+  {
+    "Time": 890.858,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 64.9,
+    "Batch": "C"
+  },
+  {
+    "Time": 1412.82,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 70,
+    "Batch": "A"
+  },
+  {
+    "Time": 2122.311,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 58.1,
+    "Batch": "A"
+  },
+  {
+    "Time": 913.251,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 65.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1345.492,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 62.7,
+    "Batch": "B"
+  },
+  {
+    "Time": 883.842,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 67.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 438.492,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 75.9,
+    "Batch": "A"
+  },
+  {
+    "Time": 643.192,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 63.9,
+    "Batch": "B"
+  },
+  {
+    "Time": 1015.304,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 69.3,
+    "Batch": "A"
+  },
+  {
+    "Time": 724.551,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 66.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 702.063,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 62.9,
+    "Batch": "C"
+  },
+  {
+    "Time": 1577.334,
+    "Event": 0,
+    "Stress": 0.8,
+    "Temperature": 59.5,
+    "Batch": "A"
+  },
+  {
+    "Time": 788.971,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 62.7,
+    "Batch": "A"
+  },
+  {
+    "Time": 887.743,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 49.9,
+    "Batch": "C"
+  },
+  {
+    "Time": 1083.519,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 56.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 784.747,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 61.6,
+    "Batch": "A"
+  },
+  {
+    "Time": 895.002,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 59.5,
+    "Batch": "A"
+  },
+  {
+    "Time": 611.249,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 66.3,
+    "Batch": "C"
+  },
+  {
+    "Time": 1888.855,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 64.1,
+    "Batch": "A"
+  },
+  {
+    "Time": 1932.787,
+    "Event": 0,
+    "Stress": 0.8,
+    "Temperature": 76.3,
+    "Batch": "A"
+  },
+  {
+    "Time": 1933.211,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 54.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 1265.998,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 72.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1009.54,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 61,
+    "Batch": "C"
+  },
+  {
+    "Time": 1242.062,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 66.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 445.824,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 63,
+    "Batch": "A"
+  },
+  {
+    "Time": 1548.816,
+    "Event": 0,
+    "Stress": 1.3,
+    "Temperature": 63.1,
+    "Batch": "A"
+  },
+  {
+    "Time": 1337.385,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 72.1,
+    "Batch": "C"
+  },
+  {
+    "Time": 1391.619,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 65,
+    "Batch": "B"
+  },
+  {
+    "Time": 652.82,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 56.7,
+    "Batch": "C"
+  },
+  {
+    "Time": 585.149,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 74.5,
+    "Batch": "C"
+  },
+  {
+    "Time": 715.484,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 59.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 936.665,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 73.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 933.873,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 70.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 479.585,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 76.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 712.029,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 85.3,
+    "Batch": "C"
+  },
+  {
+    "Time": 1366.307,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 66.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1021.142,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 79.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 637.146,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 59.4,
+    "Batch": "A"
+  },
+  {
+    "Time": 1001.588,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 58.1,
+    "Batch": "C"
+  },
+  {
+    "Time": 404.418,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 55,
+    "Batch": "B"
+  },
+  {
+    "Time": 690.014,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 61.8,
+    "Batch": "A"
+  },
+  {
+    "Time": 587.104,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 65.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 1892.553,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 62.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 816.054,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 63.4,
+    "Batch": "B"
+  },
+  {
+    "Time": 374.565,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 78.1,
+    "Batch": "C"
+  },
+  {
+    "Time": 533.663,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 55.9,
+    "Batch": "A"
+  },
+  {
+    "Time": 962.53,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 76.4,
+    "Batch": "A"
+  },
+  {
+    "Time": 865.038,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 56.3,
+    "Batch": "A"
+  },
+  {
+    "Time": 989.992,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 62.5,
+    "Batch": "C"
+  },
+  {
+    "Time": 2226.79,
+    "Event": 0,
+    "Stress": 0.8,
+    "Temperature": 74.5,
+    "Batch": "C"
+  },
+  {
+    "Time": 413.564,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 67.4,
+    "Batch": "A"
+  },
+  {
+    "Time": 477.416,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 66.4,
+    "Batch": "A"
+  },
+  {
+    "Time": 824.373,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 69.9,
+    "Batch": "C"
+  },
+  {
+    "Time": 1774.339,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 77.8,
+    "Batch": "C"
+  },
+  {
+    "Time": 1055.727,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 54.6,
+    "Batch": "A"
+  },
+  {
+    "Time": 1137.922,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 65.7,
+    "Batch": "B"
+  },
+  {
+    "Time": 556.205,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 68.9,
+    "Batch": "B"
+  },
+  {
+    "Time": 1529.452,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 66.4,
+    "Batch": "A"
+  },
+  {
+    "Time": 1381.106,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 59.9,
+    "Batch": "B"
+  },
+  {
+    "Time": 671.69,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 61.6,
+    "Batch": "A"
+  },
+  {
+    "Time": 775.467,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 64.9,
+    "Batch": "C"
+  },
+  {
+    "Time": 1774.645,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 67.4,
+    "Batch": "B"
+  },
+  {
+    "Time": 625.604,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 54.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 934.002,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 49.3,
+    "Batch": "C"
+  },
+  {
+    "Time": 671.512,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 77.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 632.616,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 61,
+    "Batch": "A"
+  },
+  {
+    "Time": 377.228,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 69.1,
+    "Batch": "B"
+  },
+  {
+    "Time": 739.805,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 65.2,
+    "Batch": "B"
+  },
+  {
+    "Time": 2137.834,
+    "Event": 0,
+    "Stress": 1.3,
+    "Temperature": 69.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 606.757,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 67.7,
+    "Batch": "C"
+  },
+  {
+    "Time": 822.91,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 74.1,
+    "Batch": "B"
+  },
+  {
+    "Time": 1279.624,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 60.8,
+    "Batch": "C"
+  },
+  {
+    "Time": 1476.812,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 58.5,
+    "Batch": "C"
+  },
+  {
+    "Time": 1047.636,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 60.4,
+    "Batch": "B"
+  },
+  {
+    "Time": 1945.881,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 62.2,
+    "Batch": "B"
+  },
+  {
+    "Time": 451.634,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 76.5,
+    "Batch": "C"
+  },
+  {
+    "Time": 494.48,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 62.2,
+    "Batch": "B"
+  },
+  {
+    "Time": 1170.43,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 58.7,
+    "Batch": "C"
+  },
+  {
+    "Time": 645.205,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 73.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 1229.978,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 67.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 816.312,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 48.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 573.058,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 61.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 1221.573,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 62.7,
+    "Batch": "A"
+  },
+  {
+    "Time": 761.804,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 67.7,
+    "Batch": "B"
+  },
+  {
+    "Time": 1154.247,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 63.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 2446.57,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 60.2,
+    "Batch": "B"
+  },
+  {
+    "Time": 1204.495,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 61.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 772.737,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 60.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 880.16,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 66.8,
+    "Batch": "C"
+  },
+  {
+    "Time": 1084.029,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 65.6,
+    "Batch": "A"
+  },
+  {
+    "Time": 1290.419,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 64.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 669.47,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 58.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1139.079,
+    "Event": 0,
+    "Stress": 0.8,
+    "Temperature": 57.3,
+    "Batch": "C"
+  },
+  {
+    "Time": 999.688,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 69.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 967.346,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 61.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 1509.72,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 65.7,
+    "Batch": "A"
+  },
+  {
+    "Time": 1871.438,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 62,
+    "Batch": "B"
+  },
+  {
+    "Time": 886.268,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 61.4,
+    "Batch": "B"
+  },
+  {
+    "Time": 509.422,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 66.5,
+    "Batch": "A"
+  },
+  {
+    "Time": 883.012,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 49.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 732.371,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 62.1,
+    "Batch": "C"
+  },
+  {
+    "Time": 1182.152,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 59.9,
+    "Batch": "C"
+  },
+  {
+    "Time": 1268.924,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 65.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 936.652,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 62.9,
+    "Batch": "B"
+  },
+  {
+    "Time": 929.496,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 65.3,
+    "Batch": "C"
+  },
+  {
+    "Time": 1432.949,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 71,
+    "Batch": "B"
+  },
+  {
+    "Time": 922.74,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 66.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 728.457,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 62.3,
+    "Batch": "B"
+  },
+  {
+    "Time": 726.455,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 65.5,
+    "Batch": "B"
+  },
+  {
+    "Time": 1327.735,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 61.3,
+    "Batch": "A"
+  },
+  {
+    "Time": 1164.858,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 57.2,
+    "Batch": "A"
+  },
+  {
+    "Time": 852.629,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 74.3,
+    "Batch": "A"
+  },
+  {
+    "Time": 1057.527,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 66.8,
+    "Batch": "A"
+  },
+  {
+    "Time": 1136.743,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 60.6,
+    "Batch": "A"
+  },
+  {
+    "Time": 727.544,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 58.5,
+    "Batch": "C"
+  },
+  {
+    "Time": 745.154,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 61.4,
+    "Batch": "B"
+  },
+  {
+    "Time": 1144.194,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 74.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1247.882,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 61.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 1407.298,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 60.5,
+    "Batch": "C"
+  },
+  {
+    "Time": 1897.385,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 69.2,
+    "Batch": "B"
+  },
+  {
+    "Time": 1140.325,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 62.5,
+    "Batch": "B"
+  },
+  {
+    "Time": 1565.344,
+    "Event": 0,
+    "Stress": 0.8,
+    "Temperature": 70.6,
+    "Batch": "C"
+  },
+  {
+    "Time": 1040.638,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 63.1,
+    "Batch": "C"
+  },
+  {
+    "Time": 664.982,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 62.3,
+    "Batch": "A"
+  },
+  {
+    "Time": 584.128,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 65.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 1042.913,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 56.8,
+    "Batch": "B"
+  },
+  {
+    "Time": 787.2,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 58.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 373.499,
+    "Event": 1,
+    "Stress": 1.8,
+    "Temperature": 61.3,
+    "Batch": "A"
+  },
+  {
+    "Time": 1102.339,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 59.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1013.978,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 51.4,
+    "Batch": "C"
+  },
+  {
+    "Time": 902.317,
+    "Event": 1,
+    "Stress": 1.3,
+    "Temperature": 65.9,
+    "Batch": "B"
+  },
+  {
+    "Time": 1023.83,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 78.7,
+    "Batch": "C"
+  },
+  {
+    "Time": 539.697,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 67.6,
+    "Batch": "B"
+  },
+  {
+    "Time": 795.655,
+    "Event": 1,
+    "Stress": 1,
+    "Temperature": 57,
+    "Batch": "C"
+  },
+  {
+    "Time": 631.138,
+    "Event": 1,
+    "Stress": 2.4,
+    "Temperature": 58.4,
+    "Batch": "C"
+  },
+  {
+    "Time": 711.997,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 68.2,
+    "Batch": "C"
+  },
+  {
+    "Time": 1746.048,
+    "Event": 1,
+    "Stress": 0.8,
+    "Temperature": 67.8,
+    "Batch": "B"
+  }
+]

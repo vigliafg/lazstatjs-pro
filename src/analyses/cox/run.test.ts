@@ -85,3 +85,37 @@ test('cox builder validates covariates and the event column', () => {
   assert.ok('reason' in nonBinary);
   if ('reason' in nonBinary) assert.match(nonBinary.reason, /exactly two values/);
 });
+
+test('frailty mode returns group effects and conditional hazard ratios', () => {
+  const rows: string[][] = [];
+  for (let index = 0; index < 90; index++) {
+    const group = ['A', 'B', 'C'][index % 3];
+    const time = ((index * 17) % 19) + 1;
+    const event = index % 5 === 0 ? '0' : '1';
+    rows.push([String(time), event, String(30 + (index % 40)), group]);
+  }
+  const result = buildCoxOutput({
+    grid: {
+      cols: [
+        { name: 'Time', type: 'num' as const },
+        { name: 'Event', type: 'int' as const },
+        { name: 'Age', type: 'num' as const },
+        { name: 'Center', type: 'str' as const },
+      ],
+      rows,
+    },
+    params: {
+      timeVariable: 0,
+      eventVariable: 1,
+      covariates: [2],
+      mode: 'frailty',
+      frailtyVariable: 3,
+    },
+    ciLevel: 95,
+  });
+  assert.ok('ok' in result && result.ok);
+  if (!('ok' in result) || !result.ok) return;
+  assert.ok(result.tables.some(spec => spec.id === 'frailty-summary'));
+  assert.ok(result.tables.some(spec => spec.id === 'frailty-effects'));
+  assert.ok((result.charts ?? []).some(chart => chart.id === 'frailty-effects'));
+});

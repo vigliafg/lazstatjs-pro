@@ -140,4 +140,12 @@ export const metaMessages = {
   'meta.analysis.irt.description': 'Two-parameter and Rasch models with ability scores and information.',
   'meta.analysis.conjoint.label': 'Conjoint Analysis',
   'meta.analysis.conjoint.description': 'Part-worth utilities and attribute importance from profiles.',
+  'meta.analysis.competing.label': 'Competing Risks',
+  'meta.analysis.competing.description': 'Fine–Gray subdistribution hazards and cumulative incidence.',
+  'meta.analysis.recurrent.label': 'Recurrent Events',
+  'meta.analysis.recurrent.description': 'Andersen–Gill and Wei–Lin–Weissfeld models for repeated events.',
+  'meta.analysis.alt.label': 'Accelerated Life Testing',
+  'meta.analysis.alt.description': 'Arrhenius and inverse-power life models with a stress variable.',
+  'meta.analysis.reliability.label': 'Reliability Growth & RBD',
+  'meta.analysis.reliability.description': 'Crow–AMSAA growth curves and series/parallel reliability block diagrams.',
 } as const;

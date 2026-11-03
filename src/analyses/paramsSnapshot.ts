@@ -55,6 +55,10 @@ const PARAMS_KEY: Record<string, keyof ProjectParams> = {
   conjoint: 'conjoint',
   discriminant: 'discriminant',
   doe: 'doe',
+  competing: 'competing',
+  recurrent: 'recurrent',
+  alt: 'alt',
+  reliability: 'reliability',
 };
 
 export const analysisParamsKey = (analysisId: string): keyof ProjectParams | undefined =>

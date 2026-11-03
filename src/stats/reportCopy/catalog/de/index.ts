@@ -39,6 +39,7 @@ import { w3RegressionCopy } from './w3-regression';
 import { w3EconometricsCopy } from './w3-econometrics';
 import { proportionsCopy as deProportionsCopy } from './proportions';
 import { w5Copy } from './w5';
+import { w6Copy } from './w6';
 import { variancesCopy as deVariancesCopy } from './variances';
 
 export const deReportCopy: Record<string, string> = {
@@ -83,4 +84,5 @@ export const deReportCopy: Record<string, string> = {
   ...w3RegressionCopy,
   ...w3EconometricsCopy,
   ...w5Copy,
+  ...w6Copy,
 };

@@ -142,4 +142,12 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.irt.description': 'Modelli 2PL e Rasch con abilità e informazione.',
   'meta.analysis.conjoint.label': 'Analisi congiunta',
   'meta.analysis.conjoint.description': 'Utilità parziali e importanza degli attributi da profili.',
+  'meta.analysis.competing.label': 'Rischi competitivi',
+  'meta.analysis.competing.description': 'Rischi di sottodistribuzione di Fine–Gray e incidenza cumulativa.',
+  'meta.analysis.recurrent.label': 'Eventi ricorrenti',
+  'meta.analysis.recurrent.description': 'Modelli di Andersen–Gill e Wei–Lin–Weissfeld per eventi ripetuti.',
+  'meta.analysis.alt.label': 'Test di vita accelerata',
+  'meta.analysis.alt.description': 'Modelli di Arrhenius e potenza inversa con una variabile di stress.',
+  'meta.analysis.reliability.label': 'Crescita di affidabilità e RBD',
+  'meta.analysis.reliability.description': 'Curve di crescita Crow–AMSAA e diagrammi a blocchi serie/parallelo.',
 };

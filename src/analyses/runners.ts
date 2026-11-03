@@ -59,6 +59,10 @@ import { buildIrtOutput } from './irt/run';
 import { buildConjointOutput } from './conjoint/run';
 import { buildDiscriminantOutput } from './discriminant/run';
 import { buildDoeOutput } from './doe/run';
+import { buildCompetingOutput } from './competing/run';
+import { buildRecurrentOutput } from './recurrent/run';
+import { buildAltOutput } from './alt/run';
+import { buildReliabilityOutput } from './reliability/run';
 
 export interface AnalysisRunContext {
   grid: Dataset;
@@ -193,4 +197,11 @@ export const ANALYSIS_RUNNERS: Record<string, (ctx: AnalysisRunContext) => Analy
     buildDiscriminantOutput({ grid, params: params.discriminant, ciLevel }),
   doe: ({ grid, params, ciLevel }) =>
     buildDoeOutput({ grid, params: params.doe, ciLevel }),
+  competing: ({ grid, params, ciLevel }) =>
+    buildCompetingOutput({ grid, params: params.competing, ciLevel }),
+  recurrent: ({ grid, params, ciLevel }) =>
+    buildRecurrentOutput({ grid, params: params.recurrent, ciLevel }),
+  alt: ({ grid, params, ciLevel }) => buildAltOutput({ grid, params: params.alt, ciLevel }),
+  reliability: ({ grid, params, ciLevel }) =>
+    buildReliabilityOutput({ grid, params: params.reliability, ciLevel }),
 };

@@ -8,6 +8,7 @@ import { w2Topics } from '../w2-de';
 import { w3Topics } from '../w3-de';
 import { w4Topics } from '../w4-de';
 import { w5Topics } from '../w5-de';
+import { w6Topics } from '../w6-de';
 
 import { chartGuides } from './charts';
 
@@ -75,7 +76,7 @@ export const deBook: HelpBook = {
     updated: "Handbuch abgestimmt auf die aktuellen Funktionen des Programms",
   },
   chapters,
-  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics, ...w5Topics]).map(topic => ({
+  topics: orderTopics([...areaTopics, ...coreTopics, ...moreTopics, ...l4Topics, ...w2Topics, ...w3Topics, ...w4Topics, ...w5Topics, ...w6Topics]).map(topic => ({
     ...topic,
     advanced: {
       ...topic.advanced,

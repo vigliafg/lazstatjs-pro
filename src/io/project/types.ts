@@ -180,14 +180,26 @@ export interface CoxParams {
   timeVariable: number;
   eventVariable: number;
   covariates: number[];
+  /** Standard proportional hazards or a shared gamma frailty model. */
+  mode?: 'standard' | 'frailty';
+  /** Grouping column for the frailty mode; -1 when unused. */
+  frailtyVariable?: number;
 }
 
-/** Parametri della sopravvivenza (Kaplan–Meier). */
+export type SurvivalMode = 'km' | 'life' | 'interval';
+
+/** Parametri della sopravvivenza (Kaplan–Meier, tavola di vita, censura a intervallo). */
 export interface SurvivalParams {
   timeVariable: number;
   eventVariable: number;
   /** -1 = nessun raggruppamento. */
   groupVariable: number;
+  /** Curve di Kaplan–Meier, tavola di vita attuariale o NPMLE a intervalli. */
+  mode?: SurvivalMode;
+  /** Limite superiore dell'intervallo; -1 quando non serve. */
+  upperVariable?: number;
+  /** Numero di intervalli della tavola di vita; 0 = automatico. */
+  intervals?: number;
 }
 
 export type TimeSeriesDifferenceMode = 'auto' | '0' | '1' | '2';
@@ -315,12 +327,65 @@ export interface ResamplingParams {
   bootstrap: number;
 }
 
+export type ParametricDistribution =
+  | 'weibull'
+  | 'exponential'
+  | 'lognormal'
+  | 'loglogistic'
+  | 'gompertz';
+
 /** Parametri della sopravvivenza parametrica. */
 export interface ParametricSurvivalParams {
   time: number;
   event: number;
   predictors: number[];
-  distribution: 'weibull' | 'exponential';
+  distribution: ParametricDistribution;
+  /** Colonna del limite superiore per la censura a intervallo; -1 se assente. */
+  upperVariable?: number;
+}
+
+/** Competing risks: one event code per cause, 0 = censored. */
+export interface CompetingParams {
+  time: number;
+  event: number;
+  /** Event code of the cause of interest. */
+  cause: number;
+  covariates: number[];
+}
+
+/** Recurrent events: one row per (start, stop] interval and subject. */
+export interface RecurrentParams {
+  id: number;
+  start: number;
+  stop: number;
+  event: number;
+  covariates: number[];
+  /** Andersen–Gill or Wei–Lin–Weissfeld. */
+  model: 'ag' | 'wlw';
+}
+
+export type AltModel = 'arrhenius' | 'inversePower' | 'exponential';
+
+/** Accelerated life testing with a stress column. */
+export interface AltParams {
+  time: number;
+  event: number;
+  stress: number;
+  covariates: number[];
+  model: AltModel;
+  /** Stress level at which the acceleration factor is reported. */
+  useStress: number;
+}
+
+export type ReliabilityMode = 'growth' | 'rbd';
+
+/** Reliability growth (Crow–AMSAA) or a series/parallel block diagram. */
+export interface ReliabilityParams {
+  mode: ReliabilityMode;
+  time: number;
+  failures: number;
+  /** Series stages; each stage lists the reliability of parallel components. */
+  stages: string[][];
 }
 
 /** Parametri dell'ANOVA mista between-within. */
@@ -708,6 +773,10 @@ export interface ProjectParams {
   conjoint: ConjointParams;
   discriminant: DiscriminantParams;
   doe: DoeParams;
+  competing: CompetingParams;
+  recurrent: RecurrentParams;
+  alt: AltParams;
+  reliability: ReliabilityParams;
 }
 
 export interface ProjectSettings {
@@ -879,11 +948,16 @@ export const DEFAULT_PARAMS: ProjectParams = {
     timeVariable: 0,
     eventVariable: 1,
     covariates: [],
+    mode: 'standard',
+    frailtyVariable: -1,
   },
   survival: {
     timeVariable: 0,
     eventVariable: 1,
     groupVariable: -1,
+    mode: 'km',
+    upperVariable: -1,
+    intervals: 0,
   },
   timeseries: {
     variable: 0,
@@ -990,6 +1064,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
     event: 2,
     predictors: [1],
     distribution: 'weibull',
+    upperVariable: -1,
   },
   mixedanova: {
     group: 2,
@@ -1171,6 +1246,34 @@ export const DEFAULT_PARAMS: ProjectParams = {
     factorA: 1,
     factorB: 2,
     model: 'quadratic',
+  },
+  competing: {
+    time: 0,
+    event: 1,
+    cause: 1,
+    covariates: [],
+  },
+  recurrent: {
+    id: 0,
+    start: 1,
+    stop: 2,
+    event: 2,
+    covariates: [],
+    model: 'ag',
+  },
+  alt: {
+    time: 0,
+    event: 1,
+    stress: 2,
+    covariates: [],
+    model: 'arrhenius',
+    useStress: 1,
+  },
+  reliability: {
+    mode: 'growth',
+    time: 0,
+    failures: 1,
+    stages: [['0.9', '0.9']],
   },
 };
 

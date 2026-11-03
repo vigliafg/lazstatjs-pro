@@ -176,4 +176,12 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.irt.description': '2PL- und Rasch-Modelle mit Fähigkeiten und Information.',
   'meta.analysis.conjoint.label': 'Conjoint-Analyse',
   'meta.analysis.conjoint.description': 'Teilnutzen und Attributwichtigkeit aus Profilen.',
+  'meta.analysis.competing.label': 'Wettbewerbsrisiken',
+  'meta.analysis.competing.description': 'Fine–Gray-Subverteilungsrisiken und kumulative Inzidenz.',
+  'meta.analysis.recurrent.label': 'Rezidivierende Ereignisse',
+  'meta.analysis.recurrent.description': 'Andersen–Gill- und Wei–Lin–Weissfeld-Modelle für wiederholte Ereignisse.',
+  'meta.analysis.alt.label': 'Beschleunigte Lebensdauertests',
+  'meta.analysis.alt.description': 'Arrhenius- und Inverse-Power-Modelle mit Belastungsvariable.',
+  'meta.analysis.reliability.label': 'Zuverlässigkeitswachstum & RBD',
+  'meta.analysis.reliability.description': 'Crow–AMSAA-Wachstumskurven und Reihen-/Parallel-Blockschaltbilder.',
 };

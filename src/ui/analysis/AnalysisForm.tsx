@@ -59,6 +59,10 @@ import { IrtForm } from '../../analyses/irt/Form';
 import { ConjointForm } from '../../analyses/conjoint/Form';
 import { DiscriminantForm } from '../../analyses/discriminant/Form';
 import { DoeForm } from '../../analyses/doe/Form';
+import { CompetingForm } from '../../analyses/competing/Form';
+import { RecurrentForm } from '../../analyses/recurrent/Form';
+import { AltForm } from '../../analyses/alt/Form';
+import { ReliabilityForm } from '../../analyses/reliability/Form';
 import { t } from '../../i18n';
 
 interface AnalysisFormProps {
@@ -243,6 +247,8 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
         return (
           <CoxForm
             grid={p.grid}
+            onLevels={p.updateColumnLevels}
+            onRecode={p.updateColumnRecode}
             coxParams={params.cox}
             setCoxParams={setSlice('cox')}
           />
@@ -537,6 +543,38 @@ export const AnalysisForm = ({ p, params, setSlice }: AnalysisFormProps) => {
             grid={p.grid}
             doeParams={params.doe}
             setDoeParams={setSlice('doe')}
+          />
+        );
+      case 'competing':
+        return (
+          <CompetingForm
+            grid={p.grid}
+            competingParams={params.competing}
+            setCompetingParams={setSlice('competing')}
+          />
+        );
+      case 'recurrent':
+        return (
+          <RecurrentForm
+            grid={p.grid}
+            recurrentParams={params.recurrent}
+            setRecurrentParams={setSlice('recurrent')}
+          />
+        );
+      case 'alt':
+        return (
+          <AltForm
+            grid={p.grid}
+            altParams={params.alt}
+            setAltParams={setSlice('alt')}
+          />
+        );
+      case 'reliability':
+        return (
+          <ReliabilityForm
+            grid={p.grid}
+            reliabilityParams={params.reliability}
+            setReliabilityParams={setSlice('reliability')}
           />
         );
       default:

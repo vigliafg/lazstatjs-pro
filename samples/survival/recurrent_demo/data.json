@@ -1,0 +1,2290 @@
+[
+  {
+    "Id": 1,
+    "Start": 0,
+    "Stop": 8.526,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 81.6
+  },
+  {
+    "Id": 1,
+    "Start": 8.526,
+    "Stop": 10.71,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 81.6
+  },
+  {
+    "Id": 2,
+    "Start": 0,
+    "Stop": 2.161,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 38.2
+  },
+  {
+    "Id": 2,
+    "Start": 2.161,
+    "Stop": 6.317,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 38.2
+  },
+  {
+    "Id": 2,
+    "Start": 6.317,
+    "Stop": 18.584,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 38.2
+  },
+  {
+    "Id": 2,
+    "Start": 18.584,
+    "Stop": 21.637,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 38.2
+  },
+  {
+    "Id": 3,
+    "Start": 0,
+    "Stop": 4.057,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 63.1
+  },
+  {
+    "Id": 4,
+    "Start": 0,
+    "Stop": 1.343,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 64.8
+  },
+  {
+    "Id": 4,
+    "Start": 1.343,
+    "Stop": 8.498,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 64.8
+  },
+  {
+    "Id": 4,
+    "Start": 8.498,
+    "Stop": 8.988,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 64.8
+  },
+  {
+    "Id": 4,
+    "Start": 8.988,
+    "Stop": 10.326,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 64.8
+  },
+  {
+    "Id": 4,
+    "Start": 10.326,
+    "Stop": 10.97,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 64.8
+  },
+  {
+    "Id": 5,
+    "Start": 0,
+    "Stop": 6.301,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 58.4
+  },
+  {
+    "Id": 6,
+    "Start": 0,
+    "Stop": 14.133,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 52.5
+  },
+  {
+    "Id": 7,
+    "Start": 0,
+    "Stop": 0.012,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 81.1
+  },
+  {
+    "Id": 7,
+    "Start": 0.012,
+    "Stop": 4.16,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 81.1
+  },
+  {
+    "Id": 7,
+    "Start": 4.16,
+    "Stop": 5.03,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 81.1
+  },
+  {
+    "Id": 7,
+    "Start": 5.03,
+    "Stop": 7.617,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 81.1
+  },
+  {
+    "Id": 8,
+    "Start": 0,
+    "Stop": 1.9,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 63.9
+  },
+  {
+    "Id": 8,
+    "Start": 1.9,
+    "Stop": 5.109,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 63.9
+  },
+  {
+    "Id": 9,
+    "Start": 0,
+    "Stop": 4.308,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 55.4
+  },
+  {
+    "Id": 10,
+    "Start": 0,
+    "Stop": 5.674,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 57.7
+  },
+  {
+    "Id": 11,
+    "Start": 0,
+    "Stop": 5.026,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 55.5
+  },
+  {
+    "Id": 12,
+    "Start": 0,
+    "Stop": 4.054,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 62.8
+  },
+  {
+    "Id": 13,
+    "Start": 0,
+    "Stop": 2.992,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 54.9
+  },
+  {
+    "Id": 13,
+    "Start": 2.992,
+    "Stop": 4.884,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 54.9
+  },
+  {
+    "Id": 14,
+    "Start": 0,
+    "Stop": 0.235,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 58.6
+  },
+  {
+    "Id": 14,
+    "Start": 0.235,
+    "Stop": 4.6,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 58.6
+  },
+  {
+    "Id": 15,
+    "Start": 0,
+    "Stop": 4.655,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 37.1
+  },
+  {
+    "Id": 16,
+    "Start": 0,
+    "Stop": 11.36,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 54
+  },
+  {
+    "Id": 17,
+    "Start": 0,
+    "Stop": 0.849,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 55.7
+  },
+  {
+    "Id": 17,
+    "Start": 0.849,
+    "Stop": 5.453,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 55.7
+  },
+  {
+    "Id": 18,
+    "Start": 0,
+    "Stop": 0.992,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 58.3
+  },
+  {
+    "Id": 18,
+    "Start": 0.992,
+    "Stop": 7.028,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 58.3
+  },
+  {
+    "Id": 19,
+    "Start": 0,
+    "Stop": 5.537,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 52.2
+  },
+  {
+    "Id": 20,
+    "Start": 0,
+    "Stop": 1.832,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 51.1
+  },
+  {
+    "Id": 20,
+    "Start": 1.832,
+    "Stop": 6.588,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 51.1
+  },
+  {
+    "Id": 21,
+    "Start": 0,
+    "Stop": 0.098,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 50.6
+  },
+  {
+    "Id": 21,
+    "Start": 0.098,
+    "Stop": 1.611,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 50.6
+  },
+  {
+    "Id": 21,
+    "Start": 1.611,
+    "Stop": 7.857,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 50.6
+  },
+  {
+    "Id": 22,
+    "Start": 0,
+    "Stop": 2.285,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 80.8
+  },
+  {
+    "Id": 22,
+    "Start": 2.285,
+    "Stop": 3.741,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 80.8
+  },
+  {
+    "Id": 22,
+    "Start": 3.741,
+    "Stop": 8.768,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 80.8
+  },
+  {
+    "Id": 23,
+    "Start": 0,
+    "Stop": 2.994,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 71.2
+  },
+  {
+    "Id": 23,
+    "Start": 2.994,
+    "Stop": 7.369,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 71.2
+  },
+  {
+    "Id": 24,
+    "Start": 0,
+    "Stop": 4.59,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 53.2
+  },
+  {
+    "Id": 25,
+    "Start": 0,
+    "Stop": 9.951,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 37
+  },
+  {
+    "Id": 26,
+    "Start": 0,
+    "Stop": 3.893,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 53.3
+  },
+  {
+    "Id": 26,
+    "Start": 3.893,
+    "Stop": 10.497,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 53.3
+  },
+  {
+    "Id": 26,
+    "Start": 10.497,
+    "Stop": 11.619,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 53.3
+  },
+  {
+    "Id": 27,
+    "Start": 0,
+    "Stop": 14.765,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 52.9
+  },
+  {
+    "Id": 27,
+    "Start": 14.765,
+    "Stop": 19.315,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 52.9
+  },
+  {
+    "Id": 27,
+    "Start": 19.315,
+    "Stop": 20.397,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 52.9
+  },
+  {
+    "Id": 28,
+    "Start": 0,
+    "Stop": 3.634,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 47.1
+  },
+  {
+    "Id": 28,
+    "Start": 3.634,
+    "Stop": 5.717,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 47.1
+  },
+  {
+    "Id": 29,
+    "Start": 0,
+    "Stop": 0.622,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 67.2
+  },
+  {
+    "Id": 29,
+    "Start": 0.622,
+    "Stop": 5.299,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 67.2
+  },
+  {
+    "Id": 29,
+    "Start": 5.299,
+    "Stop": 6.775,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 67.2
+  },
+  {
+    "Id": 29,
+    "Start": 6.775,
+    "Stop": 21.972,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 67.2
+  },
+  {
+    "Id": 30,
+    "Start": 0,
+    "Stop": 4.563,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 71.9
+  },
+  {
+    "Id": 31,
+    "Start": 0,
+    "Stop": 6.02,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 47
+  },
+  {
+    "Id": 32,
+    "Start": 0,
+    "Stop": 2.051,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 66
+  },
+  {
+    "Id": 32,
+    "Start": 2.051,
+    "Stop": 4.902,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 66
+  },
+  {
+    "Id": 33,
+    "Start": 0,
+    "Stop": 4.176,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 34.3
+  },
+  {
+    "Id": 34,
+    "Start": 0,
+    "Stop": 4.586,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 63.9
+  },
+  {
+    "Id": 34,
+    "Start": 4.586,
+    "Stop": 6.411,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 63.9
+  },
+  {
+    "Id": 35,
+    "Start": 0,
+    "Stop": 4.083,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 75.1
+  },
+  {
+    "Id": 36,
+    "Start": 0,
+    "Stop": 6.371,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 58.2
+  },
+  {
+    "Id": 37,
+    "Start": 0,
+    "Stop": 6.076,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 72
+  },
+  {
+    "Id": 37,
+    "Start": 6.076,
+    "Stop": 10.665,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 72
+  },
+  {
+    "Id": 38,
+    "Start": 0,
+    "Stop": 7.566,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 63.5
+  },
+  {
+    "Id": 39,
+    "Start": 0,
+    "Stop": 0.534,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 44.1
+  },
+  {
+    "Id": 39,
+    "Start": 0.534,
+    "Stop": 4.387,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 44.1
+  },
+  {
+    "Id": 40,
+    "Start": 0,
+    "Stop": 2.362,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 61.7
+  },
+  {
+    "Id": 40,
+    "Start": 2.362,
+    "Stop": 4.065,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 61.7
+  },
+  {
+    "Id": 41,
+    "Start": 0,
+    "Stop": 3.796,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 52.4
+  },
+  {
+    "Id": 41,
+    "Start": 3.796,
+    "Stop": 6.223,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 52.4
+  },
+  {
+    "Id": 41,
+    "Start": 6.223,
+    "Stop": 10.115,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 52.4
+  },
+  {
+    "Id": 42,
+    "Start": 0,
+    "Stop": 1.637,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 41.7
+  },
+  {
+    "Id": 42,
+    "Start": 1.637,
+    "Stop": 5.136,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 41.7
+  },
+  {
+    "Id": 42,
+    "Start": 5.136,
+    "Stop": 18.249,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 41.7
+  },
+  {
+    "Id": 43,
+    "Start": 0,
+    "Stop": 10.351,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 45.8
+  },
+  {
+    "Id": 44,
+    "Start": 0,
+    "Stop": 5.389,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 55.3
+  },
+  {
+    "Id": 45,
+    "Start": 0,
+    "Stop": 2.215,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 60.2
+  },
+  {
+    "Id": 45,
+    "Start": 2.215,
+    "Stop": 3.335,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 60.2
+  },
+  {
+    "Id": 45,
+    "Start": 3.335,
+    "Stop": 6.273,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 60.2
+  },
+  {
+    "Id": 46,
+    "Start": 0,
+    "Stop": 5.165,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 46.3
+  },
+  {
+    "Id": 47,
+    "Start": 0,
+    "Stop": 4.536,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 48.9
+  },
+  {
+    "Id": 48,
+    "Start": 0,
+    "Stop": 0.538,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 67.7
+  },
+  {
+    "Id": 48,
+    "Start": 0.538,
+    "Stop": 4.879,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 67.7
+  },
+  {
+    "Id": 48,
+    "Start": 4.879,
+    "Stop": 14.213,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 67.7
+  },
+  {
+    "Id": 49,
+    "Start": 0,
+    "Stop": 5.621,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 55.8
+  },
+  {
+    "Id": 50,
+    "Start": 0,
+    "Stop": 4.646,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 62.1
+  },
+  {
+    "Id": 51,
+    "Start": 0,
+    "Stop": 4.057,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 51.2
+  },
+  {
+    "Id": 52,
+    "Start": 0,
+    "Stop": 5.312,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 50.3
+  },
+  {
+    "Id": 52,
+    "Start": 5.312,
+    "Stop": 9.919,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 50.3
+  },
+  {
+    "Id": 53,
+    "Start": 0,
+    "Stop": 5.946,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 37.6
+  },
+  {
+    "Id": 54,
+    "Start": 0,
+    "Stop": 5.681,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 36.6
+  },
+  {
+    "Id": 55,
+    "Start": 0,
+    "Stop": 2.205,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 82.9
+  },
+  {
+    "Id": 55,
+    "Start": 2.205,
+    "Stop": 5.46,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 82.9
+  },
+  {
+    "Id": 56,
+    "Start": 0,
+    "Stop": 6.382,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 45.3
+  },
+  {
+    "Id": 57,
+    "Start": 0,
+    "Stop": 3.703,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 51.9
+  },
+  {
+    "Id": 57,
+    "Start": 3.703,
+    "Stop": 9.045,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 51.9
+  },
+  {
+    "Id": 57,
+    "Start": 9.045,
+    "Stop": 10.455,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 51.9
+  },
+  {
+    "Id": 58,
+    "Start": 0,
+    "Stop": 4.432,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 50.6
+  },
+  {
+    "Id": 58,
+    "Start": 4.432,
+    "Stop": 4.759,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 50.6
+  },
+  {
+    "Id": 58,
+    "Start": 4.759,
+    "Stop": 5.053,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 50.6
+  },
+  {
+    "Id": 59,
+    "Start": 0,
+    "Stop": 0.043,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 52.1
+  },
+  {
+    "Id": 59,
+    "Start": 0.043,
+    "Stop": 1.415,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 52.1
+  },
+  {
+    "Id": 59,
+    "Start": 1.415,
+    "Stop": 4.383,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 52.1
+  },
+  {
+    "Id": 59,
+    "Start": 4.383,
+    "Stop": 5.11,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 52.1
+  },
+  {
+    "Id": 60,
+    "Start": 0,
+    "Stop": 4.794,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 42.5
+  },
+  {
+    "Id": 61,
+    "Start": 0,
+    "Stop": 0.513,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 86
+  },
+  {
+    "Id": 61,
+    "Start": 0.513,
+    "Stop": 3.849,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 86
+  },
+  {
+    "Id": 61,
+    "Start": 3.849,
+    "Stop": 5.979,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 86
+  },
+  {
+    "Id": 62,
+    "Start": 0,
+    "Stop": 4.102,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 29
+  },
+  {
+    "Id": 62,
+    "Start": 4.102,
+    "Stop": 4.321,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 29
+  },
+  {
+    "Id": 63,
+    "Start": 0,
+    "Stop": 1.569,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 72.7
+  },
+  {
+    "Id": 63,
+    "Start": 1.569,
+    "Stop": 1.714,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 72.7
+  },
+  {
+    "Id": 63,
+    "Start": 1.714,
+    "Stop": 5.52,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 72.7
+  },
+  {
+    "Id": 64,
+    "Start": 0,
+    "Stop": 5.538,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 75.1
+  },
+  {
+    "Id": 64,
+    "Start": 5.538,
+    "Stop": 5.617,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 75.1
+  },
+  {
+    "Id": 65,
+    "Start": 0,
+    "Stop": 6.035,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 57.9
+  },
+  {
+    "Id": 66,
+    "Start": 0,
+    "Stop": 0.513,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 60.6
+  },
+  {
+    "Id": 66,
+    "Start": 0.513,
+    "Stop": 8.629,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 60.6
+  },
+  {
+    "Id": 66,
+    "Start": 8.629,
+    "Stop": 9.217,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 60.6
+  },
+  {
+    "Id": 66,
+    "Start": 9.217,
+    "Stop": 10.438,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 60.6
+  },
+  {
+    "Id": 67,
+    "Start": 0,
+    "Stop": 1.12,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 78.5
+  },
+  {
+    "Id": 67,
+    "Start": 1.12,
+    "Stop": 3.067,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 78.5
+  },
+  {
+    "Id": 67,
+    "Start": 3.067,
+    "Stop": 5.631,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 78.5
+  },
+  {
+    "Id": 68,
+    "Start": 0,
+    "Stop": 11.659,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 57.6
+  },
+  {
+    "Id": 69,
+    "Start": 0,
+    "Stop": 2.708,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 48
+  },
+  {
+    "Id": 69,
+    "Start": 2.708,
+    "Stop": 4.378,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 48
+  },
+  {
+    "Id": 70,
+    "Start": 0,
+    "Stop": 5.039,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 88.6
+  },
+  {
+    "Id": 71,
+    "Start": 0,
+    "Stop": 0.612,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 60.9
+  },
+  {
+    "Id": 71,
+    "Start": 0.612,
+    "Stop": 11.074,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 60.9
+  },
+  {
+    "Id": 71,
+    "Start": 11.074,
+    "Stop": 20.903,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 60.9
+  },
+  {
+    "Id": 72,
+    "Start": 0,
+    "Stop": 4.326,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 47.2
+  },
+  {
+    "Id": 73,
+    "Start": 0,
+    "Stop": 8.026,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 51.8
+  },
+  {
+    "Id": 74,
+    "Start": 0,
+    "Stop": 5.632,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 62
+  },
+  {
+    "Id": 74,
+    "Start": 5.632,
+    "Stop": 8.084,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 62
+  },
+  {
+    "Id": 75,
+    "Start": 0,
+    "Stop": 5.403,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 59.6
+  },
+  {
+    "Id": 76,
+    "Start": 0,
+    "Stop": 3.959,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 43.9
+  },
+  {
+    "Id": 76,
+    "Start": 3.959,
+    "Stop": 10.393,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 43.9
+  },
+  {
+    "Id": 77,
+    "Start": 0,
+    "Stop": 2.334,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 47.7
+  },
+  {
+    "Id": 77,
+    "Start": 2.334,
+    "Stop": 5.874,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 47.7
+  },
+  {
+    "Id": 77,
+    "Start": 5.874,
+    "Stop": 11.91,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 47.7
+  },
+  {
+    "Id": 78,
+    "Start": 0,
+    "Stop": 4.309,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 52.1
+  },
+  {
+    "Id": 79,
+    "Start": 0,
+    "Stop": 7.294,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 56.6
+  },
+  {
+    "Id": 79,
+    "Start": 7.294,
+    "Stop": 8.829,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 56.6
+  },
+  {
+    "Id": 80,
+    "Start": 0,
+    "Stop": 7.912,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 34.6
+  },
+  {
+    "Id": 81,
+    "Start": 0,
+    "Stop": 8.85,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 54.4
+  },
+  {
+    "Id": 81,
+    "Start": 8.85,
+    "Stop": 9.126,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 54.4
+  },
+  {
+    "Id": 82,
+    "Start": 0,
+    "Stop": 3.721,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 57.8
+  },
+  {
+    "Id": 82,
+    "Start": 3.721,
+    "Stop": 7.298,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 57.8
+  },
+  {
+    "Id": 83,
+    "Start": 0,
+    "Stop": 6.016,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 62
+  },
+  {
+    "Id": 84,
+    "Start": 0,
+    "Stop": 4.081,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 54.8
+  },
+  {
+    "Id": 85,
+    "Start": 0,
+    "Stop": 9.748,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 83.8
+  },
+  {
+    "Id": 86,
+    "Start": 0,
+    "Stop": 2.996,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 75.9
+  },
+  {
+    "Id": 86,
+    "Start": 2.996,
+    "Stop": 4.446,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 75.9
+  },
+  {
+    "Id": 86,
+    "Start": 4.446,
+    "Stop": 6.732,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 75.9
+  },
+  {
+    "Id": 87,
+    "Start": 0,
+    "Stop": 4.354,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 47.6
+  },
+  {
+    "Id": 88,
+    "Start": 0,
+    "Stop": 3.955,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 75.1
+  },
+  {
+    "Id": 88,
+    "Start": 3.955,
+    "Stop": 9.978,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 75.1
+  },
+  {
+    "Id": 89,
+    "Start": 0,
+    "Stop": 2.397,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 65.7
+  },
+  {
+    "Id": 89,
+    "Start": 2.397,
+    "Stop": 3.897,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 65.7
+  },
+  {
+    "Id": 89,
+    "Start": 3.897,
+    "Stop": 13.367,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 65.7
+  },
+  {
+    "Id": 90,
+    "Start": 0,
+    "Stop": 2.772,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 58.4
+  },
+  {
+    "Id": 90,
+    "Start": 2.772,
+    "Stop": 4.693,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 58.4
+  },
+  {
+    "Id": 91,
+    "Start": 0,
+    "Stop": 0.104,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 65.8
+  },
+  {
+    "Id": 91,
+    "Start": 0.104,
+    "Stop": 4.878,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 65.8
+  },
+  {
+    "Id": 92,
+    "Start": 0,
+    "Stop": 7.282,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 75.3
+  },
+  {
+    "Id": 93,
+    "Start": 0,
+    "Stop": 6.428,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 47.6
+  },
+  {
+    "Id": 94,
+    "Start": 0,
+    "Stop": 5.69,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 35.1
+  },
+  {
+    "Id": 95,
+    "Start": 0,
+    "Stop": 4.713,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 71.7
+  },
+  {
+    "Id": 96,
+    "Start": 0,
+    "Stop": 4.932,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 39.2
+  },
+  {
+    "Id": 97,
+    "Start": 0,
+    "Stop": 4.411,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 49.2
+  },
+  {
+    "Id": 98,
+    "Start": 0,
+    "Stop": 8.759,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 51.9
+  },
+  {
+    "Id": 99,
+    "Start": 0,
+    "Stop": 5.416,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 51.5
+  },
+  {
+    "Id": 100,
+    "Start": 0,
+    "Stop": 5.595,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 54.7
+  },
+  {
+    "Id": 100,
+    "Start": 5.595,
+    "Stop": 8.162,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 54.7
+  },
+  {
+    "Id": 101,
+    "Start": 0,
+    "Stop": 0.175,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 58.3
+  },
+  {
+    "Id": 101,
+    "Start": 0.175,
+    "Stop": 4.475,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 58.3
+  },
+  {
+    "Id": 102,
+    "Start": 0,
+    "Stop": 5.127,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 63.6
+  },
+  {
+    "Id": 102,
+    "Start": 5.127,
+    "Stop": 7.825,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 63.6
+  },
+  {
+    "Id": 102,
+    "Start": 7.825,
+    "Stop": 8.329,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 63.6
+  },
+  {
+    "Id": 103,
+    "Start": 0,
+    "Stop": 0.612,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 68.9
+  },
+  {
+    "Id": 103,
+    "Start": 0.612,
+    "Stop": 5.261,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 68.9
+  },
+  {
+    "Id": 104,
+    "Start": 0,
+    "Stop": 8.805,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 61.4
+  },
+  {
+    "Id": 104,
+    "Start": 8.805,
+    "Stop": 10.153,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 61.4
+  },
+  {
+    "Id": 105,
+    "Start": 0,
+    "Stop": 3.855,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 55
+  },
+  {
+    "Id": 105,
+    "Start": 3.855,
+    "Stop": 4.656,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 55
+  },
+  {
+    "Id": 106,
+    "Start": 0,
+    "Stop": 2.572,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 82.1
+  },
+  {
+    "Id": 106,
+    "Start": 2.572,
+    "Stop": 4.34,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 82.1
+  },
+  {
+    "Id": 107,
+    "Start": 0,
+    "Stop": 0.542,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 50.6
+  },
+  {
+    "Id": 107,
+    "Start": 0.542,
+    "Stop": 4.764,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 50.6
+  },
+  {
+    "Id": 108,
+    "Start": 0,
+    "Stop": 4.388,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 56.3
+  },
+  {
+    "Id": 109,
+    "Start": 0,
+    "Stop": 1.279,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 50.4
+  },
+  {
+    "Id": 109,
+    "Start": 1.279,
+    "Stop": 6.442,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 50.4
+  },
+  {
+    "Id": 109,
+    "Start": 6.442,
+    "Stop": 7.101,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 50.4
+  },
+  {
+    "Id": 110,
+    "Start": 0,
+    "Stop": 4.175,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 42.8
+  },
+  {
+    "Id": 111,
+    "Start": 0,
+    "Stop": 4.485,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 55.7
+  },
+  {
+    "Id": 112,
+    "Start": 0,
+    "Stop": 2.804,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 89.8
+  },
+  {
+    "Id": 112,
+    "Start": 2.804,
+    "Stop": 8.667,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 89.8
+  },
+  {
+    "Id": 113,
+    "Start": 0,
+    "Stop": 5.261,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 58.9
+  },
+  {
+    "Id": 113,
+    "Start": 5.261,
+    "Stop": 6.293,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 58.9
+  },
+  {
+    "Id": 114,
+    "Start": 0,
+    "Stop": 2.418,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 52.2
+  },
+  {
+    "Id": 114,
+    "Start": 2.418,
+    "Stop": 5.071,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 52.2
+  },
+  {
+    "Id": 115,
+    "Start": 0,
+    "Stop": 2.393,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 68.5
+  },
+  {
+    "Id": 115,
+    "Start": 2.393,
+    "Stop": 10.718,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 68.5
+  },
+  {
+    "Id": 115,
+    "Start": 10.718,
+    "Stop": 13.886,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 68.5
+  },
+  {
+    "Id": 116,
+    "Start": 0,
+    "Stop": 10.05,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 40.9
+  },
+  {
+    "Id": 116,
+    "Start": 10.05,
+    "Stop": 10.153,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 40.9
+  },
+  {
+    "Id": 117,
+    "Start": 0,
+    "Stop": 4.562,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 41
+  },
+  {
+    "Id": 118,
+    "Start": 0,
+    "Stop": 4.725,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 47.8
+  },
+  {
+    "Id": 119,
+    "Start": 0,
+    "Stop": 10.868,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 58.6
+  },
+  {
+    "Id": 120,
+    "Start": 0,
+    "Stop": 4.5,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 41.8
+  },
+  {
+    "Id": 121,
+    "Start": 0,
+    "Stop": 1.312,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 60.8
+  },
+  {
+    "Id": 121,
+    "Start": 1.312,
+    "Stop": 4.606,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 60.8
+  },
+  {
+    "Id": 122,
+    "Start": 0,
+    "Stop": 2.231,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 76.6
+  },
+  {
+    "Id": 122,
+    "Start": 2.231,
+    "Stop": 5.053,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 76.6
+  },
+  {
+    "Id": 123,
+    "Start": 0,
+    "Stop": 12.685,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 61.7
+  },
+  {
+    "Id": 124,
+    "Start": 0,
+    "Stop": 5.692,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 44.7
+  },
+  {
+    "Id": 125,
+    "Start": 0,
+    "Stop": 0.36,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 69.1
+  },
+  {
+    "Id": 125,
+    "Start": 0.36,
+    "Stop": 0.848,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 69.1
+  },
+  {
+    "Id": 125,
+    "Start": 0.848,
+    "Stop": 4.943,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 69.1
+  },
+  {
+    "Id": 126,
+    "Start": 0,
+    "Stop": 6.217,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 63.1
+  },
+  {
+    "Id": 126,
+    "Start": 6.217,
+    "Stop": 9.168,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 63.1
+  },
+  {
+    "Id": 127,
+    "Start": 0,
+    "Stop": 8.878,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 55.6
+  },
+  {
+    "Id": 128,
+    "Start": 0,
+    "Stop": 4.702,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 35.3
+  },
+  {
+    "Id": 129,
+    "Start": 0,
+    "Stop": 4.011,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 39.4
+  },
+  {
+    "Id": 129,
+    "Start": 4.011,
+    "Stop": 6.718,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 39.4
+  },
+  {
+    "Id": 129,
+    "Start": 6.718,
+    "Stop": 9.611,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 39.4
+  },
+  {
+    "Id": 130,
+    "Start": 0,
+    "Stop": 4.312,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 53.7
+  },
+  {
+    "Id": 130,
+    "Start": 4.312,
+    "Stop": 7.903,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 53.7
+  },
+  {
+    "Id": 130,
+    "Start": 7.903,
+    "Stop": 15.74,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 53.7
+  },
+  {
+    "Id": 131,
+    "Start": 0,
+    "Stop": 0.238,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 88.1
+  },
+  {
+    "Id": 131,
+    "Start": 0.238,
+    "Stop": 0.728,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 88.1
+  },
+  {
+    "Id": 131,
+    "Start": 0.728,
+    "Stop": 1.003,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 88.1
+  },
+  {
+    "Id": 131,
+    "Start": 1.003,
+    "Stop": 4.995,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 88.1
+  },
+  {
+    "Id": 132,
+    "Start": 0,
+    "Stop": 0.854,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 55.2
+  },
+  {
+    "Id": 132,
+    "Start": 0.854,
+    "Stop": 4.895,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 55.2
+  },
+  {
+    "Id": 132,
+    "Start": 4.895,
+    "Stop": 5.155,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 55.2
+  },
+  {
+    "Id": 133,
+    "Start": 0,
+    "Stop": 1.686,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 57.6
+  },
+  {
+    "Id": 133,
+    "Start": 1.686,
+    "Stop": 4.355,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 57.6
+  },
+  {
+    "Id": 133,
+    "Start": 4.355,
+    "Stop": 4.987,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 57.6
+  },
+  {
+    "Id": 134,
+    "Start": 0,
+    "Stop": 4.753,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 50.7
+  },
+  {
+    "Id": 135,
+    "Start": 0,
+    "Stop": 0.412,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 57.2
+  },
+  {
+    "Id": 135,
+    "Start": 0.412,
+    "Stop": 6.641,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 57.2
+  },
+  {
+    "Id": 136,
+    "Start": 0,
+    "Stop": 0.38,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 54.5
+  },
+  {
+    "Id": 136,
+    "Start": 0.38,
+    "Stop": 10.68,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 54.5
+  },
+  {
+    "Id": 136,
+    "Start": 10.68,
+    "Stop": 11.592,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 54.5
+  },
+  {
+    "Id": 137,
+    "Start": 0,
+    "Stop": 4.952,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 44.3
+  },
+  {
+    "Id": 137,
+    "Start": 4.952,
+    "Stop": 5.12,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 44.3
+  },
+  {
+    "Id": 138,
+    "Start": 0,
+    "Stop": 3.359,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 37.8
+  },
+  {
+    "Id": 138,
+    "Start": 3.359,
+    "Stop": 4.707,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 37.8
+  },
+  {
+    "Id": 139,
+    "Start": 0,
+    "Stop": 0.886,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 48.8
+  },
+  {
+    "Id": 139,
+    "Start": 0.886,
+    "Stop": 5.68,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 48.8
+  },
+  {
+    "Id": 139,
+    "Start": 5.68,
+    "Stop": 6.479,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 48.8
+  },
+  {
+    "Id": 140,
+    "Start": 0,
+    "Stop": 1.206,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 76.9
+  },
+  {
+    "Id": 140,
+    "Start": 1.206,
+    "Stop": 1.856,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 76.9
+  },
+  {
+    "Id": 140,
+    "Start": 1.856,
+    "Stop": 4.549,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 76.9
+  },
+  {
+    "Id": 140,
+    "Start": 4.549,
+    "Stop": 6.759,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 76.9
+  },
+  {
+    "Id": 140,
+    "Start": 6.759,
+    "Stop": 8.03,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 76.9
+  },
+  {
+    "Id": 140,
+    "Start": 8.03,
+    "Stop": 8.931,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 76.9
+  },
+  {
+    "Id": 141,
+    "Start": 0,
+    "Stop": 0.956,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 69.6
+  },
+  {
+    "Id": 141,
+    "Start": 0.956,
+    "Stop": 1.989,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 69.6
+  },
+  {
+    "Id": 141,
+    "Start": 1.989,
+    "Stop": 12.834,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 69.6
+  },
+  {
+    "Id": 141,
+    "Start": 12.834,
+    "Stop": 12.855,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 69.6
+  },
+  {
+    "Id": 142,
+    "Start": 0,
+    "Stop": 0.358,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 52.8
+  },
+  {
+    "Id": 142,
+    "Start": 0.358,
+    "Stop": 5.465,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 52.8
+  },
+  {
+    "Id": 143,
+    "Start": 0,
+    "Stop": 2.208,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 52
+  },
+  {
+    "Id": 143,
+    "Start": 2.208,
+    "Stop": 5.361,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 52
+  },
+  {
+    "Id": 144,
+    "Start": 0,
+    "Stop": 1.762,
+    "Event": 1,
+    "Treatment": "Nuovo",
+    "Age": 71.5
+  },
+  {
+    "Id": 144,
+    "Start": 1.762,
+    "Stop": 5.489,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 71.5
+  },
+  {
+    "Id": 145,
+    "Start": 0,
+    "Stop": 0.013,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 62.8
+  },
+  {
+    "Id": 145,
+    "Start": 0.013,
+    "Stop": 1.053,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 62.8
+  },
+  {
+    "Id": 145,
+    "Start": 1.053,
+    "Stop": 4.171,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 62.8
+  },
+  {
+    "Id": 145,
+    "Start": 4.171,
+    "Stop": 8.076,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 62.8
+  },
+  {
+    "Id": 146,
+    "Start": 0,
+    "Stop": 4.987,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 49.5
+  },
+  {
+    "Id": 147,
+    "Start": 0,
+    "Stop": 4.443,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 60
+  },
+  {
+    "Id": 148,
+    "Start": 0,
+    "Stop": 0.912,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 77.4
+  },
+  {
+    "Id": 148,
+    "Start": 0.912,
+    "Stop": 5.824,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 77.4
+  },
+  {
+    "Id": 149,
+    "Start": 0,
+    "Stop": 4.282,
+    "Event": 1,
+    "Treatment": "Standard",
+    "Age": 69.7
+  },
+  {
+    "Id": 149,
+    "Start": 4.282,
+    "Stop": 4.615,
+    "Event": 0,
+    "Treatment": "Standard",
+    "Age": 69.7
+  },
+  {
+    "Id": 150,
+    "Start": 0,
+    "Stop": 8.815,
+    "Event": 0,
+    "Treatment": "Nuovo",
+    "Age": 29.7
+  }
+]

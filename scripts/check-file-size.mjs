@@ -13,11 +13,12 @@ const EXCEPTIONS = new Map([
   ['src/stats/kernels/arima.ts', 1304], // kernel numerico compatto
   ['src/App.tsx', 754], // composizione root: preset, salvataggio, temi, comandi desktop e row state L5
   ['src/charts/features.ts', 701], // registro unico dei controlli: una riga in più dopo gli oggetti L4
-  ['src/io/project/types.ts', 1194], // tipi di tutti i parametri persistiti: un blocco per procedura (W5)
-  ['src/io/project/parse.ts', 1020], // parsing difensivo di tutti i parametri persistiti (W5)
-  ['src/analyses/params.ts', 1129], // normalizzazione/validazione di tutte le procedure (W5)
-  ['src/analyses/roles.ts', 1016], // mappa ruoli/colonne di tutte le procedure (W5)
-  ['src/stats/reportCopy/catalog/en/charts.ts', 754], // catalogo inglese dei grafici, un blocco per famiglia (W4)
+  ['src/io/project/types.ts', 1297], // tipi di tutti i parametri persistiti: un blocco per procedura (W6)
+  ['src/io/project/parse.ts', 1115], // parsing difensivo di tutti i parametri persistiti (W6)
+  ['src/analyses/params.ts', 1224], // normalizzazione/validazione di tutte le procedure (W6)
+  ['src/analyses/roles.ts', 1023], // mappa ruoli/colonne di tutte le procedure (W6)
+  ['src/stats/reportCopy/catalog/en/charts.ts', 756], // catalogo inglese dei grafici, un blocco per famiglia (W4)
+  ['src/stats/kernels/cox.ts', 854], // Cox PH e fragilità gamma condivisa, con verosimiglianze e EM (W6)
 ]);
 
 const walk = directory =>

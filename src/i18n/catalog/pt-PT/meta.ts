@@ -140,4 +140,12 @@ export const metaMessages = {
   'meta.analysis.irt.description': 'Modelos 2PL e Rasch com habilidade e informação.',
   'meta.analysis.conjoint.label': 'Análise conjunta',
   'meta.analysis.conjoint.description': 'Utilidades parciais e importância dos atributos a partir de perfis.',
+  'meta.analysis.competing.label': 'Riscos competitivos',
+  'meta.analysis.competing.description': 'Riscos de subdistribuição de Fine–Gray e incidência cumulativa.',
+  'meta.analysis.recurrent.label': 'Eventos recorrentes',
+  'meta.analysis.recurrent.description': 'Modelos de Andersen–Gill e Wei–Lin–Weissfeld para eventos repetidos.',
+  'meta.analysis.alt.label': 'Ensaios de vida acelerada',
+  'meta.analysis.alt.description': 'Modelos de Arrhenius e potência inversa com uma variável de tensão.',
+  'meta.analysis.reliability.label': 'Crescimento de fiabilidade e RBD',
+  'meta.analysis.reliability.description': 'Curvas de crescimento de Crow–AMSAA e diagramas de blocos série/paralelo.',
 } as const;

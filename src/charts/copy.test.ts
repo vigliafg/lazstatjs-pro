@@ -75,6 +75,10 @@ const SOURCE_IDS = [
   ...idsOf('src/analyses/cluster'),
   ...idsOf('src/analyses/discriminant'),
   ...idsOf('src/analyses/doe'),
+  ...idsOf('src/analyses/competing'),
+  ...idsOf('src/analyses/recurrent'),
+  ...idsOf('src/analyses/alt'),
+  ...idsOf('src/analyses/reliability'),
   ...panelIds(),
 ];
 

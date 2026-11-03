@@ -22,6 +22,9 @@ import { buildPropensityOutput } from '../propensity/run';
 import { buildSemOutput } from '../sem/run';
 import { buildLatentClassOutput } from '../latentclass/run';
 import { buildIrtOutput } from '../irt/run';
+import { buildCompetingOutput } from '../competing/run';
+import { buildRecurrentOutput } from '../recurrent/run';
+import { buildAltOutput } from '../alt/run';
 import type { HeavyAnalysisId } from './heavyIds';
 
 /**
@@ -74,4 +77,9 @@ export const HEAVY_RUNNERS: Record<
   latentclass: ({ grid, params }) =>
     buildLatentClassOutput({ grid, params: params.latentclass }),
   irt: ({ grid, params }) => buildIrtOutput({ grid, params: params.irt }),
+  competing: ({ grid, params, ciLevel }) =>
+    buildCompetingOutput({ grid, params: params.competing, ciLevel }),
+  recurrent: ({ grid, params, ciLevel }) =>
+    buildRecurrentOutput({ grid, params: params.recurrent, ciLevel }),
+  alt: ({ grid, params, ciLevel }) => buildAltOutput({ grid, params: params.alt, ciLevel }),
 };

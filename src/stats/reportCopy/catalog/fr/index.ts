@@ -42,6 +42,7 @@ import { w3RegressionCopy } from './w3-regression';
 import { w3EconometricsCopy } from './w3-econometrics';
 import { proportionsCopy as frProportionsCopy } from './proportions';
 import { w5Copy } from './w5';
+import { w6Copy } from './w6';
 import { variancesCopy as frVariancesCopy } from './variances';
 
 export const frReportCopy: Record<string, string> = {
@@ -86,4 +87,5 @@ export const frReportCopy: Record<string, string> = {
   ...w3RegressionCopy,
   ...w3EconometricsCopy,
   ...w5Copy,
+  ...w6Copy,
 };

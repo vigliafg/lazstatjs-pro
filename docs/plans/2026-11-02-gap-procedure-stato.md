@@ -1,10 +1,10 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W5 chiusa: 8/8 item, gate G5 verde)
+**Ultimo aggiornamento**: 2026-11-03 (W6 chiusa: 8/8 item, gate G6 verde)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0–W5 chiuse; gate G0, G1, G2, G3, G4 e G5 verdi
-**Ondata corrente**: W5 — Multivariate avanzata (8 item)
+**Stato**: W0–W6 chiuse; gate G0, G1, G2, G3, G4, G5 e G6 verdi
+**Ondata corrente**: W6 chiusa — Survival e affidabilità (8 item); prossima W7
 
 ---
 
@@ -31,17 +31,17 @@ passi; per il resto rimandare alle sezioni del piano.
 
 | Voce | Valore |
 |---|---|
-| Ondata corrente | W5 chiusa (gate G5 verde); prossima W6 |
+| Ondata corrente | W6 chiusa (gate G6 verde); prossima W7 |
 | Branch/worktree | `feat/gap-wave-1` (in-place, senza worktree) |
-| Ultimo commit di codice | `a0055dd` (etichette ruolo W5) |
-| Ultimo commit documentale | `7541e2d` (regole economia del contesto) |
-| Test | `npm run check` verde; `npm test` 1206/1206 verdi; `npm run test:samples` 7/7; locale check 6/6 |
-| Item chiusi | 46 / 73; W5 chiusa |
-| Nuove voci | 22 / 36 (W2 + W3 + `loglinear` + 7 voci W5) |
-| Estensioni | 25 / 37 (cluster k-means/k-medians) |
-| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 + 8 reference W5 |
+| Ultimo commit di codice | `09c67cc` + interventi W6 (da committare) |
+| Ultimo commit documentale | `a3a751f` (allineamento hash post-G5) |
+| Test | `npm run check` verde; `npm test` 1227/1227 verdi; `npm run test:samples` 7/7; locale check 6/6 |
+| Item chiusi | 54 / 73; W6 chiusa |
+| Nuove voci | 26 / 36 (W2 + W3 + `loglinear` + 7 voci W5 + 4 voci W6) |
+| Estensioni | 29 / 37 (cluster k-means/k-medians, life table, frailty, censoring a intervallo, parametriche extra) |
+| Reference baseline | 35 / 35 baseline W0 + 7 reference W3 + 3 reference W4 + 8 reference W5 + 5 reference W6 |
 | Blocchi | nessuno |
-| Prossimo gate | G6 — fine W6 (survival e affidabilità) |
+| Prossimo gate | G7 — fine W7 (time series) |
 
 ---
 
@@ -55,7 +55,7 @@ passi; per il resto rimandare alle sezioni del piano.
 | W3 | Regressione avanzata | 7 | 7 | **chiusa** (G3 verde) | G3 |
 | W4 | Categorical + MI categorica | 5 | 1 | **chiusa** (G4 verde) | G4 |
 | W5 | Multivariate avanzata | 8 | 7 | **chiusa** (G5 verde) | G5 |
-| W6 | Survival e affidabilità | 8 | 4 | non iniziata | G6 |
+| W6 | Survival e affidabilità | 8 | 4 | **chiusa** (G6 verde) | G6 |
 | W7 | Time series | 7 | 3 | non iniziata | G7 |
 | W8 | Quality/DOE/power restanti | 5 | 0 | non iniziata | G8 |
 | W9 | Survey + ML + Advanced | 7 | 7 | non iniziata | G9 |
@@ -71,13 +71,13 @@ passi; per il resto rimandare alle sezioni del piano.
 | Regression | 15 | 15 | **chiusa** (R-01…R-15) |
 | Multivariate | 8 | 8 | **chiusa** (M-01…M-08) |
 | Categorical | 4 | 4 | **chiusa** (K-01…K-04) |
-| Survival | 0 | 8 | non iniziata |
+| Survival | 8 | 8 | **chiusa** (S-01…S-08) |
 | Time series | 0 | 7 | non iniziata |
 | Design & power | 2 | 4 | in corso (P-01, P-02) |
 | Missing data | 1 | 2 | in corso (N-01) |
 | Machine Learning | 0 | 3 | non iniziata |
 | Advanced & Bayesian | 0 | 3 | non iniziata |
-| **Totale** | **46** | **73** |  |
+| **Totale** | **54** | **73** |  |
 
 ---
 
@@ -549,6 +549,66 @@ Decisioni W5:
 - M-08 usa la stessa codifica a effetti di `conjoint::caUtilities` (`lm` con
   `contr.sum`); la fixture è generata da quel modello.
 
+## 5h. Ondata W6 — avanzamento (2026-11-03)
+
+### Cosa è stato chiuso
+
+- **S-01** Life table: modalità `life` in `survival`, tavola attuariale con q,
+  p, S(t), SE di Greenwood per gruppo.
+- **S-02** Competing risks: nuova voce `competing`, kernel Fine–Gray con
+  CIF, `cmprsk::crr` come reference.
+- **S-03** Frailty: modalità `frailty` in `cox`, fragilità gamma condivisa con
+  EM e varianza θ, `coxph(frailty(...))` come reference.
+- **S-04** Eventi ricorrenti: nuova voce `recurrent`, Andersen–Gill e
+  Wei–Lin–Weissfeld con errori robusti per soggetto.
+- **S-05** Censoring L/R/intervallo: modalità `interval` in `survival` con
+  NPMLE di Turnbull; `survfit(Surv(type="interval2"))` come reference.
+- **S-06** Parametriche extra: log-normale, log-logistica e Gompertz in
+  `parametric`, con censura a intervallo.
+- **S-07** ALT: nuova voce `alt`, AFT di Weibull su stress trasformato e
+  fattore di accelerazione.
+- **S-08** Reliability growth/RBD: nuova voce `reliability`, Crow–AMSAA e
+  diagrammi serie/parallelo.
+
+### F5 — fondazione survival
+
+La fondazione F5 è stata realizzata dentro i kernel esistenti e nuovi:
+verosimiglianza parziale pesata per la fragilità gamma (EM), verosimiglianza
+Fine–Gray con pesi di censura, score residuali cluster-robust per AG/WLW e
+verosimiglianza AFT/PH con supporto a intervalli. Non è stato creato un file
+separato: le parti condivise restano in `kernels/survival.ts`,
+`kernels/cox.ts`, `kernels/parametric.ts`.
+
+### Reference e sample
+
+- 5 nuovi reference test: `survivalW6`, `competing`, `recurrent`, `alt`,
+  `reliability` con fixture JSON committate e script R in
+  `src/stats/reference/r/`.
+- 4 nuovi sample in 5 formati: `competing_demo`, `recurrent_demo`, `alt_demo`,
+  `reliability_demo`.
+- I sample legacy `categorical_table`, `ordinal_table`, `stratified_2x2`
+  sono stati riportati in `samples/generate.R` per non perderli nella
+  rigenerazione.
+
+### UI, help e copy
+
+- Registry, tipi, parse, params, ruoli (`rolesW6`), runners, worker heavy,
+  `AnalysisForm`, `analysisKinds`, default e `useProjectParams` aggiornati.
+- Help W6 in 6 lingue (`w6-*.ts`) con 4 nuove pagine.
+- Copy report/tabelle W6: catalogo inglese completo; le altre lingue
+  riusano temporaneamente il catalogo inglese per i nuovi messaggi.
+  `check-locale` è verde su 6/6.
+
+### Verifiche
+
+- `npm run check` **verde** (1227/1227 test, tsc, depcruise, madge,
+  file size).
+- `npm run test:samples` **7/7**.
+- Locale check **6/6**.
+- Reference W6 **5/5** verdi.
+
+---
+
 ## 6. Registro checkpoint
 
 | Data | Checkpoint | Commit | Test | Esito | Note |
@@ -572,6 +632,41 @@ Decisioni W5:
 ## 7. Handoff per la prossima compattazione
 
 Compilare **prima** di compattare. Se un campo non si applica, scrivere “n/d”.
+
+### Handoff — 2026-11-03 / chiusura W6 (G6 verde)
+
+- Ondata: W6 chiusa, gate G6 verde; prossima W7 (time series).
+- Branch/worktree: `feat/gap-wave-1` (in-place, nessun worktree).
+- Ultimo commit: interventi W6 da committare; base `a3a751f`.
+- Item chiusi (ID): S-01 life table, S-02 competing risks, S-03 frailty,
+  S-04 eventi ricorrenti, S-05 censoring a intervallo, S-06 parametriche
+  extra, S-07 ALT, S-08 reliability growth/RBD.
+- Item in corso (ID): nessuno.
+- Item bloccati (ID + motivo): nessuno.
+- Test eseguiti e risultato: `npm run check` verde (1227/1227 test, tsc,
+  depcruise, madge, file size); `test:samples` 7/7; locale check 6/6.
+- File/moduli toccati: contratti `types/parse/params/rolesW6/registry/
+  runners/heavyIds/heavyRunners/AnalysisForm/analysisKinds/useProjectParams`;
+  kernel `survival`, `cox`, `parametric`, `competing`, `recurrent`, `alt`,
+  `reliability`; tabelle/report/reportCopy/help W6; 4 sample nuovi.
+- Decisioni prese / deviazioni dal piano:
+  - F5 non è un file separato: le verosimiglianze condivise restano nei kernel
+    delle procedure che le usano.
+  - Frailty gamma via EM con verosimiglianza parziale pesata; θ è stimato con
+    massimizzazione numerica della prior gamma attesa.
+  - La varianza di Fine–Gray è model-based (la sandwich di `crr` include il
+    termine di censura): confronto con tolleranza dichiarata.
+  - Il copy W6 per de/fr/es/pt-PT usa temporaneamente il catalogo inglese.
+- Prossimi 3 passi:
+  1. Aprire W7: Holt-Winters, radice unitaria, VAR/VECM, spettrale,
+     ARIMAX, GARCH, state-space.
+  2. Verificare F6 (Kalman, smoothing, filtri) e i pacchetti R disponibili.
+  3. Implementare T-01/T-02/T-04/T-05 sul motore ARIMA e T-03/T-06/T-07 con
+     reference dedicati.
+- Domande aperte: nessuna; la traduzione completa del copy W6 è un debito
+  dichiarato.
+- Rischi attivi: la fragilità gamma e la varianza Fine–Gray sono
+  approssimazioni; l’estrapolazione ALT resta un’assunzione fisica.
 
 ### Handoff — 2026-11-03 / chiusura W5 (G5 verde)
 

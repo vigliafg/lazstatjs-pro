@@ -207,6 +207,26 @@ const parseContingencyValues = (
   });
 };
 
+/** Series/parallel stages of a reliability block diagram: 1–8 stages, 1–8 components. */
+const parseReliabilityStages = (value: unknown, fallback: string[][]): string[][] => {
+  if (!Array.isArray(value)) return fallback.map(stage => [...stage]);
+  const stages = value
+    .filter(Array.isArray)
+    .slice(0, 8)
+    .map(stage =>
+      (stage as unknown[])
+        .slice(0, 8)
+        .map(cell => {
+          const text = parseCell(cell).trim();
+          const number = Number(text.replace(',', '.'));
+          return Number.isFinite(number) ? String(Math.min(1, Math.max(0, number))) : '0';
+        })
+        .filter(Boolean)
+    )
+    .filter(stage => stage.length > 0);
+  return stages.length > 0 ? stages : fallback.map(stage => [...stage]);
+};
+
 const parseCell = (value: unknown): string => {
   if (typeof value === 'string') return value;
   if (typeof value === 'number') return Number.isFinite(value) ? String(value) : '';
@@ -363,6 +383,10 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const conjoint = isRecord(raw.conjoint) ? raw.conjoint : {};
   const discriminant = isRecord(raw.discriminant) ? raw.discriminant : {};
   const doe = isRecord(raw.doe) ? raw.doe : {};
+  const competing = isRecord(raw.competing) ? raw.competing : {};
+  const recurrent = isRecord(raw.recurrent) ? raw.recurrent : {};
+  const alt = isRecord(raw.alt) ? raw.alt : {};
+  const reliability = isRecord(raw.reliability) ? raw.reliability : {};
   const d = DEFAULT_PARAMS;
   const contingencyRows = contingency
     ? parseContingencyLabels(contingency.rows, d.contingency.rows)
@@ -409,6 +433,22 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   const logisticOutcome = index(logistic.outcome, d.logistic.outcome, width);
   const coxTime = index(cox.timeVariable, d.cox.timeVariable, width);
   const coxEvent = index(cox.eventVariable, d.cox.eventVariable, width);
+  const coxFrailty = optionalIndex(
+    cox.frailtyVariable,
+    d.cox.frailtyVariable ?? -1,
+    width
+  );
+  const survivalUpper = optionalIndex(
+    survival.upperVariable,
+    d.survival.upperVariable ?? -1,
+    width
+  );
+  const parametricUpper = optionalIndex(
+    parametric.upperVariable,
+    d.parametric.upperVariable ?? -1,
+    width
+  );
+  const reliabilityStages = parseReliabilityStages(reliability.stages, d.reliability.stages);
 
   return {
     descVars: indexList(raw.descVars, d.descVars, width),
@@ -602,11 +642,19 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       covariates: indexList(cox.covariates, d.cox.covariates, width).filter(
         (value) => value !== coxTime && value !== coxEvent
       ),
+      mode: cox.mode === 'frailty' ? 'frailty' : 'standard',
+      frailtyVariable: coxFrailty,
     },
     survival: {
       timeVariable: index(survival.timeVariable, d.survival.timeVariable, width),
       eventVariable: index(survival.eventVariable, d.survival.eventVariable, width),
       groupVariable: optionalIndex(survival.groupVariable, d.survival.groupVariable, width),
+      mode:
+        survival.mode === 'life' || survival.mode === 'interval'
+          ? survival.mode
+          : 'km',
+      upperVariable: survivalUpper,
+      intervals: Math.max(0, Math.min(30, integer(survival.intervals, d.survival.intervals ?? 0))),
     },
     timeseries: {
       variable: index(timeseries.variable, d.timeseries.variable, width),
@@ -714,7 +762,14 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       time: index(parametric.time, d.parametric.time, width),
       event: index(parametric.event, d.parametric.event, width),
       predictors: indexList(parametric.predictors, d.parametric.predictors, width),
-      distribution: parametric.distribution === 'exponential' ? 'exponential' : d.parametric.distribution,
+      distribution:
+        parametric.distribution === 'exponential' ||
+        parametric.distribution === 'lognormal' ||
+        parametric.distribution === 'loglogistic' ||
+        parametric.distribution === 'gompertz'
+          ? parametric.distribution
+          : d.parametric.distribution,
+      upperVariable: parametricUpper,
     },
     mixedanova: {
       group: index(mixedanova.group, d.mixedanova.group, width),
@@ -941,6 +996,46 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
       factorA: index(doe.factorA, d.doe.factorA, width),
       factorB: index(doe.factorB, d.doe.factorB, width),
       model: doe.model === 'linear' ? 'linear' : d.doe.model,
+    },
+    competing: {
+      time: index(competing.time, d.competing.time, width),
+      event: index(competing.event, d.competing.event, width),
+      cause: Math.max(1, integer(competing.cause, d.competing.cause)),
+      covariates: indexList(competing.covariates, d.competing.covariates, width).filter(
+        value =>
+          value !== index(competing.time, d.competing.time, width) &&
+          value !== index(competing.event, d.competing.event, width)
+      ),
+    },
+    recurrent: {
+      id: index(recurrent.id, d.recurrent.id, width),
+      start: index(recurrent.start, d.recurrent.start, width),
+      stop: index(recurrent.stop, d.recurrent.stop, width),
+      event: index(recurrent.event, d.recurrent.event, width),
+      covariates: indexList(recurrent.covariates, d.recurrent.covariates, width),
+      model: recurrent.model === 'wlw' ? 'wlw' : 'ag',
+    },
+    alt: {
+      time: index(alt.time, d.alt.time, width),
+      event: index(alt.event, d.alt.event, width),
+      stress: index(alt.stress, d.alt.stress, width),
+      covariates: indexList(alt.covariates, d.alt.covariates, width).filter(
+        value =>
+          value !== index(alt.time, d.alt.time, width) &&
+          value !== index(alt.event, d.alt.event, width) &&
+          value !== index(alt.stress, d.alt.stress, width)
+      ),
+      model:
+        alt.model === 'inversePower' || alt.model === 'exponential'
+          ? alt.model
+          : 'arrhenius',
+      useStress: finite(alt.useStress, d.alt.useStress),
+    },
+    reliability: {
+      mode: reliability.mode === 'rbd' ? 'rbd' : 'growth',
+      time: index(reliability.time, d.reliability.time, width),
+      failures: index(reliability.failures, d.reliability.failures, width),
+      stages: reliabilityStages,
     },
   };
 };

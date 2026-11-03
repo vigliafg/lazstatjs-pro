@@ -198,6 +198,26 @@ export const remapParams = (
   const varianceGroup = optional(params.variances.group);
   const proportionVariable = one(params.proportions.variable, 'Proportions: variable');
   const proportionGroup = optional(params.proportions.group);
+  const coxFrailty = optional(params.cox.frailtyVariable ?? -1);
+  const survivalUpper = optional(params.survival.upperVariable ?? -1);
+  const parametricUpper = optional(params.parametric.upperVariable ?? -1);
+  const competingTime = one(params.competing.time, 'Competing risks: time');
+  const competingEvent = one(params.competing.event, 'Competing risks: event');
+  const competingCovariates = list(
+    params.competing.covariates,
+    'Competing risks: covariates'
+  ).filter(value => value !== competingTime && value !== competingEvent);
+  const recurrentId = one(params.recurrent.id, 'Recurrent events: subject');
+  const recurrentStart = one(params.recurrent.start, 'Recurrent events: start');
+  const recurrentStop = one(params.recurrent.stop, 'Recurrent events: stop');
+  const recurrentEvent = one(params.recurrent.event, 'Recurrent events: event');
+  const recurrentCovariates = list(params.recurrent.covariates, 'Recurrent events: covariates');
+  const altTime = one(params.alt.time, 'ALT: time');
+  const altEvent = one(params.alt.event, 'ALT: event');
+  const altStress = one(params.alt.stress, 'ALT: stress');
+  const altCovariates = list(params.alt.covariates, 'ALT: covariates').filter(
+    value => value !== altTime && value !== altEvent && value !== altStress
+  );
 
   return {
     invalidated: unique(invalidated.map(label => label)),
@@ -248,12 +268,17 @@ export const remapParams = (
         timeVariable: coxTime,
         eventVariable: coxEvent,
         covariates: coxCovariates,
+        mode: params.cox.mode ?? 'standard',
+        frailtyVariable: coxFrailty,
       },
       survival: {
         ...params.survival,
         timeVariable: survivalTime,
         eventVariable: survivalEvent,
         groupVariable: optional(params.survival.groupVariable),
+        mode: params.survival.mode ?? 'km',
+        upperVariable: survivalUpper,
+        intervals: Math.max(0, Math.min(30, Math.round(params.survival.intervals ?? 0))),
       },
       timeseries: { ...params.timeseries, variable: timeseriesVariable },
       ancova: {
@@ -314,6 +339,7 @@ export const remapParams = (
         time: parametricTime,
         event: parametricEvent,
         predictors: parametricPredictors,
+        upperVariable: parametricUpper,
       },
       mixedanova: {
         ...params.mixedanova,
@@ -489,6 +515,35 @@ export const remapParams = (
         factorA: doeFactorA,
         factorB: doeFactorB,
       },
+      competing: {
+        ...params.competing,
+        time: competingTime,
+        event: competingEvent,
+        cause: Math.max(1, Math.round(params.competing.cause)),
+        covariates: competingCovariates,
+      },
+      recurrent: {
+        ...params.recurrent,
+        id: recurrentId,
+        start: recurrentStart,
+        stop: recurrentStop,
+        event: recurrentEvent,
+        covariates: recurrentCovariates,
+        model: params.recurrent.model ?? 'ag',
+      },
+      alt: {
+        ...params.alt,
+        time: altTime,
+        event: altEvent,
+        stress: altStress,
+        covariates: altCovariates,
+        model: params.alt.model ?? 'arrhenius',
+        useStress: Number.isFinite(params.alt.useStress) ? params.alt.useStress : 1,
+      },
+      reliability: {
+        ...params.reliability,
+        mode: params.reliability.mode ?? 'growth',
+      },
       variances: {
         ...params.variances,
         variable: varianceVariable,
@@ -548,9 +603,11 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.cox.timeVariable, 'Cox: time', width, errors);
   checkOne(params.cox.eventVariable, 'Cox: event', width, errors);
   checkList(params.cox.covariates, 'Cox: covariates', width, errors);
+  checkOne(params.cox.frailtyVariable ?? -1, 'Cox: frailty group', width, errors, true);
   checkOne(params.survival.timeVariable, 'Survival: time', width, errors);
   checkOne(params.survival.eventVariable, 'Survival: event', width, errors);
   checkOne(params.survival.groupVariable, 'Survival: group', width, errors, true);
+  checkOne(params.survival.upperVariable ?? -1, 'Survival: upper bound', width, errors, true);
   checkOne(params.timeseries.variable, 'Time Series: series', width, errors);
   checkOne(params.ancova.response, 'ANCOVA: response', width, errors);
   checkOne(params.ancova.factor, 'ANCOVA: factor', width, errors);
@@ -581,6 +638,7 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.parametric.time, 'Parametric Survival: time', width, errors);
   checkOne(params.parametric.event, 'Parametric Survival: event', width, errors);
   checkList(params.parametric.predictors, 'Parametric Survival: predictors', width, errors);
+  checkOne(params.parametric.upperVariable ?? -1, 'Parametric Survival: upper bound', width, errors, true);
   checkOne(params.mixedanova.group, 'Mixed ANOVA: group', width, errors);
   checkList(params.mixedanova.conditions, 'Mixed ANOVA: conditions', width, errors);
   checkList(params.mi.variables, 'Missing Data: variables', width, errors);
@@ -646,6 +704,18 @@ export const validateColumnRefs = (params: ProjectParams, width: number): string
   checkOne(params.doe.response, 'DOE: response', width, errors);
   checkOne(params.doe.factorA, 'DOE: factor A', width, errors);
   checkOne(params.doe.factorB, 'DOE: factor B', width, errors);
+  checkOne(params.competing.time, 'Competing risks: time', width, errors);
+  checkOne(params.competing.event, 'Competing risks: event', width, errors);
+  checkList(params.competing.covariates, 'Competing risks: covariates', width, errors);
+  checkOne(params.recurrent.id, 'Recurrent events: subject', width, errors);
+  checkOne(params.recurrent.start, 'Recurrent events: start', width, errors);
+  checkOne(params.recurrent.stop, 'Recurrent events: stop', width, errors);
+  checkOne(params.recurrent.event, 'Recurrent events: event', width, errors);
+  checkList(params.recurrent.covariates, 'Recurrent events: covariates', width, errors);
+  checkOne(params.alt.time, 'ALT: time', width, errors);
+  checkOne(params.alt.event, 'ALT: event', width, errors);
+  checkOne(params.alt.stress, 'ALT: stress', width, errors);
+  checkList(params.alt.covariates, 'ALT: covariates', width, errors);
   return unique(errors);
 };
 
@@ -740,11 +810,13 @@ export const validateAnalysisColumnRefs = (
       one(params.cox.timeVariable, 'Cox: time');
       one(params.cox.eventVariable, 'Cox: event');
       list(params.cox.covariates, 'Cox: covariates');
+      if (params.cox.mode === 'frailty') one(params.cox.frailtyVariable ?? -1, 'Cox: frailty group');
       break;
     case 'survival':
       one(params.survival.timeVariable, 'Survival: time');
       one(params.survival.eventVariable, 'Survival: event');
       one(params.survival.groupVariable, 'Survival: group', true);
+      if (params.survival.mode === 'interval') one(params.survival.upperVariable ?? -1, 'Survival: upper bound');
       break;
     case 'timeseries':
       one(params.timeseries.variable, 'Time Series: series');
@@ -797,6 +869,7 @@ export const validateAnalysisColumnRefs = (
       one(params.parametric.time, 'Parametric Survival: time');
       one(params.parametric.event, 'Parametric Survival: event');
       list(params.parametric.predictors, 'Parametric Survival: predictors');
+      one(params.parametric.upperVariable ?? -1, 'Parametric Survival: upper bound', true);
       break;
     case 'mixedanova':
       one(params.mixedanova.group, 'Mixed ANOVA: group');
@@ -917,6 +990,28 @@ export const validateAnalysisColumnRefs = (
       one(params.doe.response, 'DOE: response');
       one(params.doe.factorA, 'DOE: factor A');
       one(params.doe.factorB, 'DOE: factor B');
+      break;
+    case 'competing':
+      one(params.competing.time, 'Competing risks: time');
+      one(params.competing.event, 'Competing risks: event');
+      list(params.competing.covariates, 'Competing risks: covariates');
+      break;
+    case 'recurrent':
+      one(params.recurrent.id, 'Recurrent events: subject');
+      one(params.recurrent.start, 'Recurrent events: start');
+      one(params.recurrent.stop, 'Recurrent events: stop');
+      one(params.recurrent.event, 'Recurrent events: event');
+      list(params.recurrent.covariates, 'Recurrent events: covariates');
+      break;
+    case 'alt':
+      one(params.alt.time, 'ALT: time');
+      one(params.alt.event, 'ALT: event');
+      one(params.alt.stress, 'ALT: stress');
+      list(params.alt.covariates, 'ALT: covariates');
+      break;
+    case 'reliability':
+      one(params.reliability.time, 'Reliability: time');
+      one(params.reliability.failures, 'Reliability: failures');
       break;
     default:
       break;

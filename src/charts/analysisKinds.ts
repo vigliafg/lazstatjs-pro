@@ -16,7 +16,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   loglinear: ['bar', 'heatmap'],
   correlation: ['box', 'heatmap', 'scatter', 'score'],
   countreg: ['bar', 'forest', 'qq', 'scatter'],
-  cox: ['forest', 'line', 'scatter'],
+  cox: ['bar', 'forest', 'line', 'scatter'],
   proportions: ['bar', 'interval'],
   variances: ['box', 'interval'],
   descriptive: [
@@ -81,6 +81,10 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   conjoint: ['bar'],
   discriminant: ['heatmap', 'line', 'scatter'],
   doe: ['bar', 'surface'],
+  competing: ['forest', 'line'],
+  recurrent: ['forest'],
+  alt: ['bar', 'forest'],
+  reliability: ['bar', 'line'],
 };
 
 export const chartKindsFor = (analysisId: string): ChartKind[] =>

@@ -3,10 +3,30 @@ import { copy } from '../reportCopy';
 import type { ReportSpec } from '../report';
 import type { ParametricSurvivalStats } from '../parametric/types';
 
+const distributionName = (stats: ParametricSurvivalStats): string => {
+  switch (stats.distribution) {
+    case 'weibull':
+      return 'Weibull';
+    case 'exponential':
+      return copy('Esponenziale');
+    case 'lognormal':
+      return copy('Log-normale');
+    case 'loglogistic':
+      return copy('Log-logistica');
+    default:
+      return 'Gompertz';
+  }
+};
+
 export const parametricReport = (stats: ParametricSurvivalStats, predNames: string[], level: number): ReportSpec => ({
   id: 'parametric',
   title: copy('Report di sopravvivenza parametrica'),
-  headline: copy('{s1} AFT su {s2} osservazioni e {s3} eventi.', { s1: stats.distribution === 'weibull' ? 'Weibull' : 'Esponenziale', s2: stats.n, s3: stats.events }),
+  headline: copy('{s1} {s2} su {s3} osservazioni e {s4} eventi.', {
+    s1: distributionName(stats),
+    s2: stats.parameterization === 'ph' ? 'PH' : 'AFT',
+    s3: stats.n,
+    s4: stats.events,
+  }),
   badge: stats.events >= 10 ? copy('Modello stimato') : copy('Pochi eventi'),
   tone: stats.events >= 10 ? 'neutral' : 'caution',
   intro: [
@@ -15,10 +35,12 @@ export const parametricReport = (stats: ParametricSurvivalStats, predNames: stri
   ],
   sections: [
     {
-      heading: 'Lettura',
+      heading: copy('Lettura'),
       body: [
-        copy('Il modello AFT stima l’effetto dei predittori sul log del tempo di sopravvivenza: un time ratio maggiore di 1 indica tempi più lunghi.'),
-        copy('La forma della distribuzione (Weibull o esponenziale) è un’assunzione: va confrontata con KM e con l’AIC rispetto ad altre famiglie.'),
+        stats.parameterization === 'ph'
+          ? copy('Il modello di Gompertz stima l’effetto dei predittori sul log del rischio istantaneo: un hazard ratio maggiore di 1 indica un rischio più alto.')
+          : copy('Il modello AFT stima l’effetto dei predittori sul log del tempo di sopravvivenza: un time ratio maggiore di 1 indica tempi più lunghi.'),
+        copy('La forma della distribuzione è un’assunzione: va confrontata con Kaplan–Meier e con l’AIC rispetto ad altre famiglie.'),
         copy('Il livello di confidenza è {s1}%; con pochi eventi le stime sono instabili.', { s1: level }),
       ],
     },

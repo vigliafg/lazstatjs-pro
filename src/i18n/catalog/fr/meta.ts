@@ -142,4 +142,12 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.analysis.irt.description': 'Modèles 2PL et Rasch avec aptitude et information.',
   'meta.analysis.conjoint.label': 'Analyse conjointe',
   'meta.analysis.conjoint.description': 'Utilités partielles et importance des attributs à partir de profils.',
+  'meta.analysis.competing.label': 'Risques concurrents',
+  'meta.analysis.competing.description': 'Risques de sous-distribution de Fine–Gray et incidence cumulée.',
+  'meta.analysis.recurrent.label': 'Événements récurrents',
+  'meta.analysis.recurrent.description': 'Modèles d’Andersen–Gill et de Wei–Lin–Weissfeld pour événements répétés.',
+  'meta.analysis.alt.label': 'Essais de durée accélérée',
+  'meta.analysis.alt.description': 'Modèles d’Arrhenius et de puissance inverse avec une variable de contrainte.',
+  'meta.analysis.reliability.label': 'Croissance de fiabilité et RBD',
+  'meta.analysis.reliability.description': 'Courbes de croissance de Crow–AMSAA et diagrammes de fiabilité série/parallèle.',
 };

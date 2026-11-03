@@ -249,7 +249,7 @@ cartella della procedura madre; il form aggiunge un selettore di modalità.
 | ID | Quando | Contenuto | Giorni | Serve a |
 |---|---|---|---:|---|
 | F4 | Prima di W5 | EM/latent helpers, inizializzazioni, BIC/entropia | 8 | M-05, M-06, N-01 |
-| F5 | Prima di W6 | verosimiglianze di sopravvivenza, censoring, frailty | 8 | S-02, S-03, S-04, S-07 |
+| F5 | Prima di W6 | verosimiglianze di sopravvivenza, censoring, frailty — **fatto** | 8 | S-02, S-03, S-04, S-07 |
 | F6 | Prima di W7 | Kalman, smoothing, filtri | 8 | T-03, T-06, T-07 |
 | F8 | Prima di W9 | MCMC, ensemble, survey variance | 20 | N-02, L-01, A-01, A-03 |
 
@@ -478,6 +478,9 @@ quadratura, gradiente numerico). Reference R: `kmeans`, `cancor`, `cmdscale`/
 - S-01/S-05/S-06 sono estensioni a basso rischio.
 - S-02/S-03/S-04 richiedono F5.
 - S-07/S-08 sono P1/P2, più industriali.
+- **Stato**: W6 chiusa il 2026-11-03; gate G6 verde (1227/1227 test,
+  `test:samples` 7/7, locale check 6/6). F5 realizzata nei kernel di
+  sopravvivenza (`survival`, `cox`, `parametric`).
 
 ---
 
