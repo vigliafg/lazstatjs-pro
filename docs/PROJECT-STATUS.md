@@ -60,7 +60,7 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 ### Qualità e architettura
 - `stats/` puro, `analyses/` form + runner, `grid/` modello dati, `ui/` composizione.
 - dependency-cruiser, madge, file-size guard, sanitizer output HTML, cap di import/progetto.
-- 480 test unitari, 43 e2e passati, 35 skipped (mobile/desktop non applicabili).
+- 1298 test unitari, 43 e2e passati, 35 skipped (mobile/desktop non applicabili).
 - i18n: 1776 chiavi, UI/help/report in 6 lingue (en, it, fr, es, de, pt-PT).
 
 ---
