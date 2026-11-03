@@ -131,6 +131,8 @@ export const buildStratifiedCoxOutput = ({ grid, params, ciLevel }: StratifiedCo
         note: copy('Le curve descrivono la sopravvivenza osservata in ogni strato; il modello Cox condivide le stime delle covariate tra gli strati.'),
         data: { curves, censored },
         fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Strato') },
+        // Kaplan–Meier steps: the same JMP conventions used by `survival-km`.
+        options: { step: true, showCI: true, showCensoring: true, showMedian: true } as never,
       })
     );
   }

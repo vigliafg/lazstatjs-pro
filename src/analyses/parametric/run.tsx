@@ -173,7 +173,9 @@ export const buildParametricOutput = ({ grid, params, ciLevel }: ParametricInput
       note: copy('Le altre covariate sono tenute al loro valore medio; le curve mostrano come cambia la sopravvivenza al variare del primo predittore.'),
       data: { curves: survivalCurves },
       fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Profilo') },
-      options: { showCI: false, showCensoring: false, step: false } as never,
+      // The parametric curve is analytic, so it is not stepped like KM; the
+      // median markers and censoring options still follow the `jmp-km` reading.
+      options: { step: false, showCI: false, showCensoring: false, showMedian: true } as never,
     }),
     makeChart({
       id: 'parametric-hazard',

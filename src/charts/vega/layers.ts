@@ -350,11 +350,21 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
 export const forestLayers = (chart: AnalysisChart, options: Extract<ChartOptions, { kind: 'forest' }>): Spec[] => {
   const theme = themeFor(options);
   const points = rowsOf(chart, 'points');
+  // A log axis cannot place a non-positive estimate or bound: one such row
+  // collapses the whole scale, so it is dropped here once for every ratio
+  // forest instead of in each runner.
+  const positive = (value: unknown): boolean => {
+    const number = num(value);
+    return Number.isFinite(number) && number > 0;
+  };
+  const usable = options.logScale
+    ? points.filter(row => positive(row.estimate) && positive(row.lo) && positive(row.hi))
+    : points;
   const sorted = options.sort === 'estimate'
-    ? [...points].sort((a, b) => num(a.estimate) - num(b.estimate))
+    ? [...usable].sort((a, b) => num(a.estimate) - num(b.estimate))
     : options.sort === 'label'
-      ? [...points].sort((a, b) => String(a.label).localeCompare(String(b.label)))
-      : points;
+      ? [...usable].sort((a, b) => String(a.label).localeCompare(String(b.label)))
+      : usable;
   const reference = options.reference === 'zero' ? 0 : 1;
   return [
     {

@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b, F9.3a e F9.3b chiuse)
-- **Fase corrente**: F10.1 — varianti JMP su forest, survival e line
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1, F9.2a, F9.2b, F9.3a, F9.3b e F10.1 chiuse)
+- **Fase corrente**: F10.2 — bar, Pareto, mosaico, heatmap, interval, dot
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,13 +12,14 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F9.3b variogramma sperimentale spaziale`.
-- **Chiuso**: F0.1 → F9.3b. Ondata O9 completa. Gate mirato verde (variogramma,
-  spatial, copy, analysisKinds), `tsc --noEmit` exit 0, `check-locale` verde su
-  it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
+- **Ultimo commit**: `feat(charts): F10.1 forest a rapporto, curve KM e serie con marker`.
+- **Chiuso**: F0.1 → F10.1. Ondata O9 completa con `npm run check` verde;
+  F10.1 con gate mirato verde (layers, styles, survival, stratcox, copy,
+  analysisKinds), `tsc --noEmit` exit 0, `check-locale` 6/6, `help:build` verde.
 - **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
   moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
-- **Da riprendere**: **F10.1** (forest/survival/line in stile JMP), poi F10.2.
+- **Da riprendere**: **F10.2** (bar, Pareto, mosaico, heatmap, interval, dot),
+  poi F10.3.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -103,7 +104,7 @@ con motivo.
 | F9.2b | ML, text, choice | 30 | ✅ | `fix(charts): F9.2b note di text, kind dichiarati e guide ML` | 35 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.3a | Bayes PPC, meta | 45 | ✅ | `feat(charts): F9.3a controllo predittivo bayesiano e funnel` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F9.3b | spatial variogram | 45 | ✅ | `feat(charts): F9.3b variogramma sperimentale spaziale` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
-| F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ⬜ | — | — |
+| F10.1 | applicazione `jmp-ratio`/`jmp-km`/`jmp-connected` | 45 | ✅ | `feat(charts): F10.1 forest a rapporto, curve KM e serie con marker` | gate mirato + `lint` + `locales:check` + `help:build` verdi |
 | F10.2 | bar, Pareto, mosaico, heatmap, interval, dot | 45 | ⬜ | — | — |
 | F10.3 | box, scatter, Q-Q: default per procedura | 45 | ⬜ | — | — |
 | F11.1a | traduzioni fr/es | 45 | ⬜ | — | — |
@@ -220,6 +221,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F9.3b | `variogram` sta nel kernel `spatial`, non nel runner | il piano lo ammette come eccezione al vincolo “solo runner”: è una funzione pura con test numerico su punti noti |
 | 2026-11-03 | F9.3b | Il variogramma usa solo le coppie entro metà della distanza massima | oltre quella soglia le coppie sono poche e la stima instabile; è il default abituale e la nota lo dichiara |
 | 2026-11-03 | F9.3b | Classi a larghezza costante sul semirange, 10 per default | classi a quantili richiederebbero un parametro di analisi nuovo, fuori perimetro |
+| 2026-11-03 | F10.1 | `meta-forest` resta in scala lineare | `MetaParams` non ha un measure: senza sapere se l’effetto è un rapporto non si può passare al log, e la meta-analisi su log-OR è già lineare |
+| 2026-11-03 | F10.1 | `parametric-survival` non usa `step: true` | la curva parametrica è analitica, non una Kaplan–Meier a gradini: si applicano solo mediana e opzioni di lettura |
+| 2026-11-03 | F10.1 | Il filtro delle righe non positive vive nel layer `forest` | un solo punto di guardia per tutti i forest a rapporto, invece di una nota per runner |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -794,6 +798,29 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### F10.1 — Forest, survival, line in stile JMP
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `jmp-ratio`: già applicato a cox, stratcox, tdcox, countreg, logistic e
+    ordinal in F4.3; aggiunto `logScale` a `gee-coefficient-forest`.
+  - `jmp-km`: `survival-km`, `stratcox-km` e `survival-life-curve` ora emettono
+    `{ step: true, showCI: true, showCensoring: true, showMedian: true }`.
+  - `parametric-survival`: mediana attiva, senza gradini (curva analitica).
+  - Guardia nel layer `forest`: con `logScale` le righe con stima, `lo` o `hi`
+    non positivi vengono scartate, così l'asse log non collassa.
+  - `jmp-connected`: `ts-arima-chart`, `hw-series` e `var-irf-chart` avevano già
+    `showMarkers: true`, nessuna modifica.
+- **Verificato**: nuovo test sul filtro log (2 righe scartate su 3, 3 righe in
+  scala lineare); survival e stratcox invariati nei loro test.
+- **File toccati**: `src/charts/vega/layers.ts`,
+  `src/charts/vega/layers.test.ts`, `src/analyses/gee/run.tsx`,
+  `src/analyses/survival/run.tsx`, `src/analyses/stratcox/run.tsx`,
+  `src/analyses/parametric/run.tsx`.
+- **Test**: layers + styles + copy + analysisKinds + survival + stratcox verdi;
+  `tsc --noEmit` exit 0; `check-locale` 6/6; `help:build` verde.
+- **Commit**: `feat(charts): F10.1 forest a rapporto, curve KM e serie con marker`
+
 ### F9.3b — Spatial: variogramma
 
 - **Stato**: ✅ chiusa (2026-11-03)
@@ -909,8 +936,8 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F10.1: varianti JMP su forest, survival e line.
-2. F10.2: bar, Pareto, mosaico, heatmap, interval, dot.
+1. F10.2: bar, Pareto, mosaico, heatmap, interval, dot.
+2. F10.3: default box/scatter/Q-Q per procedura.
 3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH,
    matrice di alias, DEFF survey, text mining, PPC bayesiano e variogramma.
 
@@ -932,7 +959,7 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 |---|---|---|
 | Copy EN mancante nei sub-runner | chiuso in F0.1 | `copy.test.ts` esteso; 211 stringhe EN aggiunte in `en/charts-f0.ts` |
 | File al limite di 700 righe | aperto | file per ondata, split |
-| Forest log con IC ≤ 0 | aperto | regola in F10.1 |
+| Forest log con IC ≤ 0 | chiuso in F10.1 | il layer `forest` scarta le righe non positive quando `logScale` è attivo |
 | Cap 24 grafici per `mi` | aperto | conteggio in F9.2a |
 | Fase che sfora l'ora | ricorrente | split e commit |
 

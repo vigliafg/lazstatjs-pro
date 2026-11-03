@@ -191,6 +191,7 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
           ),
           data: { curves, censored: [], annotations: [] },
           fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Gruppo') },
+          options: { step: true, showCI: true, showCensoring: true, showMedian: true } as never,
         }),
         makeChart({
           id: 'survival-life-events',
@@ -298,6 +299,7 @@ export const buildSurvivalOutput = ({ grid, params, ciLevel }: SurvivalInput): A
         note: copy('Ogni gradino è un evento; i tratti piatti indicano che in quell’intervallo non ci sono stati eventi.'),
         data: { curves, censored, annotations },
         fields: { xLabel: copy('Tempo'), yLabel: copy('Sopravvivenza'), series: copy('Gruppo') },
+        options: { step: true, showCI: true, showCensoring: true, showMedian: true } as never,
       }),
       makeChart({
         id: 'survival-rmst',

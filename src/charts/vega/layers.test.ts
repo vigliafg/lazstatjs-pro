@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { barLayers, heatmapLayers, lineLayers, scatterLayers, scatterOnly, survivalLayers } from './layers';
+import { barLayers, forestLayers, heatmapLayers, lineLayers, scatterLayers, scatterOnly, survivalLayers } from './layers';
 import { boxLayers } from './boxLayers';
 import { paretoLayers } from './advancedLayers';
 import { dotLayers, ecdfLayers, intervalLayers } from './descriptiveLayers';
@@ -579,4 +579,28 @@ test('the scatter draws a vertical rule when only x is given', () => {
   const encoding = rule!.encoding as { x?: { field?: string }; y?: unknown };
   assert.equal(encoding.x?.field, 'x');
   assert.equal(encoding.y, undefined);
+});
+
+test('a ratio forest drops the rows that cannot sit on the log scale', () => {
+  const chart = makeChart({
+    id: 'ratio-forest',
+    kind: 'forest',
+    title: 'Ratio forest',
+    data: {
+      points: [
+        { label: 'A', estimate: 2, lo: 1.2, hi: 3.4 },
+        { label: 'B', estimate: 0, lo: -1, hi: 1 },
+        { label: 'C', estimate: 0.5, lo: 0, hi: 1 },
+      ],
+    },
+  });
+  const options = { ...factoryOptions('forest'), logScale: true, reference: 'one' } as Extract<
+    ChartOptions,
+    { kind: 'forest' }
+  >;
+  const drawn = (chosen: typeof options) =>
+    (forestLayers(chart, chosen)[0].data.values as Array<{ label: string }>).map(row => row.label);
+
+  assert.deepEqual(drawn(options), ['A']);
+  assert.deepEqual(drawn({ ...options, logScale: false }), ['A', 'B', 'C']);
 });

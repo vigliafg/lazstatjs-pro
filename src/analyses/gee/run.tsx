@@ -122,7 +122,7 @@ export const buildGeeOutput = ({ grid, params, ciLevel }: GeeInput): AnalysisRun
         note: copy('Punto: rapporto di incidenza. Segmento: intervallo robusto per cluster; se contiene 1 il predittore non è distinguibile da nessun effetto.'),
         data: { points: coefficientPoints },
         fields: { xLabel: copy('Rapporto di incidenza'), yLabel: copy('Predittore') },
-        options: { reference: 'one' } as never,
+        options: { reference: 'one', logScale: true } as never,
       })
     );
   }
