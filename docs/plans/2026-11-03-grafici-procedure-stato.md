@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F1.1a chiusa)
-- **Fase corrente**: F1.1b — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F1.1b chiusa)
+- **Fase corrente**: F1.2 — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -58,7 +58,7 @@ con motivo.
 | F0.1 | Inventario, guardrail, stato | 60 | ✅ | `feat(charts): F0.1 inventario grafici e guardrail su sub-runner` | 8 test mirati + `npm run check` verdi |
 | F0.2 | 3 varianti JMP (`forest`, `survival`, `line`) | 60 | ✅ | `feat(charts): F0.2 tre varianti JMP` | 25 test + `locales:check` verdi |
 | F1.1a | `factorial`: medie di cella | 45 | ✅ | `feat(charts): F1.1a medie di cella` | 11 test verdi |
-| F1.1b | `recurrent`: mean cumulative function | 45 | ⬜ | — | — |
+| F1.1b | `recurrent`: mean cumulative function | 45 | ✅ | `feat(charts): F1.1b funzione cumulata media` | 11 test verdi |
 | F1.2 | `tost` e chiusura ampiezza | 45 | ⬜ | — | — |
 | F2.1 | `descriptive`: frequenze cumulate, outlier strip | 60 | ⬜ | — | — |
 | F2.2 | `quality`: profilo operatore, contributi carta | 60 | ⬜ | — | — |
@@ -139,6 +139,7 @@ sotto-blocco aperto):
 | 2026-11-03 | F0.2 | Tre varianti JMP opt-in: `forest.jmp-ratio`, `survival.jmp-km`, `line.jmp-connected` | convenzioni documentate, nessun cambio di default né di dati |
 | 2026-11-03 | F0.2 | `line.jmp-connected` ha lo stesso patch di `markers` | il contratto del piano è quello; `matchingChartStyle` evidenzia `markers` come primo match |
 | 2026-11-03 | F1.1a | `factorial-cells` riusa le medie di cella già in `series` | nessun nuovo calcolo nel kernel, solo il layer `intervals` |
+| 2026-11-03 | F1.1b | MCF in forma Nelson–Aalen: eventi al tempo / soggetti a rischio, cumulati | è la definizione non parametrica del MCF per eventi ricorrenti |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -221,6 +222,23 @@ sotto-blocco aperto):
 - **Nota**: il grafico compare solo se almeno una cella ha l'IC (n > 1).
 - **Commit**: `feat(charts): F1.1a medie di cella`
 
+### F1.1b — `recurrent`: mean cumulative function
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**: `meanCumulativeFunction` nel kernel `recurrent` (forma
+  Nelson–Aalen: eventi al tempo / soggetti a rischio, cumulati) con test
+  numerico su tempi noti; `recurrent-mcf` [line] emesso dal runner;
+  `line` aggiunto ai kind; copy EN e help IT/EN.
+- **File toccati**: `src/stats/kernels/recurrent.ts`,
+  `src/stats/kernels/recurrent.test.ts` (nuovo), `src/analyses/recurrent/run.tsx`,
+  `src/analyses/recurrent/charts.test.ts` (nuovo), `src/charts/analysisKinds.ts`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`, `src/help/content/{it,en}/charts.ts`.
+- **Test**: kernel MCF (1/3, 2/3, 7/6, 13/6 su tempi noti) + chart test +
+  `analysisKinds` + `copy` → 11/11 verdi.
+- **Nota**: `recurrent` passa a 2 grafici; il forest resta condizionato alla
+  presenza di covariate, il MCF è sempre disponibile.
+- **Commit**: `feat(charts): F1.1b funzione cumulata media`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -231,6 +249,7 @@ sotto-blocco aperto):
 | Fase | id | Analisi | kind | Formato | Test | Stato |
 |---|---|---|---|---|---|---|
 | F1.1a | `factorial-cells` | `factorial` | `interval` | LZ | `factorial/charts.test.ts` | ✅ |
+| F1.1b | `recurrent-mcf` | `recurrent` | `line` | JMP | `kernels/recurrent.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -238,11 +257,10 @@ sotto-blocco aperto):
 
 ## 7. Prossimi 3 passi
 
-1. F1.1b: `meanCumulativeFunction` nel kernel `recurrent` con test numerico su
-   tempi noti.
-2. `recurrent-mcf` [line] dal risultato della funzione, con copy EN e help.
-3. F1.2: sostituire il `bar` di `tost-difference` con l'`interval` (differenza,
-   IC e margini).
+1. F1.2: sostituire il `bar` di `tost-difference` con l'`interval` (differenza,
+   IC e margini di equivalenza).
+2. Verificare con `npm run chart:inventory` che resti solo `tdcox` a 1 grafico.
+3. F2.1: `freq-cumulative` [pareto] e `outliers-strip` [dot] in `descriptive`.
 
 ---
 

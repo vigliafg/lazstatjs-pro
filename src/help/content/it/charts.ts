@@ -21,6 +21,7 @@ export const chartGuides: Record<string, string[]> = {
   "chisquare": ["Grafico: frequenze osservate vs attese per ogni cella della tabella 2×2."],
   "contingency": ["Grafico: heatmap dei residui standardizzati per la tabella R×C."],
   "agreement": ["Bland–Altman con bias/limiti di accordo; scatter ICC con linea di identità; heatmap di accordo kappa."],
+  "recurrent": ["Grafico: funzione cumulata media degli eventi, con gli eventi divisi per i soggetti a rischio a ogni tempo."],
   "survival": ["Grafico: curve di Kaplan–Meier, con bande di confidenza, marcatori di censura e linee della mediana."],
   "cox": ["Grafico: forest plot degli hazard ratio con intervalli di confidenza e riferimento HR = 1."],
   "stratcox": ["Grafico: forest plot degli hazard ratio condivisi, con riferimento HR = 1."],

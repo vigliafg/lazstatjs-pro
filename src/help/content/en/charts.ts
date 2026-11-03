@@ -21,6 +21,7 @@ export const chartGuides: Record<string, string[]> = {
   "chisquare": ["Chart: observed vs expected frequencies for each cell of the 2×2 table."],
   "contingency": ["Chart: heat map of standardized residuals for the R×C table."],
   "agreement": ["Bland–Altman with bias/limits of agreement; ICC scatter with identity line; kappa agreement heat map."],
+  "recurrent": ["Chart: mean cumulative function of events, with events divided by the subjects at risk at each time."],
   "survival": ["Chart: Kaplan–Meier curves, with confidence bands, censor marks and median lines."],
   "cox": ["Chart: forest plot of hazard ratios with confidence intervals and HR = 1 reference."],
   "stratcox": ["Chart: forest plot of the shared hazard ratios, with HR = 1 reference."],

@@ -1,6 +1,8 @@
 import { fitRecurrent, recurrentReport, recurrentTables } from '../../stats/recurrent';
+import { meanCumulativeFunction } from '../../stats/kernels/recurrent';
 import { copy } from '../../stats/reportCopy';
 import { makeChart } from '../../charts/kits/common';
+import type { AnalysisChart } from '../../stats/charts';
 import { parseNum } from '../../stats/core';
 import { encodeCovariates } from '../shared/encode';
 import type { Dataset } from '../../grid/types';
@@ -77,6 +79,65 @@ export const buildRecurrentOutput = ({
   }
 
   const tables = recurrentTables(fit, ciLevel);
+  const mcf = meanCumulativeFunction(
+    subjects.map((subject, index) => ({
+      id: subject,
+      start: starts[index],
+      stop: stops[index],
+      event: events[index],
+    }))
+  );
+
+  const charts: AnalysisChart[] = [];
+  if (fit.coefficients.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'recurrent-forest',
+        kind: 'forest',
+        title: copy('Hazard ratio robusti'),
+        subtitle: copy('IC {s1}% · riferimento 1', { s1: ciLevel }),
+        note: copy('Gli intervalli usano errori standard raggruppati per soggetto.'),
+        data: {
+          points: fit.coefficients.map(coefficient => ({
+            label: coefficient.term,
+            estimate: coefficient.hr,
+            lo: coefficient.lo,
+            hi: coefficient.hi,
+          })),
+        },
+        fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
+        options: { reference: 'one' } as never,
+      })
+    );
+  }
+  if (mcf.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'recurrent-mcf',
+        kind: 'line',
+        title: copy('Funzione cumulata media'),
+        subtitle: copy('{s1} eventi · {s2} tempi distinti', {
+          s1: fit.events,
+          s2: mcf.length,
+        }),
+        note: copy('La curva somma gli eventi osservati divisi per i soggetti a rischio a ogni tempo: pendenze più ripide indicano una ricorrenza più intensa.'),
+        data: {
+          series: mcf.map(point => ({
+            x: point.time,
+            y: point.mcf,
+            series: copy('MCF'),
+          })),
+        },
+        fields: {
+          xLabel: copy('Tempo'),
+          yLabel: copy('Eventi cumulati per soggetto'),
+          series: copy('MCF'),
+        },
+        options: { step: true, showMarkers: true, showBand: false } as never,
+      })
+    );
+  }
+
   return {
     ok: true,
     title: model === 'ag' ? copy('Eventi ricorrenti: Andersen–Gill') : copy('Eventi ricorrenti: Wei–Lin–Weissfeld'),
@@ -87,27 +148,6 @@ export const buildRecurrentOutput = ({
     }),
     tables,
     report: recurrentReport(tables, ciLevel),
-    charts:
-      fit.coefficients.length > 0
-        ? [
-            makeChart({
-              id: 'recurrent-forest',
-              kind: 'forest',
-              title: copy('Hazard ratio robusti'),
-              subtitle: copy('IC {s1}% · riferimento 1', { s1: ciLevel }),
-              note: copy('Gli intervalli usano errori standard raggruppati per soggetto.'),
-              data: {
-                points: fit.coefficients.map(coefficient => ({
-                  label: coefficient.term,
-                  estimate: coefficient.hr,
-                  lo: coefficient.lo,
-                  hi: coefficient.hi,
-                })),
-              },
-              fields: { xLabel: copy('Hazard ratio'), yLabel: copy('Covariata') },
-              options: { reference: 'one' } as never,
-            }),
-          ]
-        : [],
+    charts,
   };
 };

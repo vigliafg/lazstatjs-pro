@@ -151,6 +151,53 @@ const evaluate = (rows: Row[], strata: number[], beta: number[]): Evaluation => 
   return { logLik, score, information, contributions };
 };
 
+/** One point of the sample mean cumulative function. */
+export interface McfPoint {
+  /** Event time. */
+  time: number;
+  /** Events observed at this time. */
+  events: number;
+  /** Distinct subjects at risk at this time. */
+  atRisk: number;
+  /** Cumulative events per subject up to and including this time. */
+  mcf: number;
+}
+
+/**
+ * Sample mean cumulative function of recurrent events.
+ *
+ * Nelson–Aalen form: at every distinct event time the events are divided by
+ * the subjects still at risk and the ratios are summed. Subjects enter at
+ * `start` and leave after `stop`, so an interval contributes to the risk set
+ * only while `start < t <= stop`.
+ */
+export const meanCumulativeFunction = (
+  rows: readonly { id: number; start: number; stop: number; event: number }[]
+): McfPoint[] => {
+  const valid = rows.filter(
+    row =>
+      Number.isFinite(row.start) &&
+      Number.isFinite(row.stop) &&
+      row.stop > row.start
+  );
+  const times = Array.from(
+    new Set(valid.filter(row => row.event === 1).map(row => row.stop))
+  ).sort((left, right) => left - right);
+
+  let cumulative = 0;
+  const points: McfPoint[] = [];
+  times.forEach(time => {
+    const events = valid.filter(row => row.event === 1 && row.stop === time).length;
+    const atRisk = new Set(
+      valid.filter(row => row.start < time && row.stop >= time).map(row => row.id)
+    ).size;
+    if (events === 0 || atRisk === 0) return;
+    cumulative += events / atRisk;
+    points.push({ time, events, atRisk, mcf: cumulative });
+  });
+  return points;
+};
+
 /** Andersen–Gill or Wei–Lin–Weissfeld recurrent-event model. */
 export const fitRecurrent = (options: RecurrentOptions): RecurrentFit | null => {
   const level = options.level ?? 95;
