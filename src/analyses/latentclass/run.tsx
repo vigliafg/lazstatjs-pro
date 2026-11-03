@@ -62,6 +62,17 @@ export const buildLatentClassOutput = ({ grid, params }: LatentClassInput): Anal
       itemIndex,
     }))
   );
+  const certaintyBars = Array.from({ length: result.classes }, (_, cluster) => {
+    const members = result.posterior
+      .map(row => row[cluster] ?? 0)
+      .filter((value, index) => result.predicted[index] === cluster);
+    const certain = members.filter(value => value >= 0.8).length;
+    return {
+      category: `C${cluster + 1}`,
+      value: members.length > 0 ? (certain / members.length) * 100 : 0,
+    };
+  });
+
   const charts: AnalysisChart[] = [
     makeChart({
       id: 'latentclass-proportions',
@@ -95,6 +106,20 @@ export const buildLatentClassOutput = ({ grid, params }: LatentClassInput): Anal
       },
       fields: { xLabel: copy('Variabile e livello'), yLabel: copy('Probabilità'), series: copy('Classe'), xType: 'nominal' },
       options: { showMarkers: true, showBand: false } as never,
+    }),
+    makeChart({
+      id: 'latentclass-entropy',
+      kind: 'bar',
+      title: copy('Certezza di classificazione per classe'),
+      subtitle: copy('Entropia {s1} · casi con probabilità ≥ 0,80', {
+        s1: Number.isFinite(result.entropy) ? result.entropy.toFixed(2) : 'n.d.',
+      }),
+      note: copy(
+        'Entropia vicina a 1 significa classi ben distinte; vicina a 0 significa posterior ambigue. Le barre sono la quota di casi di ciascuna classe assegnati con probabilità almeno 0,80: barre basse segnalano casi al confine tra classi.'
+      ),
+      data: { bars: certaintyBars },
+      fields: { xLabel: copy('Classe'), yLabel: copy('Casi certi (%)') },
+      options: { valueLabels: true, referenceLine: 'none' } as never,
     }),
   ];
 

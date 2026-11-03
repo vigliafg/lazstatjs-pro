@@ -1,6 +1,8 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
   "cluster": ["Dendrogramma, profili e dimensioni dei cluster, silhouette media per cluster e scatter nelle prime due variabili (non è una PCA)."],
+  "sem": ["Carichi fattoriali, residui di covarianza e indici di adeguamento (CFI, RMSEA, SRMR) confrontati con le soglie."],
+  "latentclass": ["Dimensione delle classi, profili delle probabilità condizionate e certezza di classificazione per classe."],
   "canonical": ["Punteggi canonici, correlazioni canoniche e correlazioni di struttura della prima funzione."],
   "multinomial": ["Distribuzione delle classi predette, accuratezza per classe e matrice di confusione osservato × predetto."],
   "iv": ["Osservati vs stimati, residui e primo stadio: strumenti contro variabile endogena, una serie per strumento."],

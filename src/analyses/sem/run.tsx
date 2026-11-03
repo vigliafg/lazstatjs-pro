@@ -48,7 +48,34 @@ export const buildSemOutput = ({ grid, params }: SemInput): AnalysisRunResult =>
     };
   }
 
+  const fitRows = [
+    { index: 'CFI', value: result.fit.cfi, threshold: 0.95 },
+    { index: 'RMSEA', value: result.fit.rmsea, threshold: 0.06 },
+    { index: 'SRMR', value: result.fit.srmr, threshold: 0.08 },
+  ];
+  const fitBars = fitRows.flatMap(row => [
+    { category: row.index, value: row.value, series: copy('Modello') },
+    { category: row.index, value: row.threshold, series: copy('Soglia') },
+  ]);
+
   const charts: AnalysisChart[] = [
+    makeChart({
+      id: 'sem-fit',
+      kind: 'bar',
+      title: copy('Adeguamento del modello'),
+      subtitle: copy('{s1} = {s2} · df = {s3} · p = {s4}', {
+        s1: 'χ²',
+        s2: result.fit.chi2.toFixed(2),
+        s3: result.fit.df,
+        s4: result.fit.p.toPrecision(3),
+      }),
+      note: copy(
+        'Soglie convenzionali: CFI ≥ 0,95, RMSEA ≤ 0,06, SRMR ≤ 0,08. Confronta ogni coppia di barre: per CFI un valore alto è buono, per RMSEA e SRMR un valore basso è buono.'
+      ),
+      data: { bars: fitBars },
+      fields: { xLabel: copy('Indice'), yLabel: copy('Valore'), series: copy('Serie') },
+      options: { valueLabels: true, grouping: 'grouped' } as never,
+    }),
     makeChart({
       id: 'sem-loadings',
       kind: 'bar',

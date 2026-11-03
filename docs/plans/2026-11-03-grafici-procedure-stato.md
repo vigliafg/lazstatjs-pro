@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F5.1 chiusa)
-- **Fase corrente**: F5.2a — da iniziare
+- **Ultimo aggiornamento**: 2026-11-03 (F5.2a chiusa)
+- **Fase corrente**: F5.2b — da iniziare
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -70,7 +70,7 @@ con motivo.
 | F4.3 | logistica, conteggi, ordinale | 45 | ✅ | `feat(charts): F4.3 foreste su scala log e link dichiarato` | 3 test + `check` e `locales:check` verdi |
 | F4.4 | diagnostica di regressione | 45 | ✅ | `feat(charts): F4.4 verifica stili JMP della regressione` | 8 test + `check` e `locales:check` verdi |
 | F5.1 | cluster, canonical, MDS, correspondence | 60 | ✅ | `feat(charts): F5.1 silhouette, scatter dei cluster e correlazioni canoniche` | 3 test + `check` e `locales:check` verdi (MDS/correspondence già a 2 grafici) |
-| F5.2a | SEM, latent class | 45 | ⬜ | — | — |
+| F5.2a | SEM, latent class | 45 | ✅ | `feat(charts): F5.2a adeguamento SEM e certezza delle classi latenti` | 2 test + `check` e `locales:check` verdi |
 | F5.2b | IRT ICC, conjoint | 30 | ⬜ | — | — |
 | F5.3 | PCA/EFA/alpha e pannelli | 45 | ⬜ | — | — |
 | F6.1 | esatti, trend, verifica MH | 45 | ⬜ | — | — |
@@ -164,6 +164,8 @@ sotto-blocco aperto):
 | 2026-11-03 | QA | Il Pareto accetta la cumulata sia come `category` sia come `x` | i runner esistenti usano `x`; il layer leggeva solo `category` |
 | 2026-11-03 | F5.1 | `silhouetteByCluster` è una funzione pura nel kernel, non un campo di `ClusterResult` | il kernel esponeva solo la media globale; il dettaglio per cluster serve ai grafici e ai test |
 | 2026-11-03 | F5.1 | `cluster-scatter` usa le prime due variabili, non le componenti principali | il piano esclude una PCA; la nota lo dichiara esplicitamente |
+| 2026-11-03 | F5.2a | `sem-fit` affianca modello e soglia per indice, invece di una linea di riferimento | CFI (≥0,95) e RMSEA (≤0,06) hanno soglie su scale diverse: la coppia di barre le rende confrontabili |
+| 2026-11-03 | F5.2a | `latentclass-entropy` mostra per classe la quota di casi con posterior ≥ 0,80; l’entropia va nel sottotitolo | un indice globale in un grafico a barre avrebbe una sola barra, senza informazione per classe |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -491,6 +493,23 @@ sotto-blocco aperto):
   `npm run check` verde; `locales:check` verde sulle 6 lingue.
 - **Commit**: `feat(charts): F5.1 silhouette, scatter dei cluster e correlazioni canoniche`
 
+### F5.2a — SEM e latent class
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `sem-fit` [bar]: CFI, RMSEA e SRMR affiancati alla propria soglia
+    convenzionale (0,95 / 0,06 / 0,08), con χ², df e p nel sottotitolo.
+  - `latentclass-entropy` [bar]: quota di casi di ogni classe assegnati con
+    posterior ≥ 0,80, con l’entropia del modello nel sottotitolo.
+- **File toccati**: `src/analyses/sem/{run.tsx,charts.test.ts}`,
+  `src/analyses/latentclass/{run.tsx,charts.test.ts}`,
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{en,it,fr,es,de,pt-PT}/charts.ts` (nuove guide `sem` e
+  `latentclass`).
+- **Test**: sem + latent class → 2/2 verdi; `npm run check` verde;
+  `locales:check` verde sulle 6 lingue.
+- **Commit**: `feat(charts): F5.2a adeguamento SEM e certezza delle classi latenti`
+
 > Duplicare questa sezione per ogni fase conclusa, con: cosa è stato fatto,
 > test, decisioni, file toccati, problemi, prossimi passi.
 
@@ -519,6 +538,8 @@ sotto-blocco aperto):
 | F5.1 | `cluster-silhouette` | `cluster` | `bar` | LZ | `cluster/charts.test.ts` | ✅ |
 | F5.1 | `cluster-scatter` | `cluster` | `scatter` | LZ | `cluster/charts.test.ts` | ✅ |
 | F5.1 | `canonical-corr` | `canonical` | `bar` | LZ | `canonical/charts.test.ts` | ✅ |
+| F5.2a | `sem-fit` | `sem` | `bar` | LZ | `sem/charts.test.ts` | ✅ |
+| F5.2a | `latentclass-entropy` | `latentclass` | `bar` | LZ | `latentclass/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -529,10 +550,9 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F5.2a: `sem-fit` [bar] (CFI, RMSEA, SRMR con soglie) e
-   `latentclass-entropy` [bar].
-2. F5.2b: IRT ICC e conjoint.
-3. F5.3: PCA/EFA/alpha e pannelli; poi gate di fine ondata O5.
+1. F5.2b: curva ICC di IRT e utility/conjoint.
+2. F5.3: PCA/EFA/alpha e pannelli.
+3. Gate di fine ondata O5 e aggiornamento dell’inventario statico.
 
 ---
 

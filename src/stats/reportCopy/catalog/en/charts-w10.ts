@@ -75,6 +75,19 @@ export const w10ChartCopy: Record<string, string> = {
     "Each bar is the correlation between the pair of canonical variates: high values mean the two blocks share a strong direction. Wilks and the p value in the table say how many functions are significant.",
   "Funzione canonica": "Canonical function",
   "Correlazione canonica": "Canonical correlation",
+  "Adeguamento del modello": "Model fit",
+  "{s1} = {s2} · df = {s3} · p = {s4}": "{s1} = {s2} · df = {s3} · p = {s4}",
+  "Soglie convenzionali: CFI ≥ 0,95, RMSEA ≤ 0,06, SRMR ≤ 0,08. Confronta ogni coppia di barre: per CFI un valore alto è buono, per RMSEA e SRMR un valore basso è buono.":
+    "Conventional thresholds: CFI ≥ 0.95, RMSEA ≤ 0.06, SRMR ≤ 0.08. Compare each pair of bars: a high value is good for CFI, a low value is good for RMSEA and SRMR.",
+  "Modello": "Model",
+  "Soglia": "Threshold",
+  "Indice": "Index",
+  "Valore": "Value",
+  "Certezza di classificazione per classe": "Classification certainty per class",
+  "Entropia {s1} · casi con probabilità ≥ 0,80": "Entropy {s1} · cases with probability ≥ 0.80",
+  "Entropia vicina a 1 significa classi ben distinte; vicina a 0 significa posterior ambigue. Le barre sono la quota di casi di ciascuna classe assegnati con probabilità almeno 0,80: barre basse segnalano casi al confine tra classi.":
+    "Entropy near 1 means well-separated classes; near 0 means ambiguous posteriors. The bars are the share of each class assigned with probability at least 0.80: low bars flag cases on the boundary between classes.",
+  "Casi certi (%)": "Certain cases (%)",
   "Ogni barra è il coefficiente di un predittore nel modello scelto dalla selezione; il segmento è il suo intervallo di confidenza. Le barre che attraversano lo zero non distinguono il predittore da nessun effetto.":
     "Each bar is a predictor coefficient in the model chosen by the selection; the segment is its confidence interval. Bars that cross zero do not distinguish the predictor from no effect.",
   "Predittore": "Predictor",

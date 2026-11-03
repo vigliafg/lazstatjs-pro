@@ -1,6 +1,8 @@
 /** Chart types and editable features shown on each procedure page. */
 export const chartGuides: Record<string, string[]> = {
   "cluster": ["Dendrogramm, Clusterprofile und -größen, mittlere Silhouette je Cluster und Streudiagramm der ersten beiden Variablen (keine PCA)."],
+  "sem": ["Faktorladungen, Kovarianzresiduen und Anpassungsindizes (CFI, RMSEA, SRMR) im Vergleich zu ihren Schwellen."],
+  "latentclass": ["Klassengrößen, Profile der bedingten Wahrscheinlichkeiten und Klassifikationssicherheit je Klasse."],
   "canonical": ["Kanonische Scores, kanonische Korrelationen und Strukturkorrelationen der ersten Funktion."],
   "multinomial": ["Verteilung der vorhergesagten Klassen, Genauigkeit je Klasse und Konfusionsmatrix beobachtet × vorhergesagt."],
   "iv": ["Beobachtet vs angepasst, Residuen und erste Stufe: Instrumente gegen die endogene Variable, eine Reihe je Instrument."],
