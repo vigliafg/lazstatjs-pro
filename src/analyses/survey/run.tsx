@@ -115,6 +115,24 @@ export const buildSurveyOutput = ({ grid, params, ciLevel }: SurveyInput): Analy
     );
   }
 
+  const deffBars = result.estimates
+    .filter(estimate => Number.isFinite(estimate.deff))
+    .map(estimate => ({ category: estimate.label, value: estimate.deff }));
+  if (deffBars.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'survey-deff',
+        kind: 'bar',
+        title: copy('Effetto del disegno'),
+        subtitle: copy('DEFF per stima · 1 = campione casuale semplice'),
+        note: copy('L’effetto del disegno è il rapporto tra la varianza del disegno e quella di un campione casuale semplice di pari numerosità: valori sopra 1 indicano un disegno meno efficiente, valori sotto 1 un disegno più efficiente.'),
+        data: { bars: deffBars, rules: [{ value: 1 }] },
+        fields: { xLabel: copy('Stima'), yLabel: 'DEFF' },
+        options: { valueLabels: true, sort: 'none' } as never,
+      })
+    );
+  }
+
   return {
     ok: true,
     title: copy('Campione complesso: {s1}', { s1: variableName }),

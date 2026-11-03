@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2 e F9.1 chiuse)
-- **Fase corrente**: F9.2a — survey e MI
+- **Ultimo aggiornamento**: 2026-11-03 (F8.1, F8.2, F9.1 e F9.2a chiuse)
+- **Fase corrente**: F9.2b — coerenza ML, text, choice
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,12 +12,11 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `feat(charts): F9.1 matrice di alias del disegno DOE`.
-- **Chiuso**: F0.1 → F9.1. O8 chiusa con `npm run check` exit 0; F9.1 con gate
-  mirato: 30 test (doe, samplesize, resampling, copy, analysisKinds,
-  buildSpec), `tsc --noEmit` exit 0, `check-locale` verde su
+- **Ultimo commit**: `feat(charts): F9.2a effetto del disegno survey`.
+- **Chiuso**: F0.1 → F9.2a. Gate mirato: 31 test (survey, mi, copy,
+  analysisKinds, buildSpec), `tsc --noEmit` exit 0, `check-locale` verde su
   it/en/fr/es/de/pt-PT, `help:build` con 498 topic in 6 lingue.
-- **Da riprendere**: **F9.2a** (survey e MI), poi F9.2b.
+- **Da riprendere**: **F9.2b** (coerenza ML, text e choice), poi F9.3a.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -98,7 +97,7 @@ con motivo.
 | F8.1 | Holt-Winters, unit root, spettrale | 45 | ✅ | `feat(charts): F8.1 Holt-Winters, radici unitarie e spettrale` | 16 test + `lint` + `locales:check` + `help:build` verdi |
 | F8.2 | VAR, GARCH, state-space | 60 | ✅ | `feat(charts): F8.2 Q-Q dei residui GARCH` | 23 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.1 | sample size, resampling, DOE | 60 | ✅ | `feat(charts): F9.1 matrice di alias del disegno DOE` | 30 test + `lint` + `locales:check` + `help:build` verdi |
-| F9.2a | survey, MI | 45 | ⬜ | — | — |
+| F9.2a | survey, MI | 45 | ✅ | `feat(charts): F9.2a effetto del disegno survey` | 31 test + `lint` + `locales:check` + `help:build` verdi |
 | F9.2b | ML, text, choice | 30 | ⬜ | — | — |
 | F9.3a | Bayes PPC, meta | 45 | ⬜ | — | — |
 | F9.3b | spatial variogram | 45 | ⬜ | — | — |
@@ -205,6 +204,9 @@ sotto-blocco aperto):
 | 2026-11-03 | F9.1 | La matrice di alias è la correlazione tra i termini del disegno (effetti principali + interazioni a due vie), calcolata nel runner da `designAliasCells` | il kernel del disegno restituisce solo le colonne codificate; la correlazione è pura algebra e non richiede una modifica kernel |
 | 2026-11-03 | F9.1 | Oltre quattro fattori la matrice si limita agli effetti principali | con 7 fattori i termini diventano 28 e la heatmap non è più leggibile; la nota lo dichiara |
 | 2026-11-03 | F9.1 | `samplesize` e `resampling` restano ai tre grafici ciascuno, con un’asserzione sui loro id nei test | la fase chiedeva la verifica: il test blocca l’aggiunta o la perdita silenziosa di un grafico |
+| 2026-11-03 | F9.2a | `survey-deff` è un bar delle stime con linea a 1, non un forest | il DEFF è un rapporto rispetto a 1: la barra rende immediato “meno efficiente / più efficiente” e non richiede un intervallo |
+| 2026-11-03 | F9.2a | Nel modo regressione non c’è `survey-deff` | il kernel riporta i coefficienti, non le stime con DEFF: il grafico resterebbe vuoto |
+| 2026-11-03 | F9.2a | `mi` resta a 8 grafici nel percorso descrittivo e 4 nel categorico | il cap di 24 non è sfiorato: nessun Q-Q o pannello da tagliare |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -730,6 +732,29 @@ sotto-blocco aperto):
   sono zero.
 - **Commit**: `feat(charts): F9.1 matrice di alias del disegno DOE`
 
+### F9.2a — Survey e MI
+
+- **Stato**: ✅ chiusa (2026-11-03)
+- **Fatto**:
+  - `survey-deff` [bar]: DEFF di ogni stima con linea di riferimento a 1 e
+    valore in etichetta; nota che spiega il rapporto rispetto al campione
+    casuale semplice.
+  - Guide `survey` (prima assente) e `mi` aggiornate nelle 6 lingue.
+- **Verificato**: `mi` emette 8 grafici nel percorso descrittivo e 4 nel
+  categorico (13 id distinti fra i due modi), tutti sotto il cap di 24: nessun
+  Q-Q o pannello da tagliare.
+- **File toccati**: `src/analyses/survey/run.tsx`,
+  `src/analyses/survey/charts.test.ts` (nuovo),
+  `src/analyses/mi/charts.test.ts` (nuovo),
+  `src/stats/reportCopy/catalog/en/charts-w10.ts`,
+  `src/help/content/{it,en,fr,es,de,pt-PT}/charts.ts`.
+- **Test**: survey + mi + mi/run + copy + analysisKinds + buildSpec → 31/31
+  verdi; `tsc --noEmit` exit 0; `check-locale` verde sulle 6 lingue;
+  `help:build` verde (498 topic).
+- **Nota**: il grafico del DEFF compare solo per le stime (media, totale,
+  proporzione); la regressione ponderata mantiene il forest dei coefficienti.
+- **Commit**: `feat(charts): F9.2a effetto del disegno survey`
+
 ### F7.3b — Parametric e reliability
 
 - **Stato**: ✅ chiusa (2026-11-03, solo verifica)
@@ -788,6 +813,7 @@ sotto-blocco aperto):
 | F8.1 | `spectral-density` ♻️ | `timeseries` | `line` | LZ | `timeseries/charts.test.ts` | ✅ |
 | F8.2 | `garch-qq` | `garch` | `qq` | LZ | `garch/charts.test.ts` | ✅ |
 | F9.1 | `doe-alias` | `doe` | `heatmap` | LZ | `doe/charts.test.ts` | ✅ |
+| F9.2a | `survey-deff` | `survey` | `bar` | LZ | `survey/charts.test.ts` | ✅ |
 
 *(compilare a ogni fase; una riga per grafico)*
 
@@ -798,10 +824,10 @@ runner, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F9.2a: survey e MI (`survey-deff`, cap di 24 grafici per `mi`).
-2. F9.2b: coerenza di ML, text e choice.
-3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH e
-   matrice di alias.
+1. F9.2b: coerenza di ML, text e choice (solo verifica).
+2. F9.3a: `bayes-ppc` e verifica meta.
+3. Tradurre in F11.1a–b le note di life-stress, `timeseries`, Q-Q GARCH,
+   matrice di alias e DEFF survey.
 
 ---
 

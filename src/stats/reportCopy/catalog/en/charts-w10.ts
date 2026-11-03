@@ -149,6 +149,10 @@ export const w10ChartCopy: Record<string, string> = {
   "I punti vicini alla diagonale indicano residui standardizzati compatibili con la normale; code pesanti o asimmetria segnalano che il GARCH gaussiano non descrive bene le innovazioni.":
     "Points close to the diagonal indicate standardised residuals compatible with normality; heavy tails or skewness mean the Gaussian GARCH does not describe the innovations well.",
   "Matrice di alias": "Alias matrix",
+  "Effetto del disegno": "Design effect",
+  "DEFF per stima · 1 = campione casuale semplice": "DEFF per estimate · 1 = simple random sample",
+  "L’effetto del disegno è il rapporto tra la varianza del disegno e quella di un campione casuale semplice di pari numerosità: valori sopra 1 indicano un disegno meno efficiente, valori sotto 1 un disegno più efficiente.":
+    "The design effect is the ratio between the design variance and that of a simple random sample of the same size: values above 1 mean a less efficient design, values below 1 a more efficient one.",
   "correlazione tra i termini del disegno": "correlation between the terms of the design",
   "Valori vicini a ±1 indicano termini confusi tra loro: la metà frazione non li distingue. Lo zero indica termini ortogonali; con più di quattro fattori la matrice si limita agli effetti principali.":
     "Values close to ±1 mean the terms are confounded: the half fraction does not separate them. Zero means orthogonal terms; beyond four factors the matrix is limited to the main effects.",
