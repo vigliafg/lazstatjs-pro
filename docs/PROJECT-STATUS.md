@@ -1,10 +1,10 @@
 # Documento di stato del progetto — LazStats
 
-**Data:** 29 ottobre 2026  
-**Branch:** `grid-roadmap`  
-**HEAD:** `982c179` — `Test: dataset di prova multi-formato per famiglia di analisi`
-**Stato git:** working tree pulito, branch allineato a `origin/grid-roadmap`
-**Verifica:** `npm run check` → 480 test, 0 fail; Playwright → 43 passed / 35 skipped; build ok, nessun chunk >500 kB; file-size guard ok (340 file, 3 eccezioni).
+**Data:** 3 novembre 2026  
+**Branch:** `grafici-procedure`  
+**HEAD:** `452b1b5` — `docs(charts): F11.2 guide help, inventario e convenzioni JMP`
+**Stato git:** working tree pulito tranne i PDF JMP e il file di avvio, non versionati
+**Verifica:** `npm run check` → 1356 test, 0 fail; e2e grafici → 12 passed / 3 skipped; `npm run build` ok; `test:samples` ok; file-size guard ok (1162 file, 14 eccezioni).
 
 ---
 
@@ -29,7 +29,7 @@ La struttura è matura: 72 procedure, 72 form, 72 runner, store dei parametri, s
 - Limiti: 50.000 righe, 500 colonne; autosave localStorage ~4 MB; 20 card output; 1,5 MB HTML.
 
 ### Analisi
-72 procedure in 12 famiglie:
+72 procedure in 12 famiglie. **71 hanno almeno un grafico** (349 modelli `AnalysisChart`, 33 kind), con editor per card, galleria stili e tre varianti JMP opt-in; inventario in `docs/analysis/2026-11-03-inventario-grafici-72-procedure.md`.
 Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power.
 
 Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repeated/mixed ANOVA, non-parametric RM, TOST, regression, correlation, logistic, count regression, ordinal, LMM, GEE, PCA/alpha/EFA, chi-square, contingency, agreement, Kaplan–Meier, Cox, stratified Cox, time-dependent Cox, parametric survival, ARIMA/SARIMA, multiple imputation, sample size, resampling, partition (regression tree), quality/SPC, cluster analysis, discriminant/MANOVA, response surface (DOE).
@@ -50,9 +50,10 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 - Export HTML, Word, XLSX, grafici PNG.
 - Export codice R/Python per descriptive, t-test, ANOVA, regressione, correlazione, logistica.
 - Report in prosa italiano, pensato per lettura e tesi.
+- Grafici con note statistiche in 6 lingue (it, en, fr, es, de, pt-PT).
 
 ### Persistenza
-- Progetto `.lzs` **versione 2**, con migrazione automatica dai file v1.
+- Progetto `.lzs` **versione 3**, con migrazione automatica dai file v1/v2.
 - Autosave su localStorage + **backup IndexedDB**, con “Restore backup” in Settings.
 - Error boundary per pannello, con reload e download diagnostico.
 - Limite noto: `filterSignature` non è persistito; una card con filtro analysis non viene confrontata dopo reload.
@@ -60,8 +61,8 @@ Copertura: descriptive, distribution fit, t-test, ANOVA, factorial, ANCOVA, repe
 ### Qualità e architettura
 - `stats/` puro, `analyses/` form + runner, `grid/` modello dati, `ui/` composizione.
 - dependency-cruiser, madge, file-size guard, sanitizer output HTML, cap di import/progetto.
-- 1298 test unitari, 43 e2e passati, 35 skipped (mobile/desktop non applicabili).
-- i18n: 1776 chiavi, UI/help/report in 6 lingue (en, it, fr, es, de, pt-PT).
+- 1356 test unitari; e2e dei grafici 12 passati / 3 skipped (chart-editor e chart-styles, desktop).
+- i18n: 1786 chiavi, UI/help/report in 6 lingue (en, it, fr, es, de, pt-PT).
 
 ---
 

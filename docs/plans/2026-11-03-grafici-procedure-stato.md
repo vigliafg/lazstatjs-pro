@@ -3,8 +3,8 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F11.2 chiusa: guide, inventario e convenzioni JMP)
-- **Fase corrente**: F11.3 — gate finale e release
+- **Ultimo aggiornamento**: 2026-11-03 (F11.3 chiusa: piano completato)
+- **Fase corrente**: chiusa — manutenzione
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
 - **Branch**: `grafici-procedure` (creato da `main` in F0.1)
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
@@ -12,7 +12,7 @@
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
-- **Ultimo commit**: `docs(charts): F11.2 guide help, inventario e convenzioni JMP`.
+- **Ultimo commit**: `docs(charts): F11.3 gate finale, note di release e stato del progetto`.
 - **Chiuso**: F0.1 → F10.3. Ondata O10 completa. Gate mirato verde (box
   layers, layers, styles, copy, analysisKinds, anova, nonparamrm, quality),
   `tsc --noEmit` exit 0, `check-locale` 6/6, `help:build` verde.
@@ -20,7 +20,8 @@
   madge senza cicli, filesize con le 5 eccezioni abbassate).
 - **Gate d'ondata O9**: `npm run check` exit 0 (test completi, depcruise 1174
   moduli, madge senza cicli, filesize 1158 file con 14 eccezioni).
-- **Da riprendere**: **F11.3** (gate finale, samples, e2e, build, note di release).
+- **Da riprendere**: nessuna fase aperta. Backlog: debiti §9 e note copy ancora
+  solo in inglese, già elencate nel documento.
 - **Debito aperto e noto**: le note nuove di `alt-life-stress` e delle tre
   modalità di `timeseries` esistono solo in inglese; le altre lingue ricadono su
   EN e vanno chiuse in F11.1a–b (nei cataloghi `<locale>/charts-extra.ts`
@@ -111,7 +112,7 @@ con motivo.
 | F11.1a | traduzioni fr/es | 45 | ✅ | `feat(charts): F11.1a cataloghi grafici in francese e spagnolo` | key set e placeholder verificati, `locales:check` fr/es 0, `copy.test` verde |
 | F11.1b | traduzioni de/pt-PT | 45 | ✅ | `feat(charts): F11.1b cataloghi grafici in tedesco e portoghese` | key set e placeholder verificati, `locales:check` de/pt-PT 0 |
 | F11.2 | help, manuale, inventario | 60 | ✅ | `docs(charts): F11.2 guide help, inventario e convenzioni JMP` | guide 71/71 in 6 lingue, inventario rigenerato, `help:build` verde |
-| F11.3 | gate finale e release | 60 | ⬜ | — | — |
+| F11.3 | gate finale e release | 60 | ✅ | `docs(charts): F11.3 gate finale, note di release e stato del progetto` | `check` 1356/0, samples, 6 locale, e2e 12/3, build verdi |
 
 **Fase di contingenza** (si aggiunge solo se F2.2 sfora e lascia un
 sotto-blocco aperto):
@@ -236,6 +237,8 @@ sotto-blocco aperto):
 | 2026-11-03 | F11.1b | de e pt-PT riusano lo stesso schema di F11.1a | un file `charts-w10.ts` per lingua, mergiato in `W10_BY_LOCALE`: nessuna modifica al catalogo inglese |
 | 2026-11-03 | F11.2 | Guide aggiunte alle 18 procedure che ne erano prive | erano rimaste fuori dalle ondate precedenti; senza guida il pannello grafici dell’help resta vuoto per quelle procedure |
 | 2026-11-03 | F11.2 | L’inventario è rigenerato, non corretto a mano | è output di `npm run chart:inventory`: i 349 modelli e i 33 kind ora corrispondono al codice |
+| 2026-11-03 | F11.3 | Le note di release vivono in `docs/RELEASE-CHARTS-2026-11-03.md` | il progetto non ha un CHANGELOG: un documento datato evita di riscrivere la cronologia e resta archiviabile |
+| 2026-11-03 | F11.3 | Il gate e2e copre `chart-editor` e `chart-styles` su desktop | sono le due spec che esercitano davvero l’editor e le varianti JMP; il resto della suite e2e è fuori perimetro |
 
 **Decisioni aperte** (da chiudere durante l'esecuzione):
 
@@ -810,6 +813,25 @@ sotto-blocco aperto):
   riceve `ciLevel`); è coerente con la nota ma resta un limite noto.
 - **Commit**: `fix(charts): F9.2b note di text, kind dichiarati e guide ML`
 
+### F11.3 — Gate finale e release
+
+- **Stato**: ✅ chiusa (2026-11-03) — piano completato
+- **Fatto**:
+  - `npm run check`: 1356 test, 0 fail; depcruise, madge e filesize verdi
+    (1162 file, 14 eccezioni).
+  - `npm run test:samples`: 7 test, 0 fail.
+  - `check-locale` su it/en/fr/es/de/pt-PT: exit 0 su tutte.
+  - e2e `chart-editor` + `chart-styles` (`--project=desktop`): 12 passati,
+    3 skipped, 0 fail.
+  - `npm run build`: web + Electron verdi.
+  - `docs/PROJECT-STATUS.md` aggiornato (data, branch, HEAD, numeri, `.lzs` v3,
+    1786 chiavi i18n); note di release in `docs/RELEASE-CHARTS-2026-11-03.md`.
+- **Verificato**: nessun gate rosso; nessun debito non documentato oltre a
+  quelli elencati in §9 e alle note copy in inglese.
+- **File toccati**: `docs/PROJECT-STATUS.md`,
+  `docs/RELEASE-CHARTS-2026-11-03.md` (nuovo), questo documento e la copia root.
+- **Commit**: `docs(charts): F11.3 gate finale, note di release e stato del progetto`
+
 ### F11.2 — Help, manuale, inventario
 
 - **Stato**: ✅ chiusa (2026-11-03)
@@ -1057,9 +1079,9 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 7. Prossimi 3 passi
 
-1. F11.3: `npm run check`, `test:samples`, e2e chart-editor/chart-styles, build.
-2. Note di release: grafici per famiglia, convenzioni JMP, test.
-3. Aggiornare `docs/PROJECT-STATUS.md` con i numeri finali.
+1. Manutenzione: chiudere i debiti §9 (cap grafici, file al limite).
+2. Tradurre le note copy rimaste in inglese nei cataloghi `charts-extra`.
+3. Ripetere il gate completo prima di un merge su `main`.
 
 ---
 
