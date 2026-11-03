@@ -43,7 +43,16 @@ jobs:
       - run: npm run build
 
       - name: Package
-        run: npx electron-builder --${{ matrix.target }} --publish never
+        shell: bash
+        run: |
+          if [ "${{ matrix.target }}" = "mac" ]; then
+            # The macOS runner currently fails while creating the DMG
+            # (hdiutil "Device not configured"). Ship the signed-ready .zip
+            # from CI and leave the DMG to a local/manual build.
+            npx electron-builder --mac zip --publish never
+          else
+            npx electron-builder --${{ matrix.target }} --publish never
+          fi
 
       - name: Smoke-test packaged Linux app
         if: matrix.target == 'linux'
