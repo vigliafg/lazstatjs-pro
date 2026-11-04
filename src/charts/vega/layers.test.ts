@@ -680,3 +680,56 @@ test('a ratio forest drops the rows that cannot sit on the log scale', () => {
   assert.deepEqual(drawn(options), ['A']);
   assert.deepEqual(drawn({ ...options, logScale: false }), ['A', 'B', 'C']);
 });
+
+test('a matrix whose cells share one value still gets a readable colour range', () => {
+  const flat = makeChart({
+    id: 'heat-flat',
+    kind: 'heatmap',
+    title: 'Flat',
+    data: {
+      cells: [
+        { x: 'A', y: 'B', value: 1, label: '1' },
+        { x: 'B', y: 'A', value: 1, label: '1' },
+      ],
+    },
+  });
+  const sequential = heatmapLayers(flat, factoryOptions('heatmap') as Extract<ChartOptions, { kind: 'heatmap' }>);
+  const scale = (sequential[0].encoding?.color as { scale: { domain?: number[] }; legend: { format?: string } });
+  // Degenerate domain: colouring 1 against 1 gives a legend "1 … 1".
+  assert.deepEqual(scale.scale.domain, [0, 1]);
+  assert.equal(scale.legend.format, '.4~g');
+
+  const diverging = heatmapLayers(flat, {
+    ...factoryOptions('heatmap'),
+    diverging: true,
+  } as Extract<ChartOptions, { kind: 'heatmap' }>);
+  const color = diverging[0].encoding?.color as { scale: { domain?: number[] } };
+  assert.deepEqual(color.scale.domain, [-1, 1]);
+});
+
+test('one or two categories do not stretch a bar over the whole card', () => {
+  const bar = (categories: string[], series = false) =>
+    makeChart({
+      id: `bar-${categories.length}`,
+      kind: 'bar',
+      title: 'Bar',
+      data: {
+        bars: categories.map(category =>
+          series
+            ? [{ category, value: 1, series: 'S1' }, { category, value: 2, series: 'S2' }]
+            : [{ category, value: 1 }]
+        ).flat(),
+      },
+    });
+  const thickness = (chart: ReturnType<typeof bar>, patch: Record<string, unknown> = {}) => {
+    const layers = barLayers(chart, { ...factoryOptions('bar'), ...patch } as Extract<ChartOptions, { kind: 'bar' }>);
+    return layers[0].mark?.size as number | undefined;
+  };
+
+  assert.equal(thickness(bar(['X1'])), 120);
+  assert.equal(thickness(bar(['X1', 'X2'])), 120);
+  // Many categories already use a narrower band: leave the automatic width alone.
+  assert.equal(thickness(bar(['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8'])), undefined);
+  // Grouped bars split the band with xOffset, so they keep their own width.
+  assert.equal(thickness(bar(['X1', 'X2'], true), { grouping: 'grouped' }), undefined);
+});

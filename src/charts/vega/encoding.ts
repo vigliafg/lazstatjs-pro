@@ -35,6 +35,40 @@ export const rowsOf = (chart: AnalysisChart, layer: string, options?: ChartOptio
   return [...rows].sort((a, b) => (num(a[key]) - num(b[key])) * direction);
 };
 
+/** Bars wider than this read as a filled block rather than as a category. */
+const MAX_BAR_THICKNESS = 120;
+
+/**
+ * A band grows with the plot when a chart has one or two categories, and a
+ * single bar then covers the whole card. Cap the thickness at what a normal
+ * few-category chart gets; grouped bars keep the offset band.
+ */
+export const barThickness = (categories: number, options: CommonChartOptions): number | undefined => {
+  if (!Number.isFinite(categories) || categories <= 0) return undefined;
+  const band = (sizeOf(options).width - 48) / categories;
+  return band > MAX_BAR_THICKNESS ? MAX_BAR_THICKNESS : undefined;
+};
+
+/**
+ * A colour scale with a single distinct value (identical documents, an empty
+ * matrix) has no range, and its legend then prints the same number twice.
+ * Grow the domain to zero — or symmetrically for a diverging scale — so the
+ * legend still reads as a magnitude.
+ */
+export const colorDomain = (values: number[], diverging: boolean): [number, number] | undefined => {
+  const finite = values.filter(value => Number.isFinite(value));
+  if (finite.length === 0) return undefined;
+  const lo = Math.min(...finite);
+  const hi = Math.max(...finite);
+  if (hi > lo) return undefined;
+  if (diverging) {
+    const extent = Math.abs(hi) || 1;
+    return [-extent, extent];
+  }
+  if (hi === 0) return [0, 1];
+  return [Math.min(0, lo), Math.max(0, hi)];
+};
+
 export const field = (chart: AnalysisChart, key: string, fallback = key): string =>
   chart.fields[key] ?? fallback;
 

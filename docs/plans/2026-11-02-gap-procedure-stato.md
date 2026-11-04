@@ -10,8 +10,7 @@
 
 ## 0. Checkpoint QA grafici (2026-11-04)
 
-**Branch**: `grafici-procedure` · **worktree**: principale · **ultimo commit**: `a6b08e3`
-(le modifiche di questo checkpoint sono ancora nel worktree, non committate)
+**Branch**: `grafici-procedure` · **worktree**: principale · **ultimo commit**: `fix(charts): legenda colore su una scala valida e barre con poche categorie` (HEAD)
 
 **Contesto**: QA visiva dei 165 modelli grafici nuovi (`1ef2860` → HEAD) e
 correzione dei difetti trovati.
@@ -26,17 +25,23 @@ correzione dei difetti trovati.
 | Assi con domini minuscoli: formato `.4~g` | chiuso |
 | Etichette barre: centro del segmento nello stack, fuori barra altrove | chiuso |
 | Linee multi-serie tutte dello stesso colore (`mark.stroke` vince sul `color`) | chiuso |
+| Riverifica delle 51 card rimaste con i runner reali | 44/51 ricostruite, 7 rinviate (servono fixture: SEM, `ml-confusion`, `ks-diff`, `hw-series`, `mi-categorical-missingness-matrix`) |
+| Legenda a dominio degenere di `text-similarity` | chiuso (`colorDomain`: dominio allargato a zero; legenda `.4~g`, legge `0 … 1`) |
+| Barre con 1–2 categorie larghe tutta la banda | chiuso (`barThickness`: tetto di 120 px, esclusi i gruppi con `xOffset`) |
+| Test di regressione dei due fix | chiuso (`layers.test.ts`: 2 test nuovi) |
 
-**Test**: `npm run check` verde — 1360 test, 0 fail; depcruise e madge puliti;
-filesize OK (`layers.ts` 685 righe, logica inchiostro estratta in
-`src/charts/vega/ink.ts`).
+**Test**: `npm run check` verde — 1362 test, 0 fail; depcruise e madge puliti;
+filesize OK (`layers.ts` 688 righe, helpers di scala in
+`src/charts/vega/encoding.ts`, inchiostro in `src/charts/vega/ink.ts`).
 
-**Artefatti**: `docs/qa/new-models-2026-11-04/` (report, metriche, fogli) e
-`docs/qa/fix-verify-2026-11-04/` (galleria e screenshot after).
+**Artefatti**: `docs/qa/new-models-2026-11-04/` (report, metriche, fogli),
+`docs/qa/fix-verify-2026-11-04/` (galleria e screenshot after) e
+`docs/qa/recheck-2026-11-04/` (riverifica: 44 card, 5 fogli, metriche).
 
-**Prossimi 3 passi**: (1) commit del checkpoint; (2) rigenerare le spec del QA
-per le 26 card a linee e ricontrollare i fogli; (3) valutare un pass di QA
-visiva sulle card rimaste non ispezionate una per una.
+**Prossimi 3 passi**: (1) aggiungere le fixture per le 7 card rinviate (SEM,
+`ml-confusion`, `ks-diff`, `hw-series`, `mi-categorical-missingness-matrix`);
+(2) ricontrollare i fogli dopo i due fix (fatto: `fix2-*.png`);
+(3) push del branch quando richiesto.
 
 ---
 

@@ -1,0 +1,441 @@
+{
+ "targets": 51,
+ "built": 44,
+ "missing": [
+  "sem-residuals",
+  "ml-confusion",
+  "ks-diff",
+  "hw-series",
+  "sem-loadings",
+  "mi-categorical-missingness-matrix",
+  "sem-fit"
+ ],
+ "runFailures": [
+  "wizard (descriptive/iris): nessun chart array",
+  "wizard (compare/plantgrowth): nessun chart array",
+  "canonical (descriptive/iris): Select at least one numeric variable in each block",
+  "nonlinear (regression/mtcars): The model did not converge or the data do not support it: try another curve, check the predictor values or collect more observations",
+  "multinomial (regression/mtcars): The model could not be estimated: check for constant predictors or perfectly separated classes",
+  "glmm (regression/mtcars): The mixed model could not be estimated: check the number of groups, the family/link pair and separation",
+  "sem (multivariate/sem_demo): SEM could not be fitted: each factor needs at least two indicators and the covariance matrix must be positive definite",
+  "irt (multivariate/irt_demo): Select at least two binary items",
+  "cox (survival/lung): The Cox model could not be estimated: check for constant covariates or too few events",
+  "stratcox (survival/lung): Select a stratum column",
+  "iv (regression/iv_demo): Select at least one excluded instrument",
+  "panel (regression/panel_demo): Select a valid entity column",
+  "choice (design/choice_demo): Select at least one attribute that varies across alternatives",
+  "choice (design/maxdiff_demo): Select at least one attribute that varies across alternatives",
+  "wizard (regression/mtcars): nessun chart array",
+  "wizard (survival/lung): nessun chart array",
+  "wizard (regression/birthwt): nessun chart array",
+  "wizard (survival/heart): nessun chart array",
+  "wizard (compare/chickweight_wide): nessun chart array",
+  "wizard (multivariate/attitude): nessun chart array",
+  "wizard (multivariate/sem_demo): nessun chart array",
+  "wizard (multivariate/irt_demo): nessun chart array",
+  "wizard (missing/airquality): nessun chart array",
+  "wizard (regression/selection_demo): nessun chart array",
+  "multinomial (survival/lung): The outcome needs at least three distinct values (for example low/medium/high)",
+  "multinomial (regression/birthwt): The outcome needs at least three distinct values (for example low/medium/high)",
+  "multinomial (survival/heart): The outcome needs at least three distinct values (for example low/medium/high)",
+  "multinomial (compare/chickweight_wide): The model could not be estimated: check for constant predictors or perfectly separated classes",
+  "multinomial (multivariate/attitude): Not enough complete rows: 22 classes with 1 predictor(s) need more than 42 observations",
+  "multinomial (multivariate/sem_demo): Not enough complete rows: 217 classes with 1 predictor(s) need more than 432 observations",
+  "multinomial (multivariate/irt_demo): The outcome needs at least three distinct values (for example low/medium/high)",
+  "glmm (survival/lung): Not enough complete rows for the mixed model",
+  "sem (regression/mtcars): Select at least three numeric indicators",
+  "sem (survival/lung): Select at least three numeric indicators",
+  "sem (regression/birthwt): Select at least three numeric indicators",
+  "sem (survival/heart): Select at least three numeric indicators",
+  "sem (compare/chickweight_wide): Select at least three numeric indicators",
+  "sem (multivariate/attitude): Select at least three numeric indicators",
+  "sem (multivariate/irt_demo): Select at least three numeric indicators",
+  "sem (missing/airquality): Select at least three numeric indicators",
+  "sem (regression/selection_demo): Select at least three numeric indicators",
+  "sem (categorical/agreement_ratings): Select at least three numeric indicators",
+  "irt (regression/mtcars): Select at least two binary items",
+  "irt (survival/lung): Select at least two binary items",
+  "irt (regression/birthwt): Select at least two binary items",
+  "irt (survival/heart): Select at least two binary items",
+  "irt (compare/chickweight_wide): Select at least two binary items",
+  "irt (multivariate/attitude): Select at least two binary items",
+  "irt (multivariate/sem_demo): Select at least two binary items",
+  "irt (missing/airquality): Select at least two binary items",
+  "irt (regression/selection_demo): Select at least two binary items",
+  "irt (categorical/agreement_ratings): Select at least two binary items",
+  "stratcox (regression/mtcars): Stratified Cox needs at least two strata with events and complete numeric covariates",
+  "stratcox (regression/birthwt): Select a stratum column",
+  "stratcox (survival/heart): Select a stratum column",
+  "stratcox (compare/chickweight_wide): Select a stratum column",
+  "stratcox (multivariate/attitude): Select a stratum column",
+  "stratcox (multivariate/sem_demo): Select a stratum column",
+  "stratcox (multivariate/irt_demo): Select a stratum column",
+  "stratcox (missing/airquality): Select a stratum column",
+  "stratcox (regression/selection_demo): Select a stratum column",
+  "stratcox (categorical/agreement_ratings): Select a stratum column",
+  "panel (regression/mtcars): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (survival/lung): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (regression/birthwt): Not enough complete rows: a panel model needs at least two entities observed twice",
+  "panel (survival/heart): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (compare/chickweight_wide): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (multivariate/attitude): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (multivariate/sem_demo): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (multivariate/irt_demo): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (missing/airquality): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities",
+  "panel (regression/selection_demo): The panel model could not be estimated: check for collinear predictors, duplicated entity-period rows, a single period per entity or too few entities"
+ ],
+ "cards": [
+  {
+   "id": "doe-alias",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 15,
+   "texts": 58
+  },
+  {
+   "id": "multinomial-confusion",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 15,
+   "texts": 44
+  },
+  {
+   "id": "freq-cumulative",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 66
+  },
+  {
+   "id": "glm-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 12,
+   "texts": 32
+  },
+  {
+   "id": "glmm-residual-fitted",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 12,
+   "texts": 35
+  },
+  {
+   "id": "iv-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 13,
+   "texts": 26
+  },
+  {
+   "id": "polynomial-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 12,
+   "texts": 26
+  },
+  {
+   "id": "penalized-coefficients-chart",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 12,
+   "texts": 17
+  },
+  {
+   "id": "lmm-random-slopes",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 16,
+   "texts": 18
+  },
+  {
+   "id": "selection-criterion",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 16,
+   "texts": 26
+  },
+  {
+   "id": "bayes-ppc",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 29
+  },
+  {
+   "id": "competing-cif",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 15,
+   "texts": 25
+  },
+  {
+   "id": "contingency-trend-line",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 16,
+   "texts": 25
+  },
+  {
+   "id": "garch-volatility",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 25
+  },
+  {
+   "id": "mars-profile",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 19,
+   "texts": 35
+  },
+  {
+   "id": "cusum-chart",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 21,
+   "texts": 30
+  },
+  {
+   "id": "penalized-path",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 15,
+   "texts": 25
+  },
+  {
+   "id": "statespace-local",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 21,
+   "texts": 36
+  },
+  {
+   "id": "statespace-markov",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 35
+  },
+  {
+   "id": "unitroot-series",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 33
+  },
+  {
+   "id": "spectral-density",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 21,
+   "texts": 29
+  },
+  {
+   "id": "var-irf-chart",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 25,
+   "texts": 29
+  },
+  {
+   "id": "canonical-loadings",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 17,
+   "texts": 19
+  },
+  {
+   "id": "conjoint-utilities",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 19,
+   "texts": 20
+  },
+  {
+   "id": "correspondence-biplot",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 16,
+   "texts": 24
+  },
+  {
+   "id": "outliers-box",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 17,
+   "texts": 13
+  },
+  {
+   "id": "glmm-random-effects",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 16,
+   "texts": 14
+  },
+  {
+   "id": "lmm-random-intercepts",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 16,
+   "texts": 17
+  },
+  {
+   "id": "mars-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 13,
+   "texts": 29
+  },
+  {
+   "id": "nonlinear-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 13,
+   "texts": 29
+  },
+  {
+   "id": "propensity-att",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 17,
+   "texts": 19
+  },
+  {
+   "id": "quantile-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 13,
+   "texts": 27
+  },
+  {
+   "id": "selection-coefficients",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 16,
+   "texts": 14
+  },
+  {
+   "id": "tobit-latent-observed",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 25
+  },
+  {
+   "id": "spatial-lisa",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 13,
+   "texts": 30
+  },
+  {
+   "id": "sign-differences",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 14,
+   "texts": 25
+  },
+  {
+   "id": "sign-ci",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 17,
+   "texts": 12
+  },
+  {
+   "id": "contingency-exact-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 15,
+   "texts": 18
+  },
+  {
+   "id": "correspondence-residual-heatmap",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 14,
+   "texts": 16
+  },
+  {
+   "id": "loglinear-residuals",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 15,
+   "texts": 20
+  },
+  {
+   "id": "text-document-topics",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 13,
+   "texts": 36
+  },
+  {
+   "id": "text-similarity",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 13,
+   "texts": 50
+  },
+  {
+   "id": "choice-shares",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 26
+  },
+  {
+   "id": "exact-observed-expected",
+   "warnings": [],
+   "empty": false,
+   "decimals": [],
+   "marks": 18,
+   "texts": 35
+  }
+ ]
+}

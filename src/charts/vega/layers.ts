@@ -6,6 +6,8 @@ import { barValueLabels, heatmapLabelLayers } from './ink';
 import {
   axis,
   bandRows,
+  barThickness,
+  colorDomain,
   colorEncoding,
   field,
   lineStyle,
@@ -254,12 +256,12 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
   const offset = grouped
     ? { xOffset: { field: 'series', type: 'nominal', title: null } }
     : {};
+  const thickness = grouped ? undefined : barThickness(categories.length, options);
   const errorBars = bars
     .map(row => ({ row, interval: intervalOf(row) }))
     .filter((item): item is { row: ChartRow; interval: { lo: number; hi: number } } => item.interval !== null);
-  layers.push({
-    data: { values: bars },
-    mark: { type: 'bar', color: colorAt(options, 0), ...tooltip(options) },
+  layers.push({      data: { values: bars },
+      mark: { type: 'bar', color: colorAt(options, 0), ...(thickness ? { size: thickness } : {}), ...tooltip(options) },
     encoding: {
       x: {
         field: 'category',
@@ -498,6 +500,7 @@ export const heatmapLayers = (chart: AnalysisChart, options: Extract<ChartOption
   };
   const xOrder = orderOf('x');
   const yOrder = orderOf('y');
+  const domain = colorDomain(cells.map(row => num(row.value)), options.diverging);
   const layers: Spec[] = [
     {
       data: { values: cells },
@@ -509,9 +512,9 @@ export const heatmapLayers = (chart: AnalysisChart, options: Extract<ChartOption
           field: 'value',
           type: 'quantitative',
           scale: options.diverging
-            ? { scheme: 'redblue', domainMid: 0 }
-            : { scheme: 'blues' },
-          legend: options.showLegend ? { title: null, labelColor: theme.muted } : null,
+            ? { scheme: 'redblue', domainMid: 0, ...(domain ? { domain } : {}) }
+            : { scheme: 'blues', ...(domain ? { domain } : {}) },
+          legend: options.showLegend ? { title: null, format: '.4~g', labelColor: theme.muted } : null,
         },
       },
     },
