@@ -80,6 +80,12 @@ test('IV builder fits the iv_demo sample and exposes tables, report and charts',
   assert.equal(observed?.data.series?.length, rows.length);
   assert.ok((observed?.data.series ?? []).every(point => Number.isFinite(Number(point.x))));
 
+  // The residual chart must carry the fitted points: a chart keyed on the
+  // wrong dataset renders axes and a zero line with no observations.
+  const residualChart = (result.charts ?? []).find(chart => chart.id === 'iv-residuals');
+  assert.equal(residualChart?.kind, 'residual');
+  assert.equal(residualChart?.data.points?.length, rows.length);
+
   const firstStageChart = (result.charts ?? []).find(chart => chart.id === 'iv-first-stage');
   assert.equal(firstStageChart?.kind, 'scatter');
   assert.equal(firstStageChart?.data.series?.length, rows.length * 2);

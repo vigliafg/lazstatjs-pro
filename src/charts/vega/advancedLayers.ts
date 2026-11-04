@@ -3,7 +3,7 @@
  * surface. They are ordinary Vega-Lite layers over precomputed rows; the
  * runners own every coordinate and every statistic.
  */
-import type { AnalysisChart, ChartOptions } from '../../stats/charts';
+import type { AnalysisChart, ChartOptions, ChartRow } from '../../stats/charts';
 import { colorAt, themeFor } from './theme';
 import { axis, field, num, rowsOf, tooltip, xEncoding, yEncoding, type Spec } from './encoding';
 
@@ -89,15 +89,21 @@ export const paretoLayers = (
   options: Extract<ChartOptions, { kind: 'pareto' }>
 ): Spec[] => {
   const theme = themeFor(options);
-  const bars = rowsOf(chart, 'bars');
-  const categories = bars
-    .map(row => String(row.category ?? ''))
-    .sort((a, b) => {
-      const left = bars.find(row => String(row.category) === a);
-      const right = bars.find(row => String(row.category) === b);
-      const delta = num(left?.value) - num(right?.value);
-      return options.sort === 'asc' ? delta : -delta;
-    });
+  // Runners key the bar category either as `category` or as `x`. Both layers
+  // are normalised onto `category` so they share one sort order: two encodings
+  // sorting different fields make Vega-Lite drop the sort and misplace the line.
+  const rawBars = rowsOf(chart, 'bars');
+  const barKey = rawBars.some(row => row.category !== undefined) ? 'category' : 'x';
+  const bars: ChartRow[] = rawBars.map(row => ({ ...row, category: String(row[barKey] ?? '') }));
+  const categories = Array.from(
+    new Set(
+      [...bars]
+        .sort((left, right) =>
+          (num(left.value) - num(right.value)) * (options.sort === 'asc' ? 1 : -1)
+        )
+        .map(row => row.category)
+    )
+  );
   const x: Spec = {
     field: 'category',
     type: 'nominal',
@@ -130,17 +136,15 @@ export const paretoLayers = (
     });
   }
   if (options.showCumulative) {
-    const cumulative = rowsOf(chart, 'cumulative');
-    // Runners emit the cumulative row keyed either as `category` or as `x`;
-    // reading the wrong key would stack every point on one axis position.
-    const cumulativeX = cumulative.some(row => row.category !== undefined)
-      ? x
-      : { ...x, field: 'x' };
+    const cumulative = rowsOf(chart, 'cumulative').map(row => ({
+      ...row,
+      category: String(row.category ?? row.x ?? ''),
+    }));
     layers.push({
       data: { values: cumulative },
       mark: { type: 'line', color: colorAt(options, 3), strokeWidth: options.lineWidth, point: true },
       encoding: {
-        x: cumulativeX,
+        x,
         y: {
           field: 'y',
           type: 'quantitative',

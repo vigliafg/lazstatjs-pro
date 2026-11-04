@@ -82,7 +82,12 @@ export const buildMancovaOutput = ({ grid, params, ciLevel }: MancovaRunInput): 
           }))
         ),
       },
-      fields: { xLabel: groupName, yLabel: copy('Media aggiustata'), series: copy('Variabile') },
+      fields: {
+        xLabel: groupName,
+        xType: 'nominal',
+        yLabel: copy('Media aggiustata'),
+        series: copy('Variabile'),
+      },
       options: { showMarkers: true, showBand: false } as never,
     }),
   ];

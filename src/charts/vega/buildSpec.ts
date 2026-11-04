@@ -35,6 +35,56 @@ import {
   survivalLayers,
 } from './layers';
 
+/** Axes over a range below this print 6+ decimals with the default format. */
+const TINY_AXIS_RANGE = 1e-3;
+
+/**
+ * Ticks on a tiny domain (random slopes near zero, residuals of a perfect fit)
+ * otherwise come out as `0.0000000000003`. Switch those axes to trimmed
+ * significant digits, which reads as `3e-13`.
+ */
+const formatTinyAxes = <T extends TopLevelSpec>(built: T): T => {
+  const layers: any[] = Array.isArray((built as any).layer) ? (built as any).layer : [built];
+  for (const layer of layers) {
+    const values = layer?.data?.values;
+    if (!Array.isArray(values) || values.length === 0) continue;
+    for (const channel of ['x', 'y'] as const) {
+      const encoding = layer.encoding?.[channel];
+      const field = encoding?.field;
+      if (encoding?.type !== 'quantitative' || typeof field !== 'string') continue;
+      // `axis: null` hides the axis on purpose (matrix panels): leave it alone.
+      if (encoding.axis === null) continue;
+      const ticks = values
+        .map((row: any) => row?.[field])
+        .filter((value: any): value is number => typeof value === 'number' && Number.isFinite(value));
+      if (ticks.length === 0) continue;
+      const maxAbs = Math.max(...ticks.map(value => Math.abs(value)));
+      if (maxAbs >= TINY_AXIS_RANGE) continue;
+      encoding.axis = { ...(encoding.axis ?? {}), format: '.4~g' };
+    }
+  }
+  return built;
+};
+
+/**
+ * Vega-Lite gives a mark-level `stroke` precedence over the `color` encoding:
+ * a line layer with both draws every series in the mark colour, while the
+ * legend still lists the series colours. Move the mark colour to `color`,
+ * which is only a default — the encoding wins when the layer has series — so
+ * single-series lines keep their fixed colour and multi-series lines get one
+ * colour per series.
+ */
+const seriesLineColor = <T extends TopLevelSpec>(built: T): T => {
+  const layers: any[] = Array.isArray((built as any).layer) ? (built as any).layer : [built];
+  for (const layer of layers) {
+    if (layer?.mark?.type !== 'line' || typeof layer.mark.stroke !== 'string') continue;
+    if (typeof layer.encoding?.color?.field !== 'string') continue;
+    layer.mark = { ...layer.mark, color: layer.mark.stroke };
+    delete layer.mark.stroke;
+  }
+  return built;
+};
+
 /** Build the Vega-Lite specification for a semantic chart model. */
 export const buildVegaSpec = (
   chart: AnalysisChart,
@@ -141,5 +191,5 @@ export const buildVegaSpec = (
       return spec(chart, options, surfaceLayers(chart, options));
     }
   };
-  return applyChartLink(build(), chart, link);
+  return applyChartLink(seriesLineColor(formatTinyAxes(build())), chart, link);
 };

@@ -131,6 +131,74 @@ test('heatmap sort orders both axes by their marginal mean', () => {
   assert.deepEqual(xOf('desc'), ['B', 'A']);
 });
 
+test('heatmap value labels switch ink with the cell brightness', () => {
+  const chart = makeChart({
+    id: 'heat-ink',
+    kind: 'heatmap',
+    title: 'Heat',
+    data: {
+      cells: [
+        { x: 'A', y: 'A', value: 0, label: '0' },
+        { x: 'A', y: 'B', value: 0.9, label: '0.9' },
+        { x: 'B', y: 'A', value: -0.9, label: '-0.9' },
+      ],
+    },
+  });
+  const options = {
+    ...factoryOptions('heatmap'),
+    diverging: true,
+    showValues: true,
+  } as Extract<ChartOptions, { kind: 'heatmap' }>;
+  // One text layer per ink, so the label colour never fights the cell scale.
+  const inks = new Map<string, string>();
+  for (const layer of heatmapLayers(chart, options).filter(item => item.mark?.type === 'text')) {
+    for (const row of layer.data?.values as { label: string }[]) {
+      inks.set(row.label, layer.mark.color as string);
+    }
+  }
+  // The near-zero cell is almost white, the saturated ones are dark.
+  assert.equal(inks.get('0'), '#0f172a');
+  assert.equal(inks.get('0.9'), '#ffffff');
+  assert.equal(inks.get('-0.9'), '#ffffff');
+});
+
+test('bar value labels centre inside a positive stack and sit outside elsewhere', () => {
+  const stacked = makeChart({
+    id: 'bar-stack-labels',
+    kind: 'bar',
+    title: 'Bar',
+    data: {
+      bars: [
+        { category: 'A', value: 10, series: 'S1' },
+        { category: 'A', value: 5, series: 'S2' },
+      ],
+    },
+  });
+  const labelsFor = (chart: ReturnType<typeof makeChart>) =>
+    barLayers(chart, { ...factoryOptions('bar'), valueLabels: true } as Extract<
+      ChartOptions,
+      { kind: 'bar' }
+    >).filter(layer => layer.mark?.type === 'text');
+
+  const stackedLabels = labelsFor(stacked);
+  assert.equal(stackedLabels.length, 1);
+  assert.equal(stackedLabels[0].mark.color, '#0f172a');
+  assert.equal(stackedLabels[0].mark.dy, 0);
+  const centred = (stackedLabels[0].data?.values as { labelY: number }[]).map(row => row.labelY);
+  // Segment centres, not the shared seam at 10.
+  assert.deepEqual(centred, [5, 12.5]);
+
+  const negative = makeChart({
+    id: 'bar-negative-label',
+    kind: 'bar',
+    title: 'Bar',
+    data: { bars: [{ category: 'B', value: -4 }] },
+  });
+  const [outside] = labelsFor(negative);
+  assert.equal(outside.mark.color, '#e2e8f0');
+  assert.equal(outside.mark.dy, 12);
+});
+
 test('residual showPoints removes the point layer but keeps the zero rule', () => {
   const chart = makeChart({
     id: 'residual',
@@ -224,7 +292,7 @@ test('scatter plots the long series table when no points are given', () => {
   assert.equal((points!.encoding?.color as { field?: string }).field, 'series');
 });
 
-test('the Pareto cumulative line reads the x key used by the runners', () => {
+test('the Pareto cumulative line shares the bar axis and order', () => {
   const chart = makeChart({
     id: 'pareto-x',
     kind: 'pareto',
@@ -247,8 +315,16 @@ test('the Pareto cumulative line reads the x key used by the runners', () => {
   >;
   const layers = paretoLayers(chart, options);
   const line = layers.find(layer => layer.mark?.type === 'line');
+  const bar = layers.find(layer => layer.mark?.type === 'bar');
   assert.ok(line);
-  assert.equal((line!.encoding?.x as { field?: string }).field, 'x');
+  assert.ok(bar);
+  // Both layers sort the same field, otherwise Vega-Lite drops the shared sort
+  // and the cumulative line no longer follows the descending bars.
+  const barX = bar!.encoding?.x as { field?: string; type?: string; sort?: unknown };
+  const lineX = line!.encoding?.x as { field?: string; type?: string; sort?: unknown };
+  assert.equal(lineX.field, 'category');
+  assert.deepEqual(lineX.sort, barX.sort);
+  assert.deepEqual(lineX.sort, ['A', 'B']);
   assert.equal((line!.data?.values as unknown[]).length, 2);
 });
 

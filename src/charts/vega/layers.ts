@@ -2,6 +2,7 @@ import type { AnalysisChart, ChartOptions, ChartRow } from '../../stats/charts';
 import { confidenceEllipse, survivalMedians } from '../kits/common';
 import { histogramLayers } from './distributionLayers';
 import { colorAt, themeFor } from './theme';
+import { barValueLabels, heatmapLabelLayers } from './ink';
 import {
   axis,
   bandRows,
@@ -312,16 +313,14 @@ export const barLayers = (chart: AnalysisChart, options: Extract<ChartOptions, {
     });
   }
   if (options.valueLabels) {
-    layers.push({
-      data: { values: bars },
-      mark: { type: 'text', dy: -6, fontSize: 9, color: theme.text },
-      encoding: {
-        x: { field: 'category', type: 'nominal', sort: orderedCategories },
-        y: { field: 'value', type: 'quantitative' },
-        text: { field: 'value', type: 'quantitative', format: '.2f' },
-        ...offset,
-      },
-    });
+    layers.push(
+      ...barValueLabels(bars, {
+        stacked: hasSeries && !grouped,
+        sort: orderedCategories,
+        textInk: theme.text,
+        offset,
+      })
+    );
   }
   const rules = rowsOf(chart, 'rules');
   if (options.referenceLine === 'zero') rules.push({ value: 0 });
@@ -518,15 +517,7 @@ export const heatmapLayers = (chart: AnalysisChart, options: Extract<ChartOption
     },
   ];
   if (options.showValues) {
-    layers.push({
-      data: { values: cells },
-      mark: { type: 'text', fontSize: 9, color: theme.text },
-      encoding: {
-        x: { field: 'x', type: 'nominal', sort: xOrder },
-        y: { field: 'y', type: 'nominal', sort: yOrder },
-        text: { field: 'label', type: 'nominal' },
-      },
-    });
+    layers.push(...heatmapLabelLayers(cells, { diverging: options.diverging, xOrder, yOrder }));
   }
   return layers;
 };

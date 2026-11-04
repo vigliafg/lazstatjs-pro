@@ -74,7 +74,7 @@ export const buildPolynomialOutput = ({ grid, regParams, ciLevel }: PolynomialRu
       title: copy('Residui'),
       subtitle: copy('Residui rispetto ai valori stimati'),
       data: {
-        series: fit.fitted.map((value, index) => ({
+        points: fit.fitted.map((value, index) => ({
           x: value,
           y: fit.residuals[index],
           series: copy('Residui'),

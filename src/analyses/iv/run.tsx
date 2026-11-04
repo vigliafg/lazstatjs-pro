@@ -120,7 +120,7 @@ export const buildIvOutput = ({
       subtitle: copy('Risposta meno valore stimato · N = {s1}', { s1: fit.n }),
       note: copy('Pattern sistematici nei residui suggeriscono una specificazione lineare inadeguata o strumenti non validi.'),
       data: {
-        series: fit.fitted.map((value, index) => ({
+        points: fit.fitted.map((value, index) => ({
           x: value,
           y: fit.residuals[index],
           series: copy('Residui'),

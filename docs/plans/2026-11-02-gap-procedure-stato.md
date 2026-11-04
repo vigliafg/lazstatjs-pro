@@ -1,10 +1,42 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-03 (W9 chiusa: 7/7 item, gate G9 verde)
+**Ultimo aggiornamento**: 2026-11-04 (checkpoint QA grafici; W9 chiusa, gate G9 verde)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
 **Stato**: W0–W9 chiuse; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
 **Ondata corrente**: W9 chiusa — Survey/ML/Advanced (7 item); piano completato
+
+---
+
+## 0. Checkpoint QA grafici (2026-11-04)
+
+**Branch**: `grafici-procedure` · **worktree**: principale · **ultimo commit**: `a6b08e3`
+(le modifiche di questo checkpoint sono ancora nel worktree, non committate)
+
+**Contesto**: QA visiva dei 165 modelli grafici nuovi (`1ef2860` → HEAD) e
+correzione dei difetti trovati.
+
+| Item | Stato |
+| --- | --- |
+| QA visiva 165/165 modelli (19 fogli, 14 ingrandimenti) | chiuso |
+| Heatmap: inchiostro etichette per luminanza cella | chiuso |
+| Pareto: barre e cumulata sullo stesso ordinamento | chiuso |
+| Grafici vuoti: `data.series` → `data.points` / `bars` in 5 runner | chiuso |
+| MANCOVA: `xType: 'nominal'` | chiuso |
+| Assi con domini minuscoli: formato `.4~g` | chiuso |
+| Etichette barre: centro del segmento nello stack, fuori barra altrove | chiuso |
+| Linee multi-serie tutte dello stesso colore (`mark.stroke` vince sul `color`) | chiuso |
+
+**Test**: `npm run check` verde — 1360 test, 0 fail; depcruise e madge puliti;
+filesize OK (`layers.ts` 685 righe, logica inchiostro estratta in
+`src/charts/vega/ink.ts`).
+
+**Artefatti**: `docs/qa/new-models-2026-11-04/` (report, metriche, fogli) e
+`docs/qa/fix-verify-2026-11-04/` (galleria e screenshot after).
+
+**Prossimi 3 passi**: (1) commit del checkpoint; (2) rigenerare le spec del QA
+per le 26 card a linee e ricontrollare i fogli; (3) valutare un pass di QA
+visiva sulle card rimaste non ispezionate una per una.
 
 ---
 

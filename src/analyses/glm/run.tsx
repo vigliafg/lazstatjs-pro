@@ -83,7 +83,7 @@ export const buildGlmOutput = ({ grid, params, ciLevel }: GlmRunInput): Analysis
       title: copy('Residui'),
       subtitle: copy('Risposta meno valore stimato'),
       data: {
-        series: fit.fitted.map((value, index) => ({
+        points: fit.fitted.map((value, index) => ({
           x: value,
           y: residuals[index],
           series: copy('Residui'),

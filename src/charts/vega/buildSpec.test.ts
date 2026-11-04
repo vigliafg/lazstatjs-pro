@@ -389,3 +389,59 @@ test('every style-gallery entry compiles without warnings', () => {
     }
   }
 });
+
+test('a tiny axis range switches to trimmed significant digits', () => {
+  const chart = makeChart({
+    id: 'tiny-axis',
+    kind: 'residual',
+    title: 'Residual',
+    data: { points: [{ x: 1, y: 1e-12 }, { x: 2, y: 3e-12 }], rules: [{ y: 0 }] },
+    fields: { xLabel: 'X', yLabel: 'Residuo' },
+  });
+  const spec = buildVegaSpec(chart, factoryOptions('residual')) as { layer?: any[] };
+  const points = (spec.layer ?? []).find(layer => layer.mark?.type === 'point');
+  assert.ok(points);
+  assert.equal(points!.encoding.y.axis.format, '.4~g');
+
+  const normal = buildVegaSpec(modelFor('bar'), factoryOptions('bar')) as { layer?: any[] };
+  const bars = (normal.layer ?? []).find(layer => layer.mark?.type === 'bar');
+  assert.equal(bars!.encoding.y.axis.format, undefined);
+});
+
+test('a multi-series line draws each series in its legend colour', () => {
+  const chart = makeChart({
+    id: 'multiseries-line',
+    kind: 'ecdf',
+    title: 'ECDF',
+    data: {
+      points: [
+        { x: 1, y: 0.1, series: 'A' },
+        { x: 2, y: 0.4, series: 'A' },
+        { x: 1, y: 0.2, series: 'B' },
+        { x: 2, y: 0.6, series: 'B' },
+      ],
+    },
+  });
+  const built = buildVegaSpec(chart, factoryOptions('ecdf')) as { layer?: any[] };
+  const line = (built.layer ?? []).find(layer => layer.mark?.type === 'line');
+  assert.ok(line);
+  // `stroke` on the mark wins over the colour encoding in Vega-Lite; the fixed
+  // colour has to sit on `color`, which the encoding overrides per series.
+  assert.equal(line!.mark.stroke, undefined);
+  assert.equal(typeof line!.encoding.color.field, 'string');
+  assert.equal(typeof line!.mark.color, 'string');
+
+  // The compiled Vega is what the browser draws: the line must take its stroke
+  // from the colour scale, not from a constant.
+  const findLine = (node: any): any => {
+    if (!node || typeof node !== 'object') return undefined;
+    if (node.type === 'line' && node.from) return node;
+    for (const value of Object.values(node)) {
+      const found = findLine(value);
+      if (found) return found;
+    }
+    return undefined;
+  };
+  const stroke = findLine(compile(built as never).spec)?.encode?.update?.stroke;
+  assert.deepEqual(stroke, { scale: 'color', field: 'series' });
+});

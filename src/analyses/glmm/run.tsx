@@ -149,7 +149,7 @@ export const buildGlmmOutput = ({ grid, params, ciLevel }: GlmmInput): AnalysisR
       subtitle: copy('N = {s1}', { s1: fit.n }),
       note: copy('Residui senza struttura sono coerenti con l’ipotesi di varianza costante.'),
       data: {
-        series: fit.fitted.map((value, index) => ({
+        points: fit.fitted.map((value, index) => ({
           x: value,
           y: fit.residuals[index],
           series: copy('Residui'),

@@ -104,6 +104,10 @@ test('penalized mode emits coefficients, fit and the path', () => {
   const ids = (result.tables ?? []).map(table => table.id);
   assert.deepEqual(ids, ['penalized-coefficients', 'penalized-fit']);
   assert.deepEqual(result.charts?.map(chart => chart.id), ['penalized-path', 'penalized-coefficients-chart']);
+  // The bar layer reads `bars`; a coefficients chart keyed on `series` is empty.
+  const coefficients = result.charts?.find(chart => chart.id === 'penalized-coefficients-chart');
+  assert.equal(coefficients?.kind, 'bar');
+  assert.ok((coefficients?.data.bars ?? []).length > 0);
   assert.equal(result.report?.id, 'report-penalized');
 });
 

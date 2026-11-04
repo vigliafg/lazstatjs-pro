@@ -74,10 +74,9 @@ export const buildPenalizedOutput = ({ grid, regParams, ciLevel }: PenalizedRunI
       title: copy('Coefficienti al λ scelto'),
       subtitle: `λ = ${lambda}`,
       data: {
-        series: predictorNames.map((name, index) => ({
-          x: name,
-          y: fit.coefficients[index],
-          series: copy('Coefficiente'),
+        bars: predictorNames.map((name, index) => ({
+          category: name,
+          value: fit.coefficients[index],
         })),
       },
       fields: { xLabel: copy('Predittore'), yLabel: copy('Coefficiente'), series: copy('Serie') },
