@@ -126,6 +126,10 @@ con le tabelle che ognuna produce, prima del confronto con JMP.
 > (`Media della risposta` e tabella `reg-effects`), quindi i conteggi includono
 > già quelle quattro voci.
 
+> Confronto voce per voce con JMP: panorama di tutte le procedure in
+> `2026-11-05-confronto-tabelle-jmp-tutte-le-procedure.md`; dettaglio della
+> famiglia regressione in `2026-11-05-confronto-tabelle-jmp-regressione.md`.
+
 ## Tabelle per procedura
 
 Formato: `id` (titolo) — righe.

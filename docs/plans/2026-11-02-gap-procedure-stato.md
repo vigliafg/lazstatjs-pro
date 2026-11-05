@@ -23,7 +23,7 @@ di qualunque confronto e di qualunque modifica alle tabelle.
 | Tabelle e voci lette eseguendo i 72 runner reali | chiuso (244 tabelle, 3.975 voci) |
 | Controparte JMP e verifica della presenza nei quattro libri | chiuso (63 con piattaforma, 39 documentate) |
 | Script di censimento riproducibile | chiuso (`scripts/inventory-procedures.mts`) |
-| Fase 2.1 (confronto voce per voce) | chiusa per la famiglia `regression` (14 blocchi mancanti calcolabili, 1 non calcolabile) |
+| Fase 2.1 (confronto voce per voce) | **chiusa su 72/72 procedure**: 38 con piattaforma JMP documentata, 20 blocchi mancanti calcolabili su 15 procedure, 3 voci non calcolabili |
 | Fase 2.2, prima integrazione (regressione lineare) | chiusa: `Media della risposta` + tabella `reg-effects` (SS Tipo III) |
 
 **Test**: `npm run check` verde (1363 test, 0 fail); `npx tsc --noEmit` pulito,
@@ -32,17 +32,19 @@ compreso lo script di censimento.
 **Artefatti**: `docs/analysis/2026-11-05-inventario-procedure-tabelle.md`
 (riepilogo, tabella unica, elenco tabelle per procedura, limiti) e
 `docs/analysis/2026-11-05-confronto-tabelle-jmp-regressione.md` (diff voce per
-voce della famiglia regressione con rimando ai libri).
+voce della famiglia regressione con rimando ai libri) e
+`docs/analysis/2026-11-05-confronto-tabelle-jmp-tutte-le-procedure.md`
+(panoramica delle 72 procedure con piattaforma, stato documentale e mancanze).
 
 **Decisioni**: il censimento esegue i runner sui dataset di `samples/manifest.json`
 invece di dedurre le tabelle dal codice; una sola modalità per procedura (le
 modalità multiple si censiranno in 2.1); la controparte JMP è dichiarata
 "documentata" solo se la piattaforma compare nei libri.
 
-**Prossimi 3 passi**: (1) fase 2.2 sulle tabelle dei modelli non lineari
-(logistico, ordinale, multinomiale: Effect LR tests e colonna ChiSquare);
-(2) famiglie `compare` e `categorical`; (3) modelli misti (SE/IC dei componenti
-di varianza e Fixed Effects Tests).
+**Prossimi 3 passi**: (1) fase 2.2 sui modelli non lineari (7 blocchi: Effect LR
+tests e colonna ChiSquare per logistico/ordinale/multinomiale/conteggi, MSE per il
+non lineare); (2) modelli misti `lmm`/`glmm` (4 blocchi); (3) confronti `anova` e
+`variances` (3 blocchi, Steel–Dwass l'unico non banale).
 
 ---
 

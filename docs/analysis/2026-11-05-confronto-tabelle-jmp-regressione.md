@@ -6,6 +6,8 @@ sono quelle **eseguite** da `scripts/inventory-procedures.mts` (etichette di rig
 e colonne reali, non dedotte dal codice); le voci JMP sono lette dai quattro libri
 con `pdftotext -layout`, con il rimando alle righe del testo estratto.
 
+> Panoramica di tutte le 72 procedure: `2026-11-05-confronto-tabelle-jmp-tutte-le-procedure.md`.
+
 ## Fonti JMP
 
 | Fonte | Contenuto usato |
