@@ -17,6 +17,7 @@
 | 2.0 | 2026-11-02 | WBS, dipendenze, Definition of Ready/Done, work package per famiglia, matrice di tracciabilità, piano test, release plan, primi 4 sprint |
 | 2.1 | 2026-11-02 | Protocollo di checkpoint, handoff e compattazione; documento di stato `gap-procedure-stato.md` |
 | 2.2 | 2026-11-02 | W0-09: retrofit dei reference test sulle 8 procedure esistenti senza confronto indipendente |
+| 2.3 | 2026-11-05 | Fase 2: censimento delle tabelle (72 procedure), confronto con JMP su tutte le procedure, checklist §8.8 per integrare le voci mancanti |
 
 ---
 
@@ -98,7 +99,36 @@ riconoscibili. Non contano:
 | Advanced & Bayesian (nuova) | 3 | 3 | 0 | P2 |
 | **Totale** | **73** | **36** | **37** |  |
 
+> **Metrica**: «Mancanti», «Nuove voci» ed «Estensioni» contano **voci di
+> registro** (metodi e modalità), non voci di output. Il confronto con le tabelle
+> che JMP riporta per le stesse analisi è un perimetro diverso e vive nella §2.5.
+> I due conteggi non vanno sommati.
+
 ---
+
+### 2.5 Fase 2 — confronto con JMP (2026-11-05)
+
+Dopo la chiusura delle ondate W0–W9 il perimetro si è spostato dalla *presenza*
+delle procedure alla *completezza dei loro risultati*: le tabelle prodotte sono
+state messe a confronto con quelle che JMP riporta per le stesse analisi. I
+numeri di §2.4 restano validi come voci di registro; questi misurano le voci di
+output dentro le tabelle.
+
+| Documento | Contenuto |
+|---|---|
+| `docs/analysis/2026-11-05-inventario-procedure-tabelle.md` | censimento eseguibile: 72 procedure, 245 tabelle, 3.979 voci, con le etichette di riga |
+| `docs/analysis/2026-11-05-confronto-tabelle-jmp-tutte-le-procedure.md` | diff JMP di tutte le procedure: 38 con piattaforma documentata nei quattro libri, 20 blocchi mancanti calcolabili su 15 procedure, 3 voci non calcolabili |
+| `docs/analysis/2026-11-05-confronto-tabelle-jmp-regressione.md` | dettaglio voce per voce della famiglia regressione, con il rimando alle righe dei PDF |
+
+Stato: fase 2.0 (inventario) e fase 2.1 (confronto) chiuse; fase 2.2 aperta, con
+la regressione già integrata per intero (tabella, prosa in sei lingue, test,
+golden) e 20 blocchi residui. La regola di chiusura di ogni blocco è la checklist
+§8.8. Ordine di lavoro: modelli non lineari (7 blocchi), modelli misti (4),
+confronti (3), multivariata e descrittive (4), qualità (1).
+
+Le 34 procedure senza riferimento nei libri restano fuori dal conteggio: per loro
+non esistono voci JMP da confrontare e i documenti lo dichiarano, invece di
+inventarle.
 
 ## 3. Baseline e assunzioni
 
@@ -201,7 +231,9 @@ cartella della procedura madre; il form aggiunge un selettore di modalità.
 
 - [ ] Kernel puro + test unitari + reference test con tolleranza.
 - [ ] Casi di rifiuto: dati insufficienti, singolarità, separazione, NA.
-- [ ] TableSpec e ReportSpec completi.
+- [ ] TableSpec e ReportSpec completi; se la voce aggiunge righe, colonne o
+      tabelle, la prosa del report le racconta e le etichette sono in sei lingue
+      (checklist §8.8).
 - [ ] Builder `run.tsx` con caso valido e rifiuti.
 - [ ] Form controllato + default grid-aware.
 - [ ] Parametri tipizzati, default, parsing difensivo, clamp, enum validati.
