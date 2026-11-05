@@ -256,4 +256,10 @@ export const multivariateCopy: Record<string, string> = {
     'Uniqueness',
   'Loadings ≥ 0,40 sono generalmente considerati sostanziali; il segno è arbitrario.':
     'Loadings ≥ 0.40 are generally considered substantial; the sign is arbitrary.',
+  'Autovettori delle componenti': 'Component eigenvectors',
+  'Autovettori (coefficienti delle componenti)': 'Eigenvectors (component coefficients)',
+  'Ogni colonna è il coefficiente con cui la variabile entra nel punteggio del componente (autovettore normalizzato a lunghezza 1).': 'Each column holds the coefficient with which the variable enters the component score (eigenvector of length 1).',
+  'Gli autovettori sono ortogonali tra loro: cambiare segno a una colonna ribalta il componente ma non l’interpretazione.': 'Eigenvectors are orthogonal to each other: flipping the sign of a column reverses the component but not its meaning.',
+  'Autovettore = saturazione / √autovalore; ha norma 1 su ogni componente.': 'Eigenvector = loading / √eigenvalue; it has norm 1 on every component.',
+  'Il segno è arbitrario: confronta i pattern, non i segni, tra analisi diverse.': 'The sign is arbitrary: compare patterns, not signs, across analyses.',
 };

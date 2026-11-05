@@ -43,6 +43,14 @@ export const pcaReport = (tables: TableSpec[], result: PcaResult, level: number)
     ],
     sections: [
       {
+        heading: copy('Autovettori delle componenti'),
+        bullets: [
+          copy('Ogni colonna è il coefficiente con cui la variabile entra nel punteggio del componente (autovettore normalizzato a lunghezza 1).'),
+          copy('Gli autovettori sono ortogonali tra loro: cambiare segno a una colonna ribalta il componente ma non l’interpretazione.'),
+        ],
+      },
+
+      {
         heading: copy('La lettura dei risultati'),
         body: [
           copy('Il primo componente spiega il {s1}; i primi {s2} arrivano al {s3}.', { s1: fmtPct(result.variancePct[0]), s2: result.retained, s3: fmtPct(explained) }),

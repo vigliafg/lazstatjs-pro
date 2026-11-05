@@ -280,4 +280,10 @@ export const multivariateCopy: Record<string, string> = {
     'α si supprimé',
   'α standardizzato':
     'α standardisé',
+  'Autovettori delle componenti': 'Vecteurs propres des composantes',
+  'Autovettori (coefficienti delle componenti)': 'Vecteurs propres (coefficients des composantes)',
+  'Ogni colonna è il coefficiente con cui la variabile entra nel punteggio del componente (autovettore normalizzato a lunghezza 1).': 'Chaque colonne donne le coefficient avec lequel la variable entre dans le score de la composante (vecteur propre de longueur 1).',
+  'Gli autovettori sono ortogonali tra loro: cambiare segno a una colonna ribalta il componente ma non l’interpretazione.': 'Les vecteurs propres sont orthogonaux entre eux : changer le signe d’une colonne inverse la composante, pas son interprétation.',
+  'Autovettore = saturazione / √autovalore; ha norma 1 su ogni componente.': 'Vecteur propre = saturation / √valeur propre ; sa norme vaut 1 sur chaque composante.',
+  'Il segno è arbitrario: confronta i pattern, non i segni, tra analisi diverse.': 'Le signe est arbitraire : comparez les motifs, pas les signes, entre analyses.',
 };

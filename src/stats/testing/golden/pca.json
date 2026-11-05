@@ -109,6 +109,41 @@
     ]
   },
   {
+    "id": "pca-eigenvectors",
+    "title": "Autovettori (coefficienti delle componenti)",
+    "subtitle": "PCA su matrice di correlazione",
+    "columns": [
+      {
+        "key": "variable",
+        "label": "Variabile",
+        "format": "text"
+      },
+      {
+        "key": "pc1",
+        "label": "PC1",
+        "format": "dec3"
+      }
+    ],
+    "rows": [
+      {
+        "variable": "score",
+        "pc1": 0.551512801505
+      },
+      {
+        "variable": "age",
+        "pc1": 0.592743907049
+      },
+      {
+        "variable": "income",
+        "pc1": 0.586931248471
+      }
+    ],
+    "notes": [
+      "Autovettore = saturazione / √autovalore; ha norma 1 su ogni componente.",
+      "Il segno è arbitrario: confronta i pattern, non i segni, tra analisi diverse."
+    ]
+  },
+  {
     "id": "pca-adequacy",
     "title": "Adeguatezza del campione",
     "columns": [

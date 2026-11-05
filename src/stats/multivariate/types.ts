@@ -7,6 +7,8 @@ export interface PcaResult {
   cumulativePct: number[];
   /** loadings[i][j] = loading of variable i on component j. */
   loadings: number[][];
+  /** eigenvectors[i][j] = coefficient of variable i on component j. */
+  eigenvectors: number[][];
   communalities: number[];
   retained: number;
   /** scores[i][j] = score of case i on component j (first two are plotted). */

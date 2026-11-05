@@ -205,4 +205,10 @@ export const multivariateCopy: Record<string, string> = {
     'α misst nicht die Eindimensionalität: Eine Skala kann ein hohes α haben und dennoch mehrere Faktoren enthalten.',
   'α se eliminato': 'α bei Entfernen',
   'α standardizzato': 'standardisiertes α',
+  'Autovettori delle componenti': 'Eigenvektoren der Komponenten',
+  'Autovettori (coefficienti delle componenti)': 'Eigenvektoren (Komponentenkoeffizienten)',
+  'Ogni colonna è il coefficiente con cui la variabile entra nel punteggio del componente (autovettore normalizzato a lunghezza 1).': 'Jede Spalte enthält den Koeffizienten, mit dem die Variable in den Komponentenwert eingeht (Eigenvektor der Länge 1).',
+  'Gli autovettori sono ortogonali tra loro: cambiare segno a una colonna ribalta il componente ma non l’interpretazione.': 'Eigenvektoren sind zueinander orthogonal: ein Vorzeichenwechsel einer Spalte dreht die Komponente um, nicht ihre Bedeutung.',
+  'Autovettore = saturazione / √autovalore; ha norma 1 su ogni componente.': 'Eigenvektor = Ladung / √Eigenwert; er hat bei jeder Komponente die Norm 1.',
+  'Il segno è arbitrario: confronta i pattern, non i segni, tra analisi diverse.': 'Das Vorzeichen ist beliebig: vergleiche Muster, nicht Vorzeichen, zwischen Analysen.',
 };

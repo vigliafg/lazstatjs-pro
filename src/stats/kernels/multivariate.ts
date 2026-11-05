@@ -128,6 +128,7 @@ export const principalComponents = (
     variancePct,
     cumulativePct,
     loadings,
+    eigenvectors: eigen.vectors,
     communalities,
     retained,
     scores,

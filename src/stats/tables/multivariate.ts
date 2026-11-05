@@ -60,6 +60,25 @@ export const pcaTables = (result: PcaResult): TableSpec[] => {
       ],
     },
     {
+      id: 'pca-eigenvectors',
+      title: copy('Autovettori (coefficienti delle componenti)'),
+      subtitle: result.standardize ? copy('PCA su matrice di correlazione') : copy('PCA su matrice di covarianza'),
+      columns: [
+        { key: 'variable', label: copy('Variabile'), format: 'text' },
+        ...loadingsColumns,
+      ],
+      rows: result.variables.map((variable, index) => ({
+        variable,
+        ...Object.fromEntries(
+          loadingsColumns.map((column, component) => [column.key, result.eigenvectors[index][component]])
+        ),
+      })),
+      notes: [
+        copy('Autovettore = saturazione / √autovalore; ha norma 1 su ogni componente.'),
+        copy('Il segno è arbitrario: confronta i pattern, non i segni, tra analisi diverse.'),
+      ],
+    },
+    {
       id: 'pca-adequacy',
       title: copy('Adeguatezza del campione'),
       columns: [

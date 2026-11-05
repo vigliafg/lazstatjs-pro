@@ -110,7 +110,7 @@ describe('PCA', () => {
     );
     assert.ok(result);
     const tables = pcaTables(result);
-    assert.deepEqual(tables.map((table) => table.id), ['pca-eigen', 'pca-loadings', 'pca-adequacy']);
+    assert.deepEqual(tables.map((table) => table.id), ['pca-eigen', 'pca-loadings', 'pca-eigenvectors', 'pca-adequacy']);
     const report = pcaReport(tables, result, 95);
     assert.ok(report.headline.includes('80.0%'));
     assert.ok(report.sections.length >= 3);

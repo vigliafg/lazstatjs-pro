@@ -280,4 +280,10 @@ export const multivariateCopy: Record<string, string> = {
     'α si se elimina',
   'α standardizzato':
     'α tipificado',
+  'Autovettori delle componenti': 'Autovectores de las componentes',
+  'Autovettori (coefficienti delle componenti)': 'Autovectores (coeficientes de las componentes)',
+  'Ogni colonna è il coefficiente con cui la variabile entra nel punteggio del componente (autovettore normalizzato a lunghezza 1).': 'Cada columna es el coeficiente con el que la variable entra en la puntuación de la componente (autovector de longitud 1).',
+  'Gli autovettori sono ortogonali tra loro: cambiare segno a una colonna ribalta il componente ma non l’interpretazione.': 'Los autovectores son ortogonales entre sí: cambiar el signo de una columna invierte la componente, no su interpretación.',
+  'Autovettore = saturazione / √autovalore; ha norma 1 su ogni componente.': 'Autovector = saturación / √autovalor; tiene norma 1 en cada componente.',
+  'Il segno è arbitrario: confronta i pattern, non i segni, tra analisi diverse.': 'El signo es arbitrario: compara patrones, no signos, entre análisis.',
 };

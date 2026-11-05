@@ -259,10 +259,13 @@ conta come integrazione a metà.
 2. **Modelli misti** (`lmm`, `glmm`): 4 blocchi, i più onerosi (matrice di informazione).
 3. **Confronti** (`anova`, `variances`): 3 blocchi, con Steel–Dwass come unico caso
    non banale.
-   **Stato: `anova` chiuso il 2026-11-05** (Bartlett, O'Brien, Steel–Dwass);
-   `variances` ancora aperto.
+   **Stato: `anova` chiuso il 2026-11-05** (Bartlett, O'Brien, Steel–Dwass) e
+   `variances` chiuso (O'Brien accanto a Bartlett, Levene e F).
 4. **Multivariata e descrittive** (`multivariate`, `cluster`, `distfit`, `agreement`):
    4 blocchi isolati, ognuno indipendente dagli altri.
+   **Stato: `multivariate` chiuso** (tabella `pca-eigenvectors`, verificata contro
+   gli autovettori di `prcomp`) e **`distfit` chiuso** (Cramér–von Mises in
+   `fit-gof`); `cluster` e `agreement` ancora aperti.
 5. **Serie e qualità** (`quality`): limiti per sottogruppo.
 
 ## Limiti

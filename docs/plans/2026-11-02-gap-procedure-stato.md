@@ -28,6 +28,7 @@ di qualunque confronto e di qualunque modifica alle tabelle.
 | Fase 2.2, checklist di integrazione | definita nel piano §8.8: numerica, tabella/colonna, prosa, 6 lingue, test, golden, grafici, export, help |
 | Fase 2.2, seconda integrazione (modelli non lineari) | **chiusa** e completa secondo §8.8: tabelle `logit-effects`, `ordinal-effects`, `multinomial-effects`, `count-effects`, `glm-effects`; colonna `ChiSquare (Wald)` in `logit-coefficients`; riga MSE in `nonlinear-fit`; prosa sugli effetti LR in sei lingue; 6 test in `src/stats/effects.test.ts`; golden invariato (solo aggiunte) |
 | Fase 2.2, terza integrazione (`anova`) | **chiusa**: Bartlett e O'Brien in `anova-assumptions`, Steel–Dwass tra i post-hoc (p del massimo dei |z| pairwise con correlazione 1/2), opzione nel form e nelle sei lingue, prosa nel report; 4 test in `src/stats/kernels/anova-homogeneity.test.ts` (Bartlett e O'Brien contro R) |
+| Fase 2.2, quarta integrazione (`variances`, `distfit`, `multivariate`) | **chiusa**: O'Brien in `var-tests`; Cramér–von Mises in `fit-gof`; tabella `pca-eigenvectors` con gli autovettori dei componenti, con prosa e sei lingue |
 
 **Test**: `npm run check` verde (1363 test, 0 fail); `npx tsc --noEmit` pulito,
 compreso lo script di censimento.
