@@ -302,4 +302,11 @@ export const anovaCopy: Record<string, string> = {
     'C’est un test non paramétrique d’égalité des médianes : il ne suppose pas la normalité et résiste aux valeurs aberrantes.',
   'χ² = {s1}, df = {s2}, p = {s3}.':
     'χ² = {s1}, df = {s2}, p = {s3}.',
+  'Bartlett (log-varianze)': 'Bartlett (log-variances)',
+  'O’Brien (varianze robuste)': 'O’Brien (variances robustes)',
+  'Steel–Dwass': 'Steel–Dwass',
+  'Bartlett: {s1} → {s2}.': 'Bartlett : {s1} → {s2}.',
+  'O’Brien: {s1} → {s2}.': 'O’Brien : {s1} → {s2}.',
+  'varianze non omogenee': 'variances non homogènes',
+  'varianze compatibili con l’ipotesi di uguaglianza': 'variances compatibles avec l’hypothèse d’égalité',
 };

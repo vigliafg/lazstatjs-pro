@@ -274,4 +274,11 @@ export const anovaCopy: Record<string, string> = {
     'It is a non-parametric test of equality of medians: it does not assume normality and resists outliers.',
   'χ² = {s1}, df = {s2}, p = {s3}.':
     'χ² = {s1}, df = {s2}, p = {s3}.',
+  'Bartlett (log-varianze)': 'Bartlett (log-variances)',
+  'O’Brien (varianze robuste)': 'O’Brien (robust variances)',
+  'Steel–Dwass': 'Steel–Dwass',
+  'Bartlett: {s1} → {s2}.': 'Bartlett: {s1} → {s2}.',
+  'O’Brien: {s1} → {s2}.': 'O’Brien: {s1} → {s2}.',
+  'varianze non omogenee': 'non-homogeneous variances',
+  'varianze compatibili con l’ipotesi di uguaglianza': 'variances consistent with equality',
 };

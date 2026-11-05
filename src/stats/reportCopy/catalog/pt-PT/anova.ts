@@ -302,4 +302,11 @@ export const anovaCopy: Record<string, string> = {
     'É um teste não paramétrico de igualdade de medianas: não assume normalidade e resiste a valores atípicos.',
   'χ² = {s1}, df = {s2}, p = {s3}.':
     'χ² = {s1}, df = {s2}, p = {s3}.',
+  'Bartlett (log-varianze)': 'Bartlett (log-variâncias)',
+  'O’Brien (varianze robuste)': 'O’Brien (variâncias robustas)',
+  'Steel–Dwass': 'Steel–Dwass',
+  'Bartlett: {s1} → {s2}.': 'Bartlett: {s1} → {s2}.',
+  'O’Brien: {s1} → {s2}.': 'O’Brien: {s1} → {s2}.',
+  'varianze non omogenee': 'variâncias não homogéneas',
+  'varianze compatibili con l’ipotesi di uguaglianza': 'variâncias compatíveis com a hipótese de igualdade',
 };

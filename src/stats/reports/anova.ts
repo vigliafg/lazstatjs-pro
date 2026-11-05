@@ -38,6 +38,8 @@ export const anovaReport = (input: AnovaReportInput): ReportSpec => {
   const brownP = num(rowLike(assumptions, 'check', 'brown'), 'p');
   const sdRatio = num(rowLike(assumptions, 'check', copy('rapporto sd')), 'statistic');
   const welchP = num(rowLike(assumptions, 'check', 'welch'), 'p');
+  const bartlettP = num(rowLike(assumptions, 'check', 'bartlett'), 'p');
+  const obrienP = num(rowLike(assumptions, 'check', 'brien'), 'p');
 
   const posthocRows = rowsOf(tables, 'anova-posthoc');
   const kruskal = rowsOf(tables, 'anova-kruskal')[0];
@@ -94,6 +96,8 @@ export const anovaReport = (input: AnovaReportInput): ReportSpec => {
       Number.isFinite(leveneP)
         ? copy('Omoschedasticità: Levene {s1}{s2} → {s3}.', { s1: describeP(leveneP), s2: Number.isFinite(brownP) ? copy(', Brown–Forsythe {s1}', { s1: describeP(brownP) }) : '', s3: leveneP < alphaOf(level) ? copy('varianze non omogenee, quindi l’ANOVA classica è a rischio e conviene usare Welch o Kruskal–Wallis') : copy('assunzione di varianze uguali plausibile') })
         : copy('Omoschedasticità non verificabile con questi dati.'),
+      Number.isFinite(bartlettP) ? copy('Bartlett: {s1} → {s2}.', { s1: describeP(bartlettP), s2: isDecided(bartlettP, level) ? copy('varianze non omogenee') : copy('varianze compatibili con l’ipotesi di uguaglianza') }) : '',
+      Number.isFinite(obrienP) ? copy('O’Brien: {s1} → {s2}.', { s1: describeP(obrienP), s2: isDecided(obrienP, level) ? copy('varianze non omogenee') : copy('varianze compatibili con l’ipotesi di uguaglianza') }) : '',
       Number.isFinite(sdRatio) ? copy('Rapporto tra SD massima e minima: {s1} (valori molto sopra 2 indicano gruppi con dispersione diversa).', { s1: show(sdRatio, 2) }) : '',
       Number.isFinite(welchP) ? copy('Welch ANOVA: {s1} → {s2}.', { s1: describeP(welchP), s2: isDecided(welchP, level) ? copy('conferma la differenza tra le medie anche senza assumere varianze uguali') : copy('non conferma la differenza quando le varianze sono libere di differire') }) : '',
       copy('I gruppi dovrebbero provenire da osservazioni indipendenti: la stessa unità non deve comparire in due gruppi.'),

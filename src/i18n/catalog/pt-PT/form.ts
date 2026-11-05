@@ -127,6 +127,7 @@ export const formMessages = {
   'posthoc.bonferroni': 'Bonferroni',
   'posthoc.holm': 'Holm',
   'posthoc.gameshowell': 'Games–Howell',
+  'posthoc.steeldwass': 'Steel–Dwass',
   'posthoc.fdr': 'FDR (BH)',
   'form.test': 'Teste',
   'form.numericMeasures3': 'Medições numéricas (≥ 3)',

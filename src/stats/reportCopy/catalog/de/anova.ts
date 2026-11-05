@@ -217,4 +217,11 @@ export const anovaCopy: Record<string, string> = {
     'Es ist ein nicht parametrischer Test auf Gleichheit der Mediane: Er setzt keine Normalität voraus und ist robust gegen Ausreißer.',
   'χ² = {s1}, df = {s2}, p = {s3}.':
     'χ² = {s1}, df = {s2}, p = {s3}.',
+  'Bartlett (log-varianze)': 'Bartlett (Log-Varianzen)',
+  'O’Brien (varianze robuste)': 'O’Brien (robuste Varianzen)',
+  'Steel–Dwass': 'Steel–Dwass',
+  'Bartlett: {s1} → {s2}.': 'Bartlett: {s1} → {s2}.',
+  'O’Brien: {s1} → {s2}.': 'O’Brien: {s1} → {s2}.',
+  'varianze non omogenee': 'nicht homogene Varianzen',
+  'varianze compatibili con l’ipotesi di uguaglianza': 'Varianzen mit der Gleichheitsannahme vereinbar',
 };

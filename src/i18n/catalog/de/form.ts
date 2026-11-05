@@ -135,6 +135,7 @@ export const formMessages: Record<keyof typeof enForm, string> = {
   'posthoc.bonferroni': 'Bonferroni',
   'posthoc.holm': 'Holm',
   'posthoc.gameshowell': 'Games–Howell',
+  'posthoc.steeldwass': 'Steel–Dwass',
   'posthoc.fdr': 'FDR (BH)',
   'form.test': 'Test',
   'form.numericMeasures3': 'Numerische Messungen (≥ 3)',

@@ -92,6 +92,7 @@ export const AnovaForm = ({ grid, anovaParams, setAnovaParams, onLevels, onRecod
           <option value="bonferroni">{t('posthoc.bonferroni')}</option>
           <option value="holm">{t('posthoc.holm')}</option>
           <option value="gameshowell">{t('posthoc.gameshowell')}</option>
+          <option value="steeldwass">{t('posthoc.steeldwass')}</option>
         </select>
         </Field>
       )}

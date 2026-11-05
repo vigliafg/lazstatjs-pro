@@ -117,6 +117,10 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
         return { check: copy('Levene (media)'), statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: copy('omoschedasticità') };
       case 'brownForsythe':
         return { check: copy('Brown–Forsythe (mediana)'), statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: copy('robusto agli outlier') };
+      case 'bartlett':
+        return { check: copy('Bartlett (log-varianze)'), statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: copy('omoschedasticità') };
+      case 'obrien':
+        return { check: copy('O’Brien (varianze robuste)'), statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: copy('robusto agli outlier') };
       case 'sdRatio':
         return { check: copy('Rapporto SD max/min'), statistic: item.statistic, df1: item.df1, df2: item.df2, p: item.p, note: copy('omogeneità descrittiva delle SD') };
       case 'welch':
@@ -163,6 +167,7 @@ export const anovaTables = (options: AnovaTablesOptions): TableSpec[] => {
       holm: 'Holm',
       fdr: copy('FDR (Benjamini–Hochberg)'),
       gameshowell: copy('Games–Howell (Welch pairwise)'),
+      steeldwass: copy('Steel–Dwass'),
     };
 
     tables.push({

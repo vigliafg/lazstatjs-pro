@@ -1,0 +1,230 @@
+{
+  "status": "OK 10",
+  "shotsMs": 2219,
+  "report": [
+    {
+      "id": "pls-loadings",
+      "hasSvg": true,
+      "svgWidth": 628,
+      "svgHeight": 374,
+      "marks": 29,
+      "texts": [
+        "-0.01",
+        "-0.44",
+        "-0.89",
+        "-0.9",
+        "0.45",
+        "0.01",
+        "0.02",
+        "−0.9",
+        "0.5",
+        "Loadings delle componenti PLS",
+        "2 componenti · 4 predittori",
+        "C1"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "alt-life-stress",
+      "hasSvg": true,
+      "svgWidth": 566,
+      "svgHeight": 376,
+      "marks": 76,
+      "texts": [
+        "0.0",
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "1.0",
+        "1.1"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "multinomial-confusion",
+      "hasSvg": true,
+      "svgWidth": 605,
+      "svgHeight": 369,
+      "marks": 30,
+      "texts": [
+        "10",
+        "10",
+        "10",
+        "10",
+        "Matrice di confusione",
+        "3 classi · accuratezza 88.2%",
+        "Classe predetta",
+        "Classe osservata"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "survey-deff",
+      "hasSvg": true,
+      "svgWidth": 566,
+      "svgHeight": 373,
+      "marks": 37,
+      "texts": [
+        "Stima",
+        "0.0",
+        "0.2",
+        "0.4",
+        "0.6",
+        "0.8",
+        "1.0",
+        "1.2",
+        "1.4",
+        "1.6",
+        "1.8",
+        "2.0"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "doe-alias",
+      "hasSvg": true,
+      "svgWidth": 614,
+      "svgHeight": 375,
+      "marks": 63,
+      "texts": [
+        "1.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "1.00",
+        "0.00",
+        "1.00",
+        "0.00",
+        "0.00",
+        "1.00",
+        "0.00"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "gof-contribution",
+      "hasSvg": true,
+      "svgWidth": 603,
+      "svgHeight": 374,
+      "marks": 64,
+      "texts": [
+        "Category",
+        "0.0",
+        "0.5",
+        "1.0",
+        "1.5",
+        "2.0",
+        "2.5",
+        "3.0",
+        "3.5",
+        "4.0",
+        "4.5",
+        "5.0"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "nested-variance",
+      "hasSvg": true,
+      "svgWidth": 557,
+      "svgHeight": 406,
+      "marks": 34,
+      "texts": [
+        "Outer",
+        "Inner",
+        "Residuo",
+        "Componente",
+        "Varianza",
+        "0.00",
+        "7.00",
+        "2.00",
+        "Componenti di varianza",
+        "Scomposizione gerarchica di Y"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "latentclass-entropy",
+      "hasSvg": true,
+      "svgWidth": 568,
+      "svgHeight": 384,
+      "marks": 38,
+      "texts": [
+        "C1",
+        "C2",
+        "Classe",
+        "10",
+        "20",
+        "30",
+        "40",
+        "50",
+        "60",
+        "70",
+        "80",
+        "90"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "cluster-silhouette",
+      "hasSvg": true,
+      "svgWidth": 565,
+      "svgHeight": 378,
+      "marks": 30,
+      "texts": [
+        "C1",
+        "C2",
+        "Cluster",
+        "0.0",
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "Silhouette media",
+        "0.58"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    },
+    {
+      "id": "exact-observed-expected",
+      "hasSvg": true,
+      "svgWidth": 562,
+      "svgHeight": 534,
+      "marks": 48,
+      "texts": [
+        "Esposto · Evento",
+        "Esposto · Nessun evento",
+        "Non esposto · Evento",
+        "Non esposto · Nessun evento",
+        "Cella",
+        "10",
+        "12",
+        "Frequenza",
+        "10.00",
+        "6.50",
+        "5.00",
+        "8.50"
+      ],
+      "badNumbers": false,
+      "clipped": 0
+    }
+  ]
+}
