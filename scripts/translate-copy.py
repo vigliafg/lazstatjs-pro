@@ -3,13 +3,18 @@
 
 The script is intentionally generic: it accepts a JSON object (key -> text) or
 a JSON array (text) and returns the same shape with translated values. It
-preserves ``{placeholders}`` and falls back through four no-key endpoints, so a
-429 on one endpoint does not stop the batch:
+preserves ``{placeholders}`` and falls back through four endpoints, so a 429 on
+one endpoint does not stop the batch:
 
 1. Google ``translate_a/single`` with ``client=dict-chrome-ex``
-2. Google ``translate-pa`` with the public browser key
+2. Google ``translate-pa`` (needs ``GOOGLE_TRANSLATE_API_KEY``; skipped when
+   the variable is unset)
 3. Google ``translate_a/single`` with the legacy ``gtx`` client
 4. Microsoft Edge ``translatetext``
+
+The API key is read from the environment only; never hardcode it here or in any
+other tracked file. The endpoint that needs it is optional and the other three
+keep working without it.
 
 Examples
 --------
@@ -28,8 +33,10 @@ one request per label.
 """
 from __future__ import annotations
 
+
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -42,7 +49,7 @@ UA = (
 )
 GT = "https://translate.googleapis.com/translate_a/single"
 GT_PA = "https://translate-pa.googleapis.com/v1/translate"
-GT_PA_KEY = "AIzaSyDLEeFI5OtFBwYBIoK_jj5m32rZK5CkCXA"
+GT_PA_KEY = os.environ.get("GOOGLE_TRANSLATE_API_KEY", "")
 MS = "https://edge.microsoft.com/translate/translatetext"
 PLACEHOLDER = re.compile(r"\{(\w+)\}")
 LANG_ALIASES = {"pt-PT": "pt", "pt_BR": "pt", "zh-CN": "zh"}
@@ -68,6 +75,8 @@ def _google_single(text: str, source: str, target: str, client: str) -> str:
 
 
 def _google_pa(text: str, source: str, target: str) -> str:
+    if not GT_PA_KEY:
+        raise RuntimeError("GOOGLE_TRANSLATE_API_KEY is not set")
     query = urllib.parse.urlencode(
         {
             "params.client": "gtx",
