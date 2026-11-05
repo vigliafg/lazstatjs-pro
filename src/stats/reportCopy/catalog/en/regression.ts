@@ -272,4 +272,11 @@ export const regressionCopy: Record<string, string> = {
     'Type III SS measure each term’s contribution net of the others: the model is refitted without the term and the increase in the residual sum of squares is recorded. With one degree of freedom F is the square of the coefficient’s t.',
   'Effetti (SS Tipo III)':
     'Effects (Type III SS)',
+  'Effetti (test LR)': 'Effects (LR tests)',
+  'LR ChiSquare': 'LR ChiSquare',
+  'ChiSquare': 'ChiSquare',
+  '{s1}: LR χ² = {s2} con {s3} df ({s4}).': '{s1}: LR χ² = {s2} with {s3} df ({s4}).',
+  'Il test LR confronta il modello completo con quello senza il termine: 2·(log-verosimiglianza completa − ridotta) con p dalla χ². È più affidabile del Wald quando gli effetti sono forti o il campione è piccolo.': 'The LR test compares the full model with the model without the term: 2·(full log-likelihood − reduced) with p from χ². It is more reliable than Wald when effects are strong or the sample is small.',
+  '2·(log-verosimiglianza completa − senza il termine); df = differenza di parametri.': '2·(full log-likelihood − without the term); df = difference in parameters.',
+  'Errore quadratico medio (MSE)': 'Mean squared error (MSE)',
 };

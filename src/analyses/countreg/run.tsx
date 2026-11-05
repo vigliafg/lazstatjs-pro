@@ -1,4 +1,5 @@
-import { countRegressionStats } from '../../stats/kernels/countreg';
+import { countEffects, countRegressionStats } from '../../stats/kernels/countreg';
+import { lrEffectsTable } from '../../stats/tables/effects';
 import { countTables } from '../../stats/tables/countreg';
 import { countReport } from '../../stats/reports/countreg';
 import { copy } from '../../stats/reportCopy';
@@ -36,7 +37,15 @@ export const buildCountOutput = ({ grid, params, ciLevel }: CountInput): Analysi
     };
   }
 
-  const tables = countTables(stats, ciLevel);
+  const indepIdxs = params.indeps.filter(index => index !== params.dep);
+  const effects = countEffects({
+    family: params.family,
+    rows: grid.rows,
+    depIdx: params.dep,
+    indepIdxs,
+    level: ciLevel,
+  }).map((effect, index) => ({ ...effect, term: grid.cols[indepIdxs[index]]?.name ?? effect.term }));
+  const tables = [...countTables(stats, ciLevel), lrEffectsTable('count-effects', effects)];
   const observedFitted = stats.observed.map((value, index) => ({ x: stats.fitted[index], y: value }));
   const residuals = stats.fitted.map((value, index) => ({ x: value, y: stats.residuals[index] }));
   const all = [...stats.observed, ...stats.fitted];

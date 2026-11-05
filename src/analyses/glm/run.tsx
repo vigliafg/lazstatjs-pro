@@ -1,5 +1,6 @@
 import { parseNum } from '../../stats/core';
-import { addIntercept, glmFit, type GlmFamily, type GlmLink } from '../../stats/kernels/glm';
+import { addIntercept, glmEffects, glmFit, type GlmFamily, type GlmLink } from '../../stats/kernels/glm';
+import { lrEffectsTable } from '../../stats/tables/effects';
 import { glmTables } from '../../stats/tables/glm';
 import { glmReport } from '../../stats/reports/glm';
 import { copy } from '../../stats/reportCopy';
@@ -58,7 +59,8 @@ export const buildGlmOutput = ({ grid, params, ciLevel }: GlmRunInput): Analysis
   const depName = grid.cols[dep]?.name ?? 'Y';
   const predictorNames = indeps.map((index, position) => grid.cols[index]?.name ?? `X${position + 1}`);
   const names = { dep: depName, predictors: predictorNames, family: familyLabel(family), link };
-  const tables = glmTables(fit, names, ciLevel);
+  const effects = glmEffects({ y, x, family, link: link as GlmLink }, predictorNames);
+  const tables = [...glmTables(fit, names, ciLevel), lrEffectsTable('glm-effects', effects)];
   const residuals = y.map((value, index) => value - fit.fitted[index]);
 
   const charts: AnalysisChart[] = [

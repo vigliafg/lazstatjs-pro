@@ -9,6 +9,7 @@
 
 import { jStat } from '../jstat';
 import { invert, solveLinear, transpose, type Matrix } from './matrix';
+import { lrTest, type LrEffect } from './effects';
 
 export type GlmFamily = 'gaussian' | 'binomial' | 'poisson' | 'gamma';
 export type GlmLink = 'identity' | 'log' | 'logit' | 'probit' | 'cloglog' | 'inverse';
@@ -332,4 +333,27 @@ export const glmFit = (input: GlmInput): GlmResult | null => {
     iterations,
     converged,
   };
+};
+
+/**
+ * Test LR per termine di un GLM: rifitta senza ciascuna colonna del design
+ * (l'intercetta resta sempre). Il df della differenza è quello dei parametri.
+ */
+export const glmEffects = (input: GlmInput, names: string[]): LrEffect[] => {
+  const full = glmFit(input);
+  if (!full) return [];
+  const width = input.x[0]?.length ?? 0;
+  const effects: LrEffect[] = [];
+  for (let column = 1; column < width; column += 1) {
+    const x = input.x.map(row => row.filter((_, position) => position !== column));
+    const reduced = glmFit({ ...input, x });
+    if (!reduced) continue;
+    // Parameter counts, so the LR degrees of freedom are width - (width - 1).
+    const test = lrTest(names[column - 1] ?? `X${column}`, full.logLik, width, {
+      logLik: reduced.logLik,
+      df: width - 1,
+    });
+    if (test) effects.push(test);
+  }
+  return effects;
 };

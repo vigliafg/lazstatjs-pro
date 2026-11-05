@@ -1,4 +1,5 @@
 import { jStat } from '../jstat';
+import { lrTest, type LrEffect } from './effects';
 import { parseNum } from '../core';
 import { chi2SF } from '../distributions';
 import type { CountCoefficient, CountFamily, CountOptions, CountStats } from '../countreg/types';
@@ -239,4 +240,24 @@ export const countRegressionStats = (options: CountOptions): CountStats | null =
     residuals: y.map((value, index) => value - mu[index]),
     coefficients,
   };
+};
+
+/** Test LR per termine della regressione per conteggi (rifit senza il predittore). */
+export const countEffects = (options: CountOptions): LrEffect[] => {
+  const full = countRegressionStats(options);
+  if (!full) return [];
+  const effects: LrEffect[] = [];
+  options.indepIdxs.forEach((_, index) => {
+    const indepIdxs = options.indepIdxs.filter((__, position) => position !== index);
+    const reduced = indepIdxs.length === 0
+      ? { logLik: full.logLikNull, df: 0 }
+      : countRegressionStats({ ...options, indepIdxs });
+    if (!reduced) return;
+    const test = lrTest(`X${index + 1}`, full.logLik, full.k, {
+      logLik: reduced.logLik,
+      df: 'k' in reduced ? reduced.k : 0,
+    });
+    if (test) effects.push(test);
+  });
+  return effects;
 };

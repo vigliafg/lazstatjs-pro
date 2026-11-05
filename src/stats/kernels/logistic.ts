@@ -1,4 +1,5 @@
 import { jStat } from '../jstat';
+import { lrTest, type LrEffect } from './effects';
 import type { LogisticModel, LogisticPredictor } from '../logistic/types';
 
 const EPS = 1e-10;
@@ -355,4 +356,35 @@ export const calibrationCurve = (
     });
   }
   return points;
+};
+
+/**
+ * Test LR per termine del modello logistico: rifitta il modello senza ciascun
+ * predittore. Con un solo predittore il modello ridotto è quello nullo.
+ */
+export const logisticEffects = (
+  y: number[],
+  predictors: LogisticPredictor[],
+  level = 95,
+  cutoff = 0.5,
+  penalized = false,
+  link: LogisticLink = 'logit'
+): LrEffect[] => {
+  const full = fitLogistic(y, predictors, level, cutoff, penalized, link);
+  if (!full) return [];
+  const effects: LrEffect[] = [];
+  predictors.forEach((predictor, index) => {
+    const remaining = predictors.filter((_, position) => position !== index);
+    const reduced = remaining.length === 0
+      ? { logLik: full.logLikNull, df: 0 }
+      : fitLogistic(y, remaining, level, cutoff, penalized, link);
+    const test = lrTest(
+      predictor.name,
+      full.logLik,
+      full.df,
+      reduced ? { logLik: reduced.logLik, df: reduced.df } : null
+    );
+    if (test) effects.push(test);
+  });
+  return effects;
 };

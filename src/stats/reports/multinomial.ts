@@ -2,6 +2,7 @@ import { fmtEst } from '../format';
 import { copy, sourceOf } from '../reportCopy';
 import { isDecided, numOf, rowsOf, textOf } from '../reportKit';
 import type { ReportSpec } from '../report';
+import { lrEffectsSection } from './effects';
 import type { TableSpec } from '../types';
 
 /**
@@ -11,6 +12,7 @@ import type { TableSpec } from '../types';
  * on screen and never calls the statistical kernel.
  */
 export const multinomialReport = (tables: TableSpec[], level: number): ReportSpec => {
+  const effectsSection = lrEffectsSection(tables, 'multinomial-effects', level);
   const fit = rowsOf(tables, 'multinomial-fit');
   const coefficientRows = rowsOf(tables, 'multinomial-coefficients');
   const classification = rowsOf(tables, 'multinomial-classification');
@@ -71,6 +73,7 @@ export const multinomialReport = (tables: TableSpec[], level: number): ReportSpe
       }),
     ],
     sections: [
+      ...(effectsSection ? [effectsSection] : []),
       {
         heading: copy('La lettura dei risultati'),
         body: [

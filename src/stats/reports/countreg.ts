@@ -3,8 +3,10 @@ import { copy } from '../reportCopy';
 import type { ReportSpec } from '../report';
 import type { TableSpec } from '../types';
 import type { CountStats } from '../countreg/types';
+import { lrEffectsSection } from './effects';
 
-export const countReport = (_tables: TableSpec[], stats: CountStats, level: number): ReportSpec => {
+export const countReport = (tables: TableSpec[], stats: CountStats, level: number): ReportSpec => {
+  const effectsSection = lrEffectsSection(tables, 'count-effects', level);
   const significant = stats.coefficients.filter(
     coefficient => coefficient.term !== '(Intercept)' && coefficient.p < 1 - level / 100
   );
@@ -23,6 +25,7 @@ export const countReport = (_tables: TableSpec[], stats: CountStats, level: numb
       main ? copy('Il primo predittore ha IRR = {s1} (CI {s2}%: {s3} – {s4}).', { s1: fmtEst(main.irr, 3), s2: level, s3: fmtEst(main.irrLo, 3), s4: fmtEst(main.irrHi, 3) }) : '',
     ],
     sections: [
+      ...(effectsSection ? [effectsSection] : []),
       {
         heading: 'Lettura',
         body: [

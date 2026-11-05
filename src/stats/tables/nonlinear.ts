@@ -69,6 +69,7 @@ export const nonlinearTables = (result: NonlinearResult, names: NonlinearNames):
       { key: 'value', label: copy('Valore'), format: 'text' },
     ],
     rows: [
+        { metric: copy('Errore quadratico medio (MSE)'), value: result.sse / Math.max(1, result.df) },
       { metric: copy('Modello'), value: nonlinearModelLabel(result.model) },
       { metric: copy('Osservazioni'), value: String(result.n) },
       { metric: copy('df'), value: String(result.df) },

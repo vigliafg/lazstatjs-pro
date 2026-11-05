@@ -1,4 +1,5 @@
-import { fitMultinomial } from '../../stats/kernels/multinomial';
+import { fitMultinomial, multinomialEffects } from '../../stats/kernels/multinomial';
+import { lrEffectsTable } from '../../stats/tables/effects';
 import { addIntercept } from '../../stats/kernels/glm';
 import { multinomialTables } from '../../stats/tables/multinomial';
 import { multinomialReport } from '../../stats/reports/multinomial';
@@ -90,7 +91,8 @@ export const buildMultinomialOutput = ({
   const predictorNames = predictors.map(
     (index, position) => grid.cols[index]?.name ?? `X${position + 1}`
   );
-  const tables = multinomialTables(model, y, predictorNames, ciLevel);
+  const effects = multinomialEffects({ y, x: design, classes: levels }, predictorNames);
+  const tables = [...multinomialTables(model, y, predictorNames, ciLevel), lrEffectsTable('multinomial-effects', effects)];
 
   const classAccuracy = model.classes.map((label, classIndex) => {
     const total = y.reduce((sum, value) => sum + (value === classIndex ? 1 : 0), 0);

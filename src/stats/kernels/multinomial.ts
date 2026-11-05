@@ -22,6 +22,7 @@
 
 import { jStat } from '../jstat';
 import { invert, type Matrix } from './matrix';
+import { lrTest, type LrEffect } from './effects';
 
 const EPS = 1e-12;
 
@@ -309,4 +310,29 @@ export const fitMultinomial = (input: MultinomialInput): MultinomialResult | nul
     iterations,
     converged,
   };
+};
+
+/** Test LR per termine del modello multinomiale (una colonna di design per volta). */
+export const multinomialEffects = (
+  input: MultinomialInput,
+  predictorNames: string[]
+): LrEffect[] => {
+  const full = fitMultinomial(input);
+  if (!full) return [];
+  const width = input.x[0]?.length ?? 0;
+  const effects: LrEffect[] = [];
+  // Each non-reference class loses one coefficient, so a dropped column costs
+  // K - 1 parameters, not one.
+  const parameters = (full.classes.length - 1) * full.p;
+  for (let column = 1; column < width; column += 1) {
+    const x = input.x.map(row => row.filter((_, position) => position !== column));
+    const reduced = fitMultinomial({ ...input, x });
+    if (!reduced) continue;
+    const test = lrTest(predictorNames[column - 1] ?? `X${column}`, full.logLik, parameters, {
+      logLik: reduced.logLik,
+      df: (reduced.classes.length - 1) * reduced.p,
+    });
+    if (test) effects.push(test);
+  }
+  return effects;
 };

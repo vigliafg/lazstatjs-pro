@@ -33,7 +33,12 @@ test('multinomial builder returns fit, coefficients, classification, report and 
 
   assert.deepEqual(
     result.tables.map(table => table.id),
-    ['multinomial-fit', 'multinomial-coefficients', 'multinomial-classification']
+    [
+      'multinomial-fit',
+      'multinomial-coefficients',
+      'multinomial-classification',
+      'multinomial-effects',
+    ]
   );
   assert.equal(result.report?.id, 'report-multinomial');
 

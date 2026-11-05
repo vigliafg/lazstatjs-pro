@@ -1,4 +1,5 @@
 import { jStat } from '../jstat';
+import { lrTest, type LrEffect } from './effects';
 import { parseNum } from '../core';
 import { chi2SF } from '../distributions';
 import type {
@@ -264,4 +265,24 @@ export const ordinalStats = (options: OrdinalOptions): OrdinalStats | null => {
     thresholds: thresholdRows,
     profile,
   };
+};
+
+/** Test LR per termine della regressione ordinale (rifit senza il predittore). */
+export const ordinalEffects = (options: OrdinalOptions): LrEffect[] => {
+  const full = ordinalStats(options);
+  if (!full) return [];
+  const effects: LrEffect[] = [];
+  options.indepIdxs.forEach((_, index) => {
+    const indepIdxs = options.indepIdxs.filter((__, position) => position !== index);
+    const reduced = indepIdxs.length === 0
+      ? { logLik: full.logLikNull, df: 0 }
+      : ordinalStats({ ...options, indepIdxs });
+    if (!reduced) return;
+    const test = lrTest(`X${index + 1}`, full.logLik, full.k, {
+      logLik: reduced.logLik,
+      df: 'k' in reduced ? reduced.k : 0,
+    });
+    if (test) effects.push(test);
+  });
+  return effects;
 };

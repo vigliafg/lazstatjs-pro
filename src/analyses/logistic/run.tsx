@@ -7,6 +7,8 @@ import {
   rocCurve,
 } from '../../stats/logistic';
 import { copy } from '../../stats/reportCopy';
+import { logisticEffects } from '../../stats/kernels/logistic';
+import { lrEffectsTable } from '../../stats/tables/effects';
 import { makeChart } from '../../charts/kits/common';
 import { parseNum } from '../../stats/core';
 import { jStat } from '../../stats/jstat';
@@ -84,7 +86,8 @@ export const buildLogisticOutput = ({
     };
   }
 
-  const tables = logisticTables(model, ciLevel, cutoff);
+  const effects = logisticEffects(y, predictorData, ciLevel, cutoff, penalized, link ?? 'logit');
+  const tables = [...logisticTables(model, ciLevel, cutoff), lrEffectsTable('logit-effects', effects)];
   const outcomeName = grid.cols[outcome]?.name ?? 'Y';
   const header = `Outcome: ${outcomeName} · event = "${levels[1]}"`;
 

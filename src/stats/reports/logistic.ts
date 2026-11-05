@@ -1,6 +1,7 @@
 import { fmtEst, fmtP } from '../format';
 import { copy, sourceOf } from '../reportCopy';
 import { isDecided, tableById } from '../reportKit';
+import { lrEffectsSection } from './effects';
 import type { ReportSpec } from '../report';
 import type { TableSpec } from '../types';
 
@@ -37,6 +38,8 @@ export const logisticReport = (
         })
       : describeOr(row);
 
+  const effectsSection = lrEffectsSection(tables, 'logit-effects', level);
+
   return {
     id: 'logistic',
     title: copy('Report di lettura'),
@@ -54,6 +57,7 @@ export const logisticReport = (
       copy('L’ipotesi nulla del test LR è “nessun predittore aggiunge informazione rispetto alla sola intercetta”; ogni coefficiente risponde invece alla domanda “questo predittore pesa, al netto degli altri?”.'),
     ],
     sections: [
+      ...(effectsSection ? [effectsSection] : []),
       {
         heading: copy('La lettura dei risultati'),
         body: [

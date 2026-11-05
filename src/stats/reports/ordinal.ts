@@ -2,8 +2,16 @@ import { fmtEst, fmtP } from '../format';
 import { copy } from '../reportCopy';
 import type { ReportSpec } from '../report';
 import type { OrdinalStats } from '../ordinal/types';
+import type { TableSpec } from '../types';
+import { lrEffectsSection } from './effects';
 
-export const ordinalReport = (stats: OrdinalStats, predNames: string[], level: number): ReportSpec => {
+export const ordinalReport = (
+  stats: OrdinalStats,
+  predNames: string[],
+  level: number,
+  tables: TableSpec[] = []
+): ReportSpec => {
+  const effectsSection = lrEffectsSection(tables, 'ordinal-effects', level);
   const significant = stats.coefficients.filter(coefficient => coefficient.p < 1 - level / 100);
   return {
     id: 'ordinal',
@@ -16,6 +24,7 @@ export const ordinalReport = (stats: OrdinalStats, predNames: string[], level: n
       copy('Predittori: {s1}.', { s1: predNames.join(', ') }),
     ],
     sections: [
+      ...(effectsSection ? [effectsSection] : []),
       {
         heading: 'Lettura',
         body: [

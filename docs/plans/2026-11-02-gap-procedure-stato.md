@@ -1,6 +1,6 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-04 (checkpoint QA grafici; W9 chiusa, gate G9 verde)
+**Ultimo aggiornamento**: 2026-11-05 (fase 2.2: seconda integrazione dei modelli non lineari)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
 **Stato**: W0–W9 chiuse; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
@@ -26,6 +26,7 @@ di qualunque confronto e di qualunque modifica alle tabelle.
 | Fase 2.1 (confronto voce per voce) | **chiusa su 72/72 procedure**: 38 con piattaforma JMP documentata, 20 blocchi mancanti calcolabili su 15 procedure, 3 voci non calcolabili |
 | Fase 2.2, prima integrazione (regressione lineare) | chiusa e completa secondo §8.8: `Media della risposta`, tabella `reg-effects`, sezione di prosa sugli effetti Tipo III in sei lingue, test, golden |
 | Fase 2.2, checklist di integrazione | definita nel piano §8.8: numerica, tabella/colonna, prosa, 6 lingue, test, golden, grafici, export, help |
+| Fase 2.2, seconda integrazione (modelli non lineari) | **chiusa** e completa secondo §8.8: tabelle `logit-effects`, `ordinal-effects`, `multinomial-effects`, `count-effects`, `glm-effects`; colonna `ChiSquare (Wald)` in `logit-coefficients`; riga MSE in `nonlinear-fit`; prosa sugli effetti LR in sei lingue; 6 test in `src/stats/effects.test.ts`; golden invariato (solo aggiunte) |
 
 **Test**: `npm run check` verde (1363 test, 0 fail); `npx tsc --noEmit` pulito,
 compreso lo script di censimento.

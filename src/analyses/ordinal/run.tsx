@@ -1,4 +1,5 @@
-import { ordinalStats } from '../../stats/kernels/ordinal';
+import { ordinalEffects, ordinalStats } from '../../stats/kernels/ordinal';
+import { lrEffectsTable } from '../../stats/tables/effects';
 import { ordinalTables } from '../../stats/tables/ordinal';
 import { ordinalReport } from '../../stats/reports/ordinal';
 import { copy } from '../../stats/reportCopy';
@@ -35,7 +36,9 @@ export const buildOrdinalOutput = ({ grid, params, ciLevel }: OrdinalInput): Ana
   }
 
   const predNames = params.indeps.map(index => grid.cols[index]?.name ?? `X${index + 1}`);
-  const tables = ordinalTables(stats, ciLevel);
+  const effects = ordinalEffects({ rows: grid.rows, depIdx: params.dep, indepIdxs: params.indeps, level: ciLevel })
+    .map((effect, index) => ({ ...effect, term: predNames[index] ?? effect.term }));
+  const tables = [...ordinalTables(stats, ciLevel), lrEffectsTable('ordinal-effects', effects)];
   const series = stats.categories.flatMap((category, categoryIndex) =>
     stats.profile.map(point => ({
       x: point.x,
@@ -120,7 +123,7 @@ export const buildOrdinalOutput = ({ grid, params, ciLevel }: OrdinalInput): Ana
     ok: true,
     title: copy('Regressione ordinale: {s1}', { s1: grid.cols[params.dep]?.name ?? 'Y' }),
     tables,
-    report: ordinalReport(stats, predNames, ciLevel),
+    report: ordinalReport(stats, predNames, ciLevel, tables),
     charts,
   };
 };

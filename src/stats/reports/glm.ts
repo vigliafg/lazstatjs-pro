@@ -2,6 +2,7 @@ import { copy } from '../reportCopy';
 import type { ReportSpec } from '../report';
 import type { TableSpec } from '../types';
 import { describeP, isDecided } from './shared';
+import { lrEffectsSection } from './effects';
 
 export const glmReport = (
   tables: TableSpec[],
@@ -17,6 +18,7 @@ export const glmReport = (
   const predictors = coefficients.filter(row => String(row.term) !== '(Intercept)');
   const significant = predictors.filter(row => isDecided(Number(row.p), level));
   const converged = metric('Convergenza') === copy('Sì');
+  const effectsSection = lrEffectsSection(tables, 'glm-effects', level);
 
   return {
     id: 'report-glm',
@@ -37,6 +39,7 @@ export const glmReport = (
       copy('La scelta di famiglia e link è parte del modello: non è un dettaglio tecnico, cambia il significato dei coefficienti.'),
     ],
     sections: [
+      ...(effectsSection ? [effectsSection] : []),
       {
         heading: copy('Risultato'),
         bullets: [

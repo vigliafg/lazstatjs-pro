@@ -248,6 +248,14 @@ conta come integrazione a metà.
 1. **Modelli non lineari** (`logistic`, `ordinal`, `multinomial`, `countreg`, `glm`,
    `nonlinear`): 7 blocchi, tutti per termine o per colonna; il più ripetibile è il
    test di rapporto di verosimiglianza, che serve a quattro procedure.
+   **Stato: chiuso il 2026-11-05.** Tabelle `logit-effects`, `ordinal-effects`,
+   `multinomial-effects`, `count-effects`, `glm-effects` (effetti LR per termine,
+   con df = differenza di parametri: K−1 per il multinomiale), colonna
+   `ChiSquare (Wald)` = z² in `logit-coefficients`, riga MSE in
+   `nonlinear-fit`. Denominatore comune: `lrTest` in `src/stats/kernels/effects.ts`,
+   tabella in `src/stats/tables/effects.ts`, prosa in `src/stats/reports/effects.ts`.
+   Test: `src/stats/effects.test.ts` (logistico e GLM binomiale contro R su
+   `mtcars`, identità del test LR per conteggi, ordinale e multinomiale).
 2. **Modelli misti** (`lmm`, `glmm`): 4 blocchi, i più onerosi (matrice di informazione).
 3. **Confronti** (`anova`, `variances`): 3 blocchi, con Steel–Dwass come unico caso
    non banale.

@@ -342,4 +342,11 @@ export const regressionCopy: Record<string, string> = {
     'Les SS Type III mesurent la contribution de chaque terme au net des autres : le modèle est réestimé sans le terme et l’augmentation de la somme des carrés résiduels est relevée. Avec un degré de liberté, F est le carré du t du coefficient.',
   'Effetti (SS Tipo III)':
     'Effets (SC de type III)',
+  'Effetti (test LR)': 'Effets (tests LR)',
+  'LR ChiSquare': 'LR ChiSquare',
+  'ChiSquare': 'ChiSquare',
+  '{s1}: LR χ² = {s2} con {s3} df ({s4}).': '{s1} : LR χ² = {s2} avec {s3} df ({s4}).',
+  'Il test LR confronta il modello completo con quello senza il termine: 2·(log-verosimiglianza completa − ridotta) con p dalla χ². È più affidabile del Wald quando gli effetti sono forti o il campione è piccolo.': 'Le test LR compare le modèle complet à celui sans le terme : 2·(log-vraisemblance complète − réduite) avec p issu du χ². Il est plus fiable que Wald quand les effets sont forts ou l’échantillon petit.',
+  '2·(log-verosimiglianza completa − senza il termine); df = differenza di parametri.': '2·(log-vraisemblance complète − sans le terme) ; df = différence de paramètres.',
+  'Errore quadratico medio (MSE)': 'Erreur quadratique moyenne (MSE)',
 };
