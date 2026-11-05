@@ -12,6 +12,14 @@ export interface IccResult {
   mse: number;
   f: number;
   p: number;
+  /** Componenti di varianza del Gage R&R (modello two-way random). */
+  ev: number;
+  av: number;
+  pv: number;
+  grr: number;
+  tv: number;
+  pctGrr: number;
+  ndc: number;
 }
 
 

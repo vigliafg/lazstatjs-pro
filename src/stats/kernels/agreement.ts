@@ -50,6 +50,20 @@ export const iccStats = (
   const icc31 = icc31Denominator > 0 ? (msb - mse) / icc31Denominator : NaN;
   const f = mse > 0 ? msb / mse : NaN;
 
+  // Gage R&R (AIAG) dai momenti del modello two-way random.
+  const evVariance = Math.max(0, mse);
+  const avVariance = Math.max(0, (msr - mse) / n);
+  const pvVariance = Math.max(0, (msb - mse) / k);
+  const grrVariance = evVariance + avVariance;
+  const tvVariance = grrVariance + pvVariance;
+  const ev = Math.sqrt(evVariance);
+  const av = Math.sqrt(avVariance);
+  const pv = Math.sqrt(pvVariance);
+  const grr = Math.sqrt(grrVariance);
+  const tv = Math.sqrt(tvVariance);
+  const pctGrr = tv > 0 ? (100 * grr) / tv : NaN;
+  const ndc = grr > 0 ? Math.floor(1.41 * (pv / grr)) : NaN;
+
   return {
     n,
     k,
@@ -61,6 +75,13 @@ export const iccStats = (
     mse,
     f,
     p: fSF(f, dfB, dfE),
+    ev,
+    av,
+    pv,
+    grr,
+    tv,
+    pctGrr,
+    ndc,
   };
 };
 

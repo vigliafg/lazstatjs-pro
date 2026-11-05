@@ -265,7 +265,7 @@ conta come integrazione a metà.
    4 blocchi isolati, ognuno indipendente dagli altri.
    **Stato: `multivariate` chiuso** (tabella `pca-eigenvectors`, verificata contro
    gli autovettori di `prcomp`) e **`distfit` chiuso** (Cramér–von Mises in
-   `fit-gof`); `cluster` e `agreement` ancora aperti.
+   `fit-gof`); `agreement` chiuso (%GRR e ndc dai componenti di varianza); `cluster` ancora aperto.
 5. **Serie e qualità** (`quality`): limiti per sottogruppo.
 
 ## Limiti

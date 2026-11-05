@@ -160,4 +160,12 @@ export const agreementCopy: Record<string, string> = {
     'Unweighted kappa: all disagreements count the same.',
   'Kappa pesata {s1} sulle categorie ordinate.':
     'Weighted kappa {s1} on the ordered categories.',
+  'Ripetibilità (EV)': 'Repeatability (EV)',
+  'Riproducibilità (AV)': 'Reproducibility (AV)',
+  'Variazione tra soggetti (PV)': 'Part variation (PV)',
+  'Variazione totale (TV)': 'Total variation (TV)',
+  'ndc (numero di categorie distinte)': 'ndc (distinct categories)',
+  'Ripetibilità, riproducibilità e variazione tra soggetti danno il Gage R&R: %GRR = {s1}% della variazione totale e ndc = {s2} categorie distinte; sopra il 30% il sistema di misura non distingue bene i soggetti.': 'Repeatability, reproducibility and part variation give the Gage R&R: %GRR = {s1}% of the total variation and ndc = {s2} distinct categories; above 30% the measurement system no longer separates the subjects well.',
+  'GRR': 'GRR',
+  '%GRR': '%GRR',
 };

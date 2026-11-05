@@ -160,4 +160,12 @@ export const agreementCopy: Record<string, string> = {
     'Valor',
   'z':
     'z',
+  'Ripetibilità (EV)': 'Repetibilidad (EV)',
+  'Riproducibilità (AV)': 'Reproducibilidad (AV)',
+  'Variazione tra soggetti (PV)': 'Variación entre sujetos (PV)',
+  'Variazione totale (TV)': 'Variación total (TV)',
+  'ndc (numero di categorie distinte)': 'ndc (categorías distintas)',
+  'Ripetibilità, riproducibilità e variazione tra soggetti danno il Gage R&R: %GRR = {s1}% della variazione totale e ndc = {s2} categorie distinte; sopra il 30% il sistema di misura non distingue bene i soggetti.': 'Repetibilidad, reproducibilidad y variación entre sujetos dan el Gage R&R: %GRR = {s1}% de la variación total y ndc = {s2} categorías distintas; por encima del 30% el sistema de medida ya no separa bien a los sujetos.',
+  'GRR': 'GRR',
+  '%GRR': '%GRR',
 };

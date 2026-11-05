@@ -20,6 +20,13 @@ export const iccTables = (stats: IccResult, level: number): TableSpec[] => [
       { metric: copy('MS between subjects'), value: stats.msb },
       { metric: copy('MS between raters'), value: stats.msr },
       { metric: copy('MS residual'), value: stats.mse },
+      { metric: copy('Ripetibilità (EV)'), value: stats.ev },
+      { metric: copy('Riproducibilità (AV)'), value: stats.av },
+      { metric: copy('Variazione tra soggetti (PV)'), value: stats.pv },
+      { metric: copy('GRR'), value: stats.grr },
+      { metric: copy('Variazione totale (TV)'), value: stats.tv },
+      { metric: copy('%GRR'), value: stats.pctGrr },
+      { metric: copy('ndc (numero di categorie distinte)'), value: stats.ndc },
     ],
     notes: [
       copy('ICC(2,1) è il modello two-way random a effetti misti con accordo assoluto.'),

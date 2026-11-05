@@ -105,4 +105,12 @@ export const agreementCopy: Record<string, string> = {
     'Eine signifikante Steigung zeigt, dass sich der Bias mit der Größe der Messung ändert.',
   Valore: 'Wert',
   z: 'z',
+  'Ripetibilità (EV)': 'Wiederholbarkeit (EV)',
+  'Riproducibilità (AV)': 'Reproduzierbarkeit (AV)',
+  'Variazione tra soggetti (PV)': 'Teilevariation (PV)',
+  'Variazione totale (TV)': 'Gesamtvariation (TV)',
+  'ndc (numero di categorie distinte)': 'ndc (unterscheidbare Kategorien)',
+  'Ripetibilità, riproducibilità e variazione tra soggetti danno il Gage R&R: %GRR = {s1}% della variazione totale e ndc = {s2} categorie distinte; sopra il 30% il sistema di misura non distingue bene i soggetti.': 'Wiederholbarkeit, Reproduzierbarkeit und Teilevariation ergeben das Gage R&R: %GRR = {s1}% der Gesamtvariation und ndc = {s2} unterscheidbare Kategorien; über 30% trennt das Messsystem die Subjekte nicht mehr gut.',
+  'GRR': 'GRR',
+  '%GRR': '%GRR',
 };

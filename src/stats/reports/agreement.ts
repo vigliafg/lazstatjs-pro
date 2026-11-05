@@ -18,6 +18,7 @@ export const iccReport = (tables: TableSpec[], stats: IccResult, level: number):
     {
       heading: 'Lettura',
       body: [
+        copy('Ripetibilità, riproducibilità e variazione tra soggetti danno il Gage R&R: %GRR = {s1}% della variazione totale e ndc = {s2} categorie distinte; sopra il 30% il sistema di misura non distingue bene i soggetti.', { s1: fmtEst(stats.pctGrr, 1), s2: Math.round(stats.ndc) }),
         copy('ICC vicino a 1 indica che le misure sono intercambiabili; valori sotto 0,5 indicano che la variabilità tra soggetti non è distinguibile dall’errore di misura.'),
         copy('Il livello di confidenza richiesto è {s1}%, ma l’ICC è un indice descrittivo: non c’è un test di superiorità.', { s1: level }),
       ],
