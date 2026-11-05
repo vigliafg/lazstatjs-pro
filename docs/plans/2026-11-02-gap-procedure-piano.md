@@ -382,6 +382,10 @@ Obiettivo: passare da OLS/logistica/count a una cassetta di modelli completa.
 | R-14 | Mediazione | new `mediation` | `kernels/mediation.ts` | `mediation/Form.tsx` | `lavaan` + bootstrap per proprietà | `mtcars` | 4 | — |
 | R-15 | Propensity score | new `propensity` | `kernels/propensity.ts` | `propensity/Form.tsx` | `MatchIt` + base R IPW | `treatment_demo*` | 4 | R-05 |
 
+**Voci JMP di famiglia** (Effect Tests, colonna ChiSquare, MSE, componenti di
+varianza): si integrano con la checklist §8.8, che vale per ogni blocco del
+censimento e comprende prosa, sei lingue, golden e grafici.
+
 **Note**
 
 - R-06 `glm` è il motore condiviso da multinomiale, ordinale, probit, count;
@@ -700,6 +704,61 @@ Regole:
   una nota che il perimetro è cambiato.
 
 ---
+
+### 8.8 Integrazione di una voce JMP nei risultati (checklist vincolante)
+
+Un blocco del censimento (`docs/analysis/2026-11-05-confronto-tabelle-jmp-tutte-le-procedure.md`,
+20 aperti) si chiude solo quando **tutte** le parti seguenti sono allineate: la
+tabella da sola non basta, perché il run-report ha una prosa separata che legge
+le tabelle per id. L'ordine è quello di sotto.
+
+1. **Numerica** — kernel in `src/stats/kernels/<id>.ts`: calcolo puro,
+   `Result | null`, valore verificato contro R/Stata/SciPy con la tolleranza di
+   §8.1 e la chiamata di riferimento annotata nel test.
+2. **Tabella** — `src/stats/tables/<id>.ts`: riga nuova in una `TableSpec`
+   esistente oppure tabella nuova, con `format` corretto, `align` coerente e
+   `notes` quando la definizione non è ovvia (es. SS Tipo III = differenza
+   drop-one). Nessun ricalcolo nel builder.
+3. **Colonne nuove** — una colonna è solo una voce in `columns` (`key`,
+   `label` via `copy()`, `format`) più il valore in ogni riga: nessuno schema da
+   migrare. Se la colonna entra in una tabella già letta dalla prosa, aggiornare
+   la lettura; se è una colonna di test (es. `ChiSquare` accanto a `z`),
+   aggiornare i valori attesi.
+4. **Prosa** — `src/stats/reports/<id>.ts`: una **tabella nuova** non è narrata
+   da nessuno finché non si aggiunge una sezione (o un bullet in una sezione
+   esistente) che la legga con `rowsOf`/`tableById`; una **riga nuova** dentro
+   una tabella già narrata viene letta per etichetta e non richiede codice. Ogni
+   frase nuova passa da `copy()`.
+5. **Sei lingue** — `src/stats/reportCopy/catalog/<locale>/<id>.ts` per it, en,
+   de, fr, es, pt-PT. `src/stats/reportCopy.test.ts` fallisce se manca una
+   traduzione: è il gate della prosa, non un extra.
+6. **Test** — valori in `src/stats/tables.test.ts` o `<id>.test.ts`; casi di
+   rifiuto; e se la procedura ha un'asserzione sull'elenco degli id
+   (`assert.deepEqual(result.tables.map(t => t.id), ...)` in `selection`,
+   `multinomial`, `pls`, `mi`, `iv`, `mars`, `quantile`, `panel`, `mediation`,
+   `nonlinear`, `loglinear`, `contingency`, `propensity`, `arima`, `wizard`,
+   `w9`) va aggiornata nello stesso commit.
+7. **Golden** — `src/stats/testing/golden/<id>.json` rigenerato con
+   `UPDATE_GOLDEN=1 node --import tsx --test src/stats/testing/golden.test.ts`;
+   il diff deve contenere **solo aggiunte**, mai valori cambiati. Un valore
+   cambiato è un bug, non un golden da aggiornare.
+8. **Grafici** — se la voce è rappresentabile aggiungere il pannello in
+   `src/charts/panels.ts` con un kind di §8.5; se non lo è, dichiararlo nel
+   documento della procedura. I tetti di `sanitizeTables` in
+   `src/charts/schema.ts` (4 tabelle, 24 colonne, 200 righe) valgono per i
+   modelli di grafico, non per le tabelle dei report.
+9. **Export e persistenza** — nessun intervento atteso: HTML e Word del
+   run-report sono snapshot del blocco renderizzato, l'xlsx dei risultati legge
+   il DOM (`buildResultsWorkbookFromElement`), il TSV usa `tableToTsv`. Da
+   controllare solo che il blocco resti sotto i tetti di `src/io/outputs.ts`
+   (600.000 caratteri per blocco, 1.500.000 totali, 20 blocchi).
+10. **Help e documenti** — se la voce compare nei testi di aiuto, aggiornare
+    `src/help/content/<locale>/procedures-*.ts`; poi censimento
+    (`scripts/inventory-procedures.mts`), documenti di confronto e
+    `docs/plans/2026-11-02-gap-procedure-stato.md`.
+
+Regola di chiusura: un blocco è chiuso quando tabella, prosa e test raccontano
+la stessa cosa. Una tabella senza prosa è un'integrazione a metà.
 
 ## 9. Strategia di test
 

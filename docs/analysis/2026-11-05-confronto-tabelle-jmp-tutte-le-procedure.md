@@ -239,6 +239,11 @@ Senza riferimento nei libri (nessuna voce conteggiata): `bayes`, `meta`, `spatia
 
 ## Cosa resta da integrare, in ordine
 
+Ogni blocco si chiude con la checklist §8.8 del piano (`docs/plans/2026-11-02-gap-procedure-piano.md`):
+numerica, tabella e colonne, prosa del report, etichette in sei lingue, test,
+golden, grafici quando rappresentabili, export e help. Una tabella senza prosa
+conta come integrazione a metà.
+
 1. **Modelli non lineari** (`logistic`, `ordinal`, `multinomial`, `countreg`, `glm`,
    `nonlinear`): 7 blocchi, tutti per termine o per colonna; il più ripetibile è il
    test di rapporto di verosimiglianza, che serve a quattro procedure.
