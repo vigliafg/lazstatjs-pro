@@ -246,6 +246,41 @@ test('regression tables match SciPy/NumPy', () => {
   assert.equal(diag('Condition index > 30'), 0);
 });
 
+test('regression tables report the response mean and Type III effects', () => {
+  const x = [1, 2, 3, 4, 5, 6, 7, 8];
+  const y = [2, 4, 5, 4, 5, 7, 8, 9];
+  const z = [5, 3, 6, 2, 8, 4, 9, 1];
+  const rows = x.map((value, i) => [String(value), String(y[i]), String(z[i])]);
+  const tables = regressionTables({
+    rows, depIdx: 1, indepIdxs: [0, 2], depName: 'Y', predNames: ['X', 'Z'], level: 95,
+  });
+
+  const model = table(tables, 'reg-model');
+  const meanRow = model.rows.find(row => row.metric === 'Media della risposta');
+  close(meanRow?.value as number, 5.5, 1e-12);
+
+  // Valori ricalcolati con R 4.5.2: lm(y ~ x + z) e modelli ridotti drop-one.
+  const effects = table(tables, 'reg-effects');
+  assert.deepEqual(effects.rows.map(row => row.term), ['X', 'Z']);
+  close(effects.rows[0].ss as number, 34.3957081545, 1e-9);
+  close(effects.rows[0].f as number, 47.7149321267, 1e-9);
+  close(effects.rows[0].p as number, 0.0009744936, 1e-9);
+  close(effects.rows[1].ss as number, 0.0147557736, 1e-9);
+  close(effects.rows[1].f as number, 0.0204697264, 1e-9);
+  close(effects.rows[1].p as number, 0.8918200012, 1e-9);
+
+  // Con un solo predittore la F dell'effetto e' il quadrato della t.
+  const single = regressionTables({
+    rows: x.map((value, i) => [String(value), String(y[i])]),
+    depIdx: 1, indepIdxs: [0], depName: 'Y', predNames: ['X'], level: 95,
+  });
+  const coefficient = table(single, 'reg-coefficients').rows[1].t as number;
+  const effect = table(single, 'reg-effects').rows[0];
+  close(effect.ss as number, 34.380952381, 1e-9);
+  close(effect.f as number, 57, 1e-9);
+  close(effect.f as number, coefficient * coefficient, 1e-9);
+});
+
 test('correlation tables expose N, p-values, CIs and partials', () => {
   const x = [1, 2, 3, 4, 5, 6, 7, 8];
   const y = [2, 4, 5, 4, 5, 7, 8, 9];

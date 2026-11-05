@@ -23,22 +23,26 @@ di qualunque confronto e di qualunque modifica alle tabelle.
 | Tabelle e voci lette eseguendo i 72 runner reali | chiuso (244 tabelle, 3.975 voci) |
 | Controparte JMP e verifica della presenza nei quattro libri | chiuso (63 con piattaforma, 39 documentate) |
 | Script di censimento riproducibile | chiuso (`scripts/inventory-procedures.mts`) |
-| Fase 2.1 (confronto voce per voce) | **da iniziare** |
+| Fase 2.1 (confronto voce per voce) | chiusa per la famiglia `regression` (14 blocchi mancanti calcolabili, 1 non calcolabile) |
+| Fase 2.2, prima integrazione (regressione lineare) | chiusa: `Media della risposta` + tabella `reg-effects` (SS Tipo III) |
 
-**Test**: `npm run check` verde (1362 test, 0 fail); `npx tsc --noEmit` pulito,
-compreso il nuovo script.
+**Test**: `npm run check` verde (1363 test, 0 fail); `npx tsc --noEmit` pulito,
+compreso lo script di censimento.
 
 **Artefatti**: `docs/analysis/2026-11-05-inventario-procedure-tabelle.md`
-(riepilogo, tabella unica, elenco tabelle per procedura, limiti).
+(riepilogo, tabella unica, elenco tabelle per procedura, limiti) e
+`docs/analysis/2026-11-05-confronto-tabelle-jmp-regressione.md` (diff voce per
+voce della famiglia regressione con rimando ai libri).
 
 **Decisioni**: il censimento esegue i runner sui dataset di `samples/manifest.json`
 invece di dedurre le tabelle dal codice; una sola modalità per procedura (le
 modalità multiple si censiranno in 2.1); la controparte JMP è dichiarata
 "documentata" solo se la piattaforma compare nei libri.
 
-**Prossimi 3 passi**: (1) fase 2.1 sulle famiglie con JMP documentato (regressione,
-compare, categorical); (2) elenco delle voci mancanti calcolabili/non calcolabili;
-(3) scelta della prima ondata di integrazione.
+**Prossimi 3 passi**: (1) fase 2.2 sulle tabelle dei modelli non lineari
+(logistico, ordinale, multinomiale: Effect LR tests e colonna ChiSquare);
+(2) famiglie `compare` e `categorical`; (3) modelli misti (SE/IC dei componenti
+di varianza e Fixed Effects Tests).
 
 ---
 

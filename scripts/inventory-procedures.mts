@@ -167,12 +167,19 @@ const guessColumns = (analysis: string, grid: Dataset): Record<string, string | 
 };
 
 const tablesOf = (tables: TableSpec[]) =>
-  tables.map((table: TableSpec) => ({
-    id: table.id,
-    title: table.title,
-    rows: table.rows.length,
-    columns: table.columns.map(column => column.key),
-  }));
+  tables.map((table: TableSpec) => {
+    const first = table.columns[0]?.key ?? '';
+    return {
+      id: table.id,
+      title: table.title,
+      rows: table.rows.length,
+      columns: table.columns.map(column => column.key),
+      /** First-column values: the row labels a JMP comparison reads. */
+      labels: table.rows.map(row =>
+        String((row as Record<string, unknown>)[first] ?? '')
+      ),
+    };
+  });
 
 /**
  * SEM needs the factor structure spelled out: the manifest lists the six

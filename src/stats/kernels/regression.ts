@@ -156,6 +156,14 @@ export interface RobustCoefficient {
   ciHi: number;
 }
 
+export interface RegressionEffect {
+  /** Somma dei quadrati parziale (Tipo III) del termine. */
+  ss: number;
+  df: number;
+  f: number;
+  p: number;
+}
+
 export interface RegressionStats {
   n: number;
   k: number;
@@ -163,6 +171,8 @@ export interface RegressionStats {
   sse: number;
   ssr: number;
   sst: number;
+  meanY: number;
+  effects: RegressionEffect[];
   mse: number;
   msRegression: number;
   r: number;
@@ -211,6 +221,23 @@ export const regressionStats = (
   const n = fit.n;
   const crit = tCrit(level, fit.df);
   const sdY = jStat.stdev(Y, true);
+  const meanY = jStat.mean(Y);
+
+  // SS Tipo III per termine: si toglie il termine, si rifitta il modello ridotto
+  // e si prende l'aumento della somma dei quadrati residui. Con un grado di
+  // libertà per termine la F del test congiunto coincide con t².
+  const effects: RegressionEffect[] = predictors.map((_, drop) => {
+    const kept = predictors.filter((__, index) => index !== drop);
+    const reducedX: Matrix = validRows.map((__, rowIndex) => [
+      1,
+      ...kept.map(values => values[rowIndex]),
+    ]);
+    const reduced = fitOls(Y, reducedX);
+    if (!reduced || !(fit.mse > 0)) return { ss: NaN, df: 1, f: NaN, p: NaN };
+    const ss = reduced.sse - fit.sse;
+    const f = ss / fit.mse;
+    return { ss, df: 1, f, p: fSF(f, 1, fit.df) };
+  });
 
   const vifValues = predictors.map((values, index) => {
     if (k === 1) return 1;
@@ -503,6 +530,8 @@ export const regressionStats = (
     sse: fit.sse,
     ssr: fit.ssr,
     sst: fit.sst,
+    meanY,
+    effects,
     mse: fit.mse,
     msRegression,
     r,

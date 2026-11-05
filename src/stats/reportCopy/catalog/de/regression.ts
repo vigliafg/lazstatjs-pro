@@ -216,4 +216,8 @@ export const regressionCopy: Record<string, string> = {
     'X auf Einheitsnorm skaliert; > 30 Kollinearität',
   'β std.': 'Std. β',
   'χ² con {s1} df': 'χ² mit {s1} df',
+  'Media della risposta':
+    'Mittelwert der Antwort',
+  'Effetti (SS Tipo III)':
+    'Effekte (Typ-III-SS)',
 };

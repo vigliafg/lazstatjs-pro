@@ -47,6 +47,11 @@
         "detail": "√(SSE / 25)"
       },
       {
+        "metric": "Media della risposta",
+        "value": 15.0428571429,
+        "detail": ""
+      },
+      {
         "metric": "F",
         "value": 491.630241234,
         "detail": "F(2, 25)"
@@ -135,6 +140,61 @@
         "ms": "NaN",
         "f": "NaN",
         "p": "NaN"
+      }
+    ]
+  },
+  {
+    "id": "reg-effects",
+    "title": "Effetti (SS Tipo III)",
+    "subtitle": "score ~ age + income",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Termine",
+        "format": "text"
+      },
+      {
+        "key": "nparm",
+        "label": "Parametri",
+        "format": "int"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "ss",
+        "label": "SS",
+        "format": "dec4"
+      },
+      {
+        "key": "f",
+        "label": "F",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "term": "age",
+        "nparm": 1,
+        "df": 1,
+        "ss": 10.5003660684,
+        "f": 13.2406896953,
+        "p": 0.00124471436514
+      },
+      {
+        "term": "income",
+        "nparm": 1,
+        "df": 1,
+        "ss": 68.4713769721,
+        "f": 86.3406332307,
+        "p": 1.38158862129e-9
       }
     ]
   },

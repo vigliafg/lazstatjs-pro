@@ -22,8 +22,8 @@ con le tabelle che ognuna produce, prima del confronto con JMP.
 | Voce | Valore |
 | --- | --- |
 | Procedure censite | **72** (36 di baseline, 36 aggiunte dopo) |
-| Tabelle prodotte | **244** |
-| Voci (righe) nei risultati | **3975** |
+| Tabelle prodotte | **245** |
+| Voci (righe) nei risultati | **3979** |
 | Con una piattaforma JMP corrispondente | 63 |
 | Piattaforma JMP documentata nei libri | 39 |
 | Senza controparte JMP | 9 |
@@ -35,7 +35,7 @@ con le tabelle che ognuna produce, prima del confronto con JMP.
 | Guided | 1 | 1 | 0 | 4 | 13 | 0 |
 | Descriptive | 4 | 3 | 1 | 11 | 57 | 3 |
 | Compare groups | 10 | 8 | 2 | 39 | 172 | 9 |
-| Regression | 20 | 8 | 12 | 67 | 332 | 10 |
+| Regression | 20 | 8 | 12 | 68 | 336 | 10 |
 | Multivariate | 10 | 3 | 7 | 35 | 2045 | 5 |
 | Categorical | 4 | 3 | 1 | 14 | 52 | 4 |
 | Survival | 9 | 5 | 4 | 25 | 564 | 4 |
@@ -82,7 +82,7 @@ con le tabelle che ognuna produce, prima del confronto con JMP.
 | `pls` PLS Regression | regression | W3 (`8f8298f`) | `regression/mtcars` | 3 | 9 | Partial Least Squares (non nei libri) |
 | `propensity` Propensity Score | regression | W3 (`8f8298f`) | `regression/treatment_demo` | 4 | 15 | Propensity score (non nei libri) |
 | `quantile` Quantile Regression | regression | W2 (`7bf4e84`) | `regression/mtcars` | 2 | 10 | Quantile Regression (non nei libri) |
-| `regression` Regression | regression | baseline `1ef2860` | `regression/mtcars` | 6 | 45 | Fit Model / Bivariate (jmp3, jmp4) |
+| `regression` Regression | regression | baseline `1ef2860` | `regression/mtcars` | 7 | 49 | Fit Model / Bivariate (jmp3, jmp4) |
 | `selection` Tobit / Selection | regression | W3 (`8f8298f`) | `regression/selection_demo` | 4 | 16 | Fit Model > Stepwise (jmp3) |
 | `canonical` Canonical Correlation | multivariate | W5 (`09c67cc`) | `descriptive/iris` | 3 | 14 | Multivariate > Canonical Correlation (jmp2) |
 | `cluster` Cluster Analysis | multivariate | baseline `1ef2860` | `descriptive/iris` | 3 | 242 | Cluster (jmp3, jmp4) |
@@ -121,6 +121,10 @@ con le tabelle che ognuna produce, prima del confronto con JMP.
 | `bayes` Bayesian Analysis | advanced | W9 (`fd4858d`) | `design/bayes_demo` | 2 | 7 | Bayesiano (non nei libri) |
 | `meta` Meta-Analysis | advanced | W9 (`fd4858d`) | `design/meta_demo` | 5 | 24 | Meta-analisi (non nei libri) |
 | `spatial` Spatial Statistics | advanced | W9 (`fd4858d`) | `design/spatial_demo` | 1 | 6 | Spatial (non nei libri) |
+
+> Il censimento è stato rieseguito dopo la prima integrazione della fase 2.2
+> (`Media della risposta` e tabella `reg-effects`), quindi i conteggi includono
+> già quelle quattro voci.
 
 ## Tabelle per procedura
 
@@ -303,9 +307,10 @@ Formato: `id` (titolo) — righe.
 - `quantile-coefficients` (Coefficienti della regressione quantilica) — 3
 - `quantile-fit` (Adattamento del modello quantilico) — 7
 
-**`regression`** (6 tabelle, 45 voci)
+**`regression`** (7 tabelle, 49 voci)
 - `reg-model` (Sintesi del modello) — 10
 - `reg-anova` (ANOVA del modello) — 3
+- `reg-effects` (Effetti (SS Tipo III)) — 3
 - `reg-coefficients` (Coefficienti) — 4
 - `reg-diagnostics` (Diagnostica del modello) — 14
 - `reg-residuals` (Diagnostica dei residui) — 11

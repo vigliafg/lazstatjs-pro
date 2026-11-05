@@ -20,7 +20,7 @@ export const regressionTables = (options: RegressionTablesOptions): TableSpec[] 
   if (!stats) return [];
   const {
     n, k, df, sse, ssr, sst, mse, msRegression, r, r2, adjR2, seEstimate, f, pF,
-    aic, bic, dw, intercept, coefficients, diagnostics,
+    aic, bic, dw, intercept, coefficients, diagnostics, meanY, effects,
     residualsOls, residualsTs, theilSen, univariateSlopes, robust,
   } = stats;
   const {
@@ -47,6 +47,7 @@ export const regressionTables = (options: RegressionTablesOptions): TableSpec[] 
       { metric: copy('R²'), value: r2, detail: copy('quota di varianza spiegata') },
       { metric: copy('Adjusted R²'), value: adjR2, detail: copy('corretto per numero di predittori') },
       { metric: copy('SE of estimate'), value: seEstimate, detail: copy('√(SSE / {s1})', { s1: df }) },
+      { metric: copy('Media della risposta'), value: meanY, detail: '' },
       { metric: copy('F'), value: f, detail: copy('F({s1}, {s2})', { s1: k, s2: df }) },
       { metric: copy('p (F)'), value: pF, detail: copy('test globale del modello') },
       { metric: copy('AIC'), value: aic, detail: copy('n·ln(SSE/n) + 2(k+1)') },
@@ -72,6 +73,28 @@ export const regressionTables = (options: RegressionTablesOptions): TableSpec[] 
       { source: 'Residual', ss: sse, df, ms: mse, f: NaN, p: NaN },
       { source: 'Total', ss: sst, df: n - 1, ms: NaN, f: NaN, p: NaN },
     ],
+  });
+
+  tables.push({
+    id: 'reg-effects',
+    title: copy('Effetti (SS Tipo III)'),
+    subtitle: copy('{s1} ~ {s2}', { s1: depName, s2: predNames.join(' + ') }),
+    columns: [
+      { key: 'term', label: copy('Termine'), format: 'text' },
+      { key: 'nparm', label: copy('Parametri'), format: 'int' },
+      { key: 'df', label: copy('df'), format: 'int' },
+      { key: 'ss', label: copy('SS'), format: 'dec4' },
+      { key: 'f', label: copy('F'), format: 'dec3' },
+      { key: 'p', label: copy('p'), format: 'p' },
+    ],
+    rows: effects.map((effect, index) => ({
+      term: predNames[index] ?? '',
+      nparm: 1,
+      df: effect.df,
+      ss: effect.ss,
+      f: effect.f,
+      p: effect.p,
+    })),
   });
 
   tables.push({

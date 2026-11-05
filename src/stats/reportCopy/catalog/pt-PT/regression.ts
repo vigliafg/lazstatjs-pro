@@ -330,4 +330,8 @@ export const regressionCopy: Record<string, string> = {
     'β est.',
   'χ² con {s1} df':
     'χ² com {s1} df',
+  'Media della risposta':
+    'Média da resposta',
+  'Effetti (SS Tipo III)':
+    'Efeitos (SQ tipo III)',
 };

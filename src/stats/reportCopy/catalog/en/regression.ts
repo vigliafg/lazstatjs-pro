@@ -260,4 +260,8 @@ export const regressionCopy: Record<string, string> = {
     'HC1 = n/(n−k−1); HC3 = 1/(1−h)². The robust covariance matrix does not assume constant variance.',
   'I gradi di libertà restano n−k−1; con pochi casi i test robusti sono instabili.':
     'The degrees of freedom remain n−k−1; with few cases the robust tests are unstable.',
+  'Media della risposta':
+    'Mean of response',
+  'Effetti (SS Tipo III)':
+    'Effects (Type III SS)',
 };
