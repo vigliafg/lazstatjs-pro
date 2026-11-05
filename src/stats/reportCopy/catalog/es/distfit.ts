@@ -172,4 +172,7 @@ export const distfitCopy: Record<string, string> = {
     'exacto (enumeración de rangos)',
   '{s1}: {s2} osservazioni; {s3}: {s4} osservazioni.':
     '{s1}: {s2} observaciones; {s3}: {s4} observaciones.',
+  'Cramér–von Mises W²': 'Cramér–von Mises W²',
+  'CvM è una distanza quadratica media tra le due cumulate: meno sensibile al singolo punto peggiore rispetto a KS, più stabile con N piccolo.': 'CvM es una distancia cuadrática media entre las dos acumuladas: menos sensible al peor punto que KS y más estable con N pequeño.',
+  'CvM (Cramér–von Mises) è la distanza quadratica media tra le due cumulate: rispetto a KS pesa tutti gli scostamenti e non solo il peggiore, quindi è più stabile con pochi dati.': 'CvM (Cramér–von Mises) es la distancia cuadrática media entre las dos acumuladas: a diferencia de KS pondera todas las desviaciones y no solo la mayor, por lo que es más estable con pocos datos.',
 };

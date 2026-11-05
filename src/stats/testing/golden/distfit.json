@@ -75,6 +75,11 @@
         "key": "ad",
         "label": "AD A²",
         "format": "dec3"
+      },
+      {
+        "key": "cvm",
+        "label": "Cramér–von Mises W²",
+        "format": "dec4"
       }
     ],
     "rows": [
@@ -82,12 +87,14 @@
         "distribution": "Normale",
         "ks": 0.0680629302162,
         "ksP": 0.998583245171,
-        "ad": 0.226706283951
+        "ad": 0.226706283951,
+        "cvm": 0.0234955978369
       }
     ],
     "notes": [
       "Il p del KS è asintotico e non corretto per i parametri stimati: tende a essere ottimistico, usalo come indicazione.",
-      "KS misura la distanza massima tra la cumulata empirica e quella teorica; AD dà più peso alle code."
+      "KS misura la distanza massima tra la cumulata empirica e quella teorica; AD dà più peso alle code.",
+      "CvM è una distanza quadratica media tra le due cumulate: meno sensibile al singolo punto peggiore rispetto a KS, più stabile con N piccolo."
     ]
   },
   {

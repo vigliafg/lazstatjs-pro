@@ -110,7 +110,7 @@ const fitNormal = (values: number[]): DistributionFit => {
   const logLik =
     -0.5 * n * Math.log(2 * Math.PI) - n * Math.log(sigma) -
     values.reduce((sum, value) => sum + Math.pow(value - mu, 2), 0) / (2 * variance);
-  return { name: 'normal', params: { mu, sigma }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, n };
+  return { name: 'normal', params: { mu, sigma }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, cvm: 0, n };
 };
 
 const fitLognormal = (values: number[]): DistributionFit | null => {
@@ -124,7 +124,7 @@ const fitLognormal = (values: number[]): DistributionFit | null => {
     -0.5 * n * Math.log(2 * Math.PI) - n * Math.log(sigma) -
     logs.reduce((sum, value) => sum + Math.pow(value - mu, 2), 0) / (2 * variance) -
     logs.reduce((sum, value) => sum + value, 0);
-  return { name: 'lognormal', params: { mu, sigma }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, n };
+  return { name: 'lognormal', params: { mu, sigma }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, cvm: 0, n };
 };
 
 const fitExponential = (values: number[]): DistributionFit | null => {
@@ -133,7 +133,7 @@ const fitExponential = (values: number[]): DistributionFit | null => {
   const mean = values.reduce((sum, value) => sum + value, 0) / n;
   const rate = 1 / mean;
   const logLik = n * Math.log(rate) - rate * values.reduce((sum, value) => sum + value, 0);
-  return { name: 'exponential', params: { rate }, logLik, k: 1, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, n };
+  return { name: 'exponential', params: { rate }, logLik, k: 1, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, cvm: 0, n };
 };
 
 const fitGamma = (values: number[]): DistributionFit | null => {
@@ -170,7 +170,7 @@ const fitGamma = (values: number[]): DistributionFit | null => {
   const logLik =
     (shape - 1) * sumLogs - sumValues / scale - n * logGamma(shape) - n * shape * Math.log(scale);
 
-  return { name: 'gamma', params: { shape, scale }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, n };
+  return { name: 'gamma', params: { shape, scale }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, cvm: 0, n };
 };
 
 const fitWeibull = (values: number[]): DistributionFit | null => {
@@ -211,7 +211,7 @@ const fitWeibull = (values: number[]): DistributionFit | null => {
     n * Math.log(shape) - n * shape * Math.log(scale) +
     (shape - 1) * sumLogs - sumPowScaled;
 
-  return { name: 'weibull', params: { shape, scale }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, n };
+  return { name: 'weibull', params: { shape, scale }, logLik, k: 2, aic: 0, bic: 0, ks: 0, ksP: 0, ad: 0, cvm: 0, n };
 };
 
 const kolmogorovP = (d: number, n: number): number => {
@@ -263,6 +263,15 @@ export const fitDistributions = (
       ad += ((2 * (i + 1) - 1) / n) * (Math.log(lower) + Math.log(1 - Math.min(upper, 1 - 1e-12)));
     }
     fit.ad = -n - ad;
+
+    // Cramér–von Mises: 1/(12n) + Σ (F(x(i)) − (2i−1)/(2n))².
+    let cvm = 1 / (12 * n);
+    for (let i = 0; i < n; i++) {
+      const cdf = distributionCdf(fit, sorted[i]);
+      if (!isFinite(cdf)) continue;
+      cvm += Math.pow(cdf - (2 * (i + 1) - 1) / (2 * n), 2);
+    }
+    fit.cvm = cvm;
 
     fits.push(fit);
   }

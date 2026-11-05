@@ -60,16 +60,19 @@ export const distributionFitTables = (
       { key: 'ks', label: copy('KS D'), format: 'dec4' },
       { key: 'ksP', label: copy('p KS (indicativo)'), format: 'p' },
       { key: 'ad', label: copy('AD A²'), format: 'dec3' },
+      { key: 'cvm', label: copy('Cramér–von Mises W²'), format: 'dec4' },
     ],
     rows: fits.map(fit => ({
       distribution: DISTRIBUTION_LABEL[fit.name],
       ks: fit.ks,
       ksP: fit.ksP,
       ad: fit.ad,
+      cvm: fit.cvm,
     })),
     notes: [
       copy('Il p del KS è asintotico e non corretto per i parametri stimati: tende a essere ottimistico, usalo come indicazione.'),
       copy('KS misura la distanza massima tra la cumulata empirica e quella teorica; AD dà più peso alle code.'),
+      copy('CvM è una distanza quadratica media tra le due cumulate: meno sensibile al singolo punto peggiore rispetto a KS, più stabile con N piccolo.'),
     ],
   });
 

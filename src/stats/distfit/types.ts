@@ -24,5 +24,6 @@ export interface DistributionFit {
   ks: number;
   ksP: number;
   ad: number;
+  cvm: number;
   n: number;
 }

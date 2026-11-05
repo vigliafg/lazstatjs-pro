@@ -78,6 +78,8 @@ export const distributionFitReport = (tables: TableSpec[], level: number): Repor
       {
         heading: copy('Assunzioni e cautele'),
         bullets: [
+        copy('CvM (Cramér–von Mises) è la distanza quadratica media tra le due cumulate: rispetto a KS pesa tutti gli scostamenti e non solo il peggiore, quindi è più stabile con pochi dati.'),
+
           copy('Le osservazioni devono essere indipendenti e provenire dalla stessa popolazione.'),
           copy('Le distribuzioni a supporto positivo (lognormale, esponenziale, gamma, Weibull) richiedono valori > 0; i valori nulli o negativi le escludono.'),
           copy('Con N piccolo le stime delle code sono instabili: i percentili estremi vanno riportati con prudenza.'),
