@@ -8,6 +8,40 @@
 
 ---
 
+## 0-bis. Fase 2.0 — inventario procedure e tabelle (2026-11-05)
+
+**Branch**: `grafici-procedure` · **worktree**: principale
+
+**Contesto**: prima fase del piano "tabelle dei risultati allineate a JMP": censire
+tutte le procedure, preesistenti e aggiunte, con le tabelle che producono, prima
+di qualunque confronto e di qualunque modifica alle tabelle.
+
+| Item | Stato |
+| --- | --- |
+| Inventario delle 72 procedure (36 baseline + 36 aggiunte) | chiuso |
+| Origine di ogni procedura ricostruita dalla storia del registro | chiuso |
+| Tabelle e voci lette eseguendo i 72 runner reali | chiuso (244 tabelle, 3.975 voci) |
+| Controparte JMP e verifica della presenza nei quattro libri | chiuso (63 con piattaforma, 39 documentate) |
+| Script di censimento riproducibile | chiuso (`scripts/inventory-procedures.mts`) |
+| Fase 2.1 (confronto voce per voce) | **da iniziare** |
+
+**Test**: `npm run check` verde (1362 test, 0 fail); `npx tsc --noEmit` pulito,
+compreso il nuovo script.
+
+**Artefatti**: `docs/analysis/2026-11-05-inventario-procedure-tabelle.md`
+(riepilogo, tabella unica, elenco tabelle per procedura, limiti).
+
+**Decisioni**: il censimento esegue i runner sui dataset di `samples/manifest.json`
+invece di dedurre le tabelle dal codice; una sola modalità per procedura (le
+modalità multiple si censiranno in 2.1); la controparte JMP è dichiarata
+"documentata" solo se la piattaforma compare nei libri.
+
+**Prossimi 3 passi**: (1) fase 2.1 sulle famiglie con JMP documentato (regressione,
+compare, categorical); (2) elenco delle voci mancanti calcolabili/non calcolabili;
+(3) scelta della prima ondata di integrazione.
+
+---
+
 ## 0. Checkpoint QA grafici (2026-11-04)
 
 **Branch**: `grafici-procedure` · **worktree**: principale · **ultimo commit**: `fix(charts): legenda colore su una scala valida e barre con poche categorie` (HEAD)
