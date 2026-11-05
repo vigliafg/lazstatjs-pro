@@ -86,6 +86,13 @@ export const twoVarianceTables = (
         p: result.bartlett.p,
       },
       {
+        test: copy('O’Brien (varianze robuste)'),
+        statistic: result.obrien.statistic,
+        df1: result.obrien.df1,
+        df2: result.obrien.df2,
+        p: result.obrien.p,
+      },
+      {
         test: copy('Levene (median)'),
         statistic: result.levene.statistic,
         df1: result.levene.df1,

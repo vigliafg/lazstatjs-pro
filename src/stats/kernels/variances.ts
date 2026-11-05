@@ -11,6 +11,7 @@
  */
 import { jStat } from '../jstat';
 import { chi2SF, fSF } from './distributions';
+import { obrienTest } from './anova';
 import type { OneVarianceResult, VarianceGroupSummary, TwoVarianceResult } from '../analysisResults';
 export type { OneVarianceResult, VarianceGroupSummary, TwoVarianceResult } from '../analysisResults';
 
@@ -135,6 +136,7 @@ export const severalVariances = (
     return { values: group.values.map(value => Math.abs(value - centre)) };
   });
   const leveneFit = oneWayF(deviations);
+  const obrien = obrienTest(groups.map(group => group.values));
 
   return {
     groups: summaries,
@@ -157,6 +159,7 @@ export const severalVariances = (
           p: fSF(leveneFit.f, leveneFit.df1, leveneFit.df2),
         }
       : { statistic: Number.NaN, df1: k - 1, df2: total - k, p: Number.NaN },
+    obrien: { statistic: obrien.stat, df1: obrien.df1, df2: obrien.df2, p: obrien.p },
     level,
   };
 };

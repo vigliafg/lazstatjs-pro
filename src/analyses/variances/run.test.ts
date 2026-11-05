@@ -38,7 +38,7 @@ test('two or more variances emit the group table, the tests and a box plot', () 
   assert.ok('ok' in result && result.ok);
   if (!('ok' in result) || !result.ok) return;
   assert.deepEqual(result.tables?.map(table => table.id), ['var-groups', 'var-tests']);
-  assert.equal(result.tables![1].rows.length, 3);
+  assert.equal(result.tables![1].rows.length, 4);
   assert.deepEqual(result.charts?.map(chart => chart.kind), ['box', 'forest']);
   const ratio = result.charts?.[1];
   assert.equal(ratio?.id, 'var-ratio-forest');

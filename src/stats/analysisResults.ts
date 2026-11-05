@@ -377,6 +377,7 @@ export interface TwoVarianceResult {
   fHi: number;
   bartlett: { statistic: number; df: number; p: number };
   levene: { statistic: number; df1: number; df2: number; p: number };
+  obrien: { statistic: number; df1: number; df2: number; p: number };
   level: number;
 }
 

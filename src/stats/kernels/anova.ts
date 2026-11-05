@@ -152,7 +152,7 @@ const bartlettTest = (groups: number[][]): { stat: number; df: number; p: number
  * r = ((n − 1.5)·n·(y − media)² − 0.5·s²·(n − 1)) / ((n − 1)·(n − 2)),
  * che è robusta alla non normalità rispetto a Bartlett.
  */
-const obrienTest = (groups: number[][]): { stat: number; df1: number; df2: number; p: number } => {
+export const obrienTest = (groups: number[][]): { stat: number; df1: number; df2: number; p: number } => {
   const k = groups.length;
   const df1 = Math.max(0, k - 1);
   const transformed = groups.map(values => {
