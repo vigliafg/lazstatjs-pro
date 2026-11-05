@@ -23,9 +23,10 @@ le nostre tabelle (lette eseguendo i runner) e le voci mancanti.
 | Blocchi di voci mancanti e calcolabili | **20** |
 | Voci mancanti non calcolabili | 3 |
 
-La regressione lineare è già stata integrata (`Media della risposta` e tabella
-`reg-effects`), quindi non compare tra le mancanti; il dettaglio del suo diff è in
-`2026-11-05-confronto-tabelle-jmp-regressione.md`.
+La regressione lineare è già stata integrata per intero secondo la checklist
+§8.8 (`Media della risposta`, tabella `reg-effects` e sezione di prosa sugli
+effetti Tipo III in sei lingue), quindi non compare tra le mancanti; il dettaglio
+del suo diff è in `2026-11-05-confronto-tabelle-jmp-regressione.md`.
 
 ## Per famiglia
 

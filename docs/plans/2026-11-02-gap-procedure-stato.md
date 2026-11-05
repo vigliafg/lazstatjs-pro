@@ -24,7 +24,7 @@ di qualunque confronto e di qualunque modifica alle tabelle.
 | Controparte JMP e verifica della presenza nei quattro libri | chiuso (63 con piattaforma, 39 documentate) |
 | Script di censimento riproducibile | chiuso (`scripts/inventory-procedures.mts`) |
 | Fase 2.1 (confronto voce per voce) | **chiusa su 72/72 procedure**: 38 con piattaforma JMP documentata, 20 blocchi mancanti calcolabili su 15 procedure, 3 voci non calcolabili |
-| Fase 2.2, prima integrazione (regressione lineare) | chiusa: `Media della risposta` + tabella `reg-effects` (SS Tipo III) |
+| Fase 2.2, prima integrazione (regressione lineare) | chiusa e completa secondo §8.8: `Media della risposta`, tabella `reg-effects`, sezione di prosa sugli effetti Tipo III in sei lingue, test, golden |
 | Fase 2.2, checklist di integrazione | definita nel piano §8.8: numerica, tabella/colonna, prosa, 6 lingue, test, golden, grafici, export, help |
 
 **Test**: `npm run check` verde (1363 test, 0 fail); `npx tsc --noEmit` pulito,
@@ -44,9 +44,7 @@ modalità multiple si censiranno in 2.1); la controparte JMP è dichiarata
 
 **Prossimi 3 passi**: (1) fase 2.2 sui modelli non lineari (7 blocchi: Effect LR
 tests e colonna ChiSquare per logistico/ordinale/multinomiale/conteggi, MSE per il
-non lineare), ognuno chiuso con la checklist §8.8 compresa la prosa; (2) prosa
-degli effetti Tipo III nel report di regressione, oggi presente solo in tabella;
-(3) modelli misti `lmm`/`glmm` (4 blocchi) e confronti `anova`/`variances`
+non lineare), ognuno chiuso con la checklist §8.8 compresa la prosa; (2) modelli misti `lmm`/`glmm` (4 blocchi) e confronti `anova`/`variances`
 (3 blocchi, Steel–Dwass l'unico non banale).
 
 ---

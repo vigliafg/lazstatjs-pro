@@ -90,6 +90,30 @@ export const regressionReport = (input: RegressionReportInput): ReportSpec => {
     },
   ];
 
+  const effectBullets = rowsOf(tables, 'reg-effects')
+    .filter(row => text(row, 'term') !== '(Intercept)')
+    .map(row => {
+      const pValue = num(row, 'p');
+      return copy('{s1}: SS Tipo III = {s2}, F = {s3} ({s4}) → {s5}.', {
+        s1: text(row, 'term'),
+        s2: show(num(row, 'ss'), 3),
+        s3: show(num(row, 'f'), 3),
+        s4: describeP(pValue),
+        s5: isDecided(pValue, level)
+          ? copy('contributo affidabile al modello')
+          : copy('contributo non distinguibile da zero'),
+      });
+    });
+  if (effectBullets.length > 0) {
+    sections.splice(2, 0, {
+      heading: copy('Effetti (SS Tipo III)'),
+      bullets: [
+        ...effectBullets,
+        copy('Le SS Tipo III misurano il contributo di ogni termine al netto degli altri: il modello viene rifittato senza il termine e si guarda quanto peggiora la somma dei quadrati residui. Con un grado di libertà F è il quadrato della t del coefficiente corrispondente.'),
+      ],
+    });
+  }
+
   if (slopeRow) {
     sections.push({
       heading: copy('Stima robusta Theil–Sen'),

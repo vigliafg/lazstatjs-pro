@@ -138,7 +138,18 @@ test('regression, correlation and chi-square reports have no placeholders', () =
     predNames: ['Age'],
     level: 95,
   });
-  assertReadable(regressionReport({ tables: regression, depName: 'Score_Pre', predNames: ['Age'], level: 95 }));
+  const regReport = regressionReport({
+    tables: regression,
+    depName: 'Score_Pre',
+    predNames: ['Age'],
+    level: 95,
+  });
+  assertReadable(regReport);
+  const effects = regReport.sections.find(section => section.heading === 'Effetti (SS Tipo III)');
+  assert.ok(effects, 'sezione effetti Tipo III assente');
+  const bullets = effects.bullets ?? [];
+  assert.ok(bullets.some(bullet => bullet.includes('Age')), 'nessun bullet per il predittore');
+  assert.ok(bullets.some(bullet => bullet.includes('SS Tipo III')), 'definizione delle SS assente');
 
   const correlation = correlationTables({
     rows: baseRows,

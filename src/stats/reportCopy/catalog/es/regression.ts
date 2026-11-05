@@ -332,6 +332,14 @@ export const regressionCopy: Record<string, string> = {
     'χ² con {s1} df',
   'Media della risposta':
     'Media de la respuesta',
+  '{s1}: SS Tipo III = {s2}, F = {s3} ({s4}) → {s5}.':
+    '{s1}: SS Tipo III = {s2}, F = {s3} ({s4}) → {s5}.',
+  'contributo affidabile al modello':
+    'contribución fiable al modelo',
+  'contributo non distinguibile da zero':
+    'contribución no distinguible de cero',
+  'Le SS Tipo III misurano il contributo di ogni termine al netto degli altri: il modello viene rifittato senza il termine e si guarda quanto peggiora la somma dei quadrati residui. Con un grado di libertà F è il quadrato della t del coefficiente corrispondente.':
+    'Las SS Tipo III miden la contribución de cada término al neto de los demás: el modelo se reajusta sin el término y se registra el aumento de la suma de cuadrados residual. Con un grado de libertad, F es el cuadrado de la t del coeficiente.',
   'Effetti (SS Tipo III)':
     'Efectos (SC tipo III)',
 };

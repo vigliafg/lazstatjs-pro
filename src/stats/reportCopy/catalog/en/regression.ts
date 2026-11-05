@@ -262,6 +262,14 @@ export const regressionCopy: Record<string, string> = {
     'The degrees of freedom remain n−k−1; with few cases the robust tests are unstable.',
   'Media della risposta':
     'Mean of response',
+  '{s1}: SS Tipo III = {s2}, F = {s3} ({s4}) → {s5}.':
+    '{s1}: Type III SS = {s2}, F = {s3} ({s4}) → {s5}.',
+  'contributo affidabile al modello':
+    'a reliable contribution to the model',
+  'contributo non distinguibile da zero':
+    'a contribution not distinguishable from zero',
+  'Le SS Tipo III misurano il contributo di ogni termine al netto degli altri: il modello viene rifittato senza il termine e si guarda quanto peggiora la somma dei quadrati residui. Con un grado di libertà F è il quadrato della t del coefficiente corrispondente.':
+    'Type III SS measure each term’s contribution net of the others: the model is refitted without the term and the increase in the residual sum of squares is recorded. With one degree of freedom F is the square of the coefficient’s t.',
   'Effetti (SS Tipo III)':
     'Effects (Type III SS)',
 };
