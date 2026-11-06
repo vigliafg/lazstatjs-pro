@@ -185,16 +185,17 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
             subtitle: copy('{s1} passi · pseudo-F e CCC', { s1: mergeRows.length }),
             note: copy('Pseudo-F e CCC misurano la separazione dopo ogni fusione: se scendono entrambi, i cluster si stanno mescolando.'),
             data: {
+              // Numeric x keeps the merge steps in order: as categories the
+              // axis sorts 10, 11, …, 19, 2, 20, … lexicographically.
               series: mergeRows.flatMap(merge => [
-                { x: String(merge.clusters), y: merge.pseudoF, series: copy('Pseudo-F') },
-                { x: String(merge.clusters), y: merge.ccc, series: copy('CCC') },
+                { x: merge.clusters, y: merge.pseudoF, series: copy('Pseudo-F') },
+                { x: merge.clusters, y: merge.ccc, series: copy('CCC') },
               ]),
             },
             fields: {
               xLabel: copy('Numero di cluster'),
               yLabel: copy('Valore'),
               series: copy('Serie'),
-              xType: 'nominal',
             },
             options: { showMarkers: true, showBand: false } as never,
           }),
