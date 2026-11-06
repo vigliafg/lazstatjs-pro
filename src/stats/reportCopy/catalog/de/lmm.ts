@@ -38,4 +38,9 @@ export const lmmCopy: Record<string, string> = {
     'Varianz des Achsenabschnitts = {s1}; Residuenvarianz = {s2}.',
   'Varianza intercetta': 'Varianz des Achsenabschnitts',
   'Varianza residua': 'Residuenvarianz',
+  'Componenti di varianza': 'Varianzkomponenten',
+  'Intercetta casuale': 'Zufälliger Achsenabschnitt',
+  'Profilo di verosimiglianza · CI {s1}%': 'Likelihood-Profil · {s1}% KI',
+  'Gli intervalli sono di profilo: non assumono una forma simmetrica e possono avvicinarsi allo zero.': 'Die Intervalle stammen aus dem Likelihood-Profil: sie sind nicht symmetrisch und können sich der Null nähern.',
+  'Le componenti di varianza portano SE e IC di profilo: l’intervallo dell’intercetta casuale dice quanto la stima dipenda da pochi gruppi.': 'Die Varianzkomponenten tragen eine Standardabweichung und ein Profil-KI: das Intervall des zufälligen Achsenabschnitts zeigt, wie stark die Schätzung von wenigen Gruppen abhängt.',
 };

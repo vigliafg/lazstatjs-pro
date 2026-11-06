@@ -1,7 +1,7 @@
 import { jStat } from '../jstat';
 import { parseNum } from '../core';
 import { tCrit, twoSidedTP } from '../distributions';
-import type { LmmCoefficient, LmmOptions, LmmStats } from '../lmm/types';
+import type { LmmCoefficient, LmmOptions, LmmStats, LmmVarianceComponent } from '../lmm/types';
 
 type Matrix = number[][];
 
@@ -121,6 +121,101 @@ const reml = (prepared: Prepared, lambda: number): { logLik: number; beta: numbe
   return vcov ? { logLik, beta, vcov, sigma2, rss } : null;
 };
 
+const CHI2_95_DF1 = 3.841458820694124;
+
+/** Chi-square quantile with one degree of freedom (normal quantile squared). */
+const chiSquareQuantile1 = (level: number): number => {
+  if (level === 0.95) return CHI2_95_DF1;
+  const target = 0.5 + level / 2;
+  const erf = (z: number): number => {
+    const t = 1 / (1 + 0.3275911 * Math.abs(z));
+    const poly = (((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592;
+    const value = 1 - poly * t * Math.exp(-z * z);
+    return z >= 0 ? value : -value;
+  };
+  let lo = 0;
+  let hi = 6;
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo + hi) / 2;
+    if (0.5 * (1 + erf(mid / Math.SQRT2)) < target) lo = mid;
+    else hi = mid;
+  }
+  const z = (lo + hi) / 2;
+  return z * z;
+};
+
+/**
+ * Variance components with their standard error and likelihood-profile interval.
+ *
+ * The parameters are profiled over the relative variance lambda, so the
+ * interval endpoints are the lambda where the REML deviance rises by the
+ * chi-square quantile: no symmetry or normality assumption on the variance.
+ */
+const varianceComponentsOf = (
+  prepared: Prepared,
+  lambda: number,
+  logLik: number,
+  level: number
+): LmmVarianceComponent[] => {
+  const chi2 = chiSquareQuantile1(level);
+  const target = -2 * logLik + chi2;
+  const deviance = (candidate: number): number | null => {
+    const fit = reml(prepared, candidate);
+    return fit ? -2 * fit.logLik : null;
+  };
+  const root = (outside: number, inside: number): number | null => {
+    let lo = outside;
+    let hi = inside;
+    for (let i = 0; i < 200; i++) {
+      const mid = (lo + hi) / 2;
+      const value = deviance(mid);
+      if (value === null) return null;
+      if (value < target) hi = mid;
+      else lo = mid;
+    }
+    return (lo + hi) / 2;
+  };
+  const lower = (): number => {
+    const far = 1e-10;
+    const farDeviance = deviance(far);
+    if (farDeviance === null || farDeviance < target) return far;
+    let step = lambda * 0.5;
+    let outside = Math.max(lambda - step, far);
+    while (outside > far && (deviance(outside) ?? 0) < target) {
+      step *= 2;
+      outside = Math.max(lambda - step, far);
+    }
+    return root(outside, lambda) ?? far;
+  };
+  const upper = (): number => {
+    let step = lambda * 0.5;
+    let outside = lambda + step;
+    while ((deviance(outside) ?? Infinity) < target && outside < 1e8) {
+      step *= 2;
+      outside = lambda + step;
+    }
+    return root(outside, lambda) ?? outside;
+  };
+  const lo = lower();
+  const hi = upper();
+  const atLo = reml(prepared, lo);
+  const atHi = reml(prepared, hi);
+  const best = reml(prepared, lambda);
+  if (!atLo || !atHi || !best) return [];
+  const zValue = Math.sqrt(chi2);
+  const entry = (component: 'intercept' | 'residual', estimate: number, low: number, high: number): LmmVarianceComponent => ({
+    component,
+    estimate,
+    se: low > 0 && high > 0 ? (estimate * Math.log(high / low)) / (2 * zValue) : NaN,
+    lo: low,
+    hi: high,
+  });
+  return [
+    entry('intercept', lambda * best.sigma2, lo * atLo.sigma2, hi * atHi.sigma2),
+    entry('residual', best.sigma2, atHi.sigma2, atLo.sigma2),
+  ];
+};
+
 const det = (matrix: Matrix): number => {
   const n = matrix.length;
   const a = matrix.map(row => [...row]);
@@ -181,6 +276,7 @@ export const lmmStats = (options: LmmOptions): LmmStats | null => {
   if (!bestPair.fit) return null;
   const { beta, vcov, sigma2, logLik } = bestPair.fit;
   const lambda = bestPair.lambda;
+  const varianceComponents = varianceComponentsOf(prepared, lambda, logLik, options.level);
   const sigmaU2 = lambda * sigma2;
   const crit = tCrit(options.level, n - p);
   const coefficients: LmmCoefficient[] = beta.map((value, index) => {
@@ -228,6 +324,7 @@ export const lmmStats = (options: LmmOptions): LmmStats | null => {
     df: n - p,
     sigmaU2,
     sigmaE2: sigma2,
+    varianceComponents,
     icc: sigmaU2 + sigma2 > 0 ? sigmaU2 / (sigmaU2 + sigma2) : NaN,
     remlLogLik: logLik,
     lambda,

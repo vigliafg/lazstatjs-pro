@@ -60,4 +60,9 @@ export const lmmCopy: Record<string, string> = {
     'Varianza del intercepto',
   'Varianza residua':
     'Varianza residual',
+  'Componenti di varianza': 'Componentes de varianza',
+  'Intercetta casuale': 'Intercepto aleatorio',
+  'Profilo di verosimiglianza · CI {s1}%': 'Perfil de verosimilitud · IC {s1}%',
+  'Gli intervalli sono di profilo: non assumono una forma simmetrica e possono avvicinarsi allo zero.': 'Los intervalos provienen del perfil de verosimilitud: no son simétricos y pueden acercarse a cero.',
+  'Le componenti di varianza portano SE e IC di profilo: l’intervallo dell’intercetta casuale dice quanto la stima dipenda da pochi gruppi.': 'Los componentes de varianza llevan un error estándar y un IC de perfil: el intervalo del intercepto aleatorio muestra cuánto depende la estimación de pocos grupos.',
 };

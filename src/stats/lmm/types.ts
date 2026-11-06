@@ -16,7 +16,17 @@ export interface LmmCoefficient {
   hi: number;
 }
 
+/** Variance component with its standard error and likelihood-profile interval. */
+export interface LmmVarianceComponent {
+  component: 'intercept' | 'residual';
+  estimate: number;
+  se: number;
+  lo: number;
+  hi: number;
+}
+
 export interface LmmStats {
+  varianceComponents: LmmVarianceComponent[];
   n: number;
   groups: number;
   groupLabels: string[];

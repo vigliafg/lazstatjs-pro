@@ -40,4 +40,9 @@ export const lmmCopy: Record<string, string> = {
     'CI {s1}% · t with df = {s2}',
   'p e CI usano una t con df = N − parametri; con pochi gruppi sono approssimati.':
     'p and CIs use a t with df = N − parameters; with few groups they are approximate.',
+  'Componenti di varianza': 'Variance components',
+  'Intercetta casuale': 'Random intercept',
+  'Profilo di verosimiglianza · CI {s1}%': 'Likelihood profile · {s1}% CI',
+  'Gli intervalli sono di profilo: non assumono una forma simmetrica e possono avvicinarsi allo zero.': 'The intervals come from the likelihood profile: they are not forced to be symmetric and can approach zero.',
+  'Le componenti di varianza portano SE e IC di profilo: l’intervallo dell’intercetta casuale dice quanto la stima dipenda da pochi gruppi.': 'The variance components carry a standard error and a profile CI: the random-intercept interval shows how much the estimate depends on few groups.',
 };

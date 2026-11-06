@@ -46,4 +46,26 @@ export const lmmTables = (
     rows: stats.coefficients.map(coefficient => ({ ...coefficient })),
     notes: [copy('p e CI usano una t con df = N − parametri; con pochi gruppi sono approssimati.')],
   },
+  {
+    id: 'lmm-varcomp',
+    title: copy('Componenti di varianza'),
+    subtitle: copy('Profilo di verosimiglianza · CI {s1}%', { s1: level }),
+    columns: [
+      { key: 'component', label: copy('Componente'), format: 'text' },
+      { key: 'estimate', label: copy('Stima'), format: 'dec4' },
+      { key: 'se', label: copy('SE'), format: 'dec4' },
+      { key: 'lo', label: copy('CI low'), format: 'dec4' },
+      { key: 'hi', label: copy('CI high'), format: 'dec4' },
+    ],
+    rows: stats.varianceComponents.map(entry => ({
+      component: entry.component === 'intercept' ? copy('Intercetta casuale') : copy('Residuo'),
+      estimate: entry.estimate,
+      se: entry.se,
+      lo: entry.lo,
+      hi: entry.hi,
+    })),
+    notes: [
+      copy('Gli intervalli sono di profilo: non assumono una forma simmetrica e possono avvicinarsi allo zero.'),
+    ],
+  },
 ];
