@@ -139,6 +139,128 @@ const buildLayout = (
   return { leafOrder: order, links, leaves };
 };
 
+
+/** Autovalori di una matrice simmetrica, per rotazioni di Jacobi. */
+const symmetricEigenvalues = (matrix: number[][]): number[] => {
+  const size = matrix.length;
+  const a = matrix.map(row => [...row]);
+  for (let sweep = 0; sweep < 100; sweep += 1) {
+    let off = 0;
+    for (let i = 0; i < size; i += 1) {
+      for (let j = i + 1; j < size; j += 1) off += a[i][j] * a[i][j];
+    }
+    if (off < 1e-26) break;
+    for (let i = 0; i < size; i += 1) {
+      for (let j = i + 1; j < size; j += 1) {
+        if (Math.abs(a[i][j]) < 1e-18) continue;
+        const theta = (a[j][j] - a[i][i]) / (2 * a[i][j]);
+        const t = (theta >= 0 ? 1 : -1) / (Math.abs(theta) + Math.sqrt(theta * theta + 1));
+        const c = 1 / Math.sqrt(t * t + 1);
+        const s = t * c;
+        for (let k = 0; k < size; k += 1) {
+          const aik = a[i][k];
+          const ajk = a[j][k];
+          a[i][k] = c * aik - s * ajk;
+          a[j][k] = s * aik + c * ajk;
+        }
+        for (let k = 0; k < size; k += 1) {
+          const aki = a[k][i];
+          const akj = a[k][j];
+          a[k][i] = c * aki - s * akj;
+          a[k][j] = s * aki + c * akj;
+        }
+      }
+    }
+  }
+  return a.map((row, index) => row[index]).sort((left, right) => right - left);
+};
+
+interface MergeQuality {
+  pseudoF: number;
+  ccc: number;
+}
+
+/**
+ * Calinski–Harabasz pseudo-F and Sarle's cubic clustering criterion of the
+ * partition that exists after a merge. Both are computed from the centred
+ * sum-of-squares of the working (possibly standardised) data, as in
+ * `fpc::cluster.stats` and `NbClust::Indices.WBT`.
+ */
+const mergeQuality = (data: number[][], groups: WorkingCluster[]): MergeQuality => {
+  const n = data.length;
+  const width = data[0]?.length ?? 1;
+  const k = groups.length;
+  if (k < 2) return { pseudoF: Number.NaN, ccc: Number.NaN };
+  const grand = Array.from({ length: width }, (_, column) => mean(data.map(row => row[column] ?? 0)));
+  let within = 0;
+  let between = 0;
+  groups.forEach(group => {
+    const center = Array.from({ length: width }, (_, column) =>
+      mean(group.members.map(member => member.data[column] ?? 0))
+    );
+    group.members.forEach(member => {
+      within += member.data.reduce((sum, value, column) => sum + Math.pow(value - center[column], 2), 0);
+    });
+    between +=
+      group.members.length * center.reduce((sum, value, column) => sum + Math.pow(value - grand[column], 2), 0);
+  });
+  const pseudoF = n > k ? between / (k - 1) / (within / (n - k)) : Number.NaN;
+
+  // Sarle's CCC uses the uncentred total and between cross-products, exactly as
+  // NbClust does: P = X'X, B = sum_c n_c * mean_c * mean_c'.
+  const total: number[][] = Array.from({ length: width }, (_, row) =>
+    Array.from({ length: width }, (__, column) =>
+      data.reduce((sum, observation) => sum + (observation[row] ?? 0) * (observation[column] ?? 0), 0)
+    )
+  );
+  const betweenMatrix: number[][] = Array.from({ length: width }, () => new Array<number>(width).fill(0));
+  let traceTotal = 0;
+  let traceWithin = 0;
+  for (let row = 0; row < width; row += 1) traceTotal += total[row][row];
+  groups.forEach(group => {
+    const center = Array.from({ length: width }, (_, column) =>
+      mean(group.members.map(member => member.data[column] ?? 0))
+    );
+    for (let row = 0; row < width; row += 1) {
+      for (let column = 0; column < width; column += 1) {
+        betweenMatrix[row][column] += group.members.length * center[row] * center[column];
+      }
+    }
+  });
+  for (let row = 0; row < width; row += 1) traceWithin += total[row][row] - betweenMatrix[row][row];
+  const r2 = traceTotal > 0 ? 1 - traceWithin / traceTotal : 0;
+  const eigenvalues = symmetricEigenvalues(
+    total.map(row => row.map(value => value / Math.max(1, n - 1)))
+  );
+  const scale = eigenvalues.map(value => (value > 0 ? Math.sqrt(value) : 1));
+  const product = scale.reduce((accumulator, value) => accumulator * value, 1);
+  const base = Math.pow(product / k, 1 / width);
+  const units = scale.map(value => (base > 0 ? value / base : value));
+  const above = units.filter(value => value >= 1).length;
+  const p1 = Math.min(above, k - 1);
+  const shape = (n - k) * (n - k) / n * (1 + 4 / n);
+  let expected: number;
+  let dimension = width;
+  if (p1 > 0 && p1 < width) {
+    const product1 = scale.slice(0, p1).reduce((accumulator, value) => accumulator * value, 1);
+    const unit1 = scale.map(value => value / Math.pow(product1 / k, 1 / p1));
+    const b1 = unit1.slice(0, p1).reduce((sum, value) => sum + 1 / (n + value), 0);
+    const b2 = unit1.slice(p1).reduce((sum, value) => sum + (value * value) / (n + value), 0);
+    expected = 1 - ((b1 + b2) / unit1.reduce((sum, value) => sum + value * value, 0)) * shape;
+    dimension = p1;
+  } else {
+    const b1 = units.reduce((sum, value) => sum + 1 / (n + value), 0);
+    expected = 1 - (b1 / units.reduce((sum, value) => sum + value * value, 0)) * shape;
+  }
+  const numerator = 1 - expected;
+  const denominator = 1 - r2;
+  const ccc =
+    numerator > 0 && denominator > 0
+      ? Math.log(numerator / denominator) * (Math.sqrt((n * dimension) / 2) / Math.pow(0.001 + expected, 1.2))
+      : Number.NaN;
+  return { pseudoF, ccc };
+};
+
 /** Agglomerate, cut and profile. */
 export const hierarchicalClusters = (input: ClusterInput): ClusterResult | null => {
   const { variableNames } = input;
@@ -175,16 +297,20 @@ export const hierarchicalClusters = (input: ClusterInput): ClusterResult | null 
       id: nextId,
       members: [...left.members, ...right.members],
     };
+    clusters = clusters.filter((_, index) => index !== bestI && index !== bestJ);
+    clusters.push(merged);
+    const quality = mergeQuality(working, clusters);
     merges.push({
       id: nextId,
       left: left.id,
       right: right.id,
       height: best,
       size: merged.members.length,
+      clusters: clusters.length,
+      pseudoF: quality.pseudoF,
+      ccc: quality.ccc,
     });
     nextId += 1;
-    clusters = clusters.filter((_, index) => index !== bestI && index !== bestJ);
-    clusters.push(merged);
   }
 
   const k = input.clusters > 0 ? Math.max(1, Math.min(n, input.clusters)) : 0;

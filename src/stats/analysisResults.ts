@@ -118,6 +118,12 @@ export interface ClusterMerge {
   right: number;
   height: number;
   size: number;
+  /** Numero di cluster dopo la fusione. */
+  clusters?: number;
+  /** Calinski–Harabasz della partizione dopo la fusione. */
+  pseudoF?: number;
+  /** Cubic clustering criterion della stessa partizione. */
+  ccc?: number;
 }
 
 export interface ClusterResult {

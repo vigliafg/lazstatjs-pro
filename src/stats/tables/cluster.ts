@@ -25,6 +25,9 @@ export const clusterTables = ({
       { key: 'right', label: copy('Gruppo destro'), align: 'left' },
       { key: 'height', label: copy('Distanza'), format: 'dec3', align: 'right' },
       { key: 'size', label: copy('Dimensione'), format: 'int', align: 'right' },
+      { key: 'clusters', label: copy('Cluster dopo la fusione'), format: 'int', align: 'right' },
+      { key: 'pseudoF', label: copy('Pseudo-F'), format: 'dec3', align: 'right' },
+      { key: 'ccc', label: copy('CCC'), format: 'dec3', align: 'right' },
     ],
     rows: result.merges.map((merge, index) => ({
       step: index + 1,
@@ -32,6 +35,9 @@ export const clusterTables = ({
       right: merge.right < rowLabels.length ? rowLabels[merge.right] : `C${merge.right + 1}`,
       height: merge.height,
       size: merge.size,
+      clusters: merge.clusters ?? null,
+      pseudoF: merge.pseudoF ?? null,
+      ccc: merge.ccc ?? null,
     })),
   };
 

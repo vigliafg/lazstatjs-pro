@@ -35,6 +35,13 @@ export const clusterReport = (
         ),
       },
       {
+        heading: copy('Quanti cluster'),
+        body: [
+          copy('Il pseudo-F confronta la variabilità tra cluster con quella interna: valori alti indicano gruppi ben separati.'),
+          copy('Il CCC corregge quel confronto per la dimensione del campione: valori positivi e in crescita segnalano una struttura reale, non un artefatto della procedura.'),
+        ],
+      },
+      {
         heading: copy('Come leggere i profili'),
         body: [
           copy('Le medie standardizzate dei cluster mostrano quali variabili distinguono un gruppo dagli altri: valori sopra zero indicano una media più alta della media generale, valori sotto zero una media più bassa.'),

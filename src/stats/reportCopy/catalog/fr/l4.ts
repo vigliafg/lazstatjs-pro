@@ -212,4 +212,10 @@ export const l4Copy: Record<string, string> = {
   'LCL del punto': 'LCL du point',
   'UCL del punto': 'UCL du point',
   'I sottogruppi non hanno tutti la stessa dimensione: ogni punto ha i propri limiti, più stretti dove il sottogruppo è più numeroso.': 'Les sous-groupes n’ont pas tous la même taille : chaque point a ses propres limites, plus serrées là où le sous-groupe est plus grand.',
+  'Cluster dopo la fusione': 'Clusters après la fusion',
+  'Pseudo-F': 'Pseudo-F',
+  'CCC': 'CCC',
+  'Quanti cluster': 'Combien de clusters',
+  'Il pseudo-F confronta la variabilità tra cluster con quella interna: valori alti indicano gruppi ben separati.': 'Le pseudo-F compare la variabilité entre clusters à la variabilité interne : des valeurs élevées indiquent des groupes bien séparés.',
+  'Il CCC corregge quel confronto per la dimensione del campione: valori positivi e in crescita segnalano una struttura reale, non un artefatto della procedura.': 'Le CCC corrige cette comparaison pour la taille de l’échantillon : des valeurs positives et croissantes indiquent une structure réelle, non un artefact de la procédure.',
 };
