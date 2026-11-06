@@ -47,7 +47,7 @@ export const w3Topics: HelpTopic[] = [
         'La varianza del intercepto σ²ᵤ mide cuánto varía el nivel basal entre clústeres; la varianza de la pendiente mide cuánto varía el efecto de un predictor, y la correlación intercepto-pendiente indica si los clústeres que empiezan más alto también cambian más deprisa.',
         'El ICC es la proporción de varianza en la escala latente atribuible al clúster: σ²ᵤ / (σ²ᵤ + π²/3) para logit, σ²ᵤ / (σ²ᵤ + 1) para log y σ²ᵤ / (σ²ᵤ + σ²) para el modelo gaussiano con identidad. Describe el agrupamiento, no la varianza explicada.',
         'El BLUP es la desviación estimada de un clúster respecto a la recta poblacional, contraída hacia cero en proporción a la poca información que aporta ese clúster: es una predicción, no un parámetro contrastado.',
-      ],
+      'Los componentes de varianza llevan error estándar e IC de Wald en escala log, y las pruebas de efectos fijos dan el Wald por término.'],
       pitfalls: [
         'Leer una odds ratio condicionada como si fuera la marginal que reporta la regresión logística, o al contrario, y compararlas numéricamente.',
         'Ajustar una pendiente aleatoria con muy pocos clústeres: la varianza colapsa a cero o el modelo no converge, y los errores estándar pierden sentido.',

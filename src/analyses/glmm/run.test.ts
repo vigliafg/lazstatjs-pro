@@ -49,8 +49,9 @@ test('Gaussian GLMM with a random slope emits tables, report and charts', () => 
     'glmm-random-effects',
     'glmm-residual-fitted',
     'glmm-random-slopes',
+    'glmm-variance-interval',
   ]);
-  assert.equal(result.charts?.[3].kind, 'interval');
+  assert.equal(result.charts?.[4].kind, 'interval');
 });
 
 test('GLMM without a random slope keeps only the intercept columns', () => {
@@ -65,6 +66,7 @@ test('GLMM without a random slope keeps only the intercept columns', () => {
     'glmm-observed-fitted',
     'glmm-random-effects',
     'glmm-residual-fitted',
+    'glmm-variance-interval',
   ]);
   const blups = result.tables!.find(table => table.id === 'glmm-blups')!;
   assert.equal(blups.columns.length, 4);

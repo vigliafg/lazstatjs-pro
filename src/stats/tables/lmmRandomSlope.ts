@@ -85,4 +85,53 @@ export const lmmRandomSlopeTables = (
       copy('I BLUP sono stime condizionate al gruppo: la loro variabilità non va confrontata con i coefficienti fissi.'),
     ],
   },
+  {
+    id: 'lmm-varcomp',
+    title: copy('Componenti di varianza'),
+    subtitle: copy('Stima e CI {s1}%', { s1: level }),
+    columns: [
+      { key: 'component', label: copy('Componente'), format: 'text' },
+      { key: 'estimate', label: copy('Stima'), format: 'dec4' },
+      { key: 'se', label: copy('SE'), format: 'dec4' },
+      { key: 'lo', label: copy('CI low'), format: 'dec4' },
+      { key: 'hi', label: copy('CI high'), format: 'dec4' },
+    ],
+    rows: fit.varianceComponents.map(entry => ({
+      component:
+        entry.component === 'intercept'
+          ? copy('Intercetta casuale')
+          : entry.component === 'slope'
+            ? copy('Varianza pendenza')
+            : copy('Residuo'),
+      estimate: entry.estimate,
+      se: entry.se,
+      lo: entry.lo,
+      hi: entry.hi,
+    })),
+    notes: [
+      copy('La tabella delle componenti di varianza riporta SE e CI di Wald su scala log: un intervallo ampio dice che servono piu gruppi per una stima stabile.'),
+    ],
+  },
+  {
+    id: 'lmm-fixed-tests',
+    title: copy('Test degli effetti fissi'),
+    subtitle: copy('Wald per termine · CI {s1}%', { s1: level }),
+    columns: [
+      { key: 'term', label: copy('Termine'), format: 'text' },
+      { key: 'f', label: copy('F'), format: 'dec3' },
+      { key: 'df1', label: copy('df1'), format: 'int' },
+      { key: 'df2', label: copy('df2'), format: 'int' },
+      { key: 'p', label: copy('p'), format: 'p' },
+    ],
+    rows: fit.fixedTests.map((test, index) => ({
+      term: index === 0 ? '(Intercept)' : names.predictors[index - 1] ?? test.term,
+      f: test.chiSquare,
+      df1: test.df,
+      df2: fit.df,
+      p: test.p,
+    })),
+    notes: [
+      copy('Con predittori a una colonna il test è il quadrato dello z: il p-value coincide con quello della tabella dei coefficienti.'),
+    ],
+  },
 ];

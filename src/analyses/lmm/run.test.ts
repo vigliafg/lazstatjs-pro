@@ -60,7 +60,7 @@ test('lmm random-slope mode reports the slope variance and the BLUPs', () => {
 
   assert.deepEqual(
     (result.tables ?? []).map(table => table.id),
-    ['lmm-summary', 'lmm-fixed', 'lmm-random-effects']
+    ['lmm-summary', 'lmm-fixed', 'lmm-random-effects', 'lmm-varcomp', 'lmm-fixed-tests']
   );
   const summary = result.tables!.find(table => table.id === 'lmm-summary')!.rows;
   assert.ok(summary.some(row => String(row.metric) === 'Varianza pendenza'));
@@ -68,6 +68,7 @@ test('lmm random-slope mode reports the slope variance and the BLUPs', () => {
     'lmm-observed-fitted',
     'lmm-random-slopes',
     'lmm-random-intercepts',
+    'lmm-variance-interval',
   ]);
   assert.equal(result.report?.id, 'lmm');
 });

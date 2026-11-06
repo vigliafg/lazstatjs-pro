@@ -113,6 +113,8 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
     group: `C${result.assignment[index] + 1}`,
   }));
 
+  const mergeRows = 'merges' in result && Array.isArray(result.merges) ? result.merges : [];
+
   const charts: AnalysisChart[] = [
     ...(partitioned
       ? []
@@ -174,6 +176,30 @@ export const buildClusterOutput = ({ grid, params }: ClusterInput): AnalysisRunR
       fields: { xLabel: variableNames[0], yLabel: variableNames[1] ?? 'V2', series: copy('Cluster') },
       options: { fit: 'none', band: 'none', showPoints: true } as never,
     }),
+    ...(mergeRows.length > 0
+      ? [
+          makeChart({
+            id: 'cluster-merge-quality',
+            kind: 'line',
+            title: copy('Qualità della fusione'),
+            subtitle: copy('{s1} passi · pseudo-F e CCC', { s1: mergeRows.length }),
+            note: copy('Pseudo-F e CCC misurano la separazione dopo ogni fusione: se scendono entrambi, i cluster si stanno mescolando.'),
+            data: {
+              series: mergeRows.flatMap(merge => [
+                { x: String(merge.clusters), y: merge.pseudoF, series: copy('Pseudo-F') },
+                { x: String(merge.clusters), y: merge.ccc, series: copy('CCC') },
+              ]),
+            },
+            fields: {
+              xLabel: copy('Numero di cluster'),
+              yLabel: copy('Valore'),
+              series: copy('Serie'),
+              xType: 'nominal',
+            },
+            options: { showMarkers: true, showBand: false } as never,
+          }),
+        ]
+      : []),
     makeChart({
       id: 'cluster-sizes',
       kind: 'bar',

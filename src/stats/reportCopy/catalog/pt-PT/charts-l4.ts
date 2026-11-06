@@ -157,4 +157,9 @@ export const l4ChartCopy: Record<string, string> = {
   "Bontà di adattamento — {s1}": "Ajustamento — {s1}",
   "Frequenze osservate": "Frequências observadas",
   "Le barre sono i conteggi osservati; confrontali con le attese riportate nella tabella.": "As barras são as contagens observadas; compare-as com os valores esperados na tabela.",
+  'Qualità della fusione': 'Qualidade da fusão',
+  '{s1} passi · pseudo-F e CCC': '{s1} passos · pseudo-F e CCC',
+  'Pseudo-F e CCC misurano la separazione dopo ogni fusione: se scendono entrambi, i cluster si stanno mescolando.': 'Pseudo-F e CCC medem a separação após cada fusão: se ambos descem, os clusters estão a misturar-se.',
+  'Numero di cluster': 'Número de clusters',
+  'L’intervallo misura l’incertezza sulla componente: se è ampio servono più gruppi per una stima stabile.': 'O intervalo mede a incerteza da componente: se for amplo, são precisos mais grupos para uma estimativa estável.',
 };

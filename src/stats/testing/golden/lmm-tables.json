@@ -1,0 +1,216 @@
+[
+  {
+    "id": "lmm-summary",
+    "title": "Modello lineare misto",
+    "subtitle": "Y ~ X + (1 | G) · CI 95%",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "format": "text"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "N",
+        "value": 16
+      },
+      {
+        "metric": "Gruppi",
+        "value": 4
+      },
+      {
+        "metric": "Varianza intercetta",
+        "value": 2.36739035473
+      },
+      {
+        "metric": "Varianza residua",
+        "value": 0.0746015169763
+      },
+      {
+        "metric": "ICC",
+        "value": 0.969450546564
+      },
+      {
+        "metric": "REML logLik (a meno di costante)",
+        "value": 8.00730017091
+      }
+    ],
+    "notes": [
+      "Stima REML con intercetta casuale per gruppo.",
+      "ICC = varianza tra gruppi / varianza totale."
+    ]
+  },
+  {
+    "id": "lmm-fixed",
+    "title": "Effetti fissi",
+    "subtitle": "CI 95% · t con df = 14",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Termine",
+        "format": "text"
+      },
+      {
+        "key": "beta",
+        "label": "Stima",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "t",
+        "label": "t",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "lo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "hi",
+        "label": "CI high",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "term": "(Intercept)",
+        "beta": -0.183134527795,
+        "se": 0.787873671441,
+        "t": -0.232441487047,
+        "p": 0.819558740834,
+        "lo": -1.87295548486,
+        "hi": 1.50668642927
+      },
+      {
+        "term": "X1",
+        "beta": 1.81201354031,
+        "se": 0.0610490612102,
+        "t": 29.6812678916,
+        "p": 4.83427598388e-14,
+        "lo": 1.68107632692,
+        "hi": 1.9429507537
+      }
+    ],
+    "notes": [
+      "p e CI usano una t con df = N − parametri; con pochi gruppi sono approssimati."
+    ]
+  },
+  {
+    "id": "lmm-varcomp",
+    "title": "Componenti di varianza",
+    "subtitle": "Profilo di verosimiglianza · CI 95%",
+    "columns": [
+      {
+        "key": "component",
+        "label": "Componente",
+        "format": "text"
+      },
+      {
+        "key": "estimate",
+        "label": "Stima",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "lo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "hi",
+        "label": "CI high",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "component": "Intercetta casuale",
+        "estimate": 2.36739035473,
+        "se": 7.12771145281,
+        "lo": 1.91761398796e-10,
+        "hi": 940993.718847
+      },
+      {
+        "component": "Residuo",
+        "estimate": 0.0746015169763,
+        "se": 0.0216840490157,
+        "lo": 0.0586071747437,
+        "hi": 1.91761398796
+      }
+    ],
+    "notes": [
+      "Gli intervalli sono di profilo: non assumono una forma simmetrica e possono avvicinarsi allo zero."
+    ]
+  },
+  {
+    "id": "lmm-fixed-tests",
+    "title": "Test degli effetti fissi",
+    "subtitle": "Wald per termine · df 14 · 95",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Termine",
+        "format": "text"
+      },
+      {
+        "key": "f",
+        "label": "F",
+        "format": "dec3"
+      },
+      {
+        "key": "df1",
+        "label": "df1",
+        "format": "int"
+      },
+      {
+        "key": "df2",
+        "label": "df2",
+        "format": "int"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "term": "(Intercept)",
+        "f": 0.0540290449005,
+        "df1": 1,
+        "df2": 14,
+        "p": 0.819558740834
+      },
+      {
+        "term": "X1",
+        "f": 880.977663655,
+        "df1": 1,
+        "df2": 14,
+        "p": 4.83427598388e-14
+      }
+    ],
+    "notes": [
+      "Con predittori a una colonna F è il quadrato del t: il p-value coincide con quello della tabella dei coefficienti."
+    ]
+  }
+]

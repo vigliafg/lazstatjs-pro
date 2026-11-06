@@ -507,7 +507,7 @@ export const coreTopics: HelpTopic[] = [
       assumptions: ['Résidus approximativement normaux ; structure de covariance correcte.'],
       whenToUse: ['Données longitudinales, grappes, mesures répétées avec données manquantes.'],
       whenNotToUse: ['Peu de grappes : les estimations de variance sont instables.'],
-      reading: ['Les coefficients fixes se lisent comme dans une régression, mais les erreurs tiennent compte du regroupement.'],
+      reading: ['Les coefficients fixes se lisent comme dans une régression, mais les erreurs tiennent compte du regroupement.', 'Les composantes de variance portent une erreur type et un IC de profil, et les tests des effets fixes donnent F par terme.'],
       pitfalls: ['Traiter des mesures répétées comme indépendantes sous-estime les erreurs standard.'],
       glossary: [
         { term: 'Effet fixe', definition: 'Un effet moyen valable pour la population.' },

@@ -50,4 +50,5 @@ export const lmmCopy: Record<string, string> = {
   'Il test degli effetti fissi riporta il Wald per termine: con predittori a una colonna F è il quadrato del t della tabella dei coefficienti.': 'Die Tests der festen Effekte geben den Wald-Test je Termin an: bei einspaltigen Prädiktoren ist F das Quadrat des t aus der Koeffiziententabelle.',
   'Wald per termine · CI {s1}%': 'Wald je Termin · {s1}% KI',
   'Wald per termine · df {s1} · {s2}': 'Wald je Termin · df {s1} · {s2}',
+  'Stima e CI {s1}%': 'Schätzung und {s1}% KI',
 };

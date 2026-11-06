@@ -1,0 +1,229 @@
+[
+  {
+    "id": "glmm-coefficients",
+    "title": "Coefficienti del modello",
+    "subtitle": "Y ~ X · effetti casuali per G · CI 95%",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Termine",
+        "format": "text"
+      },
+      {
+        "key": "beta",
+        "label": "B",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "z",
+        "label": "z",
+        "format": "dec3"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      },
+      {
+        "key": "lo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "hi",
+        "label": "CI high",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "term": "(Intercept)",
+        "beta": -0.181436331803,
+        "se": 0.685065991066,
+        "z": -0.264845042914,
+        "p": 0.791128836229,
+        "lo": -1.52414100132,
+        "hi": 1.16126833772
+      },
+      {
+        "term": "X",
+        "beta": 1.81134758525,
+        "se": 0.0584499714034,
+        "z": 30.9897086646,
+        "p": 0,
+        "lo": 1.6967877464,
+        "hi": 1.9259074241
+      }
+    ],
+    "notes": [
+      "I coefficienti sono sulla scala del link: la loro interpretazione cambia con famiglia e link.",
+      "Il test z è di Wald: con gruppi piccoli l’approssimazione può divergere dal test di verosimiglianza."
+    ]
+  },
+  {
+    "id": "glmm-random",
+    "title": "Componenti di varianza",
+    "subtitle": "Famiglia Gaussiana · link Identità · effetti casuali per G",
+    "columns": [
+      {
+        "key": "component",
+        "label": "Componente",
+        "format": "text"
+      },
+      {
+        "key": "estimate",
+        "label": "Stima",
+        "format": "dec4"
+      },
+      {
+        "key": "se",
+        "label": "SE",
+        "format": "dec4"
+      },
+      {
+        "key": "lo",
+        "label": "CI low",
+        "format": "dec4"
+      },
+      {
+        "key": "hi",
+        "label": "CI high",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "component": "Varianza intercetta",
+        "estimate": 1.77130193462,
+        "se": 1.26585233616,
+        "lo": 0.436501301262,
+        "hi": 7.18786068794
+      },
+      {
+        "component": "Varianza residua",
+        "estimate": 0.0683972331446,
+        "se": 0.0279321427734,
+        "lo": 0.0307201861596,
+        "hi": 0.152283631275
+      },
+      {
+        "component": "ICC",
+        "estimate": 0.962821512156,
+        "se": "NaN",
+        "lo": "NaN",
+        "hi": "NaN"
+      }
+    ],
+    "notes": [
+      "Le varianze sono sulla scala del predittore lineare: per binomiale e Poisson non sono componenti di varianza della risposta osservata.",
+      "L’ICC è la quota di varianza attribuibile ai gruppi: valori alti indicano osservazioni molto correlate entro gruppo.",
+      "Convergenza raggiunta."
+    ]
+  },
+  {
+    "id": "glmm-blups",
+    "title": "Effetti casuali per gruppo",
+    "subtitle": "4 gruppi",
+    "columns": [
+      {
+        "key": "group",
+        "label": "Gruppo",
+        "format": "text"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int"
+      },
+      {
+        "key": "intercept",
+        "label": "Intercetta",
+        "format": "dec4"
+      },
+      {
+        "key": "interceptSe",
+        "label": "SE intercetta",
+        "format": "dec4"
+      }
+    ],
+    "rows": [
+      {
+        "group": "A",
+        "n": 4,
+        "intercept": 0.622062274691,
+        "interceptSe": 0.13013768838
+      },
+      {
+        "group": "B",
+        "n": 4,
+        "intercept": -1.71108838865,
+        "interceptSe": 0.13013768838
+      },
+      {
+        "group": "C",
+        "n": 4,
+        "intercept": 1.79144737847,
+        "interceptSe": 0.13013768838
+      },
+      {
+        "group": "D",
+        "n": 4,
+        "intercept": -0.702421306414,
+        "interceptSe": 0.13013768838
+      }
+    ],
+    "notes": [
+      "I BLUP sono stime condizionate al gruppo, con contrazione verso l’effetto fisso (shrinkage).",
+      "Gruppi con pochi casi sono stimati con maggiore incertezza: la colonna N aiuta a pesare la lettura."
+    ]
+  },
+  {
+    "id": "glmm-fixed-tests",
+    "title": "Test degli effetti fissi",
+    "subtitle": "Wald per termine · CI 95%",
+    "columns": [
+      {
+        "key": "term",
+        "label": "Termine",
+        "format": "text"
+      },
+      {
+        "key": "chiSquare",
+        "label": "ChiSquare",
+        "format": "dec3"
+      },
+      {
+        "key": "df",
+        "label": "df",
+        "format": "int"
+      },
+      {
+        "key": "p",
+        "label": "p",
+        "format": "p"
+      }
+    ],
+    "rows": [
+      {
+        "term": "(Intercept)",
+        "chiSquare": 0.070142896756,
+        "df": 1,
+        "p": 0.791128836229
+      },
+      {
+        "term": "X",
+        "chiSquare": 960.362043117,
+        "df": 1,
+        "p": 0
+      }
+    ],
+    "notes": [
+      "Con predittori a una colonna il test è il quadrato dello z: il p-value coincide con quello della tabella dei coefficienti."
+    ]
+  }
+]

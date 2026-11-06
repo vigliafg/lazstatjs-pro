@@ -47,7 +47,7 @@ export const w3Topics: HelpTopic[] = [
         'The intercept variance σ²ᵤ measures how much the baseline level varies between clusters; the slope variance measures how much the effect of a predictor varies, and the intercept-slope correlation says whether clusters that start higher also change faster.',
         'The ICC is the share of latent-scale variance attributable to the cluster: σ²ᵤ / (σ²ᵤ + π²/3) for logit, σ²ᵤ / (σ²ᵤ + 1) for log, and σ²ᵤ / (σ²ᵤ + σ²) for the Gaussian identity model. It describes clustering, not explained variance.',
         'A BLUP is the estimated deviation of one cluster from the population line, shrunk towards zero in proportion to how little information that cluster carries; it is a prediction, not a tested parameter.',
-      ],
+      'The variance components carry a standard error and a Wald CI on the log scale, and the fixed effects tests report the Wald statistic per term.'],
       pitfalls: [
         'Reading a conditional odds ratio as if it were the marginal one reported by logistic regression, or vice versa, and comparing the two numerically.',
         'Fitting a random slope with only a handful of clusters: the variance collapses to zero or the model fails to converge, and the standard errors become meaningless.',

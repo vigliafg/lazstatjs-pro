@@ -507,7 +507,7 @@ export const coreTopics: HelpTopic[] = [
       assumptions: ['Resíduos aproximadamente normais; estrutura de covariância correta.'],
       whenToUse: ['Dados longitudinais, clusters, medidas repetidas com dados omissos.'],
       whenNotToUse: ['Poucos clusters: as estimativas de variância são instáveis.'],
-      reading: ['Os coeficientes fixos leem-se como numa regressão, mas os erros têm em conta o agrupamento.'],
+      reading: ['Os coeficientes fixos leem-se como numa regressão, mas os erros têm em conta o agrupamento.', 'As componentes de variância têm erro padrão e IC de perfil, e os testes dos efeitos fixos dão F por termo.'],
       pitfalls: ['Tratar medidas repetidas como independentes subestima os erros padrão.'],
       glossary: [
         { term: 'Efeito fixo', definition: 'Um efeito médio válido para a população.' },

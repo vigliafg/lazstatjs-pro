@@ -1,0 +1,108 @@
+[
+  {
+    "id": "quality-control-summary",
+    "title": "Sintesi della carta di controllo",
+    "subtitle": "Peso",
+    "columns": [
+      {
+        "key": "metric",
+        "label": "Metrica",
+        "align": "left"
+      },
+      {
+        "key": "value",
+        "label": "Valore",
+        "align": "right"
+      }
+    ],
+    "rows": [
+      {
+        "metric": "Tipo di carta",
+        "value": "XBAR"
+      },
+      {
+        "metric": "Centro (CL)",
+        "value": "3.6667"
+      },
+      {
+        "metric": "Sigma stimata",
+        "value": "1.329"
+      },
+      {
+        "metric": "Limite superiore (UCL)",
+        "value": "5.9686"
+      },
+      {
+        "metric": "Limite inferiore (LCL)",
+        "value": "1.3648"
+      },
+      {
+        "metric": "Punti fuori controllo",
+        "value": 0
+      },
+      {
+        "metric": "Dimensione sottogruppo",
+        "value": 3
+      },
+      {
+        "metric": "Centro della gamma (R̄)",
+        "value": "2.25"
+      },
+      {
+        "metric": "Limite superiore R",
+        "value": "5.7915"
+      },
+      {
+        "metric": "Limite inferiore R",
+        "value": "0"
+      }
+    ]
+  },
+  {
+    "id": "quality-control-ranges",
+    "title": "Sottogruppi e ampiezze",
+    "subtitle": "4 sottogruppi di 3",
+    "columns": [
+      {
+        "key": "subgroup",
+        "label": "Sottogruppo",
+        "format": "int",
+        "align": "right"
+      },
+      {
+        "key": "mean",
+        "label": "Media",
+        "format": "dec3",
+        "align": "right"
+      },
+      {
+        "key": "range",
+        "label": "Ampiezza",
+        "format": "dec3",
+        "align": "right"
+      }
+    ],
+    "rows": [
+      {
+        "subgroup": 1,
+        "mean": 3,
+        "range": 2
+      },
+      {
+        "subgroup": 2,
+        "mean": 4.66666666667,
+        "range": 3
+      },
+      {
+        "subgroup": 3,
+        "mean": 5,
+        "range": 2
+      },
+      {
+        "subgroup": 4,
+        "mean": 2,
+        "range": 2
+      }
+    ]
+  }
+]

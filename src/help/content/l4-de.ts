@@ -66,6 +66,7 @@ export const l4Topics: HelpTopic[] = [
         "Gage R&R unter 10% ist akzeptabel, 10–30% grenzwertig und über 30% gefährdet Entscheidungen über Teile.",
         "In der OC-Kurve ist die AQL die Qualität, die zu 95% angenommen wird, die LTPD die zu 10% angenommene Qualität.",
         "Ein T²-Punkt außerhalb der Grenze zeigt eine ungewöhnliche Kombination der Variablen, nicht welche Variable sich verschoben hat.",
+        'Bei unterschiedlich großen Untergruppen werden die Grenzen für jeden Punkt berechnet, nicht einmalig.',
       ],
       pitfalls: [
         "Eingriffsgrenzen sind keine Spezifikationsgrenzen.",
@@ -104,6 +105,7 @@ export const l4Topics: HelpTopic[] = [
       reading: [
         "Die Höhe einer Fusion ist die Distanz zwischen den zusammengeführten Gruppen.",
         "Standardisierte Profile zeigen, welche Variablen jeden Cluster prägen.",
+        'Die Fusionstabelle zeigt pseudo-F und CCC bei jedem Schritt, sodass man sieht, wo sich die Cluster zu vermischen beginnen.',
       ],
       pitfalls: [
         "Verschiedene Verknüpfungen oder Schnitte ergeben verschiedene Cluster.",

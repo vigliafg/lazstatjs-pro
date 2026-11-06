@@ -47,7 +47,7 @@ export const w3Topics: HelpTopic[] = [
         'La variance de l’ordonnée à l’origine σ²ᵤ mesure la variabilité du niveau de base entre clusters ; la variance de la pente mesure la variabilité de l’effet d’un prédicteur, et la corrélation entre ordonnée à l’origine et pente indique si les clusters qui partent plus haut évoluent aussi plus vite.',
         'L’ICC est la part de variance sur l’échelle latente attribuable au cluster : σ²ᵤ / (σ²ᵤ + π²/3) pour le logit, σ²ᵤ / (σ²ᵤ + 1) pour le log et σ²ᵤ / (σ²ᵤ + σ²) pour le modèle gaussien à identité. Il décrit le regroupement, pas la variance expliquée.',
         'Le BLUP est l’écart estimé d’un cluster par rapport à la droite de population, contracté vers zéro à proportion du peu d’information que ce cluster apporte : c’est une prédiction, pas un paramètre testé.',
-      ],
+      'Les composantes de variance portent une erreur type et un IC de Wald sur l’échelle log, et les tests des effets fixes donnent le Wald par terme.'],
       pitfalls: [
         'Lire un odds ratio conditionnel comme s’il s’agissait de l’odds ratio marginal de la régression logistique, ou l’inverse, et les comparer numériquement.',
         'Ajuster une pente aléatoire avec très peu de clusters : la variance s’effondre à zéro ou le modèle ne converge pas, et les erreurs standard perdent leur sens.',

@@ -47,7 +47,7 @@ export const w3Topics: HelpTopic[] = [
         'A variância do intercepto σ²ᵤ mede quanto varia o nível de base entre clusters; a variância do declive mede quanto varia o efeito de um preditor, e a correlação intercepto-declive indica se os clusters que começam mais alto também mudam mais depressa.',
         'O ICC é a fração de variância na escala latente atribuível ao cluster: σ²ᵤ / (σ²ᵤ + π²/3) para logit, σ²ᵤ / (σ²ᵤ + 1) para log e σ²ᵤ / (σ²ᵤ + σ²) para o modelo gaussiano com identidade. Descreve o agrupamento, não a variância explicada.',
         'O BLUP é o desvio estimado de um cluster em relação à reta populacional, encolhido para zero em proporção à pouca informação que esse cluster transporta: é uma previsão, não um parâmetro testado.',
-      ],
+      'As componentes de variância têm erro padrão e IC de Wald na escala log, e os testes dos efeitos fixos dão o Wald por termo.'],
       pitfalls: [
         'Ler um odds ratio condicionado como se fosse o marginal reportado pela regressão logística, ou o contrário, e compará-los numericamente.',
         'Ajustar um declive aleatório com muito poucos clusters: a variância colapsa em zero ou o modelo não converge, e os erros padrão deixam de fazer sentido.',

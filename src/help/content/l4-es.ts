@@ -95,6 +95,7 @@ export const l4Topics: HelpTopic[] = [
         "Un Gage R&R por debajo del 10 % es aceptable, entre el 10 % y el 30 % es marginal y por encima del 30 % las decisiones sobre piezas son arriesgadas.",
         "En la curva OC, el AQL es la calidad aceptada el 95 % de las veces y el LTPD la aceptada solo el 10 %.",
         "Un punto T² fuera del límite indica una combinación inusual de las variables, no cuál se movió.",
+        'Si los subgrupos tienen tamaños distintos, los límites se calculan punto por punto, no una sola vez.',
       ],
       pitfalls: [
         "Los límites de control no son límites de especificación.",
@@ -165,6 +166,7 @@ export const l4Topics: HelpTopic[] = [
       reading: [
         "La altura de una fusión es la distancia entre los grupos que se unen.",
         "Los perfiles estandarizados muestran qué variables caracterizan cada clúster.",
+        'La tabla de fusiones da pseudo-F y CCC en cada paso: se ve dónde empiezan a mezclarse los clústeres.',
       ],
       pitfalls: [
         "Enlaces o cortes distintos producen clústeres distintos.",

@@ -507,7 +507,7 @@ export const coreTopics: HelpTopic[] = [
       assumptions: ['Residui approssimativamente normali; struttura di covarianza corretta.'],
       whenToUse: ['Dati longitudinali, cluster, misure ripetute con dati mancanti.'],
       whenNotToUse: ['Pochi cluster: le stime della varianza sono instabili.'],
-      reading: ['I coefficienti fissi si leggono come in una regressione, ma gli errori tengono conto del raggruppamento.'],
+      reading: ['I coefficienti fissi si leggono come in una regressione, ma gli errori tengono conto del raggruppamento.', 'Le componenti di varianza hanno SE e IC di profilo, e i test degli effetti fissi riportano F per termine.'],
       pitfalls: ['Trattare misure ripetute come indipendenti sottostima gli errori standard.'],
       glossary: [
         { term: 'Effetto fisso', definition: 'Effetto medio valido per la popolazione.' },

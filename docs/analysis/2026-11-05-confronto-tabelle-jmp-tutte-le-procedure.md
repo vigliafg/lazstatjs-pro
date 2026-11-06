@@ -164,9 +164,9 @@ Con riferimento nei libri:
   Mancano e sono calcolabili: Effect LR tests per termine.
 - **`glm`** (Generalized Linear Model): nostre tabelle `glm-coefficients`, `glm-fit`.
   Mancano e sono calcolabili: Effect Tests per termine; colonna ChiSquare (Wald).
-- **`glmm`** (Mixed Model (GLMM)): nostre tabelle `glmm-coefficients`, `glmm-random`, `glmm-blups`.
+- **`glmm`** (Mixed Model (GLMM)): nostre tabelle `glmm-coefficients`, `glmm-random` (con SE e IC dei componenti), `glmm-blups`, `glmm-fixed-tests`.
   Mancano e sono calcolabili: SE e IC 95% dei componenti di varianza; Fixed Effects Tests per termine.
-- **`lmm`** (Mixed Model): nostre tabelle `lmm-summary`, `lmm-fixed`.
+- **`lmm`** (Mixed Model): nostre tabelle `lmm-summary`, `lmm-fixed`, `lmm-varcomp`, `lmm-fixed-tests`.
   Mancano e sono calcolabili: SE e IC 95% dei componenti di varianza; Fixed Effects Tests per termine.
 - **`logistic`** (Nominal Logistic): nostre tabelle `logit-fit`, `logit-coefficients`, `logit-classification`, `logit-warning`.
   Mancano e sono calcolabili: Effect Likelihood Ratio Tests per termine; colonna ChiSquare (Wald) accanto a z.
@@ -278,3 +278,21 @@ conta come integrazione a metà.
 - Una sola modalità per procedura, come nel censimento: le modalità alternative
   (`variances` con k gruppi, `selection` con stepwise, `glm` con altre famiglie)
   vanno censite quando si integra quella procedura.
+
+---
+
+## Aggiornamento 2026-11-06
+
+Le voci segnalate per `quality`, `cluster`, `lmm` e `glmm` sono implementate:
+
+- `quality`: limiti di controllo calcolati per punto quando i sottogruppi hanno
+  dimensione diversa (il sottogruppo finale incompleto resta un punto con i
+  propri limiti).
+- `cluster`: `Pseudo-F` e `CCC` per ogni passo della fusione, nella tabella
+  `cluster-merges` e nel grafico `cluster-merge-quality`.
+- `lmm`: tabella `lmm-varcomp` (SE e IC di profilo sul criterio REML) e
+  `lmm-fixed-tests` (Wald F per termine), sia nel percorso a intercetta casuale
+  sia in quello a pendenza casuale; grafico `lmm-variance-interval`.
+- `glmm`: `glmm-random` porta SE e IC di Wald su scala log dei componenti,
+  `glmm-fixed-tests` riporta il Wald chi-quadro per termine; grafico
+  `glmm-variance-interval`.

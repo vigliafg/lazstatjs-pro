@@ -129,6 +129,33 @@ export const buildLmmRandomSlopeOutput = ({
     }),
   ];
 
+  if (fit.varianceComponents.length > 0) {
+    charts.push(
+      makeChart({
+        id: 'lmm-variance-interval',
+        kind: 'interval',
+        title: copy('Componenti di varianza'),
+        subtitle: copy('Stima e CI {s1}%', { s1: ciLevel }),
+        note: copy('L’intervallo misura l’incertezza sulla componente: se è ampio servono più gruppi per una stima stabile.'),
+        data: {
+          intervals: fit.varianceComponents.map(entry => ({
+            category:
+              entry.component === 'intercept'
+                ? copy('Intercetta casuale')
+                : entry.component === 'slope'
+                  ? copy('Varianza pendenza')
+                  : copy('Residuo'),
+            estimate: entry.estimate,
+            lo: entry.lo,
+            hi: entry.hi,
+          })),
+        },
+        fields: { xLabel: copy('Componente'), yLabel: copy('Varianza') },
+        options: { sort: 'none' } as never,
+      })
+    );
+  }
+
   return {
     ok: true,
     title: copy('Modello misto con pendenza casuale: {s1}', { s1: depName }),

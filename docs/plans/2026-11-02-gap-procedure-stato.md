@@ -1192,3 +1192,18 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   quelli del deviance profile (0.0172–0.6144 contro 0.0241–1.1136 per la
   varianza dell'intercetta); i nostri seguono la definizione di profilo del
   criterio REML, documentata nella nota di tabella.
+- Chiusura §8.8 per le quattro famiglie (worktree `grafici-procedure`, dopo `4810a4d`):
+  - `lmm` random-slope: tabelle `lmm-varcomp` e `lmm-fixed-tests` riusano il motore
+    `fitGlmm` (`fit.varianceComponents`, `fit.fixedTests`) e la prosa del modo a intercetta.
+  - Grafici nuovi: `cluster-merge-quality` (pseudo-F e CCC per passo di fusione),
+    `lmm-variance-interval` (modo a intercetta e random-slope) e `glmm-variance-interval`.
+  - Help: frasi aggiunte a `lmm` (`procedures-core.ts`, 6 locale), `glmm` (`w3-*.ts`, 6 locale),
+    `cluster` e `quality` (`l4.ts`, `l4-{de,es,fr,pt-PT}.ts`), con parità di numero di voci
+    per locale verificata da `src/help/content.test.ts`.
+  - Test: `golden-mixed.test.ts` con quattro fixture (`quality-xbar`, `cluster-ward`,
+    `lmm-tables`, `glmm-tables`); riallineati gli elenchi di id in `glmm/run.test.ts`,
+    `lmm/run.test.ts` e `l4.test.ts`; chiavi dei grafici spostate in `charts-l4.ts` e
+    sottotitolo `Stima e CI {s1}%` nei cataloghi `lmm.ts`.
+  - Nota: le voci help di `cluster` e `quality` esistono solo per en/it/de/es/fr/pt-PT tramite
+    `l4*.ts`; non c'e' alcuna pagina mancante, solo file per locale con id tra virgolette
+    singole o doppie.

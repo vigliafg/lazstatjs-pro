@@ -47,7 +47,7 @@ export const w3Topics: HelpTopic[] = [
         'Die Achsenabschnittsvarianz σ²ᵤ misst, wie stark das Ausgangsniveau zwischen Clustern schwankt; die Steigungsvarianz misst, wie stark der Effekt eines Prädiktors variiert, und die Korrelation zwischen Achsenabschnitt und Steigung sagt, ob Cluster mit höherem Start auch schneller steigen.',
         'Der ICC ist der Anteil der Varianz auf der latenten Skala, der auf das Cluster entfällt: σ²ᵤ / (σ²ᵤ + π²/3) beim Logit, σ²ᵤ / (σ²ᵤ + 1) beim Log und σ²ᵤ / (σ²ᵤ + σ²) beim gaußschen Identitätsmodell. Er beschreibt die Clusterung, nicht die erklärte Varianz.',
         'Ein BLUP ist die geschätzte Abweichung eines Clusters von der Populationsgeraden, zur Null hin geschrumpft im Verhältnis zur geringen Information dieses Clusters; er ist eine Vorhersage, kein getesteter Parameter.',
-      ],
+      'Die Varianzkomponenten tragen einen Standardfehler und ein Wald-KI auf der Log-Skala; die Tests der festen Effekte geben den Wald-Test je Termin an.'],
       pitfalls: [
         'Ein bedingtes Odds Ratio so lesen, als wäre es das marginale der logistischen Regression (oder umgekehrt), und beide numerisch vergleichen.',
         'Eine zufällige Steigung mit nur wenigen Clustern schätzen: die Varianz kollabiert auf null oder das Modell konvergiert nicht, und die Standardfehler verlieren ihre Bedeutung.',

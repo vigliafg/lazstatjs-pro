@@ -1,0 +1,242 @@
+[
+  {
+    "id": "cluster-means",
+    "title": "Medie dei cluster",
+    "subtitle": "3 cluster",
+    "columns": [
+      {
+        "key": "cluster",
+        "label": "Cluster",
+        "align": "left"
+      },
+      {
+        "key": "n",
+        "label": "N",
+        "format": "int",
+        "align": "right"
+      },
+      {
+        "key": "v0",
+        "label": "V1",
+        "format": "dec3",
+        "align": "right"
+      },
+      {
+        "key": "v1",
+        "label": "V2",
+        "format": "dec3",
+        "align": "right"
+      }
+    ],
+    "rows": [
+      {
+        "cluster": "C1",
+        "n": 3,
+        "v0": 1.16666666667,
+        "v1": 1
+      },
+      {
+        "cluster": "C2",
+        "n": 3,
+        "v0": 4.03333333333,
+        "v1": 4.16666666667
+      },
+      {
+        "cluster": "C3",
+        "n": 3,
+        "v0": 7.03333333333,
+        "v1": 1
+      }
+    ]
+  },
+  {
+    "id": "cluster-merges",
+    "title": "Sequenza di fusione",
+    "subtitle": "8 passi",
+    "columns": [
+      {
+        "key": "step",
+        "label": "Passo",
+        "format": "int",
+        "align": "right"
+      },
+      {
+        "key": "left",
+        "label": "Gruppo sinistro",
+        "align": "left"
+      },
+      {
+        "key": "right",
+        "label": "Gruppo destro",
+        "align": "left"
+      },
+      {
+        "key": "height",
+        "label": "Distanza",
+        "format": "dec3",
+        "align": "right"
+      },
+      {
+        "key": "size",
+        "label": "Dimensione",
+        "format": "int",
+        "align": "right"
+      },
+      {
+        "key": "clusters",
+        "label": "Cluster dopo la fusione",
+        "format": "int",
+        "align": "right"
+      },
+      {
+        "key": "pseudoF",
+        "label": "Pseudo-F",
+        "format": "dec3",
+        "align": "right"
+      },
+      {
+        "key": "ccc",
+        "label": "CCC",
+        "format": "dec3",
+        "align": "right"
+      }
+    ],
+    "rows": [
+      {
+        "step": 1,
+        "left": "Riga 1",
+        "right": "Riga 3",
+        "height": 0.22360679775,
+        "size": 2,
+        "clusters": 8,
+        "pseudoF": 414.13015873,
+        "ccc": 7.03428960603
+      },
+      {
+        "step": 2,
+        "left": "Riga 4",
+        "right": "Riga 5",
+        "height": 0.316227766017,
+        "size": 2,
+        "clusters": 7,
+        "pseudoF": 321.879012346,
+        "ccc": 8.38159746097
+      },
+      {
+        "step": 3,
+        "left": "Riga 7",
+        "right": "Riga 9",
+        "height": 0.424264068712,
+        "size": 2,
+        "clusters": 6,
+        "pseudoF": 263.028282828,
+        "ccc": 9.05027136376
+      },
+      {
+        "step": 4,
+        "left": "Riga 2",
+        "right": "C10",
+        "height": 0.532290647422,
+        "size": 3,
+        "clusters": 5,
+        "pseudoF": 235.405797101,
+        "ccc": 9.69952366242
+      },
+      {
+        "step": 5,
+        "left": "Riga 6",
+        "right": "C11",
+        "height": 0.571547606649,
+        "size": 3,
+        "clusters": 4,
+        "pseudoF": 255.417651694,
+        "ccc": 10.877579107
+      },
+      {
+        "step": 6,
+        "left": "Riga 8",
+        "right": "C12",
+        "height": 0.820568908339,
+        "size": 3,
+        "clusters": 3,
+        "pseudoF": 266.619834711,
+        "ccc": 12.1172809582
+      },
+      {
+        "step": 7,
+        "left": "C13",
+        "right": "C14",
+        "height": 7.39842325544,
+        "size": 6,
+        "clusters": 2,
+        "pseudoF": 11.0118702553,
+        "ccc": 2.38497017549
+      },
+      {
+        "step": 8,
+        "left": "C15",
+        "right": "C16",
+        "height": 9.4151768733,
+        "size": 9,
+        "clusters": 1,
+        "pseudoF": "NaN",
+        "ccc": "NaN"
+      }
+    ]
+  },
+  {
+    "id": "cluster-membership",
+    "title": "Assegnazione dei casi",
+    "subtitle": "9 osservazioni",
+    "columns": [
+      {
+        "key": "row",
+        "label": "Riga",
+        "align": "left"
+      },
+      {
+        "key": "cluster",
+        "label": "Cluster",
+        "align": "left"
+      }
+    ],
+    "rows": [
+      {
+        "row": "Riga 1",
+        "cluster": "C1"
+      },
+      {
+        "row": "Riga 2",
+        "cluster": "C1"
+      },
+      {
+        "row": "Riga 3",
+        "cluster": "C1"
+      },
+      {
+        "row": "Riga 4",
+        "cluster": "C2"
+      },
+      {
+        "row": "Riga 5",
+        "cluster": "C2"
+      },
+      {
+        "row": "Riga 6",
+        "cluster": "C2"
+      },
+      {
+        "row": "Riga 7",
+        "cluster": "C3"
+      },
+      {
+        "row": "Riga 8",
+        "cluster": "C3"
+      },
+      {
+        "row": "Riga 9",
+        "cluster": "C3"
+      }
+    ]
+  }
+]

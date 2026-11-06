@@ -158,6 +158,7 @@ test('cluster runner emits dendrogram, profiles and sizes', () => {
     'cluster-profile',
     'cluster-silhouette',
     'cluster-scatter',
+    'cluster-merge-quality',
     'cluster-sizes',
   ]);
   assert.equal(charts[0].kind, 'dendrogram');

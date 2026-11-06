@@ -507,7 +507,7 @@ export const coreTopics: HelpTopic[] = [
       assumptions: ['Approximately normal residuals; correct covariance structure.'],
       whenToUse: ['Longitudinal data, clusters, repeated measures with missing data.'],
       whenNotToUse: ['Few clusters: variance estimates are unstable.'],
-      reading: ['Fixed coefficients read like a regression, but the errors account for grouping.'],
+      reading: ['Fixed coefficients read like a regression, but the errors account for grouping.', 'The variance components carry a standard error and a profile CI, and the fixed effects tests report F per term.'],
       pitfalls: ['Treating repeated measures as independent underestimates standard errors.'],
       glossary: [
         { term: 'Fixed effect', definition: 'An average effect valid for the population.' },

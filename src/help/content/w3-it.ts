@@ -47,7 +47,7 @@ export const w3Topics: HelpTopic[] = [
         'La varianza dell’intercetta σ²ᵤ misura quanto varia il livello di base tra i cluster; la varianza della pendenza misura quanto varia l’effetto di un predittore, e la correlazione intercetta-pendenza dice se i cluster che partono più in alto cambiano anche più in fretta.',
         'L’ICC è la quota di varianza sulla scala latente attribuibile al cluster: σ²ᵤ / (σ²ᵤ + π²/3) per il logit, σ²ᵤ / (σ²ᵤ + 1) per il log, σ²ᵤ / (σ²ᵤ + σ²) per il modello gaussiano a identità. Descrive il raggruppamento, non la varianza spiegata.',
         'Il BLUP è lo scostamento stimato di un cluster dalla retta di popolazione, ridotto verso zero in proporzione alla poca informazione che quel cluster porta: è una previsione, non un parametro testato.',
-      ],
+      'Le componenti di varianza hanno SE e IC di Wald su scala log, e i test degli effetti fissi riportano il Wald per termine.'],
       pitfalls: [
         'Leggere un odds ratio condizionato come se fosse quello marginale riportato dalla regressione logistica, o viceversa, e confrontarli numericamente.',
         'Stimare una pendenza casuale con pochi cluster: la varianza collassa a zero o il modello non converge, e gli errori standard perdono senso.',

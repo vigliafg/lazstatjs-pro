@@ -52,4 +52,5 @@ export const lmmCopy: Record<string, string> = {
   'Il test degli effetti fissi riporta il Wald per termine: con predittori a una colonna F è il quadrato del t della tabella dei coefficienti.': 'The fixed effects tests report the Wald statistic per term: with single-column predictors F is the square of the t in the coefficient table.',
   'Wald per termine · CI {s1}%': 'Wald per term · {s1}% CI',
   'Wald per termine · df {s1} · {s2}': 'Wald per term · df {s1} · {s2}',
+  'Stima e CI {s1}%': 'Estimate and {s1}% CI',
 };

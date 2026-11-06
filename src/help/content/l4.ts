@@ -70,7 +70,7 @@ export const l4Topics: HelpTopic[] = [
         'Gage R&R below 10% is acceptable, 10–30% is marginal and above 30% puts part decisions at risk.',
         'On the OC curve, AQL is the quality accepted 95% of the time and LTPD the quality accepted only 10% of the time.',
         'A T² point outside the limit means the combination of variables is unusual, not which variable moved.',
-      ],
+      'Se i sottogruppi hanno dimensione diversa i limiti sono calcolati per ogni punto, non una volta sola.'],
       pitfalls: [
         'Control limits are not specification limits.',
         'Capability assumes normality and a stable process.',
@@ -108,7 +108,7 @@ export const l4Topics: HelpTopic[] = [
       reading: [
         'The height of a merge is the distance between the groups being joined.',
         'Standardized profiles show which variables characterise each cluster.',
-      ],
+      'La tabella della fusione riporta pseudo-F e CCC a ogni passo: si vede dove i cluster iniziano a mescolarsi.'],
       pitfalls: [
         'Different linkages or cuts produce different clusters.',
         'Very small clusters may be outliers rather than real groups.',

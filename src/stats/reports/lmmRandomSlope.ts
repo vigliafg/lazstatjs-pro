@@ -47,6 +47,8 @@ export const lmmRandomSlopeReport = (
             s1: metric('Varianza pendenza'),
             s2: metric('Correlazione'),
           }),
+          copy('La tabella delle componenti di varianza riporta SE e CI di Wald su scala log: un intervallo ampio dice che servono piu gruppi per una stima stabile.'),
+          copy('I test degli effetti fissi riportano il Wald per termine: con una sola colonna per termine coincide con lo z al quadrato.'),
           copy(
             'Una varianza di pendenza vicina a zero indica che i gruppi crescono allo stesso modo; una correlazione positiva indica che i gruppi con intercetta più alta tendono ad avere pendenze più ripide.'
           ),

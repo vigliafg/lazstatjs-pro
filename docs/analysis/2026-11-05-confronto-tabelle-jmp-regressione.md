@@ -191,3 +191,14 @@ due predittori; coincidenza a 1e-9. Due test nuovi in `src/stats/tables.test.ts`
 
 Le voci delle altre procedure restano elencate qui e verranno integrate nelle
 ondate successive, una famiglia o un modello per volta, con ricalcolo in R.
+
+---
+
+## Aggiornamento 2026-11-06
+
+| Voce JMP | Nostra tabella/colonna | Stato |
+|---|---|---|
+| LMM — REML Variance Component Estimates con SE e IC | `lmm-varcomp`: stima, SE, CI low, CI high | presente |
+| LMM — Fixed Effects Tests per termine | `lmm-fixed-tests`: F, df1, df2, p | presente |
+| GLMM — SE e IC dei componenti di varianza | `glmm-random`: colonne SE, CI low, CI high (Wald su scala log) | presente |
+| GLMM — Fixed Effects Tests per termine | `glmm-fixed-tests`: ChiSquare, df, p | presente |
