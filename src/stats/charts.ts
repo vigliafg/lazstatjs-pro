@@ -357,7 +357,6 @@ export interface SurfaceOptions extends CommonChartOptions {
   kind: 'surface';
   display: 'mesh' | 'contour';
   showPoints: boolean;
-  showGrid: boolean;
 }
 
 export type ChartOptions =

@@ -111,7 +111,7 @@ export const buildMarsOutput = ({ grid, params, ciLevel }: MarsRunInput): Analys
       data: { series: fittedRows },
       fields: { xLabel: copy('Valore stimato'), yLabel: depName, series: copy('Serie') },
       stats: { n: fit.n, r2: fit.r2 },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true, showBand: false } as never,
     }),
   ];
 

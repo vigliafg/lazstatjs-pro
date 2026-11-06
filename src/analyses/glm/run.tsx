@@ -77,7 +77,7 @@ export const buildGlmOutput = ({ grid, params, ciLevel }: GlmRunInput): Analysis
         })),
       },
       fields: { xLabel: copy('Valore stimato'), yLabel: depName, series: copy('Serie') },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true, showBand: false } as never,
     }),
     makeChart({
       id: 'glm-residuals',
@@ -92,7 +92,7 @@ export const buildGlmOutput = ({ grid, params, ciLevel }: GlmRunInput): Analysis
         })),
       },
       fields: { xLabel: copy('Valore stimato'), yLabel: copy('Residuo'), series: copy('Serie') },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true } as never,
     }),
   ];
 

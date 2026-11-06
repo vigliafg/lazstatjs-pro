@@ -111,7 +111,7 @@ export const buildIvOutput = ({
         })),
       },
       fields: { xLabel: copy('Valore stimato'), yLabel: depName, series: copy('Serie') },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true, showBand: false } as never,
     }),
     makeChart({
       id: 'iv-residuals',
@@ -128,7 +128,7 @@ export const buildIvOutput = ({
         rules: [{ y: 0 }],
       },
       fields: { xLabel: copy('Valore stimato'), yLabel: copy('Residuo'), series: copy('Serie') },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true } as never,
     }),
     makeChart({
       id: 'iv-first-stage',
@@ -144,7 +144,7 @@ export const buildIvOutput = ({
         yLabel: names.endog[0],
         series: copy('Strumento'),
       },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true, showBand: false } as never,
     }),
   ];
 

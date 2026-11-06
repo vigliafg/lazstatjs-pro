@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { featuresFor, specificFeatures } from './features';
-import { factoryOptions } from './defaults';
+import { COMMON_KEYS, factoryOptions } from './defaults';
 import { makeChart } from './kits/common';
-import type { ChartKind } from '../stats/charts';
+import { CHART_KINDS, type ChartKind } from '../stats/charts';
 
 const chartOf = (kind: ChartKind) =>
   makeChart({ id: 'c', kind, title: kind, data: { points: [{ x: 1, y: 2 }] } });
@@ -159,4 +159,16 @@ test('the Q-Q chart exposes the envelope style and the horizontal scale', () => 
   );
   assert.equal(ciStyle!.visible?.({ ...factoryOptions('qq'), showCI: false } as never, chart), false);
   assert.equal(ciStyle!.visible?.({ ...factoryOptions('qq'), showCI: true } as never, chart), true);
+});
+
+test('every kind exposes each of its options and at least one control', () => {
+  const common = new Set<string>([...COMMON_KEYS, 'kind', 'annotations']);
+  for (const kind of CHART_KINDS) {
+    const chart = chartOf(kind);
+    assert.ok(specificFeatures(chart).length > 0, `${kind}: no specific control`);
+    const exposed = new Set(featuresFor(chart).map(feature => feature.id.replace(/^(general|style)\./, '')));
+    for (const key of Object.keys(factoryOptions(kind))) {
+      assert.ok(common.has(key) || exposed.has(key), `${kind}: ${key} has no editor control`);
+    }
+  }
 });

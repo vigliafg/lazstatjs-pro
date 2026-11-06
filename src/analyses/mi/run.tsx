@@ -90,7 +90,7 @@ const categoricalCharts = (
       note: copy('La barra dei mancanti misura le celle che l’imputazione categorica ricostruisce.'),
       data: { bars: missingBars },
       fields: { xLabel: copy('Variabile'), yLabel: copy('Conteggio'), series: copy('Stato') },
-      options: { showLabels: true } as never,
+      options: { valueLabels: true } as never,
     }),
     makeChart({
       id: 'mi-categorical-missingness-matrix',

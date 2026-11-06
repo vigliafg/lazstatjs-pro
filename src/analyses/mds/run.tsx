@@ -58,7 +58,7 @@ export const buildMdsOutput = ({ grid, params }: MdsInput): AnalysisRunResult =>
         })),
       },
       fields: { xLabel: copy('Dimensione 1'), yLabel: copy('Dimensione 2') },
-      options: { showLabels: true, showFit: false } as never,
+      options: { pointLabels: true, showFit: false } as never,
     }),
     makeChart({
       id: 'mds-stress',

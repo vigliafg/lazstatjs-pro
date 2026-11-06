@@ -1207,3 +1207,16 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   - Nota: le voci help di `cluster` e `quality` esistono solo per en/it/de/es/fr/pt-PT tramite
     `l4*.ts`; non c'e' alcuna pagina mancante, solo file per locale con id tra virgolette
     singole o doppie.
+
+### Checkpoint 2026-11-06 — Grafici e chart editor
+
+- Ogni `kind` espone nell'editor tutte le opzioni del proprio factory: aggiunti
+  `surface` (tipo superficie, punti) e `pareto.sort`; rimosso `showGrid` da
+  `SurfaceOptions`, che nessun renderer leggeva.
+- Runner allineati al formato del kind: `showMarkers` → `showPoints` nei grafici
+  scatter e nei residui, `showLabels` → `pointLabels` (scatter) / `valueLabels`
+  (bar), `valueLabels` → `showValues` nello scree; rimossi `showBand` da bar e
+  residui, che non hanno quel controllo.
+- Guardia permanente in `src/charts/features.test.ts`: per tutti i 32 kind ogni
+  opzione non comune deve avere un controllo e almeno un controllo specifico.
+- Test: `npm run check` verde; file size entro le eccezioni dichiarate.

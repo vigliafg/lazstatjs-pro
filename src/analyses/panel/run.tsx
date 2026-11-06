@@ -151,7 +151,7 @@ export const buildPanelOutput = ({ grid, params, ciLevel }: PanelInput): Analysi
       },
       fields: { xLabel: copy('Valore stimato'), yLabel: depName, series: copy('Serie') },
       stats: { n: fit.n, entities: fit.entities, periods: fit.periods },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true, showBand: false } as never,
     }),
     makeChart({
       id: 'panel-entity-effects',

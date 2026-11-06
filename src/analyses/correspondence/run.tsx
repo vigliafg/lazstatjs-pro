@@ -58,7 +58,7 @@ export const buildCorrespondenceOutput = ({ params }: CorrespondenceInput): Anal
         ],
       },
       fields: { xLabel: copy('Asse 1'), yLabel: copy('Asse 2') },
-      options: { showLabels: true, showFit: false } as never,
+      options: { pointLabels: true, showFit: false } as never,
     }),
     makeChart({
       id: 'correspondence-residual-heatmap',

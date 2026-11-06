@@ -66,7 +66,7 @@ export const buildPolynomialOutput = ({ grid, regParams, ciLevel }: PolynomialRu
         ],
       },
       fields: { xLabel: predictorName, yLabel: depName, series: copy('Serie') },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true, showBand: false } as never,
     }),
     makeChart({
       id: 'polynomial-residuals',
@@ -81,7 +81,7 @@ export const buildPolynomialOutput = ({ grid, regParams, ciLevel }: PolynomialRu
         })),
       },
       fields: { xLabel: copy('Valori stimati'), yLabel: copy('Residuo'), series: copy('Serie') },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true } as never,
     }),
   ];
 

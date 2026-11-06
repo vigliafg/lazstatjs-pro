@@ -679,6 +679,23 @@ const SPECIFIC: Partial<Record<ChartKind, FeatureDescriptor[]>> = {
     specific('pareto', 'valueLabels', 'chart.feature.valueLabels', 'checkbox', {
       section: 'chart.section.annotation',
     }),
+    specific('pareto', 'sort', 'chart.feature.sort', 'select', {
+      section: 'chart.section.order',
+      choices: [
+        choice('none', 'chart.sort.none'),
+        choice('asc', 'chart.sort.asc'),
+        choice('desc', 'chart.sort.desc'),
+      ],
+    }),
+  ],
+  surface: [
+    specific('surface', 'display', 'chart.feature.surfaceType', 'select', {
+      section: 'chart.section.summary',
+      choices: [choice('mesh', 'chart.display.mesh'), choice('contour', 'chart.display.contour')],
+    }),
+    specific('surface', 'showPoints', 'chart.feature.points', 'checkbox', {
+      section: 'chart.section.data',
+    }),
   ],
   dendrogram: [
     specific('dendrogram', 'showLabels', 'chart.feature.labels', 'checkbox', {

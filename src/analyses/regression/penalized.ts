@@ -80,7 +80,6 @@ export const buildPenalizedOutput = ({ grid, regParams, ciLevel }: PenalizedRunI
         })),
       },
       fields: { xLabel: copy('Predittore'), yLabel: copy('Coefficiente'), series: copy('Serie') },
-      options: { showMarkers: false, showBand: false } as never,
     }),
   ];
 

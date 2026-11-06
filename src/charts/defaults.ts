@@ -263,7 +263,7 @@ export const factoryOptions = (kind: ChartKind): ChartOptions => {
     case 'dendrogram':
       return { ...P, kind, showLabels: true, showHeights: false };
     case 'surface':
-      return { ...P, kind, display: 'mesh', showPoints: true, showGrid: true };
+      return { ...P, kind, display: 'mesh', showPoints: true };
   }
 };
 

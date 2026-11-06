@@ -183,7 +183,7 @@ export const buildMultivariateOutput = ({
         note: copy('Le barre sono la percentuale di varianza spiegata da ogni componente.'),
         data: { bars: scree, rules: [{ value: kaiser }] },
         fields: { xLabel: copy('Componente'), yLabel: copy('Varianza spiegata (%)') },
-        options: { valueLabels: true } as never,
+        options: { showValues: true } as never,
       }),
       makeChart({
         id: 'pca-score',

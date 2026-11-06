@@ -156,7 +156,7 @@ export const buildGlmmOutput = ({ grid, params, ciLevel }: GlmmInput): AnalysisR
         })),
       },
       fields: { xLabel: copy('Valori predetti'), yLabel: copy('Residuo'), series: copy('Serie') },
-      options: { showMarkers: true, showBand: false } as never,
+      options: { showPoints: true } as never,
     }),
   ];
 

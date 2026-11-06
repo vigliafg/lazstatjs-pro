@@ -222,7 +222,7 @@ export const buildDoeOutput = ({ grid, params }: DoeInput): AnalysisRunResult =>
         ...(gridZ.length > 0 ? { zMin: Math.min(...gridZ), zMax: Math.max(...gridZ) } : {}),
         ...coefficientStats,
       },
-      options: { display: 'mesh', showPoints: true, showGrid: true } as never,
+      options: { display: 'mesh', showPoints: true } as never,
     }),
     makeChart({
       id: 'doe-contour',
@@ -235,7 +235,7 @@ export const buildDoeOutput = ({ grid, params }: DoeInput): AnalysisRunResult =>
         points: contourPoints,
       },
       fields: { xLabel: factorAName, yLabel: factorBName },
-      options: { display: 'contour', showPoints: true, showGrid: true } as never,
+      options: { display: 'contour', showPoints: true } as never,
     }),
     makeChart({
       id: 'doe-coefficients',
