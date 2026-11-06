@@ -310,6 +310,14 @@ export const lmmStats = (options: LmmOptions): LmmStats | null => {
     randomEffectsSe.push(denominator > 0 ? Math.sqrt((sigmaU2 * sigma2) / denominator) : NaN);
   });
 
+  const fixedTests = coefficients.map(coefficient => ({
+    term: coefficient.term,
+    f: coefficient.se > 0 ? (coefficient.beta / coefficient.se) ** 2 : Number.NaN,
+    df1: 1,
+    df2: n - p,
+    p: coefficient.p,
+  }));
+
   return {
     n,
     groups: groupSizes.length,
@@ -329,5 +337,6 @@ export const lmmStats = (options: LmmOptions): LmmStats | null => {
     remlLogLik: logLik,
     lambda,
     coefficients,
+    fixedTests,
   };
 };

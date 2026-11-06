@@ -128,4 +128,11 @@ export const w3Copy: Record<string, string> = {
     'Varianz des zufälligen Achsenabschnitts = {s1}; ICC = {s2}: {s3}% der Variabilität ist den Gruppen zuzuschreiben.',
   'Varianza pendenza':
     'Varianz Steigung',
+  'Test degli effetti fissi': 'Tests der festen Effekte',
+  'ChiSquare': 'Chi-Quadrat',
+  'Con predittori a una colonna il test è il quadrato dello z: il p-value coincide con quello della tabella dei coefficienti.': 'Bei einspaltigen Prädiktoren ist der Test das Quadrat von z; der p-Wert entspricht der Koeffiziententabelle.',
+  'La tabella delle componenti di varianza riporta SE e CI di Wald su scala log: un intervallo ampio dice che servono piu gruppi per una stima stabile.': 'Die Tabelle der Varianzkomponenten enthält einen Standardfehler und ein Wald-KI auf der Log-Skala: ein breites Intervall zeigt, dass mehr Gruppen für eine stabile Schätzung nötig sind.',
+  'I test degli effetti fissi riportano il Wald per termine: con una sola colonna per termine coincide con lo z al quadrato.': 'Die Tests der festen Effekte geben den Wald-Test je Termin an: bei einer Spalte je Termin entspricht er dem quadrierten z.',
+  'Wald per termine · CI {s1}%': 'Wald je Termin · {s1}% KI',
+  'Wald per termine · df {s1} · {s2}': 'Wald je Termin · df {s1} · {s2}',
 };

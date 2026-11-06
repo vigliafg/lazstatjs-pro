@@ -19,6 +19,7 @@ export const lmmReport = (stats: LmmStats, predNames: string[], groupName: strin
       body: [
         copy(`L’ICC misura la quota di varianza attribuibile alle differenze tra gruppi. Un ICC alto indica che le osservazioni dello stesso gruppo si somigliano e che ignorare il gruppo gonfia l’errore.`),
         copy('Le componenti di varianza portano SE e IC di profilo: l’intervallo dell’intercetta casuale dice quanto la stima dipenda da pochi gruppi.'),
+        copy('Il test degli effetti fissi riporta il Wald per termine: con predittori a una colonna F è il quadrato del t della tabella dei coefficienti.'),
         copy(`Gli effetti fissi sono stimati con REML; il modello assume normalità degli effetti casuali e residui omoschedastici.`),
       ],
     },

@@ -287,3 +287,26 @@ export const rank = (matrix: Matrix, tolerance = 1e-10): number => {
   const threshold = tolerance * Math.max(rows, cols) * s[0];
   return s.filter(value => value > threshold).length;
 };
+
+export const numericalHessian = (objective: (values: number[]) => number, x: number[]): Matrix => {
+  const size = x.length;
+  const hessian: Matrix = Array.from({ length: size }, () => new Array<number>(size).fill(0));
+  const steps = x.map(value => 1e-4 * Math.max(1, Math.abs(value)));
+  const shifted = (i: number, si: number, j: number, sj: number): number[] => {
+    const values = [...x];
+    values[i] += si * steps[i];
+    values[j] += sj * steps[j];
+    return values;
+  };
+  for (let i = 0; i < size; i += 1) {
+    for (let j = i; j < size; j += 1) {
+      const value =
+        (objective(shifted(i, 1, j, 1)) - objective(shifted(i, 1, j, -1)) -
+          objective(shifted(i, -1, j, 1)) + objective(shifted(i, -1, j, -1))) /
+        (4 * steps[i] * steps[j]);
+      hessian[i][j] = value;
+      hessian[j][i] = value;
+    }
+  }
+  return hessian;
+}

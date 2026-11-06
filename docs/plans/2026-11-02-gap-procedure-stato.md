@@ -1170,3 +1170,25 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
 - Non dichiarare chiuso un item senza il gate di ondata.
 - Non aggiornare i conteggi globali (36→72) prima di G1.
 - Non duplicare il piano in questo file: rimandare alle sezioni.
+
+### Checkpoint 2026-11-06 — allineamento tabelle JMP (quality, cluster, lmm, glmm)
+
+- Ondata: famiglie `quality`, `cluster`, `lmm`, `glmm` chiuse. Branch `grafici-procedure`.
+- `quality`: limiti per punto con sottogruppi di dimensione variabile; `fitMultinomial`
+  precondizionato quando `max|x| > 1e3` (logLik identico su scala 1e5).
+- `cluster`: pseudo-F (Calinski–Harabasz) e CCC (Sarle, `NbClust::Indices.WBT`) per
+  ogni passo di fusione, verificati passo per passo contro R.
+- `lmm`: SE e IC di profilo delle componenti di varianza sul criterio REML
+  (estremi dove 2*ΔlogLik = qchisq(0.95, 1)); criterio verificato identico a
+  `lme4` a meno di costante su una griglia di λ. Tabella `lmm-varcomp` e
+  `lmm-fixed-tests` (Wald F per termine, con un predittore a una colonna F = t²).
+  Il modo random-slope mantiene le proprie tabelle.
+- `glmm`: SE e IC di Wald su scala log dai componenti di varianza (informazione
+  osservata, delta method) nella tabella `glmm-random`; tabella
+  `glmm-fixed-tests` (Wald chi-square per termine).
+- Test nuovi: `quality-limits`, `multinomial-scale`, `cluster-ccc`,
+  `lmm-varcomp`, `glmm-varcomp`. Gate finale verde.
+- Nota aperta: `lme4::confint(method="profile")` riporta estremi piu stretti di
+  quelli del deviance profile (0.0172–0.6144 contro 0.0241–1.1136 per la
+  varianza dell'intercetta); i nostri seguono la definizione di profilo del
+  criterio REML, documentata nella nota di tabella.

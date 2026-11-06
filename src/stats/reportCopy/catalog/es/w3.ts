@@ -128,4 +128,12 @@ export const w3Copy: Record<string, string> = {
     'Varianza del intercepto aleatorio = {s1}; ICC = {s2}: el {s3}% de la variabilidad es atribuible a los grupos.',
   'Varianza pendenza':
     'Varianza pendiente',
+  'Test degli effetti fissi': 'Pruebas de efectos fijos',
+  'ChiSquare': 'Chi-cuadrado',
+  'df': 'gl',
+  'Con predittori a una colonna il test è il quadrato dello z: il p-value coincide con quello della tabella dei coefficienti.': 'Con predictores de una columna, el test es el cuadrado de z: el valor p coincide con la tabla de coeficientes.',
+  'La tabella delle componenti di varianza riporta SE e CI di Wald su scala log: un intervallo ampio dice che servono piu gruppi per una stima stabile.': 'La tabla de componentes de varianza da un error estándar y un IC de Wald en escala log: un intervalo amplio indica que hacen falta más grupos para una estimación estable.',
+  'I test degli effetti fissi riportano il Wald per termine: con una sola colonna per termine coincide con lo z al quadrato.': 'Las pruebas de efectos fijos dan el Wald por término: con una sola columna por término coincide con la z al cuadrado.',
+  'Wald per termine · CI {s1}%': 'Wald por término · IC {s1}%',
+  'Wald per termine · df {s1} · {s2}': 'Wald por término · gl {s1} · {s2}',
 };

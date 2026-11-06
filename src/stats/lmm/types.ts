@@ -6,6 +6,14 @@ export interface LmmOptions {
   level: number;
 }
 
+export interface LmmFixedTest {
+  term: string;
+  f: number;
+  df1: number;
+  df2: number;
+  p: number;
+}
+
 export interface LmmCoefficient {
   term: string;
   beta: number;
@@ -26,6 +34,7 @@ export interface LmmVarianceComponent {
 }
 
 export interface LmmStats {
+  fixedTests: LmmFixedTest[];
   varianceComponents: LmmVarianceComponent[];
   n: number;
   groups: number;

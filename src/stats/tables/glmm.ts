@@ -27,9 +27,23 @@ export const glmmTables = (
   const linkLabel =
     fit.link === 'identity' ? copy('Identità') : fit.link === 'logit' ? copy('Logit') : copy('Log');
 
+  const componentRow = (key: 'intercept' | 'slope' | 'residual', label: string, estimate: number) => {
+    const found = fit.varianceComponents.find(entry => entry.component === key);
+    return {
+      component: copy(label),
+      estimate,
+      se: found?.se ?? Number.NaN,
+      lo: found?.lo ?? Number.NaN,
+      hi: found?.hi ?? Number.NaN,
+    };
+  };
+
   const randomColumns: TableColumn[] = [
     { key: 'component', label: copy('Componente'), format: 'text' },
     { key: 'estimate', label: copy('Stima'), format: 'dec4' },
+    { key: 'se', label: copy('SE'), format: 'dec4' },
+    { key: 'lo', label: copy('CI low'), format: 'dec4' },
+    { key: 'hi', label: copy('CI high'), format: 'dec4' },
   ];
 
   const blupColumns: TableColumn[] = [
@@ -88,18 +102,18 @@ export const glmmTables = (
       }),
       columns: randomColumns,
       rows: [
-        { component: copy('Varianza intercetta'), estimate: fit.random.interceptVariance },
+        componentRow('intercept', 'Varianza intercetta', fit.random.interceptVariance),
         ...(fit.randomSlope
           ? [
-              { component: copy('Varianza pendenza'), estimate: fit.random.slopeVariance },
-              { component: copy('Covarianza (intercetta–pendenza)'), estimate: fit.random.covariance },
-              { component: copy('Correlazione (intercetta–pendenza)'), estimate: fit.random.correlation },
+              componentRow('slope', 'Varianza pendenza', fit.random.slopeVariance),
+              { component: copy('Covarianza (intercetta–pendenza)'), estimate: fit.random.covariance, se: Number.NaN, lo: Number.NaN, hi: Number.NaN },
+              { component: copy('Correlazione (intercetta–pendenza)'), estimate: fit.random.correlation, se: Number.NaN, lo: Number.NaN, hi: Number.NaN },
             ]
           : []),
         ...(fit.family === 'gaussian'
-          ? [{ component: copy('Varianza residua'), estimate: fit.random.residualVariance }]
+          ? [componentRow('residual', 'Varianza residua', fit.random.residualVariance)]
           : []),
-        { component: copy('ICC'), estimate: fit.icc },
+        { component: copy('ICC'), estimate: fit.icc, se: Number.NaN, lo: Number.NaN, hi: Number.NaN },
       ],
       notes: [
         copy('Le varianze sono sulla scala del predittore lineare: per binomiale e Poisson non sono componenti di varianza della risposta osservata.'),
@@ -128,5 +142,25 @@ export const glmmTables = (
         copy('Gruppi con pochi casi sono stimati con maggiore incertezza: la colonna N aiuta a pesare la lettura.'),
       ],
     },
-  ];
+    {
+    id: 'glmm-fixed-tests',
+    title: copy('Test degli effetti fissi'),
+    subtitle: copy('Wald per termine · CI {s1}%', { s1: level }),
+    columns: [
+      { key: 'term', label: copy('Termine'), format: 'text' },
+      { key: 'chiSquare', label: copy('ChiSquare'), format: 'dec3' },
+      { key: 'df', label: copy('df'), format: 'int' },
+      { key: 'p', label: copy('p'), format: 'p' },
+    ],
+    rows: fit.fixedTests.map((test, index) => ({
+      term: index === 0 ? '(Intercept)' : names.predictors[index - 1] ?? test.term,
+      chiSquare: test.chiSquare,
+      df: test.df,
+      p: test.p,
+    })),
+    notes: [
+      copy('Con predittori a una colonna il test è il quadrato dello z: il p-value coincide con quello della tabella dei coefficienti.'),
+    ],
+  },
+];
 };

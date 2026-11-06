@@ -43,4 +43,11 @@ export const lmmCopy: Record<string, string> = {
   'Profilo di verosimiglianza · CI {s1}%': 'Likelihood-Profil · {s1}% KI',
   'Gli intervalli sono di profilo: non assumono una forma simmetrica e possono avvicinarsi allo zero.': 'Die Intervalle stammen aus dem Likelihood-Profil: sie sind nicht symmetrisch und können sich der Null nähern.',
   'Le componenti di varianza portano SE e IC di profilo: l’intervallo dell’intercetta casuale dice quanto la stima dipenda da pochi gruppi.': 'Die Varianzkomponenten tragen eine Standardabweichung und ein Profil-KI: das Intervall des zufälligen Achsenabschnitts zeigt, wie stark die Schätzung von wenigen Gruppen abhängt.',
+  'Test degli effetti fissi': 'Tests der festen Effekte',
+  'df1': 'df1',
+  'df2': 'df2',
+  'Con predittori a una colonna F è il quadrato del t: il p-value coincide con quello della tabella dei coefficienti.': 'Bei einspaltigen Prädiktoren ist F das Quadrat von t; der p-Wert entspricht der Koeffiziententabelle.',
+  'Il test degli effetti fissi riporta il Wald per termine: con predittori a una colonna F è il quadrato del t della tabella dei coefficienti.': 'Die Tests der festen Effekte geben den Wald-Test je Termin an: bei einspaltigen Prädiktoren ist F das Quadrat des t aus der Koeffiziententabelle.',
+  'Wald per termine · CI {s1}%': 'Wald je Termin · {s1}% KI',
+  'Wald per termine · df {s1} · {s2}': 'Wald je Termin · df {s1} · {s2}',
 };

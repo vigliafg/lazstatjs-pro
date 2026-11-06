@@ -128,4 +128,12 @@ export const w3Copy: Record<string, string> = {
     'Variance de l’ordonnée à l’origine aléatoire = {s1} ; ICC = {s2} : {s3}% de la variabilité est attribuable aux groupes.',
   'Varianza pendenza':
     'Variance pente',
+  'Test degli effetti fissi': 'Tests des effets fixes',
+  'ChiSquare': 'Khi-deux',
+  'df': 'ddl',
+  'Con predittori a una colonna il test è il quadrato dello z: il p-value coincide con quello della tabella dei coefficienti.': 'Avec des prédicteurs à une colonne, le test est le carré de z : la p-valeur est celle du tableau des coefficients.',
+  'La tabella delle componenti di varianza riporta SE e CI di Wald su scala log: un intervallo ampio dice che servono piu gruppi per una stima stabile.': 'Le tableau des composantes de variance donne une erreur type et un IC de Wald sur l’échelle log : un intervalle large indique qu’il faut plus de groupes pour une estimation stable.',
+  'I test degli effetti fissi riportano il Wald per termine: con una sola colonna per termine coincide con lo z al quadrato.': 'Les tests des effets fixes donnent le Wald par terme : avec une seule colonne par terme, il vaut le carré du z.',
+  'Wald per termine · CI {s1}%': 'Wald par terme · IC {s1}%',
+  'Wald per termine · df {s1} · {s2}': 'Wald par terme · ddl {s1} · {s2}',
 };

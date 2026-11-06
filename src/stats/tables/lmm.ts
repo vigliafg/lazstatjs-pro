@@ -68,4 +68,20 @@ export const lmmTables = (
       copy('Gli intervalli sono di profilo: non assumono una forma simmetrica e possono avvicinarsi allo zero.'),
     ],
   },
+  {
+    id: 'lmm-fixed-tests',
+    title: copy('Test degli effetti fissi'),
+    subtitle: copy('Wald per termine · df {s1} · {s2}', { s1: stats.df, s2: level }),
+    columns: [
+      { key: 'term', label: copy('Termine'), format: 'text' },
+      { key: 'f', label: copy('F'), format: 'dec3' },
+      { key: 'df1', label: copy('df1'), format: 'int' },
+      { key: 'df2', label: copy('df2'), format: 'int' },
+      { key: 'p', label: copy('p'), format: 'p' },
+    ],
+    rows: stats.fixedTests.map(test => ({ ...test })),
+    notes: [
+      copy('Con predittori a una colonna F è il quadrato del t: il p-value coincide con quello della tabella dei coefficienti.'),
+    ],
+  },
 ];

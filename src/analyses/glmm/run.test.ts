@@ -34,7 +34,7 @@ test('Gaussian GLMM with a random slope emits tables, report and charts', () => 
 
   assert.deepEqual(
     (result.tables ?? []).map(table => table.id),
-    ['glmm-coefficients', 'glmm-random', 'glmm-blups']
+    ['glmm-coefficients', 'glmm-random', 'glmm-blups', 'glmm-fixed-tests']
   );
   const coefficients = result.tables!.find(table => table.id === 'glmm-coefficients')!.rows;
   assert.ok(Math.abs(Number(coefficients[1].beta) - 1.5) < 0.5);

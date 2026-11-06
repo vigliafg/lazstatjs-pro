@@ -23,6 +23,9 @@ import { jStat } from '../jstat';
 import { invert, pseudoInverse, rank, type Matrix } from './matrix';
 import { bfgs } from './optimize';
 import { zCrit, zTwoSidedP } from './distributions';
+import { glmmVarianceComponents, glmmFixedTests, glmmVarianceFromModel } from './glmmVariance';
+import type { GlmmVarianceComponent, GlmmFixedTest, GlmmCoefficient, GlmmRandomEffect } from './glmmVariance';
+import { numericalHessian } from './matrix';
 
 export type GlmmFamily = 'gaussian' | 'binomial' | 'poisson';
 export type GlmmLink = 'identity' | 'logit' | 'log';
@@ -45,16 +48,6 @@ export interface GlmmInput {
   tolerance?: number;
 }
 
-export interface GlmmCoefficient {
-  term: string; beta: number; se: number; z: number; p: number; lo: number; hi: number;
-}
-
-export interface GlmmRandomEffect {
-  group: string; n: number;
-  intercept: number; interceptSe: number;
-  slope: number; slopeSe: number;
-}
-
 export interface GlmmResult {
   family: GlmmFamily;
   link: GlmmLink;
@@ -65,6 +58,8 @@ export interface GlmmResult {
   k: number;
   df: number;
   coefficients: GlmmCoefficient[];
+  varianceComponents: GlmmVarianceComponent[];
+  fixedTests: GlmmFixedTest[];
   random: {
     interceptVariance: number; slopeVariance: number; covariance: number; correlation: number;
     /** Solo gaussiana; NaN per binomiale/Poisson. */
@@ -516,28 +511,7 @@ const numericalGradient = (objective: (values: number[]) => number, x: number[])
   });
 };
 
-const numericalHessian = (objective: (values: number[]) => number, x: number[]): Matrix => {
-  const size = x.length;
-  const hessian: Matrix = Array.from({ length: size }, () => new Array<number>(size).fill(0));
-  const steps = x.map(value => 1e-4 * Math.max(1, Math.abs(value)));
-  const shifted = (i: number, si: number, j: number, sj: number): number[] => {
-    const values = [...x];
-    values[i] += si * steps[i];
-    values[j] += sj * steps[j];
-    return values;
-  };
-  for (let i = 0; i < size; i += 1) {
-    for (let j = i; j < size; j += 1) {
-      const value =
-        (objective(shifted(i, 1, j, 1)) - objective(shifted(i, 1, j, -1)) -
-          objective(shifted(i, -1, j, 1)) + objective(shifted(i, -1, j, -1))) /
-        (4 * steps[i] * steps[j]);
-      hessian[i][j] = value;
-      hessian[j][i] = value;
-    }
-  }
-  return hessian;
-};
+;
 
 /** A few safeguarded Newton steps on top of BFGS (BFGS alone stalls on noisy gradients). */
 const newtonPolish = (
@@ -687,10 +661,21 @@ export const fitGlmm = (input: GlmmInput): GlmmResult | null => {
       : Number.NaN;
   }
 
+  const varianceComponents = glmmVarianceFromModel({
+    objective, theta, interceptIndex: p, slopeIndex: randomSlope ? p + 1 : -1,
+    residualIndex: family === 'gaussian' ? p + (randomSlope ? 3 : 1) : -1,
+    intercept: parameters.sigmaU * parameters.sigmaU,
+    slope: randomSlope ? parameters.sigmaV * parameters.sigmaV : 0,
+    residual: sigma2, critical,
+  });
+  const fixedTests = glmmFixedTests(coefficients);
+
   return {
     family, link, randomSlope, n, groups: prepared.groups.length, k, df: n - k,
-    coefficients, random, randomEffects, fitted, linearPredictor, residuals, logLik,
+    coefficients, varianceComponents, fixedTests, random, randomEffects, fitted, linearPredictor, residuals, logLik,
     aic: -2 * logLik + 2 * k, bic: -2 * logLik + k * Math.log(n),
     icc, iterations: optimisation.iterations + polished.steps, converged, level,
   };
 };
+
+export type { GlmmVarianceComponent, GlmmFixedTest, GlmmCoefficient, GlmmRandomEffect } from './glmmVariance';

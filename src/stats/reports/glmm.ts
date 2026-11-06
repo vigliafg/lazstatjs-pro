@@ -112,6 +112,8 @@ export const glmmReport = (
             })
           ),
           varianceBullet,
+          copy('La tabella delle componenti di varianza riporta SE e CI di Wald su scala log: un intervallo ampio dice che servono piu gruppi per una stima stabile.'),
+          copy('I test degli effetti fissi riportano il Wald per termine: con una sola colonna per termine coincide con lo z al quadrato.'),
           ...(Number.isFinite(slopeVariance)
             ? [
                 copy('Varianza della pendenza casuale = {s1}; correlazione intercetta–pendenza = {s2}.', {

@@ -128,4 +128,12 @@ export const w3Copy: Record<string, string> = {
     'Random-intercept variance = {s1}; ICC = {s2}: {s3}% of the variability is attributable to groups.',
   'Varianza pendenza':
     'Slope variance',
+  'Test degli effetti fissi': 'Fixed effects tests',
+  'ChiSquare': 'ChiSquare',
+  'df': 'df',
+  'Con predittori a una colonna il test è il quadrato dello z: il p-value coincide con quello della tabella dei coefficienti.': 'With single-column predictors the test is the square of z, so the p-value matches the coefficient table.',
+  'La tabella delle componenti di varianza riporta SE e CI di Wald su scala log: un intervallo ampio dice che servono piu gruppi per una stima stabile.': 'The variance component table reports a standard error and a Wald CI on the log scale: a wide interval means more groups are needed for a stable estimate.',
+  'I test degli effetti fissi riportano il Wald per termine: con una sola colonna per termine coincide con lo z al quadrato.': 'The fixed effects tests report the Wald statistic per term: with a single column per term it equals the squared z.',
+  'Wald per termine · CI {s1}%': 'Wald per term · {s1}% CI',
+  'Wald per termine · df {s1} · {s2}': 'Wald per term · df {s1} · {s2}',
 };
