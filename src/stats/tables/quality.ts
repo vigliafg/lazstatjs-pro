@@ -24,6 +24,12 @@ export const controlTables = ({ result, variableName }: QualityControlTablesOpti
       { metric: copy('Limite superiore R'), value: fmtEst(result.rUcl ?? NaN, 4) },
       { metric: copy('Limite inferiore R'), value: fmtEst(result.rLcl ?? NaN, 4) }
     );
+    if (result.subgroupSizes && result.subgroupSizes.length > 1) {
+      rows.push({
+        metric: copy('Sottogruppi a dimensione variabile'),
+        value: result.subgroupSizes.join(', '),
+      });
+    }
   }
   const tables: TableSpec[] = [
     {
@@ -44,13 +50,26 @@ export const controlTables = ({ result, variableName }: QualityControlTablesOpti
       subtitle: copy('{s1} sottogruppi di {s2}', { s1: result.ranges.length, s2: result.subgroup }),
       columns: [
         { key: 'subgroup', label: copy('Sottogruppo'), format: 'int', align: 'right' },
+        ...(result.subgroupSizes
+          ? [{ key: 'n', label: copy('N sottogruppo'), format: 'int' as const, align: 'right' as const }]
+          : []),
         { key: 'mean', label: copy('Media'), format: 'dec3', align: 'right' },
         { key: 'range', label: copy('Ampiezza'), format: 'dec3', align: 'right' },
+        ...(result.limits.length > 0
+          ? [
+              { key: 'lcl', label: copy('LCL del punto'), format: 'dec3' as const, align: 'right' as const },
+              { key: 'ucl', label: copy('UCL del punto'), format: 'dec3' as const, align: 'right' as const },
+            ]
+          : []),
       ],
       rows: result.points.map((point, index) => ({
         subgroup: index + 1,
+        ...(result.subgroupSizes ? { n: result.subgroupSizes[index] ?? null } : {}),
         mean: point.value,
         range: result.ranges?.[index] ?? null,
+        ...(result.limits.length > 0
+          ? { lcl: result.limits[index]?.lcl ?? null, ucl: result.limits[index]?.ucl ?? null }
+          : {}),
       })),
     });
   }

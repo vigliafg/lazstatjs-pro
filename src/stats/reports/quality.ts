@@ -35,6 +35,13 @@ export const qualityControlReport = (result: ControlResult, variableName: string
             s1: result.outCount,
             s2: result.points.length,
           }),
+          ...(result.limits.length > 0
+            ? [
+                copy(
+                  'I sottogruppi non hanno tutti la stessa dimensione: ogni punto ha i propri limiti, più stretti dove il sottogruppo è più numeroso.'
+                ),
+              ]
+            : []),
         ],
       },
       {

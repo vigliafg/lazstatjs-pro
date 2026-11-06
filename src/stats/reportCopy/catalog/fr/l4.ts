@@ -207,4 +207,9 @@ export const l4Copy: Record<string, string> = {
   "La superficie è valida solo nell’intervallo dei fattori osservati: fuori da quell’area il modello estrapola.": "La surface n’est valide que dans l’intervalle des facteurs observés : en dehors de cette zone, le modèle extrapole.",
   "Un modello quadratico non sostituisce un disegno sperimentale: senza repliche e randomizzazione non separa l’effetto dei fattori dal rumore.": "Un modèle quadratique ne remplace pas un plan d’expérience : sans répétitions ni randomisation, il ne sépare pas l’effet des facteurs du bruit.",
   "La significatività dei termini assume residui indipendenti e varianza costante; controlla i grafici dei residui prima di fidarti delle previsioni.": "La significativité des termes suppose des résidus indépendants et une variance constante ; vérifiez les graphiques des résidus avant de faire confiance aux prédictions.",
+  'Sottogruppi a dimensione variabile': 'Sous-groupes de taille variable',
+  'N sottogruppo': 'N du sous-groupe',
+  'LCL del punto': 'LCL du point',
+  'UCL del punto': 'UCL du point',
+  'I sottogruppi non hanno tutti la stessa dimensione: ogni punto ha i propri limiti, più stretti dove il sottogruppo è più numeroso.': 'Les sous-groupes n’ont pas tous la même taille : chaque point a ses propres limites, plus serrées là où le sous-groupe est plus grand.',
 };

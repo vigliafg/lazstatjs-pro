@@ -77,19 +77,49 @@ export const controlChart = (
     for (let start = 0; start + size <= clean.length; start += size) {
       groups.push(clean.slice(start, start + size));
     }
+    // A trailing incomplete subgroup is a real subgroup, not noise: JMP keeps
+    // it and gives that point its own limits. A single leftover value cannot
+    // contribute a range, so it is dropped.
+    const remainder = clean.length % size;
+    if (remainder >= 2) groups.push(clean.slice(clean.length - remainder));
     if (groups.length < 2) return null;
+    const sizes = groups.map(group => group.length);
+    const equalSizes = sizes.every(value => value === sizes[0]);
     const means = groups.map(mean);
     const ranges = groups.map(group => Math.max(...group) - Math.min(...group));
     const center = mean(means);
     const rCenter = mean(ranges);
-    const sigma = rCenter / (D2[size] ?? 1.128);
+    const pooledDf = sizes.reduce((sum, value) => sum + (value - 1), 0);
+    const sigma = equalSizes
+      ? rCenter / (D2[size] ?? 1.128)
+      : Math.sqrt(
+          groups.reduce((sum, group, index) => {
+            const spread = Math.sqrt(
+              group.reduce((inner, value) => inner + Math.pow(value - means[index], 2), 0) /
+                Math.max(1, sizes[index] - 1)
+            );
+            return sum + (sizes[index] - 1) * spread * spread;
+          }, 0) / Math.max(1, pooledDf)
+        );
+    // With varying sizes each point carries its own standard error, so the
+    // limits are per point instead of a single pair.
+    const pointLimits = equalSizes
+      ? []
+      : means.map((value, index) => ({
+          index: index + 1,
+          ucl: center + (3 * sigma) / Math.sqrt(sizes[index]),
+          lcl: center - (3 * sigma) / Math.sqrt(sizes[index]),
+        }));
     const ucl = center + (3 * sigma) / Math.sqrt(size);
     const lcl = center - (3 * sigma) / Math.sqrt(size);
-    const points = means.map((value, index) => ({
-      index: index + 1,
-      value,
-      out: value > ucl || value < lcl,
-    }));
+    const points = means.map((value, index) => {
+      const limit = pointLimits[index];
+      return {
+        index: index + 1,
+        value,
+        out: limit ? value > limit.ucl || value < limit.lcl : value > ucl || value < lcl,
+      };
+    });
     return {
       chart,
       points,
@@ -97,13 +127,14 @@ export const controlChart = (
       sigma,
       ucl,
       lcl,
-      limits: [],
+      limits: pointLimits,
       outCount: points.filter(point => point.out).length,
       ranges,
       rCenter,
-      rUcl: (D4[size] ?? 0) * rCenter,
-      rLcl: (D3[size] ?? 0) * rCenter,
+      rUcl: equalSizes ? (D4[size] ?? 0) * rCenter : Number.NaN,
+      rLcl: equalSizes ? (D3[size] ?? 0) * rCenter : Number.NaN,
       subgroup: size,
+      ...(equalSizes ? {} : { subgroupSizes: sizes }),
     };
   }
 

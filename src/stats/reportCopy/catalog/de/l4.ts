@@ -207,4 +207,9 @@ export const l4Copy: Record<string, string> = {
   "La superficie è valida solo nell’intervallo dei fattori osservati: fuori da quell’area il modello estrapola.": "Die Oberfläche gilt nur im Bereich der beobachteten Faktoren: Außerhalb dieses Bereichs extrapoliert das Modell.",
   "Un modello quadratico non sostituisce un disegno sperimentale: senza repliche e randomizzazione non separa l’effetto dei fattori dal rumore.": "Ein quadratisches Modell ersetzt kein Versuchsdesign: Ohne Wiederholungen und Randomisierung trennt es die Faktoreffekte nicht vom Rauschen.",
   "La significatività dei termini assume residui indipendenti e varianza costante; controlla i grafici dei residui prima di fidarti delle previsioni.": "Die Signifikanz der Terme setzt unabhängige Residuen und konstante Varianz voraus; prüfen Sie die Residuendiagramme, bevor Sie den Vorhersagen vertrauen.",
+  'Sottogruppi a dimensione variabile': 'Teilgruppen unterschiedlicher Größe',
+  'N sottogruppo': 'N der Teilgruppe',
+  'LCL del punto': 'LCL des Punktes',
+  'UCL del punto': 'UCL des Punktes',
+  'I sottogruppi non hanno tutti la stessa dimensione: ogni punto ha i propri limiti, più stretti dove il sottogruppo è più numeroso.': 'Die Teilgruppen sind nicht alle gleich groß: jeder Punkt hat eigene Grenzen, enger dort, wo die Teilgruppe größer ist.',
 };

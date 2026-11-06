@@ -282,4 +282,9 @@ export const l4Copy: Record<string, string> = {
     "Un modelo cuadrático no sustituye un diseño experimental: sin réplicas ni aleatorización, no separa el efecto de los factores del ruido.",
   "La significatività dei termini assume residui indipendenti e varianza costante; controlla i grafici dei residui prima di fidarti delle previsioni.":
     "La significación de los términos supone residuos independientes y varianza constante; revisa los gráficos de residuos antes de fiarte de las predicciones.",
+  'Sottogruppi a dimensione variabile': 'Subgrupos de tamaño variable',
+  'N sottogruppo': 'N del subgrupo',
+  'LCL del punto': 'LCL del punto',
+  'UCL del punto': 'UCL del punto',
+  'I sottogruppi non hanno tutti la stessa dimensione: ogni punto ha i propri limiti, più stretti dove il sottogruppo è più numeroso.': 'Los subgrupos no tienen todos el mismo tamaño: cada punto tiene sus propios límites, más estrechos donde el subgrupo es mayor.',
 };

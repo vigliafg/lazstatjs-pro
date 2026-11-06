@@ -76,6 +76,8 @@ export interface ControlResult {
   rUcl?: number;
   rLcl?: number;
   subgroup: number;
+  /** Dimensioni effettive dei sottogruppi quando non sono tutte uguali. */
+  subgroupSizes?: number[];
 }
 
 export interface CapabilityResult {

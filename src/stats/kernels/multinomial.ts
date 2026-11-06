@@ -204,6 +204,49 @@ const validity = (input: MultinomialInput): { classes: number; width: number } |
  * classes, non-finite values, too few observations, wrong `classes` length),
  * singular information matrices or non-convergence.
  */
+/**
+ * Starting values for a design matrix on a large scale: Newton from a zero
+ * start overflows the linear predictor before the first step, so the problem
+ * is solved once on a centred/scaled design and the solution is mapped back.
+ * Constant columns (the intercept) are only shifted, never scaled.
+ */
+const scaledStart = (
+  x: Matrix,
+  y: number[],
+  classes: number,
+  width: number,
+  maxIterations: number,
+  tolerance: number
+): Matrix | null => {
+  const means = new Array<number>(width).fill(0);
+  const sds = new Array<number>(width).fill(1);
+  for (let j = 0; j < width; j += 1) {
+    const column = x.map(row => row[j] ?? 0);
+    const average = column.reduce((sum, value) => sum + value, 0) / column.length;
+    const variance = column.reduce((sum, value) => sum + Math.pow(value - average, 2), 0);
+    means[j] = average;
+    sds[j] = Math.sqrt(variance / Math.max(1, column.length - 1));
+  }
+  const scaled: Matrix = x.map(row =>
+    row.map((value, j) => (sds[j] > 1e-12 ? (value - means[j]) / sds[j] : value - means[j]))
+  );
+  const fit = fitMultinomial({ y, x: scaled, maxIterations, tolerance });
+  if (!fit) return null;
+  const shift = new Array<number>(width).fill(0);
+  for (let j = 0; j < width; j += 1) if (sds[j] > 1e-12) shift[j] = means[j] / sds[j];
+  return fit.coefficients.map(row =>
+    row.map((value, j) => (sds[j] > 1e-12 ? value / sds[j] : value))
+  ).map(row => {
+    // The constant column absorbs the shift of every scaled column.
+    const adjusted = [...row];
+    for (let j = 0; j < width; j += 1) {
+      if (sds[j] > 1e-12) continue;
+      adjusted[j] = row[j] - row.reduce((sum, value, other) => sum + (other === j ? 0 : value * shift[other]), 0);
+    }
+    return adjusted;
+  });
+};
+
 export const fitMultinomial = (input: MultinomialInput): MultinomialResult | null => {
   const shape = validity(input);
   if (!shape) return null;
@@ -215,6 +258,11 @@ export const fitMultinomial = (input: MultinomialInput): MultinomialResult | nul
   if (!(maxIterations > 0) || !(tolerance > 0)) return null;
 
   let beta: Matrix = Array.from({ length: classes - 1 }, () => new Array<number>(width).fill(0));
+  const scale = x.reduce((max, row) => Math.max(max, ...row.map(value => Math.abs(value))), 0);
+  if (scale > 1e3) {
+    const start = scaledStart(x, y, classes, width, maxIterations, tolerance);
+    if (start) beta = start;
+  }
   let current = evaluate(x, y, beta);
   if (!Number.isFinite(current.negativeLogLik)) return null;
 
