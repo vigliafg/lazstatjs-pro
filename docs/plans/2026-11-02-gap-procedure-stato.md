@@ -1220,3 +1220,22 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
 - Guardia permanente in `src/charts/features.test.ts`: per tutti i 32 kind ogni
   opzione non comune deve avere un controllo e almeno un controllo specifico.
 - Test: `npm run check` verde; file size entro le eccezioni dichiarate.
+
+### Checkpoint 2026-11-06 — Verifica a schermo dei grafici superficie
+
+- Playwright (`test-results/doe-surface-audit/`): editor di `doe-surface` e
+  `doe-contour`, screenshot per mesh, contour, punti attivi e spenti.
+- Difetto trovato e corretto: il selettore «Tipo di superficie» funzionava ma
+  cambiava lo spazio delle coordinate. I due grafici portavano un solo dataset:
+  il primo la mesh proiettata (0..1), il secondo i segmenti di livello nelle
+  unita' dei fattori. Passando a contour il primo mostrava assi 0..0.8 con punti
+  fuori scala, passando a mesh il secondo restava vuoto.
+- Fix: `surfaceLayers` sceglie le tabelle per modalita' (`mesh`/`meshPoints`
+  oppure `contours`/`contourPoints`); il runner DOE pubblica entrambe le
+  proiezioni in ambedue i grafici. Verificato: contour 128 linee, mesh 312.
+- Nota: i due grafici hanno titolo e nota specifici della modalita' iniziale,
+  quindi dopo lo scambio restano quelli (solo cosmetica, nessun dato errato).
+- Il sample `samples/design/doe_demo` non permette la stima quadratica: nel
+  disegno 2^3 + centri a^2 = b^2 e la matrice e' singolare, quindi il run
+  fallisce con «The surface could not be estimated». La verifica visiva ha usato
+  un CCD generato nel test.

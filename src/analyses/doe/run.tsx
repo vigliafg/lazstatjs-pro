@@ -210,8 +210,10 @@ export const buildDoeOutput = ({ grid, params }: DoeInput): AnalysisRunResult =>
       }),
       note: copy('La griglia è una proiezione 2D di una superficie 3D: mostra la forma e le zone alte o basse, non i valori esatti. I punti sono le osservazioni proiettate sullo stesso piano.'),
       data: {
-        lines: result.mesh,
-        points: result.points.map(point => ({ ...point, label: '' })),
+        mesh: result.mesh,
+        contours: result.contours,
+        meshPoints: result.points.map(point => ({ ...point, label: '' })),
+        contourPoints,
       },
       fields: { xLabel: factorAName, yLabel: factorBName },
       stats: {
@@ -231,8 +233,10 @@ export const buildDoeOutput = ({ grid, params }: DoeInput): AnalysisRunResult =>
       subtitle: copy('{s1} previsto', { s1: responseName }),
       note: copy('Le linee collegano combinazioni di fattori con la stessa risposta prevista. Curve vicine indicano un cambiamento rapido; curve chiuse indicano un massimo o un minimo.'),
       data: {
-        lines: result.contours,
-        points: contourPoints,
+        mesh: result.mesh,
+        contours: result.contours,
+        meshPoints: result.points.map(point => ({ ...point, label: '' })),
+        contourPoints,
       },
       fields: { xLabel: factorAName, yLabel: factorBName },
       options: { display: 'contour', showPoints: true } as never,

@@ -205,9 +205,12 @@ export const surfaceLayers = (
   options: Extract<ChartOptions, { kind: 'surface' }>
 ): Spec[] => {
   const theme = themeFor(options);
-  const lines = rowsOf(chart, 'lines');
-  const points = rowsOf(chart, 'points');
   const mesh = options.display === 'mesh';
+  // The two projections live in different coordinate spaces: mesh rows are the
+  // projected drawing (x1..y2 in 0..1), contour segments are in factor units.
+  // Pick by display mode so switching in the editor cannot mix the two.
+  const lines = rowsOf(chart, mesh ? 'mesh' : 'contours');
+  const points = rowsOf(chart, mesh ? 'meshPoints' : 'contourPoints');
   const layers: Spec[] = [
     {
       data: { values: lines },
