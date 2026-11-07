@@ -69,6 +69,11 @@ export const buildSurveyOutput = ({ grid, params, ciLevel }: SurveyInput): Analy
   if (!result) {
     return { ok: false, reason: 'The survey estimate could not be computed: check the design columns and the weights' };
   }
+  // Every non-regression mode must produce one estimate: an empty list means
+  // the design could not be linearised, and an empty table would hide it.
+  if (result.mode !== 'regression' && result.estimates.length === 0) {
+    return { ok: false, reason: 'The survey estimate could not be computed: check the design columns and the weights' };
+  }
 
   const charts: AnalysisChart[] = [];
   if (result.mode === 'regression') {

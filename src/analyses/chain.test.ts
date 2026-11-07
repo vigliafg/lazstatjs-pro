@@ -66,7 +66,6 @@ const KNOWN_REJECTIONS: Record<string, string> = {
   'mtcars/nonlinear': 'did not converge',
   'selection_demo/selection': 'not a column role',
   'sem_demo/sem': 'could not be fitted',
-  'survey_demo/survey': 'has no columns or rows',
   'two_groups_binary/distfit': 'not a column role',
   'two_groups_binary/proportions': 'not a column role',
 };

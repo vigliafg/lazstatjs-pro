@@ -1292,3 +1292,14 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   two_groups_binary/proportions (chiavi del manifest che non sono ruoli),
   selection_demo/selection (idem), survey_demo/survey che restituisce una
   tabella "survey-estimates" vuota: il runner dovrebbe rifiutare con un motivo.
+
+### Checkpoint 2026-11-06 — Tabella delle stime vuota in survey
+
+- `survey regression`: la tabella `survey-estimates` era emessa sempre, anche
+  quando il modo non produce stime (la regressione ha solo coefficienti), e
+  arrivava alla console come card vuota. Ora `surveyTables` la emette solo se
+  esiste almeno una stima, e `buildSurveyOutput` rifiuta con un motivo quando
+  un modo non di regressione non riesce a calcolare la stima.
+- Test: `w9.test.ts` verifica che la regressione produca `survey-coefficients`
+  e non `survey-estimates`; il test a catena non ha piu' `survey_demo/survey`
+  fra i difetti noti.

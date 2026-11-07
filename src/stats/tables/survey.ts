@@ -37,7 +37,9 @@ export const surveyTables = (result: SurveyResult): TableSpec[] => {
       copy('L’effetto disegno confronta la varianza del disegno con quella di un campione casuale semplice della stessa numerosità ponderata.'),
     ],
   };
-  const tables = [design, estimates];
+  // A regression has no design-based estimates: emitting the table with no
+  // rows would show an empty card instead of the coefficients only.
+  const tables = result.estimates.length > 0 ? [design, estimates] : [design];
   if (result.mode === 'regression') {
     tables.push({
       id: 'survey-coefficients',

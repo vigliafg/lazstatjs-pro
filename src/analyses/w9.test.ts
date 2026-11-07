@@ -167,6 +167,26 @@ test('wave 9 survey modes emit estimates and reports', () => {
   });
   assert.ok(proportion.ok);
   assert.ok(tableIds(proportion).includes('survey-estimates'));
+
+  // A regression has coefficients, not design-based estimates: the estimates
+  // table must not be emitted empty.
+  const regression = buildSurveyOutput({
+    grid: surveyGrid,
+    params: {
+      ...DEFAULT_PARAMS.survey,
+      mode: 'regression',
+      variable: 3,
+      predictors: [4],
+      weight: 2,
+      strata: 0,
+      cluster: 1,
+    },
+    ciLevel: 95,
+  });
+  assert.ok(regression.ok);
+  const regressionTables = tableIds(regression);
+  assert.ok(regressionTables.includes('survey-coefficients'));
+  assert.ok(!regressionTables.includes('survey-estimates'));
 });
 
 test('wave 9 machine learning modes emit fit, importance and predictions', () => {
