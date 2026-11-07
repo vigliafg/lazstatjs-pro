@@ -8,6 +8,8 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 
 **UI status and backlog:** [`docs/UI-STATE.md`](docs/UI-STATE.md) · **Grid checkpoint:** [`docs/GRID-STATE.md`](docs/GRID-STATE.md)
 
+**Guida per blocchi di funzionalità:** [`docs/guide/README.md`](docs/guide/README.md) — dati, scelta dell'analisi, parametri, tabelle, report, grafici, chart editor, validazione, lingue e confronto con JMP/SPSS/R.
+
 ## Features
 
 ### Data Editor
