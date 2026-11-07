@@ -66,6 +66,7 @@ export const coreTopics: HelpTopic[] = [
         'Lower AIC/BIC means a better fit.',
         'A goodness-of-fit p-value does not prove normality: it only measures evidence against it.',
         'The two-sample KS mode compares two groups without assuming a distribution family.',
+        'Cramér–von Mises W² is the mean squared distance between the two cumulative curves: it weighs every deviation, not only the worst one like KS, so it is steadier with small samples.',
       ],
       pitfalls: ['Choosing the distribution from the data and then testing it on the same data overstates the fit.'],
       glossary: [
@@ -137,6 +138,8 @@ export const coreTopics: HelpTopic[] = [
         'The Mood median test compares medians without assuming normality; use it when outliers or skewness make the mean unreliable.',
         'A significant p says at least one mean differs: the post-hoc says which.',
         'A significant Levene suggests unequal variances: prefer Welch or Kruskal-Wallis.',
+        'Bartlett and O\'Brien test equal variances before the means: Bartlett is powerful under normality, O\'Brien keeps its level with outliers and heavy tails.',
+        'Steel–Dwass is the distribution-free all-pairs post-hoc: it compares every pair of mean ranks and needs no normality assumption.',
       ],
       pitfalls: [
         'Choose the post-hoc test before looking at the data, not after.',
@@ -385,6 +388,8 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'A coefficient is the expected change in the outcome for one more unit of the predictor, other things equal.',
         'R² describes explained variability, not the causal quality of the model.',
+        'Type III effects test each term with all the other terms in the model, so the table agrees with the coefficients of a model with interactions.',
+        'In non-linear models every term also carries a likelihood-ratio test: it compares the model with and without the term instead of relying on a Wald z.',
       ],
       pitfalls: [
         'Extrapolating outside the observed range of the predictors.',

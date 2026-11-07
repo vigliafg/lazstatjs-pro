@@ -1239,3 +1239,22 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   disegno 2^3 + centri a^2 = b^2 e la matrice e' singolare, quindi il run
   fallisce con «The surface could not be estimated». La verifica visiva ha usato
   un CCD generato nel test.
+
+### Checkpoint 2026-11-06 — Help multilingua allineato
+
+- Trovato un buco vero: il libro italiano importava `l4.ts`, cioe' le pagine
+  inglesi di partition, quality, cluster, discriminant, doe, proportions e
+  variances. Creato `src/help/content/l4-it.ts` traducendo le 7 pagine con
+  `scripts/translate-copy.py` (194 stringhe, en -> it) e puntato `it/book.ts`
+  al modulo tradotto.
+- Aggiornate le pagine delle procedure con le funzioni aggiunte nelle ultime
+  ondate: quality (%GRR, ndc, limiti per punto), agreement (%GRR e ndc nel modo
+  Gage R&R), anova (Bartlett, O'Brien, Steel–Dwass), variances (O'Brien),
+  distfit (Cramér–von Mises W²), multivariate (autovettori PCA), regression
+  (effetti Tipo III e test del rapporto di verosimiglianza).
+- In ogni locale le aggiunte sono state tradotte con la stessa routine; nomi
+  tecnici (%GRR, ndc, Steel–Dwass, Cramér–von Mises, O’Brien) ripristinati dopo
+  la traduzione.
+- Corretta una frase italiana rimasta nella pagina inglese di quality.
+- Verifiche: tsc pulito, `content.test` 6/6, `check-locale` verde per it, en,
+  fr, es, de, pt-PT, `npm run help:build` 6 locale e 498 pagine, file size ok.

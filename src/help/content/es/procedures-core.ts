@@ -66,6 +66,7 @@ export const coreTopics: HelpTopic[] = [
         'Un AIC/BIC más bajo indica un mejor ajuste.',
         'Un valor p de bondad de ajuste no demuestra la normalidad: solo mide la evidencia en contra.',
         'El modo KS de dos muestras compara dos grupos sin suponer una familia de distribuciones.',
+        'Cramér–von Mises W² es la distancia media cuadrática entre las dos curvas acumulativas: pesa cada desviación, no solo la peor como KS, por lo que es más estable con muestras pequeñas.',
       ],
       pitfalls: ['Elegir la distribución a partir de los datos y luego probarla con los mismos datos sobreestima el ajuste.'],
       glossary: [
@@ -137,6 +138,8 @@ export const coreTopics: HelpTopic[] = [
         'La prueba de la mediana de Mood compara medianas sin suponer normalidad: úsala cuando los valores atípicos o la asimetría hacen poco fiable la media.',
         'Un p significativo dice que al menos una media difiere: el post-hoc dice cuál.',
         'Un Levene significativo sugiere varianzas distintas: prefiere Welch o Kruskal-Wallis.',
+        'Bartlett y O’Brien prueban variaciones iguales antes de las medias: Bartlett es poderoso en condiciones normales, O’Brien mantiene su nivel con valores atípicos y colas pesadas.',
+        'Steel–Dwass es el post-hoc de todos los pares sin distribución: compara cada par de rangos medios y no necesita ningún supuesto de normalidad.',
       ],
       pitfalls: [
         'Elige la prueba post-hoc antes de mirar los datos, no después.',
@@ -385,6 +388,8 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Un coeficiente es el cambio esperado en el resultado por una unidad más del predictor, todo lo demás constante.',
         'La R² describe la variabilidad explicada, no la calidad causal del modelo.',
+        'Los efectos de tipo III prueban cada término con todos los demás términos del modelo, por lo que la tabla concuerda con los coeficientes de un modelo con interacciones.',
+        'En los modelos no lineales, cada término también conlleva una prueba de razón de verosimilitud: compara el modelo con y sin el término en lugar de depender de un Wald z.',
       ],
       pitfalls: [
         'Extrapolar fuera del rango observado de los predictores.',

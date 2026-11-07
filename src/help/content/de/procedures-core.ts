@@ -69,6 +69,7 @@ export const coreTopics: HelpTopic[] = [
         "Ein niedrigeres AIC/BIC bedeutet eine bessere Anpassung.",
         "Ein p-Wert der Anpassungsgüte beweist keine Normalität: Er misst nur die Evidenz dagegen.",
         "Der Zweistichproben-KS-Modus vergleicht zwei Gruppen, ohne eine Verteilungsfamilie vorauszusetzen.",
+        'Cramér–von Mises-W² ist der mittlere quadratische Abstand zwischen den beiden Summenkurven: Er gewichtet jede Abweichung, nicht nur die schlimmste wie KS, und ist daher bei kleinen Stichproben stabiler.',
       ],
       pitfalls: [
         "Die Verteilung aus den Daten zu wählen und sie dann an denselben Daten zu prüfen, überschätzt die Anpassung.",
@@ -144,6 +145,8 @@ export const coreTopics: HelpTopic[] = [
         'Der Mood-Median-Test vergleicht Mediane ohne Normalitätsannahme: Verwenden Sie ihn, wenn Ausreißer oder Schiefe den Mittelwert unzuverlässig machen.',
         "Ein signifikantes p sagt, dass mindestens ein Mittelwert abweicht: Der Post-hoc-Test sagt, welcher.",
         "Ein signifikanter Levene-Test deutet auf ungleiche Varianzen hin: Bevorzugen Sie Welch oder Kruskal-Wallis.",
+        'Bartlett und O’Brien testen gleiche Varianzen vor den Mittelwerten: Bartlett ist unter Normalität stark, O’Brien behält sein Niveau mit Ausreißern und starken Ausläufern.',
+        'Steel–Dwass ist das verteilungsfreie Post-hoc-System für alle Paare: Es vergleicht jedes Paar mittlerer Ränge und benötigt keine Normalitätsannahme.',
       ],
       pitfalls: [
         "Wählen Sie den Post-hoc-Test, bevor Sie die Daten betrachten, nicht danach.",
@@ -419,6 +422,8 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         "Ein Koeffizient ist die erwartete Änderung des Ergebnisses bei einer Einheit mehr des Prädiktors, unter sonst gleichen Bedingungen.",
         "R² beschreibt die erklärte Streuung, nicht die kausale Güte des Modells.",
+        'Effekte vom Typ III testen jeden Term mit allen anderen Termen im Modell, sodass die Tabelle mit den Koeffizienten eines Modells mit Wechselwirkungen übereinstimmt.',
+        'In nichtlinearen Modellen wird für jeden Term auch ein Likelihood-Ratio-Test durchgeführt: Dabei wird das Modell mit und ohne den Term verglichen, anstatt sich auf einen Wald-Z-Test zu verlassen.',
       ],
       pitfalls: [
         "Extrapolieren außerhalb des beobachteten Bereichs der Prädiktoren.",

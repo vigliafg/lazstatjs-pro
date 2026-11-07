@@ -66,6 +66,7 @@ export const coreTopics: HelpTopic[] = [
         'Um AIC/BIC mais baixo significa um melhor ajustamento.',
         'Um valor p de qualidade do ajustamento não prova a normalidade: apenas mede a evidência contra ela.',
         'O modo KS de duas amostras compara dois grupos sem assumir uma família de distribuições.',
+        'Cramér–von Mises W² é a distância quadrática média entre as duas curvas cumulativas: ela pesa cada desvio, não apenas o pior como KS, por isso é mais estável com amostras pequenas.',
       ],
       pitfalls: ['Escolher a distribuição a partir dos dados e depois testá-la nos mesmos dados sobrestima o ajustamento.'],
       glossary: [
@@ -137,6 +138,8 @@ export const coreTopics: HelpTopic[] = [
         'O teste da mediana de Mood compara medianas sem assumir normalidade: use-o quando valores atípicos ou assimetria tornam a média pouco fiável.',
         'Um p significativo diz que pelo menos uma média difere: o post-hoc diz qual.',
         'Um Levene significativo sugere variâncias desiguais: prefira Welch ou Kruskal-Wallis.',
+        'Bartlett e O’Brien testam variâncias iguais antes das médias: Bartlett é poderoso sob normalidade, O’Brien mantém seu nível com valores discrepantes e caudas pesadas.',
+        'Steel–Dwass é o post-hoc de todos os pares sem distribuição: ele compara cada par de classificações médias e não precisa de suposição de normalidade.',
       ],
       pitfalls: [
         'Escolha o teste post-hoc antes de olhar para os dados, não depois.',
@@ -385,6 +388,8 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Um coeficiente é a variação esperada do resultado por mais uma unidade do preditor, mantendo o resto constante.',
         'O R² descreve a variabilidade explicada, não a qualidade causal do modelo.',
+        'Os efeitos do Tipo III testam cada termo com todos os outros termos do modelo, de forma que a tabela esteja de acordo com os coeficientes de um modelo com interações.',
+        'Em modelos não lineares, cada termo também carrega um teste de razão de verossimilhança: ele compara o modelo com e sem o termo, em vez de confiar em um z de Wald.',
       ],
       pitfalls: [
         'Extrapolar para fora do intervalo observado dos preditores.',

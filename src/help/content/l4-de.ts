@@ -66,7 +66,8 @@ export const l4Topics: HelpTopic[] = [
         "Gage R&R unter 10% ist akzeptabel, 10–30% grenzwertig und über 30% gefährdet Entscheidungen über Teile.",
         "In der OC-Kurve ist die AQL die Qualität, die zu 95% angenommen wird, die LTPD die zu 10% angenommene Qualität.",
         "Ein T²-Punkt außerhalb der Grenze zeigt eine ungewöhnliche Kombination der Variablen, nicht welche Variable sich verschoben hat.",
-        'Bei unterschiedlich großen Untergruppen werden die Grenzen für jeden Punkt berechnet, nicht einmalig.',
+        'Gage R&R meldet %GRR, den Anteil der Gesamtabweichung aufgrund des Messgeräts, und ndc, die Anzahl der unterschiedlichen Kategorien, die es trennt: Unter 10 % ist das System bei fünf oder mehr Kategorien verwendbar, bei über 30 % oder weniger als zwei Kategorien nicht.',
+        'Wenn die Untergruppen unterschiedliche Größen haben, werden die Kontrollgrenzen Punkt für Punkt und nicht einmal für das gesamte Diagramm berechnet: Ein Schritt in den Grenzen spiegelt die Stichprobengröße wider, keine Änderung im Prozess.',
       ],
       pitfalls: [
         "Eingriffsgrenzen sind keine Spezifikationsgrenzen.",
@@ -80,6 +81,7 @@ export const l4Topics: HelpTopic[] = [
         { term: "Cpk", definition: "Fähigkeitskennzahl, die den Abstand zwischen Mittelwert und Spezifikationsgrenzen berücksichtigt." },
         { term: "Gage R&R", definition: "Anteil der Gesamtstreuung, der vom Messsystem stammt: Wiederholbarkeit plus Reproduzierbarkeit." },
         { term: "AQL", definition: "Annahmefähige Qualitätslage: Eingangsfehleranteil, der mit 95% Wahrscheinlichkeit angenommen wird." },
+        { term: 'ndc', definition: 'Anzahl unterschiedlicher Kategorien: Wie viele verschiedene Ebenen der gemessenen Größe kann das Messgerät unterscheiden?' },
       ],
     },
     seeAlso: ["descriptive", "distfit"],
@@ -261,6 +263,7 @@ export const l4Topics: HelpTopic[] = [
         "Der F-Test gilt für zwei Gruppen; bei mehr Gruppen Bartlett oder Levene verwenden.",
         "Bartlett ist unter Normalität leistungsfähig, wird aber durch Ausreißer und schwere Ränder verzerrt.",
         "Levene auf Medianen verringert den Einfluss von Extremen und ist die sichere Standardwahl.",
+        'O’Brien fügt einen robusten Test gleicher Varianzen hinzu: Er behält sein Niveau bei, wenn Ausreißer oder starke Ausläufer Bartlett verzerren würden.',
       ],
       pitfalls: [
         "Ein nicht signifikanter Test beweist keine gleichen Varianzen: Betrachten Sie Intervall und Boxplots.",

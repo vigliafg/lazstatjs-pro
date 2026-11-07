@@ -66,6 +66,7 @@ export const coreTopics: HelpTopic[] = [
         'Un AIC/BIC plus bas signifie un meilleur ajustement.',
         'Une p-value d’adéquation ne prouve pas la normalité : elle mesure seulement la preuve contre elle.',
         'Le mode KS à deux échantillons compare deux groupes sans supposer une famille de distributions.',
+        'Cramér–von Mises W² est la distance quadratique moyenne entre les deux courbes cumulées : elle pondère chaque écart, pas seulement le pire comme KS, elle est donc plus stable avec de petits échantillons.',
       ],
       pitfalls: ['Choisir la distribution à partir des données puis la tester sur ces mêmes données surestime l’ajustement.'],
       glossary: [
@@ -137,6 +138,8 @@ export const coreTopics: HelpTopic[] = [
         'Le test de la médiane de Mood compare les médianes sans supposer la normalité : utilisez-le quand les valeurs aberrantes ou l’asymétrie rendent la moyenne peu fiable.',
         'Une p significative dit qu’au moins une moyenne diffère : le post-hoc dit laquelle.',
         'Un Levene significatif suggère des variances inégales : préférez Welch ou Kruskal-Wallis.',
+        'Bartlett et O’Brien testent des variances égales avant les moyennes : Bartlett est puissant en situation de normalité, O’Brien maintient son niveau avec des valeurs aberrantes et des queues lourdes.',
+        'Steel–Dwass est le post-hoc toutes paires sans distribution : il compare chaque paire de rangs moyens et ne nécessite aucune hypothèse de normalité.',
       ],
       pitfalls: [
         'Choisissez le test post-hoc avant de regarder les données, pas après.',
@@ -385,6 +388,8 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Un coefficient est le changement attendu de la réponse pour une unité de plus du prédicteur, toutes choses égales par ailleurs.',
         'R² décrit la variabilité expliquée, pas la qualité causale du modèle.',
+        'Les effets de type III testent chaque terme avec tous les autres termes du modèle, le tableau est donc en accord avec les coefficients d\'un modèle avec interactions.',
+        'Dans les modèles non linéaires, chaque terme comporte également un test de rapport de vraisemblance : il compare le modèle avec et sans le terme au lieu de s\'appuyer sur un Wald z.',
       ],
       pitfalls: [
         'Extrapoler en dehors de la plage observée des prédicteurs.',

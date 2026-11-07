@@ -76,6 +76,7 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         'Saturazioni alte (in valore assoluto) indicano item legati alla componente.',
         'α molto alto può segnalare item ridondanti, non solo coerenza.',
+        'La tabella dei componenti PCA riporta gli autovettori: ogni valore è il peso di una variabile su un componente e un caricamento è quel peso scalato dalla radice quadrata dell\'autovalore.',
       ],
       pitfalls: ['Ruotare e scegliere il numero di fattori guardando i risultati porta a soluzioni non replicabili.'],
       glossary: [
@@ -167,8 +168,9 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         'ICC vicino a 1 indica accordo elevato; sotto 0,5 è scarso.',
         'Bland–Altman mostra se il secondo metodo sovra- o sotto-stima sistematicamente.',
+        'La modalità Gage R&R suddivide la variazione totale in ripetibilità, riproducibilità e da parte a parte e riporta %GRR e ndc: oltre il 30% il misuratore non può separare i soggetti.',
       ],
-      pitfalls: ['Una correlazione alta può nascondere un bias sistematico: guarda sempre la differenza media.'],
+      pitfalls: ['Una correlazione alta può nascondere un bias sistematico: guarda sempre la differenza media.', 'Un %GRR superiore al 30% invalida il confronto tra metodi: migliorare il sistema di misurazione prima di studiare l\'accordo.'],
       glossary: [
         { term: 'ICC', definition: 'Coefficiente di correlazione intraclasse: quota di variabilità dovuta alle differenze reali tra soggetti.' },
         { term: 'Limiti di accordo', definition: 'Intervallo entro cui cade il 95% delle differenze tra i due metodi.' },

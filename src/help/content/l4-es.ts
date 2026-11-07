@@ -95,7 +95,8 @@ export const l4Topics: HelpTopic[] = [
         "Un Gage R&R por debajo del 10 % es aceptable, entre el 10 % y el 30 % es marginal y por encima del 30 % las decisiones sobre piezas son arriesgadas.",
         "En la curva OC, el AQL es la calidad aceptada el 95 % de las veces y el LTPD la aceptada solo el 10 %.",
         "Un punto T² fuera del límite indica una combinación inusual de las variables, no cuál se movió.",
-        'Si los subgrupos tienen tamaños distintos, los límites se calculan punto por punto, no una sola vez.',
+        'Gage R&R informa %GRR, la proporción de la variación total debida al calibre, y ndc, el número de categorías distintas que separa: por debajo del 10 % con cinco o más categorías, el sistema es utilizable, por encima del 30 % o menos de dos categorías, no lo es.',
+        'Cuando los subgrupos tienen diferentes tamaños, los límites de control se calculan punto por punto en lugar de una vez para todo el gráfico: un paso en los límites refleja el tamaño de la muestra, no un cambio en el proceso.',
       ],
       pitfalls: [
         "Los límites de control no son límites de especificación.",
@@ -134,6 +135,7 @@ export const l4Topics: HelpTopic[] = [
           definition:
             "Nivel de calidad aceptable: defectuosos entrantes aceptados con probabilidad del 95 %.",
         },
+        { term: 'ndc', definition: 'Número de categorías distintas: cuántos niveles diferentes de la cantidad medida puede distinguir el medidor.' },
       ],
     },
     seeAlso: ["descriptive", "distfit"],
@@ -382,6 +384,7 @@ export const l4Topics: HelpTopic[] = [
         "La prueba F abarca dos grupos; con más grupos usa Bartlett o Levene.",
         "Bartlett es potente bajo normalidad pero se distorsiona con valores atípicos y colas pesadas.",
         "Levene sobre medianas reduce la influencia de los extremos y es la opción segura por defecto.",
+        'O’Brien añade una prueba robusta de varianzas iguales: mantiene su nivel cuando los valores atípicos o las colas pesadas distorsionarían a Bartlett.',
       ],
       pitfalls: [
         "Una prueba no significativa no demuestra igualdad de varianzas: mira el intervalo y las cajas.",

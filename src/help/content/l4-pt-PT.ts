@@ -69,7 +69,9 @@ export const l4Topics: HelpTopic[] = [
         'Um Gage R&R abaixo de 10 % é aceitável, entre 10 % e 30 % é marginal e acima de 30 % as decisões sobre peças são arriscadas.',
         'Na curva OC, o AQL é a qualidade aceite em 95 % dos casos e o LTPD a aceite apenas em 10 %.',
         'Um ponto T² fora do limite indica uma combinação invulgar das variáveis, não qual delas mudou.',
-      'Se os subgrupos têm tamanhos diferentes, os limites são calculados ponto a ponto, não uma só vez.'],
+        'O medidor R&R informa %GRR, a parcela da variação total devido ao medidor, e ndc, o número de categorias distintas que ele separa: abaixo de 10% com cinco ou mais categorias o sistema é utilizável, acima de 30% ou menos de duas categorias não é.',
+        'Quando os subgrupos têm tamanhos diferentes, os limites de controle são calculados ponto por ponto, em vez de uma vez para todo o gráfico: um passo nos limites reflete o tamanho da amostra, não uma mudança no processo.',
+      ],
       pitfalls: [
         'Os limites de controlo não são limites de especificação.',
         'A capacidade assume normalidade e um processo estável.',
@@ -82,6 +84,7 @@ export const l4Topics: HelpTopic[] = [
         { term: 'Cpk', definition: 'Índice de capacidade que tem em conta a distância entre a média e os limites de especificação.' },
         { term: 'Gage R&R', definition: 'Parte da variabilidade total devida ao sistema de medição: repetibilidade mais reprodutibilidade.' },
         { term: 'AQL', definition: 'Nível de qualidade aceitável: defeituosos à entrada aceites com probabilidade de 95 %.' },
+        { term: 'ndc', definition: 'Número de categorias distintas: quantos níveis diferentes da quantidade medida o medidor consegue distinguir.' },
       ],
     },
     seeAlso: ['descriptive', 'distfit'],
@@ -262,6 +265,7 @@ export const l4Topics: HelpTopic[] = [
         'O teste F abrange dois grupos; com mais grupos use Bartlett ou Levene.',
         'Bartlett é potente sob normalidade mas distorcido por valores atípicos e caudas pesadas.',
         'Levene sobre medianas reduz a influência dos extremos e é a opção segura por omissão.',
+        'O’Brien acrescenta um teste robusto de variâncias iguais: ele mantém seu nível quando valores discrepantes ou caudas pesadas distorceriam Bartlett.',
       ],
       pitfalls: [
         'Um teste não significativo não prova igualdade de variâncias: veja o intervalo e as caixas.',

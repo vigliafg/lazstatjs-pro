@@ -3,7 +3,7 @@ import { orderTopics } from '../order';
 import { areaTopics } from './areas';
 import { coreTopics } from './procedures-core';
 import { moreTopics } from './procedures-more';
-import { l4Topics } from '../l4';
+import { l4Topics } from '../l4-it';
 import { w2Topics } from '../w2-it';
 import { w3Topics } from '../w3-it';
 import { w4Topics } from '../w4-it';

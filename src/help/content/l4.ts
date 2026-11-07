@@ -70,7 +70,9 @@ export const l4Topics: HelpTopic[] = [
         'Gage R&R below 10% is acceptable, 10–30% is marginal and above 30% puts part decisions at risk.',
         'On the OC curve, AQL is the quality accepted 95% of the time and LTPD the quality accepted only 10% of the time.',
         'A T² point outside the limit means the combination of variables is unusual, not which variable moved.',
-      'Se i sottogruppi hanno dimensione diversa i limiti sono calcolati per ogni punto, non una volta sola.'],
+        'Gage R&R reports %GRR and ndc: below 10% with five or more distinct categories the gauge is usable, above 30% or fewer than two it is not.',
+        'When the subgroups have different sizes the control limits are computed point by point: a step in the limits reflects the sample size, not a change in the process.',
+      ],
       pitfalls: [
         'Control limits are not specification limits.',
         'Capability assumes normality and a stable process.',
@@ -83,6 +85,7 @@ export const l4Topics: HelpTopic[] = [
         { term: 'Cpk', definition: 'Capability index that accounts for the distance between the mean and the specification limits.' },
         { term: 'Gage R&R', definition: 'Share of total variation due to the measurement system: repeatability plus reproducibility.' },
         { term: 'AQL', definition: 'Acceptable quality level: incoming defectiveness accepted with 95% probability.' },
+        { term: 'ndc', definition: 'Number of distinct categories: how many different levels of the measured quantity the gauge can tell apart.' },
       ],
     },
     seeAlso: ['descriptive', 'distfit'],

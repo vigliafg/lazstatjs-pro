@@ -69,7 +69,9 @@ export const l4Topics: HelpTopic[] = [
         'Un Gage R&R sous 10 % est acceptable, entre 10 % et 30 % il est marginal et au-delà de 30 % les décisions sur les pièces sont risquées.',
         'Sur la courbe OC, l’AQL est la qualité acceptée dans 95 % des cas et la LTPD celle acceptée seulement dans 10 %.',
         'Un point T² hors limite indique une combinaison inhabituelle des variables, pas laquelle a bougé.',
-      'Quand les sous-groupes ont des tailles différentes, les limites sont calculées point par point, pas une seule fois.'],
+        'Gage R&R rapporte %GRR, la part de la variation totale due à la jauge, et ndc, le nombre de catégories distinctes qu\'elle sépare : en dessous de 10 % avec cinq catégories ou plus, le système est utilisable, au-dessus de 30 % ou en dessous de deux catégories, il ne l\'est pas.',
+        'Lorsque les sous-groupes ont des tailles différentes, les limites de contrôle sont calculées point par point au lieu d\'une seule fois pour l\'ensemble du graphique : une étape dans les limites reflète la taille de l\'échantillon et non un changement dans le processus.',
+      ],
       pitfalls: [
         'Les limites de contrôle ne sont pas des limites de spécification.',
         'La capabilité suppose la normalité et un processus stable.',
@@ -82,6 +84,7 @@ export const l4Topics: HelpTopic[] = [
         { term: 'Cpk', definition: 'Indice de capabilité qui tient compte de la distance entre la moyenne et les limites de spécification.' },
         { term: 'Gage R&R', definition: 'Part de la variabilité totale due au système de mesure : répétabilité plus reproductibilité.' },
         { term: 'AQL', definition: 'Niveau de qualité acceptable : défaut entrant accepté avec une probabilité de 95 %.' },
+        { term: 'ndc', definition: 'Nombre de catégories distinctes : combien de niveaux différents de la quantité mesurée la jauge peut distinguer.' },
       ],
     },
     seeAlso: ['descriptive', 'distfit'],
@@ -262,6 +265,7 @@ export const l4Topics: HelpTopic[] = [
         'Le test F concerne deux groupes ; avec plus de groupes utilisez Bartlett ou Levene.',
         'Bartlett est puissant sous normalité mais faussé par les valeurs aberrantes et les queues épaisses.',
         'Levene sur les médianes réduit l’influence des extrêmes et constitue le choix par défaut le plus sûr.',
+        'O’Brien ajoute un test robuste d\'égalité des variances : il maintient son niveau lorsque des valeurs aberrantes ou des queues lourdes fausseraient Bartlett.',
       ],
       pitfalls: [
         'Un test non significatif ne prouve pas l’égalité des variances : regardez l’intervalle et les boîtes.',

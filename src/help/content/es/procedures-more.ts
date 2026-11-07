@@ -76,6 +76,7 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         'Saturaciones absolutas altas significan que el ítem está ligado a ese componente.',
         'Un α muy alto puede señalar ítems redundantes, no solo consistencia.',
+        'La tabla de componentes de PCA informa los vectores propios: cada valor es el peso de una variable en un componente y una carga es ese peso escalado por la raíz cuadrada del valor propio.',
       ],
       pitfalls: ['Rotar y elegir el número de factores mirando los resultados lleva a soluciones no replicables.'],
       glossary: [
@@ -167,8 +168,9 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         'Un ICC cercano a 1 indica concordancia alta; por debajo de 0.5 es pobre.',
         'Bland–Altman muestra si el segundo método sobreestima o subestima de forma sistemática.',
+        'El modo Gage R&R divide la variación total en repetibilidad, reproducibilidad y parte a parte, e informa %GRR y ndc: por encima del 30%, el medidor no puede separar los sujetos.',
       ],
-      pitfalls: ['Una correlación alta puede ocultar un sesgo sistemático: mira siempre la diferencia media.'],
+      pitfalls: ['Una correlación alta puede ocultar un sesgo sistemático: mira siempre la diferencia media.', 'Un %GRR superior al 30% invalida la comparación entre métodos: mejorar el sistema de medición antes de estudiar la concordancia.'],
       glossary: [
         { term: 'ICC', definition: 'Correlación intraclase: la parte de la variabilidad debida a diferencias reales entre sujetos.' },
         { term: 'Límites de concordancia', definition: 'El intervalo que contiene el 95 % de las diferencias entre los dos métodos.' },

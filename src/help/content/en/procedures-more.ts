@@ -76,6 +76,7 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         'High absolute loadings mean the item is tied to that component.',
         'A very high α can signal redundant items, not only consistency.',
+        'The PCA components table reports the eigenvectors: each value is the weight of a variable on a component, and a loading is that weight scaled by the square root of the eigenvalue.',
       ],
       pitfalls: ['Rotating and choosing the number of factors while looking at the results leads to non-replicable solutions.'],
       glossary: [
@@ -167,8 +168,9 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         'An ICC near 1 means high agreement; below 0.5 it is poor.',
         'Bland–Altman shows whether the second method systematically over- or under-estimates.',
+        'The Gage R&R mode splits the total variation into repeatability, reproducibility and part-to-part, and reports %GRR and ndc: above 30% the gauge cannot separate the subjects.',
       ],
-      pitfalls: ['High correlation can hide a systematic bias: always look at the mean difference.'],
+      pitfalls: ['High correlation can hide a systematic bias: always look at the mean difference.', 'A %GRR above 30% invalidates the comparison between methods: improve the measurement system before studying agreement.'],
       glossary: [
         { term: 'ICC', definition: 'Intraclass correlation: the share of variability due to real differences between subjects.' },
         { term: 'Limits of agreement', definition: 'The interval holding 95% of the differences between the two methods.' },

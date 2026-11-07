@@ -66,6 +66,7 @@ export const coreTopics: HelpTopic[] = [
         'Valori più bassi di AIC/BIC indicano adattamento migliore.',
         'Il p-value di un test di adattamento non «prova» la normalità: misura solo l’evidenza contraria.',
         'La modalità KS a due campioni confronta due gruppi senza assumere una famiglia di distribuzioni.',
+        'Cramér–von Mises W² è la distanza media quadrata tra le due curve cumulative: pesa ogni deviazione, non solo quella peggiore come KS, quindi è più stabile con campioni piccoli.',
       ],
       pitfalls: ['Scegliere la distribuzione guardando i dati e poi testarla sugli stessi dati gonfia l’ottimismo.'],
       glossary: [
@@ -137,6 +138,8 @@ export const coreTopics: HelpTopic[] = [
         'Il test della mediana di Mood confronta le mediane senza assumere la normalità: usalo quando outlier o asimmetria rendono la media inaffidabile.',
         'Un p significativo dice che almeno una media differisce: i post-hoc dicono quale.',
         'Levene significativo suggerisce varianze diverse: preferisci Welch o Kruskal-Wallis.',
+        'Bartlett e O’Brien testano varianze uguali prima delle medie: Bartlett è potente in condizioni normali, O’Brien mantiene il suo livello con valori anomali e code pesanti.',
+        'Steel–Dwass è il post-hoc per tutte le coppie senza distribuzione: confronta ogni coppia di ranghi medi e non necessita di presupposti di normalità.',
       ],
       pitfalls: [
         'Il post-hoc va scelto prima di guardare i dati, non dopo.',
@@ -385,6 +388,8 @@ export const coreTopics: HelpTopic[] = [
       reading: [
         'Il coefficiente è il cambiamento atteso dell’esito per una unità in più del predittore, a parità degli altri.',
         'R² descrive la quota di variabilità spiegata, non la qualità causale del modello.',
+        'Gli effetti di tipo III mettono alla prova ciascun termine con tutti gli altri termini del modello, quindi la tabella concorda con i coefficienti di un modello con interazioni.',
+        'Nei modelli non lineari ogni termine comporta anche un test del rapporto di verosimiglianza: confronta il modello con e senza il termine invece di fare affidamento su un Wald z.',
       ],
       pitfalls: [
         'Estrapolare fuori dall’intervallo osservato dei predittori.',

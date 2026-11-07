@@ -80,6 +80,7 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         "Hohe absolute Ladungen bedeuten, dass das Item an diese Komponente gebunden ist.",
         "Ein sehr hohes α kann auf redundante Items hindeuten, nicht nur auf Konsistenz.",
+        'Die PCA-Komponententabelle gibt die Eigenvektoren an: Jeder Wert ist das Gewicht einer Variablen auf einer Komponente, und eine Ladung ist das Gewicht, skaliert durch die Quadratwurzel des Eigenwerts.',
       ],
       pitfalls: [
         "Zu rotieren und die Zahl der Faktoren beim Betrachten der Ergebnisse zu wählen führt zu nicht replizierbaren Lösungen.",
@@ -179,9 +180,11 @@ export const moreTopics: HelpTopic[] = [
       reading: [
         "Ein ICC nahe 1 bedeutet hohe Übereinstimmung; unter 0.5 ist sie schlecht.",
         "Bland–Altman zeigt, ob die zweite Methode systematisch über- oder unterschätzt.",
+        'Der Gage R&R-Modus unterteilt die Gesamtvariation in Wiederholbarkeit, Reproduzierbarkeit und Teil-zu-Teil und meldet %GRR und ndc: Über 30 % kann das Messgerät die Probanden nicht trennen.',
       ],
       pitfalls: [
         "Eine hohe Korrelation kann eine systematische Verzerrung verbergen: Sehen Sie sich immer die mittlere Differenz an.",
+        'Ein %GRR über 30 % macht den Vergleich zwischen Methoden ungültig: Verbessern Sie das Messsystem, bevor Sie die Übereinstimmung untersuchen.',
       ],
       glossary: [
         {
