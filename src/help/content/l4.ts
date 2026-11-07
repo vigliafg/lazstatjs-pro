@@ -111,7 +111,7 @@ export const l4Topics: HelpTopic[] = [
       reading: [
         'The height of a merge is the distance between the groups being joined.',
         'Standardized profiles show which variables characterise each cluster.',
-      'La tabella della fusione riporta pseudo-F e CCC a ogni passo: si vede dove i cluster iniziano a mescolarsi.'],
+      'The fusion table reports pseudo-F and CCC at every step: it shows where the clusters start to merge.'],
       pitfalls: [
         'Different linkages or cuts produce different clusters.',
         'Very small clusters may be outliers rather than real groups.',
@@ -265,6 +265,7 @@ export const l4Topics: HelpTopic[] = [
       reading: [
         'The F test covers two groups; with more groups use Bartlett or Levene.',
         'Bartlett is powerful under normality but distorted by outliers and heavy tails.',
+        'O’Brien adds a robust test of equal variances: it keeps its level when outliers or heavy tails would distort Bartlett.',
         'Levene on medians reduces the influence of extremes and is the safer default.',
       ],
       pitfalls: [

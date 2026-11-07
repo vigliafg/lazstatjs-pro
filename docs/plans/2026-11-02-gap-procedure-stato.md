@@ -1258,3 +1258,20 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
 - Corretta una frase italiana rimasta nella pagina inglese di quality.
 - Verifiche: tsc pulito, `content.test` 6/6, `check-locale` verde per it, en,
   fr, es, de, pt-PT, `npm run help:build` 6 locale e 498 pagine, file size ok.
+
+### Checkpoint 2026-11-06 — Audit della prosa multilingua
+
+- Aggiunto `npm run help:audit` (`scripts/help-audit.mts`): controlla la
+  contaminazione linguistica del libro inglese e la parita' di struttura di
+  ogni pagina tradotta rispetto all'inglese (steps, assumptions, whenToUse,
+  whenNotToUse, reading, pitfalls, charts, glossary).
+- Corrette due frasi italiane rimaste nelle pagine inglesi: quality (limiti per
+  punto) e cluster (pseudo-F e CCC). Aggiunta a `variances` la voce O'Brien,
+  che le cinque traduzioni avevano gia'.
+- Esito dell'audit dopo le correzioni: contaminazione 0; pagine con struttura
+  diversa it 25/72, fr 25/72, es 26/72, de 27/72, pt-PT 26/72; sezioni intere
+  mancanti it 12, fr 32, es 32, de 32, pt-PT 32 (glossari e assunzioni delle
+  ondate w3, w5, w6, w9).
+- Non chiuse in questa ondata: richiedono la riscrittura delle pagine tradotte
+  dai sorgenti inglesi, con verifica manuale dei glossari (i termini tradotti
+  devono comparire nel testo della pagina).

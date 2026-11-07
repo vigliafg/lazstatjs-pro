@@ -46,7 +46,8 @@
     "prebuild": "npm run help:build",
     "pretest": "npm run help:build",
     "postinstall": "node scripts/postinstall-electron.mjs",
-    "locales:check": "node --import tsx scripts/check-locale.mjs"
+    "locales:check": "node --import tsx scripts/check-locale.mjs",
+    "help:audit": "node --import tsx scripts/help-audit.mts"
   },
   "dependencies": {
     "electron-updater": "^6.8.11"
