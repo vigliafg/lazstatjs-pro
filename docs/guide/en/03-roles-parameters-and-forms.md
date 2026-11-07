@@ -70,7 +70,8 @@ rewritten: it is shared and stays in one place.
 single
   parameter.
 
-**Does not cover.** The computation and the tables: [04](04-engine-and-tables.md).
+**Does not cover.** The computation and the tables:
+[04](04-engine-and-tables.md).
 Runtime rejections: [08](08-validation-and-guardrails.md).
 
 **Sources in the code.** `src/analyses/roles.ts`, `rolesW5.ts`, `rolesW7.ts`,

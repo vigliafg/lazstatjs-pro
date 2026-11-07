@@ -64,7 +64,8 @@ risultato è stato letto.
   Un preset o uno stile bastano a due clic; chi lavora sui dettagli trova assi,
   legende, annotazioni e colori uno per uno.
 
-**Cosa non copre.** La costruzione del grafico: [06](06-grafici-delle-procedure.md).
+**Cosa non copre.** La costruzione del grafico:
+[06](06-grafici-delle-procedure.md).
 
 **Fonti nel codice.** `src/charts/features.ts`, `src/charts/defaults.ts`,
 `src/charts/presets.ts`, `src/charts/styles.ts`,

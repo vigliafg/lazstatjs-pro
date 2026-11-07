@@ -87,7 +87,8 @@ on
   without an explanation: people with little experience read a clear sentence,
   people with a lot find the same quantities as always in the tables.
 
-**Does not cover.** The prose: [05](05-reports-and-session-report.md). The charts:
+**Does not cover.** The prose: [05](05-reports-and-session-report.md). The
+charts:
 [06](06-procedure-charts.md).
 
 **Sources in the code.** `src/stats/kernels/`, `src/stats/tables/`,

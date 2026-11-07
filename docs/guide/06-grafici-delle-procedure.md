@@ -65,7 +65,8 @@ esito.
   come leggere il grafico; chi ne ha molta ritrova i grafici diagnostici attesi,
   con la possibilità di intervenire nei dettagli nel chart editor.
 
-**Cosa non copre.** La modifica interattiva del grafico: [07](07-chart-editor.md).
+**Cosa non copre.** La modifica interattiva del grafico:
+[07](07-chart-editor.md).
 
 **Fonti nel codice.** `src/stats/charts.ts`, `src/charts/`,
 `src/charts/vega/buildSpec.ts`, `src/analyses/*/run.tsx`.

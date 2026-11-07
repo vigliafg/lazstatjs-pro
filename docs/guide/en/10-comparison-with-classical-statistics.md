@@ -61,7 +61,8 @@ user needs to know.
   the prose and the guide, without needing to know the reference program.
 
 **Does not cover.** The details of individual procedures: the in-app guide
-([09](09-languages-help-and-terminology.md)) and the documents in `docs/analysis/`.
+([09](09-languages-help-and-terminology.md)) and the documents in
+`docs/analysis/`.
 
 **Sources in the code and documents.** `docs/analysis/`, `samples/`, the in-app
 guide `src/help/content/`.

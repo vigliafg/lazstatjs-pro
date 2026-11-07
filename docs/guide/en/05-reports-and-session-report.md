@@ -78,12 +78,14 @@ that was seen on screen.
   explanation in plain words; people who do find the same quantities in the
   tables, in the language they prefer and without double work.
 
-**Does not cover.** The tables ([04](04-engine-and-tables.md)) and how charts are
+**Does not cover.** The tables ([04](04-engine-and-tables.md)) and how charts
+are
 built ([06](06-procedure-charts.md)).
 
 **Sources in the code.** `src/stats/reports/`, `src/stats/reportCopy/`,
 `src/stats/report.ts`, `src/io/outputs.ts`, `src/io/reportExport.ts`,
 `src/ui/analysis/sessionOutline.ts`.
 
-**See also.** [`docs/RUN-REPORT-SESSION-REPORT.md`](../../RUN-REPORT-SESSION-REPORT.md),
+**See also.**
+[`docs/RUN-REPORT-SESSION-REPORT.md`](../../RUN-REPORT-SESSION-REPORT.md),
 [`docs/plans/2026-10-29-session-report-outline.md`](../../plans/2026-10-29-session-report-outline.md).

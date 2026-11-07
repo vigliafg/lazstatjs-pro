@@ -116,7 +116,8 @@ really exist.
 ## Development and release
 
 - Layers and dependency rules: [`ARCHITECTURE.md`](../../../ARCHITECTURE.md).
-- Project status and backlog: [`docs/PROJECT-STATUS.md`](../../PROJECT-STATUS.md).
+- Project status and backlog:
+  [`docs/PROJECT-STATUS.md`](../../PROJECT-STATUS.md).
 - Quality gate: `npm run check` runs `tsc --noEmit`, the full suite
   (`node --test`) and `npm run guard` (dependency-cruiser, madge, file size,
   documentation links). `npm run help:build` regenerates the six help books and

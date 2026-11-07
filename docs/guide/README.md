@@ -112,7 +112,8 @@ controlla che esistano davvero.
 ## Sviluppo e rilascio
 
 - Strati e regole di dipendenza: [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
-- Stato del progetto e backlog: [`docs/PROJECT-STATUS.md`](../PROJECT-STATUS.md).
+- Stato del progetto e backlog:
+  [`docs/PROJECT-STATUS.md`](../PROJECT-STATUS.md).
 - Gate di qualità: `npm run check` esegue `tsc --noEmit`, l'intera suite
   (`node --test`) e `npm run guard` (dependency-cruiser, madge, dimensione file,
   link della documentazione). `npm run help:build` rigenera i sei libri di guida
