@@ -72,4 +72,4 @@ risultato è stato letto.
 `src/ui/analysis/ChartStyles.tsx`, `src/io/chartExport.ts`.
 
 **Vedi anche.** [`docs/CHART-EDITOR-AUDIT.md`](../CHART-EDITOR-AUDIT.md),
-[`docs/analysis/2026-10-31-property-panel-editor.md`](../analysis/2026-10-31-property-panel-editor.md).
+[`docs/analysis/2026-10-31-property-panel-editor.md`](../analysis/2026-10-31-property-panel-editor.md)

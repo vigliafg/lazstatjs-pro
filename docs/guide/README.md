@@ -43,16 +43,26 @@ confronto con JMP/SPSS/R docs/analysis           → 10
 
 | # | Documento | In una frase |
 |---|-----------|--------------|
-| 01 | [Dati e Data Editor](01-dati-e-data-editor.md) | Come entrano i dati, come vengono riconosciuti e come si correggono senza rompere le analisi. |
-| 02 | [Libreria e scelta dell'analisi](02-libreria-e-scelta-analisi.md) | Le 72 procedure: come si trovano e cosa succede dal clic al risultato. |
-| 03 | [Ruoli, parametri e Form](03-ruoli-parametri-e-form.md) | Lo stesso modo di scegliere variabili e parametri per tutte le procedure. |
-| 04 | [Motore e tabelle](04-motore-e-tabelle.md) | Come i numeri diventano tabelle leggibili e perché calcolo, presentazione e testo restano separati. |
-| 05 | [Report, run-report e session-report](05-report-e-session-report.md) | La prosa che accompagna i numeri, la sua lingua e la differenza tra un run e la sessione. |
-| 06 | [Grafici delle procedure](06-grafici-delle-procedure.md) | I 32 tipi di grafico e perché ogni procedura produce quelli che servono. |
-| 07 | [Chart editor](07-chart-editor.md) | Cosa si può cambiare di un grafico e cosa resta fissato dal calcolo. |
-| 08 | [Validazione e guardrail](08-validazione-e-guardrail.md) | Tre livelli di controllo e la regola "mai un risultato vuoto". |
-| 09 | [Lingue, help e terminologia](09-lingue-help-e-terminologia.md) | Sei lingue, 498 pagine di guida in-app e le regole per tradurre senza rompere i termini. |
-| 10 | [Confronto con la statistica classica](10-confronto-con-la-statistica-classica.md) | Cosa coincide con JMP, SPSS e R, cosa no e come si documenta. |
+| 01 |
+[Dati e Data Editor](01-dati-e-data-editor.md)
+| 02 |
+[Libreria e scelta dell'analisi](02-libreria-e-scelta-analisi.md)
+| 03 |
+[Ruoli, parametri e Form](03-ruoli-parametri-e-form.md)
+| 04 |
+[Motore e tabelle](04-motore-e-tabelle.md)
+| 05 |
+[Report, run-report e session-report](05-report-e-session-report.md)
+| 06 |
+[Grafici delle procedure](06-grafici-delle-procedure.md)
+| 07 |
+[Chart editor](07-chart-editor.md)
+| 08 |
+[Validazione e guardrail](08-validazione-e-guardrail.md)
+| 09 |
+[Lingue, help e terminologia](09-lingue-help-e-terminologia.md)
+| 10 |
+[Confronto con la statistica classica](10-confronto-con-la-statistica-classica.md)
 
 ## Terminologia vincolante
 

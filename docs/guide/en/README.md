@@ -43,16 +43,26 @@ comparison with JMP/SPSS/R docs/analysis         → 10
 
 | # | Document | In one sentence |
 |---|----------|-----------------|
-| 01 | [Data and Data Editor](01-data-and-data-editor.md) | How data gets in, how it is recognised and how it is corrected without breaking analyses. |
-| 02 | [Library and analysis selection](02-library-and-analysis-selection.md) | The 72 procedures: how they are found and what happens from the click to the result. |
-| 03 | [Roles, parameters and forms](03-roles-parameters-and-forms.md) | One way of choosing variables and parameters for every procedure. |
-| 04 | [Engine and tables](04-engine-and-tables.md) | How numbers become readable tables, and why computation, presentation and text stay apart. |
-| 05 | [Reports and session report](05-reports-and-session-report.md) | The prose around the numbers, its language and the difference between a run and a session. |
-| 06 | [Procedure charts](06-procedure-charts.md) | The 32 chart kinds and why each procedure produces the ones it needs. |
-| 07 | [Chart editor](07-chart-editor.md) | What can be changed in a chart and what stays fixed by the computation. |
-| 08 | [Validation and guardrails](08-validation-and-guardrails.md) | Three levels of checks and the "never an empty result" rule. |
-| 09 | [Languages, help and terminology](09-languages-help-and-terminology.md) | Six languages, 498 in-app guide pages and rules for translating without breaking terms. |
-| 10 | [Comparison with classical statistics](10-comparison-with-classical-statistics.md) | What matches JMP, SPSS and R, what does not, and how it is documented. |
+| 01 |
+[Data and Data Editor](01-data-and-data-editor.md)
+| 02 |
+[Library and analysis selection](02-library-and-analysis-selection.md)
+| 03 |
+[Roles, parameters and forms](03-roles-parameters-and-forms.md)
+| 04 |
+[Engine and tables](04-engine-and-tables.md)
+| 05 |
+[Reports and session report](05-reports-and-session-report.md)
+| 06 |
+[Procedure charts](06-procedure-charts.md)
+| 07 |
+[Chart editor](07-chart-editor.md)
+| 08 |
+[Validation and guardrails](08-validation-and-guardrails.md)
+| 09 |
+[Languages, help and terminology](09-languages-help-and-terminology.md)
+| 10 |
+[Comparison with classical statistics](10-comparison-with-classical-statistics.md)
 
 ## Binding terminology
 

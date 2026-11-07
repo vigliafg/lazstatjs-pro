@@ -74,4 +74,4 @@ introdurre un grafico che non c'è né perdere un passaggio.
 `scripts/check-locale.mjs`, `scripts/help-audit.mts`.
 
 **Vedi anche.**
-[`docs/plans/2026-10-29-multilingua-e-manuale.md`](../plans/2026-10-29-multilingua-e-manuale.md).
+[`docs/plans/2026-10-29-multilingua-e-manuale.md`](../plans/2026-10-29-multilingua-e-manuale.md)

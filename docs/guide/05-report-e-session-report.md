@@ -80,4 +80,4 @@ dei grafici ([06](06-grafici-delle-procedure.md)).
 
 **Vedi anche.**
 [`docs/RUN-REPORT-SESSION-REPORT.md`](../RUN-REPORT-SESSION-REPORT.md),
-[`docs/plans/2026-10-29-session-report-outline.md`](../plans/2026-10-29-session-report-outline.md).
+[`docs/plans/2026-10-29-session-report-outline.md`](../plans/2026-10-29-session-report-outline.md)

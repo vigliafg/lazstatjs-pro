@@ -74,4 +74,4 @@ not there or lose a step.
 `scripts/check-locale.mjs`, `scripts/help-audit.mts`.
 
 **See also.**
-[`docs/plans/2026-10-29-multilingua-e-manuale.md`](../../plans/2026-10-29-multilingua-e-manuale.md).
+[`docs/plans/2026-10-29-multilingua-e-manuale.md`](../../plans/2026-10-29-multilingua-e-manuale.md)

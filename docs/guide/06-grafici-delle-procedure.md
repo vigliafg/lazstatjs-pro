@@ -72,4 +72,4 @@ esito.
 `src/charts/vega/buildSpec.ts`, `src/analyses/*/run.tsx`.
 
 **Vedi anche.** [`docs/CHART-ENGINE.md`](../CHART-ENGINE.md),
-[`docs/analysis/2026-11-02-confronto-grafici-jmp.md`](../analysis/2026-11-02-confronto-grafici-jmp.md).
+[`docs/analysis/2026-11-02-confronto-grafici-jmp.md`](../analysis/2026-11-02-confronto-grafici-jmp.md)
