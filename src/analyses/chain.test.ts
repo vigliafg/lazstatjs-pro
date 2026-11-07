@@ -51,24 +51,7 @@ const PARAM_SLICE: Record<string, string> = {
 /** Table- and parameter-driven procedures: they read no grid column. */
 const NO_ROLES = new Set(['chisquare', 'contingency', 'loglinear', 'correspondence', 'samplesize']);
 
-/**
- * Sample examples that do not run today, with the reason the runner gives.
- *
- * They are kept explicit instead of skipped: the assertion below fails when a
- * new example stops working and when one of these starts working, so the list
- * cannot rot. Each entry is a defect of the sample data (a column that no role
- * accepts, factors that are collinear, a model that needs options) and not of
- * the chain this suite guards.
- */
-const KNOWN_REJECTIONS: Record<string, string> = {
-  'doe_demo/doe': 'surface could not be estimated',
-  'mtcars/multinomial': 'could not be estimated',
-  'mtcars/nonlinear': 'did not converge',
-  'selection_demo/selection': 'not a column role',
-  'sem_demo/sem': 'could not be fitted',
-  'two_groups_binary/distfit': 'not a column role',
-  'two_groups_binary/proportions': 'not a column role',
-};
+
 
 const gridOf = (dir: string): GridData => {
   const table = readDelimitedTable(readFileSync(join(root, dir, 'data.csv'), 'utf8'), {
@@ -154,7 +137,8 @@ const paramsFor = (example: SampleExample, grid: GridData): ProjectParams => {
       }
     }
   }
-  return params;
+  // Derived fields (e.g. the SEM factor groups) follow the selected columns.
+  return parseParams(params, grid.cols.length);
 };
 
 const unresolved = (value: unknown): string[] => {
@@ -166,15 +150,6 @@ test('every sample example runs the whole chain', () => {
   const failures: string[] = [];
   const executed: string[] = [];
   const pending: string[] = [];
-  const allowed = new Set<string>();
-
-  const knownRejection = (where: string, reason: string): boolean => {
-    const expected = KNOWN_REJECTIONS[where];
-    if (!expected || !reason.toLowerCase().includes(expected.toLowerCase())) return false;
-    allowed.add(where);
-    return true;
-  };
-
   for (const dataset of manifest.datasets) {
     let grid: GridData | null = null;
     for (const example of dataset.examples) {
@@ -209,8 +184,7 @@ test('every sample example runs the whole chain', () => {
             : grid;
         const result = runner({ grid: runGrid, params, ciLevel: 95 });
         if (!('ok' in result) || !result.ok) {
-          const reason = 'reason' in result ? result.reason : 'rejected';
-          if (!knownRejection(where, reason)) failures.push(`${where}: ${reason}`);
+          failures.push(`${where}: ${'reason' in result ? result.reason : 'rejected'}`);
           continue;
         }
         executed.push(example.analysis);
@@ -220,8 +194,7 @@ test('every sample example runs the whole chain', () => {
         for (const table of result.tables) {
           if (!table.id || !table.title) failures.push(`${where}: table without id or title`);
           if (table.columns.length === 0 || table.rows.length === 0) {
-            const message = `table "${table.id}" has no columns or rows`;
-            if (!knownRejection(where, message)) failures.push(`${where}: ${message}`);
+            failures.push(`${where}: table "${table.id}" has no columns or rows`);
           }
           if (ids.has(table.id)) failures.push(`${where}: duplicate table id "${table.id}"`);
           ids.add(table.id);
@@ -244,23 +217,16 @@ test('every sample example runs the whole chain', () => {
           if ((JSON.stringify(result.report) ?? '').length < 20) failures.push(`${where}: empty report`);
         }
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        if (!knownRejection(where, message)) failures.push(`${where}: ${message}`);
+        failures.push(`${where}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
   }
 
   assert.deepEqual(failures.slice(0, 12), []);
-  const reached = new Set([
-    ...executed,
-    ...[...allowed].map(where => where.slice(where.indexOf('/') + 1)),
-  ]);
   assert.deepEqual(
-    [...reached].sort(),
+    [...new Set(executed)].sort(),
     Object.keys(ANALYSIS_RUNNERS).filter(id => !NO_ROLES.has(id)).sort()
   );
-  // The allowlist cannot rot: an entry that starts passing must be removed.
-  assert.deepEqual([...allowed].sort(), Object.keys(KNOWN_REJECTIONS).sort());
   // Only the table-driven procedures may skip the run; a new skip is a gap.
   for (const entry of new Set(pending)) {
     const analysis = entry.slice(entry.indexOf('/') + 1);

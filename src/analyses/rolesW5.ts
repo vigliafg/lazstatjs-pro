@@ -56,14 +56,22 @@ export const W5_ROLES: Record<string, W5Role[]> = {
       label: 'SEM: indicators',
       kind: 'continuous',
       get: p => p.sem.selected,
-      set: (p, c) => ({
-        ...p,
-        sem: {
-          ...p.sem,
-          selected: append(p.sem.selected, c),
-          groups: append(p.sem.selected, c).map((_, index) => p.sem.groups[index] ?? 0),
-        },
-      }),
+      set: (p, c) => {
+        const selected = append(p.sem.selected, c);
+        // A new indicator joins the factor with the fewest indicators, so the
+        // default grouping stays usable (each factor needs at least two).
+        const counts = Array.from({ length: p.sem.factors }, () => 0);
+        const groups = selected.map((_, index) => {
+          const kept = p.sem.groups[index];
+          const group =
+            kept !== undefined && kept >= 0 && kept < p.sem.factors
+              ? kept
+              : counts.indexOf(Math.min(...counts));
+          counts[group] += 1;
+          return group;
+        });
+        return { ...p, sem: { ...p.sem, selected, groups } };
+      },
     },
   ],
   latentclass: [

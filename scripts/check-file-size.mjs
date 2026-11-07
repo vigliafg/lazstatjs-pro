@@ -16,7 +16,7 @@ const EXCEPTIONS = new Map([
   ['src/io/project/types.ts', 1588], // tipi di tutti i parametri persistiti: un blocco per procedura (W9)
   ['src/io/project/parse.ts', 1287], // parsing difensivo di tutti i parametri persistiti (W9)
   ['src/analyses/params.ts', 1475], // normalizzazione/validazione di tutte le procedure (W9)
-  ['src/analyses/roles.ts', 1045], // mappa ruoli/colonne di tutte le procedure (W9)
+  ['src/analyses/roles.ts', 1052], // mappa ruoli/colonne di tutte le procedure (W9)
   ['src/analyses/registry.ts', 747], // registro unico delle procedure: una voce per analisi (W9)
   ['src/stats/kernels/cox.ts', 854], // Cox PH e fragilità gamma condivisa, con verosimiglianze e EM (W6)
 ]);

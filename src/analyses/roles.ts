@@ -284,6 +284,13 @@ const ROLES: Record<string, AnalysisRole[]> = {
       get: p => [p.distfit.variable],
       set: (p, c) => ({ ...p, distfit: { ...p.distfit, variable: c } }),
     },
+    {
+      key: 'group',
+      label: 'Distribution Fit: group variable',
+      kind: 'group',
+      get: p => (p.distfit.group >= 0 ? [p.distfit.group] : []),
+      set: (p, c) => ({ ...p, distfit: { ...p.distfit, group: c } }),
+    },
   ],
   logistic: [
     {

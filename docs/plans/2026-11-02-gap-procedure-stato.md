@@ -1303,3 +1303,26 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
 - Test: `w9.test.ts` verifica che la regressione produca `survey-coefficients`
   e non `survey-estimates`; il test a catena non ha piu' `survey_demo/survey`
   fra i difetti noti.
+
+### Checkpoint 2026-11-06 — Esempi dei sample allineati ai ruoli e agli stimatori
+
+- `two_groups_binary/proportions` (twoRate): il conteggio si passa in
+  `variable`, non in una colonna `count` che non esiste; esempio corretto in
+  `generate.R` e nel manifest.
+- `selection_demo/selection` (Heckman): la chiave del manifest era
+  `selectionPredictors`, il ruolo si chiama `selectIndeps`.
+- `two_groups_binary/distfit` (KS a due campioni): i parametri avevano gia'
+  `group`, ma il ruolo non era esposto. Aggiunto `distfit.group` in
+  `rolesW5`/`roles.ts`, quindi ora la colonna si puo' selezionare anche dall'app.
+- `doe_demo/doe`: la superficie con modello quadratico non e' stimabile sui
+  tre fattori del sample (matrice non a rango pieno); l'esempio usa `linear`.
+  Il secondo esempio (disegno CCD) resta invariato.
+- `mtcars/multinomial`: con tre predittori le classi sono separate; l'esempio
+  usa `wt`.
+- `mtcars/nonlinear`: il modello di default (`logistic`) non converge su una
+  risposta continua; l'esempio dichiara `exponential`.
+- `sem_demo/sem`: il setter aggiungeva ogni nuovo indicatore al primo fattore,
+  lasciando un fattore con un solo indicatore. Ora l'indicatore va al fattore
+  con meno indicatori, cosi' il raggruppamento predefinito e' stimabile.
+- Il test a catena non ha piu' nessuna eccezione: tutti i 153 esempi girano e
+  la lista `KNOWN_REJECTIONS` e' stata rimossa.

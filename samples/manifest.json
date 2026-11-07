@@ -637,13 +637,16 @@
           "columns": {
             "dependent": "mpg",
             "predictor": "hp"
+          },
+          "options": {
+            "model": "exponential"
           }
         },
         {
           "analysis": "multinomial",
           "columns": {
             "outcome": "cyl",
-            "predictors": ["mpg", "wt", "hp"]
+            "predictors": ["wt"]
           }
         },
         {
@@ -1510,7 +1513,7 @@
         {
           "analysis": "proportions",
           "columns": {
-            "count": "Events",
+            "variable": "Events",
             "group": "Group"
           },
           "options": {
@@ -1730,7 +1733,7 @@
             "dependent": "Wage_obs",
             "predictors": ["Education", "Experience"],
             "selection": "Selected",
-            "selectionPredictors": ["Education", "Experience", "Kids"]
+            "selectIndeps": ["Education", "Experience", "Kids"]
           },
           "options": {
             "mode": "heckman"
@@ -2254,7 +2257,7 @@
           },
           "options": {
             "mode": "surface",
-            "model": "quadratic"
+            "model": "linear"
           }
         },
         {

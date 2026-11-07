@@ -282,8 +282,8 @@ write_dataset(
     example("doe", list(response = "mpg", factorA = "hp", factorB = "wt")),
     example("glm", list(dependent = "mpg", predictors = c("wt", "hp")), family = "gaussian"),
     example("quantile", list(dependent = "mpg", predictors = c("wt", "hp")), tau = 0.5),
-    example("nonlinear", list(dependent = "mpg", predictor = "hp")),
-    example("multinomial", list(outcome = "cyl", predictors = c("mpg", "wt", "hp"))),
+    example("nonlinear", list(dependent = "mpg", predictor = "hp"), model = "exponential"),
+    example("multinomial", list(outcome = "cyl", predictors = c("wt"))),
     example("glmm", list(outcome = "mpg", predictors = c("wt", "hp"), group = "cyl")),
     example("pls", list(dependent = "mpg", predictors = c("wt", "hp", "disp"))),
     example("mars", list(dependent = "mpg", predictors = c("wt", "hp", "disp"))),
@@ -704,7 +704,7 @@ write_dataset(
   list(
     example("proportions", list(outcome = "Outcome"), mode = "oneProp", successLevel = "Yes", nullP = 0.5),
     example("proportions", list(outcome = "Outcome", group = "Group"), mode = "twoProp", successLevel = "Yes"),
-    example("proportions", list(count = "Events", group = "Group"), mode = "twoRate", exposure = 1),
+    example("proportions", list(variable = "Events", group = "Group"), mode = "twoRate", exposure = 1),
     example("distfit", list(variable = "Events", group = "Group"), mode = "ks"),
     example("descriptive", list(variables = "Events"))
   ),
@@ -812,7 +812,7 @@ write_dataset(
   c("selection", "regression", "descriptive", "correlation"),
   list(
     example("selection", list(dependent = "Wage", predictors = c("Education", "Experience"))),
-    example("selection", list(dependent = "Wage_obs", predictors = c("Education", "Experience"), selection = "Selected", selectionPredictors = c("Education", "Experience", "Kids")), mode = "heckman"),
+    example("selection", list(dependent = "Wage_obs", predictors = c("Education", "Experience"), selection = "Selected", selectIndeps = c("Education", "Experience", "Kids")), mode = "heckman"),
     example("regression", list(dependent = "Wage", predictors = c("Education", "Experience"))),
     example("descriptive", list(variables = c("Wage", "Wage_obs", "Education", "Experience"))),
     example("correlation", list(variables = c("Wage", "Education", "Experience")))
@@ -1078,7 +1078,7 @@ write_dataset(
   "Synthetic, seeded with set.seed(20261108)",
   c("doe"),
   list(
-    example("doe", list(response = "Y", factorA = "A", factorB = "B"), mode = "surface", model = "quadratic"),
+    example("doe", list(response = "Y", factorA = "A", factorB = "B"), mode = "surface", model = "linear"),
     example("doe", list(response = "Y", factorA = "A", factorB = "B"), mode = "design", designType = "ccd", factors = 3, centerPoints = 3)
   ),
   "11 runs: a 2^3 factorial plus three centre points; Y follows a quadratic surface in A and B with a linear effect of C."
