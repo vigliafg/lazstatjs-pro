@@ -1,6 +1,6 @@
 # LazStats Pro guide
 
-LazStats Pro is a statistical analysis application that runs entirely in the
+**Covers.** LazStats Pro is a statistical analysis application that runs entirely in the
 browser (and ships as a desktop application through Electron). The path is
 always the same: **data → choose a procedure → parameters → computation →
 tables, report and charts → chart editor → session**.
@@ -11,6 +11,15 @@ the guide says *what the app does and why*, the architecture says *where it
 lives and what it may import*.
 
 Italiano: [../README.md](../README.md)
+
+## Contents
+
+- [The chain, one line per step](#the-chain-one-line-per-step)
+- [The documents](#the-documents)
+- [Binding terminology](#binding-terminology)
+- [The numbers](#the-numbers)
+- [Keeping this guide honest](#keeping-this-guide-honest)
+- [Development and release](#development-and-release)
 
 ## The chain, one line per step
 
@@ -27,7 +36,7 @@ languages and in-app help src/help, src/i18n     → 09
 comparison with JMP/SPSS/R docs/analysis         → 10
 ```
 
-## Index
+## The documents
 
 | # | Document | In one sentence |
 |---|----------|-----------------|
