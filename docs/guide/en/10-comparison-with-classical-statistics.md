@@ -15,18 +15,17 @@ comparison is documented without promising a parity that has not been verified.
 
 The comparison is not done from memory. The same dataset is taken, the same
 procedure is run in both programs, and the tables are compared entry by entry
-and
-the charts kind by kind. The results stay in `docs/analysis/`, with an inventory
-of the tables for every procedure, a detail on the linear model, a chart
-comparison and a document that widens the comparison to the other programs.
+and the charts kind by kind. The results stay in `docs/analysis/`, with an
+inventory of the tables for every procedure, a detail on the linear model, a
+chart comparison and a document that widens the comparison to the other
+programs.
 
 ## What matches
 
 The basic analyses — means and intervals, tests, analysis of variance,
 regression, survival — follow the classical conventions: the same quantities,
-the
-same reference results, the same procedure names for people coming from JMP or
-SPSS. Differences, where they exist, are documented and not hidden.
+the same reference results, the same procedure names for people coming from JMP
+or SPSS. Differences, where they exist, are documented and not hidden.
 
 The order of things is designed for people arriving from another program: they
 search for the procedure under the name they know, find the same entries in the

@@ -60,8 +60,8 @@ risultato è stato letto.
 - **L'idea è un elenco di proprietà condiviso.** Ogni tipo di grafico dichiara
   cosa offre, e l'interfaccia si costruisce da quell'elenco: comportamento
   uniforme e meno occasioni di errore.
-- **Semplice per chi vuole solo esportare, profondo per chi vuole rifinire.**
-  Un preset o uno stile bastano a due clic; chi lavora sui dettagli trova assi,
+- **Semplice per chi vuole solo esportare, profondo per chi vuole rifinire.** Un
+  preset o uno stile bastano a due clic; chi lavora sui dettagli trova assi,
   legende, annotazioni e colori uno per uno.
 
 **Cosa non copre.** La costruzione del grafico:

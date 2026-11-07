@@ -15,9 +15,9 @@ sorprese.
 ## Ruoli di colonna
 
 Ogni procedura dichiara di cosa ha bisogno. Un ruolo è una casella con un nome
-chiaro e un compito preciso: una variabile numerica da analizzare, una
-variabile di gruppo, oppure una variabile che va bene in entrambi i casi
-perché è la procedura a decidere in base al tipo.
+chiaro e un compito preciso: una variabile numerica da analizzare, una variabile
+di gruppo, oppure una variabile che va bene in entrambi i casi perché è la
+procedura a decidere in base al tipo.
 
 Le regole comuni sono poche e valgono per tutte le procedure: elencare i ruoli,
 leggere lo stato attuale, assegnare una colonna e rifiutare gli abbinamenti
@@ -48,9 +48,9 @@ invece di riutilizzare per errore un numero di colonna ormai diverso.
 
 Ogni procedura ha il proprio form, costruito con gli stessi controlli delle
 altre. Il form non calcola nulla: legge e scrive parametri, controlla i tipi e
-mostra le etichette tradotte. I preset salvano una combinazione di parametri
-con un nome, così un'analisi ricorrente si riapre con un clic e non va
-ricostruita ogni volta.
+mostra le etichette tradotte. I preset salvano una combinazione di parametri con
+un nome, così un'analisi ricorrente si riapre con un clic e non va ricostruita
+ogni volta.
 
 ## La regola
 
@@ -74,7 +74,7 @@ salvataggio: quella è comune e resta una sola.
 rifiuti a runtime: [08](08-validazione-e-guardrail.md).
 
 **Fonti nel codice.** `src/analyses/roles.ts`, `rolesW5.ts`, `rolesW7.ts`,
-`src/analyses/params.ts`, `src/io/project/types.ts`,
-`src/io/project/parse.ts`, `src/ui/analysis/`.
+`src/analyses/params.ts`, `src/io/project/types.ts`, `src/io/project/parse.ts`,
+`src/ui/analysis/`.
 
 **Vedi anche.** [`docs/FORMS-AUDIT.md`](../FORMS-AUDIT.md).

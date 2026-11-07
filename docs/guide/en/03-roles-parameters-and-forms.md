@@ -20,8 +20,7 @@ that works in both cases because the procedure decides according to its type.
 The shared rules are few and hold for every procedure: list the roles, read the
 current state, assign a column, reject incompatible pairings. A role left empty
 stays empty: there is no placeholder value to interpret, and the form shows it
-as
-a slot to fill.
+as a slot to fill.
 
 Some procedures have roles that depend on the others: in a factor model, for
 instance, each indicator belongs to a factor and the grouping must stay
@@ -41,8 +40,7 @@ check.
 
 When the grid changes structure, references are pointed back at the right
 columns; roles that are no longer valid become empty and the app says so,
-instead
-of reusing a column number that now means something else.
+instead of reusing a column number that now means something else.
 
 ## The form
 
@@ -67,15 +65,14 @@ rewritten: it is shared and stays in one place.
   each part can change without forcing the others to follow.
 - **The entry threshold stays low.** Slots say what to put in, checks prevent
   wrong pairings, presets remove repetitive work; experts still find every
-single
-  parameter.
+  single parameter.
 
 **Does not cover.** The computation and the tables:
-[04](04-engine-and-tables.md).
-Runtime rejections: [08](08-validation-and-guardrails.md).
+[04](04-engine-and-tables.md). Runtime rejections:
+[08](08-validation-and-guardrails.md).
 
 **Sources in the code.** `src/analyses/roles.ts`, `rolesW5.ts`, `rolesW7.ts`,
-`src/analyses/params.ts`, `src/io/project/types.ts`,
-`src/io/project/parse.ts`, `src/ui/analysis/`.
+`src/analyses/params.ts`, `src/io/project/types.ts`, `src/io/project/parse.ts`,
+`src/ui/analysis/`.
 
 **See also.** [`docs/FORMS-AUDIT.md`](../../FORMS-AUDIT.md).

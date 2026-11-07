@@ -13,8 +13,8 @@
 
 ## Il catalogo
 
-Le procedure disponibili sono 72 e vivono in un elenco unico: ognuna ha un
-nome, una famiglia di appartenenza e un'identità interna stabile. Il nome può
+Le procedure disponibili sono 72 e vivono in un elenco unico: ognuna ha un nome,
+una famiglia di appartenenza e un'identità interna stabile. Il nome può
 cambiare, l'identità no: parametri salvati, report, grafici e guida in-app
 continuano a riconoscere la stessa procedura anche dopo un cambio di etichetta.
 
@@ -28,8 +28,8 @@ compilato con i valori predefiniti della procedura.
 1. L'utente sceglie la procedura e il form mostra i ruoli richiesti e i
    parametri correnti.
 2. Prima di calcolare, l'app controlla i riferimenti alle colonne: se un ruolo
-   punta a una colonna sparita o di tipo incompatibile, il run si ferma e
-   chiede di riselezionare la variabile.
+   punta a una colonna sparita o di tipo incompatibile, il run si ferma e chiede
+   di riselezionare la variabile.
 3. La procedura viene caricata solo quando serve, così l'avvio dell'app resta
    rapido anche con 72 procedure disponibili.
 4. Le procedure pesanti girano in un processo separato, con avanzamento visibile
@@ -40,10 +40,10 @@ compilato con i valori predefiniti della procedura.
 
 ## Calcolo immediato o su richiesta
 
-Le procedure veloci possono aggiornarsi mentre si cambiano i parametri, e
-l'app decide quando è sicuro farlo. Le procedure pesanti e i dataset grandi
-restano manuali: il pulsante Esegui è l'unico punto di partenza, quindi non
-parte nulla di inatteso mentre l'utente sta ancora scegliendo.
+Le procedure veloci possono aggiornarsi mentre si cambiano i parametri, e l'app
+decide quando è sicuro farlo. Le procedure pesanti e i dataset grandi restano
+manuali: il pulsante Esegui è l'unico punto di partenza, quindi non parte nulla
+di inatteso mentre l'utente sta ancora scegliendo.
 
 ## La card
 
@@ -63,9 +63,9 @@ rifiutato mostra soltanto il motivo: mai una card vuota, mai una card a metà.
   da risolvere e trova una descrizione in parole; chi la conosce cerca il nome
   esatto e arriva al form già pronto.
 
-**Cosa non copre.** Il significato dei singoli parametri e dei ruoli: vedi
-[03 — Ruoli, parametri e Form](03-ruoli-parametri-e-form.md). La struttura
-del risultato: [04 — Motore e tabelle](04-motore-e-tabelle.md).
+**Cosa non copre.** Il significato dei singoli parametri e dei ruoli: vedi [03 —
+Ruoli, parametri e Form](03-ruoli-parametri-e-form.md). La struttura del
+risultato: [04 — Motore e tabelle](04-motore-e-tabelle.md).
 
 **Fonti nel codice.** `src/analyses/registry.ts`, `src/analyses/runners.ts`,
 `src/analyses/worker/`, `src/ui/analysis/` (`AnalysisLibrary.tsx`,

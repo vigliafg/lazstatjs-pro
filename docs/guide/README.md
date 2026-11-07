@@ -3,17 +3,14 @@
 **Cosa copre.** LazStats Pro è un'applicazione di analisi statistica che gira
 interamente nel browser (ed esiste anche come applicazione desktop). Il percorso
 tipico è sempre lo stesso: **dati → scelta della procedura → parametri → calcolo
-→
-tabelle, report e grafici → editor del grafico → sessione**.
+→ tabelle, report e grafici → editor del grafico → sessione**.
 
 Questa cartella racconta i blocchi di funzionalità uno per uno, in linguaggio
 semplice: cosa fa l'app, cosa rende facile il lavoro e perché è pensata tanto
-per
-chi muove i primi passi nella statistica quanto per chi la usa ogni giorno. Non
-sostituisce `ARCHITECTURE.md`, che descrive gli strati del codice e le regole di
-dipendenza: la guida dice *cosa fa l'app e perché*, l'architettura dice *dove
-sta
-e cosa può importare*.
+per chi muove i primi passi nella statistica quanto per chi la usa ogni giorno.
+Non sostituisce `ARCHITECTURE.md`, che descrive gli strati del codice e le
+regole di dipendenza: la guida dice *cosa fa l'app e perché*, l'architettura
+dice *dove sta e cosa può importare*.
 
 English: [en/README.md](en/README.md)
 
@@ -63,8 +60,7 @@ Due parole hanno un significato preciso in tutto il progetto (lo impone
 `AGENTS.md`):
 
 - **run-report**: l'output di *una singola* procedura, cioè un blocco con
-  tabelle,
-  prosa e grafici.
+  tabelle, prosa e grafici.
 - **session-report**: l'insieme ordinato dei run-report presenti nella finestra
   Output della sessione.
 
@@ -77,8 +73,7 @@ Sono i riferimenti da citare, non da ricopiare in ogni documento:
 - 72 procedure statistiche (`src/analyses/registry.ts`).
 - 32 tipi di grafico (`CHART_KINDS` in `src/stats/charts.ts`).
 - 6 lingue: `en` (sorgente), `it`, `fr`, `es`, `de`, `pt-PT`; la prosa dei
-  report
-  parte da `it` come lingua predefinita.
+  report parte da `it` come lingua predefinita.
 - 83 pagine di guida per libro, 83 × 6 = 498 pagine generate.
 - 52 dataset di esempio in `samples/`, ognuno in 5 formati (CSV, SPSS, Stata,
   Excel, JSON).
@@ -98,11 +93,9 @@ Sono i riferimenti da citare, non da ricopiare in ogni documento:
 ## Come si mantiene questa guida
 
 Ogni documento ha la stessa struttura: **Cosa copre**, **Punti di forza**,
-**Cosa
-non copre** (con il link al documento giusto), **Fonti nel codice**, **Vedi
-anche**. Le date e gli audit in `docs/plans/` e `docs/analysis/` restano come
-prove
-e approfondimenti: la guida li cita, non li riscrive.
+**Cosa non copre** (con il link al documento giusto), **Fonti nel codice**,
+**Vedi anche**. Le date e gli audit in `docs/plans/` e `docs/analysis/` restano
+come prove e approfondimenti: la guida li cita, non li riscrive.
 
 Se un numero cambia (procedure, grafici, pagine, dataset) si aggiorna qui e si
 lascia che gli altri documenti lo citino per riferimento. I link relativi devono
@@ -114,10 +107,9 @@ controlla che esistano davvero.
 - Strati e regole di dipendenza: [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
 - Stato del progetto e backlog:
   [`docs/PROJECT-STATUS.md`](../PROJECT-STATUS.md).
-- Gate di qualità: `npm run check` esegue `tsc --noEmit`, l'intera suite
-  (`node --test`) e `npm run guard` (dependency-cruiser, madge, dimensione file,
-  link della documentazione). `npm run help:build` rigenera i sei libri di guida
-e
+- Gate di qualità: `npm run check` esegue `tsc --noEmit`, l'intera suite (`node
+  --test`) e `npm run guard` (dependency-cruiser, madge, dimensione file, link
+  della documentazione). `npm run help:build` rigenera i sei libri di guida e
   `npm run help:audit` controlla contaminazione linguistica e parità.
 - Rilascio 0.30.0: gate verde, `help:build` e `help:audit` rieseguiti, pacchetti
   Electron costruiti, note di rilascio allineate ai documenti 01–10.

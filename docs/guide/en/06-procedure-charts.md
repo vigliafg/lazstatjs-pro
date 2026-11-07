@@ -1,8 +1,7 @@
 # 06 — Procedure charts
 
 **Covers.** The charts each procedure produces, how they come about, and why
-they
-are not decoration.
+they are not decoration.
 
 ## Contents
 
@@ -28,42 +27,36 @@ it has to be shown.
 
 The same object feeds the display, the editor, the export and the tests. A chart
 that cannot be built never reaches the user: the check happens beforehand, not
-in
-front of someone who is working.
+in front of someone who is working.
 
 The note that accompanies the chart explains how to read it — for instance what
-a
-segment in an interval chart represents — and does not repeat the numbers, which
-live in the tables.
+a segment in an interval chart represents — and does not repeat the numbers,
+which live in the tables.
 
 ## Which charts, for which procedure
 
 The choice is not arbitrary. Each procedure produces the charts needed to read
 its own result: residuals for a model, intervals for an estimate, a surface for
-an
-experimental design. The full map is documented in `docs/analysis/`, with an
+an experimental design. The full map is documented in `docs/analysis/`, with an
 inventory per procedure and a comparison with the classical programs.
 
 Automatic checks build the charts of the covered procedures and verify that
-every
-kind produces a valid result: coverage is measured, not declared.
+every kind produces a valid result: coverage is measured, not declared.
 
 ## Composite charts
 
 Some analyses add panels after the individual charts: they are cards that bring
 several views of the same result together, for instance a surface and its
-contour
-lines. They stay in the same run-report, because they tell a single outcome.
+contour lines. They stay in the same run-report, because they tell a single
+outcome.
 
 ## Strengths
 
 - **The right chart arrives ready.** The user does not have to pick a kind and
   build it: the procedure knows which views are needed to read its own result.
 - **The idea is to separate content from rendering.** The chart describes what
-  to
-  show; the translation into a drawing happens later, so screen, export and
-tests
-  see the same thing.
+  to show; the translation into a drawing happens later, so screen, export and
+  tests see the same thing.
 - **Useful at every level.** People with little experience find a note
   explaining how to read the chart; people with a lot find the expected
   diagnostic charts, with the option to adjust the details in the chart editor.

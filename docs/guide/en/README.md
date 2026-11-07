@@ -1,21 +1,16 @@
 # LazStats Pro guide
 
 **Covers.** LazStats Pro is a statistical analysis application that runs
-entirely
-in the browser (and is also available as a desktop application). The path is
-always the same: **data → choose a procedure → parameters → computation →
-tables,
-report and charts → chart editor → session**.
+entirely in the browser (and is also available as a desktop application). The
+path is always the same: **data → choose a procedure → parameters → computation
+→ tables, report and charts → chart editor → session**.
 
 This folder explains the feature blocks one at a time, in plain language: what
-the
-app does, what makes the work easy, and why it is designed for people taking
-their
-first steps in statistics as much as for those who use it every day. It does not
-replace `ARCHITECTURE.md`, which describes the code layers and their dependency
-rules: the guide says *what the app does and why*, the architecture says *where
-it
-lives and what it may import*.
+the app does, what makes the work easy, and why it is designed for people taking
+their first steps in statistics as much as for those who use it every day. It
+does not replace `ARCHITECTURE.md`, which describes the code layers and their
+dependency rules: the guide says *what the app does and why*, the architecture
+says *where it lives and what it may import*.
 
 Italiano: [../README.md](../README.md)
 
@@ -89,9 +84,8 @@ document:
   decode: every technical term is explained in plain words the first time it is
   needed.
 - **Every document says what the feature is for.** The *Strengths* section
-  closes
-  each chapter with the concrete benefit, the idea behind it and how the feature
-  stays within reach of someone with little experience.
+  closes each chapter with the concrete benefit, the idea behind it and how the
+  feature stays within reach of someone with little experience.
 - **Designed for every level.** Learners find descriptions, warnings and
   glossaries; experts find numbers, code references and deeper documents without
   hunting for them elsewhere.
@@ -100,26 +94,21 @@ document:
 
 Every document follows the same structure: **Covers**, **Strengths**, **Does not
 cover** (with a link to the right document), **Sources in the code**, **See
-also**.
-Dated notes and audits in `docs/plans/` and `docs/analysis/` remain as evidence
-and
-deep dives: the guide cites them instead of rewriting them.
+also**. Dated notes and audits in `docs/plans/` and `docs/analysis/` remain as
+evidence and deep dives: the guide cites them instead of rewriting them.
 
 When a number changes (procedures, charts, pages, datasets), update it here and
-let
-the other documents cite it by reference. Relative links must keep resolving:
-they
-point at repository files, not external URLs, and `npm run guard` checks that
-they
-really exist.
+let the other documents cite it by reference. Relative links must keep
+resolving: they point at repository files, not external URLs, and `npm run
+guard` checks that they really exist.
 
 ## Development and release
 
 - Layers and dependency rules: [`ARCHITECTURE.md`](../../../ARCHITECTURE.md).
 - Project status and backlog:
   [`docs/PROJECT-STATUS.md`](../../PROJECT-STATUS.md).
-- Quality gate: `npm run check` runs `tsc --noEmit`, the full suite
-  (`node --test`) and `npm run guard` (dependency-cruiser, madge, file size,
+- Quality gate: `npm run check` runs `tsc --noEmit`, the full suite (`node
+  --test`) and `npm run guard` (dependency-cruiser, madge, file size,
   documentation links). `npm run help:build` regenerates the six help books and
   `npm run help:audit` checks language contamination and structural parity.
 - Release 0.30.0: green gate, `help:build` and `help:audit` re-run, Electron

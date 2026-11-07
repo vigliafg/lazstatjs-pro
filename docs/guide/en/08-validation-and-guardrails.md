@@ -24,14 +24,12 @@ column" would be a reference that changes meaning on its own.
 
 Before reaching the computations, parameters are brought back to the correct
 shape: types are applied, an index is prevented from falling outside the
-dataset,
-missing fields are filled and derived ones are recomputed. This holds for
-parameters chosen on screen, read from a project file, or proposed by a
+dataset, missing fields are filled and derived ones are recomputed. This holds
+for parameters chosen on screen, read from a project file, or proposed by a
 manifest.
 
 The same check runs again after an operation on the grid, so references follow
-the
-columns and roles that are no longer valid become empty with a warning.
+the columns and roles that are no longer valid become empty with a warning.
 
 ## Level 3 — checks inside the procedure
 
@@ -46,16 +44,14 @@ what is missing and what to try: no number computed on insufficient data.
 ## The output rule
 
 - No empty table: if there are no rows, the table is not shown and the run
-  rejects
-  when that content was mandatory.
+  rejects when that content was mandatory.
 - No sentence with open gaps: the prose comes out complete or not at all.
 - No chart that cannot be built.
 
 ## The test net
 
 - The 153 samples of the example datasets go through the real computation
-  engines
-  and check tables, charts and prose.
+  engines and check tables, charts and prose.
 - A dedicated check verifies the dataset list, the formats and their
   consistency.
 - Interface tests cover the visual flows: analyses, editor, annotations,
@@ -71,17 +67,13 @@ what is missing and what to try: no number computed on insufficient data.
   proceed.
 - **The idea is to check at the borders.** Checks sit where data enters the
   engine, not scattered inside the procedures: they are written once and hold
-for
-  all of them.
+  for all of them.
 - **Protection does not require expertise.** People who know little statistics
-  do
-  not need to know what a procedure requires: if something is off, the app says
-it
-  in plain words; experts still find the technical reason.
+  do not need to know what a procedure requires: if something is off, the app
+  says it in plain words; experts still find the technical reason.
 
 **Does not cover.** The correctness of individual computations: that is verified
-by
-the engine tests, not by this level.
+by the engine tests, not by this level.
 
 **Sources in the code.** `src/hooks/useAnalysisRun.ts`,
 `src/io/project/parse.ts`, `src/analyses/params.ts`, the runners in

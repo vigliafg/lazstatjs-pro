@@ -15,28 +15,25 @@ between the result of a single run and the set of results in a session.
 ## Two words, two things
 
 - **run-report**: the output of a single procedure — the tables, prose and
-  charts
-  of that run.
+  charts of that run.
 - **session-report**: the ordered set of run-reports currently in the Output
   window.
 
 The distinction is binding: "export the session-report" and "export the
 run-report" are two different actions, and the rest of the documentation uses
-the
-two terms with this meaning.
+the two terms with this meaning.
 
 ## How the prose is written
 
 The report is not free text. It is made of sentences with a stable identity and,
 where needed, of gaps to fill with the values from the tables. The sentences
-live
-in separate catalogues per language, and an automatic check requires every
+live in separate catalogues per language, and an automatic check requires every
 language to have the same sentences with the same gaps: a translation cannot
 forget a number or invent one.
 
 The prose reads only the tables, never the computations. When a value changes,
-it
-changes where it is produced and the sentence follows without being rewritten.
+it changes where it is produced and the sentence follows without being
+rewritten.
 
 ## Report language and interface language
 
@@ -52,8 +49,7 @@ application.
 ## The session
 
 Every run adds a block to the Output window. The session outline keeps the
-order,
-the titles and the references, so the list stays readable even after many
+order, the titles and the references, so the list stays readable even after many
 analyses. Blocks can be deleted one by one or cleared all at once, and export
 keeps the order of the session: the document handed over tells the same story
 that was seen on screen.
@@ -71,16 +67,14 @@ that was seen on screen.
   written elsewhere: it is born from the tables, so it cannot age against the
   result.
 - **The idea is text as data.** Every sentence has an identity and every
-  language
-  has its own catalogue, so translation and quality control become automatic
-  checks instead of spot re-readings.
+  language has its own catalogue, so translation and quality control become
+  automatic checks instead of spot re-readings.
 - **Readable at every level.** People who do not know statistics get an
   explanation in plain words; people who do find the same quantities in the
   tables, in the language they prefer and without double work.
 
 **Does not cover.** The tables ([04](04-engine-and-tables.md)) and how charts
-are
-built ([06](06-procedure-charts.md)).
+are built ([06](06-procedure-charts.md)).
 
 **Sources in the code.** `src/stats/reports/`, `src/stats/reportCopy/`,
 `src/stats/report.ts`, `src/io/outputs.ts`, `src/io/reportExport.ts`,

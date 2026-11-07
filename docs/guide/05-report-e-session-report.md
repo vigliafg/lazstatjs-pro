@@ -69,8 +69,7 @@ consegna racconta la stessa storia che si è vista a schermo.
   automatiche invece di riletture a campione.
 - **Leggibile a ogni livello.** Chi non conosce la statistica trova una
   spiegazione in parole semplici; chi la conosce ritrova le stesse quantità
-nelle
-  tabelle, con la lingua che preferisce e senza doppio lavoro.
+  nelle tabelle, con la lingua che preferisce e senza doppio lavoro.
 
 **Cosa non copre.** Le tabelle ([04](04-motore-e-tabelle.md)) e la costruzione
 dei grafici ([06](06-grafici-delle-procedure.md)).

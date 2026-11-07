@@ -39,24 +39,23 @@ tabella dei coefficienti" e restare corretta anche se l'ordine delle tabelle
 cambia.
 
 La regola non negoziabile è una: **una tabella esiste solo se ha righe**. Se una
-stima non è calcolabile, l'analisi rifiuta e spiega il motivo invece di
-mostrare una tabella vuota.
+stima non è calcolabile, l'analisi rifiuta e spiega il motivo invece di mostrare
+una tabella vuota.
 
 ## Risultati ripetibili
 
 Le procedure che hanno una parte casuale — simulazioni, campionamenti ripetuti,
-stime per ricampionamento — usano una sequenza sempre uguale e lo dichiarano
-nel report. Lo stesso dataset con gli stessi parametri produce gli stessi
-numeri, anche quando il calcolo avviene nel processo separato: due persone che
-rifanno la stessa analisi ottengono lo stesso risultato e possono confrontarlo.
+stime per ricampionamento — usano una sequenza sempre uguale e lo dichiarano nel
+report. Lo stesso dataset con gli stessi parametri produce gli stessi numeri,
+anche quando il calcolo avviene nel processo separato: due persone che rifanno
+la stessa analisi ottengono lo stesso risultato e possono confrontarlo.
 
 ## Controlli prima del calcolo
 
 Prima di calcolare, ogni procedura verifica di avere ciò che le serve:
-abbastanza
-righe complete, abbastanza gruppi, una situazione non degenere, classi non
-separate, indicatori sufficienti per ogni fattore. I controlli comuni coprono i
-casi che richiedono più passaggi.
+abbastanza righe complete, abbastanza gruppi, una situazione non degenere,
+classi non separate, indicatori sufficienti per ogni fattore. I controlli comuni
+coprono i casi che richiedono più passaggi.
 
 Quando un requisito manca, il risultato non è un numero sbagliato né una tabella
 muta: è un rifiuto con una frase che dice cosa manca e cosa provare a fare.

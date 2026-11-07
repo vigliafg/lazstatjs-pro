@@ -1,7 +1,7 @@
 # 01 — Dati e Data Editor
 
-**Cosa copre.** Come entrano i dati nell'app, come vengono riconosciuti e
-come si correggono senza rovinare le analisi già impostate.
+**Cosa copre.** Come entrano i dati nell'app, come vengono riconosciuti e come
+si correggono senza rovinare le analisi già impostate.
 
 ## Indice
 
@@ -31,11 +31,11 @@ non sposta il significato di un risultato.
 Il tipo di una colonna dice come quella colonna partecipa ai calcoli. All'import
 l'app propone un tipo guardando i valori che trova, e l'utente può sempre
 correggerlo. I tipi coprono i casi normali di un dataset: numeri continui e
-interi, valori decimali, categorie, testi, identificativi, risposte sì/no,
-date, date con l'ora e orari.
+interi, valori decimali, categorie, testi, identificativi, risposte sì/no, date,
+date con l'ora e orari.
 
-Le colonne categoriali hanno un valore in più: i **livelli**. Ogni livello ha
-un codice, un'etichetta leggibile e un ordine, e uno dei livelli può essere
+Le colonne categoriali hanno un valore in più: i **livelli**. Ogni livello ha un
+codice, un'etichetta leggibile e un ordine, e uno dei livelli può essere
 indicato come riferimento — quello rispetto al quale i modelli leggono le
 differenze.
 
@@ -65,19 +65,18 @@ dell'utente e resta evidente che c'è qualcosa da sistemare.
 
 Inserire, eliminare, spostare, duplicare, dividere o unire colonne sono
 operazioni normali quando si prepara un dataset. L'app le tratta come
-manutenzione, non come un rischio: le analisi già configurate vengono
-ricondotte alle colonne corrette. Se un ruolo non è più compatibile con il
-nuovo tipo, l'analisi si ferma e chiede di riselezionare la variabile, invece
-di calcolare in silenzio su una colonna diversa.
+manutenzione, non come un rischio: le analisi già configurate vengono ricondotte
+alle colonne corrette. Se un ruolo non è più compatibile con il nuovo tipo,
+l'analisi si ferma e chiede di riselezionare la variabile, invece di calcolare
+in silenzio su una colonna diversa.
 
 ## Filtri e vista
 
 Il filtro si costruisce in base al tipo di colonna (contiene, uguale, maggiore,
-vuoto e così via) e può valere solo per la vista oppure anche per le analisi:
-la differenza è esplicita, non un effetto collaterale. La vista offre prima
-colonna congelata e intestazione fissa, righe virtualizzate sui dataset grandi,
-riempimento con maniglia e da tastiera, e incolla su più celle in un colpo
-solo.
+vuoto e così via) e può valere solo per la vista oppure anche per le analisi: la
+differenza è esplicita, non un effetto collaterale. La vista offre prima colonna
+congelata e intestazione fissa, righe virtualizzate sui dataset grandi,
+riempimento con maniglia e da tastiera, e incolla su più celle in un colpo solo.
 
 ## Import ed export
 
@@ -102,9 +101,8 @@ solo.
   una volta sola; chi lavora di fino ritrova livelli, riferimento, filtri e
   colonne calcolate esattamente dove li aspetta.
 
-**Cosa non copre.** Il calcolo e la prosa: vedi
-[04 — Motore e tabelle](04-motore-e-tabelle.md) e
-[05 — Report](05-report-e-session-report.md).
+**Cosa non copre.** Il calcolo e la prosa: vedi [04 — Motore e
+tabelle](04-motore-e-tabelle.md) e [05 — Report](05-report-e-session-report.md).
 
 **Fonti nel codice.** `src/grid/` (modello, livelli, operazioni, history),
 `src/io/` (lettori, scrittori, manifest), `samples/README.md`.

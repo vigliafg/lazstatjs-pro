@@ -16,8 +16,7 @@ produrre un risultato sbagliato o una card vuota.
 
 Prima del run si verifica che ogni ruolo punti a una colonna esistente e di tipo
 compatibile. Se l'utente ha eliminato o cambiato tipo a una colonna, l'analisi
-si
-ferma e invita a riselezionare la variabile, invece di calcolare su un'altra
+si ferma e invita a riselezionare la variabile, invece di calcolare su un'altra
 colonna. È il motivo per cui le colonne hanno un'identità stabile: senza quella,
 "la terza colonna" sarebbe un riferimento che cambia significato da sola.
 
@@ -60,8 +59,7 @@ manca e cosa provare a fare: nessun numero calcolato su dati insufficienti.
   preset.
 - I controlli di progetto verificano dipendenze, cicli, dimensione dei file,
   link della documentazione, e la guida in-app viene controllata su
-contaminazione
-  linguistica e parità tra le traduzioni.
+  contaminazione linguistica e parità tra le traduzioni.
 
 ## Punti di forza
 
@@ -77,9 +75,9 @@ contaminazione
 **Cosa non copre.** La correttezza dei singoli calcoli: quella è verificata dai
 test dei motori, non da questo livello.
 
-**Fonti nel codice.** `src/hooks/useAnalysisRun.ts`,
-`src/io/project/parse.ts`, `src/analyses/params.ts`, i runner in
-`src/analyses/*/run.tsx`, `src/analyses/chain.test.ts`.
+**Fonti nel codice.** `src/hooks/useAnalysisRun.ts`, `src/io/project/parse.ts`,
+`src/analyses/params.ts`, i runner in `src/analyses/*/run.tsx`,
+`src/analyses/chain.test.ts`.
 
 **Vedi anche.** [`docs/audit-funzionalita.md`](../audit-funzionalita.md),
 [`docs/qa/`](../qa/).

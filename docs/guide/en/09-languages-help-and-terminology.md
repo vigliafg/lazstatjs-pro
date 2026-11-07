@@ -1,8 +1,8 @@
 # 09 — Languages, help and terminology
 
 **Covers.** The six languages of the app, the guide available inside the
-program,
-and the writing rules that keep interface, report and documentation aligned.
+program, and the writing rules that keep interface, report and documentation
+aligned.
 
 ## Contents
 
@@ -17,8 +17,7 @@ and the writing rules that keep interface, report and documentation aligned.
 Six languages are active: English, Italian, French, Spanish, German and European
 Portuguese. English is the source of the guide; the report has its own default
 language, independent of the interface. Adding a language means joining this
-list
-and providing a catalogue and a guide: the rest of the app does not need to
+list and providing a catalogue and a guide: the rest of the app does not need to
 change.
 
 ## The in-app guide
@@ -39,12 +38,10 @@ Building it is a controlled chain:
 ## Translating without breaking the terms
 
 Translations go through an automatic tool with two services in cascade.
-Technical
-terms are not translated by ear: after translation, recurring names are brought
-back to their correct form, and the charts cited in a page are checked against
-the
-page itself. A translation cannot introduce a chart that is not there or lose a
-step.
+Technical terms are not translated by ear: after translation, recurring names
+are brought back to their correct form, and the charts cited in a page are
+checked against the page itself. A translation cannot introduce a chart that is
+not there or lose a step.
 
 ## Terminology
 
@@ -52,8 +49,7 @@ step.
   synonyms: the first is the result of a run, the second is the ordered set of
   run-reports in a session.
 - Role labels are translated through shared keys: changing a word in one
-  language
-  must not change the meaning of the role.
+  language must not change the meaning of the role.
 - The shared glossary collects the terms used by the guide, the report and the
   interface.
 
@@ -66,17 +62,16 @@ step.
   identifiers, people read translated labels: language becomes a replaceable
   layer, not a part of the computation.
 - **Understanding does not require English.** Every procedure has its own page
-  in
-  the chosen language, with a glossary and the usual pitfalls; experts can
-switch
-  the language of the report alone to hand in a result in the reader's language.
+  in the chosen language, with a glossary and the usual pitfalls; experts can
+  switch the language of the report alone to hand in a result in the reader's
+  language.
 
 **Does not cover.** The comparison with other programs:
 [10](10-comparison-with-classical-statistics.md).
 
 **Sources in the code.** `src/i18n/`, `src/help/content/`,
-`src/stats/reportCopy/`, `scripts/translate-copy.py`,
-`scripts/build-help.mjs`, `scripts/check-locale.mjs`, `scripts/help-audit.mts`.
+`src/stats/reportCopy/`, `scripts/translate-copy.py`, `scripts/build-help.mjs`,
+`scripts/check-locale.mjs`, `scripts/help-audit.mts`.
 
 **See also.**
 [`docs/plans/2026-10-29-multilingua-e-manuale.md`](../../plans/2026-10-29-multilingua-e-manuale.md).

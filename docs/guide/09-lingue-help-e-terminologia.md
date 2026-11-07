@@ -22,9 +22,9 @@ dell'app non va toccato.
 
 ## La guida in-app
 
-La guida è contenuto statico organizzato per procedura: 83 pagine per libro,
-498 pagine in tutto. Ogni pagina racconta quando usare la procedura e quando no,
-i passi da seguire, le assunzioni, come leggere le tabelle, quali grafici
+La guida è contenuto statico organizzato per procedura: 83 pagine per libro, 498
+pagine in tutto. Ogni pagina racconta quando usare la procedura e quando no, i
+passi da seguire, le assunzioni, come leggere le tabelle, quali grafici
 arrivano, le insidie più comuni e un glossario dei termini che compaiono.
 
 La costruzione è una catena controllata:
@@ -37,8 +37,8 @@ La costruzione è una catena controllata:
 
 ## Tradurre senza rompere i termini
 
-Le traduzioni passano da uno strumento automatico con due servizi in cascata.
-I termini tecnici non si traducono a orecchio: dopo la traduzione i nomi
+Le traduzioni passano da uno strumento automatico con due servizi in cascata. I
+termini tecnici non si traducono a orecchio: dopo la traduzione i nomi
 ricorrenti vengono riportati alla forma corretta, e si verifica che i grafici
 citati in una pagina esistano davvero in quella pagina. Una traduzione non può
 introdurre un grafico che non c'è né perdere un passaggio.
@@ -56,9 +56,8 @@ introdurre un grafico che non c'è né perdere un passaggio.
 ## Punti di forza
 
 - **Sei lingue senza sei programmi diversi.** Interfaccia, report e guida
-  seguono
-  le stesse chiavi e gli stessi controlli: una correzione si fa una volta e vale
-  ovunque.
+  seguono le stesse chiavi e gli stessi controlli: una correzione si fa una
+  volta e vale ovunque.
 - **L'idea è separare i testi dai codici.** Il programma usa identificativi
   stabili, le persone leggono etichette tradotte: la lingua diventa un livello
   sostituibile, non una parte del calcolo.
@@ -70,9 +69,9 @@ introdurre un grafico che non c'è né perdere un passaggio.
 **Cosa non copre.** Il confronto con altri programmi:
 [10](10-confronto-con-la-statistica-classica.md).
 
-**Fonti nel codice.** `src/i18n/`, `src/help/content/`,
-`src/stats/reportCopy/`, `scripts/translate-copy.py`,
-`scripts/build-help.mjs`, `scripts/check-locale.mjs`, `scripts/help-audit.mts`.
+**Fonti nel codice.** `src/i18n/`, `src/help/content/`, `src/stats/reportCopy/`,
+`scripts/translate-copy.py`, `scripts/build-help.mjs`,
+`scripts/check-locale.mjs`, `scripts/help-audit.mts`.
 
 **Vedi anche.**
 [`docs/plans/2026-10-29-multilingua-e-manuale.md`](../plans/2026-10-29-multilingua-e-manuale.md).

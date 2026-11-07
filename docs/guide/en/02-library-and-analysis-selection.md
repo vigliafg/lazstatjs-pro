@@ -14,10 +14,9 @@
 ## The catalogue
 
 The app offers 72 procedures and they live in a single list: each one has a
-name,
-a family it belongs to and a stable internal identity. The name may change, the
-identity does not: saved parameters, reports, charts and the in-app guide keep
-recognising the same procedure after a label change.
+name, a family it belongs to and a stable internal identity. The name may
+change, the identity does not: saved parameters, reports, charts and the in-app
+guide keep recognising the same procedure after a label change.
 
 The library opens in tabs and lets people search by name and description, save
 favourites and pick up recently used procedures. Every entry says up front what
@@ -32,8 +31,7 @@ procedure's defaults.
    column that has disappeared or has an incompatible type, the run stops and
    asks for the variable to be selected again.
 3. The procedure is loaded only when it is needed, so the app starts quickly
-   even
-   with 72 procedures available.
+   even with 72 procedures available.
 4. Heavy procedures run in a separate process, with visible progress and the
    option to cancel; fast ones run straight away.
 5. The outcome is always one of two things: a result with title, tables, prose,
@@ -65,9 +63,9 @@ shows the reason and nothing else: never an empty card, never a half-built one.
   problem to solve and find it described in words; people who know the field
   search for the exact name and land on a ready form.
 
-**Does not cover.** The meaning of individual parameters and roles: see
-[03 — Roles, parameters and forms](03-roles-parameters-and-forms.md). The shape
-of the result: [04 — Engine and tables](04-engine-and-tables.md).
+**Does not cover.** The meaning of individual parameters and roles: see [03 —
+Roles, parameters and forms](03-roles-parameters-and-forms.md). The shape of the
+result: [04 — Engine and tables](04-engine-and-tables.md).
 
 **Sources in the code.** `src/analyses/registry.ts`, `src/analyses/runners.ts`,
 `src/analyses/worker/`, `src/ui/analysis/` (`AnalysisLibrary.tsx`,

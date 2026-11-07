@@ -54,20 +54,18 @@ rule.
 ## Computed columns
 
 A computed column keeps the rule that generated it and updates on every change
-to
-the data. If the rule can no longer be applied, the column keeps the last good
-value instead of emptying itself: the data does not disappear in front of the
-user, and it stays clear that something needs fixing.
+to the data. If the rule can no longer be applied, the column keeps the last
+good value instead of emptying itself: the data does not disappear in front of
+the user, and it stays clear that something needs fixing.
 
 ## Changing the structure without losing the thread
 
 Inserting, deleting, moving, duplicating, splitting or merging columns are
-normal
-operations when preparing a dataset. The app treats them as maintenance, not as
-a risk: analyses already configured are pointed back at the right columns. If a
-role is no longer compatible with the new type, the analysis stops and asks for
-the variable to be selected again, instead of quietly computing on a different
-column.
+normal operations when preparing a dataset. The app treats them as maintenance,
+not as a risk: analyses already configured are pointed back at the right
+columns. If a role is no longer compatible with the new type, the analysis stops
+and asks for the variable to be selected again, instead of quietly computing on
+a different column.
 
 ## Filters and view
 
@@ -90,8 +88,7 @@ handle or from the keyboard, and pasting into several cells at once.
 
 - **Analyses survive changes to the data.** Renaming, moving or rewriting a
   column does not make an analysis point at the wrong variable: when a role is
-no
-  longer valid the app says so, instead of computing something else.
+  no longer valid the app says so, instead of computing something else.
 - **The underlying idea is simple: stable identities and explicit types.** Every
   column knows what it holds and who it is; the rest of the app leans on those
   two facts instead of guessing.
@@ -100,9 +97,9 @@ no
   declared once for all; people who work in detail find levels, reference,
   filters and computed columns exactly where they expect them.
 
-**Does not cover.** The computation and the prose: see
-[04 — Engine and tables](04-engine-and-tables.md) and
-[05 — Reports](05-reports-and-session-report.md).
+**Does not cover.** The computation and the prose: see [04 — Engine and
+tables](04-engine-and-tables.md) and [05 —
+Reports](05-reports-and-session-report.md).
 
 **Sources in the code.** `src/grid/` (model, levels, operations, history),
 `src/io/` (readers, writers, manifest), `samples/README.md`.
