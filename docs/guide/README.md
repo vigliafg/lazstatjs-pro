@@ -10,6 +10,8 @@ Questa cartella spiega i blocchi di funzionalità uno per uno. Non sostituisce
 dipendenza: la guida dice *cosa fa l'app e perché*, l'architettura dice *dove
 sta e cosa può importare*.
 
+English: [en/README.md](en/README.md)
+
 ## La catena, in una riga per passo
 
 ```
