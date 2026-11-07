@@ -17,7 +17,7 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "dev:electron": "npm run build:electron && electron . --dev",
     "build": "vite build && npm run build:electron",
-    "build:web": "npm run help:build && vite build",
+    "build:web": "npm run help:build && vite build --mode web",
     "build:electron": "node scripts/build-electron.mjs",
     "start": "electron .",
     "dist": "npm run build && electron-builder --publish never",

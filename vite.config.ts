@@ -8,9 +8,13 @@ export default defineConfig(({mode, command}) => {
   return {
     // Electron loads `dist/index.html` from disk, so production assets must be
     // relative. The Vite dev server (browser and e2e) keeps the absolute base.
-    base: command === 'build' ? './' : '/',
+    // The web build (`--mode web`) is served by a static host, which sets
+    // WEB_BASE (e.g. /lazstatjs-pro/ on GitHub Pages).
+    base: mode === 'web' ? env.WEB_BASE || '/' : command === 'build' ? './' : '/',
     plugins: [react(), tailwindcss()],
-    define: {
+    // The desktop bundle may inline the optional key; the public web build must
+    // never ship it, or anyone could read it from the page.
+    define: mode === 'web' ? {} : {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
     resolve: {
