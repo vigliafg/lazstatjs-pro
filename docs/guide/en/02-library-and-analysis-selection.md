@@ -1,54 +1,69 @@
 # 02 — Library and analysis selection
 
-**Covers.** How a procedure is found and what happens between clicking "Run"
-and the result card.
+**Covers.** How the right procedure is found and what happens from the click on
+"Run" to the result card.
 
 ## Contents
 
 - [The catalogue](#the-catalogue)
 - [From click to result](#from-click-to-result)
-- [Live and manual](#live-and-manual)
+- [Immediate or on demand](#immediate-or-on-demand)
 - [The card](#the-card)
+- [Strengths](#strengths)
 
 ## The catalogue
 
-Procedures are declared in a single registry, `src/analyses/registry.ts`:
-72 entries, each with a stable id, a label and a family. The id is the contract
-used everywhere — parameters, reports, charts, in-app help — so it does not
-change when the label does.
+The app offers 72 procedures and they live in a single list: each one has a
+name,
+a family it belongs to and a stable internal identity. The name may change, the
+identity does not: saved parameters, reports, charts and the in-app guide keep
+recognising the same procedure after a label change.
 
-The library is organised in tabs and offers search by name and description,
-saved favourites and the list of recent procedures. Each entry says what it
-needs (data or parameters only) and opens the form pre-filled with the
-procedure defaults.
+The library opens in tabs and lets people search by name and description, save
+favourites and pick up recently used procedures. Every entry says up front what
+it needs — data or parameters only — and opens the form already filled with the
+procedure's defaults.
 
 ## From click to result
 
-1. The user picks a procedure: the form reads the required roles and the
-   current parameters (`src/ui/analysis/AnalysisForm.tsx`,
-   `AnalysisOptions.tsx`).
-2. The run validates column references: if a role points at a column that is
-   gone or has an incompatible type, it stops and asks to reselect.
-3. The runner is loaded on demand (`ANALYSIS_RUNNERS` in
-   `src/analyses/runners.ts`), so app startup does not pay for every
-   procedure.
-4. Heavy procedures run in a dedicated Web Worker
-   (`src/analyses/worker/heavyRunners.ts`) with progress state and
-   cancellation; the others run synchronously.
-5. The result is an `AnalysisRunResult`: either `ok: true` with title, tables,
-   report, charts and warnings, or `ok: false` with a readable reason.
+1. The user picks the procedure and the form shows the required roles and the
+   current parameters.
+2. Before computing, the app checks the column references: if a role points at a
+   column that has disappeared or has an incompatible type, the run stops and
+   asks for the variable to be selected again.
+3. The procedure is loaded only when it is needed, so the app starts quickly
+   even
+   with 72 procedures available.
+4. Heavy procedures run in a separate process, with visible progress and the
+   option to cancel; fast ones run straight away.
+5. The outcome is always one of two things: a result with title, tables, prose,
+   charts and warnings, or a readable reason explaining why the computation was
+   not possible.
 
-## Live and manual
+## Immediate or on demand
 
-Fast procedures can recompute while parameters change; the gate `liveGate.ts`
-decides when that is safe. Heavy procedures and large datasets stay manual:
-the Run button is the only trigger.
+Fast procedures can update while the parameters change, and the app decides when
+that is safe. Heavy procedures and large datasets stay manual: the Run button is
+the only starting point, so nothing starts unexpectedly while the user is still
+choosing.
 
 ## The card
 
-The run-report card shows the header, any data-quality warnings, tables, prose
-and charts in the order chosen by the procedure. A rejected run shows only the
-reason: never an empty or partial card.
+The run-report card brings together the header, any warnings about data quality,
+tables, prose and charts in the order chosen by the procedure. A rejected run
+shows the reason and nothing else: never an empty card, never a half-built one.
+
+## Strengths
+
+- **Finding the right procedure costs little.** Search, favourites and recents
+  recognise that the first obstacle is not the computation but knowing where to
+  start.
+- **Behind it, one structure for 72 procedures.** Roles, parameters and forms
+  follow the same rules, so learning to use one analysis means being able to use
+  the others too.
+- **Designed for every level.** People who know little statistics search for the
+  problem to solve and find it described in words; people who know the field
+  search for the exact name and land on a ready form.
 
 **Does not cover.** The meaning of individual parameters and roles: see
 [03 — Roles, parameters and forms](03-roles-parameters-and-forms.md). The shape

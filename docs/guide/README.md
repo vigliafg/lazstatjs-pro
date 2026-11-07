@@ -1,15 +1,19 @@
 # Guida a LazStats Pro
 
 **Cosa copre.** LazStats Pro è un'applicazione di analisi statistica che gira
-interamente nel browser (ed è impacchettata anche come applicazione desktop
-Electron). Il percorso tipico è sempre lo stesso: **dati → scelta della
-procedura → parametri → calcolo → tabelle, report e grafici → editor del
-grafico → sessione**.
+interamente nel browser (ed esiste anche come applicazione desktop). Il percorso
+tipico è sempre lo stesso: **dati → scelta della procedura → parametri → calcolo
+→
+tabelle, report e grafici → editor del grafico → sessione**.
 
-Questa cartella spiega i blocchi di funzionalità uno per uno. Non sostituisce
-`ARCHITECTURE.md`, che descrive gli strati del codice e le regole di
+Questa cartella racconta i blocchi di funzionalità uno per uno, in linguaggio
+semplice: cosa fa l'app, cosa rende facile il lavoro e perché è pensata tanto
+per
+chi muove i primi passi nella statistica quanto per chi la usa ogni giorno. Non
+sostituisce `ARCHITECTURE.md`, che descrive gli strati del codice e le regole di
 dipendenza: la guida dice *cosa fa l'app e perché*, l'architettura dice *dove
-sta e cosa può importare*.
+sta
+e cosa può importare*.
 
 English: [en/README.md](en/README.md)
 
@@ -19,6 +23,7 @@ English: [en/README.md](en/README.md)
 - [I documenti](#i-documenti)
 - [Terminologia vincolante](#terminologia-vincolante)
 - [I numeri dell'app](#i-numeri-dellapp)
+- [Punti di forza](#punti-di-forza)
 - [Come si mantiene questa guida](#come-si-mantiene-questa-guida)
 - [Sviluppo e rilascio](#sviluppo-e-rilascio)
 
@@ -41,16 +46,16 @@ confronto con JMP/SPSS/R docs/analysis           → 10
 
 | # | Documento | In una frase |
 |---|-----------|--------------|
-| 01 | [Dati e Data Editor](01-dati-e-data-editor.md) | Griglia tipizzata, livelli, mancanti, formule, import ed export. |
-| 02 | [Libreria e scelta dell'analisi](02-libreria-e-scelta-analisi.md) | Le 72 procedure, come si trovano e come si avviano. |
-| 03 | [Ruoli, parametri e Form](03-ruoli-parametri-e-form.md) | Il contratto che rende ogni procedura una funzione delle stesse parti. |
-| 04 | [Motore e tabelle](04-motore-e-tabelle.md) | Numeri, tabelle e struttura di un risultato. |
-| 05 | [Report, run-report e session-report](05-report-e-session-report.md) | La prosa del risultato e la sua lingua. |
-| 06 | [Grafici delle procedure](06-grafici-delle-procedure.md) | I 32 tipi di grafico e la mappa procedura → grafici. |
-| 07 | [Chart editor](07-chart-editor.md) | Cosa si può cambiare di un grafico e cosa no. |
-| 08 | [Validazione e guardrail](08-validazione-e-guardrail.md) | Tre livelli di controllo e la regola "mai output vuoto". |
-| 09 | [Lingue, help e terminologia](09-lingue-help-e-terminologia.md) | Sei locale, 83 pagine per libro, audit della prosa. |
-| 10 | [Confronto con la statistica classica](10-confronto-con-la-statistica-classica.md) | Cosa coincide con JMP, SPSS e R e cosa no. |
+| 01 | [Dati e Data Editor](01-dati-e-data-editor.md) | Come entrano i dati, come vengono riconosciuti e come si correggono senza rompere le analisi. |
+| 02 | [Libreria e scelta dell'analisi](02-libreria-e-scelta-analisi.md) | Le 72 procedure: come si trovano e cosa succede dal clic al risultato. |
+| 03 | [Ruoli, parametri e Form](03-ruoli-parametri-e-form.md) | Lo stesso modo di scegliere variabili e parametri per tutte le procedure. |
+| 04 | [Motore e tabelle](04-motore-e-tabelle.md) | Come i numeri diventano tabelle leggibili e perché calcolo, presentazione e testo restano separati. |
+| 05 | [Report, run-report e session-report](05-report-e-session-report.md) | La prosa che accompagna i numeri, la sua lingua e la differenza tra un run e la sessione. |
+| 06 | [Grafici delle procedure](06-grafici-delle-procedure.md) | I 32 tipi di grafico e perché ogni procedura produce quelli che servono. |
+| 07 | [Chart editor](07-chart-editor.md) | Cosa si può cambiare di un grafico e cosa resta fissato dal calcolo. |
+| 08 | [Validazione e guardrail](08-validazione-e-guardrail.md) | Tre livelli di controllo e la regola "mai un risultato vuoto". |
+| 09 | [Lingue, help e terminologia](09-lingue-help-e-terminologia.md) | Sei lingue, 498 pagine di guida in-app e le regole per tradurre senza rompere i termini. |
+| 10 | [Confronto con la statistica classica](10-confronto-con-la-statistica-classica.md) | Cosa coincide con JMP, SPSS e R, cosa no e come si documenta. |
 
 ## Terminologia vincolante
 
@@ -58,7 +63,8 @@ Due parole hanno un significato preciso in tutto il progetto (lo impone
 `AGENTS.md`):
 
 - **run-report**: l'output di *una singola* procedura, cioè un blocco con
-  tabelle, prosa e grafici.
+  tabelle,
+  prosa e grafici.
 - **session-report**: l'insieme ordinato dei run-report presenti nella finestra
   Output della sessione.
 
@@ -70,30 +76,47 @@ Sono i riferimenti da citare, non da ricopiare in ogni documento:
 
 - 72 procedure statistiche (`src/analyses/registry.ts`).
 - 32 tipi di grafico (`CHART_KINDS` in `src/stats/charts.ts`).
-- 6 locale: `en` (sorgente), `it`, `fr`, `es`, `de`, `pt-PT`; la prosa dei
-  report parte da `it` come locale predefinita.
+- 6 lingue: `en` (sorgente), `it`, `fr`, `es`, `de`, `pt-PT`; la prosa dei
+  report
+  parte da `it` come lingua predefinita.
 - 83 pagine di guida per libro, 83 × 6 = 498 pagine generate.
 - 52 dataset di esempio in `samples/`, ognuno in 5 formati (CSV, SPSS, Stata,
   Excel, JSON).
 
+## Punti di forza
+
+- **Si legge senza essere statistici.** Nessuna formula e nessun simbolo da
+  interpretare: ogni termine tecnico viene spiegato in parole semplici la prima
+  volta che serve.
+- **Ogni documento dice a cosa serve la funzione.** La sezione *Punti di forza*
+  chiude ogni capitolo con il vantaggio concreto, l'idea che lo sostiene e il
+  modo in cui la funzione resta accessibile a chi ha poca esperienza.
+- **Pensata per ogni livello.** Chi impara trova descrizioni, avvertenze e
+  glossari; chi è esperto trova numeri, riferimenti nel codice e documenti di
+  approfondimento senza doverli cercare altrove.
+
 ## Come si mantiene questa guida
 
-Ogni documento ha la stessa intestazione: **Cosa copre**, **Cosa non copre**
-(con il link al documento giusto), **Fonti nel codice**, **Vedi anche**. Le
-date e gli audit in `docs/plans/` e `docs/analysis/` restano come prove e
-approfondimenti: la guida li cita, non li riscrive.
+Ogni documento ha la stessa struttura: **Cosa copre**, **Punti di forza**,
+**Cosa
+non copre** (con il link al documento giusto), **Fonti nel codice**, **Vedi
+anche**. Le date e gli audit in `docs/plans/` e `docs/analysis/` restano come
+prove
+e approfondimenti: la guida li cita, non li riscrive.
 
 Se un numero cambia (procedure, grafici, pagine, dataset) si aggiorna qui e si
-lascia che gli altri documenti lo citino per riferimento. I link relativi
-devono restare validi: sono file del repository, non URL esterni.
+lascia che gli altri documenti lo citino per riferimento. I link relativi devono
+restare validi: sono file del repository, non URL esterni, e `npm run guard`
+controlla che esistano davvero.
 
 ## Sviluppo e rilascio
 
 - Strati e regole di dipendenza: [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
 - Stato del progetto e backlog: [`docs/PROJECT-STATUS.md`](../PROJECT-STATUS.md).
 - Gate di qualità: `npm run check` esegue `tsc --noEmit`, l'intera suite
-  (`node --test`) e `npm run guard` (dependency-cruiser, madge, dimensione
-  file). `npm run help:build` rigenera i sei libri di guida e
+  (`node --test`) e `npm run guard` (dependency-cruiser, madge, dimensione file,
+  link della documentazione). `npm run help:build` rigenera i sei libri di guida
+e
   `npm run help:audit` controlla contaminazione linguistica e parità.
-- Rilascio 0.30.0: gate verde, `help:build` e `help:audit` rieseguiti,
-  pacchetti Electron costruiti, note di rilascio allineate ai documenti 01–10.
+- Rilascio 0.30.0: gate verde, `help:build` e `help:audit` rieseguiti, pacchetti
+  Electron costruiti, note di rilascio allineate ai documenti 01–10.

@@ -1,62 +1,74 @@
 # 03 — Ruoli, parametri e Form
 
-**Cosa copre.** Il contratto che permette a 72 procedure diverse di usare lo
-stesso modello di selezione delle colonne e di salvataggio dei parametri.
+**Cosa copre.** Il patto che permette a 72 procedure diverse di chiedere le
+colonne e i parametri nello stesso modo, e di essere salvate e riaperte senza
+sorprese.
 
 ## Indice
 
 - [Ruoli di colonna](#ruoli-di-colonna)
 - [Parametri](#parametri)
-- [Form](#form)
+- [Il form](#il-form)
 - [La regola](#la-regola)
+- [Punti di forza](#punti-di-forza)
 
 ## Ruoli di colonna
 
-Ogni procedura dichiara i ruoli che le servono (`src/analyses/roles.ts` e i
-moduli `rolesW5.ts`, `rolesW7.ts` per le ondate più recenti). Un ruolo ha una
-chiave stabile, un'etichetta localizzata e un tipo:
+Ogni procedura dichiara di cosa ha bisogno. Un ruolo è una casella con un nome
+chiaro e un compito preciso: una variabile numerica da analizzare, una
+variabile di gruppo, oppure una variabile che va bene in entrambi i casi
+perché è la procedura a decidere in base al tipo.
 
-- `continuous`: variabile numerica che entra in un calcolo;
-- `group`: variabile categoriale che definisce gruppi o classi;
-- `any`: accetta entrambe, perché la procedura decide in base al tipo.
+Le regole comuni sono poche e valgono per tutte le procedure: elencare i ruoli,
+leggere lo stato attuale, assegnare una colonna e rifiutare gli abbinamenti
+incompatibili. Un ruolo lasciato vuoto resta vuoto: non esiste un valore
+segnaposto da interpretare, e il form lo mostra come una casella da riempire.
 
-Le funzioni condivise sono poche e sono il punto di verità:
-`analysisRoles(id)` elenca i ruoli, `roleStates(id, params)` restituisce lo
-stato corrente, `assignRole(id, params, key, column)` assegna una colonna,
-`validateRoleTypes` rifiuta gli accoppiamenti incompatibili. Un parametro
-opzionale vale `-1` quando non è assegnato.
-
-Alcune procedure hanno ruoli derivati: in SEM, per esempio, ogni indicatore
-appartiene a un fattore e il gruppo deve restare coerente con la selezione.
-La derivazione appartiene al setter del ruolo, non al form.
+Alcune procedure hanno ruoli che dipendono dagli altri: in un modello a fattori,
+per esempio, ogni indicatore appartiene a un fattore e il gruppo deve restare
+coerente con la selezione. Questa coerenza la gestisce l'assegnazione del ruolo,
+non il form: l'utente non deve ricordarsene.
 
 ## Parametri
 
-I parametri di tutte le procedure vivono in `src/io/project/types.ts`, con i
-valori iniziali in `DEFAULT_PARAMS`. `parseParams(value, width)` è l'unico
-punto che normalizza un oggetto grezzo (da file di progetto o da un manifest):
-applica i tipi, limita gli indici alla larghezza del dataset, riempie i campi
-mancanti e ricalcola i campi derivati. Un parametro che arriva da fuori non
-entra mai nel motore senza passare di qui.
+Tutti i parametri di tutte le procedure sono descritti in un unico posto e
+partono da valori iniziali sensati. Prima di essere usati passano da un solo
+passaggio di normalizzazione, che applica i tipi, impedisce indici fuori dal
+dataset, riempie i campi mancanti e ricalcola quelli derivati.
 
-`remapParams` (`src/analyses/params.ts`) riscrive i riferimenti dopo
-un'operazione strutturale sulla griglia: gli id stabili delle colonne evitano
-che un'analisi punti a un'altra variabile, e i ruoli non più validi diventano
-`-1` con un avviso.
+Vale per ogni provenienza: parametri scelti a schermo, parametri letti da un
+file di progetto, parametri proposti da un manifest. Nulla entra nei calcoli
+senza questo controllo.
 
-## Form
+Quando la griglia cambia struttura, i riferimenti vengono ricondotti alle
+colonne giuste; i ruoli non più validi diventano vuoti e l'app lo segnala,
+invece di riutilizzare per errore un numero di colonna ormai diverso.
 
-Ogni procedura ha il suo `Form.tsx` nella propria cartella, composto con i
-controlli condivisi di `AnalysisOptions.tsx`. Il form non calcola nulla: legge
-e scrive parametri, valida i tipi e mostra le etichette tradotte. I preset
-salvano una combinazione di parametri con un nome, così un'analisi ricorrente
-si riapre con un clic.
+## Il form
+
+Ogni procedura ha il proprio form, costruito con gli stessi controlli delle
+altre. Il form non calcola nulla: legge e scrive parametri, controlla i tipi e
+mostra le etichette tradotte. I preset salvano una combinazione di parametri
+con un nome, così un'analisi ricorrente si riapre con un clic e non va
+ricostruita ogni volta.
 
 ## La regola
 
-Se una nuova procedura deve comportarsi come le altre, si aggiungono una
-voce nel registro, i ruoli, il tipo di parametri e il form. Non si duplica la
-logica di selezione, di rimappatura o di salvataggio.
+Per aggiungere una procedura si aggiungono una voce nel catalogo, i ruoli, i
+parametri e il form. Non si riscrive la logica di selezione, di rimappatura o di
+salvataggio: quella è comune e resta una sola.
+
+## Punti di forza
+
+- **72 procedure, un solo modo di usarle.** La stessa casella, lo stesso
+  linguaggio, la stessa gestione dei parametri: la competenza acquisita su
+  un'analisi vale su tutte.
+- **L'idea è separare il patto dal calcolo.** Ruoli e parametri descrivono cosa
+  serve, il form lo raccoglie, il motore calcola: ogni parte può cambiare senza
+  costringere le altre a seguire.
+- **La soglia d'ingresso resta bassa.** Le caselle dicono cosa mettere, i
+  controlli impediscono gli abbinamenti sbagliati, i preset tolgono il lavoro
+  ripetitivo; chi è esperto ritrova comunque tutti i parametri, uno per uno.
 
 **Cosa non copre.** Il calcolo e le tabelle: [04](04-motore-e-tabelle.md). I
 rifiuti a runtime: [08](08-validazione-e-guardrail.md).

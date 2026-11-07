@@ -1,62 +1,76 @@
 # 03 — Roles, parameters and forms
 
-**Covers.** The contract that lets 72 different procedures share the same model
-for column selection and parameter storage.
+**Covers.** The agreement that lets 72 different procedures ask for columns and
+parameters in the same way, and be saved and reopened without surprises.
 
 ## Contents
 
 - [Column roles](#column-roles)
 - [Parameters](#parameters)
-- [Forms](#forms)
+- [The form](#the-form)
 - [The rule](#the-rule)
+- [Strengths](#strengths)
 
 ## Column roles
 
-Every procedure declares the roles it needs (`src/analyses/roles.ts` plus
-`rolesW5.ts` and `rolesW7.ts` for the newer waves). A role has a stable key, a
-localised label and a kind:
+Every procedure declares what it needs. A role is a slot with a clear name and a
+precise job: a numeric variable to analyse, a grouping variable, or a variable
+that works in both cases because the procedure decides according to its type.
 
-- `continuous`: a numeric variable that enters a computation;
-- `group`: a categorical variable that defines groups or classes;
-- `any`: accepts both, because the procedure decides based on the type.
+The shared rules are few and hold for every procedure: list the roles, read the
+current state, assign a column, reject incompatible pairings. A role left empty
+stays empty: there is no placeholder value to interpret, and the form shows it
+as
+a slot to fill.
 
-The shared functions are few and are the single source of truth:
-`analysisRoles(id)` lists roles, `roleStates(id, params)` returns the current
-state, `assignRole(id, params, key, column)` assigns a column and
-`validateRoleTypes` rejects incompatible pairings. An optional parameter is
-`-1` when unassigned.
-
-Some procedures have derived roles: in SEM, for example, every indicator
-belongs to a factor and the grouping must stay consistent with the selection.
-That derivation belongs to the role setter, not to the form.
+Some procedures have roles that depend on the others: in a factor model, for
+instance, each indicator belongs to a factor and the grouping must stay
+consistent with the selection. That consistency is handled by the role
+assignment, not by the form: the user does not have to remember it.
 
 ## Parameters
 
-Parameters for all procedures live in `src/io/project/types.ts`, with initial
-values in `DEFAULT_PARAMS`. `parseParams(value, width)` is the only place that
-normalises a raw object (from a project file or a manifest): it applies types,
-clamps indexes to the dataset width, fills missing fields and recomputes derived
-ones. A parameter coming from outside never reaches the engine without passing
-through it.
+Every parameter of every procedure is described in one place and starts from
+sensible defaults. Before being used, parameters go through a single
+normalisation step that applies the types, prevents indices from falling outside
+the dataset, fills the missing fields and recomputes the derived ones.
 
-`remapParams` (`src/analyses/params.ts`) rewrites references after a structural
-grid operation: stable column ids keep an analysis from pointing at another
-variable, and roles that are no longer valid become `-1` with a warning.
+This holds for every origin: parameters chosen on screen, read from a project
+file, or proposed by a manifest. Nothing reaches the computation without that
+check.
 
-## Forms
+When the grid changes structure, references are pointed back at the right
+columns; roles that are no longer valid become empty and the app says so,
+instead
+of reusing a column number that now means something else.
 
-Each procedure has its own `Form.tsx` in its folder, composed from the shared
-controls in `AnalysisOptions.tsx`. The form computes nothing: it reads and
-writes parameters, validates types and shows translated labels. Presets save a
-named parameter combination, so a recurring analysis reopens in one click.
+## The form
+
+Every procedure has its own form, built with the same controls as the others.
+The form computes nothing: it reads and writes parameters, checks the types and
+shows translated labels. Presets save a combination of parameters under a name,
+so a recurring analysis reopens in one click instead of being rebuilt each time.
 
 ## The rule
 
-When a new procedure has to behave like the others, add a registry entry, its
-roles, its parameter type and its form. Do not duplicate selection, remapping
-or persistence logic.
+Adding a procedure means adding an entry to the catalogue, its roles, its
+parameters and its form. The logic for selection, remapping and saving is not
+rewritten: it is shared and stays in one place.
 
-**Does not cover.** Computation and tables: [04](04-engine-and-tables.md).
+## Strengths
+
+- **72 procedures, one way to use them.** The same slot, the same wording, the
+  same parameter handling: the skill learned on one analysis carries over to all
+  of them.
+- **The idea is to separate the agreement from the computation.** Roles and
+  parameters describe what is needed, the form collects it, the engine computes:
+  each part can change without forcing the others to follow.
+- **The entry threshold stays low.** Slots say what to put in, checks prevent
+  wrong pairings, presets remove repetitive work; experts still find every
+single
+  parameter.
+
+**Does not cover.** The computation and the tables: [04](04-engine-and-tables.md).
 Runtime rejections: [08](08-validation-and-guardrails.md).
 
 **Sources in the code.** `src/analyses/roles.ts`, `rolesW5.ts`, `rolesW7.ts`,

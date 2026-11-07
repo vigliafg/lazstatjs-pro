@@ -1,51 +1,71 @@
 # 07 — Chart editor
 
-**Covers.** What the user can change in a chart, what stays fixed by the
-procedure and where the changes go.
+**Covers.** What can be changed in a chart, what stays fixed by the procedure,
+and where the changes end up.
 
 ## Contents
 
 - [The principle](#the-principle)
-- [The property registry](#the-property-registry)
+- [The catalogue of properties](#the-catalogue-of-properties)
 - [Where edits happen](#where-edits-happen)
 - [Export](#export)
+- [Strengths](#strengths)
 
 ## The principle
 
-A chart is born from data and from the statistical result: the editor never
-changes numbers, only how they are read. Title, subtitle, notes, axes, legend,
-colours, ordering, labels, reference lines and annotations are editable; the
-chart kind and the data are not.
+A chart is born from the data and from the result of the analysis: the editor
+does
+not allow changing the numbers, only reading them better. Title, subtitle,
+notes,
+axes, legend, colours, ordering, labels, reference lines and annotations can be
+edited; the chart kind and the data cannot.
 
-## The property registry
+This is a decision of substance: a chart whose values could be edited would be a
+second way of computing, and therefore a second way of being wrong.
 
-`src/charts/features.ts` declares, for each chart kind, which properties exist
-and what they are called. The property panel and its controls come from that
-registry: adding a property means adding it there and in the chart model, not
-writing a control by hand for every kind.
+## The catalogue of properties
 
-Above single properties sit:
+Every chart kind declares which properties it has and what they are called. The
+properties panel and its controls are generated from that list, so adding a
+property means adding it in one place, not writing a control by hand for every
+chart kind.
 
-- **presets** (`src/charts/presets.ts`): quick, recognisable combinations;
-- **styles** (`src/charts/styles.ts`): palettes, fonts, grids, themes;
-- **annotations**: text and reference marks anchored to the chart;
-- **per-kind defaults** (`src/charts/defaults.ts`): what the user sees when the
-  chart first appears.
+Above the individual properties sit four tools that save time:
+
+- **presets**: quick, recognisable combinations, to start again from a known
+  view;
+- **styles**: palettes, fonts, grids and themes;
+- **annotations**: texts and references anchored to the chart;
+- **per-kind defaults**: what the user sees as soon as the chart appears.
 
 ## Where edits happen
 
-The property panel and the style gallery live in the chart tab
-(`src/ui/analysis/ChartStyles.tsx`). Edits apply to that chart in that run and
-do not touch the procedure: a new run starts from defaults unless the user
-saved a style or a preset.
+The properties panel and the style gallery sit in the chart tab. Edits apply to
+that chart in that run and do not touch the procedure: a new run starts again
+from
+the defaults, unless the user has saved a style or a preset to reuse.
 
 ## Export
 
-A chart exports as image or SVG with the same options seen on screen
-(`chartExport.ts`); the run-report and session-report include charts in the
-order they appear.
+A chart is exported as an image or as SVG with the same options seen on screen.
+The run-report and the session-report include the charts in the order they
+appear,
+so the exported document keeps the sequence in which the result was read.
 
-**Does not cover.** Spec construction: [06](06-procedure-charts.md).
+## Strengths
+
+- **Reading can be improved without touching the numbers.** Anyone who wants a
+  clearer chart has every tool to do it, and none to alter the result.
+- **The idea is a shared list of properties.** Every chart kind declares what it
+  offers, and the interface is built from that list: uniform behaviour and fewer
+  chances to go wrong.
+- **Simple for those who only want to export, deep for those who want to
+  refine.**
+  A preset or a style is enough in two clicks; people working on the details
+find
+  axes, legends, annotations and colours one by one.
+
+**Does not cover.** How a chart is built: [06](06-procedure-charts.md).
 
 **Sources in the code.** `src/charts/features.ts`, `src/charts/defaults.ts`,
 `src/charts/presets.ts`, `src/charts/styles.ts`,

@@ -1,15 +1,16 @@
 # 05 — Report, run-report e session-report
 
-**Cosa copre.** La prosa che accompagna i numeri, la sua traduzione e la
-differenza tra il risultato di un run e la sessione.
+**Cosa copre.** La prosa che accompagna i numeri, la sua lingua e la differenza
+tra il risultato di un singolo run e l'insieme dei risultati di una sessione.
 
 ## Indice
 
 - [Due parole, due cose](#due-parole-due-cose)
-- [Come è fatta la prosa](#come-è-fatta-la-prosa)
+- [Come è scritta la prosa](#come-è-scritta-la-prosa)
 - [Lingua del report e lingua dell'interfaccia](#lingua-del-report-e-lingua-dellinterfaccia)
 - [La sessione](#la-sessione)
 - [Export](#export)
+- [Punti di forza](#punti-di-forza)
 
 ## Due parole, due cose
 
@@ -18,40 +19,58 @@ differenza tra il risultato di un run e la sessione.
 - **session-report**: l'insieme ordinato dei run-report presenti nella finestra
   Output.
 
-La distinzione è vincolante (`AGENTS.md`): "esporta il session-report" e
-"esporta il run-report" sono due azioni diverse.
+La distinzione è vincolante: "esporta il session-report" ed "esporta il
+run-report" sono due azioni diverse, e il resto della documentazione usa i due
+termini con questo significato.
 
-## Come è fatta la prosa
+## Come è scritta la prosa
 
-Il report non è testo libero: è un `ReportSpec` composto da frasi con un id
-stabile e, dove servono, segnaposto (`{s1}`, `{s2}`) riempiti con i valori
-delle tabelle. Le frasi vivono in cataloghi per locale
-(`src/stats/reportCopy/`) e il test `reportCopy.test.ts` impone che ogni
-lingua abbia le stesse frasi con gli stessi segnaposto: una traduzione non può
-dimenticare un numero o inventarne uno.
+Il report non è testo libero. È composto da frasi con un'identità stabile e,
+dove serve, da spazi da riempire con i valori delle tabelle. Le frasi vivono in
+cataloghi separati per lingua, e un controllo automatico impone che ogni lingua
+abbia le stesse frasi con gli stessi spazi da riempire: una traduzione non può
+dimenticare un numero né inventarne uno.
 
-Il report legge solo le tabelle, mai i kernel: se un numero cambia, cambia nel
-punto in cui è calcolato e la frase lo segue.
+La prosa legge soltanto le tabelle, mai i calcoli. Se un valore cambia, cambia
+nel punto in cui viene prodotto e la frase lo segue senza essere riscritta.
 
 ## Lingua del report e lingua dell'interfaccia
 
-Sono indipendenti. L'interfaccia parte da `en` (o dalla lingua scelta), il
-report ha una propria locale predefinita (`it`) e si può cambiare per singolo
-run. Le sei locale attive sono `en`, `it`, `fr`, `es`, `de`, `pt-PT`.
+Sono due scelte indipendenti. L'interfaccia parte dalla lingua del sistema (o da
+quella scelta dall'utente), mentre il report ha una propria lingua predefinita e
+si può cambiare anche per il singolo run. Le lingue disponibili sono sei:
+inglese, italiano, francese, spagnolo, tedesco e portoghese europeo.
+
+Questa separazione serve a un caso concreto: un docente che lavora in inglese
+può consegnare un report in italiano, oppure il contrario, senza cambiare tutta
+l'applicazione.
 
 ## La sessione
 
-Ogni run aggiunge un blocco alla finestra Output; il contorno della sessione
-(`sessionOutline.ts`) tiene l'ordine, i titoli e i riferimenti. I blocchi si
-possono eliminare singolarmente o svuotare insieme, e l'export conserva
-l'ordine del session-report.
+Ogni run aggiunge un blocco alla finestra Output. Il contorno della sessione
+tiene l'ordine, i titoli e i riferimenti, così l'elenco resta leggibile anche
+dopo molte analisi. I blocchi si possono eliminare singolarmente o svuotare
+tutti insieme, e l'export conserva l'ordine della sessione: il documento che si
+consegna racconta la stessa storia che si è vista a schermo.
 
 ## Export
 
-- Report testuale/HTML/PDF tramite `reportExport.ts`.
+- Report testuale, HTML e PDF.
 - Tabelle in CSV.
-- Grafici come immagine o SVG (`chartExport.ts`).
-- Progetto completo `.lzs` per riaprire dati, parametri e output.
+- Grafici come immagine o come SVG.
+- Progetto completo, per riaprire dati, parametri e output insieme.
+
+## Punti di forza
+
+- **La prosa dice sempre la verità dei numeri.** Non è un commento scritto a
+  parte: nasce dalle tabelle, quindi non può invecchiare rispetto al risultato.
+- **L'idea è il testo come dato.** Ogni frase ha un'identità e ogni lingua ha il
+  proprio catalogo, così traduzione e controllo qualità diventano verifiche
+  automatiche invece di riletture a campione.
+- **Leggibile a ogni livello.** Chi non conosce la statistica trova una
+  spiegazione in parole semplici; chi la conosce ritrova le stesse quantità
+nelle
+  tabelle, con la lingua che preferisce e senza doppio lavoro.
 
 **Cosa non copre.** Le tabelle ([04](04-motore-e-tabelle.md)) e la costruzione
 dei grafici ([06](06-grafici-delle-procedure.md)).

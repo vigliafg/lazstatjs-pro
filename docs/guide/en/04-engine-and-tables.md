@@ -1,61 +1,93 @@
 # 04 — Engine and tables
 
-**Covers.** How a statistical result becomes a table, and why computation knows
-neither React nor prose.
+**Covers.** How a result becomes a readable table, and why the computation, the
+presentation and the text stay apart.
 
 ## Contents
 
-- [Three layers, one direction](#three-layers-one-direction)
+- [Three steps, one direction](#three-steps-one-direction)
 - [The table](#the-table)
-- [Determinism](#determinism)
-- [Dimensional guardrails](#dimensional-guardrails)
+- [Repeatable results](#repeatable-results)
+- [Checks before the computation](#checks-before-the-computation)
 - [The result](#the-result)
+- [Strengths](#strengths)
 
-## Three layers, one direction
+## Three steps, one direction
 
-- `src/stats/kernels/`: pure numbers. No labels, no formatting, no imports from
-  tables or reports.
-- `src/stats/tables/`: turn numbers into `TableSpec`, that is headers, rows and
-  notes that can already be read.
-- `src/stats/reports/`: read only tables and produce prose.
+A result always follows the same path:
 
-The dependency rules in `.dependency-cruiser.cjs` forbid backward arrows: a
-kernel cannot format, a table cannot write sentences. A layout change never
-touches the maths, and a formula change never touches the text.
+1. the **computation** produces numbers, without labels and without formatting;
+2. the **tables** turn those numbers into headings, rows and notes that are
+   already readable;
+3. the **prose** reads only the tables and writes the sentences that go with
+   them.
+
+The direction never reverses: the computation cannot format, the tables cannot
+write sentences. It is a technical rule, but the effect is practical: changing
+the look of a table leaves the numbers alone, and fixing a computation does not
+force a rewrite of the texts.
 
 ## The table
 
-`TableSpec` (`src/stats/types.ts`) has `id`, `title`, `subtitle?`, `columns`,
-`rows` and `notes?`. The `id` is stable and unique within the card: it is used
-by exports, tests and prose references. Columns declare key, label, alignment
-and format (`dec3`, `p`, percentage…); notes explain the method instead of
-repeating numbers.
+A table has a title, sometimes a subtitle, a list of columns and rows, and
+notes.
+Every column declares its label, its alignment and how the values should be
+shown; the notes explain the method and do not repeat the numbers visible above.
 
-Non-negotiable rule: **a table exists only if it has rows**. When an estimate
-cannot be computed, the runner rejects with a reason instead of emitting an
-empty table (exactly the defect fixed in `survey`).
+Every table also has a stable identity inside the card: it serves export, tests
+and references from the prose, so a sentence can cite "the coefficients table"
+and stay correct even when the order of tables changes.
 
-## Determinism
+One rule is non-negotiable: **a table exists only if it has rows**. If an
+estimate
+cannot be computed, the analysis rejects and explains why, instead of showing an
+empty table.
 
-Procedures with random components (bootstrap, permutations, imputation) use a
-seeded generator and state it in the report. The same dataset with the same
-parameters produces the same numbers, including inside the worker.
+## Repeatable results
 
-## Dimensional guardrails
+Procedures with a random part — simulations, repeated sampling, resampling
+estimates — use an always-identical sequence and say so in the report. The same
+dataset with the same parameters produces the same numbers, even when the
+computation happens in the separate process: two people redoing the same
+analysis
+get the same result and can compare it.
 
-Before computing, runners check that they have enough complete rows, enough
-groups and a non-degenerate matrix; the shared `guardDimensions` check bounds
-iterative cases. When a check fails the result is `{ ok: false, reason }`, with
-a sentence saying what is missing and what to try.
+## Checks before the computation
+
+Before computing, every procedure verifies that it has what it needs: enough
+complete rows, enough groups, a non-degenerate situation, classes that are not
+separated, enough indicators for every factor. Shared checks cover the cases
+that
+require several steps.
+
+When a requirement is missing, the outcome is neither a wrong number nor a
+silent
+table: it is a rejection with a sentence saying what is missing and what to try.
 
 ## The result
 
-`AnalysisRunResult` (`src/analyses/types.ts`) is the only contract: `ok: true`
-with `tables`, `report`, `charts?`, `panels?`, `warnings?`, `header?`,
-`callout?`; or `ok: false` with `reason`. It is serialisable, so it crosses the
-Web Worker without adapters.
+The outcome of a run is a single object, always of the same shape: either a
+successful result with tables, prose, any charts, panels, warnings and header,
+or
+a rejection with its reason. Because it can be described as plain data, it
+crosses
+the computation process without adapters: what is shown on screen is what was
+computed.
 
-**Does not cover.** Prose: [05](05-reports-and-session-report.md). Charts:
+## Strengths
+
+- **Numbers and words cannot drift apart.** The prose is born from the tables,
+  not from a second computation: when a value changes, the sentence commenting
+on
+  it changes too.
+- **The idea is the separation of duties.** Computation, presentation and text
+  have clear boundaries, so an error is located quickly and a change does not
+  spread unexpected effects.
+- **A result that does not mislead anyone.** No empty tables and no numbers
+  without an explanation: people with little experience read a clear sentence,
+  people with a lot find the same quantities as always in the tables.
+
+**Does not cover.** The prose: [05](05-reports-and-session-report.md). The charts:
 [06](06-procedure-charts.md).
 
 **Sources in the code.** `src/stats/kernels/`, `src/stats/tables/`,
