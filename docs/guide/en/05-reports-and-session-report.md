@@ -82,4 +82,4 @@ are built ([06](06-procedure-charts.md)).
 
 **See also.**
 [`docs/RUN-REPORT-SESSION-REPORT.md`](../../RUN-REPORT-SESSION-REPORT.md),
-[`docs/plans/2026-10-29-session-report-outline.md`](../../plans/2026-10-29-session-report-outline.md)
+[`docs/plans/2026-10-29-session-report-outline.md`](../../plans/2026-10-29-session-report-outline.md).
