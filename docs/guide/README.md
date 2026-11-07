@@ -1,9 +1,10 @@
 # Guida a LazStats Pro
 
-**Cosa copre.** LazStats Pro è un'applicazione di analisi statistica che gira interamente nel
-browser (ed è impacchettata anche come applicazione desktop Electron). Il
-percorso tipico è sempre lo stesso: **dati → scelta della procedura → parametri
-→ calcolo → tabelle, report e grafici → editor del grafico → sessione**.
+**Cosa copre.** LazStats Pro è un'applicazione di analisi statistica che gira
+interamente nel browser (ed è impacchettata anche come applicazione desktop
+Electron). Il percorso tipico è sempre lo stesso: **dati → scelta della
+procedura → parametri → calcolo → tabelle, report e grafici → editor del
+grafico → sessione**.
 
 Questa cartella spiega i blocchi di funzionalità uno per uno. Non sostituisce
 `ARCHITECTURE.md`, che descrive gli strati del codice e le regole di

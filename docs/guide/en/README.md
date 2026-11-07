@@ -1,9 +1,9 @@
 # LazStats Pro guide
 
-**Covers.** LazStats Pro is a statistical analysis application that runs entirely in the
-browser (and ships as a desktop application through Electron). The path is
-always the same: **data → choose a procedure → parameters → computation →
-tables, report and charts → chart editor → session**.
+**Covers.** LazStats Pro is a statistical analysis application that runs
+entirely in the browser (and ships as a desktop application through Electron).
+The path is always the same: **data → choose a procedure → parameters →
+computation → tables, report and charts → chart editor → session**.
 
 This folder explains the feature blocks one at a time. It does not replace
 `ARCHITECTURE.md`, which describes the code layers and their dependency rules:
