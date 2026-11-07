@@ -21,7 +21,7 @@ import { nonEmptyRowCount, type GridData } from '../grid/types';
 import { restoredOutputs, type OutputEntry } from '../ui/output/types';
 import type { Toast } from './useToasts';
 import { t } from '../i18n';
-import { loadBackup, saveBackup } from '../io/backup';
+import { isNewerBackup, loadBackup, loadBackupRecord, saveBackup } from '../io/backup';
 
 interface UseProjectSessionOptions {
   /** Snapshot ripristinato all'avvio (autosave), già letto una volta. */
@@ -91,23 +91,55 @@ export const useProjectSession = ({
       const json = serializeProject(snapshot);
       if (json === lastSavedProject.current) return;
       const local = saveAutosaveText(json);
-      // Keep a second copy outside the 5 MB localStorage budget. It is
-      // best-effort: failure must never block the local autosave path.
-      void saveBackup(json);
-      if (local) {
-        lastSavedProject.current = json;
-        autosaveWarned.current = false;
-        setLastAutosave(new Date().toLocaleTimeString());
-      } else if (!autosaveWarned.current) {
-        // Quota exceeded or oversized grid: warn once, not on every keystroke.
-        autosaveWarned.current = true;
-        setLastAutosave(null);
-        showToast(t('toast.autosave'), t('autosave.unavailable'), 'warn');
-      }
+      // IndexedDB keeps the full copy: it ignores the localStorage budget, so
+      // a reload can restore grids that never fit in 5 MB. Best-effort: with
+      // no IndexedDB the localStorage copy above still counts as saved.
+      void saveBackup(json).then(stored => {
+        if (local || stored) {
+          lastSavedProject.current = json;
+          autosaveWarned.current = false;
+          setLastAutosave(new Date().toLocaleTimeString());
+        } else if (!autosaveWarned.current) {
+          // Neither store accepted the snapshot: warn once, not per keystroke.
+          autosaveWarned.current = true;
+          setLastAutosave(null);
+          showToast(t('toast.autosave'), t('autosave.unavailable'), 'warn');
+        }
+      });
     }, 800);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grid, datasetId, dataRevision, prefs, settings, params, outputs]);
+
+  // A reload must never lose work: the IndexedDB copy wins whenever it is
+  // newer than the snapshot the synchronous boot already loaded (for example
+  // a grid too large for localStorage, which leaves `boot` empty).
+  const backupRestoreTried = useRef(false);
+  useEffect(() => {
+    if (backupRestoreTried.current) return;
+    backupRestoreTried.current = true;
+    void loadBackupRecord().then(record => {
+      if (!record || !isNewerBackup(boot?.savedAt ?? null, record.savedAt)) return;
+      let project: ProjectSnapshot;
+      try {
+        project = parseProject(record.text);
+      } catch {
+        // Corrupted copy: keep whatever the synchronous boot restored.
+        return;
+      }
+      const json = serializeProject(project);
+      if (json === lastSavedProject.current) return;
+      lastSavedProject.current = json;
+      restore(project);
+      setLastAutosave(new Date(project.savedAt).toLocaleTimeString());
+      showToast(
+        t('toast.session'),
+        `${t('session.restored')} ${nonEmptyRowCount(project.grid.rows)} ${t('session.rows')}`,
+        'ok'
+      );
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const bootNoticeShown = useRef(false);
   useEffect(() => {

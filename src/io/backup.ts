@@ -61,9 +61,36 @@ export const saveBackup = async (text: string): Promise<boolean> => {
   return result !== null;
 };
 
-export const loadBackup = async (): Promise<string | null> => {
+export interface StoredBackup {
+  text: string;
+  savedAt: string;
+}
+
+/** Full record, so boot can tell whether this copy is newer than the autosave. */
+export const loadBackupRecord = async (): Promise<StoredBackup | null> => {
   const record = await withStore<BackupRecord | undefined>('readonly', store => store.get(KEY));
-  return typeof record?.text === 'string' ? record.text : null;
+  if (typeof record?.text !== 'string') return null;
+  return {
+    text: record.text,
+    savedAt: typeof record.savedAt === 'string' ? record.savedAt : '',
+  };
+};
+
+export const loadBackup = async (): Promise<string | null> =>
+  (await loadBackupRecord())?.text ?? null;
+
+/**
+ * True when the IndexedDB copy should replace what the synchronous boot read.
+ * A missing or unparsable boot timestamp always loses to a valid backup.
+ */
+export const isNewerBackup = (
+  bootSavedAt: string | null,
+  backupSavedAt: string | null
+): boolean => {
+  const backup = backupSavedAt ? Date.parse(backupSavedAt) : NaN;
+  if (!Number.isFinite(backup)) return false;
+  const boot = bootSavedAt ? Date.parse(bootSavedAt) : NaN;
+  return !Number.isFinite(boot) || backup > boot;
 };
 
 export const clearBackup = async (): Promise<void> => {
