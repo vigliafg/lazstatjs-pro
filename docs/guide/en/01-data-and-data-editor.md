@@ -3,6 +3,16 @@
 **Covers.** How data enters the app, how it is typed and how it can be edited
 without breaking analyses that are already configured.
 
+## Contents
+
+- [The model](#the-model)
+- [Types, levels and reference](#types-levels-and-reference)
+- [Missing values and validation](#missing-values-and-validation)
+- [Formulas and computed columns](#formulas-and-computed-columns)
+- [Structural operations](#structural-operations)
+- [View](#view)
+- [Import and export](#import-and-export)
+
 ## The model
 
 The grid is not a generic spreadsheet: it is a dataset with typed columns and

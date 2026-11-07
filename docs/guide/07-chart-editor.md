@@ -3,6 +3,13 @@
 **Cosa copre.** Cosa l'utente può cambiare di un grafico, cosa resta fissato
 dalla procedura e dove finiscono le modifiche.
 
+## Indice
+
+- [Il principio](#il-principio)
+- [Il registro delle proprietà](#il-registro-delle-proprietà)
+- [Dove si modifica](#dove-si-modifica)
+- [Esportazione](#esportazione)
+
 ## Il principio
 
 Il grafico nasce dai dati e dal risultato statistico: l'editor non permette di

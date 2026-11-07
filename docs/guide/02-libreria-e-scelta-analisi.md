@@ -3,6 +3,13 @@
 **Cosa copre.** Come l'utente trova una procedura e cosa succede dal clic su
 "Esegui" fino alla card del risultato.
 
+## Indice
+
+- [Il catalogo](#il-catalogo)
+- [Dal clic al risultato](#dal-clic-al-risultato)
+- [Live e manuale](#live-e-manuale)
+- [La card](#la-card)
+
 ## Il catalogo
 
 Le procedure sono dichiarate in un unico registro, `src/analyses/registry.ts`:

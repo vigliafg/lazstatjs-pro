@@ -3,6 +3,13 @@
 **Covers.** How a procedure is found and what happens between clicking "Run"
 and the result card.
 
+## Contents
+
+- [The catalogue](#the-catalogue)
+- [From click to result](#from-click-to-result)
+- [Live and manual](#live-and-manual)
+- [The card](#the-card)
+
 ## The catalogue
 
 Procedures are declared in a single registry, `src/analyses/registry.ts`:

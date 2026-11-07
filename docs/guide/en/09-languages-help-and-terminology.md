@@ -3,6 +3,13 @@
 **Covers.** The six app languages, the in-app guide and the writing rules that
 keep interface, reports and documentation aligned.
 
+## Contents
+
+- [The languages](#the-languages)
+- [The in-app guide](#the-in-app-guide)
+- [Translating without breaking terms](#translating-without-breaking-terms)
+- [Terminology](#terminology)
+
 ## The languages
 
 `ACTIVE_LOCALES` in `src/i18n/locales.ts` lists `en`, `it`, `fr`, `es`, `de`,

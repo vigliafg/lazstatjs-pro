@@ -3,6 +3,13 @@
 **Covers.** How the app positions itself against JMP, SPSS and R, and how the
 comparison is documented without promising parity it does not have.
 
+## Contents
+
+- [The method](#the-method)
+- [What matches](#what-matches)
+- [What differs](#what-differs)
+- [The rule](#the-rule)
+
 ## The method
 
 A comparison is not made from memory: take the same dataset, run the same

@@ -3,6 +3,13 @@
 **Covers.** The charts each procedure produces, how they are built and why they
 are not decoration.
 
+## Contents
+
+- [The catalogue](#the-catalogue)
+- [A chart, not an image](#a-chart-not-an-image)
+- [Which charts, for which procedure](#which-charts-for-which-procedure)
+- [Composite charts](#composite-charts)
+
 ## The catalogue
 
 `CHART_KINDS` in `src/stats/charts.ts` lists 32 chart kinds. Each kind has a

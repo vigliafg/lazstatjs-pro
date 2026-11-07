@@ -3,6 +3,13 @@
 **Cosa copre.** Come l'app si posiziona rispetto a JMP, SPSS e R, e come si
 documenta il confronto senza promettere parità che non c'è.
 
+## Indice
+
+- [Il metodo](#il-metodo)
+- [Cosa coincide](#cosa-coincide)
+- [Cosa differisce](#cosa-differisce)
+- [La regola](#la-regola)
+
 ## Il metodo
 
 Il confronto non si fa a memoria: si prende lo stesso dataset, si esegue la

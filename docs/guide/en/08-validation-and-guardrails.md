@@ -3,6 +3,14 @@
 **Covers.** The three levels that stop an analysis from producing a wrong
 result or an empty card.
 
+## Contents
+
+- [Level 1 — column references](#level-1-column-references)
+- [Level 2 — parameter normalisation](#level-2-parameter-normalisation)
+- [Level 3 — runner guardrails](#level-3-runner-guardrails)
+- [The output rule](#the-output-rule)
+- [The test net](#the-test-net)
+
 ## Level 1 — column references
 
 Before the run, every role is checked against an existing column with a

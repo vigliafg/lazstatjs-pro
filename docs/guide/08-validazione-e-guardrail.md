@@ -3,6 +3,14 @@
 **Cosa copre.** I tre livelli che impediscono a un'analisi di produrre un
 risultato sbagliato o una card vuota.
 
+## Indice
+
+- [Livello 1 — riferimenti di colonna](#livello-1-riferimenti-di-colonna)
+- [Livello 2 — normalizzazione dei parametri](#livello-2-normalizzazione-dei-parametri)
+- [Livello 3 — guardrail del runner](#livello-3-guardrail-del-runner)
+- [La regola dell'output](#la-regola-delloutput)
+- [La rete di test](#la-rete-di-test)
+
 ## Livello 1 — riferimenti di colonna
 
 Prima del run si verifica che ogni ruolo punti a una colonna esistente e di

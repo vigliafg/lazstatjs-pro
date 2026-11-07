@@ -3,6 +3,13 @@
 **Cosa copre.** Le sei lingue dell'app, la guida in-app e le regole di
 scrittura che tengono allineate interfaccia, report e documentazione.
 
+## Indice
+
+- [Le lingue](#le-lingue)
+- [La guida in-app](#la-guida-in-app)
+- [Tradurre senza rompere i termini](#tradurre-senza-rompere-i-termini)
+- [Terminologia](#terminologia)
+
 ## Le lingue
 
 `ACTIVE_LOCALES` in `src/i18n/locales.ts` elenca `en`, `it`, `fr`, `es`, `de`,

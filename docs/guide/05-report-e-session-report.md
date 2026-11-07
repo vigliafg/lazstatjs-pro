@@ -3,6 +3,14 @@
 **Cosa copre.** La prosa che accompagna i numeri, la sua traduzione e la
 differenza tra il risultato di un run e la sessione.
 
+## Indice
+
+- [Due parole, due cose](#due-parole-due-cose)
+- [Come è fatta la prosa](#come-è-fatta-la-prosa)
+- [Lingua del report e lingua dell'interfaccia](#lingua-del-report-e-lingua-dellinterfaccia)
+- [La sessione](#la-sessione)
+- [Export](#export)
+
 ## Due parole, due cose
 
 - **run-report**: l'output di una singola procedura — tabelle, prosa e grafici

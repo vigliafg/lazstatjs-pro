@@ -3,6 +3,13 @@
 **Covers.** The contract that lets 72 different procedures share the same model
 for column selection and parameter storage.
 
+## Contents
+
+- [Column roles](#column-roles)
+- [Parameters](#parameters)
+- [Forms](#forms)
+- [The rule](#the-rule)
+
 ## Column roles
 
 Every procedure declares the roles it needs (`src/analyses/roles.ts` plus

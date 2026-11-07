@@ -3,6 +3,13 @@
 **Cosa copre.** I grafici che ogni procedura produce, come sono costruiti e
 perché non sono decorazioni.
 
+## Indice
+
+- [Il catalogo](#il-catalogo)
+- [Un grafico, non un'immagine](#un-grafico-non-unimmagine)
+- [Quali grafici, per quale procedura](#quali-grafici-per-quale-procedura)
+- [Grafici composti](#grafici-composti)
+
 ## Il catalogo
 
 `CHART_KINDS` in `src/stats/charts.ts` elenca 32 tipi di grafico. Ogni tipo ha

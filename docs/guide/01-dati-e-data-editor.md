@@ -3,6 +3,16 @@
 **Cosa copre.** Come entrano i dati nell'app, come sono tipizzati e come si
 modificano senza rompere le analisi già configurate.
 
+## Indice
+
+- [Il modello](#il-modello)
+- [Tipi, livelli e riferimento](#tipi-livelli-e-riferimento)
+- [Mancanti e validazione](#mancanti-e-validazione)
+- [Formule e colonne calcolate](#formule-e-colonne-calcolate)
+- [Operazioni strutturali](#operazioni-strutturali)
+- [Vista](#vista)
+- [Import ed export](#import-ed-export)
+
 ## Il modello
 
 La griglia non è un foglio di calcolo generico: è un dataset con colonne

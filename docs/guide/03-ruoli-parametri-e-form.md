@@ -3,6 +3,13 @@
 **Cosa copre.** Il contratto che permette a 72 procedure diverse di usare lo
 stesso modello di selezione delle colonne e di salvataggio dei parametri.
 
+## Indice
+
+- [Ruoli di colonna](#ruoli-di-colonna)
+- [Parametri](#parametri)
+- [Form](#form)
+- [La regola](#la-regola)
+
 ## Ruoli di colonna
 
 Ogni procedura dichiara i ruoli che le servono (`src/analyses/roles.ts` e i

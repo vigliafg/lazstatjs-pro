@@ -3,6 +3,14 @@
 **Cosa copre.** Come un risultato statistico diventa una tabella e perché il
 calcolo non conosce né React né la prosa.
 
+## Indice
+
+- [Tre strati, una direzione](#tre-strati-una-direzione)
+- [La tabella](#la-tabella)
+- [Determinismo](#determinismo)
+- [Guardrail dimensionali](#guardrail-dimensionali)
+- [Il risultato](#il-risultato)
+
 ## Tre strati, una direzione
 
 - `src/stats/kernels/`: numeri puri. Nessuna etichetta, nessun formato,

@@ -3,6 +3,14 @@
 **Covers.** The prose around the numbers, its translation, and the difference
 between one run and the session.
 
+## Contents
+
+- [Two words, two things](#two-words-two-things)
+- [How the prose is built](#how-the-prose-is-built)
+- [Report language and interface language](#report-language-and-interface-language)
+- [The session](#the-session)
+- [Export](#export)
+
 ## Two words, two things
 
 - **run-report**: the output of a single procedure — tables, prose and charts

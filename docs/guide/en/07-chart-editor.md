@@ -3,6 +3,13 @@
 **Covers.** What the user can change in a chart, what stays fixed by the
 procedure and where the changes go.
 
+## Contents
+
+- [The principle](#the-principle)
+- [The property registry](#the-property-registry)
+- [Where edits happen](#where-edits-happen)
+- [Export](#export)
+
 ## The principle
 
 A chart is born from data and from the statistical result: the editor never

@@ -3,6 +3,14 @@
 **Covers.** How a statistical result becomes a table, and why computation knows
 neither React nor prose.
 
+## Contents
+
+- [Three layers, one direction](#three-layers-one-direction)
+- [The table](#the-table)
+- [Determinism](#determinism)
+- [Dimensional guardrails](#dimensional-guardrails)
+- [The result](#the-result)
+
 ## Three layers, one direction
 
 - `src/stats/kernels/`: pure numbers. No labels, no formatting, no imports from
