@@ -1275,3 +1275,20 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
 - Non chiuse in questa ondata: richiedono la riscrittura delle pagine tradotte
   dai sorgenti inglesi, con verifica manuale dei glossari (i termini tradotti
   devono comparire nel testo della pagina).
+
+### Checkpoint 2026-11-06 — Test a catena runner -> tabelle -> grafici -> prosa
+
+- Nuovo `src/analyses/chain.test.ts`: esegue i 153 esempi del manifest (68
+  procedure) caricando il CSV del sample, assegnando i ruoli di colonna e
+  chiamando `ANALYSIS_RUNNERS` come fa l'app. Per ogni run verifica: tabelle con
+  id, titolo, colonne e righe non vuote; grafici con un `kind` registrato e uno
+  spec vega-lite compilabile; report presente, non vuoto e senza segnaposto
+  irrisolti. Il test fallisce anche se un esempio smette di girare o se uno
+  degli esempi dichiarati come noti ricomincia a funzionare.
+- Difetti noti dichiarati in `KNOWN_REJECTIONS` (da correggere nei sample, non
+  nella catena): doe_demo/doe (fattori collineari), mtcars/multinomial e
+  mtcars/nonlinear (modello non stimabile con le colonne scelte),
+  sem_demo/sem (indicatori insufficienti), two_groups_binary/distfit e
+  two_groups_binary/proportions (chiavi del manifest che non sono ruoli),
+  selection_demo/selection (idem), survey_demo/survey che restituisce una
+  tabella "survey-estimates" vuota: il runner dovrebbe rifiutare con un motivo.
