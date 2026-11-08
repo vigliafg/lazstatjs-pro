@@ -108,8 +108,28 @@ export const ChartInteractionLayer = ({
     { x0: number; y0: number; x1: number; y1: number } | null
   >(null);
   const [committedPolygon, setCommittedPolygon] = useState<PolygonPoint[] | null>(null);
+  const [shiftHeld, setShiftHeld] = useState(false);
   const hintId = useId();
   const zoomReady = useMemo(() => zoom && hasZoomSignals(view), [view, zoom]);
+
+  // Shift turns the drag into a pan, so the cursor announces it before the
+  // gesture starts. Reset on blur and on leaving the plot, where the release
+  // of the key may never be observed.
+  useEffect(() => {
+    if (!zoomReady) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Shift') setShiftHeld(event.type === 'keydown');
+    };
+    const clear = () => setShiftHeld(false);
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('keyup', onKey);
+    window.addEventListener('blur', clear);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('keyup', onKey);
+      window.removeEventListener('blur', clear);
+    };
+  }, [zoomReady]);
 
   // The overlay sits above the SVG, so a wheel over the plot never reaches
   // Vega's own handler: apply the same projection to the bound signals, which
@@ -243,7 +263,9 @@ export const ChartInteractionLayer = ({
       aria-label={`${t('chart.link.surface')} (${toolLabel}) · ${points.length} ${t('chart.link.points')}`}
       aria-describedby={hintId}
       aria-keyshortcuts="Enter Escape"
-      className="absolute z-[5] cursor-crosshair touch-none rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+      className={`absolute z-[5] touch-none rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${
+        pan ? 'cursor-grabbing' : zoomReady && shiftHeld ? 'cursor-grab' : 'cursor-crosshair'
+      }`}
       style={{
         left: area.css.left,
         top: area.css.top,
@@ -336,6 +358,7 @@ export const ChartInteractionLayer = ({
         finish(local(event));
       }}
       onPointerCancel={reset}
+      onPointerLeave={() => setShiftHeld(false)}
       onClick={event => event.stopPropagation()}
       onDoubleClick={event => {
         event.stopPropagation();

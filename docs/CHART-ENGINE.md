@@ -271,9 +271,11 @@ dati, statistiche, tabelle o report.
   (`zoomDomain`/`panDomain` in `zoom.ts`, le formule di `zoomLinear` e
   `panLinear`), con fattore `1.001^deltaY` e ancora sul cursore. Il drag
   semplice resta il pennello; con Shift (o tasto centrale) diventa un pan che
-  sposta il dominio a larghezza costante. L'istruzione accessibile aggiunge la
-  frase `chart.link.surfaceZoomHint` solo quando le card con zoom hanno
-  l'overlay.
+  sposta il dominio a larghezza costante. Il cursore passa da `crosshair` a
+  `grab` appena Shift è premuto (e a `grabbing` durante il pan), così il gesto
+  si scopre anche senza leggere la guida: lo stato si azzera sul blur e quando
+  il puntatore esce dal plot. L'istruzione accessibile aggiunge la frase
+  `chart.link.surfaceZoomHint` solo quando le card con zoom hanno l'overlay.
 - **Accessibilità**: la superficie ha `role="application"`, focus visibile,
   istruzioni `sr-only` collegate con `aria-describedby`, Invio seleziona tutti i
   punti ed Esc annulla. Il conteggio `N selezionati` e `N nascosti` sono

@@ -209,8 +209,17 @@ test.describe('chart axis zoom and pan', () => {
     // Linking puts the transparent brush surface on top of the plot; the
     // ticks do not move on their own.
     await page.getByRole('button', { name: 'Turn dynamic linking on or off' }).click();
-    await expect(chart.locator('[data-chart-link-surface]')).toBeVisible();
+    const overlay = chart.locator('[data-chart-link-surface]');
+    await expect(overlay).toBeVisible();
     expect(await tickLabels(chart, 'horizontal')).toEqual(before);
+
+    // The cursor announces the pan gesture before it starts.
+    const cursor = () => overlay.evaluate(el => getComputedStyle(el).cursor);
+    await expect.poll(cursor).toBe('crosshair');
+    await page.keyboard.down('Shift');
+    await expect.poll(cursor).toBe('grab');
+    await page.keyboard.up('Shift');
+    await expect.poll(cursor).toBe('crosshair');
 
     // The wheel hits the overlay, which drives the same bound domains Vega
     // would: the visible span still shrinks.
@@ -236,7 +245,7 @@ test.describe('chart axis zoom and pan', () => {
     // Reset restores the initial ticks and leaves linking on.
     await chart.getByRole('button', { name: 'Reset zoom' }).click();
     await waitReady(chart);
-    await expect(chart.locator('[data-chart-link-surface]')).toBeVisible();
+    await expect(overlay).toBeVisible();
     await expect.poll(() => tickLabels(chart, 'horizontal'), { timeout: 20_000 }).toEqual(before);
   });
 });
