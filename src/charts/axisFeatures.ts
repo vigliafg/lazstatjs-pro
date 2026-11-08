@@ -3,13 +3,19 @@ import type { AnalysisChart, ChartOptions } from '../stats/charts';
 import {
   axisChannels,
   axisFlag,
+  axisLabelFormat,
   axisNumber,
   axisScaleType,
+  axisTickCount,
   setAxisFlag,
+  setAxisLabelFormat,
   setAxisNumber,
   setAxisScaleType,
+  setAxisTickCount,
   type AxisFlagKey,
+  type AxisFormatKey,
   type AxisLimitKey,
+  type AxisTickKey,
 } from './axisModel';
 import type { FeatureDescriptor } from './featureTypes';
 
@@ -75,6 +81,40 @@ const scale = (axis: Axis, labelKey: MessageKey): FeatureDescriptor => {
   );
 };
 
+const tickCount = (axis: Axis, labelKey: MessageKey): FeatureDescriptor => {
+  const key = `${axis}TickCount` as AxisTickKey;
+  return axisFeature(
+    `general.${key}`,
+    labelKey,
+    'numberInput',
+    axis,
+    options => axisTickCount(options, key) ?? '',
+    (options, value) => setAxisTickCount(options, key, value === '' ? null : Number(value)),
+    { min: 2, max: 50, step: 1 }
+  );
+};
+
+const labelFormat = (axis: Axis, labelKey: MessageKey): FeatureDescriptor => {
+  const key = `${axis}LabelFormat` as AxisFormatKey;
+  return axisFeature(
+    `general.${key}`,
+    labelKey,
+    'select',
+    axis,
+    options => axisLabelFormat(options, key),
+    (options, value) => setAxisLabelFormat(options, key, value),
+    {
+      choices: [
+        choice('auto', 'chart.format.auto'),
+        choice('decimal', 'chart.format.decimal'),
+        choice('compact', 'chart.format.compact'),
+        choice('percent', 'chart.format.percent'),
+        choice('scientific', 'chart.format.scientific'),
+      ],
+    }
+  );
+};
+
 const toggle = (axis: Axis, flag: 'Reverse' | 'Clamp' | 'Nice', labelKey: MessageKey): FeatureDescriptor => {
   const key = `${axis}${flag}` as AxisFlagKey;
   return axisFeature(
@@ -94,10 +134,14 @@ const toggle = (axis: Axis, flag: 'Reverse' | 'Clamp' | 'Nice', labelKey: Messag
 export const AXIS_FEATURES: FeatureDescriptor[] = [
   limit('x', 'Min', 'chart.feature.xMin'),
   limit('x', 'Max', 'chart.feature.xMax'),
+  tickCount('x', 'chart.feature.xTicks'),
   limit('y', 'Min', 'chart.feature.yMin'),
   limit('y', 'Max', 'chart.feature.yMax'),
+  tickCount('y', 'chart.feature.yTicks'),
   scale('x', 'chart.feature.xScale'),
   scale('y', 'chart.feature.yScale'),
+  labelFormat('x', 'chart.feature.xFormat'),
+  labelFormat('y', 'chart.feature.yFormat'),
   toggle('x', 'Reverse', 'chart.feature.xReverse'),
   toggle('y', 'Reverse', 'chart.feature.yReverse'),
   toggle('x', 'Clamp', 'chart.feature.xClamp'),

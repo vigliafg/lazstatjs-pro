@@ -1344,3 +1344,17 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
 - `features.ts` scende a 697 righe: eccezione di dimensione rimossa dal guard.
 - Prossimi passi: fase 2 (tick/formato etichette) e fase 3 (pan/zoom e reset,
   fusione con il brush di linking).
+
+### Checkpoint 2026-11-08 — Chart editor: tick e formato etichette (fase 2)
+
+- Nuove chiavi per card: `xTickCount`/`yTickCount` (interi 2-50, arrotondati,
+  fuori intervallo → automatico) e `xLabelFormat`/`yLabelFormat` (auto,
+  decimale `~f`, compatto `~s`, percentuale `.1%`, scientifico `.2~e`).
+- `applyAxisSettings` ora scrive anche `encoding[canale].axis` (tickCount e
+  format) e gira **dopo** `formatTinyAxes`: il formato esplicito batte il
+  default `.4~g` dei domini minuscoli.
+- Pannello: due campi numerici e due select nella sezione Asse (X e Y); 9 chiavi
+  i18n per lingua (tick, formato, cinque voci del formato).
+- Test: 18 casi nei due file degli assi (5 nuovi), typecheck e guard verdi.
+- Prossimo passo: fase 3 (pan/zoom con `bind: 'scales'` e reset, convivenza con
+  il brush di linking).

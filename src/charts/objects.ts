@@ -37,7 +37,9 @@ const COMMON_OBJECTS: ChartObjectNode[] = [
         features: [
           'general.xMin',
           'general.xMax',
+          'general.xTickCount',
           'general.xScaleType',
+          'general.xLabelFormat',
           'general.xReverse',
           'general.xClamp',
           'general.xNice',
@@ -49,7 +51,9 @@ const COMMON_OBJECTS: ChartObjectNode[] = [
         features: [
           'general.yMin',
           'general.yMax',
+          'general.yTickCount',
           'general.yScaleType',
+          'general.yLabelFormat',
           'general.yReverse',
           'general.yClamp',
           'general.yNice',

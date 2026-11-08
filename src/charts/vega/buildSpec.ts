@@ -192,8 +192,10 @@ export const buildVegaSpec = (
       return spec(chart, options, surfaceLayers(chart, options));
     }
   };
+  // Axis labels are applied after `formatTinyAxes`, so an explicit format wins
+  // over its tiny-domain default; the scale part is order-independent.
   return applyChartLink(
-    seriesLineColor(formatTinyAxes(applyAxisSettings(build(), options, chart))),
+    seriesLineColor(applyAxisSettings(formatTinyAxes(build()), options, chart)),
     chart,
     link
   );

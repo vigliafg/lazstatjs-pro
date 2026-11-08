@@ -1,5 +1,10 @@
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
-import { axisChannels, axisScalePatch, type AxisChannel } from '../axisModel';
+import {
+  axisChannels,
+  axisPropertyPatch,
+  axisScalePatch,
+  type AxisChannel,
+} from '../axisModel';
 
 const layersOf = (spec: unknown): Record<string, any>[] => {
   const layers = (spec as { layer?: unknown } | null)?.layer;
@@ -7,7 +12,8 @@ const layersOf = (spec: unknown): Record<string, any>[] => {
 };
 
 /**
- * Apply the per-axis limits and scale type to an already built specification.
+ * Apply the per-axis limits, scale type, tick count and label format to an
+ * already built specification.
  *
  * One pass over the layers instead of a change in every layer builder: the
  * same reason `formatTinyAxes` and `seriesLineColor` post-process the spec.
@@ -25,8 +31,9 @@ export const applyAxisSettings = <T>(built: T, options: ChartOptions, chart: Ana
       if (!channelEncoding || channelEncoding.type !== 'quantitative') continue;
       if (channelEncoding.axis === null) continue;
       const patch = axisScalePatch(options, channel);
-      if (!patch) continue;
-      channelEncoding.scale = { ...(channelEncoding.scale ?? {}), ...patch };
+      if (patch) channelEncoding.scale = { ...(channelEncoding.scale ?? {}), ...patch };
+      const labels = axisPropertyPatch(options, channel);
+      if (labels) channelEncoding.axis = { ...(channelEncoding.axis ?? {}), ...labels };
     }
   }
   return built;

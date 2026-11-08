@@ -1,6 +1,6 @@
 # Chart editor — assi: limiti e scala (fase 1)
 
-Stato: **fase 1 implementata** (2026-11-08). Fasi 2 e 3 in fondo al documento.
+Stato: **fasi 1 e 2 implementate** (2026-11-08). Fase 3 in fondo al documento.
 
 ## Cosa puo' fare l'utente
 
@@ -88,12 +88,23 @@ Nel pannello di modifica di una card, sezione **Asse**:
 - Verifica: `npm run lint`, i test mirati sopra, `locales:check` per le sei
   lingue, `depcruise`, `madge`, `filesize`, poi il gate `npm run check`.
 
-## Fase 2 — tick e formato
+## Fase 2 — tick e formato (implementata)
 
-- `tickCount` per canale (desiderata Vega-Lite, non garanzia).
-- Formato numerico delle etichette con `d3-format` (`~s`, `~g`, percentuale) e
-  prefisso/suffisso unita'.
-- Riga "passo" per limiti non tondi, come il campo Step di OriginPro.
+- Nuove chiavi per card: `xTickCount`/`yTickCount` (intero 2-50; vuoto =
+  automatico) e `xLabelFormat`/`yLabelFormat` con Auto, Decimale (`~f`),
+  Compatto (`~s`, cioe' `1.2k`), Percentuale (`.1%`) e Scientifico (`.2~e`).
+- **Ordine in `buildVegaSpec`**: `applyAxisSettings` gira *dopo*
+  `formatTinyAxes`, cosi' un formato scelto dall'utente vince sul `.4~g` che il
+  post-pass applica ai domini minuscoli; la parte di scala e' indipendente
+  dall'ordine.
+- `tickCount` e' un *desiderata* di Vega-Lite: l'asse puo' sceglierne un altro
+  per evitare etichette sovrapposte. Il valore viene arrotondato e riportato ad
+  automatico fuori dall'intervallo 2-50; un formato sconosciuto torna ad Auto.
+- Attributi scritti in `encoding[canale].axis` (merge con l'oggetto di `axis()`),
+  non in `scale`: tick e formato appartengono all'asse, non al dominio.
+- Test aggiunti: sanitizzazione di tick e formato, patch degli attributi,
+  presenza nella spec, formato esplicito che batte il default dei domini
+  minuscoli.
 
 ## Fase 3 — zoom e pan
 

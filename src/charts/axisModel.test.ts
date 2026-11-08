@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   AXIS_KEYS,
   axisChannels,
+  axisPropertyPatch,
   axisScalePatch,
 } from './axisModel';
 import { factoryOptions, mergeOptions } from './defaults';
@@ -15,7 +16,7 @@ test('factory options start with every axis on automatic', () => {
   assert.equal(options.yMax, null);
   assert.equal(options.xScaleType, 'auto');
   assert.equal(options.yNice, false);
-  assert.equal(AXIS_KEYS.length, 12);
+  assert.equal(AXIS_KEYS.length, 16);
 });
 
 test('invalid stored axis values degrade to automatic', () => {
@@ -87,4 +88,20 @@ test('the editor hides the controls of a derived axis', () => {
     featuresFor(pareto).find(feature => feature.id === 'general.xMin')!.visible?.(factoryOptions('pareto'), pareto),
     false
   );
+});
+
+test('tick count and label format are sanitised', () => {
+  const rounded = mergeOptions('scatter', { xTickCount: 4.6, yLabelFormat: 'banana' } as never);
+  assert.equal(rounded.xTickCount, 5);
+  assert.equal(rounded.yLabelFormat, 'auto');
+
+  const outOfRange = mergeOptions('scatter', { xTickCount: 1, yTickCount: 99 } as never);
+  assert.equal(outOfRange.xTickCount, null);
+  assert.equal(outOfRange.yTickCount, null);
+});
+
+test('the axis object patch carries ticks and the d3 format', () => {
+  const options = mergeOptions('scatter', { xTickCount: 4, xLabelFormat: 'compact' } as never);
+  assert.deepEqual(axisPropertyPatch(options, 'x'), { tickCount: 4, format: '~s' });
+  assert.equal(axisPropertyPatch(factoryOptions('scatter'), 'x'), null);
 });

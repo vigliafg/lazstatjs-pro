@@ -63,6 +63,11 @@ const channelScales = (spec: unknown, channel: 'x' | 'y'): any[] =>
     .map(layer => layer?.encoding?.[channel]?.scale)
     .filter(scale => scale && typeof scale === 'object');
 
+const channelAxes = (spec: unknown, channel: 'x' | 'y'): any[] =>
+  layersOf(spec)
+    .map(layer => layer?.encoding?.[channel]?.axis)
+    .filter(axis => axis && typeof axis === 'object');
+
 const build = (kind: ChartKind, options: Partial<ChartOptions>) =>
   buildVegaSpec(chartOf(kind), { ...factoryOptions(kind), ...options } as never);
 
@@ -133,6 +138,38 @@ test('derived axes stay automatic', () => {
       assert.equal('domainMin' in scale, false);
     }
   }
+});
+
+test('tick count and label format reach the axis object', () => {
+  const spec = build('scatter', { xTickCount: 4, xLabelFormat: 'compact' });
+  const axes = channelAxes(spec, 'x');
+  assert.ok(axes.length > 0);
+  for (const axis of axes) {
+    assert.equal(axis.tickCount, 4);
+    assert.equal(axis.format, '~s');
+  }
+});
+
+test('automatic labels leave the axis format alone', () => {
+  const spec = build('scatter', { xTickCount: null, xLabelFormat: 'auto' });
+  for (const axis of channelAxes(spec, 'x')) assert.equal(axis.format, undefined);
+});
+
+test('an explicit format wins over the tiny-domain default', () => {
+  const chart = makeChart({
+    id: 'tiny',
+    kind: 'line',
+    title: 'tiny',
+    data: { series: [{ x: 1, y: 3e-13 }, { x: 2, y: 6e-13 }] },
+    fields: { xLabel: 'X', yLabel: 'Y' },
+  });
+  const spec = buildVegaSpec(chart, {
+    ...factoryOptions('line'),
+    yLabelFormat: 'percent',
+  } as never);
+  const axes = channelAxes(spec, 'y');
+  assert.ok(axes.length > 0);
+  for (const axis of axes) assert.equal(axis.format, '.1%');
 });
 
 test('every kind compiles without warnings with axis settings', () => {
