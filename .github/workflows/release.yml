@@ -13,6 +13,9 @@ env:
   # electron-builder fetches the runtime it needs; the postinstall download in
   # `npm ci` only adds a CDN dependency that can fail the whole release.
   ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+  # GitHub's release CDN intermittently answers 504 for the Electron runtime
+  # archives and their SHASUMS256 file, which kills every platform build.
+  ELECTRON_MIRROR: 'https://npmmirror.com/mirrors/electron/'
 
 jobs:
   build:
