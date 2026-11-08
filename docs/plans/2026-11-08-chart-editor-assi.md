@@ -120,6 +120,11 @@ Nel pannello di modifica di una card, sezione **Asse**:
 - **Canali**: il bind copre l'intera view, quindi servono scale continue e non
   binned. Una barra con x nominale o un istogramma con x binned restano senza
   zoom; Pareto e le matrici sono esclusi da `axisChannels`.
+- I layer di riferimento con un valore fisso (`value`/`datum`, per esempio le
+  rule orizzontali delle bande) **non** disattivano lo zoom: il parametro vive
+  su un layer con campi, quindi quei layer non partecipano alla proiezione.
+  Senza questo filtro lo scatter di correlazione perdeva lo zoom per una sola
+  rule a valore fisso.
 - **Convivenza con il brush di linking**: il brush non usa `params`. Vive in un
   overlay HTML e scrive i segnali `linkKeys`/`hiddenKeys` nella view montata,
   quindi `applyZoom` puo' accodare il suo parametro senza toccarli. Un test

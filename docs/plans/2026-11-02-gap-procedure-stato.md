@@ -1378,3 +1378,11 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   senza warning dei 32 tipi con zoom attivo).
 - Limite noto: con il linking attivo l'overlay del brush copre il plot, quindi
   il pan va fatto trascinando gli assi; non verificato a video in questa sessione.
+- Correzione dopo la prova in app: i layer con encoding a valore fisso
+  (`value`/`datum`) non disattivano più lo zoom. Lo scatter di correlazione lo
+  perdeva per una rule con `y: { value: 0 }`; ora `canBindScales` considera
+  solo gli encoding con `field`. Aggiunto il test relativo.
+- Prova in app (Vite, `localhost:3000`): la card scatter mostra il pulsante
+  "Reset zoom" solo con l'opzione attiva. Lo zoom con rotella non è stato
+  osservabile: il wheel sintetico non viene accettato da Vega e lo scroll
+  reale via browser va in timeout; resta da provare a mano.

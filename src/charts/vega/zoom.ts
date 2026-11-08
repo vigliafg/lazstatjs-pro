@@ -21,23 +21,32 @@ const continuous = (encoding: SpecRecord | undefined): boolean =>
   encoding?.bin !== true &&
   typeof encoding?.bin !== 'object';
 
+/** Encodings that draw a field, as opposed to fixed marks (value/datum). */
+const fielded = (layers: readonly SpecRecord[], channel: AxisChannel): SpecRecord[] =>
+  layers
+    .map(layer => layer?.encoding?.[channel] as SpecRecord | undefined)
+    .filter(
+      (encoding): encoding is SpecRecord =>
+        encoding !== undefined && typeof encoding.field === 'string'
+    );
+
 /**
- * Scale binding covers the whole view, so every drawn channel must be
- * continuous: Vega-Lite refuses to bind a nominal domain (bar with categories)
- * or a binned one (histogram). At least one channel allowed by
- * `axisChannels(kind)` must remain zoomable, otherwise the switch is useless.
+ * Scale binding covers the whole view, so every channel that plots a field
+ * must be continuous: Vega-Lite refuses to bind a nominal domain (bar with
+ * categories) or a binned one (histogram). Reference layers carry a fixed
+ * `value` instead of a field and are ignored here: the parameter is declared
+ * on a data layer, so they never take part in the projection.
+ *
+ * At least one channel allowed by `axisChannels(kind)` must remain zoomable,
+ * otherwise the switch is useless.
  */
 const canBindScales = (spec: unknown, allowed: readonly AxisChannel[]): boolean => {
   const layers = layersOf(spec) ?? [spec as SpecRecord];
   for (const channel of ['x', 'y'] as const) {
-    const drawn = layers
-      .map(layer => layer?.encoding?.[channel] as SpecRecord | undefined)
-      .filter((encoding): encoding is SpecRecord => encoding !== undefined);
+    const drawn = fielded(layers, channel);
     if (drawn.length > 0 && drawn.some(encoding => !continuous(encoding))) return false;
   }
-  return allowed.some(channel =>
-    layers.some(layer => continuous(layer?.encoding?.[channel]))
-  );
+  return allowed.some(channel => layers.some(layer => continuous(layer?.encoding?.[channel])));
 };
 
 const withoutZoom = (params: unknown): SpecRecord[] =>

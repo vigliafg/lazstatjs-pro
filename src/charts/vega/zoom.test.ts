@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { compile } from 'vega-lite';
 import { buildVegaSpec } from './buildSpec';
+import { applyZoom } from './zoom';
 import { factoryOptions, mergeOptions } from '../defaults';
 import { makeChart } from '../kits/common';
 import type { ChartKind, ChartOptions } from '../../stats/charts';
@@ -115,6 +116,27 @@ test('zoom coexists with the link signals', () => {
   assert.ok(names.includes('chartZoom'));
   assert.ok(names.includes('linkKeys'));
   assert.ok(names.includes('hiddenKeys'));
+});
+
+test('a value-only reference layer does not disable zoom', () => {
+  const spec = {
+    layer: [
+      { mark: 'rule', encoding: { y: { value: 0 } } },
+      {
+        mark: 'point',
+        encoding: {
+          x: { field: 'x', type: 'quantitative' },
+          y: { field: 'y', type: 'quantitative' },
+        },
+      },
+    ],
+  };
+  const out = applyZoom(
+    spec as never,
+    { ...factoryOptions('scatter'), enableZoom: true } as never,
+    chartOf('scatter')
+  );
+  assert.ok(paramsOf(out).some(param => param?.name === 'chartZoom'));
 });
 
 test('zoom is stored as a per-card boolean', () => {
