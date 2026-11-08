@@ -5,6 +5,34 @@ import { axisChannels, type AxisChannel } from '../axisModel';
 /** Name of the scale-binding parameter added when zoom is on. */
 export const ZOOM_PARAM = 'chartZoom';
 
+/** Vega signal that carries the bound domain of one channel. */
+export const zoomSignal = (channel: 'x' | 'y'): string => `${ZOOM_PARAM}_${channel}`;
+
+/**
+ * Domain projection Vega applies to a scale-bound wheel (`zoomLinear` in the
+ * compiled spec): the window grows or shrinks around the cursor anchor.
+ */
+export const zoomDomain = (
+  domain: readonly [number, number],
+  anchor: number,
+  factor: number
+): [number, number] => [
+  anchor + (domain[0] - anchor) * factor,
+  anchor + (domain[1] - anchor) * factor,
+];
+
+/**
+ * Domain projection Vega applies to a scale-bound drag (`panLinear`): the
+ * window keeps its width and moves by `fraction` of it.
+ */
+export const panDomain = (
+  domain: readonly [number, number],
+  fraction: number
+): [number, number] => {
+  const span = domain[1] - domain[0];
+  return [domain[0] + span * fraction, domain[1] + span * fraction];
+};
+
 export const zoomEnabled = (options: ChartOptions): boolean =>
   (options as unknown as { enableZoom?: unknown }).enableZoom === true;
 

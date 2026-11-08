@@ -546,6 +546,7 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.link.modeTitle": "Activer ou désactiver la liaison dynamique",
   "chart.link.clear": "Effacer la sélection",
   "chart.link.surfaceHint": "Faites glisser dans le graphique pour sélectionner des observations avec le pinceau ou le lasso. Appuyez sur Entrée pour tout sélectionner et sur Échap pour effacer la sélection.",
+  "chart.link.surfaceZoomHint": "Avec le zoom actif, maintenez Maj et faites glisser pour déplacer la vue ; la molette zoome.",
   "chart.link.tool": "Outil de sélection",
   "chart.link.availableHint": "Graphique lié : la sélection est partagée avec les autres graphiques de la session.",
   "chart.link.unavailableHint": "Ce graphique ne dessine pas les lignes individuelles ; la liaison par ligne n’est donc pas disponible.",

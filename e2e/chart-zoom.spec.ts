@@ -104,6 +104,42 @@ const panRight = async (page: Page, chart: Locator) => {
   await page.waitForTimeout(300);
 };
 
+/** Turn the zoom option on from the card editor; the card then offers the reset. */
+const enableZoom = async (page: Page, chart: Locator) => {
+  await chart.locator('button[aria-label^="Edit chart:"]').click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('[data-chart-surface]')).toHaveAttribute(
+    'data-chart-state',
+    'ready',
+    { timeout: 20_000 }
+  );
+  const expand = dialog.locator('[data-chart-tree-expand]');
+  if (await expand.isVisible().catch(() => false)) await expand.click();
+  await dialog.locator('#chart-feature-general-enableZoom').check();
+  await dialog.getByRole('button', { name: 'Done' }).click();
+  await expect(dialog).toHaveCount(0);
+  await waitReady(chart);
+  await expect(chart.getByRole('button', { name: 'Reset zoom' })).toBeVisible();
+};
+
+/**
+ * Shift+drag pans while the link overlay owns the plain drag: without the
+ * modifier that gesture is the brush.
+ */
+const shiftPanRight = async (page: Page, chart: Locator) => {
+  const box = await surfaceBox(chart);
+  const y = box.y + box.height / 2;
+  const centre = box.x + box.width / 2;
+  await page.keyboard.down('Shift');
+  await page.mouse.move(centre - 100, y);
+  await page.mouse.down();
+  await page.mouse.move(centre + 100, y, { steps: 12 });
+  await page.mouse.up();
+  await page.keyboard.up('Shift');
+  await page.waitForTimeout(300);
+};
+
 /** The drag ends with a click, and a click on a chart opens its editor. */
 const closeEditor = async (page: Page) => {
   const dialog = page.getByRole('dialog');
@@ -127,25 +163,10 @@ test.describe('chart axis zoom and pan', () => {
     expect(initial.length).toBeGreaterThanOrEqual(3);
     await expect(chart.getByRole('button', { name: 'Reset zoom' })).toHaveCount(0);
 
-    // Turn the option on from the card editor; the card then renders the
-    // reset button, so the switch reached the mounted view.
-    await chart.locator('button[aria-label^="Edit chart:"]').click();
-    const dialog = page.getByRole('dialog');
-    await expect(dialog).toBeVisible();
-    await expect(dialog.locator('[data-chart-surface]')).toHaveAttribute(
-      'data-chart-state',
-      'ready',
-      { timeout: 20_000 }
-    );
-    const expand = dialog.locator('[data-chart-tree-expand]');
-    if (await expand.isVisible().catch(() => false)) await expand.click();
-    await dialog.locator('#chart-feature-general-enableZoom').check();
-    await dialog.getByRole('button', { name: 'Done' }).click();
-    await expect(dialog).toHaveCount(0);
-    await waitReady(chart);
+    // The switch reached the mounted view: the reset button is now there.
+    await enableZoom(page, chart);
 
     const reset = chart.getByRole('button', { name: 'Reset zoom' });
-    await expect(reset).toBeVisible();
     const before = await tickLabels(chart, 'horizontal');
     expect(before).toEqual(initial);
 
@@ -174,6 +195,48 @@ test.describe('chart axis zoom and pan', () => {
     // Reset remounts the view: the original ticks come back.
     await reset.click();
     await waitReady(chart);
+    await expect.poll(() => tickLabels(chart, 'horizontal'), { timeout: 20_000 }).toEqual(before);
+  });
+
+  test('wheel and Shift+drag navigate under the brush overlay', async ({ page }) => {
+    await page.goto('/');
+    await runRegression(page);
+    const chart = chartOf(page, 'reg-scatter');
+    await waitReady(chart);
+    await enableZoom(page, chart);
+    const before = await tickLabels(chart, 'horizontal');
+
+    // Linking puts the transparent brush surface on top of the plot; the
+    // ticks do not move on their own.
+    await page.getByRole('button', { name: 'Turn dynamic linking on or off' }).click();
+    await expect(chart.locator('[data-chart-link-surface]')).toBeVisible();
+    expect(await tickLabels(chart, 'horizontal')).toEqual(before);
+
+    // The wheel hits the overlay, which drives the same bound domains Vega
+    // would: the visible span still shrinks.
+    await zoomIn(page, chart);
+    await expect
+      .poll(() => tickLabels(chart, 'horizontal').then(labels => labels.join('|')), {
+        timeout: 20_000,
+      })
+      .not.toBe(before.join('|'));
+    const zoomed = await tickLabels(chart, 'horizontal');
+    expect(span(zoomed)).toBeLessThan(span(before));
+
+    // Shift+drag pans instead of brushing: no selection appears and the
+    // window keeps its width while moving.
+    await shiftPanRight(page, chart);
+    await expect(page.locator('[data-link-count]')).toHaveCount(0);
+    const panned = await tickLabels(chart, 'horizontal');
+    expect(panned).not.toEqual(zoomed);
+    const shift = Math.abs(Math.min(...numeric(panned)) - Math.min(...numeric(zoomed)));
+    expect(shift).toBeGreaterThan(0);
+    expect(Math.abs(span(panned) - span(zoomed))).toBeLessThanOrEqual(span(zoomed) * 0.2 + 1);
+
+    // Reset restores the initial ticks and leaves linking on.
+    await chart.getByRole('button', { name: 'Reset zoom' }).click();
+    await waitReady(chart);
+    await expect(chart.locator('[data-chart-link-surface]')).toBeVisible();
     await expect.poll(() => tickLabels(chart, 'horizontal'), { timeout: 20_000 }).toEqual(before);
   });
 });

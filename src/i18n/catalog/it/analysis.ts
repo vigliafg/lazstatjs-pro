@@ -546,6 +546,7 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.link.modeTitle": "Attiva o disattiva il collegamento dinamico",
   "chart.link.clear": "Annulla selezione",
   "chart.link.surfaceHint": "Trascina nel grafico per selezionare le osservazioni con il pennello o il lazo. Premi Invio per selezionare tutti i punti ed Esc per annullare la selezione.",
+  "chart.link.surfaceZoomHint": "Con lo zoom attivo, trascina tenendo premuto Shift per spostare la vista; la rotella zooma.",
   "chart.link.tool": "Strumento di selezione",
   "chart.link.availableHint": "Grafico collegato: la selezione è condivisa con gli altri grafici della sessione.",
   "chart.link.unavailableHint": "Questo grafico non disegna le singole righe, quindi il collegamento per riga non è disponibile.",

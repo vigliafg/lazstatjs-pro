@@ -544,6 +544,7 @@ export const analysisMessages = {
   "chart.link.modeTitle": "Ativar ou desativar a ligação dinâmica",
   "chart.link.clear": "Limpar seleção",
   "chart.link.surfaceHint": "Arraste no gráfico para selecionar observações com o pincel ou o laço. Prima Enter para selecionar todos os pontos e Esc para limpar a seleção.",
+  "chart.link.surfaceZoomHint": "Com o zoom ativo, mantenha Shift premido e arraste para deslocar a vista; a roda faz zoom.",
   "chart.link.tool": "Ferramenta de seleção",
   "chart.link.availableHint": "Gráfico ligado: a seleção é partilhada com os outros gráficos da sessão.",
   "chart.link.unavailableHint": "Este gráfico não desenha as linhas individuais, pelo que a ligação por linha não está disponível.",

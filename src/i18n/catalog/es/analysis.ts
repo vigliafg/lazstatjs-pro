@@ -546,6 +546,7 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.link.modeTitle": "Activar o desactivar el enlace dinámico",
   "chart.link.clear": "Borrar selección",
   "chart.link.surfaceHint": "Arrastra en el gráfico para seleccionar observaciones con el pincel o el lazo. Pulsa Intro para seleccionar todos los puntos y Esc para borrar la selección.",
+  "chart.link.surfaceZoomHint": "Con el zoom activo, mantén Mayús y arrastra para desplazar la vista; la rueda hace zoom.",
   "chart.link.tool": "Herramienta de selección",
   "chart.link.availableHint": "Gráfico enlazado: la selección se comparte con los demás gráficos de la sesión.",
   "chart.link.unavailableHint": "Este gráfico no dibuja las filas individuales, así que el enlace por fila no está disponible.",

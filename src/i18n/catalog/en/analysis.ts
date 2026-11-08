@@ -544,6 +544,7 @@ export const analysisMessages = {
   "chart.link.modeTitle": "Turn dynamic linking on or off",
   "chart.link.clear": "Clear selection",
   "chart.link.surfaceHint": "Drag in the plot to select observations with the brush or lasso. Press Enter to select all points and Escape to clear the selection.",
+  "chart.link.surfaceZoomHint": "With zoom on, hold Shift and drag to pan the view; the wheel zooms.",
   "chart.link.tool": "Selection tool",
   "chart.link.availableHint": "Chart linked: selections are shared with the other charts in this session.",
   "chart.link.unavailableHint": "This chart does not draw individual rows, so row linking is unavailable.",

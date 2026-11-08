@@ -217,6 +217,7 @@ export const VegaChart = ({
             view={view}
             points={linkPoints}
             tool={interaction.tool}
+            zoom={zoomEnabled(options)}
             onSelect={interaction.onSelect}
             onClear={interaction.onClear}
           />

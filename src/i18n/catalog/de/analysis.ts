@@ -578,6 +578,7 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.link.modeTitle": "Dynamische Verknüpfung ein- oder ausschalten",
   "chart.link.clear": "Auswahl aufheben",
   "chart.link.surfaceHint": "Im Diagramm ziehen, um Beobachtungen mit Pinsel oder Lasso auszuwählen. Enter wählt alle Punkte aus, Escape hebt die Auswahl auf.",
+  "chart.link.surfaceZoomHint": "Bei aktivem Zoom mit Umschalttaste ziehen, um die Ansicht zu verschieben; das Mausrad zoomt.",
   "chart.link.tool": "Auswahlwerkzeug",
   "chart.link.availableHint": "Diagramm verknüpft: Die Auswahl wird mit den anderen Diagrammen dieser Sitzung geteilt.",
   "chart.link.unavailableHint": "Dieses Diagramm zeichnet keine einzelnen Zeilen; die Zeilenverknüpfung ist daher nicht verfügbar.",

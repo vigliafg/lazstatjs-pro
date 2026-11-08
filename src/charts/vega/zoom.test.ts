@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { compile } from 'vega-lite';
 import { buildVegaSpec } from './buildSpec';
-import { applyZoom } from './zoom';
+import { applyZoom, panDomain, zoomDomain, zoomSignal } from './zoom';
 import { factoryOptions, mergeOptions } from '../defaults';
 import { makeChart } from '../kits/common';
 import type { ChartKind, ChartOptions } from '../../stats/charts';
@@ -66,6 +66,17 @@ const paramsOf = (spec: unknown): any[] => {
 
 const zoomParam = (spec: unknown): any | undefined =>
   paramsOf(spec).find(param => param?.name === 'chartZoom');
+
+test('the overlay projections match the compiled bindings', () => {
+  // Same formulas as `zoomLinear`/`panLinear` in the Vega spec, so the link
+  // overlay and the native view move the domain identically.
+  assert.deepEqual(zoomDomain([0, 100], 40, 0.5), [20, 70]);
+  assert.deepEqual(zoomDomain([0, 100], 40, 2), [-40, 160]);
+  assert.deepEqual(panDomain([0, 100], 0.25), [25, 125]);
+  assert.deepEqual(panDomain([10, 30], -0.5), [0, 20]);
+  assert.equal(zoomSignal('x'), 'chartZoom_x');
+  assert.equal(zoomSignal('y'), 'chartZoom_y');
+});
 
 test('zoom binds the view scales when enabled', () => {
   const spec = build('scatter', { enableZoom: true });

@@ -130,8 +130,9 @@ Nel pannello di modifica di una card, sezione **Asse**:
   quindi `applyZoom` puo' accodare il suo parametro senza toccarli. Un test
   verifica che la spec con link attivo contenga tutti e tre i parametri.
 - Nota d'uso: con il linking attivo l'overlay del brush copre l'area del plot,
-  quindi il pan va fatto trascinando sugli assi e la rotella funziona sopra gli
-  assi; il reset resta sempre disponibile.
+  quindi la rotella e il pan li applica l'overlay ai signali del binding
+  (`zoomDomain`/`panDomain`): Shift+trascinamento sposta la vista, il drag
+  semplice resta il pennello e il reset resta sempre disponibile.
 - **Reset**: pulsante in basso a destra nella view (`data-no-export`, quindi
   escluso da PNG e report). Incrementa un token che rimonta la view: e' l'unico
   modo affidabile di azzerare un bind di scala senza cambiare la spec.
@@ -141,5 +142,7 @@ Nel pannello di modifica di una card, sezione **Asse**:
   sulla card di regressione. I tick si leggono dall'SVG (`g.role-axis-label`):
   la rotella restringe il dominio (44-72 -> 53-65), il trascinamento lo trasla
   mantenendo la larghezza visibile, "Reset zoom" riporta i tick iniziali. Il
-  test verifica anche che senza l'opzione il pulsante non esista. Skippato su
-  mobile (gesti del puntatore).
+  test verifica anche che senza l'opzione il pulsante non esista. Un secondo
+  caso tiene il linking attivo: con la superficie del pennello sopra il plot la
+  rotella restringe ancora il dominio e Shift+drag lo trasla senza selezionare
+  righe. Skippato su mobile (gesti del puntatore).
