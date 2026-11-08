@@ -19,6 +19,10 @@ jobs:
   build:
     name: Build web app
     runs-on: ubuntu-latest
+    env:
+      # The static site needs no desktop runtime; skipping the binary avoids
+      # failing the build when the Electron CDN is slow or unavailable.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
     steps:
       - uses: actions/checkout@v4
 

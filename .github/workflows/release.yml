@@ -9,6 +9,11 @@ on:
 permissions:
   contents: write
 
+env:
+  # electron-builder fetches the runtime it needs; the postinstall download in
+  # `npm ci` only adds a CDN dependency that can fail the whole release.
+  ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+
 jobs:
   build:
     name: Build ${{ matrix.name }}
