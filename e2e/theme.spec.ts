@@ -67,3 +67,27 @@ test('the header switches theme without opening settings', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dracula');
   await expect(page.getByLabel('Interface theme', { exact: true }).first()).toHaveValue('dracula');
 });
+
+test('a stored theme wins over the first-run default', async ({ page }) => {
+  // Simulate a profile that chose the previous default before the upgrade. The
+  // stored preference is seeded only on the first load, so the reload proves
+  // the app reads it back instead of rewriting it with GitHub Light.
+  await page.addInitScript(() => {
+    if (!window.localStorage.getItem('lazstats.ui.theme')) {
+      window.localStorage.setItem('lazstats.ui.theme', 'github-dark');
+    }
+  });
+
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  expect(await readVar(page, '--color-bg')).toBe('#0d0f14');
+
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  await expect(page.getByLabel('Interface theme', { exact: true }).first()).toHaveValue(
+    'github-dark'
+  );
+  expect(await page.evaluate(() => window.localStorage.getItem('lazstats.ui.theme'))).toBe(
+    'github-dark'
+  );
+});
