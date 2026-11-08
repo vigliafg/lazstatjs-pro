@@ -271,6 +271,7 @@ export const areaTopics: HelpTopic[] = [
       steps: [
         'Lancez une analyse et regardez la carte : les tableaux, puis le rapport de lecture, puis les graphiques modifiables.',
         'Cliquez sur un graphique pour ouvrir l’éditeur : changez le thème, les couleurs, le préréglage et les options de la procédure, puis appuyez sur Terminé.',
+        'Dans la section Axe, choisissez graduations, limites, échelle et format des étiquettes ; activez Zoom et déplacement pour la molette et Maj+glisser, puis Réinitialiser le zoom pour revenir à la vue initiale.',
         'Appuyez sur Annotations pour ajouter du texte, des lignes, des flèches ou des rectangles sur le graphique ; faites glisser pour déplacer, utilisez les poignées pour redimensionner et annulez avec Ctrl/⌘+Z.',
         'Ouvrez le Plan pour sauter à une carte ou la réduire avec le chevron.',
         'Appuyez sur Rapport pour télécharger un fichier HTML imprimable, ou sur Word pour une version modifiable.',
@@ -287,6 +288,7 @@ export const areaTopics: HelpTopic[] = [
         '« obsolète » signifie que les données ont changé après l’exécution : relancez avant d’exporter.',
         'Les graphiques restent modifiables après rechargement ; les cartes enregistrées avec l’ancien moteur restent statiques : relancez-les pour obtenir un graphique modifiable.',
         'Réglages → Graphiques définit le style par défaut des futurs graphiques ; les cartes existantes ne changent pas.',
+        'Zoom, déplacement, graduations et limites appartiennent à la carte, pas à la procédure : un nouveau run repart de ses valeurs par défaut.',
         'Les annotations utilisent des coordonnées relatives à la zone du graphique (0–1) : elles suivent le redimensionnement et l’export dans le même SVG Vega.',
         'Chaque geste sur les annotations est une étape d’annulation ; sur mobile, l’éditeur de graphique se divise en onglets Graphique, Propriétés et Annotations.',
         'Les préréglages nommés sont liés au projet et apparaissent dans le sélecteur Préréglage de chaque éditeur de graphique du projet.',
@@ -316,6 +318,7 @@ export const areaTopics: HelpTopic[] = [
         'Lancez une analyse qui produit des graphiques à points, par exemple une régression ou un rapport descriptif.',
         'Appuyez sur Lier dans la barre de sortie : chaque graphique qui dessine les lignes individuelles affiche la pastille Lier.',
         'Choisissez pinceau ou lasso, faites glisser sur le graphique pour sélectionner des observations et lisez le compteur N sélectionnés.',
+        'Avec Zoom et déplacement actif, la molette zoome et Maj+glisser déplace la vue ; Réinitialiser le zoom revient à la fenêtre initiale.',
         'Ouvrez Filtre de données pour exclure des lignes par catégorie ou par seuil numérique ; les lignes masquées restent visibles mais atténuées.',
         'Appuyez sur Échap ou Effacer la sélection pour revenir au graphique complet ; désactivez Lier pour masquer la couche de sélection.',
       ],
@@ -332,6 +335,7 @@ export const areaTopics: HelpTopic[] = [
       reading: [
         'Un graphique n’offre la liaison que s’il dessine les observations comme des symboles : histogrammes, courbes de densité et lignes sans marqueurs n’ont pas de lignes à sélectionner.',
         'La clé de ligne est la ligne du jeu de données utilisée par l’exécution, pas un identifiant permanent : changer de jeu de données efface la sélection.',
+        'Avec la liaison active, le curseur devient une main dès que Maj est enfoncée : le déplacement ne demande jamais de repasser au pinceau.',
         'Le filtre de données atténue les lignes dans les graphiques liés mais ne les retire ni de l’analyse, ni des tableaux, ni du rapport.',
       ],
       pitfalls: [

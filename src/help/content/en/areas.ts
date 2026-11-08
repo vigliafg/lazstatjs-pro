@@ -271,6 +271,7 @@ export const areaTopics: HelpTopic[] = [
       steps: [
         'Run an analysis and look at the card: tables, then the reading report, then the editable charts.',
         'Click a chart to open the editor: change theme, colours, preset and procedure-specific options, then press Done.',
+        'In the Axis section choose ticks, limits, scale and label format; switch Zoom and pan on to use the wheel and Shift+drag, then Reset zoom to return to the initial view.',
         'Press Annotations to add text, lines, arrows or rectangles on the plot; drag to move, use the handles to resize and undo with Ctrl/⌘+Z.',
         'Open the Outline to jump to a card or collapse it with the chevron.',
         'Press Report to download a printable HTML file, or Word for an editable one.',
@@ -287,6 +288,7 @@ export const areaTopics: HelpTopic[] = [
         '“stale” means data changed after the run: re-run before exporting.',
         'Charts stay editable after reload; cards saved with the old engine remain static: re-run them to get an editable chart.',
         'Settings → Charts sets the default style of future charts; existing cards are not changed.',
+        'Zoom, pan, ticks and limits belong to the card, not to the procedure: a new run starts again from its defaults.',
         'Annotations use plot-relative coordinates (0–1 inside the plot area), so they follow resizing and export inside the same Vega SVG.',
         'Each annotation gesture is one undo step; on mobile the chart editor splits into Chart, Properties and Annotations tabs.',
         'Named presets are project-scoped and appear in the Preset selector of every chart editor in that project.',
@@ -316,6 +318,7 @@ export const areaTopics: HelpTopic[] = [
         'Run an analysis that produces point charts, for example a regression or a descriptive report.',
         'Press Link in the output toolbar: every chart that draws individual rows shows the Link chip.',
         'Choose brush or lasso, drag on the plot to select observations, and read the N selected counter.',
+        'With Zoom and pan on, the wheel zooms and Shift+drag moves the view; Reset zoom returns to the initial window.',
         'Open Data Filter to exclude rows by a category or a numeric threshold; hidden rows stay visible but faded.',
         'Press Escape or Clear selection to return to the full chart; turn Link off to hide the selection layer.',
       ],
@@ -332,6 +335,7 @@ export const areaTopics: HelpTopic[] = [
       reading: [
         'A chart offers linking only when it draws observations as symbols: histograms, density curves and lines without markers have no rows to brush.',
         'The row key is the row of the dataset used by the run, not a permanent identifier: changing dataset clears the selection.',
+        'While linking is on the cursor turns into a hand as soon as Shift is held, so panning never means switching to the brush.',
         'The Data Filter dims rows in linked charts but does not remove them from the analysis, the tables or the report.',
       ],
       pitfalls: [

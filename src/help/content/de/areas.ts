@@ -276,6 +276,7 @@ export const areaTopics: HelpTopic[] = [
       steps: [
         "Führen Sie eine Analyse aus und sehen Sie sich die Karte an: zuerst Tabellen, dann den Lesetext, dann die bearbeitbaren Diagramme.",
         "Klicken Sie auf ein Diagramm, um den Editor zu öffnen: Ändern Sie Thema, Farben, Voreinstellung und verfahrensspezifische Optionen, und drücken Sie dann Fertig.",
+        "Legen Sie im Abschnitt Achse Ticks, Grenzen, Skalentyp und Etikettenformat fest; schalten Sie Zoom und Verschieben ein, um Mausrad und Umschalt+Ziehen zu nutzen, und drücken Sie Zoom zurücksetzen, um zur ursprünglichen Ansicht zurückzukehren.",
         "Drücken Sie Anmerkungen, um Text, Linien, Pfeile oder Rechtecke auf dem Diagramm hinzuzufügen; ziehen Sie zum Verschieben, nutzen Sie die Griffe zum Größenändern und machen Sie mit Strg/⌘+Z rückgängig.",
         "Öffnen Sie die Gliederung, um zu einer Karte zu springen, oder klappen Sie sie mit dem Pfeil ein.",
         "Drücken Sie Bericht, um eine druckbare HTML-Datei herunterzuladen, oder Word für eine bearbeitbare.",
@@ -292,6 +293,7 @@ export const areaTopics: HelpTopic[] = [
         "„veraltet“ bedeutet, dass sich die Daten nach dem Lauf geändert haben: Führen Sie vor dem Export erneut aus.",
         "Diagramme bleiben nach dem Neuladen bearbeitbar; mit der alten Engine gespeicherte Karten bleiben statisch: Führen Sie sie erneut aus, um ein bearbeitbares Diagramm zu erhalten.",
         "Einstellungen → Diagramme legt den Standardstil künftiger Diagramme fest; bestehende Karten bleiben unverändert.",
+        "Zoom, Verschieben, Ticks und Achsengrenzen gehören zur Karte, nicht zum Verfahren: Ein neuer Lauf beginnt wieder mit den Standardwerten.",
         "Anmerkungen verwenden Koordinaten relativ zur Diagrammfläche (0–1) und folgen daher Größenänderungen und Export innerhalb desselben Vega-SVG.",
         "Jede Geste an den Anmerkungen ist ein Rückgängig-Schritt; auf Mobilgeräten teilt sich der Diagrammeditor in die Tabs Diagramm, Eigenschaften und Anmerkungen.",
         "Benannte Voreinstellungen gehören zum Projekt und erscheinen im Voreinstellungs-Auswahlfeld jedes Diagrammeditors dieses Projekts.",
@@ -321,6 +323,7 @@ export const areaTopics: HelpTopic[] = [
         "Führen Sie eine Analyse aus, die Punktdiagramme erzeugt, zum Beispiel eine Regression oder einen deskriptiven Bericht.",
         "Drücken Sie Verknüpfen in der Ausgabewerkzeugleiste: Jedes Diagramm, das einzelne Zeilen zeichnet, zeigt die Verknüpfen-Marke.",
         "Wählen Sie Pinsel oder Lasso, ziehen Sie im Diagramm, um Beobachtungen auszuwählen, und lesen Sie den Zähler N ausgewählt.",
+        "Bei aktivem Zoom und Verschieben zoomt das Mausrad und Umschalt+Ziehen verschiebt die Ansicht; Zoom zurücksetzen stellt das ursprüngliche Fenster wieder her.",
         "Öffnen Sie Datenfilter, um Zeilen nach Kategorie oder numerischem Schwellenwert auszuschließen; ausgeblendete Zeilen bleiben sichtbar, aber blasser.",
         "Drücken Sie Esc oder Auswahl aufheben, um zum vollständigen Diagramm zurückzukehren; schalten Sie Verknüpfen aus, um die Auswahlfläche zu verbergen.",
       ],
@@ -337,6 +340,7 @@ export const areaTopics: HelpTopic[] = [
       reading: [
         "Ein Diagramm bietet Verknüpfen nur, wenn es Beobachtungen als Symbole zeichnet: Histogramme, Dichtekurven und Linien ohne Marker haben keine Zeilen zum Auswählen.",
         "Der Zeilenschlüssel ist die Zeile des vom Lauf verwendeten Datensatzes, keine dauerhafte Kennung: Beim Datensatzwechsel wird die Auswahl gelöscht.",
+        "Bei aktiver Verknüpfung wird der Cursor zur Hand, sobald Umschalt gedrückt ist: Verschieben erfordert nie den Wechsel zum Pinsel.",
         "Der Datenfilter blendet Zeilen in verknüpften Diagrammen ab, entfernt sie aber nicht aus der Analyse, den Tabellen oder dem Bericht.",
       ],
       pitfalls: [

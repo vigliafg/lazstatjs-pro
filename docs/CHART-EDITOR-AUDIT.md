@@ -3,6 +3,22 @@
 Data: 2026-10-29. Perimetro: `ChartEditorDialog`, toolbar generale,
 pannello specifico, `VegaChart`, persistenza delle opzioni e layout mobile.
 
+## Aggiornamenti 2026-11-08
+
+- **Assi**: tick e formato delle etichette per canale, limiti min/max e tipo di
+  scala (auto, lineare, log, radice) nella sezione Asse; i controlli compaiono
+  solo per i canali che il tipo di grafico disegna.
+- **Zoom e pan**: opzione per card `enableZoom`, spenta di default; quando
+  attiva aggiunge il parametro `chartZoom` (`bind: 'scales'`) e il pulsante
+  Azzera zoom. Barre, istogrammi, Pareto e matrici restano senza zoom: gli
+  scale non sono continui o non binned.
+- **Convivenza con il linking**: con il pennello attivo l'overlay applica
+  rotella e Shift+trascinamento ai segnali del binding, il drag semplice resta
+  la selezione e il cursore diventa una mano quando Shift è premuto.
+- **E2E**: `e2e/chart-zoom.spec.ts` pilota rotella, trascinamento e reset
+  leggendo i tick dall'SVG, anche con il linking attivo. `npm test` 1422 test,
+  `npm run lint` e `npm run guard` verdi.
+
 ## Copertura end-to-end
 
 La suite è in `e2e/chart-editor.spec.ts` e viene eseguita da `npm run test:e2e`
@@ -21,6 +37,8 @@ barre) e **regressione lineare semplice** (scatter, box dei residui, Q–Q).
 | Q–Q | linea di riferimento, stile intervallo, scala probabilità/z |
 | Galleria stili | fascia sotto l'anteprima: stile applicato alla card, copia inserita nel report, salvataggio di uno stile utente, default globale e override della procedura (`e2e/chart-styles.spec.ts`) |
 | Dialogo | Done, Cancel, Escape, conferma modifiche non salvate, focus trap, Reset, Reset sezione |
+| Assi | tick e formato per X/Y, limiti min/max, scala auto/lineare/log/radice |
+| Zoom e pan | rotella, trascinamento, Shift+trascinamento con linking attivo, Azzera zoom (`e2e/chart-zoom.spec.ts`) |
 | Persistenza | autosave, reload, riapertura con le opzioni salvate |
 | Mobile | dialog full-screen, pannello specifico nel disclosure, nessuna duplicazione di id |
 

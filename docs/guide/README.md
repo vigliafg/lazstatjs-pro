@@ -123,3 +123,6 @@ controlla che esistano davvero.
   `npm run help:audit` controlla contaminazione linguistica e parità.
 - Rilascio 0.30.0: gate verde, `help:build` e `help:audit` rieseguiti, pacchetti
   Electron costruiti, note di rilascio allineate ai documenti 01–10.
+- Rilascio 0.31.0: assi completi (tick, formato, limiti, scala), zoom e pan con
+  Azzera zoom anche con il linking attivo, tema di primo avvio GitHub Light;
+  `help:build`/`help:audit` rieseguiti e web pubblicata su GitHub Pages dal tag.

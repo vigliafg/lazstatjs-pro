@@ -8,6 +8,7 @@ procedura e dove finiscono le modifiche.
 - [Il principio](#il-principio)
 - [Il catalogo delle proprietà](#il-catalogo-delle-proprietà)
 - [Dove si modifica](#dove-si-modifica)
+- [Assi, zoom e pan](#assi-zoom-e-pan)
 - [Esportazione](#esportazione)
 - [Punti di forza](#punti-di-forza)
 
@@ -44,6 +45,27 @@ Il pannello delle proprietà e la galleria degli stili stanno nella scheda del
 grafico. Le modifiche valgono per quel grafico di quel run e non toccano la
 procedura: un nuovo run riparte dai valori predefiniti, a meno che l'utente non
 abbia salvato uno stile o un preset da riusare.
+
+## Assi, zoom e pan
+
+La sezione **Asse** dell'editor governa la lettura dei numeri, non i numeri:
+
+- **tick**: quanti valori mostrare (da 2 a 50, oppure automatico);
+- **limiti**: minimo e massimo fissi per l'asse, per confrontare grafici con
+  scale diverse;
+- **scala**: automatica, lineare, logaritmica o radice quadrata;
+- **formato delle etichette**: decimale, percentuale o notazione compatta.
+
+Con **Zoom e pan** attivo la rotella restringe il dominio e il trascinamento lo
+sposta; il pulsante **Azzera zoom** riporta la finestra iniziale. Con il
+collegamento per righe attivo la superficie del pennello copre il grafico: la
+rotella continua a zoomare, il trascinamento semplice seleziona e
+**Shift+trascinamento** sposta la vista; il cursore diventa una mano appena
+premi Shift.
+
+Tutto vale per quella scheda e quel run: non cambia i dati né i risultati
+statistici. Limiti e scala restano il modo corretto per confrontare due grafici
+senza ingrandirli a mano.
 
 ## Esportazione
 

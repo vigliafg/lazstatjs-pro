@@ -271,6 +271,7 @@ export const areaTopics: HelpTopic[] = [
       steps: [
         'Execute uma análise e veja o cartão: primeiro as tabelas, depois o relatório de leitura, depois os gráficos editáveis.',
         'Clique num gráfico para abrir o editor: altere o tema, as cores, a predefinição e as opções do procedimento e prima Concluído.',
+        'Na secção Eixo escolha marcas, limites, escala e formato das etiquetas; ative Zoom e deslocamento para usar a roda e Shift+arrastar, e Repor zoom para voltar à vista inicial.',
         'Prima Anotações para acrescentar texto, linhas, setas ou retângulos sobre o gráfico; arraste para mover, use as pegas para redimensionar e anule com Ctrl/⌘+Z.',
         'Abra a Estrutura para saltar para um cartão ou reduzi-lo com a seta.',
         'Prima Relatório para descarregar um ficheiro HTML para impressão, ou Word para um ficheiro editável.',
@@ -287,6 +288,7 @@ export const areaTopics: HelpTopic[] = [
         '«desatualizado» significa que os dados mudaram depois da execução: volte a executar antes de exportar.',
         'Os gráficos continuam editáveis após recarregar; os cartões guardados com o motor antigo são estáticos: volte a executá-los para obter um gráfico editável.',
         'Definições → Gráficos define o estilo predefinido dos gráficos futuros; os cartões existentes não mudam.',
+        'Zoom, deslocamento, marcas e limites pertencem ao cartão, não ao procedimento: uma nova execução parte dos valores predefinidos.',
         'As anotações usam coordenadas relativas à área do gráfico (0–1), por isso acompanham o redimensionamento e a exportação no mesmo SVG do Vega.',
         'Cada gesto nas anotações é um passo de anular; no telemóvel o editor do gráfico divide-se nos separadores Gráfico, Propriedades e Anotações.',
         'As predefinições com nome pertencem ao projeto e aparecem no seletor Predefinição de cada editor de gráficos desse projeto.',
@@ -316,6 +318,7 @@ export const areaTopics: HelpTopic[] = [
         'Execute uma análise que produza gráficos de pontos, por exemplo uma regressão ou um relatório descritivo.',
         'Prima Ligar na barra de saída: cada gráfico que desenha as linhas individuais mostra a etiqueta Ligar.',
         'Escolha pincel ou laço, arraste sobre o gráfico para selecionar observações e leia o contador N selecionados.',
+        'Com Zoom e deslocamento ativo, a roda faz zoom e Shift+arrastar move a vista; Repor zoom volta à janela inicial.',
         'Abra Filtro de dados para excluir linhas por categoria ou por limite numérico; as linhas ocultas continuam visíveis mas atenuadas.',
         'Prima Esc ou Limpar seleção para voltar ao gráfico completo; desative Ligar para ocultar a camada de seleção.',
       ],
@@ -332,6 +335,7 @@ export const areaTopics: HelpTopic[] = [
       reading: [
         'Um gráfico só oferece ligação se desenhar as observações como símbolos: histogramas, curvas de densidade e linhas sem marcadores não têm linhas para selecionar.',
         'A chave de linha é a linha do conjunto de dados usado pela execução, não um identificador permanente: ao mudar de conjunto de dados a seleção é limpa.',
+        'Com a ligação ativa o cursor torna-se uma mão assim que Shift é premido, pelo que deslocar nunca obriga a mudar para o pincel.',
         'O filtro de dados atenua as linhas nos gráficos ligados mas não as remove da análise, das tabelas ou do relatório.',
       ],
       pitfalls: [

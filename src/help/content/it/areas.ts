@@ -275,6 +275,7 @@ export const areaTopics: HelpTopic[] = [
       steps: [
         'Esegui un’analisi e osserva la scheda: tabelle, poi il Report di lettura, poi i grafici modificabili.',
         'Clicca un grafico per aprire l’editor: cambia tema, colori, preset e opzioni della procedura, poi premi Fatto.',
+        'Nella sezione Asse scegli tick, limiti, scala e formato delle etichette; attiva Zoom e pan per usare rotella e Shift+trascinamento, poi Azzera zoom per tornare alla vista iniziale.',
         'Premi Annotazioni per aggiungere testo, linee, frecce o rettangoli sul grafico; trascina per spostare, usa le maniglie per ridimensionare e annulla con Ctrl/⌘+Z.',
         'Apri l’Indice per saltare a una scheda o comprimerla con la freccia.',
         'Premi Report per scaricare un HTML stampabile, o Word per un file modificabile.',
@@ -291,6 +292,7 @@ export const areaTopics: HelpTopic[] = [
         '«obsoleto» indica che i dati sono cambiati dopo l’esecuzione: riesegui prima di esportare.',
         'I grafici restano modificabili dopo il reload; le schede salvate con il vecchio motore sono statiche: rilanciale per ottenere un grafico modificabile.',
         'Impostazioni → Grafici imposta lo stile predefinito dei grafici futuri; le schede esistenti non cambiano.',
+        'Zoom, pan, tick e limiti appartengono alla scheda, non alla procedura: un nuovo run riparte dai valori predefiniti.',
         'Le annotazioni usano coordinate relative all’area del grafico (0–1), quindi seguono ridimensionamento ed export nello stesso SVG di Vega.',
         'Ogni gesto sulle annotazioni è un passo di annulla; su mobile l’editor del grafico si divide nei tab Grafico, Proprietà e Annotazioni.',
         'I preset con nome sono legati al progetto e compaiono nel selettore Preset di ogni editor grafico del progetto.',
@@ -320,6 +322,7 @@ export const areaTopics: HelpTopic[] = [
         'Esegui un’analisi che produce grafici a punti, per esempio una regressione o un report descrittivo.',
         'Premi Collega nella barra dell’output: ogni grafico che disegna le singole righe mostra il chip Collega.',
         'Scegli pennello o lazo, trascina sul grafico per selezionare le osservazioni e leggi il conteggio N selezionati.',
+        'Con Zoom e pan attivo la rotella zooma e Shift+trascinamento sposta la vista; Azzera zoom riporta la finestra iniziale.',
         'Apri Filtro dati per escludere righe per categoria o per soglia numerica; le righe nascoste restano visibili ma attenuate.',
         'Premi Esc o Annulla selezione per tornare al grafico completo; disattiva Collega per nascondere il livello di selezione.',
       ],
@@ -336,6 +339,7 @@ export const areaTopics: HelpTopic[] = [
       reading: [
         'Un grafico offre il collegamento solo se disegna le osservazioni come simboli: istogrammi, curve di densità e linee senza marker non hanno righe da selezionare.',
         'La chiave di riga è la riga del dataset usata dal run, non un identificativo permanente: cambiando dataset la selezione viene azzerata.',
+        'Con il collegamento attivo il cursore diventa una mano appena premi Shift, così il pan non richiede di passare al pennello.',
         'Il filtro dati attenua le righe nei grafici collegati ma non le rimuove dall’analisi, dalle tabelle o dal report.',
       ],
       pitfalls: [
