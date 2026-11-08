@@ -1326,3 +1326,21 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   con meno indicatori, cosi' il raggruppamento predefinito e' stimabile.
 - Il test a catena non ha piu' nessuna eccezione: tutti i 153 esempi girano e
   la lista `KNOWN_REJECTIONS` e' stata rimossa.
+
+### Checkpoint 2026-11-08 — Chart editor: limiti d'asse e tipo di scala (fase 1)
+
+- Implementata la fase 1 del piano assi: `axisModel.ts` (default, normalizzazione,
+  `axisChannels`, patch di scala), `vega/axis.ts` (post-pass nella spec),
+  `axisFeatures.ts` (dodici controlli), tipi estratti in `featureTypes.ts`.
+- Limiti per card: `domainMin`/`domainMax` con `zero: false`, scala
+  auto/linear/log/sqrt, reverse/clamp/nice. Esclusi i tipi con assi derivati
+  (qq solo y, forest solo x, scree y, tree x; nessuno per pareto, dendrogram,
+  surface, heatmap, mosaic, missingness, scattermatrix, scatter3d).
+- Chiavi d'asse fuori da `COMMON_DEFAULTS`/`COMMON_KEYS` e da `sanitizePatch`:
+  preset stile, default utente e stili salvati non catturano i limiti.
+- Test nuovi: `src/charts/axisModel.test.ts` e `src/charts/vega/axis.test.ts`
+  (13 casi, compresa la compilazione senza warning di tutti i 32 tipi).
+- 19 chiavi per lingua in it/en/fr/es/de/pt-PT.
+- `features.ts` scende a 697 righe: eccezione di dimensione rimossa dal guard.
+- Prossimi passi: fase 2 (tick/formato etichette) e fase 3 (pan/zoom e reset,
+  fusione con il brush di linking).

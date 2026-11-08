@@ -16,6 +16,7 @@
 import type { MessageKey } from '../i18n';
 import type { AnalysisChart, ChartKind, ChartOptions, ChartRow } from '../stats/charts';
 import { CHART_KINDS } from '../stats/charts';
+import { AXIS_KEYS } from './axisModel';
 import { COMMON_KEYS, factoryOptions } from './defaults';
 
 /** Kind-specific options a style can own. Values are JSON primitives. */
@@ -103,13 +104,19 @@ const sanitizeName = (value: unknown): string =>
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
+/**
+ * Axis limits and scale type are per card: a saved style must not pin a range
+ * that belongs to one dataset, even though the keys exist in the factory.
+ */
+const AXIS = new Set<string>(AXIS_KEYS as readonly string[]);
+
 /** Keep only known kind-specific keys with a matching primitive type. */
 const sanitizePatch = (kind: ChartKind, value: unknown): ChartStylePatch => {
   if (!isRecord(value)) return {};
   const factory = factoryOptions(kind) as unknown as Record<string, unknown>;
   const patch: Record<string, string | number | boolean> = {};
   for (const [key, item] of Object.entries(value)) {
-    if (key === 'kind' || key === 'annotations' || COMMON.has(key)) continue;
+    if (key === 'kind' || key === 'annotations' || COMMON.has(key) || AXIS.has(key)) continue;
     if (!(key in factory)) continue;
     const expected = typeof factory[key];
     if (typeof item !== expected) continue;

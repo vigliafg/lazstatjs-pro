@@ -6,33 +6,11 @@ import type {
   CommonChartOptions,
 } from '../stats/charts';
 import { applyPreset, boxDisplayOf } from './defaults';
+import { AXIS_FEATURES } from './axisFeatures';
 
-export type FeatureGroup = 'general' | 'style' | 'specific';
-export type FeatureType = 'checkbox' | 'select' | 'number' | 'range';
+import type { FeatureChoice, FeatureDescriptor, FeatureGroup, FeatureType } from './featureTypes';
 
-export interface FeatureChoice {
-  value: string | number;
-  labelKey: MessageKey;
-}
-
-export interface FeatureDescriptor {
-  id: string;
-  labelKey: MessageKey;
-  group: FeatureGroup;
-  type: FeatureType;
-  /** Shown in the compact toolbar instead of "More style". */
-  prominent?: boolean;
-  section?: MessageKey;
-  choices?: FeatureChoice[];
-  /** Choices that depend on the chart data (e.g. SE/SD only when present). */
-  choicesFor?: (chart: AnalysisChart) => FeatureChoice[];
-  min?: number;
-  max?: number;
-  step?: number;
-  visible?: (options: ChartOptions, chart: AnalysisChart) => boolean;
-  get: (options: ChartOptions) => string | number | boolean;
-  set: (options: ChartOptions, value: string | number | boolean) => ChartOptions;
-}
+export type { FeatureChoice, FeatureDescriptor, FeatureGroup, FeatureType } from './featureTypes';
 
 const choice = (value: string | number, labelKey: MessageKey): FeatureChoice => ({
   value,
@@ -709,6 +687,7 @@ const SPECIFIC: Partial<Record<ChartKind, FeatureDescriptor[]>> = {
 /** The single registry: toolbar and panel only filter/lay out these entries. */
 export const featuresFor = (chart: AnalysisChart): FeatureDescriptor[] => [
   ...GENERAL,
+  ...AXIS_FEATURES,
   ...STYLE,
   ...(SPECIFIC[chart.kind] ?? []),
 ];

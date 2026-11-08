@@ -1,6 +1,7 @@
 import type { TopLevelSpec } from 'vega-lite';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import { applyChartLink, type ChartLink } from '../interaction';
+import { applyAxisSettings } from './axis';
 import { base, spec } from './encoding';
 import { boxLayers } from './boxLayers';
 import { dotLayers, ecdfLayers, intervalLayers } from './descriptiveLayers';
@@ -191,5 +192,9 @@ export const buildVegaSpec = (
       return spec(chart, options, surfaceLayers(chart, options));
     }
   };
-  return applyChartLink(seriesLineColor(formatTinyAxes(build())), chart, link);
+  return applyChartLink(
+    seriesLineColor(formatTinyAxes(applyAxisSettings(build(), options, chart))),
+    chart,
+    link
+  );
 };
