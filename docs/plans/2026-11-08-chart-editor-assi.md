@@ -137,3 +137,9 @@ Nel pannello di modifica di una card, sezione **Asse**:
   modo affidabile di azzerare un bind di scala senza cambiare la spec.
 - Test: parametro presente/assente, canali per tipo, compresenza con i segnali
   di link, normalizzazione booleana, compilazione senza warning dei 32 tipi.
+- **E2E** (`e2e/chart-zoom.spec.ts`, desktop): rotella e trascinamento reali
+  sulla card di regressione. I tick si leggono dall'SVG (`g.role-axis-label`):
+  la rotella restringe il dominio (44-72 -> 53-65), il trascinamento lo trasla
+  mantenendo la larghezza visibile, "Reset zoom" riporta i tick iniziali. Il
+  test verifica anche che senza l'opzione il pulsante non esista. Skippato su
+  mobile (gesti del puntatore).

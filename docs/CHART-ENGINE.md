@@ -320,6 +320,10 @@ dati, statistiche, tabelle o report.
   undo/redo, export PNG diretto, persistenza, focus trap e layout mobile su
   ANOVA e regressione semplice (screenshot in
   `test-results/chart-editor-audit/`).
+- `e2e/chart-zoom.spec.ts`: rotella e trascinamento sulla view Vega reale
+  (`reg-scatter`), con i tick letti dall'SVG: la rotella restringe il dominio
+  dell'asse, il trascinamento lo trasla a larghezza costante e «Reset zoom»
+  riporta i tick iniziali. Skippato su mobile (gesti del puntatore).
 - Baseline visive opzionali: `VISUAL=1 npx playwright test
   e2e/chart-editor.spec.ts --project=desktop -g baseline`.
 - `npm run check`, build e guardrail restano verdi.
