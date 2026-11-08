@@ -387,7 +387,7 @@ export const THEMES = [
 
 export type ThemeId = (typeof THEMES)[number]['id'];
 
-export const DEFAULT_THEME_ID: ThemeId = 'github-dark';
+export const DEFAULT_THEME_ID: ThemeId = 'github-light';
 
 const BY_ID = new Map<string, ThemeDefinition>(THEMES.map(theme => [theme.id, theme]));
 

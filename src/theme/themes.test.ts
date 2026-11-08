@@ -50,6 +50,11 @@ test('the registry ships exactly five dark and five light themes', () => {
   assert.equal(isThemeId(DEFAULT_THEME_ID), true);
 });
 
+test('the first run uses GitHub Light', () => {
+  assert.equal(DEFAULT_THEME_ID, 'github-light');
+  assert.equal(themeById(DEFAULT_THEME_ID).mode, 'light');
+});
+
 test('every theme declares every UI token and chart token', () => {
   for (const theme of THEMES) {
     for (const key of Object.keys(CSS_VARIABLE_NAMES)) {

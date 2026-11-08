@@ -26,7 +26,7 @@ test('all ten themes apply their tokens and persist across reloads', async ({ pa
   test.skip(isMobile, 'the settings grid is exercised on the desktop layout');
 
   await page.goto('/');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-light');
 
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await expect(page.locator('[data-theme-option]')).toHaveCount(10);
@@ -43,8 +43,8 @@ test('all ten themes apply their tokens and persist across reloads', async ({ pa
     ).toBe(theme.mode);
   }
 
-  // Use a light theme for the reload: it proves the persisted preference,
-  // not just the dark default from the seed project.
+  // Use a different theme for the reload: it proves the persisted preference,
+  // not just the seeded default.
   await page.waitForTimeout(1200);
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light-modern');
@@ -57,7 +57,7 @@ test('all ten themes apply their tokens and persist across reloads', async ({ pa
 test('the header switches theme without opening settings', async ({ page }) => {
   await page.goto('/');
   const selector = page.getByLabel('Interface theme', { exact: true }).first();
-  await expect(selector).toHaveValue('github-dark');
+  await expect(selector).toHaveValue('github-light');
 
   await selector.selectOption('dracula');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dracula');
