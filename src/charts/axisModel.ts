@@ -29,6 +29,9 @@ export const AXIS_DEFAULTS = {
   yTickCount: null,
   xLabelFormat: 'auto',
   yLabelFormat: 'auto',
+  // Global to the card rather than per channel: one pan/zoom gesture moves
+  // both scales, so splitting it per axis would contradict the interaction.
+  enableZoom: false,
 } as const;
 
 export type AxisKey = keyof typeof AXIS_DEFAULTS;
@@ -36,7 +39,14 @@ export type AxisKey = keyof typeof AXIS_DEFAULTS;
 export const AXIS_KEYS = Object.keys(AXIS_DEFAULTS) as readonly AxisKey[];
 
 export type AxisLimitKey = 'xMin' | 'xMax' | 'yMin' | 'yMax';
-export type AxisFlagKey = 'xReverse' | 'yReverse' | 'xClamp' | 'yClamp' | 'xNice' | 'yNice';
+export type AxisFlagKey =
+  | 'xReverse'
+  | 'yReverse'
+  | 'xClamp'
+  | 'yClamp'
+  | 'xNice'
+  | 'yNice'
+  | 'enableZoom';
 export type AxisTickKey = 'xTickCount' | 'yTickCount';
 export type AxisFormatKey = 'xLabelFormat' | 'yLabelFormat';
 
@@ -217,8 +227,10 @@ const normalizeAxis = (options: ChartOptions, axis: AxisChannel): ChartOptions =
 };
 
 /** Fill and validate every axis key; unknown or missing input becomes `auto`. */
-export const normalizeAxisOptions = <T extends ChartOptions>(options: T): T =>
-  normalizeAxis(normalizeAxis(options, 'x'), 'y') as T;
+export const normalizeAxisOptions = <T extends ChartOptions>(options: T): T => {
+  const normalized = normalizeAxis(normalizeAxis(options, 'x'), 'y');
+  return write(normalized, 'enableZoom', axisFlag(normalized, 'enableZoom')) as T;
+};
 
 export interface AxisScalePatch {
   domainMin?: number;

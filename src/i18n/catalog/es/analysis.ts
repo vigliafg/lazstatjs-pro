@@ -267,6 +267,8 @@ export const analysisMessages: Record<keyof typeof enAnalysis, string> = {
   "chart.format.compact": "Compacto (1,2k)",
   "chart.format.percent": "Porcentaje",
   "chart.format.scientific": "Científico (1,2e+06)",
+  "chart.feature.zoom": "Zoom y desplazamiento",
+  "chart.zoom.reset": "Restablecer zoom",
   "chart.object.axisX": "Eje X",
   "chart.object.axisY": "Eje Y",
   "chart.feature.xMin": "Mínimo X",

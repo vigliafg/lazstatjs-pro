@@ -1,6 +1,6 @@
 # Chart editor — assi: limiti e scala (fase 1)
 
-Stato: **fasi 1 e 2 implementate** (2026-11-08). Fase 3 in fondo al documento.
+Stato: **fasi 1, 2 e 3 implementate** (2026-11-08).
 
 ## Cosa puo' fare l'utente
 
@@ -106,10 +106,29 @@ Nel pannello di modifica di una card, sezione **Asse**:
   presenza nella spec, formato esplicito che batte il default dei domini
   minuscoli.
 
-## Fase 3 — zoom e pan
+## Fase 3 — zoom e pan (implementata)
 
-- `params: [{ select: { type: 'interval', encodings: ['x','y'] }, bind: 'scales' }]`
-  per pan/zoom con assi riadattati, piu' un pulsante di reset.
-- Attenzione: il brush di linking in `src/charts/interaction.ts` usa gli stessi
-  `params`; `applyChartLink` filtra e riaggiunge i suoi, quindi la fusione va
-  verificata con il linking attivo e con il brush spento.
+- Nuova chiave per card `enableZoom` (spenta di default). Quando e' attiva,
+  `vega/zoom.ts` aggiunge un parametro `chartZoom` (`select: 'interval'`,
+  `bind: 'scales'`): rotella per lo zoom, trascinamento per il pan, assi che
+  seguono il dominio.
+- **Dove sta il parametro**: sul primo layer con un campo continuo, non al
+  top-level. A livello top-level Vega-Lite proietta la selezione su tutti i
+  layer e avvisa per i layer di riferimento con un solo asse (una rule
+  orizzontale non ha `x`); sul layer emette gli stessi signali
+  `chartZoom_x`/`chartZoom_y` senza warning.
+- **Canali**: il bind copre l'intera view, quindi servono scale continue e non
+  binned. Una barra con x nominale o un istogramma con x binned restano senza
+  zoom; Pareto e le matrici sono esclusi da `axisChannels`.
+- **Convivenza con il brush di linking**: il brush non usa `params`. Vive in un
+  overlay HTML e scrive i segnali `linkKeys`/`hiddenKeys` nella view montata,
+  quindi `applyZoom` puo' accodare il suo parametro senza toccarli. Un test
+  verifica che la spec con link attivo contenga tutti e tre i parametri.
+- Nota d'uso: con il linking attivo l'overlay del brush copre l'area del plot,
+  quindi il pan va fatto trascinando sugli assi e la rotella funziona sopra gli
+  assi; il reset resta sempre disponibile.
+- **Reset**: pulsante in basso a destra nella view (`data-no-export`, quindi
+  escluso da PNG e report). Incrementa un token che rimonta la view: e' l'unico
+  modo affidabile di azzerare un bind di scala senza cambiare la spec.
+- Test: parametro presente/assente, canali per tipo, compresenza con i segnali
+  di link, normalizzazione booleana, compilazione senza warning dei 32 tipi.

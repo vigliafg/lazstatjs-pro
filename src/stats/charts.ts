@@ -116,6 +116,8 @@ export interface CommonChartOptions {
   yTickCount?: number | null;
   xLabelFormat?: AxisLabelFormat;
   yLabelFormat?: AxisLabelFormat;
+  /** Pan and wheel zoom bound to both scales, with a reset button. */
+  enableZoom?: boolean;
   /**
    * Free annotations in normalized plot coordinates. Per card only: this key
    * is intentionally absent from factory, user and global chart defaults.

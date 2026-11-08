@@ -265,6 +265,8 @@ export const analysisMessages = {
   "chart.format.compact": "Compact (1.2k)",
   "chart.format.percent": "Percent",
   "chart.format.scientific": "Scientific (1.2e+06)",
+  "chart.feature.zoom": "Zoom and pan",
+  "chart.zoom.reset": "Reset zoom",
   "chart.object.axisX": "X axis",
   "chart.object.axisY": "Y axis",
   "chart.feature.xMin": "X minimum",

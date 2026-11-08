@@ -2,6 +2,7 @@ import type { TopLevelSpec } from 'vega-lite';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import { applyChartLink, type ChartLink } from '../interaction';
 import { applyAxisSettings } from './axis';
+import { applyZoom } from './zoom';
 import { base, spec } from './encoding';
 import { boxLayers } from './boxLayers';
 import { dotLayers, ecdfLayers, intervalLayers } from './descriptiveLayers';
@@ -194,9 +195,15 @@ export const buildVegaSpec = (
   };
   // Axis labels are applied after `formatTinyAxes`, so an explicit format wins
   // over its tiny-domain default; the scale part is order-independent.
-  return applyChartLink(
-    seriesLineColor(applyAxisSettings(formatTinyAxes(build()), options, chart)),
-    chart,
-    link
+  // Zoom is applied last: it appends its own parameter, so the link signals
+  // that `applyChartLink` writes are kept and the two interactions coexist.
+  return applyZoom(
+    applyChartLink(
+      seriesLineColor(applyAxisSettings(formatTinyAxes(build()), options, chart)),
+      chart,
+      link
+    ),
+    options,
+    chart
   );
 };

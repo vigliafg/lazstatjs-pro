@@ -1358,3 +1358,23 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
 - Test: 18 casi nei due file degli assi (5 nuovi), typecheck e guard verdi.
 - Prossimo passo: fase 3 (pan/zoom con `bind: 'scales'` e reset, convivenza con
   il brush di linking).
+
+### Checkpoint 2026-11-08 — Chart editor: zoom, pan e reset (fase 3)
+
+- Chiave per card `enableZoom`: `vega/zoom.ts` aggiunge `chartZoom`
+  (`select: 'interval'`, `bind: 'scales'`) sul primo layer con un campo
+  continuo. Il bind copre la view, quindi servono scale continue e non binned:
+  barre con x nominale e istogrammi restano senza zoom, Pareto e matrici sono
+  esclusi da `axisChannels`.
+- Convivenza con il linking verificata: il brush usa i segnali
+  `linkKeys`/`hiddenKeys`, non `params`, quindi la spec con link attivo contiene
+  `chartZoom`, `linkKeys` e `hiddenKeys` insieme.
+- Pulsante "Azzera zoom" nella view: incrementa un token che rimonta la view
+  (reset affidabile del bind di scala), escluso dagli export con
+  `data-no-export`.
+- Controllo "Zoom e pan" nella sezione Asse, nascosto per i tipi senza canali
+  scalabili; 2 chiavi i18n per lingua.
+- Test: nuovo `src/charts/vega/zoom.test.ts` (6 casi, inclusa la compilazione
+  senza warning dei 32 tipi con zoom attivo).
+- Limite noto: con il linking attivo l'overlay del brush copre il plot, quindi
+  il pan va fatto trascinando gli assi; non verificato a video in questa sessione.

@@ -27,7 +27,14 @@ const COMMON_OBJECTS: ChartObjectNode[] = [
   {
     id: 'axes',
     labelKey: 'chart.object.axes',
-    features: ['general.showXTitle', 'general.showYTitle', 'general.gridX', 'general.gridY', 'style.gridOpacity'],
+    features: [
+      'general.showXTitle',
+      'general.showYTitle',
+      'general.gridX',
+      'general.gridY',
+      'style.gridOpacity',
+      'general.enableZoom',
+    ],
     // Limits and scale live per channel: a chart whose axis is derived (Q-Q,
     // Pareto, matrices) hides the whole sub-object through `visible`.
     children: [

@@ -115,6 +115,18 @@ const labelFormat = (axis: Axis, labelKey: MessageKey): FeatureDescriptor => {
   );
 };
 
+const zoom = (labelKey: MessageKey): FeatureDescriptor => ({
+  id: 'general.enableZoom',
+  labelKey,
+  group: 'general',
+  type: 'checkbox',
+  section: 'chart.section.axis',
+  // No channel to scale means no gesture to offer (Pareto, matrices, ...).
+  visible: (_options, chart) => axisChannels(chart.kind).length > 0,
+  get: options => axisFlag(options, 'enableZoom'),
+  set: (options, value) => setAxisFlag(options, 'enableZoom', value),
+});
+
 const toggle = (axis: Axis, flag: 'Reverse' | 'Clamp' | 'Nice', labelKey: MessageKey): FeatureDescriptor => {
   const key = `${axis}${flag}` as AxisFlagKey;
   return axisFeature(
@@ -148,4 +160,5 @@ export const AXIS_FEATURES: FeatureDescriptor[] = [
   toggle('y', 'Clamp', 'chart.feature.yClamp'),
   toggle('x', 'Nice', 'chart.feature.xNice'),
   toggle('y', 'Nice', 'chart.feature.yNice'),
+  zoom('chart.feature.zoom'),
 ];

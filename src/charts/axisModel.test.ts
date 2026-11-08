@@ -16,7 +16,7 @@ test('factory options start with every axis on automatic', () => {
   assert.equal(options.yMax, null);
   assert.equal(options.xScaleType, 'auto');
   assert.equal(options.yNice, false);
-  assert.equal(AXIS_KEYS.length, 16);
+  assert.equal(AXIS_KEYS.length, 17);
 });
 
 test('invalid stored axis values degrade to automatic', () => {
