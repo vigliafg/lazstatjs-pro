@@ -36,15 +36,24 @@ test.describe('analysis forms — structure', () => {
             return !(el as HTMLInputElement).hidden;
           })
           .map((el) => `${el.tagName.toLowerCase()}${el.getAttribute('type') ? `[${el.getAttribute('type')}]` : ''}`);
+        // Editable fields scroll their own value once the text is longer than the box (a
+        // row label such as "Treatment" sits right at the edge), and that depends on the
+        // font metrics of the runner. Layout overflow is measured on the containers.
         const overflow = Array.from(root.querySelectorAll<HTMLElement>('*'))
+          .filter((el) => !['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName))
           .filter((el) => el.scrollWidth > el.clientWidth + 1)
           .slice(0, 5)
           .map((el) => `${el.tagName}.${String(el.className).slice(0, 24)}`);
-        return { duplicates, unlabeled, overflow };
+        const paneOverflow =
+          root.scrollWidth > root.clientWidth + 1
+            ? `${root.scrollWidth}>${root.clientWidth}`
+            : null;
+        return { duplicates, unlabeled, overflow, paneOverflow };
       });
       if (metrics.duplicates.length > 0) failures.push(`${tab.id}: duplicate ids ${metrics.duplicates.join(', ')}`);
       if (metrics.unlabeled.length > 0) failures.push(`${tab.id}: unlabeled ${metrics.unlabeled.join(', ')}`);
       if (metrics.overflow.length > 0) failures.push(`${tab.id}: overflow ${metrics.overflow.join(', ')}`);
+      if (metrics.paneOverflow) failures.push(`${tab.id}: setup pane scrolls sideways ${metrics.paneOverflow}`);
     }
 
     expect(failures).toEqual([]);
