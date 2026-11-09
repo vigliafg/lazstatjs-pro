@@ -21,8 +21,15 @@ const setColour = async (locator: import('@playwright/test').Locator, value: str
 test('output appearance overrides the theme only inside the result window', async ({ page, isMobile }) => {
   test.skip(isMobile, 'the output appearance editor is exercised on the desktop layout');
 
+  // Read the shell colour from the active theme instead of hardcoding one, so
+  // the check survives a change of the default theme.
+  let shellBackground = '';
+
   await test.step('configure the output window', async () => {
     await page.goto('/');
+    shellBackground = await page
+      .locator('body')
+      .evaluate(node => getComputedStyle(node).backgroundColor);
     await page.getByRole('button', { name: 'Settings', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Output window' })).toBeVisible();
 
@@ -48,7 +55,7 @@ test('output appearance overrides the theme only inside the result window', asyn
     await expect(output).toHaveCSS('font-size', '16px');
     await expect(output).toHaveCSS('font-family', /Georgia/);
     // The shell keeps the selected UI theme: only the result window changed.
-    await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(13, 15, 20)');
+    await expect(page.locator('body')).toHaveCSS('background-color', shellBackground);
   });
 
   await test.step('persist across reload and keep the result window themed', async () => {

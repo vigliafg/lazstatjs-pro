@@ -32,19 +32,21 @@ test.describe('theme creator — desktop', () => {
     await expect(page.locator('[data-theme-chart-preview]')).toHaveCount(1);
     await expect(page.locator('[data-contrast-check]')).toHaveCount(11);
     await dialog.locator('[data-theme-name]').fill('Test theme');
-    await dialog.locator('[data-theme-color="accent"]').fill('#38bdf8');
+    // The accent must pass the contrast check on the light default theme,
+    // otherwise saving asks for confirmation and the dialog stays open.
+    await dialog.locator('[data-theme-color="accent"]').fill('#1d4ed8');
     await expect
       .poll(() =>
         page.locator('[data-theme-preview]').evaluate(node =>
           getComputedStyle(node).getPropertyValue('--color-accent').trim()
         )
       )
-      .toBe('#38bdf8');
+      .toBe('#1d4ed8');
 
     await dialog.locator('[data-theme-save]').click();
     await expect(dialog).toHaveCount(0);
     await expect(page.locator('html')).toHaveAttribute('data-theme', /^custom-/);
-    expect(await readVar(page, '--color-accent')).toBe('#38bdf8');
+    expect(await readVar(page, '--color-accent')).toBe('#1d4ed8');
     await expect(page.locator('[data-custom-theme]')).toHaveCount(1);
     await expect(page.locator('[data-custom-theme]')).toContainText('Test theme');
 
@@ -87,7 +89,7 @@ test.describe('theme creator — desktop', () => {
     page.once('dialog', prompt => prompt.accept());
     await page.locator('[data-custom-theme]').filter({ hasText: 'Paper theme copy' }).locator('[data-theme-delete]').click();
     await expect(page.locator('[data-custom-theme]')).toHaveCount(1);
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-light');
   });
 
   test('cancel and contrast warnings do not change the app theme', async ({ page }) => {
