@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { RotateCcw } from 'lucide-react';
+import { t } from '../../i18n';
+import { zoomEnabled } from '../../charts/vega/zoom';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import {
   chartHasRowKeys,
@@ -71,6 +74,9 @@ export const VegaChart = ({
   const [state, setState] = useState<ChartState>('loading');
   const [plotArea, setPlotArea] = useState<ChartPlotArea | null>(null);
   const [view, setView] = useState<VegaViewLike | null>(null);
+  // Bumping this token remounts the view, which is the only reliable way to
+  // drop a scale-binding zoom without recompiling with a different spec.
+  const [resetToken, setResetToken] = useState(0);
   const background = chartSurfaceBackground(options);
   const annotations = options.annotations ?? [];
   const theme = options.theme;
@@ -153,7 +159,7 @@ export const VegaChart = ({
       }
       if (hostRef.current) hostRef.current.innerHTML = '';
     };
-  }, [chart, chartKey]);
+  }, [chart, chartKey, resetToken]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -211,11 +217,28 @@ export const VegaChart = ({
             view={view}
             points={linkPoints}
             tool={interaction.tool}
+            zoom={zoomEnabled(options)}
             onSelect={interaction.onSelect}
             onClear={interaction.onClear}
           />
         )}
         {state === 'ready' && overlay?.(plotArea)}
+        {state === 'ready' && !thumbnail && zoomEnabled(options) && (
+          <button
+            type="button"
+            data-no-export
+            title={t('chart.zoom.reset')}
+            aria-label={t('chart.zoom.reset')}
+            onClick={event => {
+              event.stopPropagation();
+              setResetToken(token => token + 1);
+            }}
+            className="absolute bottom-1 right-1 z-10 flex items-center gap-1 rounded border border-border2 bg-surface3/90 px-1.5 py-0.5 font-mono text-[9px] text-text2 hover:text-text"
+          >
+            <RotateCcw className="h-3 w-3" aria-hidden="true" />
+            {t('chart.zoom.reset')}
+          </button>
+        )}
       </div>
     </div>
   );

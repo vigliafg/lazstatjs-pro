@@ -1326,3 +1326,63 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   con meno indicatori, cosi' il raggruppamento predefinito e' stimabile.
 - Il test a catena non ha piu' nessuna eccezione: tutti i 153 esempi girano e
   la lista `KNOWN_REJECTIONS` e' stata rimossa.
+
+### Checkpoint 2026-11-08 — Chart editor: limiti d'asse e tipo di scala (fase 1)
+
+- Implementata la fase 1 del piano assi: `axisModel.ts` (default, normalizzazione,
+  `axisChannels`, patch di scala), `vega/axis.ts` (post-pass nella spec),
+  `axisFeatures.ts` (dodici controlli), tipi estratti in `featureTypes.ts`.
+- Limiti per card: `domainMin`/`domainMax` con `zero: false`, scala
+  auto/linear/log/sqrt, reverse/clamp/nice. Esclusi i tipi con assi derivati
+  (qq solo y, forest solo x, scree y, tree x; nessuno per pareto, dendrogram,
+  surface, heatmap, mosaic, missingness, scattermatrix, scatter3d).
+- Chiavi d'asse fuori da `COMMON_DEFAULTS`/`COMMON_KEYS` e da `sanitizePatch`:
+  preset stile, default utente e stili salvati non catturano i limiti.
+- Test nuovi: `src/charts/axisModel.test.ts` e `src/charts/vega/axis.test.ts`
+  (13 casi, compresa la compilazione senza warning di tutti i 32 tipi).
+- 19 chiavi per lingua in it/en/fr/es/de/pt-PT.
+- `features.ts` scende a 697 righe: eccezione di dimensione rimossa dal guard.
+- Prossimi passi: fase 2 (tick/formato etichette) e fase 3 (pan/zoom e reset,
+  fusione con il brush di linking).
+
+### Checkpoint 2026-11-08 — Chart editor: tick e formato etichette (fase 2)
+
+- Nuove chiavi per card: `xTickCount`/`yTickCount` (interi 2-50, arrotondati,
+  fuori intervallo → automatico) e `xLabelFormat`/`yLabelFormat` (auto,
+  decimale `~f`, compatto `~s`, percentuale `.1%`, scientifico `.2~e`).
+- `applyAxisSettings` ora scrive anche `encoding[canale].axis` (tickCount e
+  format) e gira **dopo** `formatTinyAxes`: il formato esplicito batte il
+  default `.4~g` dei domini minuscoli.
+- Pannello: due campi numerici e due select nella sezione Asse (X e Y); 9 chiavi
+  i18n per lingua (tick, formato, cinque voci del formato).
+- Test: 18 casi nei due file degli assi (5 nuovi), typecheck e guard verdi.
+- Prossimo passo: fase 3 (pan/zoom con `bind: 'scales'` e reset, convivenza con
+  il brush di linking).
+
+### Checkpoint 2026-11-08 — Chart editor: zoom, pan e reset (fase 3)
+
+- Chiave per card `enableZoom`: `vega/zoom.ts` aggiunge `chartZoom`
+  (`select: 'interval'`, `bind: 'scales'`) sul primo layer con un campo
+  continuo. Il bind copre la view, quindi servono scale continue e non binned:
+  barre con x nominale e istogrammi restano senza zoom, Pareto e matrici sono
+  esclusi da `axisChannels`.
+- Convivenza con il linking verificata: il brush usa i segnali
+  `linkKeys`/`hiddenKeys`, non `params`, quindi la spec con link attivo contiene
+  `chartZoom`, `linkKeys` e `hiddenKeys` insieme.
+- Pulsante "Azzera zoom" nella view: incrementa un token che rimonta la view
+  (reset affidabile del bind di scala), escluso dagli export con
+  `data-no-export`.
+- Controllo "Zoom e pan" nella sezione Asse, nascosto per i tipi senza canali
+  scalabili; 2 chiavi i18n per lingua.
+- Test: nuovo `src/charts/vega/zoom.test.ts` (6 casi, inclusa la compilazione
+  senza warning dei 32 tipi con zoom attivo).
+- Limite noto: con il linking attivo l'overlay del brush copre il plot, quindi
+  il pan va fatto trascinando gli assi; non verificato a video in questa sessione.
+- Correzione dopo la prova in app: i layer con encoding a valore fisso
+  (`value`/`datum`) non disattivano più lo zoom. Lo scatter di correlazione lo
+  perdeva per una rule con `y: { value: 0 }`; ora `canBindScales` considera
+  solo gli encoding con `field`. Aggiunto il test relativo.
+- Prova in app (Vite, `localhost:3000`): la card scatter mostra il pulsante
+  "Reset zoom" solo con l'opzione attiva. Lo zoom con rotella non è stato
+  osservabile: il wheel sintetico non viene accettato da Vega e lo scroll
+  reale via browser va in timeout; resta da provare a mano.

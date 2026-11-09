@@ -9,6 +9,14 @@ on:
 permissions:
   contents: write
 
+env:
+  # electron-builder fetches the runtime it needs; the postinstall download in
+  # `npm ci` only adds a CDN dependency that can fail the whole release.
+  ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+  # GitHub's release CDN intermittently answers 504 for the Electron runtime
+  # archives and their SHASUMS256 file, which kills every platform build.
+  ELECTRON_MIRROR: 'https://npmmirror.com/mirrors/electron/'
+
 jobs:
   build:
     name: Build ${{ matrix.name }}
@@ -24,7 +32,7 @@ jobs:
             os: windows-latest
             target: win
           - name: macOS
-            os: macos-14
+            os: macos-latest
             target: mac
     steps:
       - uses: actions/checkout@v4
@@ -44,15 +52,32 @@ jobs:
 
       - name: Package
         shell: bash
+        # electron-builder downloads its own tool binaries (winCodeSign, nsis,
+        # appimage, fpm) from GitHub releases. That backend intermittently
+        # answers 504 even while the runtime download succeeds, so fetch the
+        # tools from the public mirror first and retry before giving up.
+        env:
+          ELECTRON_BUILDER_BINARIES_MIRROR: 'https://registry.npmmirror.com/-/binary/electron-builder-binaries/'
         run: |
-          if [ "${{ matrix.target }}" = "mac" ]; then
-            # The macOS runner currently fails while creating the DMG
-            # (hdiutil "Device not configured"). Ship the signed-ready .zip
-            # from CI and leave the DMG to a local/manual build.
-            npx electron-builder --mac zip --x64 --arm64 --publish never
-          else
-            npx electron-builder --${{ matrix.target }} --publish never
-          fi
+          package_app() {
+            if [ "${{ matrix.target }}" = "mac" ]; then
+              # The macOS runner currently fails while creating the DMG
+              # (hdiutil "Device not configured"). Ship the signed-ready .zip
+              # from CI and leave the DMG to a local/manual build.
+              npx electron-builder --mac zip --x64 --arm64 --publish never
+            else
+              npx electron-builder --${{ matrix.target }} --publish never
+            fi
+          }
+          package_app || {
+            echo "packaging failed, retrying in 20s"
+            sleep 20
+            package_app
+          } || {
+            echo "packaging failed again, retrying against GitHub in 20s"
+            sleep 20
+            ELECTRON_BUILDER_BINARIES_MIRROR= package_app
+          }
 
       - name: Smoke-test packaged Linux app
         if: matrix.target == 'linux'

@@ -8,6 +8,7 @@ and where the changes end up.
 - [The principle](#the-principle)
 - [The catalogue of properties](#the-catalogue-of-properties)
 - [Where edits happen](#where-edits-happen)
+- [Axes, zoom and pan](#axes-zoom-and-pan)
 - [Export](#export)
 - [Strengths](#strengths)
 
@@ -41,6 +42,27 @@ Above the individual properties sit four tools that save time:
 The properties panel and the style gallery sit in the chart tab. Edits apply to
 that chart in that run and do not touch the procedure: a new run starts again
 from the defaults, unless the user has saved a style or a preset to reuse.
+
+## Axes, zoom and pan
+
+The **Axis** section of the editor governs how numbers are read, not the numbers
+themselves:
+
+- **ticks**: how many values to show (2 to 50, or automatic);
+- **limits**: fixed minimum and maximum for the axis, to compare charts with
+  different scales;
+- **scale**: automatic, linear, logarithmic or square root;
+- **label format**: decimal, percentage or compact notation.
+
+With **Zoom and pan** on, the wheel narrows the domain and dragging slides it;
+**Reset zoom** restores the initial window. While row linking is on, the brush
+surface covers the plot: the wheel still zooms, a plain drag selects and
+**Shift+drag** pans the view; the cursor turns into a hand as soon as Shift is
+held.
+
+Everything applies to that card and that run: it changes neither the data nor
+the statistical results. Limits and scale remain the right way to compare two
+charts without zooming them by hand.
 
 ## Export
 

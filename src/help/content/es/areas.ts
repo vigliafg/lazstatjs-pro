@@ -271,6 +271,7 @@ export const areaTopics: HelpTopic[] = [
       steps: [
         'Ejecuta un análisis y mira la tarjeta: primero las tablas, luego el informe de lectura y después los gráficos editables.',
         'Haz clic en un gráfico para abrir el editor: cambia el tema, los colores, el preajuste y las opciones de la procedencia, y pulsa Hecho.',
+        'En la sección Eje elige marcas, límites, escala y formato de las etiquetas; activa Zoom y desplazamiento para usar la rueda y Mayús+arrastrar, y Restablecer zoom para volver a la vista inicial.',
         'Pulsa Anotaciones para añadir texto, líneas, flechas o rectángulos sobre el gráfico; arrastra para mover, usa las asas para redimensionar y deshaz con Ctrl/⌘+Z.',
         'Abre el Esquema para saltar a una tarjeta o contráela con la flecha.',
         'Pulsa Informe para descargar un archivo HTML imprimible, o Word para uno editable.',
@@ -287,6 +288,7 @@ export const areaTopics: HelpTopic[] = [
         '«obsoleto» significa que los datos cambiaron después de la ejecución: vuelve a ejecutar antes de exportar.',
         'Los gráficos siguen siendo editables tras recargar; las tarjetas guardadas con el motor anterior son estáticas: vuelve a ejecutarlas para obtener un gráfico editable.',
         'Ajustes → Gráficos define el estilo predeterminado de los gráficos futuros; las tarjetas existentes no cambian.',
+        'Zoom, desplazamiento, marcas y límites pertenecen a la tarjeta, no al procedimiento: una nueva ejecución parte de sus valores predeterminados.',
         'Las anotaciones usan coordenadas relativas al área del gráfico (0–1), así que siguen el redimensionado y la exportación dentro del mismo SVG de Vega.',
         'Cada gesto sobre las anotaciones es un paso de deshacer; en móvil el editor del gráfico se divide en las pestañas Gráfico, Propiedades y Anotaciones.',
         'Los preajustes con nombre están ligados al proyecto y aparecen en el selector Preajuste de cada editor de gráficos del proyecto.',
@@ -316,6 +318,7 @@ export const areaTopics: HelpTopic[] = [
         'Ejecuta un análisis que produzca gráficos de puntos, por ejemplo una regresión o un informe descriptivo.',
         'Pulsa Enlazar en la barra de salida: cada gráfico que dibuja las filas individuales muestra la etiqueta Enlazar.',
         'Elige pincel o lazo, arrastra sobre el gráfico para seleccionar observaciones y lee el contador N seleccionados.',
+        'Con Zoom y desplazamiento activo, la rueda hace zoom y Mayús+arrastrar mueve la vista; Restablecer zoom vuelve a la ventana inicial.',
         'Abre Filtro de datos para excluir filas por categoría o por umbral numérico; las filas ocultas siguen visibles pero atenuadas.',
         'Pulsa Esc o Borrar selección para volver al gráfico completo; desactiva Enlazar para ocultar la capa de selección.',
       ],
@@ -332,6 +335,7 @@ export const areaTopics: HelpTopic[] = [
       reading: [
         'Un gráfico solo ofrece enlace si dibuja las observaciones como símbolos: histogramas, curvas de densidad y líneas sin marcadores no tienen filas que seleccionar.',
         'La clave de fila es la fila del conjunto de datos usado por la ejecución, no un identificador permanente: al cambiar de conjunto de datos se borra la selección.',
+        'Con el enlace activo el cursor se convierte en una mano en cuanto pulsas Mayús, así que desplazar nunca exige cambiar al pincel.',
         'El filtro de datos atenúa las filas en los gráficos enlazados pero no las elimina del análisis, las tablas ni el informe.',
       ],
       pitfalls: [

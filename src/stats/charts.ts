@@ -64,6 +64,12 @@ export type ChartKind = (typeof CHART_KINDS)[number];
 
 export type ChartLayout = 'full' | 'half';
 
+/** Scale requested for one cartesian axis; `auto` keeps the data-driven one. */
+export type AxisScaleType = 'auto' | 'linear' | 'log' | 'sqrt';
+
+/** Label pattern for one cartesian axis; `auto` keeps the Vega default. */
+export type AxisLabelFormat = 'auto' | 'decimal' | 'compact' | 'percent' | 'scientific';
+
 export interface CommonChartOptions {
   preset: 'default' | 'minimal' | 'print';
   theme: 'dark' | 'light';
@@ -86,6 +92,32 @@ export interface CommonChartOptions {
   lineDash: 'solid' | 'dashed' | 'dotted';
   size: 'compact' | 'regular' | 'wide';
   tooltip: boolean;
+  /**
+   * Axis settings are per card: they deliberately do not travel in style
+   * presets, so a preset stays reusable on data with a different range.
+   * A null (or missing) limit means "automatic", i.e. the domain comes from
+   * the data. `axisChannels()` in `charts/axisModel.ts` lists the kinds whose
+   * axes are derived (Q-Q, Pareto, matrices) and therefore stay automatic.
+   */
+  xMin?: number | null;
+  xMax?: number | null;
+  yMin?: number | null;
+  yMax?: number | null;
+  xScaleType?: AxisScaleType;
+  yScaleType?: AxisScaleType;
+  xReverse?: boolean;
+  yReverse?: boolean;
+  xClamp?: boolean;
+  yClamp?: boolean;
+  xNice?: boolean;
+  yNice?: boolean;
+  /** Desired number of ticks (Vega-Lite honours it as a hint, not a rule). */
+  xTickCount?: number | null;
+  yTickCount?: number | null;
+  xLabelFormat?: AxisLabelFormat;
+  yLabelFormat?: AxisLabelFormat;
+  /** Pan and wheel zoom bound to both scales, with a reset button. */
+  enableZoom?: boolean;
   /**
    * Free annotations in normalized plot coordinates. Per card only: this key
    * is intentionally absent from factory, user and global chart defaults.

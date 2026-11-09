@@ -265,6 +265,17 @@ dati, statistiche, tabelle o report.
   (`view.scenegraph()`), non dai nomi degli scale: Vega-Lite può nominare gli
   scale per layer (Q-Q a due assi, Pareto a due assi y). L'overlay esiste solo
   con `Link` attivo, quindi tooltip, annotazioni ed editor restano usabili.
+- **Zoom con il linking attivo**: la superficie del pennello copre il plot, ma
+  la rotella non arriva a Vega. L'overlay applica quindi ai segnali del
+  binding `chartZoom_x`/`chartZoom_y` le stesse proiezioni del compilato
+  (`zoomDomain`/`panDomain` in `zoom.ts`, le formule di `zoomLinear` e
+  `panLinear`), con fattore `1.001^deltaY` e ancora sul cursore. Il drag
+  semplice resta il pennello; con Shift (o tasto centrale) diventa un pan che
+  sposta il dominio a larghezza costante. Il cursore passa da `crosshair` a
+  `grab` appena Shift è premuto (e a `grabbing` durante il pan), così il gesto
+  si scopre anche senza leggere la guida: lo stato si azzera sul blur e quando
+  il puntatore esce dal plot. L'istruzione accessibile aggiunge la frase
+  `chart.link.surfaceZoomHint` solo quando le card con zoom hanno l'overlay.
 - **Accessibilità**: la superficie ha `role="application"`, focus visibile,
   istruzioni `sr-only` collegate con `aria-describedby`, Invio seleziona tutti i
   punti ed Esc annulla. Il conteggio `N selezionati` e `N nascosti` sono
@@ -320,6 +331,13 @@ dati, statistiche, tabelle o report.
   undo/redo, export PNG diretto, persistenza, focus trap e layout mobile su
   ANOVA e regressione semplice (screenshot in
   `test-results/chart-editor-audit/`).
+- `e2e/chart-zoom.spec.ts`: rotella e trascinamento sulla view Vega reale
+  (`reg-scatter`), con i tick letti dall'SVG: la rotella restringe il dominio
+  dell'asse, il trascinamento lo trasla a larghezza costante e «Reset zoom»
+  riporta i tick iniziali. Un secondo test attiva anche il linking: con la
+  superficie del pennello sopra il plot la rotella deve ancora restringere il
+  dominio e Shift+drag deve traslarlo senza selezionare righe. Skippato su
+  mobile (gesti del puntatore).
 - Baseline visive opzionali: `VISUAL=1 npx playwright test
   e2e/chart-editor.spec.ts --project=desktop -g baseline`.
 - `npm run check`, build e guardrail restano verdi.

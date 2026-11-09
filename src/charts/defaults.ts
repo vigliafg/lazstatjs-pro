@@ -5,6 +5,7 @@ import type {
   CommonChartOptions,
 } from '../stats/charts';
 import { normalizeAnnotations } from './annotations';
+import { AXIS_DEFAULTS, normalizeAxisOptions } from './axisModel';
 
 export type ChartDefaults = CommonChartOptions;
 
@@ -32,7 +33,7 @@ export const COMMON_DEFAULTS: CommonChartOptions = {
   tooltip: true,
 };
 
-const P = { ...COMMON_DEFAULTS };
+const P = { ...COMMON_DEFAULTS, ...AXIS_DEFAULTS };
 
 /** Factory options for a chart kind. User defaults will be merged here later. */
 let activeDefaults: ChartDefaults | null = null;
@@ -284,9 +285,11 @@ export const mergeOptions = (
   const base = factoryOptions(kind);
   const user = activeDefaults ?? {};
   const style = activeStyles?.[kind];
-  if (!options) return { ...base, ...user, ...(style ?? {}), kind } as ChartOptions;
+  if (!options) {
+    return normalizeAxisOptions({ ...base, ...user, ...(style ?? {}), kind } as ChartOptions);
+  }
   if (options.kind !== undefined && options.kind !== kind) {
-    return { ...base, ...user, ...(style ?? {}), kind } as ChartOptions;
+    return normalizeAxisOptions({ ...base, ...user, ...(style ?? {}), kind } as ChartOptions);
   }
   const merged = { ...base, ...user, ...(style ?? {}), ...options, kind } as ChartOptions;
   // Annotations are a per-card list, never a global default. Normalising here
@@ -294,7 +297,9 @@ export const mergeOptions = (
   if (options.annotations !== undefined) {
     merged.annotations = normalizeAnnotations(options.annotations);
   }
-  return merged;
+  // Same reason for the axis range: a NaN or an inverted pair from a stored
+  // project must fall back to `auto`, not reach Vega.
+  return normalizeAxisOptions(merged);
 };
 
 /** Defaults for a chart, preserving a valid stored option object. */

@@ -26,7 +26,7 @@ test('all ten themes apply their tokens and persist across reloads', async ({ pa
   test.skip(isMobile, 'the settings grid is exercised on the desktop layout');
 
   await page.goto('/');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-light');
 
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await expect(page.locator('[data-theme-option]')).toHaveCount(10);
@@ -43,8 +43,8 @@ test('all ten themes apply their tokens and persist across reloads', async ({ pa
     ).toBe(theme.mode);
   }
 
-  // Use a light theme for the reload: it proves the persisted preference,
-  // not just the dark default from the seed project.
+  // Use a different theme for the reload: it proves the persisted preference,
+  // not just the seeded default.
   await page.waitForTimeout(1200);
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light-modern');
@@ -57,7 +57,7 @@ test('all ten themes apply their tokens and persist across reloads', async ({ pa
 test('the header switches theme without opening settings', async ({ page }) => {
   await page.goto('/');
   const selector = page.getByLabel('Interface theme', { exact: true }).first();
-  await expect(selector).toHaveValue('github-dark');
+  await expect(selector).toHaveValue('github-light');
 
   await selector.selectOption('dracula');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dracula');
@@ -66,4 +66,28 @@ test('the header switches theme without opening settings', async ({ page }) => {
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dracula');
   await expect(page.getByLabel('Interface theme', { exact: true }).first()).toHaveValue('dracula');
+});
+
+test('a stored theme wins over the first-run default', async ({ page }) => {
+  // Simulate a profile that chose the previous default before the upgrade. The
+  // stored preference is seeded only on the first load, so the reload proves
+  // the app reads it back instead of rewriting it with GitHub Light.
+  await page.addInitScript(() => {
+    if (!window.localStorage.getItem('lazstats.ui.theme')) {
+      window.localStorage.setItem('lazstats.ui.theme', 'github-dark');
+    }
+  });
+
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  expect(await readVar(page, '--color-bg')).toBe('#0d0f14');
+
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  await expect(page.getByLabel('Interface theme', { exact: true }).first()).toHaveValue(
+    'github-dark'
+  );
+  expect(await page.evaluate(() => window.localStorage.getItem('lazstats.ui.theme'))).toBe(
+    'github-dark'
+  );
 });

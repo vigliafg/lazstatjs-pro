@@ -82,6 +82,39 @@ export const ChartControls = ({
             </label>
           );
         }
+        if (feature.type === 'numberInput') {
+          // A blank field means "automatic": the slider controls above can only
+          // express a value inside a fixed range, so limits need a text field.
+          const current = typeof value === 'number' && Number.isFinite(value) ? String(value) : '';
+          return (
+            <label
+              key={feature.id}
+              htmlFor={id}
+              className={
+                stacked
+                  ? 'flex flex-col gap-1 text-[10px] text-text3'
+                  : 'flex items-center gap-1.5 text-[10px] text-text3'
+              }
+            >
+              <span className="whitespace-nowrap">{label}</span>
+              <input
+                id={id}
+                type="number"
+                inputMode="decimal"
+                step={feature.step ?? 'any'}
+                value={current}
+                placeholder={t('chart.axis.auto')}
+                onChange={event => {
+                  const raw = event.target.value;
+                  onChange(feature.set(options, raw.trim() === '' ? '' : Number(raw)));
+                }}
+                className={`rounded border border-border2 bg-surface3 px-1.5 py-0.5 text-[10px] text-text2 ${
+                  stacked ? 'w-full' : 'w-20'
+                }`}
+              />
+            </label>
+          );
+        }
         const numeric = Number(value);
         return (
           <label

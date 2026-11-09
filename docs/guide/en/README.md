@@ -123,3 +123,7 @@ guard` checks that they really exist.
   `npm run help:audit` checks language contamination and structural parity.
 - Release 0.30.0: green gate, `help:build` and `help:audit` re-run, Electron
   packages built, release notes aligned with documents 01–10.
+- Release 0.31.0: complete axes (ticks, format, limits, scale), zoom and pan
+  with Reset zoom also while linking is on, GitHub Light as the first-run
+  theme; `help:build`/`help:audit` re-run and the web build published to GitHub
+  Pages from the tag.
