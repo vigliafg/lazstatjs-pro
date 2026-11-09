@@ -3,12 +3,30 @@
 - **Documento di piano**: `2026-11-03-grafici-procedure-piano.md`
 - **Repository**: `/home/vigliafg/Documenti/GitHub/lazstatjs-pro`
 - **Creato**: 2026-11-03
-- **Ultimo aggiornamento**: 2026-11-03 (F11.3 chiusa: piano completato)
+- **Ultimo aggiornamento**: 2026-11-09 (merge di `grafici-procedure` in `main`)
 - **Fase corrente**: chiusa — manutenzione
 - **Deadline**: 10 giorni lavorativi, 4 h/giorno, fasi ≤ 60 min
-- **Branch**: `grafici-procedure` (creato da `main` in F0.1)
+- **Branch**: `main` — merge di `grafici-procedure` in `a9587f3`
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
-- **Versione**: `0.19.0`
+- **Versione**: `0.31.0`
+
+## Ripresa rapida (2026-11-09, merge su `main`)
+
+- **Merge**: `grafici-procedure` → `main` con `--no-ff`, commit `a9587f3`
+  (`Merge branch 'grafici-procedure': assi, zoom e release 0.31.0`); albero
+  identico a `ecbefff` (0 file di differenza).
+- **Gate pre-merge** (branch `grafici-procedure`, `ecbefff`): `npm run check`
+  exit 0 — 1423/1423 test, lint, guard, depcruise senza cicli, filesize 1187
+  file con 8 eccezioni, docs 75 file/233 link; `npm run build` exit 0
+  (renderer + main/preload Electron); `npx tsc --noEmit` exit 0 dopo il merge.
+- **Release**: il tag `v0.31.0` punta al commit mergiato; workflow `release` e
+  `web` verdi sul tag.
+- **Non eseguito in questa sessione**: `npm run test:e2e` e
+  `npm run test:samples`. Il job e2e di `check.yml` era già rosso su `main`
+  prima del merge (commit del 7 nov: 133 passati, 1 flaky), quindi il primo run
+  CI su `main` è la prima verifica e2e di questi commit.
+- **Aperto**: debiti §9 (cap 24 grafici, eccezioni di dimensione) e revisione a
+  campione delle note fr/es/de/pt-PT.
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
@@ -1106,7 +1124,8 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 ## 7. Prossimi 3 passi
 
 1. Manutenzione: cap 24 grafici per output e restanti eccezioni di dimensione.
-2. Ripetere il gate completo prima di un merge su `main`.
+2. ~~Ripetere il gate completo prima di un merge su `main`.~~ Fatto il
+   2026-11-09: `check` 1423/1423 e `build` verdi, merge `a9587f3` su `main`.
 3. Revisione a campione delle note tradotte in fr/es/de/pt-PT.
 
 ---
@@ -1153,17 +1172,21 @@ opzioni dei runner, note, guide e test sugli stili esistenti.
 
 ## 11. Chiusura
 
-Da compilare in F11.3:
+Compilata in F11.3 (2026-11-03) e riverificata al merge del 2026-11-09:
 
-- [ ] Tutte le fasi ✅ o ⏭️ con motivo.
-- [ ] `npm run check` verde.
-- [ ] `npm run locales:check` verde.
-- [ ] `npm run test:samples` verde.
-- [ ] e2e editor/gallery verdi.
-- [ ] `npm run build` verde.
-- [ ] `docs/PROJECT-STATUS.md`, `docs/CHART-ENGINE.md`, inventario aggiornati.
-- [ ] Debiti residui elencati qui sotto.
+- [x] Tutte le fasi ✅ o ⏭️ con motivo.
+- [x] `npm run check` verde — 1423/1423 al gate pre-merge del 2026-11-09.
+- [x] `npm run locales:check` verde — 6/6 in F11.3 (non rieseguito al merge).
+- [x] `npm run test:samples` verde — 7/7 in F11.3 (non rieseguito al merge).
+- [x] e2e editor/gallery verdi — 12/3 in F11.3 (non rieseguito al merge).
+- [x] `npm run build` verde — riverificato il 2026-11-09.
+- [x] `docs/PROJECT-STATUS.md`, `docs/CHART-ENGINE.md`, inventario aggiornati.
+- [x] Debiti residui elencati qui sotto.
 
 **Debiti residui**:
 
-- —
+- Cap 24 grafici per output e restanti eccezioni di dimensione (§9).
+- Note nuove di `alt-life-stress` e delle tre modalità di `timeseries` solo in
+  inglese; revisione a campione di fr/es/de/pt-PT ancora aperta.
+- Due domande di prodotto aperte: copertura modalità di `bayes-ppc` e banda CI
+  su `reg-observed-fitted` per `k ≥ 2`.
