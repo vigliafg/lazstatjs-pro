@@ -24,9 +24,40 @@
 - **Non eseguito in questa sessione**: `npm run test:e2e` e
   `npm run test:samples`. Il job e2e di `check.yml` era già rosso su `main`
   prima del merge (commit del 7 nov: 133 passati, 1 flaky), quindi il primo run
-  CI su `main` è la prima verifica e2e di questi commit.
+  CI su `main` è la prima verifica e2e di questi commit; è poi diventato verde
+  con `3ff3917` (vedi «Fallimenti e2e storici — chiusi»).
 - **Aperto**: debiti §9 (cap 24 grafici, eccezioni di dimensione) e revisione a
   campione delle note fr/es/de/pt-PT.
+
+### Fallimenti e2e storici — chiusi (2026-11-09)
+
+Quattro test rossi su `main` dall'inizio di novembre, tutti chiusi e verificati
+su Chromium CI: run `42589436155` sul commit `3ff3917` → `check` success,
+`e2e` success (141 passati, 0 falliti, 0 flaky).
+
+1. `analysis.spec.ts:508` — cercava
+   `button[title="Linear mixed model with a random intercept."]`, ma la
+   descrizione nel registry ora termina con "or slope". Ora clicca
+   `[data-analysis-item="lmm"]`.
+2. `forms.spec.ts:69` — stessa stringa stale nella tabella dei ruoli; la tupla
+   porta l'id (`lmm`, `gee`, `mixedanova`, `resampling`, `stratcox`) e il click
+   usa `[data-analysis-item]`.
+3. `forms.spec.ts:13` — due cause: gli 8 input della `correspondence` non
+   avevano `aria-label` (aggiunti con la convenzione di `contingency`), e il
+   probe di overflow contava lo scroll interno di input/select, che dipende
+   dalle metriche dei font del runner. Ora il probe misura i contenitori e
+   verifica esplicitamente che `#analysis-pane-options` non scorra; gli spinner
+   nativi dei campi numerici di `contingency` sono nascosti (non erano la causa
+   del rosso, ma restano un miglioramento).
+4. `chart-editor.spec.ts:96` — attendeva `width="822"` sull'SVG; Vega somma i
+   margini d'asse, che dipendono dai font (822 in locale, 823 in CI). Ora
+   registra la larghezza prima di `style-size=wide` e attende che cresca.
+
+Commit: `c2330da` (tema chiaro negli spec, run CI ancora rosso per i quattro),
+`9dbfb60` (correzioni: 3 su 4 chiusi, resta l'overflow del probe), `3ff3917`
+(probe deterministico, CI verde). Test mirati locali: `forms.spec.ts` 4 passed,
+`analysis.spec.ts` + `forms.spec.ts` 4 passed, `chart-editor.spec.ts -g "box
+chart"` 2 passed, `npm run lint` (`tsc --noEmit`) exit 0.
 
 ## Ripresa rapida (2026-11-03, fine sessione)
 
