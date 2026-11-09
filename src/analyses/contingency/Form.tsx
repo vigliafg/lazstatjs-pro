@@ -29,7 +29,7 @@ const PRESETS = {
 };
 
 const cellInput =
-  'w-14 rounded border border-border2 bg-surface p-1 text-center font-mono text-[11px] text-text';
+  'w-14 rounded border border-border2 bg-surface p-1 text-center font-mono text-[11px] text-text [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
 const labelInput =
   'w-20 rounded border border-border2 bg-surface p-1 text-[10px] font-semibold text-text';
 const smallButton =

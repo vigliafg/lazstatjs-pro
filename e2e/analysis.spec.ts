@@ -511,7 +511,7 @@ test('runs a heavy analysis in a worker without blocking the setup', async ({ pa
   await page.goto('/');
   await page.getByRole('button', { name: 'Analysis', exact: true }).click();
   await page.getByLabel('Search analyses').fill('Mixed Model');
-  await page.locator('button[title="Linear mixed model with a random intercept."]').click();
+  await page.locator('[data-analysis-item="lmm"]').click();
   const worker = page.waitForEvent('worker', { timeout: 10000 });
   await page.getByRole('button', { name: 'Run analysis' }).click();
   expect((await worker).url()).toContain('heavy.worker');

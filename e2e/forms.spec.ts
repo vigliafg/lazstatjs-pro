@@ -69,15 +69,15 @@ test.describe('analysis forms — group roles and duplication', () => {
   test('group-based procedures expose the levels editor', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Analysis', exact: true }).click();
-    for (const [search, title, groupLabel, groupValue] of [
-      ['Mixed Model', 'Linear mixed model with a random intercept.', 'Group (random intercept)', '2'],
-      ['GEE', 'Marginal effects with cluster-robust standard errors.', 'Cluster', '2'],
-      ['Mixed ANOVA', 'One between-subject factor and within-subject conditions.', 'Between-subject group', '2'],
-      ['Resampling', 'Permutation and bootstrap inference.', 'Group', '2'],
-      ['Stratified Cox', 'Cox model with a separate baseline per stratum.', 'Stratum', '3'],
+    for (const [id, search, groupLabel, groupValue] of [
+      ['lmm', 'Mixed Model', 'Group (random intercept)', '2'],
+      ['gee', 'GEE', 'Cluster', '2'],
+      ['mixedanova', 'Mixed ANOVA', 'Between-subject group', '2'],
+      ['resampling', 'Resampling', 'Group', '2'],
+      ['stratcox', 'Stratified Cox', 'Stratum', '3'],
     ] as const) {
       await page.getByLabel('Search analyses').fill(search);
-      await page.locator(`button[title="${title}"]`).click();
+      await page.locator(`[data-analysis-item="${id}"]`).click();
       await page.getByLabel(groupLabel, { exact: true }).selectOption(groupValue);
       await expect(page.getByRole('button', { name: /Edit levels for/ }).first()).toBeVisible();
     }

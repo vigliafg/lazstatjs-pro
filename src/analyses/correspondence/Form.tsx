@@ -63,6 +63,7 @@ export const CorrespondenceForm = ({
               {cols.map((label, column) => (
                 <th key={column} className="p-1">
                   <input
+                    aria-label={`${t('contingency.col')} ${column + 1}`}
                     className="w-20 rounded border border-border2 bg-surface3 p-1 text-[10px] text-text"
                     value={label}
                     onChange={event =>
@@ -83,6 +84,7 @@ export const CorrespondenceForm = ({
               <tr key={row}>
                 <th className="p-1">
                   <input
+                    aria-label={`${t('contingency.row')} ${row + 1}`}
                     className="w-24 rounded border border-border2 bg-surface3 p-1 text-[10px] text-text"
                     value={label}
                     onChange={event =>
@@ -98,6 +100,7 @@ export const CorrespondenceForm = ({
                 {values[row]?.map((value, column) => (
                   <td key={column} className="p-1">
                     <input
+                      aria-label={`${t('contingency.row')} ${row + 1} ${t('contingency.col')} ${column + 1}`}
                       className={cellInput}
                       value={value}
                       onChange={event => setCell(row, column, event.target.value)}

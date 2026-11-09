@@ -119,8 +119,14 @@ test.describe('chart editor — ANOVA', () => {
     await field(dialog, 'general-theme').selectOption('light');
     await expect(preview).toHaveAttribute('data-chart-background', '#ffffff');
     await moreStyle(dialog);
+    // Vega adds the axis margins to the preset width, and those margins depend on
+    // the font metrics of the axis labels, so assert the change, not a pixel count.
+    const svg = preview.locator('svg').first();
+    const widthBefore = Number(await svg.getAttribute('width'));
     await field(dialog, 'style-size').selectOption('wide');
-    await expect(preview.locator('svg').first()).toHaveAttribute('width', '822');
+    await expect
+      .poll(async () => Number(await svg.getAttribute('width')))
+      .toBeGreaterThan(widthBefore);
     await field(dialog, 'general-gridX').check();
     await field(dialog, 'general-gridY').uncheck();
     await field(dialog, 'general-palette').selectOption('mono');
