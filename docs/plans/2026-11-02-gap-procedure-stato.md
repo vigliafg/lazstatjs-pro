@@ -8,11 +8,11 @@
 
 ## Checkpoint rilascio 0.32.0 (2026-11-10)
 
-- **Branch**: `main` · **Versione**: `0.32.0` · **Tag**: `v0.32.0` da creare dopo il commit.
+- **Branch**: `main` · **Versione**: `0.32.0` · **Tag**: `v0.32.0` sul commit di release.
 - **Chiuso**: Assistant F0–F8; tema chiaro **Mist** e scuro **Midnight** (12 temi built-in, 6+6); status bar `LazStats JS v0.32.0`; pagina Assistant riscritta in en/it/fr/es/de/pt-PT; capitolo 11 della guida in IT/EN sul workflow Assistant.
 - **Test**: gate completo **1477/1477**, `CHECK_EXIT=0`; depcruise, madge, filesize e docs:links verdi; help 498 pagine (83 × 6), audit con 0 contaminazioni inglesi; `check-locale` 6/6; `tsc` pulito.
 - **Web**: `npm run build:web` verde; footer servito da `vite preview` su `:4173` = `LazStats JS v0.32.0`, nessun errore console.
-- **Installer**: build Linux in corso; Windows da tentare con wine; la release GitHub li rigenera per Linux/Windows/macOS dal tag.
+- **Installer**: Linux (AppImage, deb, rpm, tar.gz) e Windows x64 zip creati; NSIS/portable in build locale; la release GitHub rigenera Linux/Windows/macOS dal tag.
 - **Prossimi 3 passi**: completare gli installer locali, commit + push + tag `v0.32.0`, verificare la release GitHub e la web Pages.
 
 ## Checkpoint Assistant F0–F2 (2026-11-09)
