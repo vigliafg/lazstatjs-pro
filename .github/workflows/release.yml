@@ -61,9 +61,7 @@ jobs:
         run: |
           package_app() {
             if [ "${{ matrix.target }}" = "mac" ]; then
-              # The macOS runner currently fails while creating the DMG
-              # (hdiutil "Device not configured"). Ship the signed-ready .zip
-              # from CI and leave the DMG to a local/manual build.
+              # The macOS zip ships here; the DMG has its own job below.
               npx electron-builder --mac zip --x64 --arm64 --publish never
             else
               npx electron-builder --${{ matrix.target }} --publish never
@@ -102,10 +100,53 @@ jobs:
             release/*.blockmap
             release/latest*.yml
 
+  dmg:
+    name: Build macOS DMG
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - run: npm run build
+
+      - name: Package DMG
+        shell: bash
+        env:
+          # The DMG is unsigned: do not let electron-builder look for a local
+          # signing identity on the runner.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          ELECTRON_BUILDER_BINARIES_MIRROR: 'https://registry.npmmirror.com/-/binary/electron-builder-binaries/'
+        run: |
+          # hdiutil on GitHub's macOS runners intermittently fails with
+          # "Device not configured"; retry the whole DMG build a few times.
+          for attempt in 1 2 3; do
+            if npx electron-builder --mac dmg --x64 --arm64 --publish never; then
+              exit 0
+            fi
+            echo "DMG packaging failed (attempt $attempt/3); retrying in 20s"
+            hdiutil detach /Volumes/LazStats 2>/dev/null || true
+            sleep 20
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LazStats-mac-dmg
+          if-no-files-found: error
+          path: |
+            release/*.dmg
+            release/*.dmg.blockmap
+
   release:
     name: Publish GitHub release
     if: startsWith(github.ref, 'refs/tags/')
-    needs: build
+    needs: [build, dmg]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
