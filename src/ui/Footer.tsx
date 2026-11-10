@@ -26,7 +26,7 @@ export const Footer = ({ grid }: FooterProps) => {
       <div>{t('footer.status')}: <span className="text-green">{t('footer.ready')}</span></div>
       <div className="ml-auto hidden items-center gap-2 sm:flex">
         <Info className="w-3 h-3" />
-        <span className="hidden md:inline">LazStats JS v3.0.0</span>
+        <span className="hidden md:inline">LazStats JS v0.32.0</span>
       </div>
     </footer>
   );

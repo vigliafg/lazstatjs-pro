@@ -30,7 +30,7 @@ const samePlaceholders = (a, b) => JSON.stringify(placeholders(a)) === JSON.stri
 // ---------------------------------------------------------------------------
 // Interface catalog
 // ---------------------------------------------------------------------------
-const AREAS = ['shell', 'form', 'data', 'analysis', 'output', 'meta'];
+const AREAS = ['shell', 'form', 'data', 'analysis', 'output', 'meta', 'assistant'];
 const base = join('src/i18n/catalog', locale);
 
 if (!existsSync(base)) {

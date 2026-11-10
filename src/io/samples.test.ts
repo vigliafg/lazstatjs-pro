@@ -35,7 +35,8 @@ test('the sample manifest is coherent with its folders', () => {
   assert.deepEqual(manifest.formats, ['csv', 'sav', 'dta', 'xlsx', 'json']);
   assert.ok(manifest.datasets.length >= 15);
 
-  const knownProcedures = new Set(ANALYSIS_TABS.map(tab => tab.id));
+  // The legacy wizard is hidden from the library but its sample stays valid.
+  const knownProcedures = new Set([...ANALYSIS_TABS.map(tab => tab.id), 'wizard']);
   const ids = new Set<string>();
   for (const dataset of manifest.datasets) {
     assert.ok(dataset.title.trim().length > 0, `${dataset.id}: empty title`);
@@ -71,7 +72,9 @@ test('the sample manifest is coherent with its folders', () => {
 test('every data-driven analysis has at least one sample', () => {
   // Chi-square, contingency, log-linear and sample size are table/parameter
   // driven and do not read the grid, so they intentionally have no dataset.
-  const manualOnly = new Set(['chisquare', 'contingency', 'loglinear', 'correspondence', 'samplesize']);
+  const manualOnly = new Set([
+    'chisquare', 'contingency', 'loglinear', 'correspondence', 'samplesize', 'assistant',
+  ]);
   const covered = new Set(manifest.datasets.flatMap(dataset => dataset.procedures));
   const missing = ANALYSIS_TABS.map(tab => tab.id).filter(
     id => !manualOnly.has(id) && !covered.has(id)

@@ -72,6 +72,7 @@ export const ANALYSIS_CHART_KINDS: Record<string, ChartKind[]> = {
   statespace: ['line'],
   tost: ['interval'],
   ttest: ['box', 'diamond', 'histogram', 'interval'],
+  assistant: [],
   wizard: [],
   partition: ['bar', 'scatter', 'tree'],
   quality: ['bar', 'box', 'histogram', 'interval', 'line', 'pareto'],

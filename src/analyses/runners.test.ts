@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ANALYSIS_RUNNERS } from './runners';
-import { ANALYSIS_IDS } from './registry';
+import { ANALYSIS_ALL, ANALYSIS_IDS } from './registry';
 
 test('the pure-builder registry covers the six legacy analyses and the converted panels', () => {
   assert.deepEqual(Object.keys(ANALYSIS_RUNNERS).sort(), [
@@ -81,7 +81,10 @@ test('the pure-builder registry covers the six legacy analyses and the converted
 });
 
 test('every registered runner is a real analysis tab', () => {
+  const known = ANALYSIS_ALL.map(meta => meta.id);
   for (const id of Object.keys(ANALYSIS_RUNNERS)) {
-    assert.ok(ANALYSIS_IDS.includes(id), `${id} is not in ANALYSIS_TABS`);
+    assert.ok(known.includes(id), `${id} is not in the registry`);
   }
+  // The legacy wizard is hidden from the library but keeps its runner.
+  assert.ok(ANALYSIS_IDS.every(id => known.includes(id)));
 });

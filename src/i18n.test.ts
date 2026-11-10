@@ -34,6 +34,8 @@ const DYNAMIC_KEYS = new Set([
   'settings.themeEditTitle',
   'settings.themePreviewTab',
   'settings.themeEditTab',
+  'assistant.recommend.none',
+  'assistant.recommend.empty',
 ]);
 
 const walk = (directory: string): string[] =>
@@ -95,6 +97,19 @@ const DYNAMIC_PREFIXES = [
   'settings.themeChart.',
   'settings.themeContrast',
   'settings.themeGroup',
+  // The Assistant resolves these keys through its typed tree and its status
+  // maps (not through a literal `t('key')`); tree.test.ts proves they exist in
+  // every catalog and validateAssistantTree proves every node uses them.
+  'assistant.q.',
+  'assistant.h.',
+  'assistant.checks.',
+  'assistant.leaf.',
+  'assistant.status.',
+  'assistant.card.',
+  'assistant.next.',
+  'assistant.d.',
+  'assistant.optionHelp',
+  'assistant.leafHelp',
 ];
 
 test('every shell message is referenced by the UI', () => {

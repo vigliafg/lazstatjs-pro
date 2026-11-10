@@ -2,6 +2,7 @@ import { sanitizeOutputHtml, type StoredOutput } from '../../io/outputs';
 import type { AnalysisChart, PanelChart } from '../../stats/charts';
 import type { ReportSpec } from '../../stats/report';
 import type { TableSpec } from '../../stats/types';
+import type { AssistantCardSpec } from '../assistant/card';
 
 export interface SessionOutputBody {
   title?: string;
@@ -13,6 +14,8 @@ export interface SessionOutputBody {
   charts?: AnalysisChart[];
   /** L3 composite cards rendered after the individual charts. */
   panels?: PanelChart[];
+  /** Report Card of an Assistant run; also rendered into the stored HTML. */
+  assistantCard?: AssistantCardSpec;
   callout?: {
     title: string;
     badge?: string;

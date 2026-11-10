@@ -4,6 +4,9 @@ import type { RowFilter } from '../../grid/ops';
 import type { RoleState } from '../../analyses/roles';
 import type { OutputEntry } from '../output/types';
 import type { ProjectParams } from '../../io/project';
+import type { AssistantChainStep } from '../assistant/chain';
+import type { AssistantLeaf } from '../assistant/tree';
+import type { LeafRepair } from '../assistant/readiness';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
 import type { ChartOutputGroup } from '../../charts/outputs';
 import type { ChartKind } from '../../stats/charts';
@@ -71,6 +74,18 @@ export interface AnalysisTabProps {
   setActiveTab: Dispatch<SetStateAction<'data' | 'analysis' | 'settings' | 'help'>>;
   runAnalysis: () => Promise<boolean>;
   runAnalysisLive: (isCurrent?: () => boolean) => Promise<boolean>;
+  /** Assistant workspace: apply a leaf to the live parameters. */
+  onApplyAssistant: (leaf: AssistantLeaf, params: ProjectParams) => void;
+  /** Assistant workspace: run the leaf procedure with its inferred roles. */
+  onRunAssistant: (leaf: AssistantLeaf, params: ProjectParams, path: string[]) => void;
+  /** Assistant workspace: run the chain from the given position. */
+  onRunAssistantChain: (steps: AssistantChainStep[], from: number) => void;
+  /** Assistant: open the data editor on the column to repair. */
+  onRepairAssistant: (repair: LeafRepair) => void;
+  /** Chain run state shown by the workspace strip. */
+  assistantChain: { running: boolean; step: number | null; failedAt: number | null };
+  /** User-facing message from the chain (toast). */
+  notifyAssistant: (message: string, type?: 'ok' | 'warn' | 'error') => void;
   /** Heavy procedures run in a worker; the setup shows progress and cancel. */
   analysisRunning: boolean;
   analysisPhase: 'starting' | 'computing' | 'finishing';

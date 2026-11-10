@@ -3,6 +3,7 @@ import { validateAnalysisColumnRefs } from '../analyses/params';
 import type { AnalysisRunResult } from '../analyses/types';
 import type { Dataset } from '../grid/types';
 import type { ProjectParams } from '../io/project';
+import type { AssistantRunMeta } from '../io/outputs';
 import { t, type Locale } from '../i18n';
 import { isReportLocale, withReportLocale, type ReportLocale } from '../stats/reportCopy';
 import { isHeavyAnalysis } from '../analyses/worker/heavyIds';
@@ -99,7 +100,12 @@ export const useAnalysisRun = ({
   const run = async (
     analysisId: string,
     paramsUsed: ProjectParams,
-    options?: { live?: boolean; ciLevel?: number; isCurrent?: () => boolean }
+    options?: {
+      live?: boolean;
+      ciLevel?: number;
+      isCurrent?: () => boolean;
+      assistant?: AssistantRunMeta;
+    }
   ): Promise<boolean> => {
     const level = options?.ciLevel ?? ciLevel;
     const locale: ReportLocale = isReportLocale(reportLocale) ? reportLocale : 'it';
@@ -221,8 +227,9 @@ export const useAnalysisRun = ({
   const runAnalysisWith = (
     analysisId: string,
     paramsUsed: ProjectParams,
-    level = ciLevel
-  ): Promise<boolean> => run(analysisId, paramsUsed, { ciLevel: level });
+    level = ciLevel,
+    assistant?: AssistantRunMeta
+  ): Promise<boolean> => run(analysisId, paramsUsed, { ciLevel: level, assistant });
 
   /** Live run: replaces the previous live card instead of appending. */
   const runAnalysisLive = (isCurrent?: () => boolean): Promise<boolean> =>

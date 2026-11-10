@@ -4,6 +4,7 @@ import { dataMessages } from './data';
 import { analysisMessages } from './analysis';
 import { outputMessages } from './output';
 import { metaMessages } from './meta';
+import { assistantMessages } from './assistant';
 
 /** English catalog: the source of truth for every message key. */
 export const enMessages = {
@@ -13,6 +14,7 @@ export const enMessages = {
   ...analysisMessages,
   ...outputMessages,
   ...metaMessages,
+  ...assistantMessages,
 };
 
 export type Messages = { [K in keyof typeof enMessages]: string };

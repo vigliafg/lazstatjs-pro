@@ -8,7 +8,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 
 **UI status and backlog:** [`docs/UI-STATE.md`](docs/UI-STATE.md) · **Grid checkpoint:** [`docs/GRID-STATE.md`](docs/GRID-STATE.md)
 
-**Guida per blocchi di funzionalità:** [`docs/guide/README.md`](docs/guide/README.md) · **English guide:** [`docs/guide/en/README.md`](docs/guide/en/README.md) — dati, scelta dell'analisi, parametri, tabelle, report, grafici, chart editor, validazione, lingue e confronto con JMP/SPSS/R.
+**Guida per blocchi di funzionalità:** [`docs/guide/README.md`](docs/guide/README.md) · **English guide:** [`docs/guide/en/README.md`](docs/guide/en/README.md) — dati, scelta dell'analisi, Assistant nel workflow, parametri, tabelle, report, grafici, chart editor, validazione, lingue e confronto con JMP/SPSS/R.
 
 ## Features
 
@@ -34,6 +34,7 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 - **Data operations bar**: one trigger per operation (Sort, Recode, Split, Split all, Merge, Compute | Find/Replace, Fill missing, Trim, Drop empty, Drop duplicates); each opens its own anchored panel with parameters and Cancel/Run, with icon + label from 1280 px and a themed tooltip
 
 ### Analysis workbench
+- **Assistant**: a question-driven path across the data and analysis domains, available as a full view and as a docked panel. It shows the readiness of every required/optional role, applies the procedure with its variables, supports a reorderable chain of steps, a path diagram and an Assistant report card inside each run-report
 - **Three-pane workspace**: a searchable analysis library on the left, a setup panel in the middle and the output document on the right
 - **Library grouped into twelve families** (Guided, Descriptive, Compare groups, Regression, Multivariate, Categorical, Survival, Time series, Missing data, Design & power, Machine learning, Advanced & Bayesian), with search across labels, descriptions, keywords and family names, recent analyses and a `heavy` badge for expensive procedures
 - **Sticky Run** at the bottom of the setup panel, `Ctrl/Cmd + Enter` to run and `Ctrl/Cmd + K` to focus the analysis search

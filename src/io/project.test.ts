@@ -1,5 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { parseSettings } from './project/parse';
 import {
   DEFAULT_PARAMS,
   DEFAULT_SETTINGS,
@@ -760,3 +761,10 @@ describe('project autosave', () => {
     assert.deepEqual(parsed.settings.chartStyleDefaults, { box: 'box' });
     assert.deepEqual(parsed.settings.chartStyleOverrides, { anova: { qq: 'prob' } });
   });
+
+describe('Assistant migration', () => {
+  it('opens the Assistant for a project saved with the wizard', () => {
+    assert.equal(parseSettings({ activeAnalysis: 'wizard' }).activeAnalysis, 'assistant');
+    assert.equal(parseSettings({}).activeAnalysis, 'assistant');
+  });
+});

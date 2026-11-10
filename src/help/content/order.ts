@@ -10,7 +10,7 @@ export const TOPIC_ORDER = [
   'levels',
   'analysis-workflow',
   'choosing-test',
-  'wizard',
+  'assistant',
   'descriptive',
   'distfit',
   'ttest',

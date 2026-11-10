@@ -56,14 +56,12 @@ export const ANALYSIS_FAMILIES: readonly AnalysisFamily[] = [
 ];
 
 const ANALYSIS_DEFINITIONS = [
-  {
-    id: 'wizard',
-    label: 'Wizard',
-    family: 'guided',
+  { id: 'assistant', label: 'Assistant', family: 'guided', cost: 'instant',
     description: 'Start from your goal and let the data shape suggest the right procedure.',
-    keywords: ['guide', 'choose', 'recommend', 'goal', 'help me'],
-    cost: 'instant',
-  },
+    keywords: ['assistant', 'guide', 'choose', 'recommend', 'goal', 'help me'] },
+  // Hidden legacy id: it keeps the reports saved by the wizard rerunnable.
+  { id: 'wizard', label: 'Wizard (legacy)', family: 'guided', cost: 'instant', keywords: ['wizard'],
+    description: 'Legacy guided procedure kept to rerun reports saved before the Assistant.' },
   {
     id: 'descriptive',
     label: 'Descriptive',
@@ -639,7 +637,10 @@ const ANALYSIS_DEFINITIONS = [
 
 export type AnalysisId = (typeof ANALYSIS_DEFINITIONS)[number]['id'];
 
-export const ANALYSIS_TABS: readonly AnalysisMeta[] = ANALYSIS_DEFINITIONS;
+/** Every definition, including the hidden legacy wizard. */
+export const ANALYSIS_ALL: readonly AnalysisMeta[] = ANALYSIS_DEFINITIONS;
+/** The wizard leaves the library, but its runner keeps saved reports rerunnable. */
+export const ANALYSIS_TABS: readonly AnalysisMeta[] = ANALYSIS_ALL.filter(meta => meta.id !== 'wizard');
 
 export const ANALYSIS_IDS: readonly string[] = ANALYSIS_TABS.map(tab => tab.id);
 
@@ -650,10 +651,8 @@ const familyKey = (id: string, field: 'label' | 'description'): MessageKey =>
   `meta.family.${id}.${field}` as MessageKey;
 
 /** Localised label for an analysis id, with an id fallback. */
-export const analysisLabel = (id: string): string => {
-  const meta = ANALYSIS_TABS.find(tab => tab.id === id);
-  return meta ? t(metaKey(id, 'label')) : id;
-};
+export const analysisLabel = (id: string): string =>
+  analysisMeta(id) ? t(metaKey(id, 'label')) : id;
 
 /** Localised one-line description of an analysis. */
 export const analysisDescription = (meta: AnalysisMeta): string =>
@@ -666,7 +665,7 @@ export const familyDescription = (family: AnalysisFamily): string =>
 
 /** Full metadata for an analysis id. */
 export const analysisMeta = (id: string): AnalysisMeta | undefined =>
-  ANALYSIS_TABS.find(tab => tab.id === id);
+  ANALYSIS_ALL.find(tab => tab.id === id);
 
 /** Family metadata for an analysis id. */
 export const familyOf = (id: string): AnalysisFamily | undefined => {

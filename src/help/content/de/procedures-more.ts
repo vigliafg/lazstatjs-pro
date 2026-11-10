@@ -3,27 +3,40 @@ import type { HelpTopic } from '../types';
 /** Procedure chapters: multivariate, categorical, survival, time series and design. */
 export const moreTopics: HelpTopic[] = [
   {
-    id: "wizard",
+    id: "assistant",
     area: "procedures",
-    title: "Geführtes Verfahren",
-    summary: "Von der Frage zum richtigen Verfahren, mit bereits gesetzten Variablen.",
+    title: "Assistent",
+    summary: "Von der Frage zum Run-Report: geführter Pfad, vorbereitete Variablen und Machbarkeitsprüfungen.",
     tutorial: {
-      goal: "Nicht wissen, welchen Test Sie verwenden sollen, und sich vom Programm führen lassen.",
+      goal: "Eine vollständige Analyse mit dem Assistenten durchführen, von der Frage bis zum Run-Report.",
       dataset: "score-groups.csv",
       steps: [
-        "Öffnen Sie das geführte Verfahren und wählen Sie die Frage (beschreiben, vergleichen, vorhersagen).",
-        "Legen Sie Ergebnis, Gruppen und fest, ob die Messungen unabhängig oder gepaart sind.",
-        "Lesen Sie die Empfehlung und drücken Sie Öffnen, um das Verfahren zu laden.",
-        "Führen Sie die Analyse aus und prüfen Sie die Annahmen im Lesetext.",
+        "Öffnen Sie den Assistenten über die Hauptnavigation oder das Seitenpanel in den Tabs Daten bzw. Analyse.",
+        "Wählen Sie den Bereich (Daten oder Analyse) und beantworten Sie die Fragen: Der Pfad entsteht Antwort für Antwort.",
+        "Lesen Sie Empfehlung und Bereitschaft: erforderliche und optionale Variablen sowie das, was noch fehlt.",
+        "Drücken Sie Anwenden, um Verfahren und Variablen zu laden, prüfen Sie das Setup und drücken Sie Ausführen.",
+        "Für einen mehrstufigen Ablauf fügen Sie der Kette Blätter hinzu, ordnen sie und starten sie nacheinander.",
+        "Öffnen Sie das Diagramm für den gesamten Pfad und lesen Sie die Report Card des Runs für Annahmen und Interpretation.",
       ],
-      expected: "Das vorgeschlagene Verfahren öffnet sich mit bereits ausgewählten Variablen.",
+      expected: "Das Verfahren öffnet sich mit den Variablen des Pfads; Ausführen erzeugt einen Run-Report mit der Assistenten-Karte, während die Kette die Schritte in der gewählten Reihenfolge einreiht.",
     },
     advanced: {
-      whenToUse: ["Zu Beginn einer Analyse oder wenn das Design nicht offensichtlich ist."],
-      reading: ["Behandeln Sie die Empfehlung als Ausgangspunkt, nicht als Urteil."],
-      pitfalls: ["Der Assistent prüft keine Annahmen und kennt die Datenqualität nicht."],
+      whenToUse: ["Zu Beginn einer Analyse, wenn das Design nicht offensichtlich ist oder wenn Sie dokumentieren möchten, warum ein Verfahren gewählt wurde."],
+      whenNotToUse: ["Um ein bereits eingerichtetes Modell von Hand zu ändern: Verwenden Sie direkt das Formular des Verfahrens."],
+      reading: [
+        "Grüne Bereitschaft bedeutet, dass alle erforderlichen Variablen zugewiesen sind; fehlende bleiben aufgelistet und blockieren Anwenden und Ausführen.",
+        "In einer Kette verwendet jedes Blatt dieselbe Tabelle; die Reihenfolge zählt, wenn ein Schritt den nächsten vorbereitet.",
+        "Die Report Card fasst Annahmen und die Lesart des Ergebnisses zusammen, ersetzt aber nicht die Prüfung der Daten.",
+      ],
+      pitfalls: [
+        "Der Assistent kennt die Datenqualität nicht: Prüfen Sie nach Änderungen an der Tabelle Rollen und Bereitschaft erneut.",
+        "Eine Kette mit einem nicht bereiten Blatt startet nicht: Schließen Sie den Schritt ab oder entfernen Sie ihn.",
+      ],
       glossary: [
-        { term: "Empfehlung", definition: "Das Verfahren, das aus Ergebnis, Gruppen und Design vorgeschlagen wird." },
+        { term: "Assistent", definition: "Die Ansicht, die eine Frage in einen geprüften Analysepfad übersetzt." },
+        { term: "Bereitschaft", definition: "Der Zustand, der angibt, ob die vom Blatt benötigten Variablen zugewiesen sind." },
+        { term: "Kette", definition: "Mehrere Blätter, die nacheinander in der vom Benutzer gewählten Reihenfolge laufen." },
+        { term: "Pfad", definition: "Die Folge von Antworten und Schritten, die zum empfohlenen Verfahren führt." },
       ],
     },
     seeAlso: ["choosing-test", "analysis-workflow"],

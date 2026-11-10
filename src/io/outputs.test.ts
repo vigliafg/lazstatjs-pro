@@ -242,3 +242,39 @@ describe('output snapshots in project files', () => {
     assert.deepEqual(parseProject(JSON.stringify(raw)).outputs, []);
   });
 });
+
+it('parses the Assistant chain metadata of a stored card', () => {
+  const [entry] = parseStoredOutputs([
+    {
+      id: 'run-1',
+      title: 'T',
+      createdAt: 'now',
+      html: '<div class="output-title">T</div>',
+      assistant: {
+        leafId: 'ttest-ind',
+        path: ['compare', 'means'],
+        ciLevel: 95,
+        chain: { index: 2, total: 3 },
+      },
+    },
+  ]);
+  assert.deepEqual(entry.assistant, {
+    leafId: 'ttest-ind',
+    path: ['compare', 'means'],
+    ciLevel: 95,
+    chain: { index: 2, total: 3 },
+  });
+});
+
+it('drops a malformed chain position from a stored card', () => {
+  const [entry] = parseStoredOutputs([
+    {
+      id: 'run-1',
+      title: 'T',
+      createdAt: 'now',
+      html: '<div class="output-title">T</div>',
+      assistant: { leafId: 'ttest-ind', path: [], chain: { index: 3, total: 2 } },
+    },
+  ]);
+  assert.equal(entry.assistant?.chain, undefined);
+});

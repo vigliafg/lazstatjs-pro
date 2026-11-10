@@ -22,6 +22,8 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.family.missing.description': 'Imputation et mise en commun',
   'meta.family.design.label': 'Plan et puissance',
   'meta.family.design.description': 'Taille d’échantillon, puissance et rééchantillonnage',
+  'meta.analysis.assistant.label': 'Assistant',
+  'meta.analysis.assistant.description': 'Partez de votre objectif et laissez la forme des données suggérer la bonne procédure.',
   'meta.analysis.wizard.label': 'Assistant',
   'meta.analysis.wizard.description': 'Partez de votre objectif et laissez la forme des données suggérer la bonne procédure.',
   'meta.analysis.descriptive.label': 'Descriptif',

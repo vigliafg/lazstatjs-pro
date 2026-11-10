@@ -41,10 +41,10 @@ const assertContrast = (theme: ThemeDefinition, foreground: string, background: 
   );
 };
 
-test('the registry ships exactly five dark and five light themes', () => {
-  assert.equal(THEMES.length, 10);
-  assert.equal(themesByMode('dark').length, 5);
-  assert.equal(themesByMode('light').length, 5);
+test('the registry ships exactly six dark and six light themes', () => {
+  assert.equal(THEMES.length, 12);
+  assert.equal(themesByMode('dark').length, 6);
+  assert.equal(themesByMode('light').length, 6);
   assert.equal(new Set(THEMES.map(theme => theme.id)).size, THEMES.length);
   assert.equal(new Set(THEMES.map(theme => theme.name)).size, THEMES.length);
   assert.equal(isThemeId(DEFAULT_THEME_ID), true);
@@ -63,7 +63,10 @@ test('every theme declares every UI token and chart token', () => {
     }
     const variables = cssVariablesOf(theme);
     assert.equal(variables['--color-bg'], theme.tokens.bg);
-    assert.equal(variables['--color-text3'], theme.tokens.text3);
+    const ink = theme.mode === 'dark' ? '#ffffff' : '#000000';
+    for (const key of ['text', 'text2', 'text3', 'border', 'border2'] as const) {
+      assert.equal(variables[`--color-${key}`], ink, `${theme.id}.${key}`);
+    }
     assert.equal(Object.keys(variables).length, Object.keys(CSS_VARIABLE_NAMES).length);
     assert.equal(theme.chart.palette.length >= 6, true, `${theme.id}: chart palette`);
     assert.match(theme.chart.background, /^#[0-9a-f]{6}$/i);

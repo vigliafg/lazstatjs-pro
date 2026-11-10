@@ -394,12 +394,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'appearance',
     area: 'output',
     title: 'Themes, chart presets and the theme creator',
-    summary: 'Ten built-in themes, project custom themes with a live preview, and named chart presets.',
+    summary: 'Twelve built-in themes, project custom themes with a live preview, and named chart presets.',
     tutorial: {
       goal: 'Create a project theme and a chart preset, then reuse them.',
       dataset: 'score-groups.csv',
       steps: [
-        'Open SETTINGS → Appearance and pick one of the five dark or five light built-in themes; the header selector applies it immediately.',
+        'Open SETTINGS → Appearance and pick one of the six dark or six light built-in themes; the header selector applies it immediately.',
         'Press Create theme: name it, choose the base and the mode, edit the colours and follow the live preview.',
         'Check the WCAG contrast panel, then press Save theme: it joins Custom themes, is selected and stays inside the project.',
         'Run an analysis, open a chart and use the Preset selector: choose Default, Minimal, Print light or one of your presets.',

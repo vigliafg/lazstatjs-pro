@@ -6,9 +6,9 @@ import { ANALYSIS_IDS } from '../analyses/registry';
 import { BOOKS } from './content';
 import { TOPIC_ORDER } from './content/order';
 
-/** Registry id → help topic id (only the guided procedure differs). */
+/** Registry id → help topic id (the guided procedure is the Assistant page). */
 const topicOf = (analysisId: string): string =>
-  analysisId === 'guided' ? 'wizard' : analysisId;
+  analysisId === 'guided' || analysisId === 'wizard' ? 'assistant' : analysisId;
 
 const nonEmpty = (values: readonly string[] | undefined, label: string): void => {
   assert.ok(values && values.length > 0, `${label} is empty`);
@@ -56,7 +56,7 @@ test('every procedure page lists the charts it produces', () => {
       const id = topicOf(analysisId);
       const topic = book.topics.find(entry => entry.id === id);
       assert.ok(topic, `${book.locale}: missing topic for ${analysisId}`);
-      if (id === 'wizard') {
+      if (id === 'assistant') {
         assert.equal(topic.advanced.charts, undefined, `${book.locale}: wizard should not list charts`);
       } else {
         nonEmpty(topic.advanced.charts, `${book.locale}: ${id} charts`);

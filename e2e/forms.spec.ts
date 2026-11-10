@@ -16,7 +16,8 @@ test.describe('analysis forms — structure', () => {
     await page.getByRole('button', { name: 'Analysis', exact: true }).click();
     const failures: string[] = [];
 
-    for (const tab of ANALYSIS_TABS) {
+    // The Assistant is a full-page workspace, not a setup form.
+    for (const tab of ANALYSIS_TABS.filter(item => item.id !== 'assistant')) {
       await page.getByLabel('Search analyses').fill(tab.label);
       await page.locator(`button[title="${tab.description}"]`).first().click();
       await page.waitForTimeout(80);

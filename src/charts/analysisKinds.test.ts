@@ -41,7 +41,7 @@ const runnerSources = (analysisId: string): string => {
 
 test('the declared kinds cover the literals emitted by each runner', () => {
   for (const [analysisId, kinds] of Object.entries(ANALYSIS_CHART_KINDS)) {
-    if (analysisId === 'wizard') continue;
+    if (analysisId === 'wizard' || analysisId === 'assistant') continue;
     const source = runnerSources(analysisId);
     const literals = new Set(
       [...source.matchAll(/makeChart\(\{[\s\S]{0,4000}?kind: '([a-z]+)'/g)].map(match => match[1])

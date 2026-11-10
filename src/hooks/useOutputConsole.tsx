@@ -16,6 +16,9 @@ import type { AnalysisChart, ChartOptions, PanelChart } from '../stats/charts';
 import type { ChartLinkValue } from '../components/charts/ChartLinkContext';
 import { restoredOutputs, type OutputEntry } from '../ui/output/types';
 import { analysisLabel } from '../analyses/registry';
+import { buildAssistantCard } from '../ui/assistant/card';
+import { AssistantReportCard } from '../ui/assistant/AssistantReportCard';
+import type { AssistantRunMeta } from '../io/outputs';
 import type { Toast } from './useToasts';
 import { t, translate, type Locale } from '../i18n';
 
@@ -117,16 +120,22 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       paramsSignature?: string;
       ciLevel?: number;
       live?: boolean;
+      assistant?: AssistantRunMeta;
     }
   ) => {
     if ('reason' in result) return;
     const title = result.title || (analysisId ? analysisLabel(analysisId) : extractOutputTitle(''));
+    const assistantCard =
+      meta?.assistant && analysisId ? buildAssistantCard(result, analysisId, meta.assistant) : null;
     const block = (
       <AnalysisOutput
         title={title}
         header={result.header}
         tables={result.tables}
         report={result.report}
+        assistantCard={
+          assistantCard ? <AssistantReportCard spec={assistantCard} /> : null
+        }
         limitationsLabel={reportText('report.limitations')}
       />
     );
@@ -153,6 +162,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
       ...(meta?.paramsSignature ? { paramsSignature: meta.paramsSignature } : {}),
       ...(meta?.ciLevel !== undefined ? { ciLevel: meta.ciLevel } : {}),
       ...(meta?.live ? { live: true } : {}),
+      ...(meta?.assistant ? { assistant: meta.assistant } : {}),
       html,
       ...(budget.charts.length > 0 ? { charts: budget.charts } : {}),
       ...(budget.overflow > 0 ? { chartOverflow: budget.overflow } : {}),
@@ -169,6 +179,7 @@ export const useOutputConsole = ({ initial, grid, ciLevel, reportLocale, showToa
         charts: result.charts,
         panels: result.panels,
         callout: result.callout,
+        ...(assistantCard ? { assistantCard } : {}),
       },
     };
     setOutputs(prev => {

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LazStats · 10 schemi colore</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --page: #0b0d10;
+        --page-text: #f5f5f5;
+        --muted: #b9bdc6;
+        --line: #ffffff;
+        --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--page); color: var(--page-text); font-family: var(--font); }
+      body { padding: 28px 26px 60px; }
+      .wrap { max-width: 1440px; margin: 0 auto; }
+      h1 { font-size: 26px; letter-spacing: -0.02em; margin: 0 0 6px; }
+      .lede { color: var(--muted); max-width: 78ch; line-height: 1.55; margin: 0 0 18px; }
+      h2 { font-size: 14px; font-family: var(--mono); letter-spacing: 0.14em; text-transform: uppercase; margin: 30px 0 12px; }
+      .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 0 0 8px; }
+      .principle { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: #14171c; }
+      .principle b { display: block; margin-bottom: 4px; }
+      .principle span { color: var(--muted); font-size: 12px; line-height: 1.5; }
+      .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 14px; }
+      .pill { appearance: none; border: 1px solid var(--line); background: #14171c; color: var(--page-text); border-radius: 999px; padding: 6px 12px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+      .pill[aria-pressed="true"] { background: #f5f5f5; color: #000; }
+      .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; border: 1px solid currentColor; }
+      .stage { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #111419; }
+      .stage-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+      .stage-head strong { font-size: 15px; }
+      .stage-head span { color: var(--muted); font-size: 12px; }
+      .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+      .mini { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: #101216; }
+      .mini-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+      .mini-head strong { font-size: 13px; }
+      .mini-head span { color: var(--muted); font-size: 10px; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+      .mini-head button { margin-left: auto; appearance: none; border: 1px solid var(--line); background: transparent; color: var(--page-text); border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; }
+      .mini-head button:hover { background: #f5f5f5; color: #000; }
+      .swatches { display: flex; gap: 4px; margin: 6px 0 8px; }
+      .swatches i { height: 14px; flex: 1; border: 1px solid var(--line); border-radius: 3px; }
+
+      /* ---- The mock application, sized in em so it scales as a mini or full ---- */
+      .app {
+        background: var(--bg);
+        color: var(--ink);
+        border: 1px solid var(--ink);
+        border-radius: 8px;
+        overflow: hidden;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+      .mini .app { font-size: 7px; }
+      .app .top { display: flex; align-items: center; gap: 0.8em; padding: 0.7em 0.9em; border-bottom: 1px solid var(--ink); background: var(--surface); }
+      .app .logo { font-family: var(--mono); font-size: 0.85em; letter-spacing: 0.18em; color: var(--title); }
+      .app .tabs { display: flex; gap: 0.25em; }
+      .app .tab { border: 1px solid transparent; border-bottom: 0; border-radius: 0.35em 0.35em 0 0; background: var(--tab-bg); color: var(--tab); padding: 0.4em 0.7em; font-size: 0.8em; font-family: var(--mono); letter-spacing: 0.12em; text-transform: uppercase; }
+      .app .tab.active { background: var(--tab-active-bg); color: var(--tab-active-text); border-color: var(--ink); }
+      .app .top .right { margin-left: auto; display: flex; align-items: center; gap: 0.5em; }
+      .app .pill2 { border: 1px solid var(--ink); border-radius: 999px; padding: 0.25em 0.6em; font-size: 0.75em; background: var(--surface2); }
+      .app .body { display: grid; grid-template-columns: 1.1fr 1.25fr 1.35fr; min-height: 24em; }
+      .app .panel { min-width: 0; padding: 0.8em; border-right: 1px solid var(--ink); background: var(--panel); }
+      .app .panel:last-child { border-right: 0; }
+      .app .panel-h { display: flex; align-items: center; gap: 0.5em; font-family: var(--mono); font-size: 0.72em; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.6em 0.8em; margin: -0.8em -0.8em 0.7em; border-bottom: 1px solid var(--ink); background: var(--panel-head); color: var(--title); }
+      .app .badge { margin-left: auto; border: 1px solid var(--ink); border-radius: 999px; padding: 0.1em 0.45em; font-size: 0.85em; letter-spacing: 0; text-transform: none; background: var(--surface3); }
+      .app .badge:not(.ok):not(.warn) { color: var(--ink); }
+      .app .badge.ok { background: var(--green); color: var(--onAccent); }
+      .app .badge.warn { background: var(--warn); color: var(--onAccent); }
+      .app .chips { display: flex; flex-wrap: wrap; gap: 0.3em; margin-bottom: 0.7em; }
+      .app .chip { border: 1px solid var(--ink); border-radius: 0.3em; background: var(--surface2); padding: 0.15em 0.4em; font-size: 0.78em; }
+      .app .q { font-weight: 650; margin: 0 0 0.55em; font-size: 0.95em; color: var(--title); }
+      .app .opt { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 0.5em; border: 1px solid var(--ink); background: var(--surface2); color: var(--ink); border-radius: 0.35em; padding: 0.45em 0.55em; font: inherit; font-size: 0.85em; margin-bottom: 0.35em; text-align: left; }
+      .app .ghost { width: 100%; border: 1px dashed var(--ink); background: transparent; color: var(--ink); border-radius: 0.35em; padding: 0.4em; font: inherit; font-size: 0.8em; margin-top: 0.4em; }
+      .app .caption { margin-top: 0.7em; border-top: 1px solid var(--ink); padding-top: 0.5em; font-size: 0.75em; }
+      .app .caption b { font-family: var(--mono); font-size: 0.85em; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.3em; }
+      .app .row { display: grid; gap: 0.25em; margin-bottom: 0.6em; }
+      .app .row label { font-family: var(--mono); font-size: 0.7em; letter-spacing: 0.1em; text-transform: uppercase; }
+      .app .input { border: 1px solid var(--ink); background: var(--surface2); color: var(--ink); border-radius: 0.3em; padding: 0.45em 0.5em; font: inherit; font-size: 0.85em; display: flex; justify-content: space-between; }
+      .app .primary { width: 100%; border: 1px solid var(--ink); background: var(--accent); color: var(--onAccent); border-radius: 0.35em; padding: 0.55em; font: inherit; font-weight: 700; font-size: 0.85em; margin: 0.4em 0 0.8em; }
+      .app table { width: 100%; border-collapse: collapse; font-size: 0.8em; background: var(--surface2); border: 1px solid var(--ink); }
+      .app th { text-align: left; background: var(--surface3); font-family: var(--mono); font-size: 0.85em; letter-spacing: 0.06em; text-transform: uppercase; }
+      .app th, .app td { border-bottom: 1px solid var(--ink); padding: 0.35em 0.45em; }
+      .app tr:last-child td { border-bottom: 0; }
+      .app .num { text-align: right; font-variant-numeric: tabular-nums; }
+      .app .card { border: 1px solid var(--ink); border-radius: 0.4em; background: var(--surface2); padding: 0.7em; margin-bottom: 0.7em; }
+      .app .card-h { display: flex; align-items: center; gap: 0.4em; font-family: var(--mono); font-size: 0.7em; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5em; color: var(--title); }
+      .app .card-h .badge { margin-left: auto; }
+      .app .card p { margin: 0 0 0.5em; font-size: 0.82em; }
+      .app .bars { display: flex; align-items: flex-end; gap: 0.35em; height: 4.5em; border-left: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 0.2em 0.3em 0; }
+      .app .bars i { flex: 1; background: var(--accent2); border: 1px solid var(--ink); border-bottom: 0; }
+      .app .status { display: flex; gap: 1.2em; border-top: 1px solid var(--ink); background: var(--panel-head); color: var(--ink); padding: 0.4em 0.9em; font-family: var(--mono); font-size: 0.68em; letter-spacing: 0.08em; text-transform: uppercase; }
+      .app .status b { font-weight: 700; }
+      .app .link { color: var(--accent); text-decoration: underline; font-weight: 650; }
+
+      .tokens { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 10px; }
+      .token { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #14171c; }
+      .token .swatch { height: 38px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
+      .token .meta { padding: 7px 9px; font-size: 11px; color: var(--muted); }
+      .token .meta b { display: block; color: var(--page-text); font-size: 11px; margin-bottom: 2px; }
+      .token .meta code { font-size: 10px; font-family: var(--mono); }
+
+      @media (max-width: 700px) {
+        .app .body { grid-template-columns: 1fr; }
+        .app .panel { border-right: 0; border-bottom: 1px solid var(--ink); }
+        .mini .app { font-size: 8px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>10 schemi colore per LazStats</h1>
+      <p class="lede">
+        Mockup di scelta per una gestione ragionata del colore: l’inchiostro è nero pieno sui temi
+        light e bianco pieno sui temi dark (testi e bordi), mentre titoli, tab e sfondi dei pannelli
+        hanno colori propri per ogni schema. Le superfici costruiscono la gerarchia, il colore
+        d’accento segnala solo azioni e stato. Nessun grigio per il testo.
+      </p>
+
+      <div class="principles">
+        <div class="principle"><b>1 · Ink</b><span>Testo e bordi usano lo stesso inchiostro: nero su light, bianco su dark. La gerarchia viene da dimensione e peso, non dal grigio.</span></div>
+        <div class="principle"><b>2 · Tre superfici</b><span>Fondo, pannello e controllo hanno tre livelli distinti (surface, surface2, surface3). I bordi ink separano i pannelli.</span></div>
+        <div class="principle"><b>3 · Accento semantico</b><span>L’accento indica l’azione primaria; verde/giallo/rosso restano per OK, attenzione ed errore. Mai per decorazione.</span></div>
+      </div>
+
+      <h2>Panoramica</h2>
+      <div class="pills" id="pills" role="group" aria-label="Scegli uno schema"></div>
+      <div class="stage">
+        <div class="stage-head">
+          <strong id="stage-name">Paper</strong>
+          <span id="stage-meta">light · surface calde</span>
+        </div>
+        <div id="stage-app"></div>
+        <div class="tokens" id="token-row"></div>
+      </div>
+
+      <h2>Tutti gli schemi</h2>
+      <div class="mini-grid" id="grid"></div>
+    </div>
+
+    <script>
+      const SCHEMES = [
+        {
+          id: 'paper', name: 'Paper', mode: 'light', note: 'surface calde, accento teal',
+          bg: '#f6f1e7', surface: '#fffaf0', surface2: '#efe6d6', surface3: '#e3d7c2',
+          accent: '#0f766e', accent2: '#b45309', green: '#15803d', warn: '#a16207', bad: '#b91c1c', ink: '#000000', onAccent: '#ffffff',
+        },
+        {
+          id: 'mist', name: 'Mist', mode: 'light', note: 'grigio-blu freddo, indaco',
+          bg: '#eef2f7', surface: '#f8fafc', surface2: '#e6ecf4', surface3: '#d8e2ee',
+          accent: '#1d4ed8', accent2: '#0e7490', green: '#15803d', warn: '#a16207', bad: '#b91c1c', ink: '#000000', onAccent: '#ffffff',
+        },
+        {
+          id: 'porcelain', name: 'Porcelain', mode: 'light', note: 'bianco pulito, blu GitHub',
+          bg: '#ffffff', surface: '#f7f8fa', surface2: '#eef1f5', surface3: '#e2e7ee',
+          accent: '#0969da', accent2: '#8250df', green: '#1a7f37', warn: '#9a6700', bad: '#cf222e', ink: '#000000', onAccent: '#ffffff',
+        },
+        {
+          id: 'sage', name: 'Sage', mode: 'light', note: 'verde salvia, bosco',
+          bg: '#f2f7f0', surface: '#fbfdf8', surface2: '#e8f0e3', surface3: '#d9e6d0',
+          accent: '#166534', accent2: '#4d7c0f', green: '#15803d', warn: '#a16207', bad: '#b91c1c', ink: '#000000', onAccent: '#ffffff',
+        },
+        {
+          id: 'sand', name: 'Sand', mode: 'light', note: 'sabbia calda, terracotta',
+          bg: '#faf4e8', surface: '#fffaf1', surface2: '#f2e7d3', surface3: '#e7d8bd',
+          accent: '#9a3412', accent2: '#0f766e', green: '#3f6212', warn: '#a16207', bad: '#b91c1c', ink: '#000000', onAccent: '#ffffff',
+        },
+        {
+          id: 'graphite', name: 'Graphite', mode: 'dark', note: 'nero neutro, ciano',
+          bg: '#0b0c0e', surface: '#141619', surface2: '#1d2024', surface3: '#282c31',
+          accent: '#22d3ee', accent2: '#a78bfa', green: '#4ade80', warn: '#fbbf24', bad: '#f87171', ink: '#ffffff', onAccent: '#0b0c0e',
+        },
+        {
+          id: 'midnight', name: 'Midnight', mode: 'dark', note: 'blu notte, azzurro',
+          bg: '#0a1020', surface: '#111a2e', surface2: '#18243d', surface3: '#223250',
+          accent: '#60a5fa', accent2: '#34d399', green: '#4ade80', warn: '#fbbf24', bad: '#f87171', ink: '#ffffff', onAccent: '#0a1020',
+        },
+        {
+          id: 'forest', name: 'Forest', mode: 'dark', note: 'verde profondo, lime',
+          bg: '#08130d', surface: '#0f1f16', surface2: '#162b1f', surface3: '#20392b',
+          accent: '#a3e635', accent2: '#2dd4bf', green: '#86efac', warn: '#fbbf24', bad: '#f87171', ink: '#ffffff', onAccent: '#08130d',
+        },
+        {
+          id: 'plum', name: 'Plum', mode: 'dark', note: 'prugna, rosa e viola',
+          bg: '#140b16', surface: '#1e1221', surface2: '#2a1a2e', surface3: '#3a2440',
+          accent: '#f472b6', accent2: '#c084fc', green: '#4ade80', warn: '#fbbf24', bad: '#f87171', ink: '#ffffff', onAccent: '#140b16',
+        },
+        {
+          id: 'slate', name: 'Slate', mode: 'dark', note: 'ardesia, ambra',
+          bg: '#0f172a', surface: '#172033', surface2: '#1f2b42', surface3: '#2a3853',
+          accent: '#fbbf24', accent2: '#38bdf8', green: '#4ade80', warn: '#fb923c', bad: '#f87171', ink: '#ffffff', onAccent: '#0f172a',
+        },
+      ];
+
+      /* Dedicated colours for titles, tabs and panel backgrounds. */
+      const DETAILS = {
+        paper: { title: '#0b4f4a', tab: '#0b4f4a', tabBg: '#efe6d6', tabActiveBg: '#0f766e', tabActiveText: '#ffffff', panel: '#fbf5e9', panelHead: '#efe2cd' },
+        mist: { title: '#1e3a8a', tab: '#1e3a8a', tabBg: '#e6ecf4', tabActiveBg: '#1d4ed8', tabActiveText: '#ffffff', panel: '#f4f7fb', panelHead: '#dfe9f5' },
+        porcelain: { title: '#0b4f9c', tab: '#0b4f9c', tabBg: '#eef1f5', tabActiveBg: '#0969da', tabActiveText: '#ffffff', panel: '#fbfcfe', panelHead: '#e9f0f8' },
+        sage: { title: '#14532d', tab: '#14532d', tabBg: '#e8f0e3', tabActiveBg: '#166534', tabActiveText: '#ffffff', panel: '#f6faf3', panelHead: '#dfecd6' },
+        sand: { title: '#7c2d12', tab: '#7c2d12', tabBg: '#f2e7d3', tabActiveBg: '#9a3412', tabActiveText: '#ffffff', panel: '#fdf7ec', panelHead: '#f0dfc4' },
+        graphite: { title: '#67e8f9', tab: '#a5f3fc', tabBg: '#1d2024', tabActiveBg: '#22d3ee', tabActiveText: '#0b0c0e', panel: '#121519', panelHead: '#20252b' },
+        midnight: { title: '#93c5fd', tab: '#bfdbfe', tabBg: '#18243d', tabActiveBg: '#60a5fa', tabActiveText: '#0a1020', panel: '#0f1829', panelHead: '#1a2a47' },
+        forest: { title: '#bef264', tab: '#d9f99d', tabBg: '#162b1f', tabActiveBg: '#a3e635', tabActiveText: '#08130d', panel: '#0c1b12', panelHead: '#1a3324' },
+        plum: { title: '#f9a8d4', tab: '#fbcfe8', tabBg: '#2a1a2e', tabActiveBg: '#f472b6', tabActiveText: '#140b16', panel: '#1b1020', panelHead: '#2f1b35' },
+        slate: { title: '#fcd34d', tab: '#fde68a', tabBg: '#1f2b42', tabActiveBg: '#fbbf24', tabActiveText: '#0f172a', panel: '#131d33', panelHead: '#24314a' },
+      };
+      for (const scheme of SCHEMES) Object.assign(scheme, DETAILS[scheme.id]);
+
+      const appMarkup = () => `
+        <div class="app">
+          <div class="top">
+            <span class="logo">LAZSTATS</span>
+            <div class="tabs">
+              <button class="tab">Data</button>
+              <button class="tab active">Analysis</button>
+              <button class="tab">Settings</button>
+            </div>
+            <div class="right">
+              <span class="pill2">Guided</span>
+              <span class="pill2">95%</span>
+            </div>
+          </div>
+          <div class="body">
+            <aside class="panel">
+              <div class="panel-h">Assistant <span class="badge">Guided</span></div>
+              <div class="chips"><span class="chip">Compare</span><span class="chip">Means</span><span class="chip">Independent</span></div>
+              <p class="q">What are you comparing?</p>
+              <button class="opt">Means or medians <span>›</span></button>
+              <button class="opt">Variability of groups <span>›</span></button>
+              <button class="opt">Proportions or rates <span>›</span></button>
+              <button class="ghost">I do not know</button>
+              <div class="caption"><b>Choices so far</b>Compare → Means → Independent</div>
+            </aside>
+            <main class="panel">
+              <div class="panel-h">Distribution Fit <span class="badge">Setup</span></div>
+              <div class="row"><label>Confidence level</label><div class="input">95% <span>▾</span></div></div>
+              <div class="row"><label>Variable</label><div class="input">Score_pre <span>▾</span></div></div>
+              <button class="primary">▶ Run analysis</button>
+              <table>
+                <thead><tr><th>Group</th><th class="num">n</th><th class="num">Mean</th><th class="num">SD</th></tr></thead>
+                <tbody>
+                  <tr><td>Control</td><td class="num">10</td><td class="num">4.82</td><td class="num">1.21</td></tr>
+                  <tr><td>Treatment</td><td class="num">10</td><td class="num">6.14</td><td class="num">1.34</td></tr>
+                </tbody>
+              </table>
+            </main>
+            <section class="panel">
+              <div class="panel-h">Session report <span class="badge ok">1 run</span></div>
+              <div class="card">
+                <div class="card-h">Assistant report card <span class="badge warn">Info</span></div>
+                <p>Manual review: read the written report and check the highlighted points.</p>
+                <div class="bars"><i style="height:38%"></i><i style="height:64%"></i><i style="height:52%"></i><i style="height:82%"></i><i style="height:70%"></i></div>
+              </div>
+              <div class="card">
+                <div class="card-h">Fit della distribuzione</div>
+                <p>Score_pre · 20 osservazioni · <span class="link">Log-normal</span></p>
+                <p><b>AIC</b> 42.18 &nbsp; <b>BIC</b> 45.02</p>
+              </div>
+            </section>
+          </div>
+          <div class="status"><span>Rows <b>20/20</b></span><span>Cols <b>4</b></span><span>Invalid <b>0</b></span><span>Status <b>Ready</b></span></div>
+        </div>`;
+
+      const vars = (scheme) => Object.entries({
+        '--bg': scheme.bg, '--surface': scheme.surface, '--surface2': scheme.surface2, '--surface3': scheme.surface3,
+        '--accent': scheme.accent, '--accent2': scheme.accent2, '--green': scheme.green, '--warn': scheme.warn,
+        '--bad': scheme.bad, '--ink': scheme.ink, '--onAccent': scheme.onAccent,
+        '--title': scheme.title, '--tab': scheme.tab, '--tab-bg': scheme.tabBg,
+        '--tab-active-bg': scheme.tabActiveBg, '--tab-active-text': scheme.tabActiveText,
+        '--panel': scheme.panel, '--panel-head': scheme.panelHead,
+      }).map(([name, value]) => `${name}:${value}`).join(';');
+
+      const stage = document.getElementById('stage-app');
+      const tokenRow = document.getElementById('token-row');
+      const stageName = document.getElementById('stage-name');
+      const stageMeta = document.getElementById('stage-meta');
+      const pills = document.getElementById('pills');
+      const grid = document.getElementById('grid');
+      let selected = SCHEMES[0].id;
+
+      const paint = (scheme) => {
+        stage.style.cssText = vars(scheme);
+        stage.innerHTML = appMarkup();
+        stageName.textContent = scheme.name;
+        stageMeta.textContent = `${scheme.mode} · ${scheme.note} · titoli, tab e pannelli colorati`;
+        const tokens = [
+          ['Titoli', scheme.panelHead, scheme.title],
+          ['Tab inattivo', scheme.tabBg, scheme.tab],
+          ['Tab attivo', scheme.tabActiveBg, scheme.tabActiveText],
+          ['Sfondo pannello', scheme.panel, scheme.ink],
+          ['Testata pannello', scheme.panelHead, scheme.title],
+          ['Ink / bordi', scheme.surface, scheme.ink],
+        ];
+        tokenRow.innerHTML = tokens.map(([label, background, foreground]) => `
+          <div class="token">
+            <div class="swatch" style="background:${background};color:${foreground}">Aa</div>
+            <div class="meta"><b>${label}</b><code>${background} · ${foreground}</code></div>
+          </div>
+        `).join('');
+        selected = scheme.id;
+        location.hash = scheme.id;
+        pills.querySelectorAll('button').forEach(button => {
+          button.setAttribute('aria-pressed', String(button.dataset.scheme === scheme.id));
+        });
+        grid.querySelectorAll('[data-pick]').forEach(button => {
+          button.textContent = button.dataset.pick === scheme.id ? 'Selezionato ✓' : 'Usa questo schema';
+        });
+      };
+
+      SCHEMES.forEach((scheme) => {
+        const pill = document.createElement('button');
+        pill.className = 'pill';
+        pill.dataset.scheme = scheme.id;
+        pill.type = 'button';
+        pill.innerHTML = `<span class="dot" style="background:${scheme.accent}"></span>${scheme.name}`;
+        pill.addEventListener('click', () => paint(scheme));
+        pills.appendChild(pill);
+
+        const card = document.createElement('article');
+        card.className = 'mini';
+        card.innerHTML = `
+          <div class="mini-head">
+            <strong>${scheme.name}</strong>
+            <span>${scheme.mode}</span>
+            <button type="button" data-pick="${scheme.id}">Usa questo schema</button>
+          </div>
+          <div class="swatches" aria-label="Palette dello schema">
+            <i style="background:${scheme.bg}" title="Fondo"></i>
+            <i style="background:${scheme.panel}" title="Pannello"></i>
+            <i style="background:${scheme.panelHead}" title="Testata pannello"></i>
+            <i style="background:${scheme.title}" title="Titoli"></i>
+            <i style="background:${scheme.tab}" title="Tab"></i>
+            <i style="background:${scheme.tabActiveBg}" title="Tab attivo"></i>
+            <i style="background:${scheme.accent}" title="Accento"></i>
+            <i style="background:${scheme.accent2}" title="Accento 2"></i>
+          </div>
+          <div class="mini-preview" style="${vars(scheme)}">${appMarkup()}</div>
+        `;
+        card.querySelector('[data-pick]').addEventListener('click', () => {
+          paint(scheme);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        grid.appendChild(card);
+      });
+
+      const fromHash = SCHEMES.find(scheme => scheme.id === location.hash.replace('#', ''));
+      paint(fromHash || SCHEMES[0]);
+    </script>
+  </body>
+</html>

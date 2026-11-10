@@ -24,7 +24,9 @@ export const metaMessages: Record<keyof typeof enMeta, string> = {
   'meta.family.missing.description': 'Imputation und Pooling',
   'meta.family.design.label': 'Design & Power',
   'meta.family.design.description': 'Stichprobengröße, Power und Resampling',
-  'meta.analysis.wizard.label': 'Assistent',
+  'meta.analysis.assistant.label': 'Assistent',
+  'meta.analysis.assistant.description': 'Starten Sie mit Ihrem Ziel und lassen Sie die Form der Daten das richtige Verfahren vorschlagen.',
+  'meta.analysis.wizard.label': 'Assistant',
   'meta.analysis.wizard.description':
     'Beginnen Sie bei Ihrem Ziel und lassen Sie die Datenform das passende Verfahren vorschlagen.',
   'meta.analysis.descriptive.label': 'Deskriptiv',

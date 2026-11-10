@@ -1,7 +1,7 @@
 /**
  * User-created themes.
  *
- * The 10 built-ins stay immutable in `themes.ts`; custom themes live in the
+ * The 12 built-ins stay immutable in `themes.ts`; custom themes live in the
  * project snapshot and are resolved side by side with the built-ins. A theme
  * is still a complete `ThemeDefinition`: 17 UI colours plus the chart block.
  */

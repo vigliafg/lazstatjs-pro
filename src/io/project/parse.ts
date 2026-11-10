@@ -1212,14 +1212,14 @@ export const parseParams = (value: unknown, width: number): ProjectParams => {
   };
 };
 
+const activeAnalysisAlias = (id: string): string => (id === 'wizard' ? 'assistant' : id);
 export const parseSettings = (value: unknown): ProjectSettings => {
   const raw = isRecord(value) ? value : {};
-  const ci = finite(raw.ciLevel, DEFAULT_SETTINGS.ciLevel);
-  const activeTab = raw.activeTab;
+  const ci = finite(raw.ciLevel, DEFAULT_SETTINGS.ciLevel), activeTab = raw.activeTab;
   const customThemes = normalizeCustomThemes(raw.customThemes);
   return {
     ciLevel: ci === 90 || ci === 95 || ci === 99 ? ci : DEFAULT_SETTINGS.ciLevel,
-    activeAnalysis: text(raw.activeAnalysis, DEFAULT_SETTINGS.activeAnalysis),
+    activeAnalysis: activeAnalysisAlias(text(raw.activeAnalysis, DEFAULT_SETTINGS.activeAnalysis)),
     activeTab:
       activeTab === 'analysis' || activeTab === 'settings' || activeTab === 'data' || activeTab === 'help'
         ? activeTab

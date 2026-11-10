@@ -22,6 +22,21 @@ export const MAX_SINGLE_OUTPUT_CHARS = 600_000;
 /** Parameter snapshots are small; anything larger is not trusted. */
 export const MAX_PARAMS_CHARS = 20_000;
 
+/** Position of one run inside a chain of leaves. */
+export interface AssistantChainMeta {
+  index: number;
+  total: number;
+}
+
+/** Leaf and answers that produced a run, when it came from the Assistant. */
+export interface AssistantRunMeta {
+  leafId: string;
+  path: string[];
+  ciLevel?: number;
+  /** Present when the run came from a chain step. */
+  chain?: AssistantChainMeta;
+}
+
 export interface StoredOutput {
   id: string;
   title: string;
@@ -34,6 +49,8 @@ export interface StoredOutput {
   paramsSignature?: string;
   /** Confidence level used by the run (global setting at that moment). */
   ciLevel?: number;
+  /** Assistant leaf that produced the run, when it came from the panel. */
+  assistant?: AssistantRunMeta;
   /**
    * Stable run number shown by the outline and the card. Persisted so removing
    * an earlier card never renumbers the rest; legacy entries fall back to their
@@ -98,6 +115,39 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const text = (value: unknown, fallback: string): string =>
   typeof value === 'string' ? value : fallback;
 
+/** Rebuild the Assistant metadata of a stored card, if it is well formed. */
+const parseAssistantMeta = (value: unknown): AssistantRunMeta | null => {
+  if (!isRecord(value)) return null;
+  const leafId = typeof value.leafId === 'string' ? value.leafId.slice(0, 64) : '';
+  if (!leafId) return null;
+  const path = Array.isArray(value.path)
+    ? value.path.filter((item): item is string => typeof item === 'string').slice(0, 16)
+    : [];
+  const ciLevel =
+    typeof value.ciLevel === 'number' &&
+    Number.isFinite(value.ciLevel) &&
+    value.ciLevel > 0 &&
+    value.ciLevel < 100
+      ? value.ciLevel
+      : undefined;
+  const chain =
+    isRecord(value.chain) &&
+    typeof value.chain.index === 'number' &&
+    Number.isInteger(value.chain.index) &&
+    value.chain.index >= 1 &&
+    typeof value.chain.total === 'number' &&
+    Number.isInteger(value.chain.total) &&
+    value.chain.total >= value.chain.index
+      ? { index: value.chain.index, total: value.chain.total }
+      : undefined;
+  return {
+    leafId,
+    path,
+    ...(ciLevel !== undefined ? { ciLevel } : {}),
+    ...(chain ? { chain } : {}),
+  };
+};
+
 const decodeEntities = (value: string): string =>
   value
     .replace(/&nbsp;/g, ' ')
@@ -161,6 +211,7 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
     if (!isRecord(raw)) return;
     const html = text(raw.html, '');
     if (!html || html.length > MAX_SINGLE_OUTPUT_CHARS) return;
+    const assistant = parseAssistantMeta(raw.assistant);
     let charts = Array.isArray(raw.charts) ? parseChartModels(raw.charts) : [];
     if (charts.length > 0) {
       const kept: typeof charts = [];
@@ -203,6 +254,7 @@ export const parseStoredOutputs = (value: unknown): StoredOutput[] => {
       ...(typeof raw.ciLevel === 'number' && Number.isFinite(raw.ciLevel) && raw.ciLevel > 0 && raw.ciLevel < 100
         ? { ciLevel: raw.ciLevel }
         : {}),
+      ...(assistant ? { assistant } : {}),
       ...(typeof raw.runNumber === 'number' && Number.isInteger(raw.runNumber) && raw.runNumber >= 1
         ? { runNumber: raw.runNumber }
         : {}),

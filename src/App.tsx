@@ -7,6 +7,11 @@ import { Footer } from './ui/Footer';
 import { Toasts } from './ui/Toasts';
 import { ErrorBoundary } from './ui/ErrorBoundary';
 import { useAnalysisEmit } from './ui/analysis/useAnalysisEmit';
+import { AssistantPanel } from './ui/assistant/AssistantPanel';
+import { useAssistantChain } from './hooks/useAssistantChain';
+import type { LeafRepair } from './ui/assistant/readiness';
+import type { AssistantLeaf } from './ui/assistant/tree';
+import { useDataActions } from './ui/assistant/useDataActions';
 import { UiModeProvider, type UiMode } from './components/UiMode';
 import { useToasts } from './hooks/useToasts';
 import { useOutputConsole } from './hooks/useOutputConsole';
@@ -53,6 +58,7 @@ import {
   setColumnLevels as gridSetColumnLevels,
   recodeColumnValues as gridRecodeColumnValues,
   filterRowIndexes as gridFilterIndexes,
+  type Range,
   type RowFilter,
   type RowFilterOp,
 } from './grid/ops';
@@ -123,23 +129,14 @@ export default function App() {
   const grid = gridHistory.grid;
   const dataRevision = gridHistory.revision;
   const setGrid = gridHistory.commit;
-  const undoGrid = () => {
-    const next = gridHistory.undo();
-    if (!next) return;
-    const result = remapParamsByColumns(params, grid.cols, next.cols);
-    setParams(result.params);
-  };
-  const redoGrid = () => {
-    const next = gridHistory.redo();
-    if (!next) return;
-    const result = remapParamsByColumns(params, grid.cols, next.cols);
-    setParams(result.params);
-  };
-  const canUndoGrid = gridHistory.canUndo;
-  const canRedoGrid = gridHistory.canRedo;
+  const undoGrid = () => { const next = gridHistory.undo(); if (next) setParams(remapParamsByColumns(params, grid.cols, next.cols).params); };
+  const redoGrid = () => { const next = gridHistory.redo(); if (next) setParams(remapParamsByColumns(params, grid.cols, next.cols).params); };
+  const canUndoGrid = gridHistory.canUndo, canRedoGrid = gridHistory.canRedo;
   const resetGridHistory = gridHistory.setWithoutHistory;
   const [showFilter, setShowFilter] = useState(false);
   const [filterAffectsAnalysis, setFilterAffectsAnalysis] = useState(false);
+  const [dataSelection, setDataSelection] = useState<Range | null>(null);
+  const [inspectRequest, setInspectRequest] = useState<{ column: number; stamp: number } | null>(null);
   const [focusedColumn, setFocusedColumn] = useState<number | null>(null);
   const [filterCol, setFilterCol] = useState(0);
   const [filterOp, setFilterOp] = useState<RowFilterOp>('contains');
@@ -176,12 +173,8 @@ export default function App() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [undoGrid, redoGrid]);
-  const addColumn = () => {
-    setGrid((prev) => gridAddColumn(prev));
-  };
-  const addRow = () => {
-    setGrid((prev) => gridAddRow(prev));
-  };
+  const addColumn = () => setGrid((prev) => gridAddColumn(prev));
+  const addRow = () => setGrid((prev) => gridAddRow(prev));
   /** Replacing the dataset cannot be undone, so it always asks first. */
   const newDataset = () => {
     if (!window.confirm(t('data.confirmNew'))) return;
@@ -210,9 +203,7 @@ export default function App() {
       changedCol: c,
     });
   };
-  const updateColType = (c: number, type: ColType) => {
-    setGrid((prev) => gridSetColType(prev, c, type));
-  };
+  const updateColType = (c: number, type: ColType) => setGrid((prev) => gridSetColType(prev, c, type));
   // Shared by the grid header and every analysis group selector, so levels can
   // be edited from the panel where the user is already choosing groups.
   const updateColumnLevels = (c: number, levels: CategoryLevel[], reference?: string) => {
@@ -432,6 +423,16 @@ export default function App() {
     restore: restoreProject,
     showToast,
   });
+  // Data Assistant: the leaves call the same commands as the toolbar.
+  // It owns no data model of its own, so undo/history stay single-sourced.
+  const runValidation = () => setValidation({ ran: true, issues: gridFindInvalid(grid) });
+  const onDataAction = useDataActions({
+    grid, setGrid, selection: dataSelection, setSelection: setDataSelection,
+    openImport: () => csvInputRef.current?.click(), openExport: exportCsv, saveProject: saveProjectFile,
+    openAnalysis: () => setActiveTab('analysis'), inspect: column => setInspectRequest({ column, stamp: Date.now() }),
+    duplicateColumn, moveColumn, deleteColumn, setColumnType: updateColType, recode: updateColumnRecode,
+    setColumnMeta: updateColumnMeta, runValidation, showToast,
+  });
 
   // Native menu commands from Electron (File, Help, Settings).
   useEffect(() => {
@@ -544,19 +545,61 @@ export default function App() {
     });
   };
 
+  const { state: assistantChain, run: runAssistantChain } = useAssistantChain({
+    grid,
+    showToast,
+    runAnalysisWith,
+  });
+
+  const openDataEditor = (repair: LeafRepair) => {
+    setActiveTab('data');
+    if (repair.column !== undefined) setFocusedColumn(repair.column);
+    showToast(t('assistant.title'), t('assistant.repairToast'), 'warn');
+  };
+
+  const applyAssistantLeaf = (leaf: AssistantLeaf, next: ProjectParams) => {
+    setParams(next);
+    setActiveAnalysis(leaf.analysisId);
+    setActiveTab('analysis');
+    showToast(t('assistant.title'), t('assistant.applied'), 'ok');
+  };
+
+  const runAssistantLeaf = (leaf: AssistantLeaf, next: ProjectParams, path: string[]) => {
+    setParams(next);
+    setActiveAnalysis(leaf.analysisId);
+    setActiveTab('analysis');
+    void runAnalysisWith(leaf.analysisId, next, undefined, { leafId: leaf.id, path }).then(ok => {
+      if (ok) showToast(t('assistant.title'), t('assistant.ran'), 'ok');
+    });
+  };
+
+  const assistantWorkspace = activeTab === 'analysis' && activeAnalysis === 'assistant';
+
   return (
     <UiModeProvider mode={uiMode}>
-    <div className="flex flex-col h-screen bg-bg text-text font-sans selection:bg-accent/30">
+    <div className="flex flex-col h-screen overflow-x-hidden bg-bg text-text font-sans selection:bg-accent/30">
       {/* Main Tabs */}
       <Header activeTab={activeTab} setActiveTab={setActiveTab} uiMode={uiMode} setUiMode={setUiMode} theme={theme} setTheme={setTheme} customThemes={customThemes} uiLocale={uiLocale} setUiLocale={setUiLocale} reportLocale={reportLocale} />
 
       {/* Content */}
       <main className="flex-1 overflow-hidden flex flex-col">
         <ErrorBoundary resetKey={activeTab} label={activeTab}>
-        <div className={activeTab === 'data' ? 'flex min-h-0 flex-1 flex-col' : 'hidden'}>
+        {(activeTab === 'data' || activeTab === 'analysis') && (
+        <div className="flex min-h-0 flex-1">
+          <AssistantPanel domain={activeTab === 'analysis' ? 'analysis' : 'data'} grid={grid} params={params}
+            selection={dataSelection} outputs={outputs} running={analysisRunning} onApply={applyAssistantLeaf}
+            onRun={runAssistantLeaf} onDataAction={onDataAction}
+            onRepair={openDataEditor} onOpenAnalysis={() => setActiveTab('analysis')}
+            onNotify={(message, type) => showToast(t('assistant.title'), message, type)}
+            maxWidth={assistantWorkspace ? 360 : undefined}
+            workspaceActive={assistantWorkspace}
+            onInspect={column => setInspectRequest({ column, stamp: Date.now() })} />
+          <div className={activeTab === 'data' ? 'flex min-w-0 flex-1 flex-col' : 'hidden'}>
           <DataWorkspace
             grid={grid}
             datasetId={datasetId}
+            onSelectionChange={setDataSelection}
+            inspectRequest={inspectRequest}
             setGrid={setGrid}
             onNewDataset={newDataset}
             onInsertColumn={insertColumn}
@@ -604,8 +647,9 @@ export default function App() {
             addColumn={addColumn}
             addRow={addRow}
           />
-        </div>
+          </div>
         {activeTab === 'analysis' && (
+          <div className="flex min-w-0 flex-1 flex-col">
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingAnalysis')}</div>}>
           <ChartLibraryProvider
             presets={chartPresets}
@@ -636,6 +680,10 @@ export default function App() {
             onAssignRole={assignRoleTo}
             onRerunOutput={rerunOutput}
             onRerunAllOutputs={rerunAllOutputs}
+            onApplyAssistant={applyAssistantLeaf} onRunAssistant={runAssistantLeaf}
+            onRunAssistantChain={runAssistantChain} assistantChain={assistantChain}
+            onRepairAssistant={openDataEditor}
+            notifyAssistant={(message, type) => showToast(t('assistant.chain'), message, type)}
             onApplyOutputParams={applyOutputParams}
             paramsSignatureFor={paramsSignatureFor}
             limitationsLabel={translate(reportLocale, 'report.limitations')}
@@ -665,6 +713,9 @@ export default function App() {
           />
           </ChartLibraryProvider>
           </Suspense>
+          </div>
+        )}
+        </div>
         )}
         {activeTab === 'help' && (
           <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[11px] text-text3">{t('app.loadingHelp')}</div>}>

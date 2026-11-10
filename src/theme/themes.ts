@@ -219,6 +219,39 @@ export const THEMES = [
     },
   },
   {
+    id: 'midnight',
+    name: 'Midnight',
+    mode: 'dark',
+    tokens: {
+      bg: '#0a1020',
+      surface: '#111a2e',
+      surface2: '#18243d',
+      surface3: '#223250',
+      border: '#ffffff',
+      border2: '#ffffff',
+      accent: '#60a5fa',
+      accent2: '#34d399',
+      onAccent: '#0a1020',
+      onAccent2: '#0a1020',
+      green: '#4ade80',
+      yellow: '#fbbf24',
+      red: '#f87171',
+      purple: '#c084fc',
+      text: '#ffffff',
+      text2: '#ffffff',
+      text3: '#ffffff',
+    },
+    chart: {
+      background: '#0a1020',
+      surface: '#111a2e',
+      text: '#ffffff',
+      muted: '#bfdbfe',
+      grid: '#1e3a5f',
+      axis: '#2c4a72',
+      palette: ['#60a5fa', '#34d399', '#fbbf24', '#c084fc', '#f87171', '#22d3ee'],
+    },
+  },
+  {
     id: 'github-light',
     name: 'GitHub Light',
     mode: 'light',
@@ -249,6 +282,39 @@ export const THEMES = [
       grid: '#e2e8f0',
       axis: '#cbd5e1',
       palette: ['#0969da', '#1a7f37', '#9a6700', '#8250df', '#cf222e', '#1b7c83'],
+    },
+  },
+  {
+    id: 'mist',
+    name: 'Mist',
+    mode: 'light',
+    tokens: {
+      bg: '#eef2f7',
+      surface: '#f8fafc',
+      surface2: '#e6ecf4',
+      surface3: '#d8e2ee',
+      border: '#000000',
+      border2: '#000000',
+      accent: '#1d4ed8',
+      accent2: '#0e7490',
+      onAccent: '#ffffff',
+      onAccent2: '#ffffff',
+      green: '#15803d',
+      yellow: '#a16207',
+      red: '#b91c1c',
+      purple: '#6d28d9',
+      text: '#000000',
+      text2: '#000000',
+      text3: '#000000',
+    },
+    chart: {
+      background: '#eef2f7',
+      surface: '#f8fafc',
+      text: '#000000',
+      muted: '#1e3a8a',
+      grid: '#cbd5e1',
+      axis: '#64748b',
+      palette: ['#1d4ed8', '#0e7490', '#15803d', '#a16207', '#b91c1c', '#6d28d9'],
     },
   },
   {
@@ -422,10 +488,32 @@ export const CSS_VARIABLE_NAMES: Readonly<Record<keyof ThemeTokens, string>> = {
   text3: '--color-text3',
 };
 
-export const cssVariablesOf = (theme: ThemeDefinition): Record<string, string> =>
-  Object.fromEntries(
+/**
+ * Interface ink: black on light themes, white on dark themes.
+ *
+ * Text and panel borders must not fade into grey tones: hierarchy comes from
+ * size and weight, not from dimming the ink. Accent and semantic colours stay
+ * untouched.
+ */
+export const UI_INK: Readonly<Record<ThemeMode, string>> = {
+  light: '#000000',
+  dark: '#ffffff',
+};
+
+export const cssVariablesOf = (theme: ThemeDefinition): Record<string, string> => {
+  const ink = UI_INK[theme.mode];
+  const tokens: ThemeTokens = {
+    ...theme.tokens,
+    text: ink,
+    text2: ink,
+    text3: ink,
+    border: ink,
+    border2: ink,
+  };
+  return Object.fromEntries(
     (Object.keys(CSS_VARIABLE_NAMES) as (keyof ThemeTokens)[]).map(key => [
       CSS_VARIABLE_NAMES[key],
-      theme.tokens[key],
+      tokens[key],
     ])
   );
+};

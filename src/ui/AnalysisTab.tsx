@@ -4,6 +4,7 @@ import { ToolbarButton } from '../components/ToolbarButton';
 import { analysisLabel, analysisMeta } from '../analyses/registry';
 import { AnalysisLibrary } from './analysis/AnalysisLibrary';
 import { AnalysisOptions } from './analysis/AnalysisOptions';
+import { AssistantWorkspace } from './assistant/AssistantWorkspace';
 import { useRecentAnalyses } from './analysis/useRecentAnalyses';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { AnalysisTabProps } from './analysis/types';
@@ -13,6 +14,9 @@ import type { SessionReportMeta } from './output/types';
 import { t } from '../i18n';
 
 type Pane = 'library' | 'options' | 'output';
+
+/** The legacy wizard id opens the Assistant instead. */
+const activeAnalysisId = (id: string): string => (id === 'wizard' ? 'assistant' : id);
 
 
 /**
@@ -86,7 +90,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
   };
 
   const selectAnalysis = (id: string) => {
-    props.setActiveAnalysis(id);
+    props.setActiveAnalysis(activeAnalysisId(id));
     if (narrow) {
       setPane('options');
       focusPane('options');
@@ -131,6 +135,12 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
     focusOutput || !showOptions
       ? 'hidden'
       : `${pane === 'options' ? 'flex' : 'hidden'} lg:flex`;
+  // The Assistant workspace takes the setup area; the output console stays one
+  // click away through Focus output (or the Output pane on narrow screens).
+  const assistantMode = props.activeAnalysis === 'assistant';
+  const showWorkspace = assistantMode && !focusOutput && !(narrow && pane === 'output');
+  const showAssistantOutput =
+    assistantMode && (focusOutput || (narrow && pane === 'output'));
   // A pane hidden from the desktop toolbar must not leave a blank mobile view.
   const selectedPaneHidden =
     (pane === 'library' && !showLibrary) || (pane === 'options' && !showOptions);
@@ -245,13 +255,38 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
         </div>
 
         <div
-          className={`${optionsVisibility} min-h-0 w-full shrink-0 lg:w-[300px] xl:w-[330px] 2xl:w-[360px]`}
+          className={
+            assistantMode
+              ? `${showWorkspace ? 'flex' : 'hidden'} min-h-0 min-w-0 flex-1`
+              : `${optionsVisibility} min-h-0 w-full shrink-0 lg:w-[300px] xl:w-[330px] 2xl:w-[360px]`
+          }
         >
-          <AnalysisOptions {...props} runAnalysis={run} paneId="analysis-pane-options" />
+          {assistantMode ? (
+            <AssistantWorkspace
+              grid={props.grid}
+              params={props.params}
+              outputs={props.outputs}
+              running={props.analysisRunning}
+              chainRunning={props.assistantChain.running}
+              chainRunningStep={props.assistantChain.step}
+              chainFailedAt={props.assistantChain.failedAt}
+              onApply={props.onApplyAssistant}
+              onRun={props.onRunAssistant}
+              onRunChain={props.onRunAssistantChain}
+              notify={props.notifyAssistant}
+              onRepair={props.onRepairAssistant}
+            />
+          ) : (
+            <AnalysisOptions {...props} runAnalysis={run} paneId="analysis-pane-options" />
+          )}
         </div>
 
         <div
-          className={`${outputVisibility} min-h-0 min-w-0 flex-1 flex-col lg:flex`}
+          className={
+            assistantMode
+              ? `${showAssistantOutput ? 'flex' : 'hidden'} min-h-0 min-w-0 flex-1 flex-col`
+              : `${outputVisibility} min-h-0 min-w-0 flex-1 flex-col lg:flex`
+          }
         >
           <OutputConsole
             id="analysis-pane-output"
@@ -284,7 +319,7 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
             currentCiLevel={props.ciLevel}
             onOpenAnalysis={analysisId => {
               if (!analysisMeta(analysisId)) return;
-              props.setActiveAnalysis(analysisId);
+              props.setActiveAnalysis(activeAnalysisId(analysisId));
               go('options');
             }}
           />

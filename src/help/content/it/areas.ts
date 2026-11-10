@@ -403,7 +403,7 @@ export const areaTopics: HelpTopic[] = [
       goal: 'Creare un tema di progetto e un preset grafico, poi riutilizzarli.',
       dataset: 'score-groups.csv',
       steps: [
-        'Apri IMPOSTAZIONI → Aspetto e scegli uno dei cinque temi scuri o cinque chiari incorporati; il selettore nell’Header lo applica subito.',
+        'Apri IMPOSTAZIONI → Aspetto e scegli uno dei sei temi scuri o sei chiari incorporati; il selettore nell’Header lo applica subito.',
         'Premi Crea tema: assegna un nome, scegli tema di base e modalità, modifica i colori e segui l’anteprima live.',
         'Controlla il pannello Contrasto WCAG, poi premi Salva tema: entra in Temi personalizzati, viene selezionato e resta nel progetto.',
         'Esegui un’analisi, apri un grafico e usa il selettore Preset: scegli Predefinito, Minimale, Stampa chiara o uno dei tuoi preset.',

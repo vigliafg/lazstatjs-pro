@@ -18,6 +18,7 @@ import { HelpButton } from '../../help/HelpButton';
 import { topicForAnalysis } from '../../help/book';
 import { t } from '../../i18n';
 import type { AnalysisChart, ChartOptions } from '../../stats/charts';
+import { AssistantReportCard } from '../assistant/AssistantReportCard';
 import { ExportMenu } from './ExportMenu';
 import type { OutputEntry } from './types';
 
@@ -230,6 +231,11 @@ export const RunReportCard = ({
             charts={output.session.charts ?? output.charts}
             panels={output.session.panels ?? output.panels}
             limitationsLabel={limitationsLabel}
+            assistantCard={
+              output.session.assistantCard ? (
+                <AssistantReportCard spec={output.session.assistantCard} />
+              ) : null
+            }
             analysisName={output.title}
             onChartOptionsChange={(chartId, options) =>
               onUpdateChart?.(output.id, chartId, options)

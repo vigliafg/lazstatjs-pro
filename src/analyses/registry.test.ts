@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  ANALYSIS_ALL,
   ANALYSIS_FAMILIES,
   ANALYSIS_IDS,
   ANALYSIS_TABS,
@@ -59,6 +60,13 @@ test('groupByFamily keeps every analysis exactly once', () => {
   assert.equal(ids.length, ANALYSIS_TABS.length);
   assert.deepEqual(new Set(ids), new Set(ANALYSIS_IDS));
   assert.ok(groups.every(group => group.analyses.length > 0));
+});
+
+test('the wizard is hidden but stays resolvable for legacy reports', () => {
+  assert.ok(!ANALYSIS_TABS.some(meta => meta.id === 'wizard'));
+  assert.ok(ANALYSIS_ALL.some(meta => meta.id === 'wizard'));
+  assert.equal(analysisMeta('wizard')?.label, 'Wizard (legacy)');
+  assert.equal(analysisMeta('assistant')?.family, 'guided');
 });
 
 test('metadata lookups fall back safely', () => {

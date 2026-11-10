@@ -2,7 +2,7 @@ import { useEffect, useState, type Dispatch, type RefObject, type SetStateAction
 import { DataTab } from './DataTab';
 import type { ColumnOperation } from '../grid/columnOps';
 import type { CategoryLevel, ColType, GridData } from '../grid/types';
-import type { RowFilter, RowFilterOp } from '../grid/ops';
+import type { Range, RowFilter, RowFilterOp } from '../grid/ops';
 
 interface Props {
   grid: GridData;
@@ -56,6 +56,10 @@ interface Props {
   visibleRowCount: number;
   /** Identity of the current dataset: resets selection when it changes. */
   datasetId: string;
+  /** The Assistant needs the grid selection for fill/clear actions. */
+  onSelectionChange?: (range: Range | null) => void;
+  /** Assistant request to open the inspector on one column. */
+  inspectRequest?: { column: number; stamp: number } | null;
 }
 
 /**
@@ -67,7 +71,7 @@ interface Props {
  */
 export const DataWorkspace = (p: Props) => {
   const [focusCell, setFocusCell] = useState<{ r: number; c: number; stamp: number } | null>(null);
-  const [selRange, setSelRange] = useState<{ r0: number; c0: number; r1: number; c1: number } | null>(null);
+  const [selRange, setSelRange] = useState<Range | null>(null);
   const [freezeFirstCol, setFreezeFirstCol] = useState(false);
   const [showInspector, setShowInspector] = useState(false);
   const [inspectorCol, setInspectorCol] = useState(0);
@@ -80,6 +84,20 @@ export const DataWorkspace = (p: Props) => {
     setInspectorCol(0);
     setShowInspector(false);
   }, [p.datasetId]);
+
+  // The Assistant mirrors the grid selection to enable fill and clear.
+  useEffect(() => {
+    p.onSelectionChange?.(selRange);
+  }, [selRange, p.onSelectionChange]);
+
+  // A data leaf can ask the editor to open the inspector on its column.
+  useEffect(() => {
+    if (!p.inspectRequest) return;
+    setInspectorCol(
+      Math.max(0, Math.min(p.inspectRequest.column, p.grid.cols.length - 1))
+    );
+    setShowInspector(true);
+  }, [p.inspectRequest, p.grid.cols.length]);
 
   // Column indexes in the filter bar go stale after delete/merge.
   useEffect(() => {

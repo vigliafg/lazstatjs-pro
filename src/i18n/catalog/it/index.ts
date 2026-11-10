@@ -6,6 +6,7 @@ import { dataMessages } from './data';
 import { analysisMessages } from './analysis';
 import { outputMessages } from './output';
 import { metaMessages } from './meta';
+import { assistantMessages } from './assistant';
 
 export const itMessages: Messages = {
   ...shellMessages,
@@ -14,4 +15,5 @@ export const itMessages: Messages = {
   ...analysisMessages,
   ...outputMessages,
   ...metaMessages,
+  ...assistantMessages,
 };

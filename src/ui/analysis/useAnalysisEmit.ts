@@ -1,6 +1,7 @@
 import type { AnalysisRunResult } from '../../analyses/types';
 import { analysisParamsOf, analysisParamsSignature } from '../../analyses/paramsSnapshot';
 import type { ProjectParams } from '../../io/project';
+import type { AssistantRunMeta } from '../../io/outputs';
 import { t } from '../../i18n';
 
 export interface OutputMeta {
@@ -11,6 +12,7 @@ export interface OutputMeta {
   paramsSignature?: string;
   ciLevel?: number;
   live?: boolean;
+  assistant?: AssistantRunMeta;
 }
 
 interface EmitOptions {
@@ -40,7 +42,7 @@ export const useAnalysisEmit =
     result: AnalysisRunResult,
     analysisId: string = activeAnalysis,
     paramsUsed: ProjectParams = params,
-    options?: { live?: boolean; ciLevel?: number }
+    options?: { live?: boolean; ciLevel?: number; assistant?: AssistantRunMeta }
   ): Promise<boolean> => {
     if ('reason' in result) {
       showToast(t('toast.error'), result.reason, 'error');
@@ -54,6 +56,9 @@ export const useAnalysisEmit =
       paramsSignature: analysisParamsSignature(analysisId, paramsUsed),
       ciLevel: options?.ciLevel ?? ciLevel,
       live: options?.live,
+      ...(options?.assistant
+        ? { assistant: { ...options.assistant, ciLevel: options.ciLevel ?? ciLevel } }
+        : {}),
     };
     pushOutput(result, analysisId, meta);
     return true;

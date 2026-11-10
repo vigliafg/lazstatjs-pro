@@ -63,6 +63,8 @@ confronto con JMP/SPSS/R docs/analysis           → 10
 [Lingue, help e terminologia](09-lingue-help-e-terminologia.md)
 | 10 |
 [Confronto con la statistica classica](10-confronto-con-la-statistica-classica.md)
+| 11 |
+[Assistant nel workflow](11-assistant-workflow.md)
 
 ## Terminologia vincolante
 
@@ -126,3 +128,6 @@ controlla che esistano davvero.
 - Rilascio 0.31.0: assi completi (tick, formato, limiti, scala), zoom e pan con
   Azzera zoom anche con il linking attivo, tema di primo avvio GitHub Light;
   `help:build`/`help:audit` rieseguiti e web pubblicata su GitHub Pages dal tag.
+- Rilascio 0.32.0: Assistant unificato (percorso dati/analisi, prontezza,
+  catena, diagramma e report card), temi Mist e Midnight, pagina Assistant
+  riscritta nelle sei lingue; web e installer costruiti dalla release.

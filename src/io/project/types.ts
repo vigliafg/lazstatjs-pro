@@ -1570,7 +1570,7 @@ export const DEFAULT_PARAMS: ProjectParams = {
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
   ciLevel: 95,
-  activeAnalysis: 'wizard',
+  activeAnalysis: 'assistant',
   activeTab: 'data',
   uiMode: 'guided',
   theme: DEFAULT_THEME_ID,

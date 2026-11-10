@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { AnalysisChart, ChartOptions, PanelChart } from '../stats/charts';
 import type { ReportSpec } from '../stats/report';
 import type { TableSpec } from '../stats/types';
@@ -21,6 +22,8 @@ interface AnalysisOutputProps {
     headline: string;
     bullets?: string[];
   };
+  /** Assistant Report Card, already rendered by its owner (components stay UI-free). */
+  assistantCard?: ReactNode;
   limitationsLabel?: string;
   analysisName?: string;
   onChartOptionsChange?: (chartId: string, options: ChartOptions) => void;
@@ -43,12 +46,14 @@ export const AnalysisOutput = ({
   panels,
   warnings,
   callout,
+  assistantCard,
   limitationsLabel,
   analysisName,
   onChartOptionsChange,
   onChartInsert,
 }: AnalysisOutputProps) => (
   <div className="mb-6">
+    {assistantCard}
     {title && <div className="output-title">{title}</div>}
     {header && <p className="mb-3 font-mono text-[10px] text-text3">{header}</p>}
     {(warnings ?? []).map((warning, index) => (

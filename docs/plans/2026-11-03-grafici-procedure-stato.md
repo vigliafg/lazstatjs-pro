@@ -10,6 +10,15 @@
 - **HEAD al momento della baseline**: `48ed3c0` — `ci(release): evita il DMG macOS non creabile sul runner`
 - **Versione**: `0.31.0`
 
+## Checkpoint Assistant F0–F2 (2026-11-09)
+
+- **Branch**: `main` · **worktree**: principale · **commit**: nessuno (modifiche non committate).
+- **Chiuso**: F0, etichetta Assistant/Assistente nelle sei lingue; F1, modello a due domini, contratti delle 20 foglie, ruoli `min`/`optional`, validatore estratto; F2, shell su DATA/ANALISI, dominio dal tab, collapse ANALISI sotto 1280 px e `lazstat.assistant.v2` con migrazione v1→analysis.
+- **Test**: `npm run lint`; 22 test mirati; `check-locale` 6/6; `test:samples` 7/7; `e2e/assistant.spec.ts` 8/8 desktop (8 mobile skip); filesize/docs. Gate completo F2: verde (1445/1445 test; depcruise, madge, filesize, docs:links).
+- **In corso**: F3, albero dati completo e azioni.
+- **Prossimi 3 passi**: (1) F3 albero dati completo; (2) F4 vista a tutta pagina; (3) F5 help specifico per opzioni e foglie.
+- **Rischi/domande**: `src/ui/assistant/` è ancora non tracciato in git; l'aiuto di opzioni/foglie è generico fino a F5; il dominio dati di F2 mostra solo domanda/help.
+
 ## Ripresa rapida (2026-11-09, merge su `main`)
 
 - **Merge**: `grafici-procedure` → `main` con `--no-ff`, commit `a9587f3`
@@ -1221,3 +1230,26 @@ Compilata in F11.3 (2026-11-03) e riverificata al merge del 2026-11-09:
   inglese; revisione a campione di fr/es/de/pt-PT ancora aperta.
 - Due domande di prodotto aperte: copertura modalità di `bayes-ppc` e banda CI
   su `reg-observed-fitted` per `k ≥ 2`.
+
+## Handoff — 2026-11-09 / Assistant (piano 2026-11-09)
+
+- **Ondata**: implementazione del piano `docs/plans/2026-11-09-assistant-minitab-piano.md` (F1–F7).
+- **Branch**: `main`, worktree principale; modifiche Assistant non ancora committate.
+- **Item chiusi**: pannello full-height a sinistra di DATA con resize/collapse/drawer e persistenza locale; albero tipizzato con validatore; ponte ruoli con preset; esecuzione dal pannello con marker `assistant`; Report Card dentro il run-report; i18n nelle sei lingue.
+- **Test eseguiti**: `npm run check` verde (1439/1439 test, depcruise, madge, file-size, docs:links); `npm run test:samples` 7/7; e2e `assistant.spec.ts` 6/6; unit Assistant+i18n 23/23; `check-locale` verde per it/de/es/fr/pt-PT.
+- **Decisioni**: nessun bump di `PROJECT_VERSION`; card costruita dai tavoli del run, nessun test ricalcolato; ramo qualità fuori v1.
+- **Prossimi 3 passi**: (1) OK al piano `2026-11-09-assistant-unificato-piano.md`; (2) F0 etichetta Assistant nelle sei lingue; (3) F1 modello a due domini.
+- **Vincoli rispettati**: `components/` riceve il Report Card come nodo React (nessuna dipendenza da `ui/`); il consiglio "Non lo so" passa dal barrel pubblico `stats/wizard`.
+- **Domande aperte**: se il Report Card debba seguire la lingua del report invece di quella dell'interfaccia; come migrare i run-report `wizard` storici.
+- **Rischi**: soglie del card da validare con l'utente; copy delle sei lingue da rileggere.
+
+### Piano successivo — ASSISTANT unificato
+
+- **Piano**: `docs/plans/2026-11-09-assistant-unificato-piano.md` (in attesa di OK).
+- **Decisioni recepite**: nome Assistant (id `assistant`); vista a tutta pagina con flowchart progressivo; due domini dati/analisi con schemi di domande e transizioni; una foglia = una procedura e catena di foglie nella v1; `wizard` assorbito con alias di compatibilità.
+- **Analisi workflow (2026-11-09)**: aggiunte §3.10 (invarianti, contratti delle 20 foglie, 14 incongruenze e correzioni, 6 percorsi end-to-end) e §3.11 (help `[?]` per tornata e foglia). Correzioni principali: formato lungo → ANOVA invece di `ttest`; tipi attesi per logistica/evento/conteggi/ordinale; `min: 2` per correlazione e accordo; chi quadrato/contingenza dichiarate a tabella manuale; preset a due gruppi; foglie dati con picker e griglia vuota con uscita; “Non lo so” alla radice → `a1b`; catena con snapshot per passo, niente duplicati e ripresa.
+- **Ruoli mancanti (§3.12)**: contratto obbligatorio per tutte le 20 foglie, cinque stati (`assigned`, `needsChoice`, `unavailable`, `typeMismatch`, `valueMismatch`), badge “dati da preparare” già sulle opzioni, percorso nel messaggio, riparazioni verso il data editor (focus colonna, aggiungi colonna, converti tipo, correggi valori, importa), gate su “Esegui”, preflight della catena. Oggi il pannello può mostrare un indice vecchio come assegnato e il run viene bloccato solo dopo, con un toast generico.
+- **Revisione finale**: corrette radici (`d1`/`a1`), ruoli opzionali e coppie complete, ordinale senza `ColType`, preflight distinto dall'errore di runtime, stessa foglia ammessa con snapshot diverso, `analysisGrid`/codici mancanti, riparazioni con conferma/undo, normalizzazione `wizard` e migrazione storage v2.
+- **Fasi riviste**: F0–F9; F7 coerenza end-to-end (2 giornate), F8 raccomandazione, F9 pulizia; stima 12–14 giornate.
+- **Codice**: nessuna modifica in questa fase.
+- **Prossimi 3 passi**: OK al piano; F0 etichetta Assistant; F1 modello a due domini con help e invarianti.

@@ -8,13 +8,17 @@ const base = (): string => {
   return value.endsWith('/') ? value : `${value}/`;
 };
 
+/** Old ids still resolve: `wizard` and `guided` point at the Assistant page. */
+const TOPIC_ALIASES: Record<string, string> = { wizard: 'assistant', guided: 'assistant' };
+
 /** URL of a page of the generated book, always inside `public/help`. */
 export const bookUrl = (
   locale: Locale,
   topicId?: string | null,
   level?: HelpLevel
 ): string => {
-  const page = topicId ? `${encodeURIComponent(topicId)}.html` : 'index.html';
+  const topic = topicId ? TOPIC_ALIASES[topicId] ?? topicId : null;
+  const page = topic ? `${encodeURIComponent(topic)}.html` : 'index.html';
   const hash = level ? `#${level}` : '';
   return `${base()}help/${resolveHelpLocale('auto', locale)}/${page}${hash}`;
 };
@@ -22,6 +26,6 @@ export const bookUrl = (
 export const bookLocaleFor = (help: HelpLocale, ui: Locale): Locale =>
   resolveHelpLocale(help, ui);
 
-/** Topic the popup should show for an analysis id: the registry id itself. */
+/** Topic the popup should show for an analysis id: the Assistant owns the guide. */
 export const topicForAnalysis = (analysisId: string): string =>
-  analysisId === 'guided' ? 'wizard' : analysisId;
+  TOPIC_ALIASES[analysisId] ?? analysisId;

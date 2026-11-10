@@ -63,6 +63,8 @@ comparison with JMP/SPSS/R docs/analysis         → 10
 [Languages, help and terminology](09-languages-help-and-terminology.md)
 | 10 |
 [Comparison with classical statistics](10-comparison-with-classical-statistics.md)
+| 11 |
+[Assistant in the workflow](11-assistant-workflow.md)
 
 ## Binding terminology
 
@@ -127,3 +129,6 @@ guard` checks that they really exist.
   with Reset zoom also while linking is on, GitHub Light as the first-run
   theme; `help:build`/`help:audit` re-run and the web build published to GitHub
   Pages from the tag.
+- Release 0.32.0: unified Assistant (data/analysis path, readiness, chain,
+  diagram and report card), Mist and Midnight themes, Assistant help page
+  rewritten in all six languages; web and installers built from the release.

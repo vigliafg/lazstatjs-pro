@@ -1,10 +1,34 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-05 (fase 2.2: seconda integrazione dei modelli non lineari)
+**Ultimo aggiornamento**: 2026-11-10 (checkpoint rilascio 0.32.0)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
-**Stato**: W0–W9 chiuse; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
-**Ondata corrente**: W9 chiusa — Survey/ML/Advanced (7 item); piano completato
+**Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
+**Ondata corrente**: rilascio 0.32.0 — Assistant, temi Mist/Midnight, help nelle sei lingue
+
+## Checkpoint rilascio 0.32.0 (2026-11-10)
+
+- **Branch**: `main` · **Versione**: `0.32.0` · **Tag**: `v0.32.0` da creare dopo il commit.
+- **Chiuso**: Assistant F0–F8; tema chiaro **Mist** e scuro **Midnight** (12 temi built-in, 6+6); status bar `LazStats JS v0.32.0`; pagina Assistant riscritta in en/it/fr/es/de/pt-PT; capitolo 11 della guida in IT/EN sul workflow Assistant.
+- **Test**: gate completo **1477/1477**, `CHECK_EXIT=0`; depcruise, madge, filesize e docs:links verdi; help 498 pagine (83 × 6), audit con 0 contaminazioni inglesi; `check-locale` 6/6; `tsc` pulito.
+- **Web**: `npm run build:web` verde; footer servito da `vite preview` su `:4173` = `LazStats JS v0.32.0`, nessun errore console.
+- **Installer**: build Linux in corso; Windows da tentare con wine; la release GitHub li rigenera per Linux/Windows/macOS dal tag.
+- **Prossimi 3 passi**: completare gli installer locali, commit + push + tag `v0.32.0`, verificare la release GitHub e la web Pages.
+
+## Checkpoint Assistant F0–F2 (2026-11-09)
+
+- **Branch**: `main` · **worktree**: principale · **commit**: nessuno (modifiche non committate).
+- **Chiuso**: F0 etichetta Assistant/Assistente; F1 modello/contratti/validatore; F2 shell condiviso su DATA/ANALISI, dominio dal tab, collapse ANALISI sotto 1280 px e storage `lazstat.assistant.v2` con migrazione v1→analysis.
+- **Test**: lint, 22 test mirati, `e2e/assistant.spec.ts` 8/8 desktop (8 mobile skip), `test:samples` 7/7, `check-locale` 6/6; gate completo F2 verde (1445/1445 test; depcruise, madge, filesize, docs:links).
+- **Chiuso anche F3**: albero dati completo (`d1`–`data-handoff`, 8 domande e 20 foglie), diagnosi, action map e azioni collegate alle funzioni esistenti; gate completo F3 verde (1453/1453 test; depcruise, madge, filesize, docs:links) ed e2e Assistant 13/13 desktop.
+- **Chiuso F4**: `assistant` nel registry come voce visibile e default di `activeAnalysis`; `wizard` nascosto da `ANALYSIS_TABS` ma presente in `ANALYSIS_ALL` (runner storico intatto); `AssistantWorkspace` a tutta pagina; migrazione in lettura `wizard → assistant`; help topic `assistant` con alias `wizard`/`guided`.
+- **Chiuso F5**: flowchart progressivo (`flow.ts` + `AssistantFlow`), `goTo`/`truncatePath` e aiuto contestuale (`AssistantHelp`) con Escape e focus restituito al `[?]`.
+- **Chiuso F6**: catena di foglie (`chain.ts`, `useAssistantChain`) con preflight totale, badge sul flowchart e striscia con riordino, rimozione, svuotamento ed esecuzione sequenziale; `AssistantRunMeta.chain` persistito e riletto.
+- **Chiuso F7**: validatore unico a cinque stati con riparazioni verso l’editor, formato largo/lungo per le medie, badge “dati da preparare”, footer dati→analisi e catena che usa lo stesso preflight.
+- **Chiuso F8**: raccomandazione unica guidata dal goal (`recommendLeafForGrid(grid, goal)`), con foglia reale o messaggio esplicito e “Non lo so” non più silenzioso.
+- **In corso**: nessuna fase aperta; F3–F8 non committate (modifiche non committate).
+- **Prossimi 3 passi**: (1) F9 pulizia compatibilità (release successiva); (2) verifica e2e mobile; (3) chiusura ondata.
+- **Rischi**: `src/ui/assistant/` non tracciato in git; help specifico fino a F5; pannello e vista condividono percorso e albero, quindi ogni modifica alle foglie vale per entrambi.
 
 ---
 
@@ -1386,3 +1410,147 @@ Nessuna. W2 è chiusa; le domande di prodotto si riaprono con W3.
   "Reset zoom" solo con l'opzione attiva. Lo zoom con rotella non è stato
   osservabile: il wheel sintetico non viene accettato da Vega e lo scroll
   reale via browser va in timeout; resta da provare a mano.
+
+### Checkpoint 2026-11-09 — Assistant unificato: dominio dati (F3)
+
+- `src/ui/assistant/data.ts` è la fonte unica del dominio dati: albero
+  `d1`–`data-handoff` (8 domande, 20 foglie), `DataActionParams`, diagnosi
+  `inspectData` e precondizionali `dataActionBlocked`; `tree.ts` lo importa e
+  non duplica più azioni o foglie.
+- Le azioni riusano i comandi esistenti (`grid/ops`, `useColumnOperations`,
+  inspector, import/export/salvataggio, validazione). `useDataActions` fa da
+  ponte; `App` espone la selezione di `DataWorkspace` e il focus inspector.
+- Guardia griglia vuota: solo import e aggiungi colonna; handoff disabilitato
+  con messaggio. Card qualità con fix a un clic.
+- Ritorni (`back: true`) dichiarati nel modello, così il validatore non li
+  tratta come cicli.
+- Test mirati: lint, `data.test.ts` 8/8, `tree.test.ts` 5/5, filesize (App 782).
+  E2e F3 aggiunti in `e2e/assistant.spec.ts`: 13/13 desktop (8 F2 + 5 F3).
+- Gate completo F3: verde (1453/1453 test; depcruise, madge, filesize, docs:links).
+- Prossimo passo: F4 (vista a tutta pagina e assorbimento wizard).
+
+### Checkpoint 2026-11-09 — Assistant unificato: vista a tutta pagina (F4)
+
+- `assistant` è la voce visibile del registry e il default di `activeAnalysis`;
+  `wizard` resta definito in `ANALYSIS_ALL` ma fuori da `ANALYSIS_TABS`, così la
+  libreria non lo mostra e i run-report storici restano rieseguibili.
+- `AssistantWorkspace` prende il posto del setup quando l'analisi attiva è
+  `assistant`: stesso albero e stesse foglie del pannello (`AssistantViews`),
+  nessun run-report di raccomandazione e nessun pulsante Run generico.
+- Migrazione in lettura: `parseSettings` mappa `wizard` su `assistant`; alias
+  `wizard`/`guided` per il topic di help, la cui pagina ora si chiama
+  `assistant` nelle sei lingue.
+- Test mirati: lint, registry/runners/help/project/assistant, filesize (App 782).
+  E2e Assistant 17/17 desktop, inclusi apertura dalla libreria, Apply/Run dalla
+  vista e progetto salvato con `wizard`.
+- Gate completo F4: verde (1455/1455 test; depcruise, madge, filesize, docs:links).
+- Prossimo passo: F5 (flowchart progressivo e aiuto contestuale).
+
+### Checkpoint 2026-11-09 — Assistant unificato: flowchart e aiuto contestuale (F5)
+
+- `flow.ts` costruisce il layout progressivo: percorso risposto, domanda corrente
+  e opzioni successive, con i ritorni esclusi dal grafo.
+- `AssistantFlow` rende nodi DOM `<button>` e archi SVG `aria-hidden`; gli stati
+  `answered`/`current`/`available` sono esposti con `data-state`, un nodo
+  disponibile risponde e uno già risposto tronca il percorso.
+- `useAssistant.goTo(index)` usa `truncatePath` (puro, testato); il pannello
+  docked resta sullo stesso stato e sullo stesso albero.
+- `AssistantHelp` mostra definizione, esempio e aiuto di ogni opzione per le
+  domande, aiuto e controlli per le foglie; “Non lo so”, “Torna indietro”,
+  chiusura con Escape e focus che torna al `[?]`.
+- Test: 4 layout + 1 troncamento (35 unit Assistant), e2e Assistant 21/21
+  desktop. Gate completo F5: verde (1460/1460 test; depcruise, madge, filesize,
+  docs:links).
+- Prossimo passo: F6 (catena di foglie).
+
+### Checkpoint 2026-11-09 — Assistant unificato: catena di foglie (F6)
+
+- `chain.ts` definisce la catena come dati puri: cap 8, dedupe per foglia e
+  snapshot dei parametri, riordino, rimozione e preflight che verifica ruoli,
+  tipi e riferimenti alle colonne prima del primo run.
+- `useAssistant` conserva `chains` nello stato v2 (parse difensivo compreso);
+  `useAssistantChain` esegue i passi uno dopo l’altro senza toccare la forma
+  visibile, si ferma al primo errore di runtime e riprende dal passo fallito
+  senza duplicare i completati.
+- UI: “Aggiungi alla catena” sulla foglia, badge numerati sul flowchart, striscia
+  Catena con riordino, rimozione, svuotamento, “Esegui catena (n)” e “Riprova dal
+  passo i”; chiavi i18n aggiunte in tutte e 6 le lingue.
+- `AssistantRunMeta.chain` (`{ index, total }`) opzionale e parse in
+  `parseStoredOutputs`.
+- Test: 7 unit della catena, +1 su `useAssistant`, +2 sul parse degli output;
+  e2e Assistant 23/23 desktop. Gate completo F6: verde (1470/1470 test;
+  depcruise, madge, filesize, docs:links).
+- Prossimo passo: F7 (coerenza end-to-end e uscite).
+
+### Checkpoint 2026-11-09 — Assistant unificato: coerenza end-to-end (F7)
+
+- `readiness.ts` è l’unico validatore delle foglie: cinque stati, `minRows`,
+  coppie complete, ruoli opzionali e regole sui valori; ogni ostacolo produce la
+  riparazione da fare nell’editor dati.
+- `chainPreflight` riusa lo stesso validatore, quindi catena e foglia singola
+  rifiutano gli stessi passi.
+- La domanda formato distingue dati larghi (t-test) e lunghi (ANOVA); le foglie
+  `manual` restano eseguibili senza colonne.
+- La vista foglia mostra lo stato, “Correggi nell’editor dati” (DATA + focus
+  colonna) e il pannello dati ha sempre il footer “Passa all’analisi”.
+- Test: 4 unit tabellari sulla prontezza; e2e Assistant 26/26 desktop. Gate
+  completo F7: verde (1474/1474 test; depcruise, madge, filesize,
+  docs:links).
+- Prossimo passo: F8 (raccomandazione unificata).
+
+### Checkpoint 2026-11-09 — Assistant unificato: raccomandazione (F8)
+
+- `recommendLeafForGrid(grid, goal, level)` è l’unico punto di ingresso: mappa
+  l’analisi scelta dal kernel su una foglia reale oppure restituisce un messaggio
+  esplicito (nessun candidato / dati vuoti).
+- `goalForAnswers` legge la risposta radice del percorso, così pannello e vista
+  chiedono la stessa raccomandazione.
+- “Non lo so” apre la foglia consigliata o avvisa del motivo, senza restare
+  muto.
+- Test: 3 unit sui 7 goal del kernel e sul mapping dalla radice; e2e “Not sure”
+  che apre una foglia. Gate completo F8: verde (1477/1477 test;
+  depcruise, madge, filesize, docs:links).
+- Prossimo passo: F9 (pulizia compatibilità, release successiva).
+
+### Checkpoint 2026-11-09 — Assistant: due modalità e diagramma auto-fit
+
+- L’utente sceglie tra “Domande” e “Diagramma” nell’header della vista a tutta
+  pagina; la scelta è persistita in `lazstats.assistant.view` e il default è il
+  diagramma.
+- Il diagramma è un solo SVG con `viewBox` e nodi in `foreignObject`: scala e
+  centra l’intero percorso nel viewport, senza scrollbar. Mermaid è stato
+  scartato perché non rende nodi interattivi e aggiunge una dipendenza pesante.
+- La fascia inferiore del viewport mostra le scelte fatte e una spiegazione breve
+  della foglia o della domanda corrente.
+- Test: e2e Assistant 29/29 (toggle domande/diagramma, fit senza overflow,
+  caption con le quattro scelte).
+- Verifica browser 2026-11-09: a 1440 px il pannello resta a 320 px, il workspace
+  prende 882 px e il diagramma 834 px senza overflow; a 390 px il pannello è
+  chiuso, il diagramma 342 px e la caption resta visibile. Con la vista Assistant
+  il pannello è limitato a 360 px; `html/body` hanno `overflow-x: hidden` e
+  sotto `sm` l’altezza del diagramma scende a `clamp(280px,46vh,720px)`.
+- Toggle domande/diagramma accanto al titolo (non più a fondo pagina): a 1920, 1440 e 390 px resta dentro il viewport; un test e2e lo verifica.
+- Il toggle Domande/Diagramma è anche nel pannello docked (fuori dalla vista
+  Assistant): in modalità diagramma il pannello mostra `AssistantFlow` compatto
+  con caption e spiegazione, così la scelta è disponibile anche da Distribution
+  Fit e dalle altre analisi. Nella vista Assistant il pannello resta compatto e
+  senza doppio toggle.
+- E2E Assistant: 30/30 (nuovo test sul toggle del pannello).
+- Dal pannello docked la modalità Diagramma apre un **overlay a tutta finestra**
+  (`data-assistant-diagram-overlay`, portal su body): flowchart auto-fit a piena
+  larghezza, caption in basso e, se c’è una foglia, le sue azioni in una colonna
+  laterale (sotto su schermi stretti). Il pannello non confina più il diagramma.
+- Aggiunti due temi built-in dal mockup: **Mist** (light, superfici fredde,
+  accento indaco) e **Midnight** (dark, blu notte, accento azzurro). Il registry
+  passa a 12 temi (6 light, 6 dark); help e conteggi aggiornati.
+- UI ink: testi e bordi dei pannelli usano nero pieno sui temi light e bianco
+  pieno sui temi dark (`UI_INK` applicato da `cssVariablesOf`), non più grigi;
+  accenti e colori semantici restano invariati. Verificato nel browser:
+  computed `rgb(0,0,0)` su GitHub Light e `rgb(255,255,255)` su GitHub Dark per
+  body text, muted text e bordi.
+- Con una foglia non pronta, `LeafView` disabilita **Apply to the form**,
+  **Aggiungi alla catena** e **Run**; restano attivi solo riparazione, scelta di
+  un’altra foglia e gestione della catena esistente.
+- Nota: gli screenshot del pannello di anteprima risultano zoomati/croppati
+  (innerWidth 1440 ma immagine scalata); la verifica del layout è quindi
+  numerica, con misure dei rect nel browser.
