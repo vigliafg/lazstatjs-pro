@@ -108,6 +108,7 @@ const PRINT_CSS = `
 
 export const buildReportDocument = (bodyHtml: string, meta: ReportMeta): string => {
   const details = (meta.details ?? []).map(escapeHtml).join(' · ');
+  const metaLine = [meta.generatedAt, details].filter(Boolean).join(' · ');
   return `<!doctype html>
 <html lang="${escapeHtml(meta.lang ?? 'en')}">
 <head>
@@ -119,7 +120,7 @@ export const buildReportDocument = (bodyHtml: string, meta: ReportMeta): string 
 <body>
 <header class="report-header">
   <h1>${escapeHtml(meta.title)}</h1>
-  <p class="meta">${escapeHtml(meta.generatedAt)}${details ? ` · ${details}` : ''}</p>
+  <p class="meta">${escapeHtml(metaLine)}</p>
 </header>
 <main>
 ${bodyHtml}

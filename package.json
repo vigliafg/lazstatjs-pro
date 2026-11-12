@@ -12,6 +12,14 @@
     "node": ">=22.12.0"
   },
   "main": "dist-electron/main.cjs",
+  "bin": {
+    "lazstats": "dist-cli/lazstats.mjs"
+  },
+  "files": [
+    "dist-cli/lazstats.mjs",
+    "dist-cli/worker-entry.mjs",
+    "scripts/postinstall-electron.mjs"
+  ],
   "desktopName": "lazstats.desktop",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
@@ -19,6 +27,12 @@
     "build": "vite build && npm run build:electron",
     "build:web": "npm run help:build && vite build --mode web",
     "build:electron": "node scripts/build-electron.mjs",
+    "build:cli": "node scripts/build-cli.mjs",
+    "smoke:cli": "node scripts/smoke-cli.mjs",
+    "smoke:cli:package": "npm run build:cli && node scripts/smoke-cli-package.mjs",
+    "pack:cli": "npm run build:cli && npm pack ./dist-cli --pack-destination .",
+    "publish:cli": "npm run build:cli && npm publish ./dist-cli",
+    "prepack": "npm run build:cli",
     "start": "electron .",
     "dist": "npm run build && electron-builder --publish never",
     "dist:linux": "npm run build && electron-builder --linux --publish never",
@@ -37,6 +51,8 @@
     "check": "npm run lint && npm test && npm run guard",
     "test:e2e": "playwright test",
     "test:electron": "node scripts/smoke-electron.mjs",
+    "cli": "node --import tsx src/cli/main.ts",
+    "test:cli": "node --import tsx --test \"src/cli/**/*.test.ts\"",
     "test:samples": "node --import tsx --test src/io/samples.test.ts",
     "samples:generate": "Rscript samples/generate.R",
     "chart:inventory": "node scripts/chart-inventory.mjs",

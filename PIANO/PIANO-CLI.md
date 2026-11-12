@@ -1,9 +1,9 @@
 # Piano — Motore CLI completo per LazStats
 
-**Data:** 2026-11-11
+**Data:** 2026-11-12
 **Repository:** `lazstatjs-pro`
 **Versione di riferimento:** `0.32.0`
-**Stato:** piano di progettazione; nessuna implementazione inclusa.
+**Stato:** implementato — engine e CLI completi; gate CLI verde (lint, test, guard, build e smoke).
 
 ---
 
@@ -191,7 +191,7 @@ Ogni errore deve avere un codice stabile:
 | `E_ANALYSIS` | analisi sconosciuta o non eseguibile | 2 |
 | `E_PARAMS` | parametri non validi | 2 |
 | `E_DATA` | file illeggibile, formato non supportato, limiti superati | 3 |
-| `E_RUN` | runner che restituisce `ok:false` | 2 |
+| `E_RUN` | rifiuto statistico del runner (`ok:false`); il messaggio esatto è preservato | 2 |
 | `E_INTERNAL` | eccezione non gestita | 4 |
 | `E_TIMEOUT` | timeout o annullamento | 5 |
 
@@ -315,6 +315,8 @@ Opzioni principali:
 - `--out <path>`: file o directory;
 - `--charts none|svg` (default `svg` per HTML, `none` per JSON);
 - `--include-data` per includere i dati nell’envelope;
+- `--diagnostics none|summary|full` per il dettaglio della diagnostica dei rifiuti (default `summary`);
+- `--include-row-numbers` per aggiungere un campione di numeri di riga problematici (mai i valori);
 - `--timings` per aggiungere i tempi;
 - `--timeout <secondi>`;
 - `--workers auto|0|N`;
@@ -387,7 +389,7 @@ Alias esplicito di `run --project`; utile per script.
 
 ### 6.8 `lazstats render --result <file.json>`
 
-Rigenera report/grafici da un envelope già prodotto.
+Rigenera report/grafici da un envelope già prodotto. Accetta solo `status:"ok"`; un envelope `rejected` o `error` produce `E_ARGS` e nessun file.
 
 ```bash
 lazstats render --result iris.json --format html --out iris.html
@@ -512,6 +514,445 @@ Prima del run:
 
 I messaggi dei runner sono già pensati per l’utente e non vanno riscritti nella CLI.
 
+### 8.5 Rifiuto: semantica completa ed esatta
+
+#### 8.5.1 Definizione
+
+Un **rifiuto** è un esito tipizzato, non un'eccezione e non un run-report vuoto. Significa che la richiesta è stata letta e validata, ma il motore non può produrre un run-report statisticamente valido. Un rifiuto:
+
+- non produce tabelle, report, grafici o panel;
+- non produce un `result` con `ok:true`;
+- non viene ritentato automaticamente;
+- non attiva fallback su un'altra analisi o su parametri diversi;
+- conserva il motivo esatto restituito dal runner;
+- è distinguibile da un errore di lettura, da un errore di parametri e da un errore interno.
+
+Un **warning**, invece, è un problema non bloccante: il run-report viene prodotto con `ok:true` e `warnings` popolato. Un warning non è un rifiuto.
+
+#### 8.5.2 Ordine di valutazione
+
+Gli stage sono valutati in quest'ordine. Il primo fallimento interrompe la richiesta: non si prosegue e non si produce un risultato parziale.
+
+| Ordine | Stage | Esempi | Codice | Exit | Run-report |
+|---:|---|---|---|---:|---|
+| 1 | `args` | `--data` e `--project` insieme; `--analysis` mancante con `--data`; `--ci` non valido | `E_ARGS` | 2 | no |
+| 2 | `analysis` | id sconosciuto; `assistant`; runner non disponibile | `E_ANALYSIS` | 2 | no |
+| 3 | `load` | file assente; formato errato; foglio mancante; limiti superati; `.lzs` corrotto | `E_DATA` | 3 | no |
+| 4 | `params` | JSON malformato; valore fuori dominio; nome colonna inesistente o ambiguo | `E_PARAMS` | 2 | no |
+| 5 | `preflight` | indice colonna fuori intervallo; colonna obbligatoria non selezionata | `E_PARAMS` | 2 | no |
+| 6 | `execute` | runner che restituisce `ok:false` | `E_RUN` | 2 | no |
+| 7 | `render` | envelope non `ok`; grafico richiesto ma assente | `E_ARGS` o `E_RUN` | 2 | no |
+| — | eccezione non gestita | bug, errore di memoria, errore imprevisto | `E_INTERNAL` | 4 | no |
+| — | timeout/annullamento | timeout del run o annullamento del worker | `E_TIMEOUT` | 5 | no |
+
+La distinzione importante è questa:
+
+- `E_DATA` significa che **non è stato possibile costruire un dataset valido**;
+- `E_PARAMS` significa che **il dataset è valido ma la richiesta non lo è**;
+- `E_RUN` significa che **dataset e parametri sono formalmente validi, ma la procedura rifiuta di produrre un risultato** per un motivo statistico o di dominio;
+- `E_INTERNAL` è un bug o un guasto, non un rifiuto statistico.
+
+`E_RUN` usa l'exit code 2, non 3, perché l'input è stato letto correttamente: è la procedura che rifiuta di produrre un run-report. Questa distinzione permette a uno script di separare un file illeggibile da un'analisi non applicabile.
+
+#### 8.5.3 Forma esatta del rifiuto
+
+In `--json`, un rifiuto ha questa forma:
+
+```json
+{
+  "schemaVersion": 1,
+  "status": "rejected",
+  "engine": {
+    "name": "lazstats",
+    "version": "0.32.0",
+    "runners": 72,
+    "chartKinds": 32
+  },
+  "analysis": {
+    "id": "logistic",
+    "label": "Logistic Regression",
+    "family": "regression"
+  },
+  "input": {
+    "source": "dati.csv",
+    "format": "csv",
+    "sha256": "...",
+    "rows": 120,
+    "columns": 6
+  },
+  "params": {},
+  "error": {
+    "code": "E_RUN",
+    "kind": "invalid_binary",
+    "stage": "execute",
+    "message": "The outcome needs exactly two distinct values (for example 0/1 or yes/no)",
+    "details": {
+      "analysisId": "logistic",
+      "column": "outcome",
+      "levels": 3
+    },
+    "retryable": false,
+    "hint": "Use a binary outcome or a different analysis."
+  },
+  "result": {
+    "ok": false,
+    "reason": "The outcome needs exactly two distinct values (for example 0/1 or yes/no)"
+  },
+  "warnings": [],
+  "artifacts": []
+}
+```
+
+Regole vincolanti:
+
+1. `status` è `ok`, `rejected` o `error`:
+   - `ok`: esiste un run-report completo;
+   - `rejected`: la richiesta è valida, ma `E_PARAMS` o `E_RUN` impediscono il run-report;
+   - `error`: `E_ARGS`, `E_ANALYSIS`, `E_DATA`, `E_INTERNAL` o `E_TIMEOUT`.
+2. Per `E_RUN`, `error.message` è **identico** a `result.reason`: nessun prefisso, suffisso, traduzione o riscrittura.
+3. `result` è presente solo se il runner è stato eseguito e ha restituito `ok:false`.
+4. `warnings` è sempre un array; in un rifiuto è vuoto salvo warning prodotti prima del rifiuto, che vanno comunque riportati senza trasformarli in errore.
+5. `artifacts` è sempre `[]`: nessun file di tabella, report o grafico viene creato.
+6. `details` contiene solo valori deterministici noti al motore: nomi di colonna, conteggi, livelli, parametri. Non contiene celle, token o segreti.
+7. `hint` è un suggerimento aggiuntivo e non sostituisce `message`.
+8. `retryable` è `false` per un rifiuto statistico: ripetere la stessa richiesta senza cambiare dati o parametri produce lo stesso esito.
+
+Per brevità, gli esempi di §8.5.3 e §8.5.5 omettono il blocco `diagnostics`, definito in §8.5.8; il contratto completo di un rifiuto lo include.
+
+#### 8.5.4 Classificazione dei rifiuti statistici
+
+`kind` è una classificazione **aggiuntiva** rispetto al messaggio. Non sostituisce mai il `reason` del runner. Se il motore non può classificare il rifiuto in modo deterministico, usa `other`; non indovina.
+
+| `kind` | Condizione tipica | Esempio di `details` |
+|---|---|---|
+| `not_enough_rows` | il dataset ha meno righe del minimo della procedura | `required`, `observed` |
+| `not_enough_complete_cases` | dopo la rimozione dei missing restano troppo poche righe | `required`, `observed`, `columns`, `missing` |
+| `empty_dataset` | nessuna riga utile | `rows: 0` |
+| `missing_required_column` | una colonna richiesta non è presente o non è selezionata | `column`, `parameter` |
+| `invalid_column_type` | la colonna non è numerica, categorica o binaria come richiesto | `column`, `expectedType`, `actualType` |
+| `same_column_conflict` | la stessa colonna è usata in due ruoli incompatibili | `column`, `roles` |
+| `not_enough_groups` | il gruppo ha meno livelli del minimo | `required`, `observed` |
+| `empty_group` | un gruppo non ha osservazioni valide | `groups`, `emptyGroups` |
+| `invalid_binary` | outcome/evento non ha esattamente due valori | `column`, `levels` |
+| `insufficient_levels` | una categorica ha troppi/pochi livelli per la procedura | `column`, `required`, `observed` |
+| `constant_variable` | una variabile selezionata ha varianza nulla | `columns` |
+| `collinearity` | la matrice di disegno è singolare o quasi singolare | `columns` |
+| `domain_violation` | tempi negativi, valori non positivi, probabilità fuori dominio | `column`, `rule` |
+| `too_few_events` | gli eventi di sopravvivenza sono insufficienti | `required`, `observed` |
+| `no_convergence` | l'ottimizzatore non converge | `iterations`, `tolerance` |
+| `unsupported_configuration` | combinazione di opzioni non supportata | `parameter`, `value` |
+| `other` | rifiuto non classificabile con certezza | `rawReason` |
+
+Per `E_PARAMS`, `kind` ammette:
+
+| `kind` | Condizione |
+|---|---|
+| `missing_parameter` | manca una selezione obbligatoria |
+| `unknown_parameter` | `--set` usa una chiave inesistente |
+| `column_not_found` | il nome di colonna non esiste |
+| `ambiguous_column` | il nome corrisponde a più colonne |
+| `column_out_of_range` | l'indice è minore di 0 o maggiore della larghezza |
+| `invalid_value` | valore fuori dominio o non convertibile |
+| `invalid_json` | `--params` non è JSON valido |
+| `incompatible_columns` | la stessa colonna è usata in ruoli incompatibili già in preflight |
+| `invalid_ci` | livello di confidenza diverso da 90/95/99 |
+
+Per `E_DATA`, `kind` ammette:
+
+| `kind` | Condizione |
+|---|---|
+| `file_not_found` | path inesistente |
+| `unsupported_format` | estensione o formato non supportato |
+| `parse_error` | file non parsabile o righe incoerenti |
+| `missing_sheet` | foglio XLSX richiesto assente |
+| `limit_exceeded` | righe, colonne, byte o celle oltre il limite |
+| `empty_file` | nessuna riga o nessuna colonna utile |
+| `invalid_project` | `.lzs` non valido o incompatibile |
+| `type_conversion_error` | un override di tipo non è applicabile |
+
+La classificazione non deve essere dedotta da una traduzione o da una regex fragile sul messaggio. Se il runner non fornisce un codice strutturato, il motore usa `other` e conserva il messaggio originale. Una classificazione sbagliata è peggio di `other`.
+
+#### 8.5.5 Esempi di rifiuto
+
+Dati insufficienti dopo i missing:
+
+```json
+{
+  "status": "rejected",
+  "error": {
+    "code": "E_RUN",
+    "kind": "not_enough_complete_cases",
+    "stage": "execute",
+    "message": "Not enough complete rows: the outcome and all predictors must be numeric and present",
+    "details": {
+      "analysisId": "logistic",
+      "required": 3,
+      "observed": 2,
+      "columns": ["outcome", "predictor"],
+      "missing": { "outcome": 1, "predictor": 2 }
+    },
+    "retryable": false
+  },
+  "result": {
+    "ok": false,
+    "reason": "Not enough complete rows: the outcome and all predictors must be numeric and present"
+  },
+  "artifacts": []
+}
+```
+
+Parametro di colonna fuori intervallo, già in preflight:
+
+```json
+{
+  "status": "rejected",
+  "error": {
+    "code": "E_PARAMS",
+    "kind": "column_out_of_range",
+    "stage": "preflight",
+    "message": "Regression: predictors",
+    "details": {
+      "parameter": "reg.indeps",
+      "index": 8,
+      "columns": 5
+    },
+    "retryable": false
+  },
+  "artifacts": []
+}
+```
+
+In questo secondo caso `result` è assente: il runner non è mai stato eseguito.
+
+#### 8.5.6 Comportamento su file e batch
+
+- Con `--format json` e senza `--out`, l'envelope di rifiuto va su stdout e non viene scritto nulla su disco.
+- Con `--out <file>` e rifiuto, si scrive `<file>.failure.json` e **non** si crea il file di risultato richiesto.
+- Con `--out <directory>` e rifiuto, si scrive `<directory>/failure.json`.
+- Con `--format html`, `md`, `xlsx` o `svg` e rifiuto, non si crea alcun artefatto del formato richiesto; vale solo l'envelope di fallimento.
+- Nel batch, ogni job fallito scrive `failure.json` nella propria directory e non scrive `result.json`.
+- Il riepilogo del batch contiene `status`, `error.code`, `error.kind` e `error.message` per ogni job.
+- Senza `--continue-on-error`, il primo rifiuto interrompe il batch e l'exit code è quello del rifiuto.
+- Con `--continue-on-error`, il batch prosegue e l'exit code finale è determinato dalla precedenza: `E_INTERNAL` (4) > `E_TIMEOUT` (5) > `E_DATA` (3) > `E_ARGS`/`E_ANALYSIS`/`E_PARAMS`/`E_RUN` (2) > successo (0).
+
+#### 8.5.7 `render` e risultati conservati
+
+`lazstats render --result` accetta solo un envelope con `status:"ok"`. Se l'envelope è `rejected` o `error`, il comando restituisce `E_ARGS` e non crea file. In particolare:
+
+- non tenta di ricostruire un risultato mancante;
+- non ignora le tabelle assenti;
+- non renderizza un grafico parziale;
+- conserva il riferimento al `failure` originale nel messaggio.
+
+#### 8.5.8 Diagnostica dettagliata del dataset
+
+Il rifiuto può e deve essere più dettagliato del solo `reason`. La diagnostica è un blocco **additivo** rispetto a `error`: non cambia il codice, non cambia il messaggio esatto e non trasforma il rifiuto in un risultato. Serve a rispondere a tre domande:
+
+1. che cosa, esattamente, non va nel dataset?
+2. quante righe e colonne sono coinvolte?
+3. che cosa può fare l'utente o l'agente per correggere l'input?
+
+La diagnostica viene calcolata dal motore sul dataset e sulle colonne selezionate, prima o durante il run. Non viene inventata dalla CLI e non viene dedotta dal testo del messaggio. È un blocco dei rifiuti e degli errori: non viene emessa per un run con `status:"ok"`.
+
+##### Livelli
+
+- `--diagnostics none`: nessun blocco `diagnostics`.
+- `--diagnostics summary` (default): conteggi aggregati, `checks` falliti, `problems` e `suggestions`; niente distribuzioni complete.
+- `--diagnostics full`: aggiunge il profilo per colonna, i livelli osservati e i dettagli dei controlli; resta soggetto al limite di 64 KB.
+
+##### Forma
+
+```json
+{
+  "diagnostics": {
+    "schemaVersion": 1,
+    "level": "full",
+    "dataset": {
+      "rowsTotal": 120,
+      "rowsUsed": 120,
+      "completeCases": 118,
+      "requiredColumns": 3,
+      "droppedRows": 2,
+      "dropReasons": {
+        "missing": 2,
+        "type": 0,
+        "empty": 0,
+        "outOfRange": 0
+      },
+      "duplicateColumns": [],
+      "parseWarnings": 0
+    },
+    "columns": [
+      {
+        "name": "outcome",
+        "index": 0,
+        "role": "outcome",
+        "type": "cat",
+        "total": 120,
+        "valid": 119,
+        "missing": 1,
+        "distinct": 3,
+        "constant": false,
+        "levels": [
+          { "value": "low", "n": 40 },
+          { "value": "mid", "n": 41 },
+          { "value": "high", "n": 38 }
+        ]
+      },
+      {
+        "name": "predictor",
+        "index": 1,
+        "role": "predictor",
+        "type": "num",
+        "total": 120,
+        "valid": 118,
+        "missing": 2,
+        "distinct": 87,
+        "min": 1.2,
+        "max": 9.8,
+        "constant": false
+      }
+    ],
+    "checks": [
+      {
+        "id": "outcome.binary",
+        "status": "failed",
+        "severity": "error",
+        "message": "The outcome needs exactly two distinct values (for example 0/1 or yes/no)",
+        "details": { "observed": 3, "required": 2 }
+      },
+      {
+        "id": "analysis.complete_cases",
+        "status": "failed",
+        "severity": "error",
+        "message": "Not enough complete rows: the outcome and all predictors must be numeric and present",
+        "details": { "observed": 118, "required": 120 }
+      }
+    ],
+    "problems": [
+      {
+        "kind": "invalid_binary",
+        "columns": ["outcome"],
+        "observed": 3,
+        "required": 2
+      }
+    ],
+    "suggestions": [
+      {
+        "action": "select_binary_outcome",
+        "message": "Choose a binary outcome or use multinomial regression."
+      }
+    ],
+    "rowNumbers": [],
+    "truncated": false
+  }
+}
+```
+
+##### Contenuto minimo obbligatorio
+
+Anche con `--diagnostics summary`, un rifiuto deve riportare:
+
+- `dataset.rowsTotal`, `rowsUsed`, `completeCases`, `requiredColumns`;
+- `dropReasons` con i conteggi di righe perse per missing, tipo, vuote e fuori dominio;
+- i `checks` falliti con `id`, `status`, `severity`, `message` e `details`;
+- i `problems` normalizzati, con `kind`, colonne coinvolte e, se applicabile, `observed`/`required`/`deficit`;
+- le `suggestions` correttive, senza applicarle automaticamente;
+- `truncated` per indicare se il blocco è stato tagliato.
+
+Campi per colonna, disponibili in `full`:
+
+- `name`, `index`, `role`, `type`;
+- `total`, `valid`, `missing`, `distinct`;
+- `min`, `max` per le numeriche;
+- `levels` con valore e conteggio per le categoriche;
+- `constant`, `nonFinite`, `negative`, `zero` quando pertinenti.
+
+Campi per il dataset, disponibili in `full`:
+
+- `groups`: colonna, livelli, numerosità per gruppo, gruppi vuoti o singleton;
+- `outcome`: valori distinti, conteggi per classe, classe minoritaria;
+- `survival`: eventi, censurati, tempi negativi, tempi zero;
+- `design`: righe, parametri, rango, numero di condizione, colonne costanti o aliasate.
+
+##### Check diagnostici
+
+Gli identificatori dei check sono stabili e documentati:
+
+| Check | Che cosa verifica |
+|---|---|
+| `input.parse` | errori di parsing, righe malformate, encoding, delimitatore |
+| `input.rows` | righe totali e righe utilizzabili |
+| `input.columns` | colonne mancanti, duplicate, senza nome |
+| `input.types` | tipo dichiarato o inferito e conversione |
+| `columns.missing` | missing per colonna e pattern di incompletezza |
+| `columns.constant` | varianza nulla |
+| `columns.domain` | valori negativi, non finiti, fuori dominio |
+| `analysis.min_rows` | numerosità minima della procedura |
+| `analysis.complete_cases` | righe complete rispetto alle colonne richieste |
+| `analysis.groups` | numero di gruppi, gruppi vuoti, singleton |
+| `analysis.outcome` | numero e distribuzione delle classi |
+| `analysis.events` | eventi e censure per la sopravvivenza |
+| `analysis.design` | rango, collinearità, colonne costanti |
+| `runner.precondition` | precondizione specifica del runner |
+
+Ogni check ha `status` `passed`, `failed` o `skipped` e `severity` `info`, `warning` o `error`. Un check `skipped` non è un fallimento: indica che il controllo non è applicabile a quella procedura.
+
+##### Integrazione con il rifiuto
+
+`diagnostics` è un campo fratello di `error`, non un sostituto:
+
+```json
+{
+  "status": "rejected",
+  "error": {
+    "code": "E_RUN",
+    "kind": "invalid_binary",
+    "stage": "execute",
+    "message": "The outcome needs exactly two distinct values (for example 0/1 or yes/no)",
+    "details": { "column": "outcome", "levels": 3 },
+    "retryable": false
+  },
+  "diagnostics": {
+    "schemaVersion": 1,
+    "level": "summary",
+    "dataset": { "rowsTotal": 120, "rowsUsed": 120, "completeCases": 118, "requiredColumns": 3 },
+    "checks": [],
+    "problems": [],
+    "suggestions": [],
+    "truncated": false
+  },
+  "result": { "ok": false, "reason": "The outcome needs exactly two distinct values (for example 0/1 or yes/no)" },
+  "artifacts": []
+}
+```
+
+Regole:
+
+- `error.message` resta identico a `result.reason`; la diagnostica non lo sostituisce.
+- `error.details` è il riassunto della causa; `diagnostics` è l'evidenza completa.
+- La diagnostica non contiene celle, righe di dati, nomi di persone o valori liberi; i livelli categorici sono aggregati e disponibili solo con `full`.
+- `rowNumbers` è vuoto salvo `--include-row-numbers`; contiene al massimo 20 numeri di riga, mai i valori.
+- Se il blocco supera 64 KB, viene troncato e `truncated` diventa `true`; i check falliti e i conteggi principali restano sempre presenti.
+- La diagnostica non è un'istruzione di correzione automatica: le `suggestions` vanno mostrate, non applicate senza consenso.
+
+##### Diagnostica per `E_DATA` e `E_PARAMS`
+
+- Per `E_DATA`, `dataset` contiene i conteggi parziali disponibili, `checks` include `input.parse` o `input.columns`, e `problems` riporta errori di parsing, limiti o colonne duplicate.
+- Per `E_PARAMS`, `columns` mostra solo le colonne selezionate e `problems` riporta indici fuori intervallo, nomi ambigui o selezioni mancanti.
+- Se il dataset non è stato caricato, `diagnostics` contiene solo `schemaVersion`, `level`, `dataset` con `rowsTotal: 0` e il check di caricamento fallito; non vengono inventati profili di colonna.
+
+#### 8.5.9 Regola per l'Agente
+
+Se l'agente che invoca la CLI riceve un rifiuto, deve:
+
+1. leggere `error.code`, `error.kind`, `error.message` e `diagnostics`;
+2. non presentare il rifiuto come un output statistico;
+3. non riprovare automaticamente la stessa richiesta;
+4. correggere dati o parametri e rifare il run solo se il `kind` o le `suggestions` indicano un'azione correggibile;
+5. riportare il `message` esatto all'utente, senza inventare una spiegazione alternativa;
+6. usare `diagnostics.checks` e `diagnostics.problems` per spiegare quali colonne o righe sono coinvolte, senza esporre valori delle celle.
+
 ---
 
 ## 9. Output
@@ -523,6 +964,7 @@ Forma proposta:
 ```json
 {
   "schemaVersion": 1,
+  "status": "ok",
   "engine": {
     "name": "lazstats",
     "version": "0.32.0",
@@ -561,15 +1003,19 @@ Regole:
 - niente timestamp di default; `--timestamps` aggiunge `generatedAt`;
 - niente dati completi di default; `--include-data` li aggiunge;
 - `sha256` del file o del JSON inline rende riproducibile l’input;
+- `status` è `ok` solo in presenza di un run-report completo; `rejected` ed `error` seguono §8.5;
+- `diagnostics` è presente nei rifiuti e negli errori; non viene emesso per `status:"ok"`; la sua assenza non è mai l'unica spiegazione di un rifiuto;
 - `result` è esattamente `AnalysisRunResult`, senza transformazioni lossy;
-- gli errori hanno `{ "error": { "code", "message", "details?" } }`.
+- gli errori hanno `{ "error": { "code", "kind", "stage", "message", "details?", "retryable", "hint?" } }`;
+- in `rejected`/`error` non esistono tabelle, report o grafici: `artifacts` è vuoto.
 
 ### 9.2 JSON su stdout
 
 - Con `--format json` e senza `--out`, l’envelope va su stdout e nient’altro.
 - Log, progresso e warning diagnostici vanno su stderr.
 - Con `--out file.json`, l’envelope va nel file e stdout resta vuoto (salvo `--quiet=false`).
-- Con errori in `--json`, l’oggetto errore va su stdout e l’exit code è coerente.
+- Con errori in `--json`, l’envelope di fallimento va su stdout e l’exit code è coerente; non viene prodotto alcun output parziale.
+- Con `--out` e fallimento, il file di risultato non viene creato; si applica la regola `<out>.failure.json` di §8.5.6.
 
 ### 9.3 Markdown
 
@@ -615,7 +1061,8 @@ Regole:
 - `--charts none` disabilita la generazione;
 - nessun PNG nella prima versione;
 - i font sono quelli di sistema; il documento HTML dichiara una font-family esplicita;
-- il rendering avviene solo nel processo CLI, non nel server MCP se non richiesto.
+- il rendering avviene solo nel processo CLI, non nel server MCP se non richiesto;
+- se il run è `rejected` o `error`, il renderer non viene eseguito e non crea SVG.
 
 ### 9.7 Exit code
 
@@ -740,7 +1187,8 @@ Nessuna nuova dipendenza per il core CLI: `node:util.parseArgs`, `node:fs`, `nod
 - `catalog`: 72 runner totali, 71 visibili di default, `assistant` escluso, `wizard` incluso con `--all`.
 - `params`: default, parse, `--set`, mapping nomi→indici, `@indice`, errori.
 - `dataset`: CSV, TSV, JSON, XLSX, `.lzs`, tipi, missing, livelli.
-- `result`: envelope, hash, assenza timestamp, `ok:false`.
+- `result`: envelope `ok`/`rejected`/`error`, status, hash, assenza timestamp, `ok:false`, messaggio esatto, `details`, `artifacts` vuoti.
+- `diagnostics`: profilo dataset, check falliti, problemi, suggerimenti, `truncated`, assenza di celle e valori liberi.
 - `render`: tabella, report, HTML, XLSX, SVG.
 - `errors`: codice → exit code.
 
@@ -769,6 +1217,7 @@ Verificare:
 - stderr per gli errori;
 - file prodotti;
 - nessun file inatteso;
+- rifiuto con `--out`: creazione di `failure.json`, nessun file di risultato e nessun grafico;
 - esecuzione da directory diverse.
 
 ### 13.4 Batch e worker
@@ -858,6 +1307,14 @@ Il gate finale deve includere `build:cli` e almeno uno smoke test del binario.
 9. Il batch rispetta concorrenza, timeout e connessioni.
 10. Nessun segreto, rete o comando di sistema.
 11. `npm run check` e `npm run build:cli` verdi.
+12. Un rifiuto conserva in `error.message` e `result.reason` la stringa esatta del runner.
+13. Un rifiuto non produce tabelle, report, grafici o file di risultato; `artifacts` è vuoto.
+14. Un rifiuto è distinguibile da `E_DATA`, `E_PARAMS`, `E_INTERNAL` e `E_TIMEOUT` tramite codice, `kind` e stage.
+15. Il batch riporta ogni rifiuto nel riepilogo e applica la precedenza degli exit code di §8.5.6.
+16. Un rifiuto include `diagnostics` con i check falliti, i problemi e i conteggi di righe/colonne coinvolte.
+17. `diagnostics` non contiene celle, righe di dati o valori liberi; `rowNumbers` compare solo con `--include-row-numbers`.
+18. `--diagnostics none|summary|full` cambia il dettaglio, non il codice, il messaggio o l'esito del rifiuto.
+19. Se la diagnostica supera 64 KB, viene troncata e `truncated` è `true`.
 
 ---
 

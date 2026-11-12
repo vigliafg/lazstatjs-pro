@@ -185,6 +185,14 @@ serveStdio(() => createServer());
 - Timeout: `E_TIMEOUT`.
 - Annullamento: `E_CANCELLED`.
 
+La semantica completa del rifiuto è quella di `PIANO-CLI.md` §8.5 e vale anche per l’MCP:
+
+- `E_PARAMS`/`E_RUN` sono rifiuti: `isError: true`, nessun `resultId`, nessuna entry in cache, nessuna tabella o grafico.
+- `E_DATA` è un errore di input: `isError: true`, nessun `resultId`.
+- Per `E_RUN`, `error.message` è identico al `reason` del runner; il server non lo riscrive e non lo traduce.
+- `error.kind`, `error.stage`, `error.details` e `error.retryable` seguono lo stesso contratto della CLI.
+- Una risposta `isError` non contiene mai un finto run-report con tabelle vuote.
+
 ---
 
 ## 6. Tool
@@ -335,6 +343,7 @@ Input:
   ciLevel?: 90 | 95 | 99;
   reportLocale?: string;
   include?: Array<'summary' | 'tables' | 'report' | 'charts'>;
+  diagnostics?: 'none' | 'summary' | 'full';
   timeoutMs?: number;
 }
 ```
@@ -350,7 +359,11 @@ Regole:
 - i chart model sono restituiti solo se richiesti;
 - il risultato completo viene salvato in cache con `resultId`;
 - `structuredContent` contiene un envelope ridotto e `resultId`;
-- `content` contiene un riassunto testuale leggibile.
+- `content` contiene un riassunto testuale leggibile;
+- se il motore rifiuta, non viene creato `resultId`, non viene scritta la cache e non vengono restituiti tabelle o grafici: la risposta è `isError: true` con `code`, `kind`, `stage`, `message` esatto e `details`;
+- la risposta include `diagnostics` secondo `PIANO-CLI.md` §8.5.8, con i check falliti, i problemi, i conteggi e i suggerimenti;
+- `diagnostics` non contiene celle o valori liberi; `rowNumbers` non è esposto dall'MCP nella prima versione;
+- il server non trasforma un rifiuto in un risultato `ok:true` con tabelle vuote.
 
 Output schema (semplificato):
 
@@ -488,6 +501,7 @@ Il prompt non sostituisce `list_analyses`/`describe_analysis`.
 
 - `content` breve: massimo 8.000 caratteri;
 - `structuredContent` massimo 256 KB;
+- `diagnostics` massimo 64 KB e comunque troncato prima del limite globale, con `truncated: true`;
 - tabelle/report oltre il limite vengono troncati con `truncated: true`;
 - `get_result` permette di recuperare il resto;
 - i chart model non vengono inclusi per default;
@@ -691,6 +705,15 @@ Usare `Client` + `StdioClientTransport` dell’SDK 2.4.0 per avviare il server c
 - risultato scaduto;
 - due richieste concorrenti.
 
+Per ogni rifiuto verificare esplicitamente:
+
+- `isError: true` e nessun `resultId`;
+- `error.message` identico al `reason` del runner per `E_RUN`;
+- `error.kind`, `stage` e `details` presenti quando disponibili;
+- `diagnostics` presente e coerente con il `kind` (check fallito, colonne e conteggi);
+- nessuna tabella, report o grafico nel payload;
+- nessuna entry aggiunta alla cache.
+
 ### 12.4 Purezza stdio
 
 Testare che:
@@ -724,7 +747,10 @@ npm run check
 9. La cancellazione termina il worker.
 10. stdout resta pulito.
 11. Nessuna scrittura implicita.
-12. `npm run check` e `npm run test:mcp` verdi.
+12. Un rifiuto `E_RUN` conserva il messaggio esatto e non crea `resultId` né cache.
+13. Un rifiuto non restituisce mai tabelle o grafici vuoti come se fosse un successo.
+14. Un rifiuto include `diagnostics` con check, problemi e conteggi, senza celle o valori liberi.
+15. `npm run check` e `npm run test:mcp` verdi.
 
 ---
 
