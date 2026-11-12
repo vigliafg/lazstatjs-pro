@@ -1,0 +1,36 @@
+/** Smoke-test the built stdio server over the real MCP client transport. */
+import { Client } from '@modelcontextprotocol/client';
+import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
+import { join } from 'node:path';
+
+const transport = new StdioClientTransport({
+  command: process.execPath,
+  args: [join(process.cwd(), 'dist-mcp', 'lazstats-mcp.mjs'), '--root', process.cwd()],
+  stderr: 'pipe',
+});
+let stderr = '';
+transport.stderr.on('data', chunk => {
+  stderr += String(chunk);
+});
+const client = new Client({ name: 'lazstats-mcp-smoke', version: '1.0.0' });
+await client.connect(transport);
+try {
+  const tools = await client.listTools();
+  const names = tools.tools.map(tool => tool.name).sort();
+  if (names.length !== 8) throw new Error(`Expected 8 tools, got ${names.length}: ${names.join(',')}`);
+  const info = await client.callTool({ name: 'engine_info', arguments: {} });
+  if (info.isError) throw new Error('engine_info failed');
+  const run = await client.callTool({
+    name: 'run_analysis',
+    arguments: {
+      analysisId: 'descriptive',
+      dataPath: 'samples/descriptive/iris/data.csv',
+      set: { descVars: ['Sepal_Length', 'Sepal_Width'] },
+    },
+  });
+  if (run.isError) throw new Error(`run_analysis failed: ${JSON.stringify(run.structuredContent)}`);
+  console.log(`smoke ok: ${names.length} tools, resultId=${run.structuredContent?.resultId}`);
+} finally {
+  await client.close();
+}
+if (stderr.trim()) process.stderr.write(stderr);

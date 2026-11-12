@@ -3,6 +3,7 @@ build/
 dist/
 dist-electron/
 dist-cli/
+dist-mcp/
 release/
 coverage/
 .DS_Store

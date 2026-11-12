@@ -13,11 +13,14 @@
   },
   "main": "dist-electron/main.cjs",
   "bin": {
-    "lazstats": "dist-cli/lazstats.mjs"
+    "lazstats": "dist-cli/lazstats.mjs",
+    "lazstats-mcp": "dist-mcp/lazstats-mcp.mjs"
   },
   "files": [
     "dist-cli/lazstats.mjs",
     "dist-cli/worker-entry.mjs",
+    "dist-mcp/lazstats-mcp.mjs",
+    "dist-mcp/worker-entry.mjs",
     "scripts/postinstall-electron.mjs"
   ],
   "desktopName": "lazstats.desktop",
@@ -28,6 +31,9 @@
     "build:web": "npm run help:build && vite build --mode web",
     "build:electron": "node scripts/build-electron.mjs",
     "build:cli": "node scripts/build-cli.mjs",
+    "build:mcp": "node scripts/build-mcp.mjs",
+    "smoke:mcp": "npm run build:mcp && node scripts/smoke-mcp.mjs",
+    "mcp": "node --import tsx src/mcp/main.ts",
     "smoke:cli": "node scripts/smoke-cli.mjs",
     "smoke:cli:package": "npm run build:cli && node scripts/smoke-cli-package.mjs",
     "pack:cli": "npm run build:cli && npm pack ./dist-cli --pack-destination .",
@@ -53,6 +59,7 @@
     "test:electron": "node scripts/smoke-electron.mjs",
     "cli": "node --import tsx src/cli/main.ts",
     "test:cli": "node --import tsx --test \"src/cli/**/*.test.ts\"",
+    "test:mcp": "npm run build:mcp && node --import tsx --test \"src/mcp/**/*.test.ts\"",
     "test:samples": "node --import tsx --test src/io/samples.test.ts",
     "samples:generate": "Rscript samples/generate.R",
     "chart:inventory": "node scripts/chart-inventory.mjs",
@@ -67,11 +74,14 @@
     "help:audit": "node --import tsx scripts/help-audit.mts"
   },
   "dependencies": {
-    "electron-updater": "^6.8.11"
+    "@modelcontextprotocol/server": "2.4.0",
+    "electron-updater": "^6.8.11",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@google/genai": "^1.29.0",
     "@irbisadm/statfmt": "0.1.1",
+    "@modelcontextprotocol/client": "2.4.0",
     "@playwright/test": "^1.64.1",
     "@tailwindcss/vite": "^4.1.14",
     "@types/express": "^4.17.21",

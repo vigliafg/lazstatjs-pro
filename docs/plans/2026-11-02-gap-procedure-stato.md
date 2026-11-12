@@ -1,10 +1,19 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-10 (checkpoint rilascio 0.32.0)
+**Ultimo aggiornamento**: 2026-11-12 (checkpoint MCP stdio)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
 **Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
-**Ondata corrente**: rilascio 0.32.0 — Assistant, temi Mist/Midnight, help nelle sei lingue
+**Ondata corrente**: MCP stdio — server `lazstats-mcp`
+
+## Checkpoint MCP stdio (2026-11-12)
+
+- **Branch**: `main` · **worktree**: principale · **commit**: nessuno (modifiche MCP non committate).
+- **Chiuso**: server stdio `src/mcp/` con engine condiviso e otto tool; catalogo 71/72 con `wizard` nascosto e `assistant` escluso; `run_analysis` con cache `resultId`, diagnostica e rifiuti senza risultati finti; `get_result`/`render_chart`; path root con `realpath` e symlink; gate 4/16; cancellazione worker; bundle `dist-mcp/`; documentazione host in `docs/MCP.md`.
+- **Test**: `npm run test:mcp` 15/15 sul bundle costruito, inclusi timeout, cancellazione, coda `E_BUSY`, file troppo grandi, progress e purezza stdio; `npm run smoke:mcp` verde; gate completo `npm run check` 1523/1523, depcruise/madge/filesize/docs:links verdi.
+- **Decisioni**: tutti i tool pubblicano `outputSchema`; niente scritture su disco; wizard solo con `includeHidden`; cache 10 min/20 risultati/20 MB.
+- **Rischi**: bundle MCP da 12,6 MB; configurazione host non ancora provata su Claude Desktop/Cursor; il test di cancellazione usa il tool diretto e verifica cache/risposta, non ispeziona il conteggio dei worker.
+- **Prossimi 3 passi**: valutare commit dedicato MCP; decidere se pubblicare il pacchetto MCP separato; verificare la configurazione su un host MCP reale.
 
 ## Checkpoint rilascio 0.32.0 (2026-11-10)
 

@@ -12,6 +12,7 @@ import {
 export interface WorkerRunOptions {
   workers?: string | number;
   timeoutMs?: number;
+  signal?: AbortSignal;
 }
 
 export const runAnalysisWithWorkers = async (
@@ -26,7 +27,8 @@ export const runAnalysisWithWorkers = async (
     return await runInWorkerPool(
       options,
       workers,
-      workerOptions.timeoutMs ?? DEFAULT_TIMEOUT_MS
+      workerOptions.timeoutMs ?? DEFAULT_TIMEOUT_MS,
+      workerOptions.signal
     );
   } catch (error) {
     // A runtime without worker support must not make an analysis unavailable.

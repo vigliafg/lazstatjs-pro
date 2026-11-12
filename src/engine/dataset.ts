@@ -134,7 +134,7 @@ const applyMissing = (table: ImportTable, spec: string | undefined): void => {
   }));
 };
 
-const toDataset = (table: ImportTable): Dataset => ({
+export const datasetFromTable = (table: ImportTable): Dataset => ({
   cols: table.names.map((name, index): Column => ({
     name,
     type: table.types[index],
@@ -271,7 +271,7 @@ export const loadDataset = async (
     format,
     sha256: hash,
     table,
-    grid: toDataset(table),
+    grid: datasetFromTable(table),
     ...(truncated ? { truncated: true } : {}),
   };
 };

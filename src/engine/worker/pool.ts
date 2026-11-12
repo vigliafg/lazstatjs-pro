@@ -24,6 +24,8 @@ interface PendingTask {
   resolve: (result: AnalysisRunResult) => void;
   reject: (error: Error) => void;
   timer?: ReturnType<typeof setTimeout>;
+  signal?: AbortSignal;
+  onAbort?: () => void;
 }
 
 interface Slot {
@@ -95,7 +97,21 @@ class WorkerPool {
     return this.size;
   }
 
-  run(options: RunAnalysisOptions, timeoutMs = DEFAULT_TIMEOUT_MS): Promise<AnalysisRunResult> {
+  run(
+    options: RunAnalysisOptions,
+    timeoutMs = DEFAULT_TIMEOUT_MS,
+    signal?: AbortSignal
+  ): Promise<AnalysisRunResult> {
+    if (signal?.aborted) {
+      return Promise.reject(
+        new EngineError({
+          code: 'E_RUN',
+          kind: 'cancelled',
+          stage: 'execute',
+          message: 'The request was cancelled',
+        })
+      );
+    }
     if (this.closed) {
       return Promise.reject(
         new EngineError({
@@ -111,7 +127,12 @@ class WorkerPool {
       options,
       resolve: () => undefined,
       reject: () => undefined,
+      ...(signal ? { signal } : {}),
     };
+    if (signal) {
+      task.onAbort = () => this.cancel(task);
+      signal.addEventListener('abort', task.onAbort, { once: true });
+    }
     const promise = new Promise<AnalysisRunResult>((resolve, reject) => {
       task.resolve = resolve;
       task.reject = reject;
@@ -221,9 +242,34 @@ class WorkerPool {
     this.dispatch();
   }
 
+  private cancel(task: PendingTask): void {
+    if (!this.activeTasks.has(task.id)) return;
+    this.activeTasks.delete(task.id);
+    const index = this.queue.indexOf(task);
+    if (index >= 0) this.queue.splice(index, 1);
+    const slot = this.slots.find(candidate => candidate.task?.id === task.id);
+    if (slot) {
+      slot.task = null;
+      const slotIndex = this.slots.indexOf(slot);
+      if (slotIndex >= 0) this.slots.splice(slotIndex, 1);
+      void slot.worker.terminate();
+    }
+    this.clearTask(task);
+    task.reject(
+      new EngineError({
+        code: 'E_RUN',
+        kind: 'cancelled',
+        stage: 'execute',
+        message: 'The request was cancelled',
+      })
+    );
+    this.dispatch();
+  }
+
   private timeout(task: PendingTask, ms: number): void {
     if (!this.activeTasks.has(task.id)) return;
     this.activeTasks.delete(task.id);
+    this.clearTask(task);
     const slot = this.slots.find(candidate => candidate.task?.id === task.id);
     if (slot) {
       slot.task = null;
@@ -247,6 +293,7 @@ class WorkerPool {
 
   private clearTask(task: PendingTask): void {
     if (task.timer) clearTimeout(task.timer);
+    if (task.signal && task.onAbort) task.signal.removeEventListener('abort', task.onAbort);
     this.activeTasks.delete(task.id);
   }
 
@@ -270,8 +317,9 @@ const poolFor = (size: number): WorkerPool => {
 export const runInWorkerPool = (
   options: RunAnalysisOptions,
   workers: number,
-  timeoutMs = DEFAULT_TIMEOUT_MS
-): Promise<AnalysisRunResult> => poolFor(workers).run(options, timeoutMs);
+  timeoutMs = DEFAULT_TIMEOUT_MS,
+  signal?: AbortSignal
+): Promise<AnalysisRunResult> => poolFor(workers).run(options, timeoutMs, signal);
 
 export const closeWorkerPool = (): void => {
   sharedPool?.close();

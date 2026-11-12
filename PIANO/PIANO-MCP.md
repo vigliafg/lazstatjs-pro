@@ -3,7 +3,7 @@
 **Data:** 2026-11-11
 **Repository:** `lazstatjs-pro`
 **Versione di riferimento:** `0.32.0`
-**Stato:** piano di progettazione; nessuna implementazione inclusa.
+**Stato:** implementato (server stdio, otto tool, cache, worker, build e test d’integrazione).
 
 ---
 
@@ -835,16 +835,16 @@ npm run check
 
 ---
 
-## 16. Decisioni aperte
+## 16. Decisioni chiuse in implementazione
 
-1. Il server deve accettare solo path o anche dataset inline?
-2. Il default di `include` deve contenere le tabelle o solo il summary?
-3. Quanti risultati tenere in cache e per quanto tempo?
-4. Il server deve poter scrivere report su disco con un opt-in esplicito?
-5. `wizard` va esposto come tool nascosto o solo come compatibilità?
-6. Il prompt `choose-analysis` è necessario nella prima versione?
-7. PNG è un requisito o l’SVG basta?
-8. Il server deve essere pubblicato come pacchetto separato?
+1. Sono accettati sia path sia dataset inline, con limiti dedicati.
+2. Il default di `include` è `summary`, `tables`, `report`; i grafici sono opt-in.
+3. Cache in memoria: TTL 10 minuti, 20 risultati, 20 MB, LRU.
+4. Nessuna scrittura di report su disco: il server è read-only.
+5. `wizard` è visibile solo con `includeHidden`; `assistant` resta escluso.
+6. Il prompt `choose-analysis` è incluso e non esegue analisi.
+7. Nella prima versione è supportato SVG; PNG non è previsto.
+8. Il pacchetto MCP separato non è pubblicato: il bin resta nel repository.
 
 ---
 

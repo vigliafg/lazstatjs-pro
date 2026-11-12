@@ -1,0 +1,22 @@
+export const MCP_NAME = 'lazstats';
+export const MCP_VERSION = '0.32.0';
+export const MCP_SCHEMA_VERSION = 1;
+
+export const MAX_TEXT_CHARS = 8_000;
+export const MAX_STRUCTURED_BYTES = 256 * 1024;
+export const MAX_DIAGNOSTICS_BYTES = 64 * 1024;
+export const MAX_INLINE_BYTES = 1024 * 1024;
+export const MAX_INLINE_ROWS = 2_000;
+export const MAX_ROWS = 50_000;
+export const MAX_COLS = 500;
+export const MAX_TEXT_FILE_BYTES = 100 * 1024 * 1024;
+export const MAX_BINARY_FILE_BYTES = 25 * 1024 * 1024;
+export const MAX_TOOL_INPUT_ELEMENTS = 10_000;
+export const DEFAULT_TIMEOUT_MS = 120_000;
+export const MAX_CONCURRENT_RUNS = 4;
+export const MAX_QUEUED_RUNS = 16;
+export const RESULT_TTL_MS = 10 * 60 * 1000;
+export const MAX_RESULTS = 20;
+export const MAX_RESULT_BYTES = 20 * 1024 * 1024;
+export const DEFAULT_PREVIEW_ROWS = 5;
+export const MAX_PREVIEW_ROWS = 20;
