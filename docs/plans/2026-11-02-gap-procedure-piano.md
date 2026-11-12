@@ -18,6 +18,7 @@
 | 2.1 | 2026-11-02 | Protocollo di checkpoint, handoff e compattazione; documento di stato `gap-procedure-stato.md` |
 | 2.2 | 2026-11-02 | W0-09: retrofit dei reference test sulle 8 procedure esistenti senza confronto indipendente |
 | 2.3 | 2026-11-05 | Fase 2: censimento delle tabelle (72 procedure), confronto con JMP su tutte le procedure, checklist §8.8 per integrare le voci mancanti |
+| 2.4 | 2026-11-12 | Documentazione e help CLI/MCP: catalogo unico CLI, help globale/per comando/JSON, guida runtime MCP, riferimenti generati e guardrail |
 
 ---
 
@@ -1163,6 +1164,22 @@ Termini da aggiungere prima della traduzione:
 6. Non aggiornare i conteggi globali (36→72) fino alla chiusura di W1.
 
 ---
+
+### 15.1 Ondata documentazione e help CLI/MCP (2026-11-12)
+
+| Item | Stato |
+| --- | --- |
+| Catalogo unico CLI (`src/cli/spec.ts`) e parser derivato | chiuso |
+| Help globale, per comando e JSON; `help <comando>` e `<comando> --help` | chiuso |
+| Documentazione di opzioni, precedenza parametri, envelope, batch ed exit code | chiuso |
+| Guida runtime MCP (`src/mcp/guide.ts`), `lazstats://help`, topic, `engine_info.documentation` | chiuso |
+| Fallback `engine_info({help:true})` / `engine_info({topic})` per host senza risorse o prompt | chiuso |
+| Prompt `agent-guide` e descrizioni dei tool espanse; otto tool invariati | chiuso |
+| `docs/cli/`, `docs/mcp/`, README principale e script CLI/MCP | chiuso |
+| Riferimenti generati (`docs:build`/`docs:check`) e guardrail link | chiuso |
+| Test mirati, smoke CLI/MCP e gate completo | chiuso (1534/1534) |
+
+**Prossimi 3 passi**: commit dedicato; verifica su pacchetto CLI e host MCP reale; valutare la traduzione dei riferimenti generati.
 
 ## 16. Protocollo di checkpoint, handoff e compattazione
 

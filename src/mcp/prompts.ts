@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/server';
 import { z } from 'zod';
 import { catalogEntries } from '../engine';
+import { renderGuide } from './guide';
 
 const stopWords = new Set([
   'the', 'and', 'for', 'with', 'from', 'that', 'this', 'are', 'how', 'can', 'dei', 'del',
@@ -45,12 +46,38 @@ export const registerPrompts = (server: McpServer): void => {
         ),
         '',
         'Use only columns that exist; pass them as set keys such as role=ColumnName.',
+        '',
+        'Before running, read describe_analysis and inspect_dataset. Full contracts: lazstats://help.',
       ].filter(line => line !== '');
       return {
         messages: [
           {
             role: 'user' as const,
             content: { type: 'text' as const, text: lines.join('\n') },
+          },
+        ],
+      };
+    }
+  );
+
+  server.registerPrompt(
+    'agent-guide',
+    {
+      title: 'LazStats MCP agent guide',
+      description: 'Return the complete workflow, tool contracts, limits and error recovery',
+      argsSchema: z.object({
+        task: z.string().optional(),
+      }),
+    },
+    args => {
+      const intro = args.task
+        ? `Task: ${args.task}\n\nUse the guide below to choose tools and arguments.\n\n`
+        : '';
+      return {
+        messages: [
+          {
+            role: 'user' as const,
+            content: { type: 'text' as const, text: `${intro}${renderGuide()}` },
           },
         ],
       };

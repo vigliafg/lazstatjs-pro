@@ -20,6 +20,17 @@ try {
   if (names.length !== 8) throw new Error(`Expected 8 tools, got ${names.length}: ${names.join(',')}`);
   const info = await client.callTool({ name: 'engine_info', arguments: {} });
   if (info.isError) throw new Error('engine_info failed');
+  if (info.structuredContent?.documentation?.guide !== 'lazstats://help') {
+    throw new Error('engine_info is missing the help documentation link');
+  }
+  const guide = await client.readResource({ uri: 'lazstats://help' });
+  if (!String(guide.contents[0]?.text ?? '').includes('### run_analysis')) {
+    throw new Error('lazstats://help is incomplete');
+  }
+  const fallback = await client.callTool({ name: 'engine_info', arguments: { help: true } });
+  if (!String(fallback.structuredContent?.documentation?.guideText ?? '').includes('## Tools')) {
+    throw new Error('engine_info help fallback is incomplete');
+  }
   const run = await client.callTool({
     name: 'run_analysis',
     arguments: {

@@ -111,6 +111,16 @@ test('exposes exactly the eight planned tools and the 71/72 catalog', async () =
   assert.equal(info.structuredContent?.engineSchemaVersion, 1);
   assert.match(info.structuredContent?.node as string, /^v\d+/);
   assert.deepEqual(info.structuredContent?.hiddenAnalyses, ['wizard']);
+  assert.equal(info.structuredContent?.documentation.guide, 'lazstats://help');
+  assert.ok(info.structuredContent?.documentation.topics.includes('errors'));
+  const fullHelp = await call('engine_info', { help: true });
+  assert.match(fullHelp.structuredContent?.documentation.guideText as string, /## Tools/);
+  const helpTopic = await call('engine_info', { topic: 'errors' });
+  assert.equal(helpTopic.structuredContent?.documentation.topic.id, 'errors');
+  assert.match(helpTopic.structuredContent?.documentation.topic.markdown as string, /E_TIMEOUT/);
+  const unknownTopic = await call('engine_info', { topic: 'missing' });
+  assert.equal(unknownTopic.isError, true);
+  assert.equal(unknownTopic.structuredContent?.code, 'E_ARGS');
 
   const visible = await call('list_analyses', {});
   assert.equal(visible.structuredContent?.total, 71);
@@ -253,6 +263,23 @@ test('serves resources and the prompt', async () => {
     arguments: { goal: 'compare two group means' },
   });
   assert.match((prompt.messages[0].content as { text?: string }).text as string, /ttest|anova/);
+
+  const guide = await client.readResource({ uri: 'lazstats://help' });
+  const guideText = (guide.contents[0] as { text?: string }).text as string;
+  assert.match(guideText, /## Workflow/);
+  assert.match(guideText, /### run_analysis/);
+  assert.match(guideText, /E_RESULT_EXPIRED/);
+
+  const topic = await client.readResource({ uri: 'lazstats://help/errors' });
+  assert.match((topic.contents[0] as { text?: string }).text as string, /E_TIMEOUT/);
+
+  const agentGuide = await client.getPrompt({
+    name: 'agent-guide',
+    arguments: { task: 'describe iris' },
+  });
+  const agentText = (agentGuide.messages[0].content as { text?: string }).text as string;
+  assert.match(agentText, /Task: describe iris/);
+  assert.match(agentText, /## Tools/);
 });
 
 test('runs two calls concurrently without blocking', async () => {
@@ -272,9 +299,13 @@ test('emits progress notifications when the client requests them', async () => {
     { onprogress: progress => messages.push(progress.message ?? '') }
   );
   assert.equal(result.isError, undefined);
+  // The result can reach the client before the final progress notification.
+  for (let attempt = 0; attempt < 50 && !messages.includes('finishing'); attempt += 1) {
+    await new Promise(resolve => setTimeout(resolve, 10));
+  }
   assert.ok(messages.includes('starting'), `progress: ${messages.join(',')}`);
   assert.ok(messages.includes('computing'));
-  assert.ok(messages.includes('finishing'));
+  assert.ok(messages.includes('finishing'), `progress: ${messages.join(',')}`);
 });
 
 test('rejects unknown analyses, invalid parameters, missing and oversized files', async () => {

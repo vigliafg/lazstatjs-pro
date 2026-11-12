@@ -98,7 +98,7 @@ for (const file of files) {
 }
 
 /** Ogni documento della guida deve essere linkato dal proprio hub. */
-for (const directory of ['docs/guide', 'docs/guide/en']) {
+for (const directory of ['docs/guide', 'docs/guide/en', 'docs/cli', 'docs/mcp']) {
   const hub = join(directory, 'README.md');
   if (!existsSync(hub)) {
     broken.push(`${hub}: hub mancante`);
@@ -109,10 +109,14 @@ for (const directory of ['docs/guide', 'docs/guide/en']) {
       .filter(target => !isExternal(target))
       .map(target => resolve(directory, decodeURIComponent(target.split('#')[0])))
   );
-  for (const name of readdirSync(directory)) {
-    if (name === 'README.md' || extname(name) !== '.md') continue;
-    const path = resolve(directory, name);
-    if (!linked.has(path)) broken.push(`${relative('.', path)}: non linkato da ${hub}`);
+  const documents =
+    directory === 'docs/cli'
+      ? walk(directory).filter(path => resolve(path) !== resolve(hub))
+      : readdirSync(directory)
+          .filter(name => name !== 'README.md' && extname(name) === '.md')
+          .map(name => join(directory, name));
+  for (const path of documents) {
+    if (!linked.has(resolve(path))) broken.push(`${relative('.', path)}: non linkato da ${hub}`);
   }
 }
 

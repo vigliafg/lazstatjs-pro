@@ -7,62 +7,6 @@ import type {
 } from '../engine';
 import type { CliIo } from './types';
 
-export const printHelp = (io: CliIo, version: string): void => {
-  io.out(`lazstats ${version} — statistical engine CLI
-
-Usage:
-  lazstats analyses [--json] [--family <id>] [--all]
-  lazstats schema <analysisId> [--json]
-  lazstats inspect <file> [--json] [--rows N] [--sheet NAME|INDEX]
-  lazstats project inspect <file.lzs> [--json]
-  lazstats project run <file.lzs> [options]
-  lazstats run --data <file> --analysis <id> [options]
-  lazstats run --project <file.lzs> [--analysis <id>] [options]
-  lazstats batch --jobs <file.json> --out <directory> [options]
-  lazstats render --result <file> [--format md|html|xlsx|svg] [--out PATH]
-
-Input options:
-  --format-input <format>    Force csv|tsv|json|xlsx|sav|dta
-  --max-rows <n>             Keep at most n rows for inspect
-
-Run options:
-  --set <key=value>          Repeatable parameter override
-  --params <json>            Partial/full ProjectParams object
-  --params-file <file>       JSON parameter file
-  --ci 90|95|99              Confidence level (default 95)
-  --format json|md|html|xlsx|svg  Output format (default json)
-  --out <file|directory>     Write the result; required for xlsx/svg
-  --charts none|svg          Charts in HTML/SVG (default svg for html/svg)
-  --include-data             Include the grid in the JSON envelope
-  --include-data-sheet       Add the data sheet to XLSX output
-  --timestamps               Add generatedAt
-  --diagnostics <mode>       none|summary|full (default summary)
-  --include-row-numbers      Add at most 20 incomplete row numbers to diagnostics
-  --timings                  Add phase timings to the envelope
-  --quiet                    Suppress non-essential console notices
-  --verbose                  Print stack traces for errors
-  --timeout <seconds>        Per-run timeout for heavy analyses (default 120)
-  --workers auto|0|N         Worker pool size (default auto; 0 = main thread)
-
-Batch options:
-  --jobs <file>              JSON object {"jobs":[...]} or a job array
-  --out <directory>          Required output root; each job gets a subdirectory
-  --concurrency <n>          Parallel jobs (default 2)
-  --continue-on-error        Keep running after a failed job
-
-Examples:
-  lazstats analyses --json
-  lazstats schema regression --json
-  lazstats inspect samples/descriptive/iris/data.csv
-  lazstats project inspect project.lzs --json
-  lazstats project run project.lzs --format html --out report.html
-  lazstats run --data samples/descriptive/iris/data.csv --analysis descriptive --set descVars=Sepal.Length,Sepal.Width
-  lazstats run --data samples/descriptive/iris/data.csv --analysis descriptive --format html --out report.html
-  lazstats batch --jobs jobs.json --out results --concurrency 2 --continue-on-error
-  lazstats render --result result.json --format svg --out charts/
-`);
-};
-
 export const printAnalyses = (
   entries: CatalogEntry[],
   json: boolean,

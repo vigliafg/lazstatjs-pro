@@ -1,10 +1,5 @@
-import {
-  printAnalyses,
-  printHelp,
-  printInspect,
-  printProjectInspect,
-  printSchema,
-} from './format';
+import { printAnalyses, printInspect, printProjectInspect, printSchema } from './format';
+import { printHelp } from './help';
 import { renderEnvelope, renderResultFile, type RenderFormat } from './output';
 import type { CliIo, ParsedCli } from './types';
 import {
@@ -383,9 +378,23 @@ export const runCli = async (
     io.out(`${CLI_VERSION}\n`);
     return 0;
   }
-  if (boolValue(parsed, 'help') || !parsed.command) {
-    printHelp(io, CLI_VERSION);
-    return 0;
+  if (boolValue(parsed, 'help') || parsed.command === 'help' || !parsed.command) {
+    const topic =
+      parsed.command === 'help'
+        ? parsed.positionals.join(' ')
+        : parsed.command === 'project' &&
+            (parsed.positionals[0] === 'inspect' || parsed.positionals[0] === 'run')
+          ? `project ${parsed.positionals[0]}`
+          : (parsed.command ?? undefined);
+    try {
+      printHelp(io, CLI_VERSION, topic || undefined, boolValue(parsed, 'json'));
+      return 0;
+    } catch (error) {
+      const failure = failureFromError(error);
+      io.err(`${failure.error.code}/${failure.error.kind}: ${failure.error.message}\n`);
+      emitVerbose(error, parsed, io);
+      return errorExitCode(failure.error.code);
+    }
   }
 
   try {

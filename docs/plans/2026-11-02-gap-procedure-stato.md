@@ -1,15 +1,24 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-12 (checkpoint MCP stdio)
+**Ultimo aggiornamento**: 2026-11-12 (checkpoint documentazione e help CLI/MCP)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
-**Baseline documentale**: `main` @ `1ef2860` (piano v2.2)
+**Baseline documentale**: `main` @ `1ef2860` (piano v2.4)
 **Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
-**Ondata corrente**: MCP stdio — server `lazstats-mcp`
+**Ondata corrente**: documentazione e help CLI/MCP — chiusa, modifiche non committate
+
+## Checkpoint documentazione e help CLI/MCP (2026-11-12)
+
+- **Branch**: `main` · **worktree**: principale · **commit**: `965c08d` (le modifiche di questa ondata non sono committate).
+- **Chiuso**: catalogo unico CLI in `src/cli/spec.ts`; help globale, per comando e JSON in `src/cli/help.ts`; comandi `help` e `<comando> --help` senza eseguire analisi; guida runtime MCP in `src/mcp/guide.ts`; `lazstats://help` e dieci topic; `engine_info.documentation`; fallback `engine_info({help:true})` e `engine_info({topic})` per host senza risorse/prompt, senza aggiungere tool; prompt `agent-guide`; descrizioni dei tool espanse; docs `docs/cli/` e `docs/mcp/`; README con sezioni CLI/MCP; riferimenti generati con `docs:build`/`docs:check`; guardrail link esteso ai nuovi hub.
+- **Test**: `npm run test:cli` 32/32; `npm run test:mcp` 20/20; `npm run smoke:cli` verde sul bundle; `npm run smoke:mcp` verde (8 tool, risorsa help e fallback `help:true`); `npm run docs:check` 2 riferimenti allineati; `npm run docs:links` 94 file/285 link; gate completo `npm run check` **1534/1534**, exit 0, con depcruise/madge/filesize verdi.
+- **Decisioni**: l'help runtime resta in inglese (contratto macchina-facing); la documentazione repository resta in italiano; nessun nono tool MCP, l'help passa da instructions, risorse e prompt; i riferimenti sono generati da spec/guide e verificati in CI.
+- **Rischi**: i riferimenti vanno rigenerati con `npm run docs:build` dopo ogni modifica a `src/cli/spec.ts` o `src/mcp/guide.ts`; la configurazione host MCP non è stata provata su un client desktop reale.
+- **Prossimi 3 passi**: commit dedicato dell'ondata; verifica degli help sul pacchetto CLI e su un host MCP reale; valutare la traduzione dei riferimenti generati.
 
 ## Checkpoint MCP stdio (2026-11-12)
 
 - **Branch**: `main` · **worktree**: principale · **commit**: nessuno (modifiche MCP non committate).
-- **Chiuso**: server stdio `src/mcp/` con engine condiviso e otto tool; catalogo 71/72 con `wizard` nascosto e `assistant` escluso; `run_analysis` con cache `resultId`, diagnostica e rifiuti senza risultati finti; `get_result`/`render_chart`; path root con `realpath` e symlink; gate 4/16; cancellazione worker; bundle `dist-mcp/`; documentazione host in `docs/MCP.md`.
+- **Chiuso**: server stdio `src/mcp/` con engine condiviso e otto tool; catalogo 71/72 con `wizard` nascosto e `assistant` escluso; `run_analysis` con cache `resultId`, diagnostica e rifiuti senza risultati finti; `get_result`/`render_chart`; path root con `realpath` e symlink; gate 4/16; cancellazione worker; bundle `dist-mcp/`; documentazione host in `docs/mcp/README.md`.
 - **Test**: `npm run test:mcp` 15/15 sul bundle costruito, inclusi timeout, cancellazione, coda `E_BUSY`, file troppo grandi, progress e purezza stdio; `npm run smoke:mcp` verde; gate completo `npm run check` 1523/1523, depcruise/madge/filesize/docs:links verdi.
 - **Decisioni**: tutti i tool pubblicano `outputSchema`; niente scritture su disco; wizard solo con `includeHidden`; cache 10 min/20 risultati/20 MB.
 - **Rischi**: bundle MCP da 12,6 MB; configurazione host non ancora provata su Claude Desktop/Cursor; il test di cancellazione usa il tool diretto e verifica cache/risposta, non ispeziona il conteggio dei worker.

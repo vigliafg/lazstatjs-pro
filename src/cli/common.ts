@@ -3,50 +3,8 @@ import { parseArgs } from 'node:util';
 import { EngineError, DEFAULT_TIMEOUT_MS } from '../engine';
 import type { RunEnvelope } from '../engine';
 import type { ChartsMode, RenderFormat } from './output';
+import { CLI_PARSE_OPTIONS } from './spec';
 import type { CliIo, ParsedCli } from './types';
-
-const cliOptions = {
-  help: { type: 'boolean', short: 'h' },
-  version: { type: 'boolean' },
-  json: { type: 'boolean' },
-  family: { type: 'string' },
-  all: { type: 'boolean' },
-  data: { type: 'string' },
-  project: { type: 'string' },
-  analysis: { type: 'string' },
-  params: { type: 'string' },
-  'params-file': { type: 'string' },
-  set: { type: 'string', multiple: true },
-  ci: { type: 'string' },
-  'report-locale': { type: 'string' },
-  format: { type: 'string' },
-  result: { type: 'string' },
-  jobs: { type: 'string' },
-  concurrency: { type: 'string' },
-  'continue-on-error': { type: 'boolean' },
-  out: { type: 'string' },
-  charts: { type: 'string' },
-  'include-data': { type: 'boolean' },
-  'include-data-sheet': { type: 'boolean' },
-  timestamps: { type: 'boolean' },
-  quiet: { type: 'boolean' },
-  verbose: { type: 'boolean' },
-  sheet: { type: 'string' },
-  delimiter: { type: 'string' },
-  header: { type: 'boolean' },
-  'no-header': { type: 'boolean' },
-  'decimal-comma': { type: 'boolean' },
-  'format-input': { type: 'string' },
-  types: { type: 'string' },
-  missing: { type: 'string' },
-  rows: { type: 'string' },
-  'max-rows': { type: 'string' },
-  diagnostics: { type: 'string' },
-  'include-row-numbers': { type: 'boolean' },
-  timings: { type: 'boolean' },
-  timeout: { type: 'string' },
-  workers: { type: 'string' },
-} as const;
 
 export const parseCli = (args: string[]): ParsedCli => {
   // `--quiet=false` is documented for scripts; node:util only accepts
@@ -58,7 +16,7 @@ export const parseCli = (args: string[]): ParsedCli => {
   });
   const parsed = parseArgs({
     args: normalizedArgs,
-    options: cliOptions,
+    options: CLI_PARSE_OPTIONS,
     allowPositionals: true,
     strict: true,
   });

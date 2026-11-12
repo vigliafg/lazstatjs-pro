@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/server';
 import type { CallToolResult, ServerContext } from '@modelcontextprotocol/server';
 import { z } from 'zod';
 import { toolError } from './errors';
+import { MCP_INSTRUCTIONS, toolDescription } from './guide';
 import { RunGate } from './gate';
 import { MCP_NAME, MCP_VERSION, MAX_TOOL_INPUT_ELEMENTS } from './limits';
 import type { PathGuard } from './paths';
@@ -12,6 +13,7 @@ import {
   describeAnalysisInput,
   describeAnalysisTool,
   describeAnalysisOutput,
+  engineInfoInput,
   engineInfoOutput,
   engineInfoTool,
   listAnalysesInput,
@@ -57,10 +59,7 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     { name: MCP_NAME, version: MCP_VERSION },
     {
       maxToolInputElements: MAX_TOOL_INPUT_ELEMENTS,
-      instructions:
-        'Read-only LazStats engine. Use list_analyses/describe_analysis before run_analysis. ' +
-        'Provide exactly one source (dataPath, projectPath or data). Paths are confined to the MCP root. ' +
-        'Keep resultId for paginated reads and chart rendering.',
+      instructions: MCP_INSTRUCTIONS,
     }
   );
 
@@ -68,18 +67,19 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     'engine_info',
     {
       title: 'Engine information',
-      description: 'Return engine version, catalog counts, capabilities and MCP limits.',
+      description: toolDescription('engine_info'),
+      inputSchema: engineInfoInput,
       outputSchema: engineInfoOutput,
       annotations: { readOnlyHint: true },
     },
-    safe(async () => engineInfoTool())
+    safe(async args => engineInfoTool(args as z.infer<typeof engineInfoInput>))
   );
 
   server.registerTool(
     'list_analyses',
     {
       title: 'List analyses',
-      description: 'List runnable analyses, optionally filtered by text or family.',
+      description: toolDescription('list_analyses'),
       inputSchema: listAnalysesInput,
       outputSchema: listAnalysesOutput,
       annotations: { readOnlyHint: true },
@@ -91,7 +91,7 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     'describe_analysis',
     {
       title: 'Describe analysis',
-      description: 'Return the schema, roles, defaults and example parameters of one analysis.',
+      description: toolDescription('describe_analysis'),
       inputSchema: describeAnalysisInput,
       outputSchema: describeAnalysisOutput,
       annotations: { readOnlyHint: true },
@@ -103,7 +103,7 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     'inspect_dataset',
     {
       title: 'Inspect dataset',
-      description: 'Read dataset metadata, columns and a small preview without running an analysis.',
+      description: toolDescription('inspect_dataset'),
       inputSchema: inspectDatasetInput,
       outputSchema: inspectDatasetOutput,
       annotations: { readOnlyHint: true },
@@ -117,8 +117,7 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     'run_analysis',
     {
       title: 'Run analysis',
-      description:
-        'Run one analysis from dataPath, projectPath or inline data. Returns a resultId for get_result.',
+      description: toolDescription('run_analysis'),
       inputSchema: runAnalysisInput,
       outputSchema: runOutputSchema,
     },
@@ -149,7 +148,7 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     'get_result',
     {
       title: 'Get result',
-      description: 'Read a cached result section with pagination by resultId.',
+      description: toolDescription('get_result'),
       inputSchema: getResultInput,
       outputSchema: getResultOutput,
       annotations: { readOnlyHint: true },
@@ -161,7 +160,7 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     'render_chart',
     {
       title: 'Render chart',
-      description: 'Render one chart from a cached result as SVG, or return its compiled Vega-Lite spec.',
+      description: toolDescription('render_chart'),
       inputSchema: renderChartInput,
       outputSchema: renderChartOutput,
       annotations: { readOnlyHint: true },
@@ -173,7 +172,7 @@ export const createMcpServer = (options: McpServerOptions): McpServer => {
     'validate_project',
     {
       title: 'Validate project',
-      description: 'Validate a .lzs project and return its metadata without modifying it.',
+      description: toolDescription('validate_project'),
       inputSchema: validateProjectInput,
       outputSchema: validateProjectOutput,
       annotations: { readOnlyHint: true },

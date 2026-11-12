@@ -10,6 +10,8 @@ LazStats JS provides a spreadsheet-like data editor and a full suite of parametr
 
 **Guida per blocchi di funzionalità:** [`docs/guide/README.md`](docs/guide/README.md) · **English guide:** [`docs/guide/en/README.md`](docs/guide/en/README.md) — dati, scelta dell'analisi, Assistant nel workflow, parametri, tabelle, report, grafici, chart editor, validazione, lingue e confronto con JMP/SPSS/R.
 
+**CLI:** [`docs/cli/README.md`](docs/cli/README.md) — catalogo, esecuzione, batch, report e guida agente. **MCP:** [`docs/mcp/README.md`](docs/mcp/README.md) — server stdio, tool, help runtime e integrazione host.
+
 ## Features
 
 ### Data Editor
@@ -181,6 +183,68 @@ so unsigned DMG users must install the next release manually.
 npm run lint
 ```
 
+## Command line
+
+The CLI runs the same engine headlessly and emits a JSON envelope or a rendered report. See [`docs/cli/README.md`](docs/cli/README.md) for the full guide and [`docs/cli/riferimento.md`](docs/cli/riferimento.md) for the generated contract.
+
+```bash
+npm run build:cli
+node dist-cli/lazstats.mjs --help
+
+node dist-cli/lazstats.mjs analyses --json
+node dist-cli/lazstats.mjs schema descriptive --json
+node dist-cli/lazstats.mjs inspect samples/descriptive/iris/data.csv --json
+node dist-cli/lazstats.mjs run \
+  --data samples/descriptive/iris/data.csv \
+  --analysis descriptive \
+  --set descVars=Sepal.Length,Sepal.Width \
+  --json
+```
+
+| Command | Use |
+| --- | --- |
+| `analyses` | Runnable catalog (71 visible; 72 with `--all`) |
+| `schema` | Roles, defaults and example parameters |
+| `inspect` | Dataset columns, types and preview |
+| `run` | Run from `--data` or `--project` |
+| `project inspect` / `project run` | Validate or run a `.lzs` project |
+| `batch` | Multiple jobs into separate directories |
+| `render` | Render an existing successful JSON envelope |
+
+Help is exhaustive and agent-friendly: `lazstats help <command>`, `lazstats <command> --help`, and `--json` for a stable contract. The [agent guide](docs/cli/guida-agente.md) covers parameter precedence, envelopes, batch files and exit codes.
+
+## MCP server
+
+`lazstats-mcp` exposes the engine over stdio without network, shell, eval or file writes. See [`docs/mcp/README.md`](docs/mcp/README.md) for setup and [`docs/mcp/riferimento.md`](docs/mcp/riferimento.md) for the generated tool reference.
+
+```bash
+npm run build:mcp
+node dist-mcp/lazstats-mcp.mjs --root /absolute/data
+```
+
+```json
+{
+  "mcpServers": {
+    "lazstats": {
+      "command": "node",
+      "args": ["/absolute/lazstatjs-pro/dist-mcp/lazstats-mcp.mjs"],
+      "env": { "LAZSTATS_MCP_ROOT": "/absolute/data" }
+    }
+  }
+}
+```
+
+| Tool | Use |
+| --- | --- |
+| `engine_info` | Versions, capabilities, limits and help topics |
+| `list_analyses` / `describe_analysis` | Catalog discovery and procedure contract |
+| `inspect_dataset` | Columns and bounded preview |
+| `run_analysis` | One run from a path, project or inline data |
+| `get_result` / `render_chart` | Cached sections and SVG/spec charts |
+| `validate_project` | Read-only `.lzs` validation |
+
+The server sends a workflow in its `instructions`, serves `lazstats://help` plus ten topics, exposes `engine_info.documentation`, and provides the `agent-guide` prompt. The [agent guide](docs/mcp/guida-agente.md) and [error recovery](docs/mcp/errori.md) cover the operational contract.
+
 ## Project Structure
 
 ```
@@ -204,6 +268,8 @@ lazstatjs/
     ├── io/                 # Smart IO (detect/readers/writers, xlsx, import wizard, export dialog),
     │                       #   table TSV copy, chart PNG export, printable HTML report,
     │                       #   .lzs project schema + autosave storage, output snapshots
+    ├── cli/                # Headless CLI: command catalog, help, batch and renderers
+    ├── mcp/                # stdio MCP server, guide, tools, resources and prompts
     ├── help/               # In-app HELP tab content (plain data) and its renderer
     ├── components/         # Reusable ResultTable and AnalysisReport renderers
     └── index.css           # Tailwind styles + dark theme
@@ -216,6 +282,9 @@ lazstatjs/
 - **`src/stats/report.ts`** — Builds the plain-language `ReportSpec` for each analysis by reading the already computed tables (headline, effect size, assumptions, glossary, limits). Because it never recomputes statistics, the prose cannot disagree with the numbers and follows the selected CI level. The newer modules (`contingency`, `factorial`, `logistic`, `distfit`, `samplesize`) keep their report builder next to the computation.
 - **`src/analyses/`** — One form + one pure builder per procedure, wired through the registry and the controlled analysis store. Forms only edit their parameter slice; runners return tables, charts and the written report. The Wizard does not re-implement tests: it opens the real panel with `onOpenAnalysis`.
 - **`src/components/AnalysisReport.tsx`** — Renders that report as a card closing every run of an analysis, after all tables and charts.
+- **`src/cli/spec.ts`** — Single source of truth for CLI commands, arguments, options, defaults, examples and exit codes; the parser and every help surface are derived from it.
+- **`src/cli/help.ts`** — Global, per-command and JSON help; `src/cli/run.ts` dispatches the `help` command and `<command> --help` without running an analysis.
+- **`src/mcp/guide.ts`** — Canonical MCP workflow, tool contracts, error recovery and help topics used by server instructions, resources, prompts and docs.
 - **`src/help/helpContent.ts`** — The whole in-app guide as plain data (tabs, sections, blocks, steps, examples, tables, tips) so the wording can be reviewed and tested without a DOM; `src/help/HelpPanel.tsx` renders it with a tab bar and numbered steps.
 - **`src/grid/types.ts`** — Column types plus the categorical-level model (`levels`, `reference`), group-column detection and the label substitution used by the analyses.
 - **`src/grid/LevelsEditor.tsx`** — Reusable group modal with a trigger button and two modes: *Levels* (code, label, order, reference, per-code row count, "Read data", add/remove) and *Recode values* (rename, merge, clear the group codes with a live preview). Shared by the data-grid header and the analysis group selectors, so one Apply is one undo step wherever it is opened.
@@ -240,8 +309,14 @@ lazstatjs/
 | `npm run test:samples` | Validate every committed sample in all five formats |
 | `npm run samples:generate` | Regenerate the sample files from R (requires `Rscript` + `haven`) |
 | `npm run test:e2e` | Run the Playwright suite (grid + analysis, desktop + mobile) |
-| `npm run check` | Type-check, unit tests, dependency-cruiser, madge and file-size guard |
-| `npm run guard` | Architecture and size guards only |
+| `npm run build:cli` | Build `dist-cli/lazstats.mjs` and the worker bundle |
+| `npm run build:mcp` | Build `dist-mcp/lazstats-mcp.mjs` and the worker bundle |
+| `npm run cli` / `npm run mcp` | Run the TypeScript CLI / MCP server in development |
+| `npm run test:cli` / `npm run test:mcp` | Focused CLI and MCP suites |
+| `npm run smoke:cli` / `npm run smoke:mcp` | Packaged-bundle smoke tests |
+| `npm run docs:build` / `npm run docs:check` | Regenerate / verify CLI and MCP reference pages |
+| `npm run check` | Type-check, unit tests, docs check, dependency-cruiser, madge and file-size guard |
+| `npm run guard` | Architecture, size and documentation-link guards |
 
 ## Notes
 

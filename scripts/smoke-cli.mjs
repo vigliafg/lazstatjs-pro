@@ -26,6 +26,12 @@ const run = args =>
 
 const version = run(['--version']).trim();
 assert.equal(version, packageVersion);
+const help = run(['--help']);
+assert.match(help, /Commands:/);
+assert.match(help, /--report-locale/);
+const runHelp = JSON.parse(run(['help', 'run', '--json']));
+assert.equal(runHelp.command.id, 'run');
+assert.ok(runHelp.command.options.some(option => option.key === 'set'));
 if (process.platform !== 'win32') {
   const direct = execFileSync(cli, ['--version'], { cwd: root, encoding: 'utf8' }).trim();
   assert.equal(direct, packageVersion);

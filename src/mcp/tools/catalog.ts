@@ -8,6 +8,13 @@ import {
 } from '../../engine';
 import { z } from 'zod';
 import { McpError } from '../errors';
+import {
+  MCP_DOCUMENTATION,
+  MCP_HELP_TOPIC_IDS,
+  helpTopic,
+  renderGuide,
+  renderTopic,
+} from '../guide';
 import { MCP_VERSION } from '../limits';
 
 const ok = (text: string, structuredContent: Record<string, unknown>): CallToolResult => ({
@@ -15,10 +22,34 @@ const ok = (text: string, structuredContent: Record<string, unknown>): CallToolR
   structuredContent,
 });
 
-export const engineInfoTool = (): CallToolResult => {
+export const engineInfoInput = z.object({
+  help: z.boolean().optional(),
+  topic: z.string().optional(),
+});
+
+export type EngineInfoArgs = z.infer<typeof engineInfoInput>;
+
+export const engineInfoTool = (args: EngineInfoArgs = {}): CallToolResult => {
   const info = engineInfo(MCP_VERSION, RUNNER_COUNT, CHART_KIND_COUNT);
+  const topic = args.topic ? helpTopic(args.topic) : undefined;
+  if (args.topic && !topic) {
+    throw new McpError({
+      code: 'E_ARGS',
+      kind: 'unknown_help_topic',
+      stage: 'args',
+      message: `Unknown help topic: ${args.topic}`,
+      details: { topic: args.topic, topics: MCP_HELP_TOPIC_IDS },
+    });
+  }
+  const documentation = {
+    ...MCP_DOCUMENTATION,
+    ...(args.help ? { guideText: renderGuide() } : {}),
+    ...(topic ? { topic: { id: topic.id, title: topic.title, markdown: renderTopic(topic.id) } } : {}),
+  };
   return ok(
-    `LazStats engine ${MCP_VERSION}: ${RUNNER_COUNT} runners, ${CHART_KIND_COUNT} chart kinds.`,
+    `LazStats engine ${MCP_VERSION}: ${RUNNER_COUNT} runners, ${CHART_KIND_COUNT} chart kinds.${
+      args.help ? ' Full agent guide included.' : topic ? ` Help topic: ${topic.title}.` : ''
+    }`,
     {
       ...info,
       engineSchemaVersion: 1,
@@ -39,6 +70,7 @@ export const engineInfoTool = (): CallToolResult => {
         maxQueuedRuns: 16,
         timeoutMs: 120_000,
       },
+      documentation,
     }
   );
 };
@@ -72,6 +104,19 @@ export const engineInfoOutput = z.object({
     maxConcurrentRuns: z.number(),
     maxQueuedRuns: z.number(),
     timeoutMs: z.number(),
+  }),
+  documentation: z.object({
+    version: z.number(),
+    guide: z.string(),
+    topics: z.array(z.string()),
+    guideText: z.string().optional(),
+    topic: z
+      .object({
+        id: z.string(),
+        title: z.string(),
+        markdown: z.string(),
+      })
+      .optional(),
   }),
 });
 
