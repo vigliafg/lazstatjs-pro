@@ -50,7 +50,7 @@ export const ExportMenu = ({ ariaLabel, label, title, items, compact }: ExportMe
     <div ref={root} className="relative" data-no-print>
       <button
         type="button"
-        className={`tb-btn flex items-center gap-1 ${
+        className={`tb-btn group-btn flex items-center gap-1 ${
           compact ? 'h-5 px-1.5 py-0.5 text-[10px]' : 'px-2 py-0.5 text-[10px]'
         }`}
         onClick={() => setOpen(value => !value)}

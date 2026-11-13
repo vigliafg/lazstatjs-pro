@@ -85,7 +85,6 @@ export interface DataTabProps {
   saveProjectFileAs: () => void;
   openProjectFile: (file: File) => Promise<void>;
   openProjectDialog: () => void;
-  lastAutosave: string | null;
   showToast: (title: string, msg: string, type?: 'ok' | 'warn' | 'error') => void;
   validation: { ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] };
   setValidation: Dispatch<SetStateAction<{ ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] }>>;
@@ -146,7 +145,6 @@ export const DataTab = ({
   saveProjectFileAs,
   openProjectFile,
   openProjectDialog,
-  lastAutosave,
   showToast,
   validation,
   setValidation,
@@ -187,28 +185,38 @@ export const DataTab = ({
   <>
 <div className="flex-1 flex flex-col overflow-hidden">
   <div role="toolbar" aria-label={t('data.toolbar')} className="bg-surface border-b border-border p-1.5 flex flex-wrap items-center gap-2 shrink-0">
-    <div role="group" aria-label={t('data.groupFile')} className="flex flex-wrap items-center gap-2">
-    <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-2">{t('data.file')}:</span>
-    <ToolbarButton icon={FilePlus2} label={t('data.new')} onClick={onNewDataset} />
-    <ToolbarButton icon={Upload} label={t('data.import')} onClick={() => csvInputRef.current?.click()} />
-    <ToolbarButton icon={FileDown} label={t('data.export')} onClick={exportCsv} />
-    <div className="h-4 w-px bg-border mx-1" />
+    <div role="group" aria-label={t('data.groupData')} className="flex flex-wrap items-center gap-2">
+    <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-1">{t('data.groupData')}:</span>
+    <ToolbarButton
+      icon={Upload}
+      label={t('data.import')}
+      labelVisibility="lg"
+      onClick={() => csvInputRef.current?.click()}
+    />
+    <ToolbarButton icon={FileDown} label={t('data.export')} labelVisibility="lg" onClick={exportCsv} />
+    </div>
+    <div role="group" aria-label={t('data.groupProject')} className="flex flex-wrap items-center gap-2">
+    <span className="font-mono text-[10px] text-text3 uppercase tracking-widest px-1">{t('data.groupProject')}:</span>
+    <ToolbarButton icon={FilePlus2} label={t('data.new')} labelVisibility="lg" onClick={onNewDataset} />
     <ToolbarButton
       icon={FolderOpen}
       label={t('data.openProject')}
       hint={t('data.openHint')}
+      labelVisibility="lg"
       onClick={openProjectDialog}
     />
     <ToolbarButton
       icon={Save}
       label={t('data.saveProject')}
       hint={t('data.saveHint')}
+      labelVisibility="lg"
       onClick={saveProjectFile}
     />
     <ToolbarButton
       icon={SaveAll}
       label={t('data.saveAs')}
       hint={t('data.saveAsHint')}
+      labelVisibility="lg"
       onClick={saveProjectFileAs}
       data-project-save-as=""
     />
@@ -223,17 +231,12 @@ export const DataTab = ({
         event.target.value = '';
       }}
     />
-    {lastAutosave && (
-      <span
-        className="hidden font-mono text-[9px] text-text3 uppercase tracking-wider lg:inline"
-        title={t('data.autosaveHint')}
-      >
-        {t('data.autosave')} {lastAutosave}
-      </span>
-    )}
     </div>
-    <div className="h-4 w-px bg-border mx-1" />
-    <div role="group" aria-label={t('data.groupEdit')} className="flex flex-wrap items-center gap-2">
+    <div
+      role="group"
+      aria-label={t('data.groupEdit')}
+      className="flex flex-wrap items-center gap-2 border-l border-border pl-2"
+    >
     <ToolbarButton
       icon={Undo2}
       label={t('data.undo')}
@@ -260,8 +263,11 @@ export const DataTab = ({
         event.target.value = '';
       }}
     />
-    <div className="h-4 w-px bg-border mx-2" />
-    <div role="group" aria-label={t('data.groupTools')} className="flex flex-wrap items-center gap-2">
+    <div
+      role="group"
+      aria-label={t('data.groupTools')}
+      className="flex flex-wrap items-center gap-2 border-l border-border pl-2"
+    >
     <ToolbarButton
       icon={ShieldCheck}
       label={t('data.validate')}
@@ -288,8 +294,11 @@ export const DataTab = ({
       }}
     />
     </div>
-    <div className="h-4 w-px bg-border mx-1" />
-    <div role="group" aria-label={t('data.groupView')} className="flex flex-wrap items-center gap-2">
+    <div
+      role="group"
+      aria-label={t('data.groupView')}
+      className="flex flex-wrap items-center gap-2 border-l border-border pl-2"
+    >
     <ToolbarButton
       icon={Pin}
       label={t('data.freezeCol')}

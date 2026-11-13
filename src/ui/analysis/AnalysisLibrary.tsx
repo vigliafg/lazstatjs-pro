@@ -207,6 +207,7 @@ export const AnalysisLibrary = ({
       id={id}
       tabIndex={-1}
       aria-label={t('analysis.libraryTitle')}
+      data-button-group="library"
       className="flex h-full min-h-0 w-full flex-col border-r border-border bg-surface outline-none"
     >
       <div className="shrink-0 border-b border-border p-3">
@@ -227,9 +228,7 @@ export const AnalysisLibrary = ({
                 aria-pressed={alphabetical}
                 aria-label={t('analysis.sortAz')}
                 title={t('analysis.flatAz')}
-                className={`rounded border px-1 font-mono text-[8px] ${
-                  alphabetical ? 'border-accent text-accent' : 'border-border2 text-text3'
-                }`}
+                className="group-btn rounded border px-1 font-mono text-[8px]"
               >
                 {t('analysis.az')}
               </button>
@@ -326,7 +325,7 @@ export const AnalysisLibrary = ({
                 <button
                   key={id}
                   type="button"
-                  className="tb-btn px-1.5 py-0.5 text-[9px]"
+                  className="tb-btn group-btn px-1.5 py-0.5 text-[9px]"
                   onClick={() => {
                     dismissWelcome();
                     onSelect(id);

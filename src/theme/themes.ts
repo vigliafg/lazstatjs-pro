@@ -220,7 +220,7 @@ export const THEMES = [
   },
   {
     id: 'midnight',
-    name: 'Midnight',
+    name: 'Midnight color',
     mode: 'dark',
     tokens: {
       bg: '#0a1020',
@@ -229,14 +229,14 @@ export const THEMES = [
       surface3: '#223250',
       border: '#ffffff',
       border2: '#ffffff',
-      accent: '#60a5fa',
-      accent2: '#34d399',
+      accent: '#22d3ee',
+      accent2: '#60a5fa',
       onAccent: '#0a1020',
       onAccent2: '#0a1020',
       green: '#4ade80',
       yellow: '#fbbf24',
       red: '#f87171',
-      purple: '#c084fc',
+      purple: '#a78bfa',
       text: '#ffffff',
       text2: '#ffffff',
       text3: '#ffffff',
@@ -248,7 +248,40 @@ export const THEMES = [
       muted: '#bfdbfe',
       grid: '#1e3a5f',
       axis: '#2c4a72',
-      palette: ['#60a5fa', '#34d399', '#fbbf24', '#c084fc', '#f87171', '#22d3ee'],
+      palette: ['#22d3ee', '#4ade80', '#fbbf24', '#a78bfa', '#f472b6', '#60a5fa'],
+    },
+  },
+  {
+    id: 'misty',
+    name: 'Misty color',
+    mode: 'light',
+    tokens: {
+      bg: '#eef4f8',
+      surface: '#f7fbfd',
+      surface2: '#e4eef6',
+      surface3: '#d7e5f0',
+      border: '#b8cbd9',
+      border2: '#9fb4c4',
+      accent: '#0c6b84',
+      accent2: '#1d4ed8',
+      onAccent: '#ffffff',
+      onAccent2: '#ffffff',
+      green: '#127137',
+      yellow: '#8f5607',
+      red: '#b91c1c',
+      purple: '#6d28d9',
+      text: '#0a1020',
+      text2: '#1e293b',
+      text3: '#334155',
+    },
+    chart: {
+      background: '#eef4f8',
+      surface: '#f7fbfd',
+      text: '#0a1020',
+      muted: '#334155',
+      grid: '#cbd5e1',
+      axis: '#94a3b8',
+      palette: ['#0c6b84', '#127137', '#8f5607', '#6d28d9', '#be185d', '#1d4ed8'],
     },
   },
   {
@@ -467,6 +500,38 @@ export const themeById = (value: unknown): ThemeDefinition =>
 export const themesByMode = (mode: ThemeMode): readonly ThemeDefinition[] =>
   THEMES.filter(theme => theme.mode === mode);
 
+/** Groups of buttons that share a coloured identity across the interface. */
+export const BUTTON_GROUP_IDS = [
+  'transform',
+  'clean',
+  'panels',
+  'library',
+  'run',
+  'output',
+] as const;
+
+export type ButtonGroupId = (typeof BUTTON_GROUP_IDS)[number];
+
+/** Chosen "Segnali" palette: one stable hue per group on dark surfaces. */
+const DARK_GROUP_COLOURS: Readonly<Record<ButtonGroupId, string>> = {
+  transform: '#22d3ee',
+  clean: '#fbbf24',
+  panels: '#a78bfa',
+  library: '#60a5fa',
+  run: '#4ade80',
+  output: '#f472b6',
+};
+
+/** The same Segnali hues, darkened for the light "Misty color" surface. */
+const MISTY_GROUP_COLOURS: Readonly<Record<ButtonGroupId, string>> = {
+  transform: '#0c6b84',
+  clean: '#8f5607',
+  panels: '#6d28d9',
+  library: '#1d4ed8',
+  run: '#127137',
+  output: '#be185d',
+};
+
 /** Names of the CSS custom properties written by `applyTheme`. */
 export const CSS_VARIABLE_NAMES: Readonly<Record<keyof ThemeTokens, string>> = {
   bg: '--color-bg',
@@ -500,6 +565,94 @@ export const UI_INK: Readonly<Record<ThemeMode, string>> = {
   dark: '#ffffff',
 };
 
+const parseHex = (value: string): [number, number, number] => {
+  const hex = value.replace('#', '');
+  return [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16) / 255) as [
+    number,
+    number,
+    number,
+  ];
+};
+
+const hexOf = (rgb: readonly number[]): string =>
+  `#${rgb.map(value => Math.round(value * 255).toString(16).padStart(2, '0')).join('')}`;
+
+const luminance = (value: string): number => {
+  const [red, green, blue] = parseHex(value).map(channel =>
+    channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+  );
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+};
+
+const contrastRatio = (first: string, second: string): number => {
+  const [high, low] = [luminance(first), luminance(second)].sort((left, right) => right - left);
+  return (high + 0.05) / (low + 0.05);
+};
+
+/** Mix `color` over `background`; `amount` is the share of the first colour. */
+const mixHex = (color: string, background: string, amount: number): string => {
+  const foreground = parseHex(color);
+  const behind = parseHex(background);
+  return hexOf(foreground.map((channel, index) => channel * amount + behind[index] * (1 - amount)));
+};
+
+/**
+ * Keep the group hue while guaranteeing a readable pair. Dark backgrounds
+ * already exceed AAA; light themes darken the semantic hue slightly until the
+ * normal and the inverted (hover/active) state both reach AA.
+ */
+const accessibleGroup = (
+  color: string,
+  background: string,
+  tint: number,
+  minimum: number,
+  light: boolean
+): { text: string; background: string } => {
+  let text = color;
+  const step = light ? '#000000' : '#ffffff';
+  for (let index = 0; index < 40; index += 1) {
+    const mixed = mixHex(text, background, tint);
+    if (contrastRatio(text, mixed) >= minimum) return { text, background: mixed };
+    text = mixHex(text, step, 0.96);
+  }
+  return { text, background: mixHex(text, background, tint) };
+};
+
+const groupColoursOf = (theme: ThemeDefinition): Record<string, string> => {
+  const light = theme.mode === 'light';
+  const text: Record<ButtonGroupId, string> = light
+    ? theme.id === 'misty'
+      ? MISTY_GROUP_COLOURS
+      : {
+          transform: theme.tokens.accent2,
+          clean: theme.tokens.yellow,
+          panels: theme.tokens.purple,
+          library: theme.tokens.accent,
+          run: theme.tokens.green,
+          output: theme.tokens.red,
+        }
+    : DARK_GROUP_COLOURS;
+  const variables: Record<string, string> = {};
+  for (const id of BUTTON_GROUP_IDS) {
+    const pair = accessibleGroup(
+      text[id],
+      theme.tokens.bg,
+      light ? 0.1 : 0.14,
+      light ? 4.5 : 7,
+      light
+    );
+    variables[`--group-${id}`] = pair.text;
+    variables[`--group-${id}-bg`] = pair.background;
+  }
+  return variables;
+};
+
+/** Every group variable, useful to completeness checks and the theme preview. */
+export const GROUP_CSS_VARIABLE_NAMES = BUTTON_GROUP_IDS.flatMap(id => [
+  `--group-${id}`,
+  `--group-${id}-bg`,
+]);
+
 export const cssVariablesOf = (theme: ThemeDefinition): Record<string, string> => {
   const ink = UI_INK[theme.mode];
   const tokens: ThemeTokens = {
@@ -510,10 +663,13 @@ export const cssVariablesOf = (theme: ThemeDefinition): Record<string, string> =
     border: ink,
     border2: ink,
   };
-  return Object.fromEntries(
-    (Object.keys(CSS_VARIABLE_NAMES) as (keyof ThemeTokens)[]).map(key => [
-      CSS_VARIABLE_NAMES[key],
-      tokens[key],
-    ])
-  );
+  return {
+    ...Object.fromEntries(
+      (Object.keys(CSS_VARIABLE_NAMES) as (keyof ThemeTokens)[]).map(key => [
+        CSS_VARIABLE_NAMES[key],
+        tokens[key],
+      ])
+    ),
+    ...groupColoursOf(theme),
+  };
 };

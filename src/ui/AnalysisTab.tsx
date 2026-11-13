@@ -182,7 +182,10 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
   return (
     <AnalysisStoreProvider params={props.params} onChange={props.setParams}>
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
-      <div className="flex h-9 shrink-0 items-center gap-1 border-b border-border bg-surface px-2">
+      <div
+        data-button-group="panels"
+        className="flex h-9 shrink-0 items-center gap-1 border-b border-border bg-surface px-2"
+      >
         <div className="flex items-center gap-0.5 rounded border border-border2 bg-surface3/60 p-0.5 lg:hidden">
           {(['library', 'options', 'output'] as const).map(item => (
             <button
@@ -203,9 +206,9 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
           <ToolbarButton
             icon={PanelLeft}
             label={t('analysis.library')}
+            group="panels"
             size="sm"
             labelVisibility="always"
-            className={showLibrary ? 'text-text' : 'text-text3'}
             aria-pressed={showLibrary}
             onClick={toggleLibrary}
             title={showLibrary ? t('analysis.hideLibrary') : t('analysis.showLibrary')}
@@ -213,9 +216,9 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
           <ToolbarButton
             icon={SlidersHorizontal}
             label={t('analysis.setup')}
+            group="panels"
             size="sm"
             labelVisibility="always"
-            className={showOptions ? 'text-text' : 'text-text3'}
             aria-pressed={showOptions}
             onClick={toggleOptions}
             title={showOptions ? t('analysis.hideSetup') : t('analysis.showSetup')}
@@ -230,9 +233,9 @@ export const AnalysisTab = (props: AnalysisTabProps) => {
           <ToolbarButton
             icon={focusOutput ? Minimize2 : Maximize2}
             label={focusOutput ? t('analysis.showSetup') : t('analysis.focusOutput')}
+            group="panels"
             size="sm"
             labelVisibility="xl"
-            className={focusOutput ? 'border-accent bg-accent/10 text-text' : ''}
             aria-pressed={focusOutput}
             onClick={toggleFocus}
             aria-label={focusOutput ? t('analysis.showPanels') : t('analysis.focusOutput')}

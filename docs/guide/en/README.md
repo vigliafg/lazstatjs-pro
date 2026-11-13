@@ -130,5 +130,9 @@ guard` checks that they really exist.
   theme; `help:build`/`help:audit` re-run and the web build published to GitHub
   Pages from the tag.
 - Release 0.32.0: unified Assistant (data/analysis path, readiness, chain,
-  diagram and report card), Mist and Midnight themes, Assistant help page
+  diagram and report card), Mist and Midnight color themes, Assistant help page
   rewritten in all six languages; web and installers built from the release.
+- Release 0.35.0: `lazstats` CLI and `lazstats-mcp` server published as
+  standalone tarballs; colour-coded command groups with accessible contrast,
+  Midnight color and Misty color themes, Data/Project toolbar, autosave in the
+  status bar and “New dataset” aligned across all six languages.

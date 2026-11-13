@@ -67,6 +67,7 @@ export const SessionReportToolbar = ({
   onOpenBuilder,
 }: SessionReportToolbarProps) => (
   <div
+    data-button-group="output"
     className="flex flex-wrap items-center gap-1 border-b border-border bg-surface/70 px-1 py-1.5"
     data-no-print
   >
@@ -184,6 +185,7 @@ export const SessionReportToolbar = ({
     <ToolbarButton
       icon={Trash2}
       label={t('output.clear')}
+      group="output"
       size="sm"
       labelVisibility="xl"
       className={actionClass}
@@ -195,6 +197,7 @@ export const SessionReportToolbar = ({
     <ToolbarButton
       icon={Copy}
       label={t('output.copy')}
+      group="output"
       size="sm"
       labelVisibility="xl"
       className={actionClass}
@@ -206,6 +209,7 @@ export const SessionReportToolbar = ({
     <ToolbarButton
       icon={Image}
       label={t('output.charts')}
+      group="output"
       size="sm"
       labelVisibility="xl"
       className={actionClass}
@@ -217,6 +221,7 @@ export const SessionReportToolbar = ({
     <ToolbarButton
       icon={Table2}
       label={t('output.xlsx')}
+      group="output"
       size="sm"
       labelVisibility="xl"
       className={`${actionClass} ml-auto`}

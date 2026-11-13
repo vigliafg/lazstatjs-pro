@@ -36,6 +36,8 @@ const DYNAMIC_KEYS = new Set([
   'settings.themeEditTab',
   'assistant.recommend.none',
   'assistant.recommend.empty',
+  // The Assistant file step resolves this through its typed data tree.
+  'data.file',
 ]);
 
 const walk = (directory: string): string[] =>

@@ -46,7 +46,7 @@ import {
   type SuccessEnvelope,
 } from '../engine';
 
-export const CLI_VERSION = '0.32.0';
+export const CLI_VERSION = '0.35.0';
 
 const defaultIo: CliIo = {
   out: text => process.stdout.write(text),

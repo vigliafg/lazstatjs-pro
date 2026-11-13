@@ -353,12 +353,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Guardar e reabrir um projeto',
-    summary: 'Novo projeto, ficheiros .lzs, Guardar como, gravação automática e como restaurar uma cópia de segurança.',
+    summary: 'Novo conjunto de dados, ficheiros .lzs, Guardar como, gravação automática e como restaurar uma cópia de segurança.',
     tutorial: {
       goal: 'Manter dados, definições e parâmetros para retomar amanhã.',
       dataset: 'score-groups.csv',
       steps: [
-        'Em DADOS prima Novo projeto para começar de zero: o conjunto de dados, os parâmetros e a saída são limpos, enquanto as definições e preferências se mantêm.',
+        'Em DADOS prima Novo conjunto de dados para começar de zero: o conjunto de dados, os parâmetros e a saída são limpos, enquanto as definições e preferências se mantêm.',
         'Prima Guardar projeto para escrever o ficheiro .lzs; Guardar como… pede um novo nome e deixa o ficheiro atual inalterado.',
         'Prima Abrir projeto e escolha um ficheiro para substituir a sessão atual.',
         'Recarregue a página: a gravação automática restaura a sessão a partir do navegador.',
@@ -379,7 +379,7 @@ export const areaTopics: HelpTopic[] = [
       pitfalls: [
         'A gravação automática vive no navegador: limpar os dados do site elimina-a.',
         'Um ficheiro .lzs não é uma cópia de segurança dos dados originais: guarde também o CSV de origem.',
-        'Novo projeto limpa os cartões de saída: exporte-os ou guarde-os antes, se ainda precisar deles.',
+        'Novo conjunto de dados limpa os cartões de saída: exporte-os ou guarde-os antes, se ainda precisar deles.',
         'Guardar como… cria uma cópia; as gravações seguintes usam o nome escolhido na caixa de diálogo.',
       ],
       glossary: [
@@ -394,12 +394,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'appearance',
     area: 'output',
     title: 'Temas, predefinições de gráficos e criador de temas',
-    summary: 'Dez temas incorporados, temas personalizados do projeto com pré-visualização em direto e predefinições de gráficos com nome.',
+    summary: 'Treze temas incorporados, temas personalizados do projeto com pré-visualização em direto e predefinições de gráficos com nome.',
     tutorial: {
       goal: 'Criar um tema de projeto e uma predefinição de gráfico e depois reutilizá-los.',
       dataset: 'score-groups.csv',
       steps: [
-        'Abra DEFINIÇÕES → Aspeto e escolha um dos cinco temas escuros ou cinco claros incorporados; o seletor do cabeçalho aplica-o de imediato.',
+        'Abra DEFINIÇÕES → Aspeto e escolha um dos seis temas escuros ou sete claros incorporados; o seletor do cabeçalho aplica-o de imediato.',
         'Prima Criar tema: dê-lhe um nome, escolha o tema base e o modo, edite as cores e acompanhe a pré-visualização em direto.',
         'Verifique o painel de contraste WCAG e prima Guardar tema: entra em Temas personalizados, fica selecionado e permanece no projeto.',
         'Execute uma análise, abra um gráfico e use o seletor Predefinição: escolha Predefinido, Mínimo, Impressão clara ou uma das suas predefinições.',

@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  BUTTON_GROUP_IDS,
   CSS_VARIABLE_NAMES,
   DEFAULT_THEME_ID,
+  GROUP_CSS_VARIABLE_NAMES,
   THEMES,
   cssVariablesOf,
   isThemeId,
@@ -41,10 +43,10 @@ const assertContrast = (theme: ThemeDefinition, foreground: string, background: 
   );
 };
 
-test('the registry ships exactly six dark and six light themes', () => {
-  assert.equal(THEMES.length, 12);
+test('the registry ships exactly six dark and seven light themes', () => {
+  assert.equal(THEMES.length, 13);
   assert.equal(themesByMode('dark').length, 6);
-  assert.equal(themesByMode('light').length, 6);
+  assert.equal(themesByMode('light').length, 7);
   assert.equal(new Set(THEMES.map(theme => theme.id)).size, THEMES.length);
   assert.equal(new Set(THEMES.map(theme => theme.name)).size, THEMES.length);
   assert.equal(isThemeId(DEFAULT_THEME_ID), true);
@@ -67,11 +69,45 @@ test('every theme declares every UI token and chart token', () => {
     for (const key of ['text', 'text2', 'text3', 'border', 'border2'] as const) {
       assert.equal(variables[`--color-${key}`], ink, `${theme.id}.${key}`);
     }
-    assert.equal(Object.keys(variables).length, Object.keys(CSS_VARIABLE_NAMES).length);
+    assert.equal(
+      Object.keys(variables).length,
+      Object.keys(CSS_VARIABLE_NAMES).length + GROUP_CSS_VARIABLE_NAMES.length
+    );
     assert.equal(theme.chart.palette.length >= 6, true, `${theme.id}: chart palette`);
     assert.match(theme.chart.background, /^#[0-9a-f]{6}$/i);
     assertContrast(theme, theme.tokens.onAccent, theme.tokens.accent, 4.5);
     assertContrast(theme, theme.tokens.onAccent2, theme.tokens.accent2, 4.5);
+  }
+});
+
+test('Misty color mirrors the Midnight group palette on a light surface', () => {
+  const misty = themeById('misty');
+  assert.equal(misty.mode, 'light');
+  const variables = cssVariablesOf(misty);
+  assert.equal(variables['--group-output'], '#be185d');
+  assert.notEqual(variables['--group-output'], variables['--color-red']);
+  assert.notEqual(variables['--group-transform'], variables['--color-accent2']);
+});
+
+test('Misty color keeps every semantic foreground readable on its surfaces', () => {
+  const misty = themeById('misty');
+  for (const key of ['accent', 'accent2', 'green', 'yellow', 'red', 'purple'] as const) {
+    for (const background of [misty.tokens.bg, misty.tokens.surface, misty.tokens.surface3]) {
+      assertContrast(misty, misty.tokens[key], background, 4.5);
+    }
+  }
+});
+
+test('every theme exposes the six button-group colours and their backgrounds', () => {
+  for (const theme of THEMES) {
+    const variables = cssVariablesOf(theme);
+    for (const id of BUTTON_GROUP_IDS) {
+      const text = variables[`--group-${id}`];
+      const background = variables[`--group-${id}-bg`];
+      assert.match(text, /^#[0-9a-f]{6}$/i, `${theme.id}.${id}`);
+      assert.match(background, /^#[0-9a-f]{6}$/i, `${theme.id}.${id}.bg`);
+      assertContrast(theme, text, background, 4.5);
+    }
   }
 });
 

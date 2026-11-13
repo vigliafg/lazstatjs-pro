@@ -196,7 +196,7 @@ test.describe('Assistant data domain', () => {
   test('blocks every data action but import on an empty grid', async ({ page }) => {
     page.on('dialog', dialog => void dialog.accept());
     await page.goto('/');
-    await page.locator('[role="toolbar"]').getByRole('button', { name: 'New project', exact: true }).click();
+    await page.locator('[role="toolbar"]').getByRole('button', { name: 'New dataset', exact: true }).click();
     await openPanel(page);
 
     await expect(page.locator('[data-assistant-quality]')).toBeVisible();

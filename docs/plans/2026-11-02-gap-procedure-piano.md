@@ -872,6 +872,7 @@ numerica, salvo il Wizard che non è una procedura statistica.
 | v0.17 | W6 + W7 (15 metodi) | Survival e time series |
 | v0.18 | W8 (5 metodi) — **chiuso 2026-11-03, G8 verde** | Quality/DOE/power |
 | v0.19 | W9 (7 metodi) — **chiuso 2026-11-03, G9 verde** | Survey/ML/Advanced, copertura 73/73 |
+| v0.35.0 | CLI/MCP, temi e toolbar — **chiuso 2026-11-13** | Gate verde, tarball runtime e installer dal tag |
 
 Ogni release:
 
@@ -1178,7 +1179,7 @@ Termini da aggiungere prima della traduzione:
 | Documentazione di installazione e limiti degli eseguibili nativi | chiuso |
 | Guardia versione runtime CLI/MCP vs `package.json` | chiuso |
 
-**Prossimi 3 passi**: commit; dry-run del workflow release; valutare binari nativi firmati.
+**Prossimi 3 passi**: commit + tag `v0.35.0`; verificare il workflow release; valutare binari nativi firmati.
 
 ### 15.1 Ondata documentazione e help CLI/MCP (2026-11-12)
 

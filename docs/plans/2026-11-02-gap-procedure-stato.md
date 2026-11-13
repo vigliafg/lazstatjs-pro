@@ -1,10 +1,18 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-13 (checkpoint packaging runtime CLI/MCP)
+**Ultimo aggiornamento**: 2026-11-13 (release 0.35.0)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.5)
-**Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
-**Ondata corrente**: packaging runtime CLI/MCP — verificata, modifiche non committate
+**Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci; release 0.35.0 in pubblicazione
+**Ondata corrente**: release 0.35.0 — versioni allineate, gate e tag da completare
+
+## Checkpoint rilascio 0.35.0 (2026-11-13)
+
+- **Branch**: `main` · **Versione**: `0.35.0` · **Tag**: `v0.35.0` sul commit di release.
+- **Chiuso**: CLI `lazstats` e server MCP `lazstats-mcp` con tarball npm autonomi; gruppi di comandi colorati con contrasto accessibile; temi Midnight color e Misty color; toolbar Dati/Progetto con autosave nella status bar; rinomina “New dataset” in tutte le lingue, nell’help, nel menu Electron e nei test e2e.
+- **Test**: gate completo verde — 1538/1538 test; `docs:check` 2 riferimenti; depcruise 1283 moduli; madge pulito; filesize 1259 file e 8 eccezioni; `docs:links` 94 file/285 link; build desktop e build web exit 0.
+- **Rischi**: la pubblicazione degli installer e della web dipende dai workflow GitHub del tag; la firma macOS resta fuori perimetro.
+- **Prossimi 3 passi**: commit + push + tag `v0.35.0`, verificare GitHub Release, tarball CLI/MCP e GitHub Pages.
 
 ## Checkpoint packaging runtime CLI/MCP (2026-11-13)
 

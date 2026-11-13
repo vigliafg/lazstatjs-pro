@@ -353,12 +353,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Guardar y reabrir un proyecto',
-    summary: 'Nuevo proyecto, archivos .lzs, Guardar como, guardado automático y cómo restaurar una copia de seguridad.',
+    summary: 'Nuevo conjunto de datos, archivos .lzs, Guardar como, guardado automático y cómo restaurar una copia de seguridad.',
     tutorial: {
       goal: 'Conservar datos, configuración y parámetros para continuar mañana.',
       dataset: 'score-groups.csv',
       steps: [
-        'Desde DATOS pulsa Nuevo proyecto para empezar de cero: se borran el conjunto de datos, los parámetros y la salida, mientras que la configuración y las preferencias se mantienen.',
+        'Desde DATOS pulsa Nuevo conjunto de datos para empezar de cero: se borran el conjunto de datos, los parámetros y la salida, mientras que la configuración y las preferencias se mantienen.',
         'Pulsa Guardar proyecto para escribir el archivo .lzs; Guardar como… pide un nombre nuevo y deja intacto el archivo actual.',
         'Pulsa Abrir proyecto y elige un archivo para sustituir la sesión actual.',
         'Recarga la página: el guardado automático restaura la sesión desde el navegador.',
@@ -379,7 +379,7 @@ export const areaTopics: HelpTopic[] = [
       pitfalls: [
         'El guardado automático vive en el navegador: borrar los datos del sitio lo elimina.',
         'Un archivo .lzs no es una copia de seguridad de los datos originales: conserva también el CSV de origen.',
-        'Nuevo proyecto borra las tarjetas de salida: expórtalas o guárdalas antes si aún las necesitas.',
+        'Nuevo conjunto de datos borra las tarjetas de salida: expórtalas o guárdalas antes si aún las necesitas.',
         'Guardar como… crea una copia; los guardados posteriores usan el nombre elegido en el aviso.',
       ],
       glossary: [
@@ -394,12 +394,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'appearance',
     area: 'output',
     title: 'Temas, preajustes de gráficos y el creador de temas',
-    summary: 'Diez temas integrados, temas personalizados del proyecto con vista previa en vivo y preajustes de gráficos con nombre.',
+    summary: 'Trece temas integrados, temas personalizados del proyecto con vista previa en vivo y preajustes de gráficos con nombre.',
     tutorial: {
       goal: 'Crear un tema de proyecto y un preajuste de gráfico, y luego reutilizarlos.',
       dataset: 'score-groups.csv',
       steps: [
-        'Abre AJUSTES → Apariencia y elige uno de los cinco temas oscuros o cinco claros integrados; el selector de la cabecera lo aplica al instante.',
+        'Abre AJUSTES → Apariencia y elige uno de los seis temas oscuros o siete claros integrados; el selector de la cabecera lo aplica al instante.',
         'Pulsa Crear tema: ponle nombre, elige el tema base y el modo, edita los colores y sigue la vista previa en vivo.',
         'Revisa el panel de contraste WCAG y pulsa Guardar tema: entra en Temas personalizados, queda seleccionado y permanece en el proyecto.',
         'Ejecuta un análisis, abre un gráfico y usa el selector Preajuste: elige Predeterminado, Mínimo, Impresión clara o uno de tus preajustes.',

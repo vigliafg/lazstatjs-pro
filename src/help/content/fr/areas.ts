@@ -353,12 +353,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Enregistrer et rouvrir un projet',
-    summary: 'Nouveau projet, fichiers .lzs, Enregistrer sous, sauvegarde automatique et restauration d’une sauvegarde.',
+    summary: 'Nouveau jeu de données, fichiers .lzs, Enregistrer sous, sauvegarde automatique et restauration d’une sauvegarde.',
     tutorial: {
       goal: 'Conserver les données, les réglages et les paramètres pour reprendre demain.',
       dataset: 'score-groups.csv',
       steps: [
-        'Depuis DONNÉES, appuyez sur Nouveau projet pour repartir de zéro : le jeu de données, les paramètres et la sortie sont effacés, tandis que les réglages et préférences restent.',
+        'Depuis DONNÉES, appuyez sur Nouveau jeu de données pour repartir de zéro : le jeu de données, les paramètres et la sortie sont effacés, tandis que les réglages et préférences restent.',
         'Appuyez sur Enregistrer le projet pour écrire le fichier .lzs ; Enregistrer sous… demande un nouveau nom et laisse le fichier courant inchangé.',
         'Appuyez sur Ouvrir un projet et choisissez un fichier pour remplacer la session en cours.',
         'Rechargez la page : la sauvegarde automatique restaure la session depuis le navigateur.',
@@ -379,7 +379,7 @@ export const areaTopics: HelpTopic[] = [
       pitfalls: [
         'La sauvegarde automatique vit dans le navigateur : effacer les données du site la supprime.',
         'Un fichier .lzs n’est pas une sauvegarde des données d’origine : gardez aussi le CSV source.',
-        'Nouveau projet efface les cartes de sortie : exportez-les ou enregistrez-les avant si vous en avez encore besoin.',
+        'Nouveau jeu de données efface les cartes de sortie : exportez-les ou enregistrez-les avant si vous en avez encore besoin.',
         'Enregistrer sous… crée une copie ; les enregistrements suivants utilisent le nom choisi dans l’invite.',
       ],
       glossary: [
@@ -394,12 +394,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'appearance',
     area: 'output',
     title: 'Thèmes, préréglages de graphiques et créateur de thèmes',
-    summary: 'Dix thèmes intégrés, des thèmes personnalisés du projet avec aperçu en direct et des préréglages de graphiques nommés.',
+    summary: 'Treize thèmes intégrés, des thèmes personnalisés du projet avec aperçu en direct et des préréglages de graphiques nommés.',
     tutorial: {
       goal: 'Créer un thème de projet et un préréglage de graphique, puis les réutiliser.',
       dataset: 'score-groups.csv',
       steps: [
-        'Ouvrez RÉGLAGES → Apparence et choisissez l’un des cinq thèmes sombres ou cinq thèmes clairs intégrés ; le sélecteur d’en-tête l’applique immédiatement.',
+        'Ouvrez RÉGLAGES → Apparence et choisissez l’un des six thèmes sombres ou sept thèmes clairs intégrés ; le sélecteur d’en-tête l’applique immédiatement.',
         'Appuyez sur Créer un thème : nommez-le, choisissez le thème de base et le mode, modifiez les couleurs et suivez l’aperçu en direct.',
         'Vérifiez le panneau de contraste WCAG, puis appuyez sur Enregistrer le thème : il rejoint Thèmes personnalisés, est sélectionné et reste dans le projet.',
         'Lancez une analyse, ouvrez un graphique et utilisez le sélecteur Préréglage : choisissez Par défaut, Minimal ou Impression claire, ou l’un de vos préréglages.',

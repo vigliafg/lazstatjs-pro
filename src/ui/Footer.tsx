@@ -5,10 +5,11 @@ import { t } from '../i18n';
 
 export interface FooterProps {
   grid: GridData;
+  lastAutosave?: string | null;
 }
 
 /** Barra di stato: conteggi derivati dalla griglia, nessuno stato proprio. */
-export const Footer = ({ grid }: FooterProps) => {
+export const Footer = ({ grid, lastAutosave }: FooterProps) => {
   // The footer must not block typing on a 50k-row grid: validate the deferred
   // snapshot once, instead of scanning every cell twice in the current render.
   const deferredGrid = useDeferredValue(grid);
@@ -24,9 +25,17 @@ export const Footer = ({ grid }: FooterProps) => {
       <div>{t('footer.invalid')}: <span className={invalid > 0 ? 'text-yellow' : 'text-green'}>{invalid}</span></div>
       <div className="hidden h-3 w-px bg-border sm:block" />
       <div>{t('footer.status')}: <span className="text-green">{t('footer.ready')}</span></div>
+      {lastAutosave && (
+        <>
+          <div className="hidden h-3 w-px bg-border sm:block" />
+          <div className="hidden uppercase tracking-wider sm:block" title={t('data.autosaveHint')}>
+            {t('data.autosave')}: <span className="text-text2">{lastAutosave}</span>
+          </div>
+        </>
+      )}
       <div className="ml-auto hidden items-center gap-2 sm:flex">
         <Info className="w-3 h-3" />
-        <span className="hidden md:inline">LazStats JS v0.32.0</span>
+        <span className="hidden md:inline">LazStats JS v0.35.0</span>
       </div>
     </footer>
   );

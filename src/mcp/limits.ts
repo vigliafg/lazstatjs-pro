@@ -1,5 +1,5 @@
 export const MCP_NAME = 'lazstats';
-export const MCP_VERSION = '0.32.0';
+export const MCP_VERSION = '0.35.0';
 export const MCP_SCHEMA_VERSION = 1;
 
 export const MAX_TEXT_CHARS = 8_000;

@@ -129,5 +129,9 @@ controlla che esistano davvero.
   Azzera zoom anche con il linking attivo, tema di primo avvio GitHub Light;
   `help:build`/`help:audit` rieseguiti e web pubblicata su GitHub Pages dal tag.
 - Rilascio 0.32.0: Assistant unificato (percorso dati/analisi, prontezza,
-  catena, diagramma e report card), temi Mist e Midnight, pagina Assistant
+  catena, diagramma e report card), temi Mist e Midnight color, pagina Assistant
   riscritta nelle sei lingue; web e installer costruiti dalla release.
+- Rilascio 0.35.0: CLI `lazstats` e server MCP `lazstats-mcp` pubblicati come
+  tarball autonomi; gruppi di comandi colorati con contrasto accessibile,
+  temi Midnight color e Misty color, toolbar Dati/Progetto, autosave nella
+  status bar e comando “New dataset” allineato nelle sei lingue.

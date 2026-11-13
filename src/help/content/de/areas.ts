@@ -358,12 +358,12 @@ export const areaTopics: HelpTopic[] = [
     id: "projects",
     area: "output",
     title: "Ein Projekt speichern und erneut öffnen",
-    summary: "Neues Projekt, .lzs-Dateien, Speichern unter, automatisches Speichern und Wiederherstellen einer Sicherung.",
+    summary: "Neuer Datensatz, .lzs-Dateien, Speichern unter, automatisches Speichern und Wiederherstellen einer Sicherung.",
     tutorial: {
       goal: "Daten, Einstellungen und Parameter behalten, um morgen weiterzumachen.",
       dataset: "score-groups.csv",
       steps: [
-        "Drücken Sie in DATEN auf Neues Projekt, um sauber zu beginnen: Datensatz, Parameter und Ausgabe werden geleert, Einstellungen und Voreinstellungen bleiben erhalten.",
+        "Drücken Sie in DATEN auf Neuen Datensatz, um sauber zu beginnen: Datensatz, Parameter und Ausgabe werden geleert, Einstellungen und Voreinstellungen bleiben erhalten.",
         "Drücken Sie Projekt speichern, um die .lzs-Datei zu schreiben; Speichern unter… fragt nach einem neuen Namen und lässt die aktuelle Datei unverändert.",
         "Drücken Sie Projekt öffnen und wählen Sie eine Datei, um die aktuelle Sitzung zu ersetzen.",
         "Laden Sie die Seite neu: Das automatische Speichern stellt die Sitzung aus dem Browser wieder her.",
@@ -384,7 +384,7 @@ export const areaTopics: HelpTopic[] = [
       pitfalls: [
         "Das automatische Speichern liegt im Browser: Das Löschen der Websitedaten entfernt es.",
         "Eine .lzs-Datei ist keine Sicherung der Originaldaten: Behalten Sie auch die Quell-CSV.",
-        "Neues Projekt leert die Ausgabekarten: Exportieren oder speichern Sie sie vorher, wenn Sie sie noch brauchen.",
+        "Neuer Datensatz leert die Ausgabekarten: Exportieren oder speichern Sie sie vorher, wenn Sie sie noch brauchen.",
         "Speichern unter… erstellt eine Kopie; spätere Speicherungen verwenden den im Dialog gewählten Namen.",
       ],
       glossary: [
@@ -399,12 +399,12 @@ export const areaTopics: HelpTopic[] = [
     id: "appearance",
     area: "output",
     title: "Designs, Diagramm-Voreinstellungen und der Design-Editor",
-    summary: "Zehn integrierte Designs, benutzerdefinierte Projektdesigns mit Live-Vorschau und benannte Diagramm-Voreinstellungen.",
+    summary: "Dreizehn integrierte Designs, benutzerdefinierte Projektdesigns mit Live-Vorschau und benannte Diagramm-Voreinstellungen.",
     tutorial: {
       goal: "Ein Projektdesign und eine Diagramm-Voreinstellung erstellen und anschließend wiederverwenden.",
       dataset: "score-groups.csv",
       steps: [
-        "Öffnen Sie EINSTELLUNGEN → Darstellung und wählen Sie eines der fünf dunklen oder fünf hellen integrierten Designs; die Auswahl in der Kopfzeile wendet es sofort an.",
+        "Öffnen Sie EINSTELLUNGEN → Darstellung und wählen Sie eines der sechs dunklen oder sieben hellen integrierten Designs; die Auswahl in der Kopfzeile wendet es sofort an.",
         "Drücken Sie Design erstellen: Benennen Sie es, wählen Sie Basisdesign und Modus, bearbeiten Sie die Farben und verfolgen Sie die Live-Vorschau.",
         "Prüfen Sie den WCAG-Kontrastbereich und drücken Sie Design speichern: Es erscheint unter Benutzerdefinierte Designs, wird ausgewählt und bleibt im Projekt.",
         "Führen Sie eine Analyse aus, öffnen Sie ein Diagramm und nutzen Sie das Auswahlfeld Voreinstellung: Wählen Sie Standard, Minimal, Heller Druck oder eine Ihrer Voreinstellungen.",

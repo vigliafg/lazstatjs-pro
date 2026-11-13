@@ -619,7 +619,6 @@ export default function App() {
             saveProjectFileAs={saveProjectFileAs}
             openProjectFile={openProjectFile}
             openProjectDialog={openProjectDialog}
-            lastAutosave={lastAutosave}
             showToast={showToast}
             validation={validation}
             setValidation={setValidation}
@@ -791,7 +790,7 @@ export default function App() {
       </div>
 
       {/* Footer / Statusbar */}
-      <Footer grid={grid} />
+      <Footer grid={grid} lastAutosave={lastAutosave} />
 
       {/* Toasts */}
       <Suspense fallback={null}>

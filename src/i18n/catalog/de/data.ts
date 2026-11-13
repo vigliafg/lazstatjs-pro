@@ -4,12 +4,13 @@ import type { dataMessages as enData } from '../en/data';
 export const dataMessages: Record<keyof typeof enData, string> = {
   'data.file': 'Datei',
   'data.toolbar': 'Datenwerkzeuge',
-  'data.groupFile': 'Datei',
+  'data.groupData': 'Daten',
+  'data.groupProject': 'Projekt',
   'data.groupEdit': 'Bearbeiten',
   'data.groupTools': 'Werkzeuge',
   'data.groupView': 'Ansicht',
   'grid.addLevel': 'Stufe hinzufügen',
-  'data.new': 'Neues Projekt',
+  'data.new': 'Neuer Datensatz',
   'data.import': 'Importieren',
   'data.export': 'Exportieren',
   'data.saveProject': 'Projekt speichern',
@@ -178,7 +179,7 @@ export const dataMessages: Record<keyof typeof enData, string> = {
   'inspector.info':
     'Die Beschriftung wird mit dem Projekt gespeichert und in Auswahlfeldern, Tabellen und der Datenvorschau verwendet; der Spaltenname bleibt der Datenschlüssel.',
   'data.confirmNew':
-    'Den aktuellen Datensatz ersetzen? Dies kann nicht rückgängig gemacht werden.',
+    'Neuen Datensatz erstellen? Der aktuelle Datensatz, die Parameter und die Ergebnisse werden gelöscht. Dies kann nicht rückgängig gemacht werden.',
   'data.deleteColumnPrefix': 'Spalte löschen',
   'data.deleteColumnSuffix': '? Sie können dies rückgängig machen.',
   'data.deleteRowPrefix': 'Zeile löschen',

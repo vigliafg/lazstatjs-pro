@@ -37,13 +37,13 @@ export const RunControl = ({
   }, [running]);
 
   return (
-  <div className="shrink-0 border-t border-border bg-surface2/60 p-3">
+  <div data-button-group="run" className="shrink-0 border-t border-border bg-surface2/60 p-3">
     {running ? (
       <>
         <button
           type="button"
           disabled
-          className="run-btn flex h-10 w-full items-center justify-center gap-2 opacity-90"
+          className="run-btn group-btn flex h-10 w-full items-center justify-center gap-2 opacity-90"
           aria-live="polite"
         >
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -61,7 +61,7 @@ export const RunControl = ({
           <button
             type="button"
             onClick={onCancel}
-            className="tb-btn flex shrink-0 items-center gap-1 px-2 py-0.5 text-[9px]"
+            className="tb-btn group-btn flex shrink-0 items-center gap-1 px-2 py-0.5 text-[9px]"
           >
             <X className="h-3 w-3" />
             {t('analysis.cancel')}
@@ -75,7 +75,7 @@ export const RunControl = ({
           onClick={onRun}
           disabled={disabled}
           title={t('analysis.runTitle')}
-          className="run-btn flex h-10 w-full items-center justify-center gap-2"
+          className="run-btn group-btn flex h-10 w-full items-center justify-center gap-2"
         >
           <Play className="h-3.5 w-3.5" />
           {t('analysis.run')}

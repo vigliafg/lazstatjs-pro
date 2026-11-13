@@ -25,12 +25,18 @@ export const OperationsBar = ({ grid, datasetId, onTransformApply, onCleanApply 
     <div
       role="group"
       aria-label={t('data.transform')}
+      data-button-group="transform"
       className="flex flex-wrap items-center gap-1.5"
     >
       <TransformOperations grid={grid} onApply={onTransformApply} />
     </div>
     <div aria-hidden="true" className="mx-1 h-4 w-px bg-border" />
-    <div role="group" aria-label={t('data.clean')} className="flex flex-wrap items-center gap-1.5">
+    <div
+      role="group"
+      aria-label={t('data.clean')}
+      data-button-group="clean"
+      className="flex flex-wrap items-center gap-1.5"
+    >
       <CleanOperations grid={grid} onApply={onCleanApply} />
     </div>
   </div>

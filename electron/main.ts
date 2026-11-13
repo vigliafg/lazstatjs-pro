@@ -237,7 +237,7 @@ const buildMenu = (): void => {
     {
       label: 'File',
       submenu: [
-        { label: 'New Project', accelerator: 'CmdOrCtrl+N', click: () => sendCommand('new-project') },
+        { label: 'New Dataset', accelerator: 'CmdOrCtrl+N', click: () => sendCommand('new-project') },
         { label: 'Open Project…', accelerator: 'CmdOrCtrl+O', click: () => sendCommand('open-project') },
         { type: 'separator' },
         { label: 'Save Project', accelerator: 'CmdOrCtrl+S', click: () => sendCommand('save-project') },

@@ -32,6 +32,8 @@ interface ToolbarButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   toggle?: boolean;
   size?: 'sm' | 'md';
   tone?: 'default' | 'danger' | 'warning' | 'primary';
+  /** Optional coloured identity for a group of related toolbar actions. */
+  group?: 'transform' | 'clean' | 'panels' | 'library' | 'run' | 'output';
   /** Let the button share the row width (inspector footers). */
   grow?: boolean;
   /** Keep the text visible at every width (dialogs, footers, primary actions). */
@@ -48,6 +50,7 @@ export const ToolbarButton = ({
   toggle = false,
   size = 'sm',
   tone = 'default',
+  group,
   grow = false,
   labelVisibility = 'xl',
   className = '',
@@ -74,7 +77,7 @@ export const ToolbarButton = ({
       aria-label={rest['aria-label'] ?? label}
       aria-pressed={toggle ? active : rest['aria-pressed']}
       title={rest.title ?? hint ?? label}
-      className={`tb-btn inline-flex ${grow ? 'flex-1' : 'shrink-0'} items-center justify-center whitespace-nowrap ${sizing} ${toneClass} ${activeClass} ${className}`}
+      className={`tb-btn ${group ? 'group-btn' : ''} inline-flex ${grow ? 'flex-1' : 'shrink-0'} items-center justify-center whitespace-nowrap ${sizing} ${toneClass} ${activeClass} ${className}`}
     >
       <Icon className={`${iconSize} shrink-0`} aria-hidden="true" />
       <span className={LABEL_CLASS[labelVisibility]}>{label}</span>

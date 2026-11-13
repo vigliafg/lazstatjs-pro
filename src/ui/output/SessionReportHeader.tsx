@@ -79,7 +79,7 @@ export const SessionReportHeader = ({
             {warnings} {t('output.outlineWarning')}
           </span>
         )}
-        <div className="ml-auto flex items-center gap-1" data-no-print>
+        <div data-button-group="output" className="ml-auto flex items-center gap-1" data-no-print>
           {narrow && (
             <ToolbarButton
               icon={PanelLeft}

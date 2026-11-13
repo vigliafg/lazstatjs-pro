@@ -19,7 +19,6 @@ interface Props {
   saveProjectFileAs: () => void;
   openProjectFile: (file: File) => Promise<void>;
   openProjectDialog: () => void;
-  lastAutosave: string | null;
   showToast: (title: string, message: string, type?: 'ok' | 'warn' | 'error') => void;
   validation: { ran: boolean; issues: { r: number; c: number; value: string; colName: string }[] };
   setValidation: Dispatch<
@@ -157,7 +156,6 @@ export const DataWorkspace = (p: Props) => {
       saveProjectFileAs={p.saveProjectFileAs}
       openProjectFile={p.openProjectFile}
       openProjectDialog={p.openProjectDialog}
-      lastAutosave={p.lastAutosave}
       showToast={p.showToast}
       validation={p.validation}
       setValidation={p.setValidation}

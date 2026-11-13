@@ -82,6 +82,24 @@ export const ThemePreview = ({ theme }: { theme: CustomTheme }) => {
             <span className="h-4 w-px bg-border" />
             <span className="panel-header rounded px-2 py-0.5 text-[8px]">Panel header</span>
           </div>
+          <div className="mt-1.5 flex flex-wrap items-center gap-1" data-theme-group-buttons>
+            {[
+              ['transform', 'Transform'],
+              ['clean', 'Clean'],
+              ['panels', 'Panels'],
+              ['library', 'Library'],
+              ['run', 'Run'],
+              ['output', 'Output'],
+            ].map(([id, label]) => (
+              <span
+                key={id}
+                data-button-group={id}
+                className="group-btn rounded border px-1.5 py-0.5 text-[8px]"
+              >
+                {label}
+              </span>
+            ))}
+          </div>
           <div className="mt-1.5 flex gap-1">
             <span className="rounded border border-green/40 bg-green/10 px-1.5 py-0.5 font-mono text-[8px] uppercase text-green">
               AAA

@@ -357,12 +357,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Salvare e riaprire un progetto',
-    summary: 'Nuovo progetto, file .lzs, Salva con nome, salvataggio automatico e ripristino di un backup.',
+    summary: 'Nuovo dataset, file .lzs, Salva con nome, salvataggio automatico e ripristino di un backup.',
     tutorial: {
       goal: 'Conservare dati, impostazioni e parametri per riprendere domani.',
       dataset: 'score-groups.csv',
       steps: [
-        'Da DATI premi Nuovo progetto per partire da zero: dataset, parametri e output vengono azzerati, mentre impostazioni e preferenze restano.',
+        'Da DATI premi Nuovo dataset per partire da zero: dataset, parametri e output vengono azzerati, mentre impostazioni e preferenze restano.',
         'Premi Salva progetto per scrivere il file .lzs; Salva con nome… chiede un nuovo nome e lascia invariato il file corrente.',
         'Premi Apri progetto e scegli un file per sostituire la sessione corrente.',
         'Ricarica la pagina: il salvataggio automatico ripristina la sessione dal browser.',
@@ -383,7 +383,7 @@ export const areaTopics: HelpTopic[] = [
       pitfalls: [
         'Il salvataggio automatico vive nel browser: cancellare i dati del sito lo elimina.',
         'Un file .lzs non è un backup dei dati originali: conserva anche il CSV di partenza.',
-        'Nuovo progetto azzera le schede di output: esportale o salvale prima, se ti servono ancora.',
+        'Nuovo dataset azzera le schede di output: esportale o salvale prima, se ti servono ancora.',
         'Salva con nome… crea una copia; i salvataggi successivi usano il nome scelto nel prompt.',
       ],
       glossary: [
@@ -398,12 +398,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'appearance',
     area: 'output',
     title: 'Temi, preset grafici e theme creator',
-    summary: 'Dieci temi incorporati, temi personalizzati del progetto con anteprima live e preset grafici con nome.',
+    summary: 'Tredici temi incorporati, temi personalizzati del progetto con anteprima live e preset grafici con nome.',
     tutorial: {
       goal: 'Creare un tema di progetto e un preset grafico, poi riutilizzarli.',
       dataset: 'score-groups.csv',
       steps: [
-        'Apri IMPOSTAZIONI → Aspetto e scegli uno dei sei temi scuri o sei chiari incorporati; il selettore nell’Header lo applica subito.',
+        'Apri IMPOSTAZIONI → Aspetto e scegli uno dei sei temi scuri o sette chiari incorporati; il selettore nell’Header lo applica subito.',
         'Premi Crea tema: assegna un nome, scegli tema di base e modalità, modifica i colori e segui l’anteprima live.',
         'Controlla il pannello Contrasto WCAG, poi premi Salva tema: entra in Temi personalizzati, viene selezionato e resta nel progetto.',
         'Esegui un’analisi, apri un grafico e usa il selettore Preset: scegli Predefinito, Minimale, Stampa chiara o uno dei tuoi preset.',

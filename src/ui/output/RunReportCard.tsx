@@ -94,6 +94,7 @@ export const RunReportCard = ({
       className="output-card min-w-0 scroll-mt-4"
     >
       <header
+        data-button-group="output"
         className="flex items-center gap-2 border-b border-border bg-surface2/50 px-2.5 py-1.5"
         data-no-print
       >

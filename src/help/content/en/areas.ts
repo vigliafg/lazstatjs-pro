@@ -353,12 +353,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'projects',
     area: 'output',
     title: 'Saving and reopening a project',
-    summary: 'New project, .lzs files, Save as, autosave and how to restore a backup.',
+    summary: 'New dataset, .lzs files, Save as, autosave and how to restore a backup.',
     tutorial: {
       goal: 'Keep data, settings and parameters to resume tomorrow.',
       dataset: 'score-groups.csv',
       steps: [
-        'From DATA press New project to start clean: dataset, parameters and output are cleared, while settings and preferences stay.',
+        'From DATA press New dataset to start clean: dataset, parameters and output are cleared, while settings and preferences stay.',
         'Press Save project to write the .lzs file; Save as… asks for a new name and leaves the current file unchanged.',
         'Press Open project and pick a file to replace the current session.',
         'Reload the page: autosave restores the session from the browser.',
@@ -379,7 +379,7 @@ export const areaTopics: HelpTopic[] = [
       pitfalls: [
         'Autosave lives in the browser: clearing site data deletes it.',
         'A .lzs file is not a backup of the original data: keep the source CSV too.',
-        'New project clears the output cards: export or save them first if you still need them.',
+        'New dataset clears the output cards: export or save them first if you still need them.',
         'Save as… creates a copy; later saves keep using the name you chose in the prompt.',
       ],
       glossary: [
@@ -394,12 +394,12 @@ export const areaTopics: HelpTopic[] = [
     id: 'appearance',
     area: 'output',
     title: 'Themes, chart presets and the theme creator',
-    summary: 'Twelve built-in themes, project custom themes with a live preview, and named chart presets.',
+    summary: 'Thirteen built-in themes, project custom themes with a live preview, and named chart presets.',
     tutorial: {
       goal: 'Create a project theme and a chart preset, then reuse them.',
       dataset: 'score-groups.csv',
       steps: [
-        'Open SETTINGS → Appearance and pick one of the six dark or six light built-in themes; the header selector applies it immediately.',
+        'Open SETTINGS → Appearance and pick one of the six dark or seven light built-in themes; the header selector applies it immediately.',
         'Press Create theme: name it, choose the base and the mode, edit the colours and follow the live preview.',
         'Check the WCAG contrast panel, then press Save theme: it joins Custom themes, is selected and stays inside the project.',
         'Run an analysis, open a chart and use the Preset selector: choose Default, Minimal, Print light or one of your presets.',

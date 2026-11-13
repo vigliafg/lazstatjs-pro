@@ -11,7 +11,7 @@ import { join, relative, sep } from 'node:path';
 const LIMIT = 700;
 const EXCEPTIONS = new Map([
   ['src/stats/kernels/arima.ts', 1429], // kernel numerico compatto: ARIMA, ARIMAX e ADF
-  ['src/App.tsx', 805], // composizione root: preset, salvataggio, temi, comandi desktop, catena Assistant e riparazioni readiness
+  ['src/App.tsx', 804], // composizione root: preset, salvataggio, temi, comandi desktop, catena Assistant e riparazioni readiness
   ['src/io/project/types.ts', 1588], // tipi di tutti i parametri persistiti: un blocco per procedura (W9)
   ['src/io/project/parse.ts', 1287], // parsing difensivo di tutti i parametri persistiti (W9)
   ['src/analyses/params.ts', 1475], // normalizzazione/validazione di tutte le procedure (W9)

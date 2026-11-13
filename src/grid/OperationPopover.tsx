@@ -66,25 +66,10 @@ export const OperationTrigger = ({
         onMouseLeave={() => setHovered(false)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        className={`group tb-btn flex h-7 items-center gap-1.5 px-2 ${
-          open
-            ? 'border-accent bg-accent text-on-accent'
-            : 'border-border2 bg-bg text-text hover:border-accent hover:bg-accent hover:text-on-accent'
-        }`}
+        className="tb-btn group-btn flex h-7 items-center gap-1.5 px-2"
       >
-        <Icon
-          className={`h-4 w-4 shrink-0 ${
-            open ? 'text-on-accent' : 'text-accent group-hover:text-on-accent'
-          }`}
-          aria-hidden="true"
-        />
-        <span
-          className={`hidden xl:inline ${
-            open ? 'text-on-accent' : 'text-text group-hover:text-on-accent'
-          }`}
-        >
-          {label}
-        </span>
+        <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+        <span className="hidden xl:inline">{label}</span>
       </button>
       {hint && (
         <span id={descriptionId} className="sr-only">
