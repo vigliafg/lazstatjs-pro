@@ -1,18 +1,19 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-13 (release 0.35.0)
+**Ultimo aggiornamento**: 2026-11-13 (release 0.35.0 pubblicata)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
 **Baseline documentale**: `main` @ `1ef2860` (piano v2.5)
-**Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci; release 0.35.0 in pubblicazione
-**Ondata corrente**: release 0.35.0 — versioni allineate, gate e tag da completare
+**Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci; release 0.35.0 pubblicata
+**Ondata corrente**: release 0.35.0 — pubblicata e verificata
 
 ## Checkpoint rilascio 0.35.0 (2026-11-13)
 
-- **Branch**: `main` · **Versione**: `0.35.0` · **Tag**: `v0.35.0` sul commit di release.
+- **Branch**: `main` · **Versione**: `0.35.0` · **Tag**: `v0.35.0` sul commit `1902436`.
 - **Chiuso**: CLI `lazstats` e server MCP `lazstats-mcp` con tarball npm autonomi; gruppi di comandi colorati con contrasto accessibile; temi Midnight color e Misty color; toolbar Dati/Progetto con autosave nella status bar; rinomina “New dataset” in tutte le lingue, nell’help, nel menu Electron e nei test e2e.
 - **Test**: gate completo verde — 1538/1538 test; `docs:check` 2 riferimenti; depcruise 1283 moduli; madge pulito; filesize 1259 file e 8 eccezioni; `docs:links` 94 file/285 link; build desktop e build web exit 0.
-- **Rischi**: la pubblicazione degli installer e della web dipende dai workflow GitHub del tag; la firma macOS resta fuori perimetro.
-- **Prossimi 3 passi**: commit + push + tag `v0.35.0`, verificare GitHub Release, tarball CLI/MCP e GitHub Pages.
+- **Pubblicazione**: workflow `release` completato con successo e 28 asset (Linux, Windows, macOS, `lazstats-0.35.0.tgz`, `lazstats-mcp-0.35.0.tgz`); GitHub Release <https://github.com/vigliafg/lazstatjs-pro/releases/tag/v0.35.0>; workflow `web` completato e GitHub Pages risponde 200 su <https://vigliafg.github.io/lazstatjs-pro/>.
+- **Rischi**: il workflow `check` ha unit e smoke runtime verdi ma l’e2e resta rosso per selettori ambigui preesistenti e per il conteggio temi nell’e2e (`10` atteso, `13` presenti); la firma macOS resta fuori perimetro.
+- **Prossimi 3 passi**: correggere il test e2e dei temi e i selettori ambigui, rieseguire la suite e2e, valutare binari nativi firmati per CLI/MCP.
 
 ## Checkpoint packaging runtime CLI/MCP (2026-11-13)
 
