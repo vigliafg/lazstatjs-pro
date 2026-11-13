@@ -2,6 +2,15 @@
 
 La CLI `lazstats` usa lo stesso motore dell'app e dell'MCP. Non avvia l'interfaccia, non usa la rete e produce un envelope JSON o un report renderizzato.
 
+## Installazione da release
+
+```bash
+npm install -g ./lazstats-<versione>.tgz
+lazstats --help
+```
+
+Il tarball è allegato alla release GitHub e richiede Node.js 22.12+. Non è un binario nativo: installa il bundle ESM e il comando `lazstats` nel prefix npm.
+
 ## Build e avvio
 
 ```bash
@@ -15,7 +24,7 @@ In sviluppo, senza build:
 npm run cli -- --help
 ```
 
-Il comando installato dal pacchetto è `lazstats`; il bundle è `dist-cli/lazstats.mjs` con il worker sibling `worker-entry.mjs`.
+Il comando installato dal pacchetto è `lazstats`; il bundle è `dist-cli/lazstats.mjs` con il worker sibling `worker-entry.mjs`. Per creare il tarball: `npm run pack:cli`; per verificarlo con installazione temporanea: `npm run smoke:cli:package`.
 
 ## Quickstart
 

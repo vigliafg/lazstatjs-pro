@@ -21,7 +21,7 @@ jobs:
       - run: npm run build
 
   cli-smoke:
-    name: CLI smoke (${{ matrix.os }})
+    name: Runtime smoke (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -37,6 +37,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm run smoke:cli:package
+      - run: npm run smoke:mcp:package
       - run: npm run smoke:cli
 
   e2e:

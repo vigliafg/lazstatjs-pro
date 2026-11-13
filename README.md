@@ -187,19 +187,46 @@ npm run lint
 
 The CLI runs the same engine headlessly and emits a JSON envelope or a rendered report. See [`docs/cli/README.md`](docs/cli/README.md) for the full guide and [`docs/cli/riferimento.md`](docs/cli/riferimento.md) for the generated contract.
 
+### Install
+
+Requires Node.js 22.12+.
+
+From the current GitHub release, download `lazstats-<version>.tgz` and install it globally:
+
+```bash
+npm install -g ./lazstats-<version>.tgz
+lazstats --help
+```
+
+After the package is published on npm:
+
+```bash
+npm install -g lazstats
+# or run it once without a global install
+npx lazstats --help
+```
+
+For local development:
+
 ```bash
 npm run build:cli
 node dist-cli/lazstats.mjs --help
+```
 
-node dist-cli/lazstats.mjs analyses --json
-node dist-cli/lazstats.mjs schema descriptive --json
-node dist-cli/lazstats.mjs inspect samples/descriptive/iris/data.csv --json
-node dist-cli/lazstats.mjs run \
+### Quick start
+
+```bash
+lazstats analyses --json
+lazstats schema descriptive --json
+lazstats inspect samples/descriptive/iris/data.csv --json
+lazstats run \
   --data samples/descriptive/iris/data.csv \
   --analysis descriptive \
   --set descVars=Sepal.Length,Sepal.Width \
   --json
 ```
+
+If you built the CLI locally, replace `lazstats` with `node dist-cli/lazstats.mjs`.
 
 | Command | Use |
 | --- | --- |
@@ -217,22 +244,48 @@ Help is exhaustive and agent-friendly: `lazstats help <command>`, `lazstats <com
 
 `lazstats-mcp` exposes the engine over stdio without network, shell, eval or file writes. See [`docs/mcp/README.md`](docs/mcp/README.md) for setup and [`docs/mcp/riferimento.md`](docs/mcp/riferimento.md) for the generated tool reference.
 
+### Install
+
+Requires Node.js 22.12+.
+
+From the current GitHub release, download `lazstats-mcp-<version>.tgz` and install it globally:
+
+```bash
+npm install -g ./lazstats-mcp-<version>.tgz
+lazstats-mcp --help
+```
+
+After the package is published on npm:
+
+```bash
+npm install -g lazstats-mcp
+```
+
+For local development:
+
 ```bash
 npm run build:mcp
 node dist-mcp/lazstats-mcp.mjs --root /absolute/data
 ```
 
+### Configure your MCP host
+
+Use the installed command and choose a directory containing the datasets the agent may read:
+
 ```json
 {
   "mcpServers": {
     "lazstats": {
-      "command": "node",
-      "args": ["/absolute/lazstatjs-pro/dist-mcp/lazstats-mcp.mjs"],
-      "env": { "LAZSTATS_MCP_ROOT": "/absolute/data" }
+      "command": "lazstats-mcp",
+      "args": ["--root", "/absolute/data"]
     }
   }
 }
 ```
+
+`npx -y lazstats-mcp --root /absolute/data` also works after publication, but a global install or an absolute path is recommended for a stable host configuration.
+
+Both runtime tarballs are Node bundles, not native single-file executables.
 
 | Tool | Use |
 | --- | --- |
@@ -303,7 +356,7 @@ lazstatjs/
 | `npm run dist:linux` / `dist:win` / `dist:mac` | Platform-specific installers |
 | `npm run test:electron` | Smoke-test the Electron shell (use `xvfb-run` on headless Linux) |
 | `npm run preview` | Preview production build |
-| `npm run clean` | Remove `dist/`, `dist-electron/` and `release/` |
+| `npm run clean` | Remove `dist/`, `dist-electron/`, `dist-cli/`, `dist-mcp/` and `release/` |
 | `npm run lint` | TypeScript type-check |
 | `npm test` | Run the statistics reference tests with `node:test` + `tsx` |
 | `npm run test:samples` | Validate every committed sample in all five formats |
@@ -314,6 +367,9 @@ lazstatjs/
 | `npm run cli` / `npm run mcp` | Run the TypeScript CLI / MCP server in development |
 | `npm run test:cli` / `npm run test:mcp` | Focused CLI and MCP suites |
 | `npm run smoke:cli` / `npm run smoke:mcp` | Packaged-bundle smoke tests |
+| `npm run smoke:cli:package` / `smoke:mcp:package` | Pack, install and smoke-test the npm tarballs |
+| `npm run pack:cli` / `pack:mcp` | Build npm tarballs for distribution |
+| `npm run publish:cli` / `publish:mcp` | Publish the CLI or MCP package to npm |
 | `npm run docs:build` / `npm run docs:check` | Regenerate / verify CLI and MCP reference pages |
 | `npm run check` | Type-check, unit tests, docs check, dependency-cruiser, madge and file-size guard |
 | `npm run guard` | Architecture, size and documentation-link guards |

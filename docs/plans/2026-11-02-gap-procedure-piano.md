@@ -19,6 +19,7 @@
 | 2.2 | 2026-11-02 | W0-09: retrofit dei reference test sulle 8 procedure esistenti senza confronto indipendente |
 | 2.3 | 2026-11-05 | Fase 2: censimento delle tabelle (72 procedure), confronto con JMP su tutte le procedure, checklist §8.8 per integrare le voci mancanti |
 | 2.4 | 2026-11-12 | Documentazione e help CLI/MCP: catalogo unico CLI, help globale/per comando/JSON, guida runtime MCP, riferimenti generati e guardrail |
+| 2.5 | 2026-11-13 | Packaging runtime CLI/MCP: tarball npm autonomi, smoke di installazione, matrice CI e artefatti di release |
 
 ---
 
@@ -1164,6 +1165,20 @@ Termini da aggiungere prima della traduzione:
 6. Non aggiornare i conteggi globali (36→72) fino alla chiusura di W1.
 
 ---
+
+### 15.2 Ondata packaging runtime CLI/MCP (2026-11-13)
+
+| Item | Stato |
+| --- | --- |
+| Manifest npm MCP e bin `lazstats-mcp` | chiuso |
+| `pack:mcp` / `publish:mcp` | chiuso |
+| Smoke `smoke:cli:package` e `smoke:mcp:package` | chiuso |
+| CI Linux/Windows/macOS per entrambi i pacchetti | chiuso |
+| Job release `runtimes` con tarball CLI/MCP allegati | chiuso |
+| Documentazione di installazione e limiti degli eseguibili nativi | chiuso |
+| Guardia versione runtime CLI/MCP vs `package.json` | chiuso |
+
+**Prossimi 3 passi**: commit; dry-run del workflow release; valutare binari nativi firmati.
 
 ### 15.1 Ondata documentazione e help CLI/MCP (2026-11-12)
 

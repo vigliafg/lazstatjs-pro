@@ -1,6 +1,6 @@
 /** Build the stdio MCP server and its heavy-analysis worker. */
 import { build } from 'esbuild';
-import { chmodSync, mkdirSync, rmSync } from 'node:fs';
+import { chmodSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
@@ -35,4 +35,30 @@ await Promise.all([
 ]);
 
 if (process.platform !== 'win32') chmodSync(join(outdir, 'lazstats-mcp.mjs'), 0o755);
-console.log(`Built ${join(outdir, 'lazstats-mcp.mjs')} and ${join(outdir, 'worker-entry.mjs')}`);
+
+// Keep the npm tarball self-contained: the MCP entry point and its worker are
+// the only runtime files, and the package has its own `lazstats-mcp` bin.
+const rootPackage = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
+writeFileSync(
+  join(outdir, 'package.json'),
+  `${JSON.stringify(
+    {
+      name: 'lazstats-mcp',
+      version: rootPackage.version,
+      description: 'LazStats MCP stdio server',
+      type: 'module',
+      bin: { 'lazstats-mcp': 'lazstats-mcp.mjs' },
+      files: ['lazstats-mcp.mjs', 'worker-entry.mjs'],
+      engines: rootPackage.engines,
+      license: rootPackage.license,
+      homepage: rootPackage.homepage,
+    },
+    null,
+    2
+  )}\n`,
+  'utf8'
+);
+
+console.log(
+  `Built ${join(outdir, 'lazstats-mcp.mjs')}, ${join(outdir, 'worker-entry.mjs')} and ${join(outdir, 'package.json')}`
+);

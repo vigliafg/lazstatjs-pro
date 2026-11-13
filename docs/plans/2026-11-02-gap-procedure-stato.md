@@ -1,10 +1,19 @@
 # Stato esecuzione — piano di chiusura del gap procedurale
 
-**Ultimo aggiornamento**: 2026-11-12 (checkpoint documentazione e help CLI/MCP)
+**Ultimo aggiornamento**: 2026-11-13 (checkpoint packaging runtime CLI/MCP)
 **Piano di riferimento**: [`2026-11-02-gap-procedure-piano.md`](2026-11-02-gap-procedure-piano.md)
-**Baseline documentale**: `main` @ `1ef2860` (piano v2.4)
+**Baseline documentale**: `main` @ `1ef2860` (piano v2.5)
 **Stato**: W0–W9 chiuse; Assistant F0–F8 chiuso; gate G0–G9 verdi; copertura 73/73 metodi e 36/36 voci
-**Ondata corrente**: documentazione e help CLI/MCP — chiusa, modifiche non committate
+**Ondata corrente**: packaging runtime CLI/MCP — verificata, modifiche non committate
+
+## Checkpoint packaging runtime CLI/MCP (2026-11-13)
+
+- **Branch**: `main` · **worktree**: principale · **commit**: `a06d822` (le modifiche di packaging non sono committate).
+- **Chiuso**: manifest npm autonomo `dist-mcp/package.json` (`lazstats-mcp`, bin `lazstats-mcp`); script `pack:mcp`/`publish:mcp`; smoke `smoke:mcp:package` con pack, install temporanea, bin e test MCP; CI matrix Linux/Windows/macOS che verifica entrambi i pacchetti; job `runtimes` nella release che produce e allega `lazstats-*.tgz` e `lazstats-mcp-*.tgz`; `clean` include `dist-mcp`; documentazione di installazione aggiornata.
+- **Test**: `npm run smoke:cli:package` verde (pack + install + link); `npm run smoke:mcp:package` verde (pack + install + bin + 8 tool); test `src/version.test.ts` allinea versione runtime CLI/MCP e package; `npm run docs:check` e `docs:links` verdi; gate completo `npm run check` **1535/1535**, exit 0.
+- **Decisioni**: distribuzione cross-platform tramite tarball npm e bin shim, non binari nativi; Node.js 22.12+ resta un requisito runtime; nessun cambiamento ai tool MCP o al motore.
+- **Rischi**: i tarball non sono eseguibili standalone senza Node; il workflow di release non è stato eseguito su GitHub in questa sessione; la pubblicazione npm richiede credenziali e non è stata eseguita.
+- **Prossimi 3 passi**: commit dell'ondata; dry-run del workflow release su un tag di prova; decidere se aggiungere binari nativi firmati per CLI/MCP.
 
 ## Checkpoint documentazione e help CLI/MCP (2026-11-12)
 

@@ -1,11 +1,19 @@
 /** Smoke-test the built stdio server over the real MCP client transport. */
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
-import { join } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+const root = fileURLToPath(new URL('..', import.meta.url));
+const packageVersion = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
+const server = process.env.LAZSTATS_MCP
+  ? resolve(root, process.env.LAZSTATS_MCP)
+  : join(root, 'dist-mcp', 'lazstats-mcp.mjs');
 const transport = new StdioClientTransport({
   command: process.execPath,
-  args: [join(process.cwd(), 'dist-mcp', 'lazstats-mcp.mjs'), '--root', process.cwd()],
+  args: [server, '--root', root],
+  cwd: root,
   stderr: 'pipe',
 });
 let stderr = '';
@@ -20,6 +28,11 @@ try {
   if (names.length !== 8) throw new Error(`Expected 8 tools, got ${names.length}: ${names.join(',')}`);
   const info = await client.callTool({ name: 'engine_info', arguments: {} });
   if (info.isError) throw new Error('engine_info failed');
+  if (info.structuredContent?.version !== packageVersion) {
+    throw new Error(
+      `engine_info version ${info.structuredContent?.version} does not match package ${packageVersion}`
+    );
+  }
   if (info.structuredContent?.documentation?.guide !== 'lazstats://help') {
     throw new Error('engine_info is missing the help documentation link');
   }

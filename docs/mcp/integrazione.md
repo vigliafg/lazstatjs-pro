@@ -1,23 +1,27 @@
 # Integrazione host
 
+## Installazione da release
+
+```bash
+npm install -g ./lazstats-mcp-<versione>.tgz
+```
+
+Il comando globale è `lazstats-mcp`. Il pacchetto contiene `lazstats-mcp.mjs` e `worker-entry.mjs`; richiede Node.js 22.12+.
+
 ## Configurazione minima
 
 ```json
 {
   "mcpServers": {
     "lazstats": {
-      "command": "node",
-      "args": [
-        "/assoluto/lazstatjs-pro/dist-mcp/lazstats-mcp.mjs",
-        "--root",
-        "/assoluto/dati"
-      ]
+      "command": "lazstats-mcp",
+      "args": ["--root", "/assoluto/dati"]
     }
   }
 }
 ```
 
-In alternativa alla flag `--root`, usa la variabile `LAZSTATS_MCP_ROOT`. La root deve esistere ed essere una directory; tutti i path vengono risolti con `realpath`.
+In alternativa alla flag `--root`, usa la variabile `LAZSTATS_MCP_ROOT`. La root deve esistere ed essere una directory; tutti i path vengono risolti con `realpath`. Per il bundle non installato, usa `command: "node"` e il path assoluto di `dist-mcp/lazstats-mcp.mjs`.
 
 ## Build
 

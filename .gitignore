@@ -8,6 +8,7 @@ release/
 coverage/
 .DS_Store
 *.log
+*.tgz
 .env*
 !.env.example
 test-results/

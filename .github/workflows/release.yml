@@ -143,10 +143,42 @@ jobs:
             release/*.dmg
             release/*.dmg.blockmap
 
+  runtimes:
+    name: Build CLI and MCP packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Package smoke tests
+        run: |
+          npm run smoke:cli:package
+          npm run smoke:mcp:package
+
+      - name: Pack runtime tarballs
+        run: |
+          mkdir -p artifacts/runtime
+          npm run build:cli
+          npm run build:mcp
+          npm pack ./dist-cli --pack-destination artifacts/runtime
+          npm pack ./dist-mcp --pack-destination artifacts/runtime
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LazStats-runtime
+          if-no-files-found: error
+          path: artifacts/runtime/*.tgz
+
   release:
     name: Publish GitHub release
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [build, dmg]
+    needs: [build, dmg, runtimes]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

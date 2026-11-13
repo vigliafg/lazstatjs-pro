@@ -2,6 +2,15 @@
 
 `lazstats-mcp` espone il motore LazStats tramite MCP su stdio. Non avvia la CLI, non usa rete, shell o `eval`, e non scrive file.
 
+## Installazione da release
+
+```bash
+npm install -g ./lazstats-mcp-<versione>.tgz
+lazstats-mcp --root /percorso/dati
+```
+
+Il tarball è allegato alla release GitHub e richiede Node.js 22.12+. Non è un binario nativo: installa il bundle ESM e il comando `lazstats-mcp` nel prefix npm.
+
 ## Build e avvio
 
 ```bash
@@ -26,7 +35,7 @@ Tutti i path sono risolti con `realpath` e devono restare nella root, symlink in
 }
 ```
 
-Il bundle MCP richiede il worker sibling `worker-entry.mjs` nella stessa directory di `lazstats-mcp.mjs`. Non copiare solo il file principale.
+Il bundle MCP richiede il worker sibling `worker-entry.mjs` nella stessa directory di `lazstats-mcp.mjs`. Non copiare solo il file principale. Per creare il tarball: `npm run pack:mcp`; per verificarlo con installazione temporanea: `npm run smoke:mcp:package`.
 
 ## Tool
 
